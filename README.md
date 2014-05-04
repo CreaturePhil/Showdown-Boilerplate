@@ -18,6 +18,7 @@ For more information on Pokémon Showdown, setting up your own server, or viewin
 Features
 ------------------------------------------------------------------------
 
+* Single Process Hack for improve performance.
 * Money (bucks) system for winning tournaments.
 
 _Under Construction_
