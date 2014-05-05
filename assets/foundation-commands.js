@@ -10,6 +10,8 @@
  * @license MIT license
  */
 
+const MAX_REASON_LENGTH = 300;
+
 var foundationCommands = exports.foundationCommands = {
 
 	away: 'back',
@@ -24,7 +26,7 @@ var foundationCommands = exports.foundationCommands = {
 	 * Staff
 	 *********************************************************/
 
-	hide: 'hideauth',
+	/*hide: 'hideauth',
 	hideauth: function (target, room, user) {
 		if (!this.can('hideauth')) return false;
 		target = target || Config.groups.default.global;
@@ -51,6 +53,21 @@ var foundationCommands = exports.foundationCommands = {
 		user.updateIdentity();
 		return this.sendReply("You are now showing your authority!");
 	},
+
+	kick: function(target, room, user){
+		if (!this.can('kick')) return false;
+		if (!target) return this.sendReply('|raw|/kick <em>username</em> - kicks the user from the room.');
+		var targetUser = Users.get(target);
+		if (!targetUser) return this.sendReply('User '+target+' not found.');
+		if (targetUser.can('lockdown') || targetUser.name === botName) {
+			return this.sendReply('This user can\'t be room kicked.');
+		}
+		if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target+' is not in this room.');
+		targetUser.popup('You have been kicked from room '+ room.title +' by '+user.name+'.');
+		targetUser.leaveRoom(room);
+		room.add('|raw|'+ targetUser.name + ' has been kicked from room by '+ user.name + '.');
+		this.logModCommand(user.name+' kicked '+targetUser.name+' from ' +room.id);
+	},*/
 
 };
 

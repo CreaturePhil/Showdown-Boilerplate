@@ -1416,6 +1416,14 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/privateroom [on/off] - Makes or unmakes a room private. Requires: ~");
 		}
+		if (target === '~' || target === 'givemoney' || target === 'givebucks' || target === 'givebuck') {
+			matched = true;
+			this.sendReply("/givemoney [username], [amount] - Gives money to a user. Requires: ~");
+		}
+		if (target === '~' || target === 'takemoney' || target === 'takebucks' || target === 'takebuck') {
+			matched = true;
+			this.sendReply("/takemoney [username], [amount] - Takes money from a user. Requires: ~");
+		}
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands') {
 			matched = true;
 			this.sendReply("/help OR /h OR /? - Gives you help.");

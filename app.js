@@ -427,4 +427,10 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
  * Load assets
  *********************************************************/
 
- global.FoundationCommands = require('./assets/foundation-commands.js');
+global.FoundationCommands = require('./assets/foundation-commands.js');
+
+global.Core = require('./assets/core.js').core;
+
+global.ComponentCommands = require('./assets/component-commands.js');
+
+global.Poll = require('./assets/core.js').core.poll();
