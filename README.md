@@ -1,4 +1,4 @@
-_Under Construction_ This build is not ready for production yet.
+_Under Construction_ - This build is not ready for production yet.
 
 Showdown Boilerplate
 ========================================================================
