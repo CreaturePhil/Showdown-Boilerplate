@@ -105,6 +105,17 @@ var componentCommands = exports.componentCommands = {
         if (!target) return this.parse('/help about');
         if (target.length > 30) return this.sendReply('About cannot be over 30 characters.');
 
+        var now = Date.now();Math.floor()
+
+        if ((now-user.lastAbout)* 0.001 < 30) {
+            this.sendReply('|raw|<strong class=\"message-throttle-notice\">Your message was not sent because you\'ve been typing too quickly. You must wait ' + Math.floor(
+           (30-(now-user.lastAbout)* 0.001))
+             + ' seconds</strong>');
+            return;
+        }
+
+        user.lastAbout = now;
+
         target = sanitize(target);
         target = target.replace(/[^A-Za-z\d ]+/g, '');
 
