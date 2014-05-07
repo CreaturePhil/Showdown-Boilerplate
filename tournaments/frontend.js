@@ -523,12 +523,23 @@ var Tournament = (function () {
 	Tournament.prototype.onBattleWin = function (room, winner) {
 		var from = Users.get(room.p1);
 		var to = Users.get(room.p2);
+		var fromElo = Number(Core.stdin('elo', toId(from)));
+		var toElo = Number(Core.stdin('elo', toId(to)));
 
 		var result = 'draw';
-		if (from === winner)
+		if (from === winner) {
 			result = 'win';
-		else if (to === winner)
+			var arr = Core.calculateElo(fromElo, toElo);
+			Core.stdout('elo', toId(from), arr[0], function() {
+				Core.stdout('elo', toId(to), arr[1]);
+			});
+		} else if (to === winner) {
 			result = 'loss';
+			var arr = Core.calculateElo(toElo, fromElo);
+			Core.stdout('elo', toId(to), arr[0], function() {
+				Core.stdout('elo', toId(from), arr[1]);
+			});
+		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
 			this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(',') + '|fail');

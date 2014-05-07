@@ -4,7 +4,8 @@
  *
  * This is where essential core infrastructure of
  * Pokemon Showdown extensions for private servers.
- * Core contains standard streams, etc.
+ * Core contains standard streams, profile infrastructure, 
+ * elo rating calculations, and polls infrastructure.
  *
  * @license MIT license
  */

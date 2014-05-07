@@ -5,6 +5,7 @@
  * These are custom commands for the server. This is put in a seperate file
  * from commands.js and config/commands.js to not interfere with them.
  * In addition, it is easier to manage when put in a seperate file.
+ * Most of these commands depend on core.js.
  * 
  * Command categories: General, Staff, Server Management
  *
@@ -106,7 +107,7 @@ var componentCommands = exports.componentCommands = {
         if (target.length > 30) return this.sendReply('About cannot be over 30 characters.');
 
         var now = Date.now();
-        
+
         if ((now-user.lastAbout)* 0.001 < 30) {
             this.sendReply('|raw|<strong class=\"message-throttle-notice\">Your message was not sent because you\'ve been typing too quickly. You must wait ' + Math.floor(
            (30-(now-user.lastAbout)* 0.001))
