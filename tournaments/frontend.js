@@ -578,6 +578,53 @@ var Tournament = (function () {
 	};
 	Tournament.prototype.onTournamentEnd = function () {
 		this.room.add('|tournament|end|' + JSON.stringify({results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()}));
+
+		data = {results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()};
+		data = data['results'].toString();
+
+		runnerUp = false;
+
+		if (data.indexOf(',') >= 0) { 
+			data = data.split(',');
+			winner = data[0];
+			if (data[1]) runnerUp = data[1];
+		} else {
+			winner = data;
+		}
+
+		tourSize = this.generator.users.size;
+
+		if (this.room.isOfficial || tourSize >= 2) {
+			firstMoney = Math.round(tourSize/10);
+			secondMoney = Math.round(firstMoney/2);
+			firstBuck = 'buck';
+			secondBuck = 'buck';
+			if (firstMoney > 1) firstBuck = 'bucks';
+			if (secondMoney > 1) secondBuck = 'bucks';
+
+			this.room.add('|raw|<strong><font color=#2ECC40>' + sanitize(winner)+ '</font> has also won <font color=#2ECC40>' + firstMoney + '</font> '+ firstBuck + ' for winning the tournament!</strong>');
+
+			if (runnerUp) this.room.add('|raw|<strong><font color=#2ECC40>' + sanitize(runnerUp) + '</font> has also won <font color=#2ECC40>' + secondMoney + '</font> '+secondBuck + ' for winning the tournament!</strong>');
+
+			var tourWin = Number(Core.stdin('tourWins', toId(winner)));
+			Core.stdout('config/money.csv', toId(winner), firstMoney, function() {
+				var winnerElo = Number(Core.stdin('config/elo.csv', toId(winner)));
+				if (runnerUp) {
+					var runnerUpElo = Number(Core.stdin('config/elo.csv', toId(runnerUp)));
+					Core.stdout('config/money.csv', toId(runnerUp), secondMoney, function(){
+						Core.stdout('config/tourWins.csv', toId(winner), (tourWin+1), function(){
+							Core.stdout('config/elo.csv', toId(winner), (50+winnerElo), function() {
+								Core.stdout('config/elo.csv', toId(runnerUp), (25+runnerUpElo), function() {});
+							});
+						});
+					});
+				} else {
+					Core.stdout('config/tourWins.csv', toId(winner), (tourWin+1), function(){
+						Core.stdout('config/elo.csv', toId(winner), (50+winnerElo), function() {});
+					});
+				}
+			});
+		}
 		delete exports.tournaments[toId(this.room.id)];
 	};
 
