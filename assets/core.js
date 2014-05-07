@@ -45,17 +45,17 @@ var core = exports.core = {
 
         if (match === true) {
             var re = new RegExp(data, 'g');
-            fs.readFile(file, 'utf8', function (err, data) {
+            fs.readFile('config/' + file + '.csv', 'utf8', function (err, data) {
                 if (err) return console.log(err);
 
                 var result = data.replace(re, name + ',' + info);
-                fs.writeFile(file, result, 'utf8', function (err) {
+                fs.writeFile('config/' + file + '.csv', result, 'utf8', function (err) {
                     if (err) return console.log(err);
                     typeof callback === 'function' && callback();
                 });
             });
         } else {
-            var log = fs.createWriteStream(file, {
+            var log = fs.createWriteStream('config/' + file + '.csv', {
                 'flags': 'a'
             });
             log.write('\n' + name + ',' + info);
@@ -212,7 +212,7 @@ var core = exports.core = {
     },
 
     ladder: function () {
-        var data = fs.readFileSync('elo', 'utf-8');
+        var data = fs.readFileSync('config/elo.csv', 'utf-8');
         var row = ('' + data).split("\n");
 
         var list = [];

@@ -102,8 +102,7 @@ var componentCommands = exports.componentCommands = {
 
     setabout: 'about',
     about: function (target, room, user) {
-    	console.log('start' + user.chatQueue.length);
-        if (!target) return this.parse('/help status');
+        if (!target) return this.parse('/help about');
         if (target.length > 30) return this.sendReply('About cannot be over 30 characters.');
 
         target = sanitize(target);
@@ -115,7 +114,6 @@ var componentCommands = exports.componentCommands = {
         Core.stdout('about', user.userid, target);
 
         this.sendReply('Your about is now: "' + target + '"');
-        console.log('end' + user.chatQueue.length);
     },
 
     tourladder: 'tournamentladder',
