@@ -21,6 +21,7 @@ Features
 ------------------------------------------------------------------------
 
 * Single Process Hack for improve performance.
+* Up-to-date with [Pokemon Showdown][1]'s latest features.
 * Money (bucks) system for winning tournaments.
 
 _Under Construction_
