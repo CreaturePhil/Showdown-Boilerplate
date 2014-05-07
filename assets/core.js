@@ -167,7 +167,7 @@ var core = exports.core = {
         },
 
         rank: function (user) {
-            var data = fs.readFileSync('elo', 'utf-8');
+            var data = fs.readFileSync('config/elo.csv', 'utf-8');
             var row = ('' + data).split("\n");
 
             var list = [];

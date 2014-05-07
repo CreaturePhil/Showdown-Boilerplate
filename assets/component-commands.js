@@ -65,6 +65,7 @@ var componentCommands = exports.componentCommands = {
         if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
 
         var targetUser = this.targetUserOrSelf(target);
+
         if (!targetUser) {
             var userId = toId(target);
             var money = Core.profile.money(userId);
@@ -78,23 +79,25 @@ var componentCommands = exports.componentCommands = {
                 return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + '<br clear="all">');
             }
             if (about === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo) + '<br clear="all">');
+                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
             }
-            return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('about', about) +  Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo) + '<br clear="all">');
+            return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('about', about) +  Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
         }
+
         var money = Core.profile.money(targetUser.userid);
         var elo = Core.profile.tournamentElo(toId(targetUser.userid));
-        var status = Core.profile.status(toId(targetUser.userid));
-        if (elo === 1000 && status === 0) {
-            return this.sendReplyBox('<img src="' + Core.profile.avatar(true, targetUser, targetUser.avatar) + '" width="80" height="80" align="left">&nbsp;<strong><font color="#2ECC40">Name:</font></strong>&nbsp;' + Core.profile.name(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Group:</font></strong>&nbsp;' + Core.profile.group(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Last Online:</font></strong>&nbsp;' + Core.profile.lastOnline(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Money:</font></strong>&nbsp;' + money + '<br clear="all">');
+        var about = Core.profile.about(targetUser.userid);
+
+        if (elo === 1000 && about === 0) {
+           return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
         }
         if (elo === 1000) {
-            return this.sendReplyBox('<img src="' + Core.profile.avatar(true, targetUser, targetUser.avatar) + '" width="80" height="80" align="left">&nbsp;<strong><font color="#2ECC40">Name:</font></strong>&nbsp;' + Core.profile.name(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Group:</font></strong>&nbsp;' + Core.profile.group(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Last Online:</font></strong>&nbsp;' + Core.profile.lastOnline(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Money:</font></strong>&nbsp;' + money + '<br>&nbsp;<strong><font color="#2ECC40">Status:</font></strong>&nbsp;' + status + '<br clear="all">');
+            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
         }
-        if (status === 0) {
-            return this.sendReplyBox('<img src="' + Core.profile.avatar(true, targetUser, targetUser.avatar) + '" width="80" height="80" align="left">&nbsp;<strong><font color="#2ECC40">Name:</font></strong>&nbsp;' + Core.profile.name(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Group:</font></strong>&nbsp;' + Core.profile.group(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Last Online:</font></strong>&nbsp;' + Core.profile.lastOnline(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Money:</font></strong>&nbsp;' + money + '<br>&nbsp;<strong><font color="#2ECC40">Tournament Elo:</font></strong>&nbsp;' + elo + Core.profile.rank(targetUser.userid) + '<br clear="all">');
+        if (about === 0) {
+            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) +Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
         }
-        return this.sendReplyBox('<img src="' + Core.profile.avatar(true, targetUser, targetUser.avatar) + '" width="80" height="80" align="left">&nbsp;<strong><font color="#2ECC40">Name:</font></strong>&nbsp;' + Core.profile.name(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Group:</font></strong>&nbsp;' + Core.profile.group(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Last Online:</font></strong>&nbsp;' + Core.profile.lastOnline(true, targetUser) + '<br>&nbsp;<strong><font color="#2ECC40">Money:</font></strong>&nbsp;' + money + '<br>&nbsp;<strong><font color="#2ECC40">Tournament Elo:</font></strong>&nbsp;' + elo + Core.profile.rank(targetUser.userid) + '<br>&nbsp;<strong><font color="#2ECC40">Status:</font></strong>&nbsp;' + status + '<br clear="all">');
+        return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
     },
 
     setabout: 'about',
