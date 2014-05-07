@@ -594,7 +594,7 @@ var Tournament = (function () {
 
 		tourSize = this.generator.users.size;
 
-		if (this.room.isOfficial || tourSize >= 2) {
+		if (this.room.isOfficial || tourSize >= 8) {
 			firstMoney = Math.round(tourSize/10);
 			secondMoney = Math.round(firstMoney/2);
 			firstBuck = 'buck';
@@ -603,8 +603,8 @@ var Tournament = (function () {
 			if (secondMoney > 1) secondBuck = 'bucks';
 
 			// annouces the winner/runnerUp
-			this.room.add('|raw|<strong><font color=' + Color.profile.color + '>' + sanitize(winner)+ '</font> has also won <font color=' + Color.profile.color + '>' + firstMoney + '</font> '+ firstBuck + ' for winning the tournament!</strong>');
-			if (runnerUp) this.room.add('|raw|<strong><font color=' + Color.profile.color + '>' + sanitize(runnerUp) + '</font> has also won <font color=' + Color.profile.color + '>' + secondMoney + '</font> '+ secondBuck + ' for winning the tournament!</strong>');
+			this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + sanitize(winner)+ '</font> has also won <font color=' + Core.profile.color + '>' + firstMoney + '</font> '+ firstBuck + ' for winning the tournament!</strong>');
+			if (runnerUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + sanitize(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> '+ secondBuck + ' for winning the tournament!</strong>');
 
 			var wid = toId(winner); // winner's userid
 			var rid = toId(runnerUp); // runnerUp's userid
@@ -614,9 +614,9 @@ var Tournament = (function () {
 			Core.stdout('money', wid, firstMoney, function() {
 				var winnerElo = Number(Core.stdin('elo', wid));
 				if (runnerUp) {
-					var runnerUpElo = Number(Core.stdin('elo.csv', rid));
+					var runnerUpElo = Number(Core.stdin('elo', rid));
 					Core.stdout('money', rid, secondMoney, function() {
-						Core.stdout('tourWins', rid, ( tourWin + 1 ), function() {
+						Core.stdout('tourWins', wid, ( tourWin + 1 ), function() {
 							Core.stdout('elo', wid, ( winnerElo + 50 ), function() {
 								Core.stdout('elo', rid, ( runnerUpElo + 25 ));
 							});
@@ -624,7 +624,7 @@ var Tournament = (function () {
 					});
 				} else {
 					Core.stdout('tourWins', wid, ( tourWin + 1 ), function(){
-						Core.stdout('elo', wid, ( 50 + winnerElo ));
+						Core.stdout('elo', wid, ( winnerElo + 50 ));
 					});
 				}
 			});
