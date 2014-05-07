@@ -76,7 +76,7 @@ var core = exports.core = {
             }
             for (var name in Config.customAvatars) {
                 if (user === name) {
-                    return '<img src="http://107.161.19.15:8000/avatars/' + Config.customAvatars[name] '" width="80" height="80" align="left">';
+                    return '<img src="http://107.161.19.15:8000/avatars/' + Config.customAvatars[name] + '" width="80" height="80" align="left">';
                 }
             }
             var trainersprites = [1, 2, 101, 102, 169, 170, 265, 266, 168];
