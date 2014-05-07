@@ -602,25 +602,29 @@ var Tournament = (function () {
 			if (firstMoney > 1) firstBuck = 'bucks';
 			if (secondMoney > 1) secondBuck = 'bucks';
 
-			this.room.add('|raw|<strong><font color=#2ECC40>' + sanitize(winner)+ '</font> has also won <font color=#2ECC40>' + firstMoney + '</font> '+ firstBuck + ' for winning the tournament!</strong>');
+			// annouces the winner/runnerUp
+			this.room.add('|raw|<strong><font color=' + Color.profile.color + '>' + sanitize(winner)+ '</font> has also won <font color=' + Color.profile.color + '>' + firstMoney + '</font> '+ firstBuck + ' for winning the tournament!</strong>');
+			if (runnerUp) this.room.add('|raw|<strong><font color=' + Color.profile.color + '>' + sanitize(runnerUp) + '</font> has also won <font color=' + Color.profile.color + '>' + secondMoney + '</font> '+ secondBuck + ' for winning the tournament!</strong>');
 
-			if (runnerUp) this.room.add('|raw|<strong><font color=#2ECC40>' + sanitize(runnerUp) + '</font> has also won <font color=#2ECC40>' + secondMoney + '</font> '+secondBuck + ' for winning the tournament!</strong>');
+			var wid = toId(winner); // winner's userid
+			var rid = toId(runnerUp); // runnerUp's userid
 
-			var tourWin = Number(Core.stdin('tourWins', toId(winner)));
-			Core.stdout('config/money.csv', toId(winner), firstMoney, function() {
-				var winnerElo = Number(Core.stdin('config/elo.csv', toId(winner)));
+			// file i/o
+			var tourWin = Number(Core.stdin('tourWins', wid));
+			Core.stdout('money', wid, firstMoney, function() {
+				var winnerElo = Number(Core.stdin('elo', wid));
 				if (runnerUp) {
-					var runnerUpElo = Number(Core.stdin('config/elo.csv', toId(runnerUp)));
-					Core.stdout('config/money.csv', toId(runnerUp), secondMoney, function(){
-						Core.stdout('config/tourWins.csv', toId(winner), (tourWin+1), function(){
-							Core.stdout('config/elo.csv', toId(winner), (50+winnerElo), function() {
-								Core.stdout('config/elo.csv', toId(runnerUp), (25+runnerUpElo), function() {});
+					var runnerUpElo = Number(Core.stdin('elo.csv', rid));
+					Core.stdout('money', rid, secondMoney, function() {
+						Core.stdout('tourWins', rid, ( tourWin + 1 ), function() {
+							Core.stdout('elo', wid, ( winnerElo + 50 ), function() {
+								Core.stdout('elo', rid, ( runnerUpElo + 25 ));
 							});
 						});
 					});
 				} else {
-					Core.stdout('config/tourWins.csv', toId(winner), (tourWin+1), function(){
-						Core.stdout('config/elo.csv', toId(winner), (50+winnerElo), function() {});
+					Core.stdout('tourWins', wid, ( tourWin + 1 ), function(){
+						Core.stdout('elo', wid, ( 50 + winnerElo ));
 					});
 				}
 			});
