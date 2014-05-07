@@ -1,5 +1,7 @@
 _Under Construction_ - This build is not ready for production yet.
 
+__Should I add more documentation?__ http://strawpoll.me/1650199
+
 Showdown Boilerplate
 ========================================================================
 
