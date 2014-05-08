@@ -1,7 +1,5 @@
 _Under Construction_ - This build is not ready for production yet.
 
-__Should I add more documentation?__ http://strawpoll.me/1650199
-
 Showdown Boilerplate
 ========================================================================
 
@@ -32,6 +30,8 @@ _Under Construction_
 
 Configuration
 ------------------------------------------------------------------------
+
+Create _config/about.csv_, _config/elo.csv_, _config/money.csv_, _config/lastSeen.csv_, and _config/tourWins.csv_.
 
 _Under Construction_
 
