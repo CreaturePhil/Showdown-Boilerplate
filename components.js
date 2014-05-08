@@ -439,7 +439,7 @@ var components = exports.components = {
             Core = require(path.join(__dirname, '../', './core.js')).core;
 
             this.sendReply('Reloading Components...');
-            CommandParser.uncacheTree(path.join(__dirname, '../', './componentds.js'));
+            CommandParser.uncacheTree(path.join(__dirname, '../', './components.js'));
             Components = require(path.join(__dirname, '../', './components.js'));
 
             return this.sendReply('|raw|<font color="green">All files have been reloaded.</font>');
