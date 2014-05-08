@@ -4,7 +4,7 @@
  *
  * This is where essential core infrastructure of
  * Pokemon Showdown extensions for private servers.
- * Core contains standard streams, profile infrastructure, 
+ * Core contains standard streams, profile infrastructure,
  * elo rating calculations, and polls infrastructure.
  *
  * @license MIT license
@@ -292,13 +292,15 @@ var core = exports.core = {
         };
 
         for (var i in components) {
-            poll[i] = components[i];
+            if (components.hasOwnProperty(i)) {
+                poll[i] = components[i];
+            }
         }
 
-        for (var i in Rooms.rooms) {
-            if (Rooms.rooms[i].type === 'chat' && !poll[i]) {
-                poll[i] = {};
-                poll.reset(i);
+        for (var id in Rooms.rooms) {
+            if (Rooms.rooms[id].type === 'chat' && !poll[id]) {
+                poll[id] = {};
+                poll.reset(id);
             }
         }
 
