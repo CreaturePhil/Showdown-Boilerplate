@@ -15,7 +15,15 @@
 var fs = require("fs");
 var path = require("path");
 
-var componentCommands = exports.componentCommands = {
+var components = exports.components = {
+
+    away: 'back',
+    back: function (target, room, user, connection, cmd) {
+        if (!user.away && cmd.toLowerCase() === 'back') return this.sendReply('You are not set as away.');
+        user.away = !user.away;
+        user.updateIdentity();
+        this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
+    },
 
     stafflist: function (target, room, user) {
         var buffer = {
@@ -426,17 +434,13 @@ var componentCommands = exports.componentCommands = {
             Tournaments = require(path.join(__dirname, '../', './tournaments/frontend.js'));
             Tournaments.tournaments = runningTournaments;
 
-            this.sendReply('Reloading FoundationCommands...');
-            CommandParser.uncacheTree(path.join(__dirname, '../', './assets/foundation-commands.js'));
-            FoundationCommands = require(path.join(__dirname, '../', './assets/foundation-commands.js'));
-
-            this.sendReply('Reloading ComponentCommands...');
-            CommandParser.uncacheTree(path.join(__dirname, '../', './assets/component-commands.js'));
-            ComponentCommands = require(path.join(__dirname, '../', './assets/component-commands.js'));
-
             this.sendReply('Reloading Core...');
             CommandParser.uncacheTree(path.join(__dirname, '../', './assets/core.js'));
-            Core = require(path.join(__dirname, '../', './assets/core.js')).core;
+            Core = require(path.join(__dirname, '../', './core.js')).core;
+
+            this.sendReply('Reloading Components...');
+            CommandParser.uncacheTree(path.join(__dirname, '../', './componentds.js'));
+            Components = require(path.join(__dirname, '../', './components.js'));
 
             return this.sendReply('|raw|<font color="green">All files have been reloaded.</font>');
         } catch (e) {
@@ -446,4 +450,4 @@ var componentCommands = exports.componentCommands = {
 
 };
 
-Object.merge(CommandParser.commands, componentCommands);
+Object.merge(CommandParser.commands, components);

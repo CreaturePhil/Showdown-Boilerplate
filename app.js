@@ -424,13 +424,11 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 });
 
 /*********************************************************
- * Load assets
+ * Load custom files
  *********************************************************/
 
-global.FoundationCommands = require('./assets/foundation-commands.js');
+global.Core = require('./core.js').core;
 
-global.Core = require('./assets/core.js').core;
+global.Components = require('./components.js');
 
-global.ComponentCommands = require('./assets/component-commands.js');
-
-global.Poll = require('./assets/core.js').core.poll();
+global.Poll = require('./core.js').core.poll();
