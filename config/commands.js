@@ -1271,6 +1271,30 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/invite [username], [roomname] - Invites the player [username] to join the room [roomname].");
 		}
+		if (target === 'all' || target === 'profile') {
+			matched = true;
+			this.sendReply("/profile [username] - Shows infomation about the user.");
+		}
+		if (target === 'all' || target === 'about' || target === 'setabout') {
+			matched = true;
+			this.sendReply("/about [information] - Set a description about you for your profile.");
+		}
+		if (target === 'all' || target === 'transfermoney' || target === 'transferbuck' || target === 'transferbucks') {
+			matched = true;
+			this.sendReply("/transfermoney [username], [amount] - Transfer a certain amount of money to another user.");
+		}
+		if (target === 'all' || target === 'buy') {
+			matched = true;
+			this.sendReply("/buy [command] - Buys something from the shop.");
+		}
+		if (target === 'all' || target === 'poll') {
+			matched = true;
+			this.sendReply("/poll [question], [option], [option], etc. - Creates a poll.");
+		}
+		if (target === 'all' || target === 'vote') {
+			matched = true;
+			this.sendReply("/vote [option] - votes for the specified option in the poll.");
+		}
 		if (target === '%' || target === 'lock' || target === 'l') {
 			matched = true;
 			this.sendReply("/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~");
@@ -1426,6 +1450,14 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands') {
 			matched = true;
 			this.sendReply("/help OR /h OR /? - Gives you help.");
+		}
+		if (target === '~' || target === 'givemoney' || target === 'givebuck' || target === 'givebucks') {
+			matched = true;
+			this.sendReply("/givemoney [username], [amount] - Gives money to a user. Requires: ~");
+		}
+		if (target === '~' || target === 'takemoney' || target === 'takebuck' || target === 'takebucks') {
+			matched = true;
+			this.sendReply("/takemoney [username], [amount] - Takes money from a user. Requires: ~");
 		}
 		if (!target) {
 			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");

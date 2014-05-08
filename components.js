@@ -1,5 +1,5 @@
 /**
- * Components Commands
+ * Components
  * Created by CreaturePhil - https://github.com/CreaturePhil
  *
  * These are custom commands for the server. This is put in a seperate file
@@ -435,7 +435,7 @@ var components = exports.components = {
             Tournaments.tournaments = runningTournaments;
 
             this.sendReply('Reloading Core...');
-            CommandParser.uncacheTree(path.join(__dirname, '../', './assets/core.js'));
+            CommandParser.uncacheTree(path.join(__dirname, '../', './core.js'));
             Core = require(path.join(__dirname, '../', './core.js')).core;
 
             this.sendReply('Reloading Components...');
