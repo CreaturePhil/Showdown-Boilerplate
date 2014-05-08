@@ -31,7 +31,7 @@ _Under Construction_
 Configuration
 ------------------------------------------------------------------------
 
-Create _config/about.csv_, _config/elo.csv_, _config/money.csv_, _config/lastSeen.csv_, and _config/tourWins.csv_.
+Create __config/about.csv__, __config/elo.csv__, __config/money.csv__, __config/lastSeen.csv__, and __config/tourWins.csv__ files.
 
 _Under Construction_
 

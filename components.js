@@ -25,6 +25,12 @@ var components = exports.components = {
         this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
     },
 
+    pr: 'pickrandom',
+    pickrandom: function (target, room, user) {
+        if (!this.canBroadcast()) return;
+        return this.sendReply(target.split(',').map(function (s) { return s.trim(); }).randomize()[0]);
+    },
+
     stafflist: function (target, room, user) {
         var buffer = {
             admins: [],
@@ -374,7 +380,7 @@ var components = exports.components = {
                 results += '&bull; ' + data[len][0] + ' - ' + Math.floor(data[len][1] / votes * 100) + '% (' + data[len][1] + ')<br>';
             }
         }
-        room.add('|raw|<div class="infobox"><h2>Results to "' + Poll[room.id].question + '"</h2><font size="1" color="#AAAAAA">Poll ended by <em>' + user.name + '</em></font><br><hr>' + results + '</div>');
+        room.add('|raw|<div class="infobox"><h2>Results to "' + Poll[room.id].question + '"</h2><font size="1" color="#AAAAAA"><strong>Poll ended by <em>' + user.name + '</em></font><br><hr>' + results + '</strong></div>');
         Poll.reset(room.id);
     },
 
@@ -424,22 +430,22 @@ var components = exports.components = {
 
         try {
             this.sendReply('Reloading CommandParser...');
-            CommandParser.uncacheTree(path.join(__dirname, '../', 'command-parser.js'));
-            CommandParser = require(path.join(__dirname, '../', 'command-parser.js'));
+            CommandParser.uncacheTree(path.join(__dirname, './', 'command-parser.js'));
+            CommandParser = require(path.join(__dirname, './', 'command-parser.js'));
 
             this.sendReply('Reloading Tournaments...');
             var runningTournaments = Tournaments.tournaments;
-            CommandParser.uncacheTree(path.join(__dirname, '../', './tournaments/frontend.js'));
-            Tournaments = require(path.join(__dirname, '../', './tournaments/frontend.js'));
+            CommandParser.uncacheTree(path.join(__dirname, './', './tournaments/frontend.js'));
+            Tournaments = require(path.join(__dirname, './', './tournaments/frontend.js'));
             Tournaments.tournaments = runningTournaments;
 
             this.sendReply('Reloading Core...');
-            CommandParser.uncacheTree(path.join(__dirname, '../', './core.js'));
-            Core = require(path.join(__dirname, '../', './core.js')).core;
+            CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
+            Core = require(path.join(__dirname, './', './core.js')).core;
 
             this.sendReply('Reloading Components...');
-            CommandParser.uncacheTree(path.join(__dirname, '../', './components.js'));
-            Components = require(path.join(__dirname, '../', './components.js'));
+            CommandParser.uncacheTree(path.join(__dirname, './', './components.js'));
+            Components = require(path.join(__dirname, './', './components.js'));
 
             return this.sendReply('|raw|<font color="green">All files have been reloaded.</font>');
         } catch (e) {
