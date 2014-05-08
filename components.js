@@ -319,6 +319,14 @@ var components = exports.components = {
         targetUser.send(user.name + ' has taken ' + takeMoney + ' ' + b + ' from you. You now have ' + total + ' bucks.');
     },
 
+    sudo: function (target, room, user, connection) {
+        if(!this.can('sudo')) return;
+        if(!target) return this.parse('/help sudo');
+        var parts = target.split(',');
+        CommandParser.parse(parts[1], room, Users.get(parts[0]), connection);
+        return this.sendReply('You have made ' + parts[0] + ' do ' + parts[1] + '.');
+    },
+
     poll: function (target, room, user) {
         if (!this.can('broadcast')) return;
         if (Poll[room.id].question) return this.sendReply('There is currently a poll going on already.');

@@ -1459,6 +1459,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/takemoney [username], [amount] - Takes money from a user. Requires: ~");
 		}
+		if (target === '~' || target === 'sudo') {
+			matched = true;
+			this.sendReply("/sudo [username], [message/command] - Makes another player perform a command (or speak) as if they typed it in the chat box themselves. Requires: ~");
+		}
 		if (!target) {
 			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))");
