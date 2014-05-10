@@ -1,5 +1,3 @@
-_Under Construction_ - This build is not ready for production yet.
-
 Showdown Boilerplate
 ========================================================================
 
@@ -23,10 +21,12 @@ Features
 * Single Process Hack for improve performance.
 * Up-to-date with [Pokemon Showdown][1]'s latest features.
 * Money (bucks) system for winning tournaments.
+* Polls for voting about stuff
 * Profile command to check to see when the user's last online, their money, etc.
 * A bunch of useful commands like /away, /hide, /poof, etc.
+* Custom.css template
 
-_Under Construction_
+_More coming soon_
 
 Configuration
 ------------------------------------------------------------------------
@@ -40,7 +40,6 @@ Create __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, and __tourWi
 * For profile, you can change the color property. (_Line 69_)
 * For shop, you can add, remove, or change items in the shop.
 In the array, each index means [Command, Description, Cost]. (_Lines 244 - 252_)
-* Add or remove commands in components.js file.
 
 
 License
