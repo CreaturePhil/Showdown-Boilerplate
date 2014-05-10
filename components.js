@@ -308,6 +308,44 @@ var components = exports.components = {
         this.sendReplyBox(Poll[room.id].display);
     },
 
+    dc: 'poof',
+    disconnected: 'poof',
+    cpoof: 'poof',
+    poof: (function () {
+        var messages = [
+            "has vanished into nothingness!",
+            "used Explosion!",
+            "fell into the void.",
+            "went into a cave without a repel!",
+            "has left the building.",
+            "was forced to give BlakJack's mom an oil massage!",
+            "was hit by Magikarp's Revenge!",
+            "ate a bomb!",
+            "is blasting off again!",
+            "(Quit: oh god how did this get here i am not good with computer)",
+            "was unfortunate and didn't get a cool message.",
+            "The Immortal accidently kicked {{user}} from the server!",
+        ];
+
+        return function (target, room, user) {
+            if (target && !this.can('broadcast')) return false;
+            if (room.id !== 'lobby') return false;
+            var message = target || messages[Math.floor(Math.random() * messages.length)];
+            if (message.indexOf('{{user}}') < 0)
+                message = '{{user}} ' + message;
+            message = message.replace(/{{user}}/g, user.name);
+            if (!this.canTalk(message)) return false;
+
+            var colour = '#' + [1, 1, 1].map(function () {
+                var part = Math.floor(Math.random() * 0xaa);
+                return (part < 0x10 ? '0' : '') + part.toString(16);
+            }).join('');
+
+            room.addRaw('<strong><font color="' + colour + '">~~ ' + sanitize(message) + ' ~~</font></strong>');
+            user.disconnectAll();
+        };
+    })(),
+
     /*********************************************************
      * Staff commands
      *********************************************************/
