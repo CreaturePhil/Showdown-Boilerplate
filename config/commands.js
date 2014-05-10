@@ -1209,9 +1209,9 @@ var commands = exports.commands = {
 			this.sendReply("/calc - Provides a link to a damage calculator");
 			this.sendReply("!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~");
 		}
-		if (target === 'all' || target === 'blockchallenges' || target === 'away' || target === 'idle') {
+		if (target === 'all' || target === 'blockchallenges' || target === 'idle') {
 			matched = true;
-			this.sendReply("/away - Blocks challenges so no one can challenge you. Deactivate it with /back.");
+			this.sendReply("/blockchallenges - Blocks challenges so no one can challenge you. Deactivate it with /back.");
 		}
 		if (target === 'all' || target === 'allowchallenges' || target === 'back') {
 			matched = true;
@@ -1294,6 +1294,18 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'vote') {
 			matched = true;
 			this.sendReply("/vote [option] - votes for the specified option in the poll.");
+		}
+		if (target === 'all' || target === 'regdate') {
+			matched = true;
+			this.sendReply("/regdate [username] - Shows registeration date of a user.");
+		}
+		if (target === 'all' || target === 'pmall' || target === 'masspm') {
+			matched = true;
+			this.sendReply("/pmall [message] - Sends a message to all users in the server.");
+		}
+		if (target === 'all' || target === 'tell') {
+			matched = true;
+			this.sendReply("/tell [username], [message] - Tells a message to a user.");
 		}
 		if (target === '%' || target === 'lock' || target === 'l') {
 			matched = true;

@@ -74,6 +74,62 @@ var components = exports.components = {
         this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
     },
 
+    regdate: function (target, room, user, connection) {
+        if (!this.canBroadcast()) return;
+        if (!target || target == "." || target == "," || target == "'") return this.parse('/help regdate');
+        var username = target;
+        target = target.replace(/\s+/g, '');
+        var util = require("util"),
+            http = require("http");
+
+        var options = {
+            host: "www.pokemonshowdown.com",
+            port: 80,
+            path: "/forum/~" + target
+        };
+
+        var content = "";
+        var self = this;
+        var req = http.request(options, function (res) {
+
+            res.setEncoding("utf8");
+            res.on("data", function (chunk) {
+                content += chunk;
+            });
+            res.on("end", function () {
+                content = content.split("<em");
+                if (content[1]) {
+                    content = content[1].split("</p>");
+                    if (content[0]) {
+                        content = content[0].split("</em>");
+                        if (content[1]) {
+                            regdate = content[1];
+                            data = username + ' was registered on' + regdate + '.';
+                        }
+                    }
+                } else {
+                    data = username + ' is not registered.';
+                }
+                self.sendReplyBox(data);
+                room.update();
+            });
+        });
+        req.end();
+    },
+
+    masspm: 'pmall',
+    pmall: function (target, room, user) {
+        if (!this.can('pmall')) return;
+        if (!target) return this.parse('/help pmall');
+
+        var pmName = Users.users[toId(botName)].group + botName;
+
+        for (var i in Users.users) {
+            var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
+            Users.users[i].send(message);
+        }
+    },
+
     atm: 'profile',
     profile: function (target, room, user) {
         if (!this.canBroadcast()) return;
@@ -218,7 +274,7 @@ var components = exports.components = {
         if (user.locked) return this.sendReply("You cannot use this command while locked.");
 
         message = this.canTalk(message, null);
-        if (!message) return false;
+        if (!message) return this.parse('/help tell');
 
         if (!global.tells) global.tells = {};
         if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
