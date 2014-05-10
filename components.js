@@ -211,6 +211,23 @@ var components = exports.components = {
         targetUser.send(user.name + ' has transferred ' + transferMoney + ' ' + b + ' to you. You now have ' + targetMoney + ' bucks.');
     },
 
+    tell: function (target, room, user) {
+        if (!target) return;
+        var message = this.splitTarget(target);
+        if (!message) return this.sendReply("You forgot the comma.");
+        if (user.locked) return this.sendReply("You cannot use this command while locked.");
+
+        message = this.canTalk(message, null);
+        if (!message) return false;
+
+        if (!global.tells) global.tells = {};
+        if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
+        if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
+
+        tells[toId(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
+        return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
+    },
+
     vote: function (target, room, user) {
         if (!Poll[room.id].question) return this.sendReply('There is no poll currently going on in this room.');
         if (!this.canTalk()) return;
