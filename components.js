@@ -392,6 +392,20 @@ var components = exports.components = {
         targetUser.send(user.name + ' has taken ' + takeMoney + ' ' + b + ' from you. You now have ' + total + ' bucks.');
     },
 
+    kick: function(target, room, user){
+        if (!this.can('kick')) return;
+        if (!target) return this.parse('/help kick');
+
+        var targetUser = Users.get(target);
+        if (!targetUser) return this.sendReply('User '+target+' not found.');
+
+        if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target+' is not in this room.');
+        targetUser.popup('You have been kicked from room '+ room.title +' by '+user.name+'.');
+        targetUser.leaveRoom(room);
+        room.add('|raw|'+ targetUser.name + ' has been kicked from room by '+ user.name + '.');
+        this.logModCommand(user.name+' kicked '+targetUser.name+' from ' +room.id);
+    },
+
     sudo: function (target, room, user, connection) {
         if(!this.can('sudo')) return;
         if(!target) return this.parse('/help sudo');
