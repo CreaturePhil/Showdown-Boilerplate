@@ -31,9 +31,18 @@ _Under Construction_
 Configuration
 ------------------------------------------------------------------------
 
+### Setting up files
+
 Create __config/about.csv__, __config/elo.csv__, __config/money.csv__, __config/lastSeen.csv__, and __config/tourWins.csv__ files.
 
-_Under Construction_
+### Setting up core
+
+* For profile, you can change the color property. (_Line 69_)
+* For shop, you can add, remove, or change items in the shop.
+In the array, each index means [Command, Description, Cost]. (_Line 244 - 252_)
+* Add or remove commands in components.js file.
+
+
 
 License
 ------------------------------------------------------------------------
