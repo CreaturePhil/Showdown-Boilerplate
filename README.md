@@ -33,7 +33,7 @@ Configuration
 
 ### Setting up files
 
-Create __config/about.csv__, __config/elo.csv__, __config/money.csv__, __config/lastSeen.csv__, and __config/tourWins.csv__ files.
+Create __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, and __tourWins.csv__ files in __config__ folder.
 
 ### Setting up core
 
