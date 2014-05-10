@@ -24,7 +24,6 @@ Features
 * Polls for voting about stuff
 * Profile command to check to see when the user's last online, their money, etc.
 * A bunch of useful commands like /away, /hide, /poof, etc.
-* Custom.css template
 
 _More coming soon_
 
