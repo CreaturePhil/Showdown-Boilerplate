@@ -548,6 +548,20 @@ var components = exports.components = {
         }
     },
 
+    db: 'database',
+    database: function(target, room, user) {
+        if (!this.can('db')) return;
+        if(!target) return user.send('|popup|You much enter a target.');
+
+        try {
+            var log = fs.readFileSync(('config/'+target+'.csv'),'utf8');
+            return user.send('|popup|'+log);
+        } catch (e) {
+            return user.send('|popup|Something bad happen:\n\n ' + e.stack);
+        }
+    },
+
+
 };
 
 Object.merge(CommandParser.commands, components);
