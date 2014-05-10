@@ -25,12 +25,6 @@ var components = exports.components = {
         this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
     },
 
-    pr: 'pickrandom',
-    pickrandom: function (target, room, user) {
-        if (!this.canBroadcast()) return;
-        return this.sendReply(target.split(',').map(function (s) { return s.trim(); }).randomize()[0]);
-    },
-
     stafflist: function (target, room, user) {
         var buffer = {
             admins: [],
