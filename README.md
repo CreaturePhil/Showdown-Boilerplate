@@ -39,6 +39,9 @@ Create __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, and __tourWi
 * For profile, you can change the color property. (_Line 69_) and also change the custom avatar url to your own server. (_Line 74 & Line 80_)
 * For shop, you can add, remove, or change items in the shop.
 In the array, each index means [Command, Description, Cost]. (_Lines 244 - 252_)
+* For tournaments, you can change the amount of users it takes for the winner to win money in tournaments/frontend.js. 
+If you decrease the amount of users require, also decrease the amount divided the the tourSize. For example, if you changed
+it from 8 to 4. You would change the amount divided by the tourSize from 10 to 5. (_Lines 597-598_)
 
 
 License
