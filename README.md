@@ -21,7 +21,7 @@ Features
 * Single Process Hack for improve performance.
 * Up-to-date with [Pokemon Showdown][1]'s latest features.
 * Money (bucks) system for winning tournaments.
-* Polls for voting about stuff
+* Polls for voting
 * Profile command to check to see when the user's last online, their money, etc.
 * A bunch of useful commands like /away, /hide, /poof, etc.
 
