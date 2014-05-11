@@ -119,10 +119,10 @@ var core = exports.core = {
 
             if (lastSeen === 0) return '<br>&nbsp;<strong><font color="' + this.color + '">Last Seen:</font></strong>&nbsp;Never';
 
-            var seconds = Math.floor((Date.now() - lastOn) * 0.001);
-            var minutes = Math.floor((Date.now() - lastOn) * 1.6667e-5);
-            var hours = Math.floor((Date.now() - lastOn) * 2.7778e-7);
-            var days = Math.floor(((Date.now() - lastOn) * 2.7778e-7) / 24);
+            var seconds = Math.floor((Date.now() - lastSeen) * 0.001);
+            var minutes = Math.floor((Date.now() - lastSeen) * 1.6667e-5);
+            var hours = Math.floor((Date.now() - lastSeen) * 2.7778e-7);
+            var days = Math.floor(((Date.now() - lastSeen) * 2.7778e-7) / 24);
 
             var time = days + ' days ago';
 
