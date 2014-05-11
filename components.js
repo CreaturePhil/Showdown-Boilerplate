@@ -41,7 +41,7 @@ var components = exports.components = {
             voices: []
         };
 
-        var staffList = fs.readFileSync(path.join(__dirname, '../', './config/usergroups.csv'), 'utf8').split('\n');
+        var staffList = fs.readFileSync(path.join(__dirname, './', './config/usergroups.csv'), 'utf8').split('\n');
         var numStaff = 0;
         var staff;
 
