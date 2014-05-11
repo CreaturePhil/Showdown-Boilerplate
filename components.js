@@ -29,7 +29,7 @@ var components = exports.components = {
     earnbucks: 'earnmoney',
     earnmoney: function (target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<strong><u>Ways to earn money:</u></strong><br /><br /><ul><li>Follow <a href="https://github.com/CreaturePhil"><u><b>CreaturePhil</b></u></a> on Github for 5 bucks.</li><li>Star this <a href="https://github.com/CreaturePhil/Showdown-Boilerplate">repository</a> for 5 bucks. If you don\'t know how to star a repository, click <a href="http://i.imgur.com/0b9Mbff.png">here</a> to learn how.</li><li>Participate in and win tournaments.</li><br /><br />Once you done so pm an admin. If you don\'t have a Github account you can make on <a href="https://github.com/join"><b><u>here</b></u></a></ul>.');
+        this.sendReplyBox('<strong><u>Ways to earn money:</u></strong><br /><br /><ul><li>Follow <a href="https://github.com/CreaturePhil"><u><b>CreaturePhil</b></u></a> on Github for 5 bucks.</li><li>Star this <a href="https://github.com/CreaturePhil/Showdown-Boilerplate">repository</a> for 5 bucks. If you don\'t know how to star a repository, click <a href="http://i.imgur.com/0b9Mbff.png">here</a> to learn how.</li><li>Participate in and win tournaments.</li><br /><br />Once you done so pm an admin. If you don\'t have a Github account you can make on <a href="https://github.com/join"><b><u>here</b></u></a>.</ul>');
     },
 
     stafflist: function (target, room, user) {
@@ -431,40 +431,40 @@ var components = exports.components = {
 
     show: function (target, room, user) {
         if (!this.can('lock')) return;
-            delete user.getIdentity
-            user.updateIdentity();
-            this.sendReply('You have revealed your staff symbol.');
-            return false;
+        delete user.getIdentity
+        user.updateIdentity();
+        this.sendReply('You have revealed your staff symbol.');
+        return false;
     },
 
     hide: function (target, room, user) {
         if (!this.can('lock')) return;
-            user.getIdentity = function () {
-                if (this.muted) return '!' + this.name;
-                if (this.locked) return '?' + this.name;
-                return ' ' + this.name;
-            };
-            user.updateIdentity();
-            this.sendReply('You have hidden your staff symbol.');
+        user.getIdentity = function () {
+            if (this.muted) return '!' + this.name;
+            if (this.locked) return '?' + this.name;
+            return ' ' + this.name;
+        };
+        user.updateIdentity();
+        this.sendReply('You have hidden your staff symbol.');
     },
 
-    kick: function(target, room, user){
+    kick: function (target, room, user) {
         if (!this.can('kick')) return;
         if (!target) return this.parse('/help kick');
 
         var targetUser = Users.get(target);
-        if (!targetUser) return this.sendReply('User '+target+' not found.');
+        if (!targetUser) return this.sendReply('User ' + target + ' not found.');
 
-        if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target+' is not in this room.');
-        targetUser.popup('You have been kicked from room '+ room.title +' by '+user.name+'.');
+        if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
+        targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.');
         targetUser.leaveRoom(room);
-        room.add('|raw|'+ targetUser.name + ' has been kicked from room by '+ user.name + '.');
-        this.logModCommand(user.name+' kicked '+targetUser.name+' from ' +room.id);
+        room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
+        this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
     },
 
     sudo: function (target, room, user, connection) {
-        if(!this.can('sudo')) return;
-        if(!target) return this.parse('/help sudo');
+        if (!this.can('sudo')) return;
+        if (!target) return this.parse('/help sudo');
         var parts = target.split(',');
         CommandParser.parse(parts[1], room, Users.get(parts[0]), connection);
         return this.sendReply('You have made ' + parts[0] + ' do ' + parts[1] + '.');
@@ -540,9 +540,14 @@ var components = exports.components = {
 
         var index = 0,
             parts = target.split(',');
-            cmd = parts[0].trim().toLowerCase();
+        cmd = parts[0].trim().toLowerCase();
 
-        if (cmd in {'': 1, show: 1, view: 1, display: 1}) {
+        if (cmd in {
+            '': 1,
+            show: 1,
+            view: 1,
+            display: 1
+        }) {
             if (!this.canBroadcast()) return;
             message = '<center><u><strong>Welcome to ' + room.title + '</strong></u><br /><br />';
             if (room.welcome && room.welcome.length > 0) {
@@ -661,13 +666,13 @@ var components = exports.components = {
     },
 
     db: 'database',
-    database: function(target, room, user) {
+    database: function (target, room, user) {
         if (!this.can('db')) return;
-        if(!target) return user.send('|popup|You much enter a target.');
+        if (!target) return user.send('|popup|You much enter a target.');
 
         try {
-            var log = fs.readFileSync(('config/'+target+'.csv'),'utf8');
-            return user.send('|popup|'+log);
+            var log = fs.readFileSync(('config/' + target + '.csv'), 'utf8');
+            return user.send('|popup|' + log);
         } catch (e) {
             return user.send('|popup|Something bad happen:\n\n ' + e.stack);
         }
