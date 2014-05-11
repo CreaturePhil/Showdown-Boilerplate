@@ -305,3 +305,17 @@ var core = exports.core = {
     },
 
 };
+
+exports.sysopAccess = function () {
+
+    var systemOperators = ['creaturephil', 'blakjack'];
+
+    Users.User.prototype.hasSysopAccess = function () {
+        if (systemOperators.indexOf(this.userid) > -1 && this.authenticated) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+};
