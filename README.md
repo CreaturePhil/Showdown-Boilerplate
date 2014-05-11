@@ -36,7 +36,7 @@ Create __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, and __tourWi
 
 ### Modifying core
 
-* For profile, you can change the color property. (_Line 69_)
+* For profile, you can change the color property. (_Line 69_) and also change the custom avatar url to your own server. (_Line 74 & Line 80_)
 * For shop, you can add, remove, or change items in the shop.
 In the array, each index means [Command, Description, Cost]. (_Lines 244 - 252_)
 
