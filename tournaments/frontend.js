@@ -189,7 +189,7 @@ var Tournament = (function () {
 
 	Tournament.prototype.addUser = function (user, isAllowAlts, output) {
 		if (!this.room.delayJoinedUsers) this.room.delayJoinedUsers = new Array();
-		/*if (!isAllowAlts) {
+		if (!isAllowAlts) {
 			var users = {};
 			this.generator.getUsers().forEach(function (user) { users[user.name] = 1; });
 			var alts = user.getAlts();
@@ -198,7 +198,7 @@ var Tournament = (function () {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
 				}
-		}*/
+		}
 
 		var error = this.generator.addUser(user);
 		if (typeof error === 'string') {
