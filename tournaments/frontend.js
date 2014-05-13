@@ -188,7 +188,8 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.addUser = function (user, isAllowAlts, output) {
-		if (!isAllowAlts) {
+		if (!this.room.delayJoinedUsers) this.room.delayJoinedUsers = new Array();
+		/*if (!isAllowAlts) {
 			var users = {};
 			this.generator.getUsers().forEach(function (user) { users[user.name] = 1; });
 			var alts = user.getAlts();
@@ -197,7 +198,7 @@ var Tournament = (function () {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
 				}
-		}
+		}*/
 
 		var error = this.generator.addUser(user);
 		if (typeof error === 'string') {
@@ -205,12 +206,17 @@ var Tournament = (function () {
 			return;
 		}
 
-		this.room.add('|tournament|join|' + user.name);
+		this.room.delayJoinedUsers.push(Tools.escapeHTML(user.name));
+		if (this.room.delayJoinedUsers.length >= 5) {
+			this.room.add('|raw|<strong>The following users have joined the tournament: '+this.room.delayJoinedUsers.join(', ')+'.</strong>');
+			this.room.delayJoinedUsers = new Array();
+		}
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
 		this.isBracketInvalidated = true;
 		this.update();
 	};
 	Tournament.prototype.removeUser = function (user, output) {
+		if (!this.room.delayJoinedUsers) this.room.delayJoinedUsers = new Array();
 		var error = this.generator.removeUser(user);
 		if (typeof error === 'string') {
 			output.sendReply('|tournament|error|' + error);
@@ -218,6 +224,10 @@ var Tournament = (function () {
 		}
 
 		this.room.add('|tournament|leave|' + user.name);
+		var index = this.room.delayJoinedUsers.indexOf(user.name);
+		if (index > -1) {
+		    this.room.delayJoinedUsers.splice(index, 1);
+		}
 		user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
 		this.isBracketInvalidated = true;
 		this.update();
@@ -316,6 +326,13 @@ var Tournament = (function () {
 			this.pendingChallenges.set(user, null);
 			this.disqualifiedUsers.set(user, false);
 		}, this);
+
+		if (this.room.delayJoinedUsers) {
+			if (this.room.delayJoinedUsers.length >= 1) {
+				this.room.add('|raw|<strong>The following users have joined the tournament: '+this.room.delayJoinedUsers.join(', ')+'.</strong>');
+				this.room.delayJoinedUsers = new Array();
+			}
+		}
 
 		this.isTournamentStarted = true;
 		this.isBracketInvalidated = true;
