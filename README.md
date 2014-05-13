@@ -43,7 +43,6 @@ In the array, each index means [Command, Description, Cost]. (_Lines 244 - 252_)
 If you decrease the amount of users require, also decrease the amount divided by the tourSize. For example, if you changed
 it from 8 to 4. You would change the amount divided by the tourSize from 10 to 5. (_Lines 597-598_)
 
-
 License
 ------------------------------------------------------------------------
 

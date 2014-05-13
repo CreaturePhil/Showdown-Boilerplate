@@ -76,8 +76,13 @@ battleEngineFakeProcess.client.on('message', function (message) {
 				var fakeErr = {stack: stack};
 
 				if (!require('./crashlogger.js')(fakeErr, 'A battle')) {
+<<<<<<< HEAD
 					var ministack = ("" + err.stack).split("\n").slice(0, 2).join("<br />");
 					battleEngineFakeProcess.client.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
+=======
+					var ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
+>>>>>>> upstream/master
 				} else {
 					battleEngineFakeProcess.client.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
 				}
@@ -675,7 +680,7 @@ var BattlePokemon = (function () {
 				var nature = this.battle.getNature(this.set.nature);
 				if (statName === nature.plus) stat *= 1.1;
 				if (statName === nature.minus) stat *= 0.9;
-				this.stats[statName] = Math.floor(stat);
+				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
 			}
 			this.speed = this.stats.spe;
 		}
