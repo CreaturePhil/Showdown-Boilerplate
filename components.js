@@ -187,7 +187,7 @@ var components = exports.components = {
 
         user.lastAbout = now;
 
-        target = sanitize(target);
+        target = Tools.escapeHTML(target);
         target = target.replace(/[^A-Za-z\d ]+/g, '');
 
         var data = Core.stdin('about', user.userid);
@@ -342,7 +342,7 @@ var components = exports.components = {
                 return (part < 0x10 ? '0' : '') + part.toString(16);
             }).join('');
 
-            room.addRaw('<strong><font color="' + colour + '">~~ ' + sanitize(message) + ' ~~</font></strong>');
+            room.addRaw('<strong><font color="' + colour + '">~~ ' + Tools.escapeHTML(message) + ' ~~</font></strong>');
             user.disconnectAll();
         };
     })(),

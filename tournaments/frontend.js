@@ -603,8 +603,8 @@ var Tournament = (function () {
 			if (secondMoney > 1) secondBuck = 'bucks';
 
 			// annouces the winner/runnerUp
-			this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + sanitize(winner)+ '</font> has also won <font color=' + Core.profile.color + '>' + firstMoney + '</font> '+ firstBuck + ' for winning the tournament!</strong>');
-			if (runnerUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + sanitize(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> '+ secondBuck + ' for winning the tournament!</strong>');
+			this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(winner)+ '</font> has also won <font color=' + Core.profile.color + '>' + firstMoney + '</font> '+ firstBuck + ' for winning the tournament!</strong>');
+			if (runnerUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> '+ secondBuck + ' for winning the tournament!</strong>');
 
 			var wid = toId(winner); // winner's userid
 			var rid = toId(runnerUp); // runnerUp's userid
