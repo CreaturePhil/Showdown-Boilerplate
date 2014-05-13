@@ -32,7 +32,7 @@ Configuration
 
 ### Setting up files
 
-Create __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, and __tourWins.csv__ files in __config__ folder.
+Create __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, __money.csv__,  and __tourWins.csv__ files in __config__ folder.
 
 ### Modifying core
 
