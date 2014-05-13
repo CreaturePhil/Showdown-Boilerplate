@@ -123,7 +123,7 @@ var components = exports.components = {
         if (!this.can('pmall')) return;
         if (!target) return this.parse('/help pmall');
 
-        var pmName = 'Server PM [Do not reply]';
+        var pmName = '~Server PM [Do not reply]';
 
         for (var i in Users.users) {
             var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
