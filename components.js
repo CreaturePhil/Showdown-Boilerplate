@@ -466,7 +466,7 @@ var components = exports.components = {
         if (!this.can('sudo')) return;
         if (!target) return this.parse('/help sudo');
         var parts = target.split(',');
-        CommandParser.parse(parts[1], room, Users.get(parts[0]), connection);
+        CommandParser.parse(parts[1], room, Users.get(parts[0]), Users.get(parts[0]).connections[0]);
         return this.sendReply('You have made ' + parts[0] + ' do ' + parts[1] + '.');
     },
 
