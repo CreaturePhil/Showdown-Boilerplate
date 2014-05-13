@@ -727,13 +727,15 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 
 	if (cmd === '') {
 		if (!this.canBroadcast()) return;
-		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).filter(function (tournament) {
-			tournament = exports.tournaments[tournament];
-			return !tournament.room.isPrivate && !tournament.room.staffRoom;
-		}).map(function (tournament) {
-			tournament = exports.tournaments[tournament];
-			return {room: tournament.room.title, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
-		})));
+		var tourList = [];
+		for (var u in Tournaments.tournaments) {
+			if (!Tournaments.tournaments[u].isTournamentStarted && !Tournaments.tournaments[u].room.isPrivate) {
+				if (!Tools.data.Formats[Tournaments.tournaments[u].format]) continue;
+				tourList.push('<a class="ilink" href="/' + Tournaments.tournaments[u].room.id+'">' + Tournaments.tournaments[u].room.title + '</a>: ' + Tools.data.Formats[Tournaments.tournaments[u].format].name + ' ' + Tournaments.tournaments[u].generator.name);
+			}
+		}
+		if (tourList.length < 1) return this.sendReplyBox('<strong><font color=' + Core.profile.color + '>There are no tournaments in their signup phase.</font></strong>');
+		this.sendReplyBox('<b><font color=' + Core.profile.color + '>Tournaments in their signup phase: </font></b><br />' + tourList.join('<br />'));
 	} else if (cmd === 'help') {
 		if (!this.canBroadcast()) return;
 		return this.sendReplyBox(
