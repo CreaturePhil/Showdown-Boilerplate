@@ -462,7 +462,7 @@ var components = exports.components = {
         }
     },
 
-    sudo: function (target, room, user, connection) {
+    sudo: function (target, room, user) {
         if (!this.can('sudo')) return;
         if (!target) return this.parse('/help sudo');
         var parts = target.split(',');
