@@ -118,19 +118,6 @@ var components = exports.components = {
         req.end();
     },
 
-    masspm: 'pmall',
-    pmall: function (target, room, user) {
-        if (!this.can('pmall')) return;
-        if (!target) return this.parse('/help pmall');
-
-        var pmName = '~Server PM [Do not reply]';
-
-        for (var i in Users.users) {
-            var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
-            Users.users[i].send(message);
-        }
-    },
-
     atm: 'profile',
     profile: function (target, room, user) {
         if (!this.canBroadcast()) return;
@@ -460,6 +447,19 @@ var components = exports.components = {
         targetUser.leaveRoom(room);
         room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
         this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
+    },
+
+    masspm: 'pmall',
+    pmall: function (target, room, user) {
+        if (!this.can('pmall')) return;
+        if (!target) return this.parse('/help pmall');
+
+        var pmName = '~Server PM [Do not reply]';
+
+        for (var i in Users.users) {
+            var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
+            Users.users[i].send(message);
+        }
     },
 
     sudo: function (target, room, user, connection) {
