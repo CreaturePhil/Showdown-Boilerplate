@@ -272,6 +272,20 @@ var components = exports.components = {
         return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
     },
 
+    viewtell: 'viewtells',
+    viewtells: function (target, room, user, connection) {
+        if (user.authenticated && global.tells) {
+            var alts = user.getAlts();
+            alts.push(user.name);
+            alts.map(toId).forEach(function (user) {
+                if (tells[user]) {
+                    tells[user].forEach(connection.sendTo.bind(connection, room));
+                    delete tells[user];
+                }
+            });
+        }
+    },
+
     vote: function (target, room, user) {
         if (!Poll[room.id].question) return this.sendReply('There is no poll currently going on in this room.');
         if (!this.canTalk()) return;
