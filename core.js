@@ -129,18 +129,21 @@ var core = exports.core = {
             if (seconds < 60) {
                 if (seconds === 1) {
                     time = seconds + ' second ago';
+                } else {
+                    time = seconds + ' seconds ago';
                 }
-                time = seconds + ' seconds ago';
             } else if (minutes < 60) {
                 if (minutes === 1) {
                     time = minutes + ' minute ago';
+                } else {
+                    time = minutes + ' minutes ago';
                 }
-                time = minutes + ' minutes ago';
             } else if (hours < 24) {
                 if (hours === 1) {
                     time = hours + ' hour ago';
+                } else {
+                    time = hours + ' hours ago';
                 }
-                time = hours + ' hours ago';
             } else if (days === 1) {
                 time = days + ' day ago';
             }
