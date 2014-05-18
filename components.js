@@ -477,7 +477,9 @@ var components = exports.components = {
     },
 
     sudo: function (target, room, user) {
-        if (!this.can('sudo')) return;
+        if (!user.hasConsoleAccess(connection)) {
+            return this.sendReply("/eval - Access denied.");
+        }
         if (!target) return this.parse('/help sudo');
         var parts = target.split(',');
         CommandParser.parse(parts[1].trim(), room, Users.get(parts[0]), Users.get(parts[0]).connections[0]);
