@@ -341,17 +341,17 @@ var User = (function () {
 		if (!roomid) roomid = 'lobby';
 		var name = this.name + (this.away ? " - \u0410\u051d\u0430\u0443" : "");
 		if (this.locked) {
-			return Config.lockedSymbol + name;
+			return '?' + name;
 		}
 		if (this.mutedRooms[roomid]) {
-			return Config.mutedSymbol + name;
+			return '!' + name;
 		}
 		var room = Rooms.rooms[roomid];
 		if (room.auth) {
 			if (room.auth[this.userid]) {
 				return room.auth[this.userid] + name;
 			}
-			if (room.isPrivate) return Config.groups.default[room.type + 'Room'] + name;
+			if (room.isPrivate) return ' ' + name;
 		}
 		return this.group + name;
 	};
