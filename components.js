@@ -612,28 +612,32 @@ var components = exports.components = {
 
     customavatars: 'customavatar',
     customavatar: (function () {
-        const script = (function () {
-            /*
-                FILENAME=`mktemp`
-                function cleanup {
-                    rm -f $FILENAME
-                }
-                trap cleanup EXIT
+        try {
+            const script = (function () {
+                /*
+                    FILENAME=`mktemp`
+                    function cleanup {
+                        rm -f $FILENAME
+                    }
+                    trap cleanup EXIT
 
-                set -xe
+                    set -xe
 
-                timeout 10 wget "$1" -nv -O $FILENAME
+                    timeout 10 wget "$1" -nv -O $FILENAME
 
-                FRAMES=`identify $FILENAME | wc -l`
-                if [ $FRAMES -gt 1 ]; then
-                    EXT=".gif"
-                else
-                    EXT=".png"
-                fi
+                    FRAMES=`identify $FILENAME | wc -l`
+                    if [ $FRAMES -gt 1 ]; then
+                        EXT=".gif"
+                    else
+                        EXT=".png"
+                    fi
 
-                timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
-            */
-        }).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+                    timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
+                */
+            }).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+        } catch (e) {
+            console.log(e.stack);
+        }
 
         var pendingAdds = {};
         return function (target) {
