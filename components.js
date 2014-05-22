@@ -480,7 +480,7 @@ var components = exports.components = {
 
     sudo: function (target, room, user) {
         if (!user.hasConsoleAccess(connection)) {
-            return this.sendReply("/eval - Access denied.");
+            return this.sendReply("/sudo - Access denied.");
         }
         if (!target) return this.parse('/help sudo');
         var parts = target.split(',');
