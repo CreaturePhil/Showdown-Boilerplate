@@ -582,7 +582,7 @@ var components = exports.components = {
         if (!room.welcome) room.welcome = room.chatRoomData.welcome = [];
 
         var message = parts.slice(1).join(',').trim();
-        if (cmd === 'new' || cmd === 'edit') {
+        if (cmd === 'new' || cmd === 'edit' || cmd === 'set') {
             if (!message) return this.sendReply('Your welcome message was empty.');
             if (message.length > 250) return this.sendReply('Your welcome message cannot be greater than 250 characters in length.');
 
@@ -799,7 +799,6 @@ var components = exports.components = {
             return user.send('|popup|Something bad happen:\n\n ' + e.stack);
         }
     },
-
 
 };
 

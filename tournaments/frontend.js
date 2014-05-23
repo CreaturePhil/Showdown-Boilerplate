@@ -546,16 +546,20 @@ var Tournament = (function () {
 		var result = 'draw';
 		if (from === winner) {
 			result = 'win';
-			var arr = Core.calculateElo(fromElo, toElo);
-			Core.stdout('elo', toId(from), arr[0], function() {
-				Core.stdout('elo', toId(to), arr[1]);
-			});
+			if (this.room.isOfficial && this.generator.users.size >= 8) {
+				var arr = Core.calculateElo(fromElo, toElo);
+				Core.stdout('elo', toId(from), arr[0], function() {
+					Core.stdout('elo', toId(to), arr[1]);
+				});
+			}
 		} else if (to === winner) {
 			result = 'loss';
-			var arr = Core.calculateElo(toElo, fromElo);
-			Core.stdout('elo', toId(to), arr[0], function() {
-				Core.stdout('elo', toId(from), arr[1]);
-			});
+			if (this.room.isOfficial && this.generator.users.size >= 8) {
+				var arr = Core.calculateElo(toElo, fromElo);
+				Core.stdout('elo', toId(to), arr[0], function() {
+					Core.stdout('elo', toId(from), arr[1]);
+				});
+			}
 		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
