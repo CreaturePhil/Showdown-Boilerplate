@@ -236,7 +236,7 @@ var core = exports.core = {
             if (limit > len) limit = len;
 
             while (len--) {
-                if(len === limit) break;
+                if (len === limit) break;
                 ladder = ladder + '<tr><td>' + (list.length - len) + '</td><td>' + list[len][0] + '</td><td>' + Math.floor(list[len][1]) + '</td><td>' + this.stdin('tourWins', list[len][0]) + '</td></tr>';
             }
             ladder += '</tbody></table>';
