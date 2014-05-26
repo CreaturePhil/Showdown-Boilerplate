@@ -173,11 +173,7 @@ var parse = exports.parse = {
     updateSeen: function (user, type, detail) {
         user = toId(user);
         type = toId(type);
-        if (type in {
-            j: 1,
-            l: 1,
-            c: 1
-        } && (config.rooms.indexOf(toId(detail)) === -1 || config.privaterooms.indexOf(toId(detail)) > -1)) return;
+        if (type in {j: 1, l: 1, c: 1} && (config.rooms.indexOf(toId(detail)) === -1 || config.privaterooms.indexOf(toId(detail)) > -1)) return;
         var time = Date.now();
         if (!this.chatData[user]) this.chatData[user] = {
             zeroTol: 0,
@@ -186,11 +182,7 @@ var parse = exports.parse = {
         };
         if (!detail) return;
         var msg = '';
-        if (type in {
-            j: 1,
-            l: 1,
-            c: 1
-        }) {
+        if (type in {j: 1, l: 1, c: 1}) {
             msg += (type === 'j' ? 'joining' : (type === 'l' ? 'leaving' : 'chatting in')) + ' ' + detail.trim() + '.';
         } else if (type === 'n') {
             msg += 'changing nick to ' + ('+%@&#~'.indexOf(detail.trim().charAt(0)) === -1 ? detail.trim() : detail.trim().substr(1)) + '.';
