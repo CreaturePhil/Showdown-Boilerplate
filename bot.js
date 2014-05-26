@@ -4,7 +4,6 @@
  * Credits
  * CreaturePhil - Lead Development (https://github.com/CreaturePhil)
  * TalkTakesTime - Parser (https://github.com/TalkTakesTime)
- * Stevoduhhero - Battling AI (https://github.com/stevoduhhero) - Coming Soon
  *
  * @license MIT license
  */
