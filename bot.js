@@ -91,10 +91,13 @@ const FLOOD_MESSAGE_TIME = 6*1000;
 const MIN_CAPS_LENGTH = 18;
 const MIN_CAPS_PROPORTION = 0.8;
 
-exports.parse = {
+var parse = exports.parse = {
+
 	chatData: {},
-	processChatData: function(user, room, connection, message) {
+
+	processChatData: function (user, room, connection, message) {
 		if (user.userid === config.userid()) return;
+		this.processBotCommands(user, room, connection, message);
 		message = message.trim().replace(/ +/g, " "); // removes extra spaces so it doesn't trigger stretching
 		this.updateSeen(user.userid, 'c', room.title);
 		var time = Date.now();
@@ -115,7 +118,7 @@ exports.parse = {
 		if (isFlooding) {
 			if (pointVal < 2) {
 				pointVal = 2;
-				muteMessage = ', Automated response: flooding';
+				muteMessage = ', flooding';
 			}
 		}
 		// moderation for caps (over x% of the letters in a line of y characters are capital)
@@ -123,7 +126,7 @@ exports.parse = {
 		if (capsMatch && toId(message).length > MIN_CAPS_LENGTH && (capsMatch.length >= Math.floor(toId(message).length * MIN_CAPS_PROPORTION))) {
 			if (pointVal < 1) {
 				pointVal = 1;
-				muteMessage = ', Automated response: caps';
+				muteMessage = ', caps';
 			}
 		}
 		// moderation for stretching (over x consecutive characters in the message are the same)
@@ -131,7 +134,7 @@ exports.parse = {
 		if (stretchMatch) {
 			if (pointVal < 1) {
 				pointVal = 1;
-				muteMessage = ', Automated response: stretching';
+				muteMessage = ', stretching';
 			}
 		}
 		if (pointVal > 0 && !(time - this.chatData[user][room].lastAction < ACTION_COOLDOWN)) {
@@ -155,9 +158,13 @@ exports.parse = {
 			if (this.chatData[user][room].points >= 2) this.chatData[user].zeroTol++; // getting muted or higher increases your zero tolerance level (warns do not)
 			this.chatData[user][room].lastAction = time;
 			CommandParser.parse(('/' + cmd + ' ' + user.userid + muteMessage), room, Users.get(config.name), Users.get(config.name).connections[0]);
+			return false;
 		}
+
+		return true;
 	},
-	updateSeen: function(user, type, detail) {
+
+	updateSeen: function (user, type, detail) {
 		user = toId(user);
 		type = toId(type);
 		if (type in {j:1, l:1, c:1} && (config.rooms.indexOf(toId(detail)) === -1 || config.privaterooms.indexOf(toId(detail)) > -1)) return;
@@ -179,4 +186,80 @@ exports.parse = {
 			this.chatData[user].seenAt = time;
 		}
 	},
+
+	processBotCommands: function (user, room, connection, message) {
+		var cmd = '',
+			target = '',
+			spaceIndex = message.indexOf(' '),
+			botDelay = (Math.floor(Math.random() * 6) * 1000);
+
+		if (message.charAt(0) === '!') {
+			if (spaceIndex > 0) {
+				cmd = message.substr(1, spaceIndex - 1);
+				target = message.substr(spaceIndex + 1);
+			} else {
+				cmd = message.substr(1);
+				target = '';
+			}
+		}
+
+		if (commands[cmd]) {
+			var context = {
+				sendReply: function (data) {
+					setTimeout(function () {room.add('|c|' + config.group + config.name + '|' + data)}, botDelay);
+				},
+				sendPm: function (data) {
+					var message = '|pm|' + config.group + config.name + '|' + user.group + user.name + '|' + data;
+					user.send(message);
+				},
+			}
+
+			if (typeof commands[cmd] === 'function') {
+				commands[cmd].call(context, target, room, user, connection, cmd, message);
+			}
+		}
+	},
+
+	getTimeAgo: function(time) {
+		time = Date.now() - time;
+		time = Math.round(time/1000); // rounds to nearest second
+		var seconds = time%60;
+		var times = [];
+		if (seconds) times.push(String(seconds) + (seconds === 1?' second':' seconds'));
+		var minutes, hours, days;
+		if (time >= 60) {
+			time = (time - seconds)/60; // converts to minutes
+			minutes = time%60;
+			if (minutes) times = [String(minutes) + (minutes === 1?' minute':' minutes')].concat(times);
+			if (time >= 60) {
+				time = (time - minutes)/60; // converts to hours
+				hours = time%24;
+				if (hours) times = [String(hours) + (hours === 1?' hour':' hours')].concat(times);
+				if (time >= 24) {
+					days = (time - hours)/24; // you can probably guess this one
+					if (days) times = [String(days) + (days === 1?' day':' days')].concat(times);
+				}
+			}
+		}
+		if (!times.length) times.push('0 seconds');
+		return times.join(', ');
+	},
+
+};
+
+var commands = exports.commands = {
+
+	penislength: function (target, room, user) {
+		this.sendReply('8.5 inches from the base. Perv.');
+	},
+
+	seen: function (target, room, user) {
+		if (!target) return;
+		if (toId(target) === config.userid()) return this.sendPm('I\'m right here.');
+		if (!parse.chatData[toId(target)] || !parse.chatData[toId(target)].lastSeen) {
+			return this.sendPm('The user ' + target.trim() + ' has never been seen.');
+		} 
+		return this.sendPm(target.trim() + ' was last seen ' + parse.getTimeAgo(parse.chatData[toId(target)].seenAt) + ' ago, ' + parse.chatData[toId(target)].lastSeen);
+	}
+
 };

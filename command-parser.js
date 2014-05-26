@@ -251,7 +251,8 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		});
 	}
 
-	Bot.parse.processChatData(user, room, connection, message);
+	var moderation = Bot.parse.processChatData(user, room, connection, message);
+	if (!moderation) return false;
 
 	return message;
 };
