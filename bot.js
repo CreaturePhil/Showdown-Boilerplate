@@ -1,8 +1,10 @@
 /**
  * Bot
- * Created by CreaturePhil - https://github.com/CreaturePhil
  *
- * Bot Parser comes from TTT (https://github.com/TalkTakesTime/Pokemon-Showdown-Bot).
+ * Credits
+ * CreaturePhil - Lead Development (https://github.com/CreaturePhil)
+ * TalkTakesTime - Parser (https://github.com/TalkTakesTime)
+ * Stevoduhhero - Battling AI (https://github.com/stevoduhhero)
  *
  * @license MIT license
  */
@@ -260,6 +262,12 @@ var commands = exports.commands = {
 			return this.sendPm('The user ' + target.trim() + ' has never been seen.');
 		} 
 		return this.sendPm(target.trim() + ' was last seen ' + parse.getTimeAgo(parse.chatData[toId(target)].seenAt) + ' ago, ' + parse.chatData[toId(target)].lastSeen);
+	},
+
+	salt: function (target, room, user) {
+		if(!global.salt) global.salt = 0;
+		salt++;
+		this.sendReply(salt + '% salty.');
 	}
 
 };
