@@ -80,7 +80,7 @@ function joinServer() {
             delete Users.users[i];
         }
     }
-};
+}
 
 exports.joinServer = joinServer;
 
@@ -213,14 +213,14 @@ var parse = exports.parse = {
             var context = {
                 sendReply: function (data) {
                     setTimeout(function () {
-                        room.add('|c|' + config.group + config.name + '|' + data)
+                        room.add('|c|' + config.group + config.name + '|' + data);
                     }, botDelay);
                 },
                 sendPm: function (data) {
                     var message = '|pm|' + config.group + config.name + '|' + user.group + user.name + '|' + data;
                     user.send(message);
                 },
-            }
+            };
 
             if (typeof commands[cmd] === 'function') {
                 commands[cmd].call(context, target, room, user, connection, cmd, message);
