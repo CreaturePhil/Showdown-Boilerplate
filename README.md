@@ -5,7 +5,7 @@ Showdown Boilerplate is a template for private servers of [Pokémon Showdown][1]
 
 What is a boilerplate? Boilerplate is any text that is or can be reused in new contexts or applications without being greatly changed from the original.
 
-This repository contains the files needed to set up your own Pokémon Showdown server with all the amazing stuff that Pokémon Showdown private servers like Frost and Pandora has. This also includes [Pokemon-Showdown-Addons][3] created by [kota][4].
+This repository contains the files needed to set up your own Pokémon Showdown server with all the amazing stuff that Pokémon Showdown private servers like Frost and Pandora has. This also includes [Pokemon-Showdown-Addons][3] created by [kota][4] and parser from [Pokemon-Showdown-Bot][5] by [TalkTakesTime][6].
 
 For more information on Pokémon Showdown, setting up your own server, or viewing the credits, go visit the main [Pokémon Showdown repository][1].
 
@@ -13,6 +13,8 @@ For more information on Pokémon Showdown, setting up your own server, or viewin
   [2]: https://github.com/Zarel
   [3]: https://github.com/kotarou3/Pokemon-Showdown-Addons
   [4]: https://github.com/kotarou3
+  [5]: https://github.com/TalkTakesTime/Pokemon-Showdown-Bot
+  [6]: https://github.com/TalkTakesTime
 
 
 Features
@@ -24,6 +26,7 @@ Features
 * Polls for voting
 * Profile command to check to see when the user's last online, their money, etc.
 * A bunch of useful commands like /away, /hide, /poof, etc.
+* Built-in bot for moderation and fun
 
 _More coming soon_
 
@@ -46,6 +49,6 @@ it from 8 to 4. You would change the amount divided by the tourSize from 10 to 5
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's server is distributed under the terms of the [MIT License][5].
+Pokémon Showdown's server is distributed under the terms of the [MIT License][7].
 
-  [5]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+  [7]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
