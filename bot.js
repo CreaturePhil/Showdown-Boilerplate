@@ -13,7 +13,6 @@ var config = exports.config = {
     group: '@',
     join: true,
     rooms: ['lobby'],
-    serverid: 'showdown'
 };
 
 /**
