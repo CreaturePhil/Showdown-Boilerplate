@@ -162,6 +162,7 @@ var parse = exports.parse = {
             }
             if (this.chatData[user][room].points >= 2) this.chatData[user].zeroTol++; // getting muted or higher increases your zero tolerance level (warns do not)
             this.chatData[user][room].lastAction = time;
+            room.add('|c|' + user.group + user.name + '|' + message);
             CommandParser.parse(('/' + cmd + ' ' + user.userid + muteMessage), room, Users.get(config.name), Users.get(config.name).connections[0]);
             return false;
         }
