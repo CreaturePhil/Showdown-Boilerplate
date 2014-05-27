@@ -196,6 +196,8 @@ var parse = exports.parse = {
     },
 
     processBotCommands: function (user, room, connection, message) {
+        if (room.type !== 'chat') return;
+
         var cmd = '',
             target = '',
             spaceIndex = message.indexOf(' '),
@@ -237,6 +239,9 @@ var parse = exports.parse = {
                         return false;
                     }
                     return true;
+                },
+                parse: function (target) {
+                    CommandParser.parse(target, room, Users.get(Bot.config.name), Users.get(Bot.config.name).connections[0]);
                 },
             };
 
@@ -291,7 +296,7 @@ var commands = exports.commands = {
          if (!this.can('bottell')) return;
          var parts = target.split(',');
          if (parts.length < 2) return;
-         CommandParser.parse('/tell ' + toId(parts[0]) + ', ' + Tools.escapeHTML(parts[1]), room, Users.get(Bot.config.name), Users.get(Bot.config.name).connections[0]);
+         this.parse('/tell ' + toId(parts[0]) + ', ' + Tools.escapeHTML(parts[1]));
     },
 
     penislength: function (target, room, user) {
@@ -377,5 +382,56 @@ var commands = exports.commands = {
             this.sendPm(message);
         };
     })(),
+
+    maketournament: function (target, room, user) {
+        if (!this.can('maketournament')) return;
+        if (Tournaments.tournaments[room.id]) return this.sendReply('A tournament is already running in the room.');
+
+        var parts = target.split(','),
+            self = this,
+            counter = 1;
+
+        if (parts.length < 2 || Tools.getFormat(parts[0]).effectType !== 'Format' || !/[0-9]/.test(parts[1])) return;
+
+        if (parts[1].indexOf('minute') >= 0) {
+            var time = Number(parts[1].split('minute')[0]);
+
+            this.parse('/tour create ' + parts[0] + ', elimination');
+            this.sendReply('**You have ' + time + ' minute' + parts[1].split('minute')[1] + ' to join the tournament.**');
+
+            var loop = function () {
+                setTimeout(function() {
+                    if (counter === time) {
+                        if (Tournaments.tournaments[room.id].generator.users.size < 2) {
+                            self.parse('/tour end');
+                            return self.sendReply('**The tournament was canceled because of lack of players.**');
+                        }
+                        return self.parse('/tour start');
+                    }
+                    if ((time-counter) === 1) {
+                        self.sendReply('**You have ' + (time-counter) + ' minute to sign up for the tournament.**');
+                    } else {
+                        self.sendReply('**You have ' + (time-counter) + ' minutes to sign up for the tournament.**');
+                    }
+                    counter++;
+                    if (!Tournaments.tournaments[room.id].isTournamentStarted) loop();
+                }, 1000 * 60);
+            };
+            loop();
+        }
+        if (Number(parts[1]) < 2) return;
+        parts[1] = parts[1].replace(/[^0-9 ]+/g, '');
+        this.parse('/tour create ' + parts[0] + ', elimination');
+        this.sendReply('**The tournament will begin when ' + parts[1] + ' players join.**');
+        var playerLoop = function () {
+            setTimeout(function () {
+                if (Tournaments.tournaments[room.id].generator.users.size === Number(parts[1])) {
+                    self.parse('/tour start');
+                }
+                playerLoop();
+            }, 1000 * 15);
+        };
+        playerLoop();
+    },
 
 };
