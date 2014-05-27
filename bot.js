@@ -98,7 +98,9 @@ var parse = exports.parse = {
 
     processChatData: function (user, room, connection, message) {
         if (user.userid === config.userid()) return;
-        this.processBotCommands(user, room, connection, message);
+        var cmd = this.processBotCommands(user, room, connection, message);
+        if (cmd) return false;
+
         message = message.trim().replace(/ +/g, " "); // removes extra spaces so it doesn't trigger stretching
         this.updateSeen(user.userid, 'c', room.title);
         var time = Date.now();
@@ -198,6 +200,15 @@ var parse = exports.parse = {
             target = '',
             spaceIndex = message.indexOf(' '),
             botDelay = (Math.floor(Math.random() * 6) * 1000);
+
+        var now = Date.now();
+
+        if ((now - user.lastBotCmd) * 0.001 < 30) {
+            user.send('Please wait ' + Math.floor((30 - (now - user.lastBotCmd) * 0.001)) + ' seconds until the next command.');
+            return true;
+        }
+
+        user.lastBotCmd = now;
 
         if (message.charAt(0) === '!') {
             if (spaceIndex > 0) {
