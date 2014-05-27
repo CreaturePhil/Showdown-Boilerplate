@@ -275,7 +275,6 @@ var parse = exports.parse = {
 
 var commands = exports.commands = {
 
-    botcommands: 'guide',
     guide: function (target, room, user) {
         var commands = Object.keys(Bot.commands);
         commands = commands.join(', ').toString();

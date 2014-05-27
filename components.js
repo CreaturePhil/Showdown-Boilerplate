@@ -605,6 +605,20 @@ var components = exports.components = {
         }
     },
 
+    control: function (target, room, user) {
+        if (!this.can('control')) return;
+        var parts = target.split(',');
+
+        if (parts.length < 3) return this.sendReply('/control - Syntax is incorrect.');
+
+        if (parts[1].trim().toLowerCase() === 'say') {
+            return room.add('|c|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + parts[2].trim());
+        }
+        if (parts[1].trim().toLowerCase() === 'pm') {
+            return Users.get(parts[2].trim()).send('|pm|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + Users.get(parts[2].trim()).group + Users.get(parts[2].trim()).name + '|' + parts[3].trim());
+        }
+    },
+
     /*********************************************************
      * Server management commands
      *********************************************************/
