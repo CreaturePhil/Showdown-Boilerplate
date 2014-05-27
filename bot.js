@@ -199,9 +199,8 @@ var parse = exports.parse = {
         var cmd = '',
             target = '',
             spaceIndex = message.indexOf(' '),
-            botDelay = (Math.floor(Math.random() * 6) * 1000);
-
-        var now = Date.now();
+            botDelay = (Math.floor(Math.random() * 6) * 1000),
+            now = Date.now();
 
         if (message.charAt(0) === '!') {
 
@@ -276,6 +275,7 @@ var parse = exports.parse = {
 
 var commands = exports.commands = {
 
+    botcommands: 'guide',
     guide: function (target, room, user) {
         var commands = Object.keys(Bot.commands);
         commands = commands.join(', ').toString();
