@@ -203,14 +203,15 @@ var parse = exports.parse = {
 
         var now = Date.now();
 
-        if ((now - user.lastBotCmd) * 0.001 < 30) {
-            user.send('Please wait ' + Math.floor((30 - (now - user.lastBotCmd) * 0.001)) + ' seconds until the next command.');
-            return true;
-        }
-
-        user.lastBotCmd = now;
-
         if (message.charAt(0) === '!') {
+
+            if ((now - user.lastBotCmd) * 0.001 < 30) {
+                user.send('Please wait ' + Math.floor((30 - (now - user.lastBotCmd) * 0.001)) + ' seconds until the next command.');
+                return true;
+            }
+
+            user.lastBotCmd = now;
+
             if (spaceIndex > 0) {
                 cmd = message.substr(1, spaceIndex - 1);
                 target = message.substr(spaceIndex + 1);
@@ -230,6 +231,13 @@ var parse = exports.parse = {
                 sendPm: function (data) {
                     var message = '|pm|' + config.group + config.name + '|' + user.group + user.name + '|' + data;
                     user.send(message);
+                },
+                can: function (permission, target, room) {
+                    if (!user.can(permission, target, room)) {
+                        setTimeout(function () { user.send("!" + cmd + " - Access denied.") }, botDelay);
+                        return false;
+                    }
+                    return true;
                 },
             };
 
@@ -273,6 +281,18 @@ var commands = exports.commands = {
         commands = commands.join(', ').toString();
 
         this.sendReply('List of bot commands: ' + commands);
+    },
+
+    say: function (target, room, user) {
+        if (!this.can('say')) return;
+        this.sendReply(target);
+    },
+
+    bottell: function (target, room, user) {
+         if (!this.can('bottell')) return;
+         var parts = target.split(',');
+         if (parts.length < 2) return;
+         CommandParser.parse('/tell ' + toId(parts[0]) + ', ' + Tools.escapeHTML(parts[1]), room, Users.get(Bot.config.name), Users.get(Bot.config.name).connections[0]);
     },
 
     penislength: function (target, room, user) {
