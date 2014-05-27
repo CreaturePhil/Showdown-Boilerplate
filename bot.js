@@ -157,7 +157,7 @@ var parse = exports.parse = {
             // if the bot has % and not @, it will default to hourmuting as its highest level of punishment instead of roombanning
             if (this.chatData[user][room].points >= 4 && config.group === '%') cmd = 'hourmute';
             if (this.chatData[user].zeroTol > 4) { // if zero tolerance users break a rule they get an instant roomban or hourmute
-                muteMessage = ', Automated response: zero tolerance user';
+                muteMessage = ', zero tolerance user';
                 cmd = config.group !== '%' ? 'roomban' : 'hourmute';
             }
             if (this.chatData[user][room].points >= 2) this.chatData[user].zeroTol++; // getting muted or higher increases your zero tolerance level (warns do not)
