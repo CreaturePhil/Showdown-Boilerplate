@@ -4,11 +4,12 @@
  * Credits
  * CreaturePhil - Lead Development (https://github.com/CreaturePhil)
  * TalkTakesTime - Parser (https://github.com/TalkTakesTime)
+ * Stevoduhhero - Battling AI (https://github.com/stevoduhhero) - WIP
  *
  * @license MIT license
  */
 
-var config = exports.config = {
+var config = {
     name: 'Booty-Bot',
     userid: function () {
         return toId(this.name);
@@ -23,7 +24,10 @@ var config = exports.config = {
         4: 'roomban',
         5: 'ban'
     },
-    privaterooms: ['staff']
+    privaterooms: ['staff'],
+    merge: function () {
+        for (var i in battleAi.commands) CommandParser.commands[i] = battleAi.commands[i];
+    }
 };
 
 /**
@@ -81,10 +85,6 @@ function joinServer() {
     }
 }
 
-exports.joinServer = joinServer;
-
-joinServer();
-
 const ACTION_COOLDOWN = 3 * 1000;
 const FLOOD_MESSAGE_NUM = 5;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
@@ -92,7 +92,7 @@ const FLOOD_MESSAGE_TIME = 6 * 1000;
 const MIN_CAPS_LENGTH = 18;
 const MIN_CAPS_PROPORTION = 0.8;
 
-var parse = exports.parse = {
+var parse = {
 
     chatData: {},
 
@@ -274,11 +274,11 @@ var parse = exports.parse = {
         }
         if (!times.length) times.push('0 seconds');
         return times.join(', ');
-    },
+    }
 
 };
 
-var commands = exports.commands = {
+var commands = {
 
     guide: function (target, room, user) {
         var commands = Object.keys(Bot.commands);
@@ -305,9 +305,8 @@ var commands = exports.commands = {
 
     seen: function (target, room, user) {
         if (!target) return;
-        if (toId(target) === config.userid()) return this.sendPm('I\'m right here.');
         if (!parse.chatData[toId(target)] || !parse.chatData[toId(target)].lastSeen) {
-            return this.sendPm('The user ' + target.trim() + ' has never been seen.');
+            return this.sendPm('The user ' + target.trim() + ' has never been seen chatting in rooms.');
         }
         return this.sendPm(target.trim() + ' was last seen ' + parse.getTimeAgo(parse.chatData[toId(target)].seenAt) + ' ago, ' + parse.chatData[toId(target)].lastSeen);
     },
@@ -435,3 +434,182 @@ var commands = exports.commands = {
     },
 
 };
+/** Work in progress - Should have created a new branch but too late now...
+var battleAi = {
+
+    battles: {},
+
+    checking: false,
+
+    check: function () {
+        var self = this;
+        setTimeout(function () {
+            if (!self.battles) return self.check();
+            self.checking = true;
+            for (var i in self.battles) {
+                if (self.battles[i] && Rooms.rooms[i] & Rooms.rooms[i].battle) {
+                    if (Rooms.rooms[i].battle.field[Bot.config.userid()].side.pokemon[0].condition.charAt(0) == '0' || Rooms.rooms[i].battle.field[Bot.config.userid()].forceSwitch) self.forceSwitch(i);
+                }
+            }
+            self.check();
+        }, 1000 * 15);
+    },
+
+    forceSwitch: function (roomid) {
+        if (!Rooms.rooms[roomid]) return;
+        if (!pokemonSlots) {
+            var pokemonSlots = [];
+            var teamSize = Rooms.rooms[roomid].field[config.userid()].side.pokemon.length;
+            while (teamSize--) pokemonSlots.push(teamSize);
+        }
+        var randomSlot = Math.floor(Math.random() * teamSize);
+        while (randomSlot === 1 && pokemonSlots.indexOf(randomSlot) === -1 && room.battle.field[config.userid()].side.pokemon[randomSlot].condition.charAt(0) == '0') randomSlot = Math.floor(Math.random() * teamSize);
+        room.decision(Users.get(config.userid()), 'choose', 'switch ' + parseInt(randomSlot + 1, 10));
+    },
+
+    predict: function (target, room, opponent, action) {
+        var user = Users.get(config.userid());
+
+        if (!room.battle.field || !room.battle.field[user.userid] || (userField[0].condition.charAt(0) != '0' && field[opponent.userid].side.pokemon[0].condition.charAt(0) == '0')) return false;
+
+        var changePokemon = false,
+            field = room.battle.field,
+            userField = room.battle.field[user.userid],
+            turn = field[opponent.userid].rqid,
+            teamSize = userField.length;
+
+        if (userField[0].condition.charAt(0) == '0') changePokemon = true;
+
+        Bot.battleAi.battles[room.id].turn = turn;
+
+        if (!userField || !userField.active) return 'move |' + turn;
+
+        var options = {
+            team: function () {
+                room.decision(user, 'choose', 'team ' + Math.floor(Math.random() * teamsize) + '|' + turn);
+            },
+            choose: function () {
+
+                function randomSwitch(pokemonSlots) {
+                    if (!pokemonSlots) {
+                        var pokemonSlots = [];
+                        while (teamSize--) pokemonSlots.push(teamSize);
+                    }
+                    var randomSlot = Math.floor(Math.random() * teamSize);
+                    while (randomSlot === 1 && pokemonSlots.indexOf(randomSlot) === -1 && userField[randomSlot].condition.charAt(0) == '0') randomSlot = Math.floor(Math.random() * teamSize);
+                    room.decision(user, 'choose', 'switch ' + parseInt(randomSlot + 1, 10));
+                    return randomSlot;
+                }
+
+                function chance(percent) {
+                    var rng = Math.floor(Math.random() * 100) + 1;
+                    if (rng > percent) return false;
+                    return true;
+                }
+
+                randomSwitch();
+
+            }
+        };
+        options[action]();
+    },
+
+    commands: {
+        chall: 'challenge',
+        challenge: function (target, room, user, connection) {
+            target = this.splitTarget(target);
+            var targetUser = this.targetUser;
+            if (!targetUser || !targetUser.connected) {
+                return this.popupReply("The user '" + this.targetUsername + "' was not found.");
+            }
+            if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
+                return this.popupReply("The user '" + this.targetUsername + "' is not accepting challenges right now.");
+            }
+            if (Config.pmmodchat) {
+                var userGroup = user.group;
+                if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
+                    var groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+                    this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to challenge users.");
+                    return false;
+                }
+            }
+            user.prepBattle(target, 'challenge', connection, function (result) {
+                if (result) user.makeChallenge(targetUser, target);
+            });
+
+            if (this.targetUsername === Bot.config.name) {
+                if (!Bot.battleAi.checking) Bot.battleAi.check();
+            }
+            var bot = Users.get(Bot.config.userid());
+            bot.prepBattle(target, 'challenge', bot.connections[0], function (result) {
+                if (result) bot.acceptChallengeFrom(user.userid);
+            });
+            Bot.battleAi.battles['battle-' + target.toLowerCase().replace(/[^a-z0-9]+/g, '') + '-' + (Rooms.global.lastBattle + 1)] = {
+                bot: {
+                    user: bot,
+                    exposed:  [{}, {}, {}, {}, {}, {}]
+                },
+                opponent: {
+                    user: user,
+                    exposed: [{}, {}, {}, {}, {}, {}]
+                }
+            };
+            if (!(target.split('random').length - 1 > 0)) bot.team = user.team;
+        },
+
+        mv: 'move',
+        attack: 'move',
+        move: function (target, room, user) {
+            if (!room.decision) return this.sendReply("You can only do this in battle rooms.");
+
+            room.decision(user, 'choose', 'move ' + target);
+            if (Bot.battleAi.battles[room.id]) Bot.battleAi.predict(target, room, user, 'move');
+        },
+
+        sw: 'switch',
+        switch: function (target, room, user) {
+            if (!room.decision) return this.sendReply("You can only do this in battle rooms.");
+
+            room.decision(user, 'choose', 'switch ' + parseInt(target, 10));
+            if (Bot.battleAi.battles[room.id]) Bot.battleAi.predict(target, room, user, 'switch');
+        },
+
+        choose: function (target, room, user) {
+            if (!room.decision) return this.sendReply("You can only do this in battle rooms.");
+
+            room.decision(user, 'choose', target);
+            if (Bot.battleAi.battles[room.id]) Bot.battleAi.predict(target, room, user, 'choose');
+        },
+
+        team: function (target, room, user) {
+            if (!room.decision) return this.sendReply("You can only do this in battle rooms.");
+
+            room.decision(user, 'choose', 'team ' + target);
+            if (Bot.battleAi.battles[room.id]) Bot.battleAi.predict(target, room, user, 'team');
+        },
+
+        leave: 'part',
+        part: function (target, room, user, connection) {
+            if (room.id === 'global') return false;
+            var targetRoom = Rooms.get(target);
+            if (target && !targetRoom) {
+                return this.sendReply("The room '" + target + "' does not exist.");
+            }
+            user.leaveRoom(targetRoom || room, connection);
+            var bot = Users.get(Bot.config.userid());
+            if (bot.battles[room.id]) bot.leaveRoom(targetRoom || room, bot.connections[0]);
+        }
+
+    }
+
+};
+*/
+exports.joinServer = joinServer;
+exports.config = config;
+exports.parse = parse;
+exports.commands = commands;
+//exports.battleAi = battleAi;
+
+//config.merge();
+
+joinServer();
