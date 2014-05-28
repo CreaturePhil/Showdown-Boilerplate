@@ -204,22 +204,22 @@ var parse = {
             botDelay = (Math.floor(Math.random() * 6) * 1000),
             now = Date.now();
 
-        if (message.charAt(0) === '!') {
+        if (spaceIndex > 0) {
+            cmd = message.substr(1, spaceIndex - 1);
+            target = message.substr(spaceIndex + 1);
+        } else {
+            cmd = message.substr(1);
+            target = '';
+        }
+
+        if (message.charAt(0) === '!' && Object.keys(Bot.commands).join(' ').toString().indexOf(cmd) >= 0) {
 
             if ((now - user.lastBotCmd) * 0.001 < 30) {
-                user.send('Please wait ' + Math.floor((30 - (now - user.lastBotCmd) * 0.001)) + ' seconds until the next command.');
+                connection.sendTo(room, 'Please wait ' + Math.floor((30 - (now - user.lastBotCmd) * 0.001)) + ' seconds until the next command.');
                 return true;
             }
 
             user.lastBotCmd = now;
-
-            if (spaceIndex > 0) {
-                cmd = message.substr(1, spaceIndex - 1);
-                target = message.substr(spaceIndex + 1);
-            } else {
-                cmd = message.substr(1);
-                target = '';
-            }
         }
 
         if (commands[cmd]) {
