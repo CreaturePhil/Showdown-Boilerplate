@@ -26,7 +26,7 @@ Features
 * Polls for voting
 * Profile command to check to see when the user's last online, their money, etc.
 * A bunch of useful commands like /away, /hide, /poof, etc.
-* Built-in bot for moderation and fun
+* Built-in bot for moderation and fun (Battling AI for the bot coming soon!)
 
 _More coming soon_
 
