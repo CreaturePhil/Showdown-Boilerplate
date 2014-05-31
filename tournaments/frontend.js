@@ -25,31 +25,30 @@ function createTournamentGenerator(generator, args, output) {
 }
 
 function createTournament(room, format, generator, isRated, args, output) {
-    if (room.type !== 'chat') {
-        output.sendReply("Tournaments can only be created in chat rooms.");
-        return;
-    }
-    if (exports.tournaments[room.id]) {
-        output.sendReply("A tournament is already running in the room.");
-        return;
-    }
-    if (Rooms.global.lockdown) {
-        output.sendReply("The server is restarting soon, so a tournament cannot be created.");
-        return;
-    }
-    if (Tools.getFormat(format).effectType !== 'Format') {
-        output.sendReply(format + " is not a valid format.");
-        output.sendReply("Valid formats: " + Object.keys(Tools.data.Formats).filter(function (f) {
-            return Tools.data.Formats[f].effectType === 'Format';
-        }).join(", "));
-        return;
-    }
-    if (!TournamentGenerators[toId(generator)]) {
-        output.sendReply(generator + " is not a valid type.");
-        output.sendReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
-        return;
-    }
-    return exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), isRated);
+	if (room.type !== 'chat') {
+		output.sendReply("Tournaments can only be created in chat rooms.");
+		return;
+	}
+	if (exports.tournaments[room.id]) {
+		output.sendReply("A tournament is already running in the room.");
+		return;
+	}
+	if (Rooms.global.lockdown) {
+		output.sendReply("The server is restarting soon, so a tournament cannot be created.");
+		return;
+	}
+	format = Tools.getFormat(format);
+	if (format.effectType !== 'Format') {
+		output.sendReply(format.id + " is not a valid format.");
+		output.sendReply("Valid formats: " + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
+		return;
+	}
+	if (!TournamentGenerators[toId(generator)]) {
+		output.sendReply(generator + " is not a valid type.");
+		output.sendReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
+		return;
+	}
+	return exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), isRated);
 }
 
 function deleteTournament(name, output) {
