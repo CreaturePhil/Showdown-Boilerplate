@@ -25,9 +25,6 @@ var config = {
         5: 'ban'
     },
     privaterooms: ['staff'],
-    merge: function () {
-        for (var i in battleAi.commands) CommandParser.commands[i] = battleAi.commands[i];
-    }
 };
 
 /**
@@ -235,7 +232,9 @@ var parse = {
                 },
                 can: function (permission, target, room) {
                     if (!user.can(permission, target, room)) {
-                        setTimeout(function () { user.send("!" + cmd + " - Access denied.") }, botDelay);
+                        setTimeout(function () {
+                            user.send("!" + cmd + " - Access denied.")
+                        }, botDelay);
                         return false;
                     }
                     return true;
@@ -293,10 +292,10 @@ var commands = {
     },
 
     bottell: function (target, room, user) {
-         if (!this.can('bottell')) return;
-         var parts = target.split(',');
-         if (parts.length < 2) return;
-         this.parse('/tell ' + toId(parts[0]) + ', ' + Tools.escapeHTML(parts[1]));
+        if (!this.can('bottell')) return;
+        var parts = target.split(',');
+        if (parts.length < 2) return;
+        this.parse('/tell ' + toId(parts[0]) + ', ' + Tools.escapeHTML(parts[1]));
     },
 
     penislength: function (target, room, user) {
@@ -400,7 +399,7 @@ var commands = {
             this.sendReply('**You have ' + time + ' minute' + parts[1].split('minute')[1] + ' to join the tournament.**');
 
             var loop = function () {
-                setTimeout(function() {
+                setTimeout(function () {
                     if (counter === time) {
                         if (Tournaments.tournaments[room.id].generator.users.size < 2) {
                             self.parse('/tour end');
@@ -408,10 +407,10 @@ var commands = {
                         }
                         return self.parse('/tour start');
                     }
-                    if ((time-counter) === 1) {
-                        self.sendReply('**You have ' + (time-counter) + ' minute to sign up for the tournament.**');
+                    if ((time - counter) === 1) {
+                        self.sendReply('**You have ' + (time - counter) + ' minute to sign up for the tournament.**');
                     } else {
-                        self.sendReply('**You have ' + (time-counter) + ' minutes to sign up for the tournament.**');
+                        self.sendReply('**You have ' + (time - counter) + ' minutes to sign up for the tournament.**');
                     }
                     counter++;
                     if (!Tournaments.tournaments[room.id].isTournamentStarted) loop();
