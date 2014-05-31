@@ -417,6 +417,7 @@ var commands = {
                 }, 1000 * 60);
             };
             loop();
+            return;
         }
         if (Number(parts[1]) < 2) return;
         parts[1] = parts[1].replace(/[^0-9 ]+/g, '');
