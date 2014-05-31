@@ -94,7 +94,7 @@ var parse = {
     chatData: {},
 
     processChatData: function (user, room, connection, message) {
-        if (user.userid === config.userid()) return;
+        if (user.userid === config.userid() || !room.users[config.userid()]) return true;
         var cmd = this.processBotCommands(user, room, connection, message);
         if (cmd) return false;
 
