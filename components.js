@@ -583,7 +583,7 @@ var components = exports.components = {
 
             room.welcome[0] = message;
             Rooms.global.writeChatRoomData();
-            if (cmd === 'new') return this.sendReply('Your welcome message has been created.');
+            if (cmd === 'new' || cmd === 'set') return this.sendReply('Your welcome message has been created.');
             if (cmd === 'edit') return this.sendReply('You have successfully edited your welcome mesage.');
         }
         if (cmd === 'motd') {
