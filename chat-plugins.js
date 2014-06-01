@@ -57,7 +57,7 @@ var plugins = exports.plugins = {
 				plugins.scavengers.answerTwo = toId(targets[3]);
 				plugins.scavengers.hintThree = targets[4].trim();
 				plugins.scavengers.answerThree = toId(targets[5]);
-				var result = (cmd === 'startofficialhunt' ? 'An official' : 'A new') + ' Scavenger Hunt has been started by <em> ' + user.name + '</em>! The first hint is: ' + plugins.scavengers.hintOne;
+				var result = (cmd === 'startofficialhunt' ? 'An official' : 'A new') + ' Scavenger Hunt has been started by <em> ' + Tools.escapeHTML(user.name) + '</em>! The first hint is: ' + Tools.escapeHTML(plugins.scavengers.hintOne);
 				Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 			},
 			joinhunt: function (target, room, user) {
@@ -119,13 +119,14 @@ var plugins = exports.plugins = {
 				} else {
 					result += 'No user has completed the hunt.';
 				}
-				result += '<br />Solution: ' + plugins.scavengers.answerOne + ', ' + plugins.scavengers.answerTwo + ', ' + plugins.scavengers.answerThree + '.';
+				result += '<br />Solution: ' + Tools.escapeHTML(plugins.scavengers.answerOne) + ', ' + Tools.escapeHTML(plugins.scavengers.answerTwo) + ', ' + Tools.escapeHTML(plugins.scavengers.answerThree) + '.';
 				plugins.scavengers.result = result;
 				this.parse('/resethunt');
 			},
 			resethunt: function (target, room, user) {
 				if (room.id !== 'scavengers') return;
 				if (!this.can('mute', null, room)) return false;
+				if (plugins.scavengers.status !== 'on') return this.sendReply('There is no active scavenger hunt.');
 				plugins.scavengers.status = 'off';
 				if (plugins.scavengers.blitz) clearTimeout(plugins.scavengers.blitz);
 				plugins.scavengers.blitz = null;
@@ -140,10 +141,11 @@ var plugins = exports.plugins = {
 				if (plugins.scavengers.result) {
 					Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + plugins.scavengers.result + '</strong></div>');
 				} else {
-					Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>The Scavenger Hunt was reset by <em>' + user.name + '</em>.</strong></div>');
+					Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>The Scavenger Hunt was reset by <em>' + Tools.escapeHTML(user.name) + '</em>.</strong></div>');
 				}
 				plugins.scavengers.result = null;
 			},
+			scavengershelp: 'scavengerhelp',
 			scavengerhelp: function (target, room, user) {
 				if (room.id !== 'scavengers') return;
 				if (!this.canBroadcast()) return;
