@@ -817,6 +817,7 @@ var commands = exports.commands = {
 			"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />" +
 			"- /modchat <em>[%/@/#]</em>: set modchat level<br />" +
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
+			"- /welcomemessage <em>set/motd/delete, message</em>: sets a welcome message for the room<br />" +
 			"</div>"
 		);
 	},
@@ -1509,6 +1510,10 @@ var commands = exports.commands = {
 		if (target === '~' || target === 'kick') {
 			matched = true;
 			this.sendReply("/kick [username] - Kicks a username from the room. Requires: ~");
+		}
+		if (target === '~' || target === 'control') {
+			matched = true;
+			this.sendReply("/control [username], [say/pm], [message/user that you want to pm to], [pm message] - Controls what the user says and pm. Requires: ~");
 		}
 		if (!target) {
 			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");

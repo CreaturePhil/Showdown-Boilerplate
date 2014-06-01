@@ -597,19 +597,22 @@ var components = exports.components = {
         }
         if (cmd === 'delete') {
             if (message === 'motd') index = 1;
-            if (!room.welcome[index]) return this.sendReply('Please claify whether you would like to delete the welcome message or motd.');
+            if (!room.welcome[index]) return this.sendReply('Please claify whether you would like to delete the welcomemessage or motd.');
 
             this.sendReply(room.welcome.splice(index, 1)[0]);
             Rooms.global.writeChatRoomData();
             return this.sendReply('You have sucessfully deleted ' + message + '.');
         }
+        this.sendReply("/welcomemessage [set/new/edit], [message] - Sets a new welcome message or edit the current one.");
+        this.sendReply("/welcomemessage [motd], [message] - Sets a motd if a welcome message has already been set.");
+        this.sendReply("/welcomemessage [delete], [welcomemessage/motd] - Deletes the welcomemessage or motd.");
     },
 
     control: function (target, room, user) {
         if (!this.can('control')) return;
         var parts = target.split(',');
 
-        if (parts.length < 3) return this.sendReply('/control - Syntax is incorrect.');
+        if (parts.length < 3) return this.parse('/help control');
 
         if (parts[1].trim().toLowerCase() === 'say') {
             return room.add('|c|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + parts[2].trim());
