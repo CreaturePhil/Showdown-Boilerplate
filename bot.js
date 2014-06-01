@@ -400,6 +400,7 @@ var commands = {
 
             var loop = function () {
                 setTimeout(function () {
+                    if (exports.tournaments[room.id]) return;
                     if (counter === time) {
                         if (Tournaments.tournaments[room.id].generator.users.size < 2) {
                             self.parse('/tour end');
@@ -425,6 +426,7 @@ var commands = {
         this.sendReply('**The tournament will begin when ' + parts[1] + ' players join.**');
         var playerLoop = function () {
             setTimeout(function () {
+                if (exports.tournaments[room.id]) return;
                 if (Tournaments.tournaments[room.id].generator.users.size === Number(parts[1])) {
                     self.parse('/tour start');
                 }
