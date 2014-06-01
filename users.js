@@ -341,7 +341,7 @@ var User = (function () {
 		if (!roomid) roomid = 'lobby';
 		var name = this.name + (this.away ? " - \u0410\u051d\u0430\u0443" : "");
 		if (this.locked) {
-			return '?' + name;
+			return '‽' + name;
 		}
 		if (this.mutedRooms[roomid]) {
 			return '!' + name;

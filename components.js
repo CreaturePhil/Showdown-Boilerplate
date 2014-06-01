@@ -212,7 +212,14 @@ var components = exports.components = {
                 var price = shop[len][2];
                 if (price > userMoney) return this.sendReply('You don\'t have enough money for this. You need ' + (price - userMoney) + ' more bucks to buy ' + target + '.');
                 Core.stdout('money', user.userid, (userMoney - price));
-                this.sendReply('You have purchased ' + target + '. Please contact an admin to get ' + target + '.');
+                if (target.toLowerCase() === 'symbol') {
+                    user.canCustomSymbol = true;
+                    this.sendReply('You have purchased a custom symbol. You will have this until you log off for more than an hour. You may now use /customsymbol now.');
+                    this.parse('/help customsymbol');
+                    this.sendReply('If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.');
+                } else {
+                    this.sendReply('You have purchased ' + target + '. Please contact an admin to get ' + target + '.');
+                }
                 room.add(user.name + ' has bought ' + target + ' from the shop.');
             }
         }
@@ -350,6 +357,58 @@ var components = exports.components = {
         };
     })(),
 
+    customsymbol: function (target, room, user) {
+        if (!user.canCustomSymbol) return this.sendReply('You need to buy this item from the shop to use.');
+        if (!target || target.length > 1) return this.parse('/help customsymbol');
+        if (target.match(/[A-Za-z\d]+/g) || '‽!+%@\u2605&~#'.indexOf(target) >= 0) return this.sendReply('Sorry, but you cannot change your symbol to this for safety/stability reasons.');
+        user.getIdentity = function (roomid) {
+            if (!roomid) roomid = 'lobby';
+            var name = this.name + (this.away ? " - \u0410\u051d\u0430\u0443" : "");
+            if (this.locked) {
+                return '‽' + name;
+            }
+            if (this.mutedRooms[roomid]) {
+                return '!' + name;
+            }
+            var room = Rooms.rooms[roomid];
+            if (room.auth) {
+                if (room.auth[this.userid]) {
+                    return room.auth[this.userid] + name;
+                }
+                if (room.isPrivate) return ' ' + name;
+            }
+            return target + name;
+        };
+        user.updateIdentity();
+        user.canCustomSymbol = false;
+        user.hasCustomSymbol = true;
+    },
+
+    resetsymbol: function (target, room, user) {
+        if (!user.hasCustomSymbol) return this.sendReply('You don\'t have a custom symbol.');
+        user.getIdentity = function (roomid) {
+            if (!roomid) roomid = 'lobby';
+            var name = this.name + (this.away ? " - \u0410\u051d\u0430\u0443" : "");
+            if (this.locked) {
+                return '‽' + name;
+            }
+            if (this.mutedRooms[roomid]) {
+                return '!' + name;
+            }
+            var room = Rooms.rooms[roomid];
+            if (room.auth) {
+                if (room.auth[this.userid]) {
+                    return room.auth[this.userid] + name;
+                }
+                if (room.isPrivate) return ' ' + name;
+            }
+            return this.group + name;
+        };
+        user.hasCustomSymbol = false;
+        user.updateIdentity();
+        this.sendReply('Your symbol has been reset.');
+    },
+
     /*********************************************************
      * Staff commands
      *********************************************************/
@@ -479,9 +538,7 @@ var components = exports.components = {
     },
 
     sudo: function (target, room, user) {
-        if (!user.hasConsoleAccess(connection)) {
-            return this.sendReply("/sudo - Access denied.");
-        }
+        if (!user.can('sudo')) return;
         if (!target) return this.parse('/help sudo');
         var parts = target.split(',');
         CommandParser.parse(parts[1].trim(), room, Users.get(parts[0]), Users.get(parts[0]).connections[0]);
