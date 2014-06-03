@@ -52,11 +52,27 @@ exports.Formats = [
 		banlist: ['OU', 'BL', 'Heracronite', 'Medichamite', 'Gardevoirite', 'Drizzle', 'Drought']
 	},
 	{
-		name: "RU (beta)",
+		name: "RU",
 		section: "XY Singles",
 
+		searchShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2']
+	},
+	{
+		name: "RU (suspect test)",
+		section: "XY Singles",
+
+		challengeShow: false,
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2']
+	},
+	{
+		name: "NU (beta)",
+		section: "XY Singles",
+
+		ruleset: ['RU'],
+		banlist: ['RU', 'BL3']
 	},
 	{
 		name: "LC",
@@ -65,6 +81,20 @@ exports.Formats = [
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
+	},
+	{
+		name: "LC UU",
+		section: "XY Singles",
+
+		searchShow: false,
+		maxLevel: 5,
+		ruleset: ['LC'],
+		banlist: ['Abra', 'Aipom', 'Archen', 'Bellsprout', 'Bunnelby', 'Carvanha', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos',
+			'Croagunk', 'Diglett', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Honedge',
+			'Houndour', 'Magnemite', 'Meditite', 'Mienfoo', 'Misdreavus', 'Omanyte', 'Onix', 'Pawniard', 'Ponyta', 'Porygon',
+			'Riolu', 'Scraggy', 'Shellder', 'Slowpoke', 'Snubbull', 'Spritzee', 'Staryu', 'Taillow', 'Timburr', 'Tirtouga',
+			'Trubbish', 'Vullaby', 'Vulpix', 'Zigzagoon'
+		]
 	},
 	{
 		name: "XY Battle Spot Singles",
@@ -162,12 +192,11 @@ exports.Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Smogon Doubles (current)'],
-		banlist: ['Abomasnow', 'Aegislash', 'Amoonguss', 'Ampharos', 'Azumarill', 'Bisharp', 'Breloom', 'Chandelure', 'Charizard', 'Conkeldurr',
-			'Cresselia', 'Dragonite', 'Dusclops', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gardevoir', 'Gastrodon', 'Genesect', 'Gengar',
-			'Gliscor', 'Greninja', 'Gyarados', 'Heatran', 'Hitmontop', 'Jirachi', 'Kangaskhan', 'Klefki', 'Landorus-T', 'Latios',
-			'Lucario', 'Mamoswine', 'Manectric', 'Mawile', 'Metagross', 'Ninetales', 'Politoed', 'Reuniclus', 'Rhyperior', 'Rotom-W',
-			'Sableye', 'Salamence', 'Scizor', 'Shaymin-Sky', 'Sylveon', 'Talonflame', 'Terrakion', 'Thundurus', 'Togekiss', 'Trevenant',
-			'Tyranitar', 'Venusaur', 'Volcarona', 'Whimsicott', 'Zapdos'
+		banlist: ['Abomasnow', 'Aegislash', 'Amoonguss', 'Aromatisse', 'Azumarill', 'Bisharp', 'Breloom', 'Chandelure', 'Charizard', 'Conkeldurr',
+			'Cresselia', 'Dragonite', 'Dusclops', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gardevoir', 'Genesect', 'Gengar', 'Greninja',
+			'Gyarados', 'Heatran', 'Hitmontop', 'Infernape', 'Kangaskhan', 'Klefki', 'Kyurem-Black', 'Landorus-Therian', 'Latios', 'Lucario',
+			'Mamoswine', 'Manectric', 'Mawile', 'Meowstic', 'Politoed', 'Rotom-Wash', 'Salamence', 'Scizor', 'Scrafty', 'Shaymin-Sky',
+			'Sylveon', 'Talonflame', 'Terrakion', 'Thundurus', 'Togekiss', 'Tyranitar', 'Venusaur', 'Volcarona', 'Whimsicott', 'Zapdos'
 		]
 	},
 	{
@@ -253,13 +282,6 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
-	},
-	{
-		name: "NU (alpha)",
-		section: "Other Metagames",
-
-		ruleset: ['RU (beta)'],
-		banlist: ['RU', 'BL3']
 	},
 	{
 		name: "Challenge Cup",
