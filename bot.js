@@ -94,8 +94,8 @@ var parse = {
 
   processChatData: function (user, room, connection, message) {
     if (user.userid === config.userid() || !room.users[config.userid()]) return true;
-    var cmd = this.processBotCommands(user, room, connection, message);
-    if (cmd) return false;
+    var cmds = this.processBotCommands(user, room, connection, message);
+    if (cmds) return false;
 
     message = message.trim().replace(/ +/g, " "); // removes extra spaces so it doesn't trigger stretching
     this.updateSeen(user.userid, 'c', room.title);
@@ -233,7 +233,7 @@ var parse = {
         can: function (permission, target, room) {
           if (!user.can(permission, target, room)) {
             setTimeout(function () {
-              user.send("!" + cmd + " - Access denied.")
+              user.send("!" + cmd + " - Access denied.");
             }, botDelay);
             return false;
           }
