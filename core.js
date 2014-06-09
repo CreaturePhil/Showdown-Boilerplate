@@ -281,7 +281,8 @@ var core = exports.core = {
                     question: undefined,
                     optionList: [],
                     options: {},
-                    display: ''
+                    display: '',
+                    topOption: ''
                 };
             },
 

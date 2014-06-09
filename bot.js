@@ -24,6 +24,7 @@ var config = {
         5: 'ban'
     },
     privaterooms: ['staff'],
+    hosting: {}
 };
 
 /**
@@ -391,7 +392,7 @@ var commands = {
             self = this,
             counter = 1;
 
-        if (parts.length < 2 || Tools.getFormat(parts[0]).effectType !== 'Format' || !/[0-9]/.test(parts[1])) return;
+        if (parts.length < 2 || Tools.getFormat(parts[0]).effectType !== 'Format' || !/[0-9]/.test(parts[1])) return this.sendPm('Correct Syntax: !maketournament [tier], [time/amount of players]');
 
         if (parts[1].indexOf('minute') >= 0) {
             var time = Number(parts[1].split('minute')[0]);
@@ -435,6 +436,45 @@ var commands = {
             }, 1000 * 15);
         };
         playerLoop();
+    },
+
+    hosttournament: function (target, room, user) {
+        if (!this.can('hosttournament')) return;
+        if (target.toLowerCase() === 'end') {
+            if (!Bot.config.hosting[room.id]) return this.sendPm('I\'m not hosting tournaments.');
+            Bot.config.hosting[room.id] = false;
+            return this.sendReply('I will now stop hosting tournaments.');
+        }
+        if (Bot.config.hosting[room.id]) return this.sendReply('I\'m already hosting tournaments.');
+
+        Bot.config.hosting[room.id] = true
+        this.sendReply('**I will now be hosting tournaments.**');
+
+        var self = this,
+            _room = room,
+            _user = user;
+
+        var poll = function () {
+            setTimeout(function () {
+                if (Poll[_room.id].question) self.parse('/endpoll');
+
+                self.parse('/poll Tournament tier?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
+                setTimeout(function () {
+                    self.parse('/endpoll');
+                    Bot.commands.maketournament.call(self, (Poll[_room.id].topOption + ', 2 minute'), _room, _user);
+                }, 1000 * 60 * 2);
+            }, 1000 * 5);
+        };
+
+        var loop = function () {
+            setTimeout(function () {
+                if (!Tournaments.tournaments[_room.id] || !Poll[_room.id].question) poll();
+                if (Bot.config.hosting[_room.id]) loop();
+            }, 1000 * 60);
+        };
+
+        poll();
+        loop();
     },
 
 };

@@ -601,6 +601,7 @@ var components = exports.components = {
 
         var results = '';
         var len = data.length;
+        var topOption = data[len - 1][0];
         while (len--) {
             if (data[len][1] > 0) {
                 results += '&bull; ' + data[len][0] + ' - ' + Math.floor(data[len][1] / votes * 100) + '% (' + data[len][1] + ')<br>';
@@ -608,6 +609,7 @@ var components = exports.components = {
         }
         room.add('|raw|<div class="infobox"><h2>Results to "' + Poll[room.id].question + '"</h2><font size="1" color="#AAAAAA"><strong>Poll ended by <em>' + user.name + '</em></font><br><hr>' + results + '</strong></div>');
         Poll.reset(room.id);
+        Poll[room.id].topOption = topOption;
     },
 
     welcomemessage: function (target, room, user) {
