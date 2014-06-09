@@ -206,6 +206,11 @@ var Tournament = (function () {
     };
 
     Tournament.prototype.addUser = function (user, isAllowAlts, output) {
+        if (!user.named) {
+            output.sendReply('|tournament|error|UserNotNamed');
+            return;
+        }
+
         if (!this.room.delayJoinedUsers) this.room.delayJoinedUsers = new Array();
         if (!isAllowAlts) {
             var users = {};
