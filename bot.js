@@ -231,10 +231,10 @@ var parse = {
                     var message = '|pm|' + config.group + config.name + '|' + user.group + user.name + '|' + data;
                     user.send(message);
                 },
-                can: function (permission, target, room) {
-                    if (!user.can(permission, target, room)) {
+                can: function (permission) {
+                    if (!user.can(permission)) {
                         setTimeout(function () {
-                            user.send("!" + cmd + " - Access denied.");
+                            connection.sendTo(room, '!' + cmd + ' - Access denied.');
                         }, botDelay);
                         return false;
                     }
