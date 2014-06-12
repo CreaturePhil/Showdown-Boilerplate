@@ -255,6 +255,44 @@
 
          return this.sendReplyBox('<img src="http://i.imgur.com/UEMY7N1.png" title="System Operator" height="14"><b>System Operator</b> - These are the people who make the server tick. Say hello!<br/><img src="http://i.imgur.com/mbdkl0w.png" title="Elite Moderator" height="14"><b>Elite Moderator</b> - Our most experienced and trustworthy moderator squad who help us keep the server safe and fun.<br/><img src="http://i.imgur.com/0IugM.png" title="Broadcaster" height="14"><b>Broadcaster</b> - This icon denotes the person whose room you\'re currently in.<br/><img src="http://i.imgur.com/Fqiyjil.png" title="Chat Moderator" height="14"><b>Chat Moderator</b> - Specifically appointed chat moderators for the server.<br/><img src="http://i.imgur.com/kZyJVgU.png" title="Turbo User" height="14"><b>Turbo User</b> - These are the people who donated or contributed to the server.');
      },
+     
+     afk: function(target, room, user, connection) {
+		if (!this.canTalk()) return false;
+		if (!this.can('warn')) return false;
+		if (!user.isAfk) {
+			user.realName = user.name
+			var afkName = user.name + ' - afk';
+			delete Users.get(afkName);
+			user.forceRename(afkName, undefined, true);
+			this.send('|html|<b>'+user.realName+'</b> is now Away ('+target+').');
+			user.isAfk = true;
+			user.blockChallenges = true;
+		}
+		else {
+			return this.sendReply('You are already AFK, type /unafk');
+		}
+		user.updateIdentity();
+	},
+
+	unafk: function(target, room, user, connection) {
+		if (!user.isAfk) {
+			return this.sendReply('You are not AFK.');
+		}
+		else {
+			if (user.name.slice(-6) !== ' - afk') {
+				user.isAfk = false;
+				return this.sendReply('You are no longer AFK!');
+			}
+			var newName = user.realName;
+			delete Users.get(newName);
+			user.forceRename(newName, undefined, true);
+			user.authenticated = true;
+			this.send('|html|<b>' + newName + '</b> is back');
+			user.isAfk = false;
+			user.blockChallenges = false;
+		}
+		user.updateIdentity();
+	},
      /*********************************************************
       * Bot edits                                       *
       *********************************************************/
@@ -794,6 +832,16 @@
          this.add('|unlink|' + targetUser.userid);
          targetUser.ban();
      },
+     
+     useravy: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReplyBox('The user '+this.targetUsername+' is not online.');
+		}
+		return this.sendReplyBox('<hr><center><img src="http://play.pokemonshowdown.com/sprites/trainers/'+targetUser.avatar+'.png"></center><hr>');
+	},
      /*********************************************************
       * Tour Commands                                         *
       *********************************************************/
