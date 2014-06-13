@@ -455,6 +455,7 @@ var commands = {
             _user = user;
 
         var poll = function () {
+            if (!Bot.config.hosting[_room.id]) return;
             setTimeout(function () {
                 if (Poll[_room.id].question) self.parse('/endpoll');
 
@@ -468,7 +469,7 @@ var commands = {
 
         var loop = function () {
             setTimeout(function () {
-                if (!Tournaments.tournaments[_room.id] || !Poll[_room.id].question) poll();
+                if (!Tournaments.tournaments[_room.id] && !Poll[_room.id].question) poll();
                 if (Bot.config.hosting[_room.id]) loop();
             }, 1000 * 60);
         };
