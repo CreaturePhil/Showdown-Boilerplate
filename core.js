@@ -232,12 +232,12 @@ var core = exports.core = {
             var ladder = '<table border="1" cellspacing="0" cellpadding="3"><tbody><tr><th>Rank</th><th>User</th><th>Tournament Elo</th><th>Tournament Wins</th></tr>';
             var len = list.length;
 
-            limit = (len - limit) - 1;
+            limit = len - limit;
             if (limit > len) limit = len;
 
             while (len--) {
-                if (len === limit) break;
                 ladder = ladder + '<tr><td>' + (list.length - len) + '</td><td>' + list[len][0] + '</td><td>' + Math.floor(list[len][1]) + '</td><td>' + this.stdin('tourWins', list[len][0]) + '</td></tr>';
+                if (len === limit) break;
             }
             ladder += '</tbody></table>';
             return ladder;
