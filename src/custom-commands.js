@@ -264,7 +264,7 @@
 			var afkName = user.name + ' - afk';
 			delete Users.get(afkName);
 			user.forceRename(afkName, undefined, true);
-			this.send('|html|<b>'+user.realName+'</b> is now Away ('+target+').');
+			this.send('|html|<font color="#9900CC"><b>'+user.realName+'</b></font> is now Away ('+target+').');
 			user.isAfk = true;
 			user.blockChallenges = true;
 		}
@@ -287,7 +287,7 @@
 			delete Users.get(newName);
 			user.forceRename(newName, undefined, true);
 			user.authenticated = true;
-			this.send('|html|<b>' + newName + '</b> is back');
+			this.send('|html|<b><font color="#9900CC">' + newName + '</font></b> is back');
 			user.isAfk = false;
 			user.blockChallenges = false;
 		}
