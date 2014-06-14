@@ -411,6 +411,24 @@ var components = exports.components = {
         this.sendReply('Your symbol has been reset.');
     },
 
+    emoticons: 'emoticon',
+    emoticon: function (target, room, user) {
+        if (!this.canBroadcast()) return;
+        var name = [],
+            emoticons = [],
+            both = [];
+        for (var i in Core.emoticons) {
+            name.push(i);
+        }
+        for (var i = 0; i < name.length; i++) {
+            emoticons.push(Core.processEmoticons(name[i]));
+        }
+        for (var i = 0; i < name.length; i++) {
+            both.push((emoticons[i] + '&nbsp;' + name[i]));
+        }
+        this.sendReplyBox('<b><u>List of emoticons:</b></u> <br/><br/>' + both.join(' ').toString());
+    },
+
     /*********************************************************
      * Staff commands
      *********************************************************/
