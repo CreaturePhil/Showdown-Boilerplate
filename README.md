@@ -27,6 +27,7 @@ Features
 * Profile command to check to see when the user's last online, their money, etc.
 * A bunch of useful commands like /away, /hide, /poof, etc.
 * Built-in bot for moderation and fun
+* Emoticons in chat
 
 _More coming soon_
 
