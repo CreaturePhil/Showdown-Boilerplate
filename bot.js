@@ -322,7 +322,7 @@ var commands = {
         this.sendReply(salt + '% salty.');
     },
 
-    who: (function () {
+    whois: (function () {
         var reply = [
             "Just another Pokemon Showdown user",
             "A very good competetive pokemon player",
