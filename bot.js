@@ -213,7 +213,7 @@ var parse = {
         }
         cmd = cmd.toLowerCase();
 
-        if (message.charAt(0) === '!' && Object.keys(Bot.commands).join(' ').toString().indexOf(cmd) >= 0 && message.substr(1) !== '') {
+        if (message.charAt(0) === '.' && Object.keys(Bot.commands).join(' ').toString().indexOf(cmd) >= 0 && message.substr(1) !== '') {
 
             if ((now - user.lastBotCmd) * 0.001 < 30) {
                 connection.sendTo(room, 'Please wait ' + Math.floor((30 - (now - user.lastBotCmd) * 0.001)) + ' seconds until the next command.');
@@ -237,7 +237,7 @@ var parse = {
                 can: function (permission) {
                     if (!user.can(permission)) {
                         setTimeout(function () {
-                            connection.sendTo(room, '!' + cmd + ' - Access denied.');
+                            connection.sendTo(room, '.' + cmd + ' - Access denied.');
                         }, botDelay);
                         return false;
                     }
