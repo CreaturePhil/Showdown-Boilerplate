@@ -1370,6 +1370,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/customsymbol [symbol] - Changes your symbol (usergroup) to the specified symbol. The symbol can only be one character.");
 		}
+		if (target === 'all' || target === 'emoticon' || target === 'emoticons') {
+			matched = true;
+			this.sendReply("/emoticons - Displays all emoticons available.");
+		}
 		if (target === '%' || target === 'lock' || target === 'l') {
 			matched = true;
 			this.sendReply("/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~");
