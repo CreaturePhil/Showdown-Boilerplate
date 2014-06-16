@@ -249,6 +249,9 @@ var components = exports.components = {
                     this.sendReply('If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.');
                 } else {
                     this.sendReply('You have purchased ' + target + '. Please contact an admin to get ' + target + '.');
+                    for (var u in Users.users) {
+                        if (Users.get(u).group === '~') Users.get(u).send('|pm|' + user.group + user.name + '|' + Users.get(u).group + Users.get(u).name + '|' + 'I have bought ' + target + ' from the shop.');
+                    }
                 }
                 room.add(user.name + ' has bought ' + target + ' from the shop.');
             }
