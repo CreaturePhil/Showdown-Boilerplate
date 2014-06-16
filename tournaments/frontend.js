@@ -675,12 +675,14 @@ var Tournament = (function () {
             var rid = toId(runnerUp); // runnerUp's userid
 
             // file i/o
+            var winnerMoney = Number(Core.stdin('money', wid));
             var tourWin = Number(Core.stdin('tourWins', wid));
-            Core.stdout('money', wid, firstMoney, function () {
+            Core.stdout('money', wid, (winnerMoney + firstMoney), function () {
                 var winnerElo = Number(Core.stdin('elo', wid));
                 if (runnerUp) {
-                    var runnerUpElo = Number(Core.stdin('elo', rid));
-                    Core.stdout('money', rid, secondMoney, function () {
+                    var runnerUpMoney = Number(Core.stdin('money', rid)),
+                        runnerUpElo = Number(Core.stdin('elo', rid));
+                    Core.stdout('money', rid, (runnerUpMoney + secondMoney), function () {
                         Core.stdout('tourWins', wid, (tourWin + 1), function () {
                             Core.stdout('elo', wid, (winnerElo + 50), function () {
                                 Core.stdout('elo', rid, (runnerUpElo + 25));

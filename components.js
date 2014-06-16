@@ -13,7 +13,9 @@
  */
 
 var fs = require("fs");
-var path = require("path");
+    path = require("path"),
+    util = require("util"),
+    http = require("http");
 
 var components = exports.components = {
 
@@ -80,8 +82,6 @@ var components = exports.components = {
         if (!target || target == "." || target == "," || target == "'") return this.parse('/help regdate');
         var username = target;
         target = target.replace(/\s+/g, '');
-        var util = require("util"),
-            http = require("http");
 
         var options = {
             host: "www.pokemonshowdown.com",
