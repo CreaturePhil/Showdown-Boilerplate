@@ -363,7 +363,8 @@ var core = exports.core = {
         if (!match) return true;
         message = Tools.escapeHTML(message);
         message = this.processEmoticons(message);
-        room.add('|raw|<div class="chat"><strong><font color="' + Core.hashColor(user.userid)+'"><small>~</small><span class="username" data-name="' + user.group + user.name + '">' + user.name + '</span>:</font></strong> <em class="mine">' + message + '</em></div>');
+        if (user.hiding) return room.add('|raw|<div class="chat"><strong><font color="' + Core.hashColor(user.userid)+'"><small></small><span class="username" data-name="' + user.name + '">' + user.name + '</span>:</font></strong> <em class="mine">' + message + '</em></div>');
+        room.add('|raw|<div class="chat"><strong><font color="' + Core.hashColor(user.userid)+'"><small>' + user.group + '</small><span class="username" data-name="' + user.group + user.name + '">' + user.name + '</span>:</font></strong> <em class="mine">' + message + '</em></div>');
         return false;
     },
 
