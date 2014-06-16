@@ -481,6 +481,27 @@ var commands = {
         loop();
     },
 
+    join: function (target, room, user, connection) {
+        if (!user.can('kick')) return;
+        if (!target || !Rooms.get(target.toLowerCase())) return;
+        if (Rooms.get(target.toLowerCase()).users[Bot.config.name]) return this.sendPm('I\'m already in this room.');
+        Users.get(Bot.config.name).joinRoom(Rooms.get(target.toLowerCase()));
+        var botDelay = (Math.floor(Math.random() * 6) * 1000)
+        setTimeout(function() {
+            connection.sendTo(room, Bot.config.name + ' has join ' +  target + ' room.');
+        }, botDelay);
+    },
+
+    leave: function (target, room, user, connection) {
+        if (!user.can('kick')) return;
+        if (!target || !Rooms.get(target.toLowerCase())) return;
+        Users.get(Bot.config.name).leaveRoom(Rooms.get(target.toLowerCase()));
+        var botDelay = (Math.floor(Math.random() * 6) * 1000)
+        setTimeout(function() {
+            connection.sendTo(room, Bot.config.name + ' has left ' +  target + ' room.');
+        }, botDelay);
+    },
+
 };
 
 exports.joinServer = joinServer;
