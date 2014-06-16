@@ -514,6 +514,7 @@ var components = exports.components = {
     show: function (target, room, user) {
         if (!this.can('lock')) return;
         delete user.getIdentity
+        user.hiding = false;
         user.updateIdentity();
         this.sendReply('You have revealed your staff symbol.');
         return false;
@@ -526,6 +527,7 @@ var components = exports.components = {
             if (this.locked) return '?' + this.name;
             return ' ' + this.name;
         };
+        user.hiding = true;
         user.updateIdentity();
         this.sendReply('You have hidden your staff symbol.');
     },
@@ -603,6 +605,11 @@ var components = exports.components = {
         }
         Poll[room.id].display = '<h2>' + Poll[room.id].question + '&nbsp;&nbsp;<font size="1" color="#AAAAAA">/vote OPTION</font><br><font size="1" color="#AAAAAA">Poll started by <em>' + user.name + '</em></font><br><hr>&nbsp;&nbsp;&nbsp;&nbsp;' + pollOptions;
         room.add('|raw|<div class="infobox">' + Poll[room.id].display + '</div>');
+    },
+
+    tierpoll: function (target, room, user) {
+        if (!this.can('broadcast')) return;
+        this.parse('/poll Tournament tier?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
     },
 
     endpoll: function (target, room, user) {
