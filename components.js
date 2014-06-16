@@ -14,7 +14,6 @@
 
 var fs = require("fs");
     path = require("path"),
-    util = require("util"),
     http = require("http"),
     request = require('request');
 
@@ -975,8 +974,6 @@ var components = exports.components = {
 
     reload: function (target, room, user) {
         if (!this.can('reload')) return;
-
-        var path = require("path");
 
         try {
             this.sendReply('Reloading CommandParser...');
