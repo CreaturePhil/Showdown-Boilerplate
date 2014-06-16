@@ -196,7 +196,7 @@ var parse = {
     },
 
     processBotCommands: function (user, room, connection, message) {
-        if (room.type !== 'chat') return;
+        if (room.type !== 'chat' || message.charAt(0) !== '.') return;
 
         var cmd = '',
             target = '',
