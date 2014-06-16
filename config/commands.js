@@ -1380,6 +1380,14 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/customsymbol [symbol] - Changes your symbol (usergroup) to the specified symbol. The symbol can only be one character.");
 		}
+		if (target === 'all' || target === 'urbandefine' || target === 'ud') {
+			matched = true;
+			this.sendReply("/urbandefine [phrase] - Looks up this phrase on urbandictionary.com.");
+		}
+		if (target === 'all' || target === 'define' || target === 'def') {
+			matched = true;
+			this.sendReply("/define [word] - Looks up this word on the internet.");
+		}
 		if (target === 'all' || target === 'emoticon' || target === 'emoticons') {
 			matched = true;
 			this.sendReply("/emoticons - Displays all emoticons available.");
