@@ -434,6 +434,7 @@ var components = exports.components = {
         this.sendReplyBox('<b><u>List of emoticons:</b></u> <br/><br/>' + both.join(' ').toString());
     },
 
+    u: 'urbandefine',
     ud: 'urbandefine',
     urbandefine: function (target, room, user) {
         if (!this.canBroadcast()) return;
