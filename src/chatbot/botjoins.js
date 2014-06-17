@@ -13,7 +13,7 @@ function joinServer() {
             b.named = true;
             b.renamePending = config.name;
             b.authenticated = true;
-            b.userid = config.userid();
+            b.userid = config.name.toLowerCase();
             b.group = config.group;
             
                 if(config.joinAll === true) {
