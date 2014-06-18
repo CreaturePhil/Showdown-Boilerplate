@@ -360,12 +360,13 @@ var core = exports.core = {
 
     processChatData: function (user, room, connection, message) {
         var match = false;
+        
         for (var i in this.emoticons) {
             if (message.indexOf(i) >= 0) {
                 match = true;
             }
         }
-        if (!match) return true;
+        if (!match || message.charAt(0) === '!') return true;
         message = Tools.escapeHTML(message);
         message = this.processEmoticons(message);
         if (user.hiding) return room.add('|raw|<div class="chat"><strong><font color="' + Core.hashColor(user.userid)+'"><small></small><span class="username" data-name="' + user.name + '">' + user.name + '</span>:</font></strong> <em class="mine">' + message + '</em></div>');
