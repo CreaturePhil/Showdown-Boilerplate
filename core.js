@@ -219,7 +219,7 @@ var core = exports.core = {
         var list = [];
 
         for (var i = row.length; i > -1; i--) {
-            if (!row[i]) continue;
+            if (!row[i] || row[i].indexOf(',') < 0) continue;
             var parts = row[i].split(",");
             list.push([toId(parts[0]), Number(parts[1])]);
         }
