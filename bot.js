@@ -295,7 +295,7 @@ var commands = {
         this.sendReply(target);
     },
 
-    bottell: function (target, room, user) {
+    tell: function (target, room, user) {
         if (!this.can('bottell')) return;
         var parts = target.split(',');
         if (parts.length < 2) return;

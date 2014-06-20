@@ -602,11 +602,13 @@ var components = exports.components = {
     },
 
     hide: function (target, room, user) {
+        // add support for away
         if (!this.can('lock')) return;
         user.getIdentity = function () {
-            if (this.muted) return '!' + this.name;
-            if (this.locked) return '?' + this.name;
-            return ' ' + this.name;
+            var name = this.name + (this.away ? " - Ⓐⓦⓐⓨ" : "");
+            if (this.locked) return '‽' + name;
+            if (this.muted) return '!' + name;
+            return ' ' + name;
         };
         user.hiding = true;
         user.updateIdentity();
@@ -857,6 +859,19 @@ var components = exports.components = {
 
                 if (!userid) return this.sendReply("You didn't specify a user.");
                 if (Config.customAvatars[userid]) return this.sendReply(userid + " already has a custom avatar.");
+
+                // if (process.platform === 'win32') {
+                //     var download = function (uri, filename, callback) {
+                //         request.head(uri, function (err, res, body) {
+                //             if (err) return false;
+                //             console.log('content-type:', res.headers['content-type']);
+                //             console.log('content-length:', res.headers['content-length']);
+                //             request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+                //         });
+                //     };
+                //     download(avatar, './config/avatars/' + userid + type, function() {doneDownload(that, userid, type);});
+                //     return;
+                // }
 
                 var hash = require('crypto').createHash('sha512').update(userid + '\u0000' + avatar).digest('hex').slice(0, 8);
                 pendingAdds[hash] = {
