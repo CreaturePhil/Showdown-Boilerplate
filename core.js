@@ -252,7 +252,7 @@ var core = exports.core = {
             ['Poof', 'Buys the ability to add a custom poof.', 15],
             ['Custom', 'Buys a custom avatar to be applied to your name. (you supply)', 20],
             ['Animated', 'Buys an animated avatar to be applied to your name. (you supply)', 25],
-            ['Trainer', 'Buys a trainer card which shows information through a command such as /blakjack.', 30],
+            ['Trainer', 'Buys a trainer card which shows information through a command.', 30],
             ['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 50]
         ];
 
@@ -260,15 +260,13 @@ var core = exports.core = {
             return shop;
         }
 
-        var shopName = 'Shop';
-
-        var s = '<center><h4><strong><u>' + shopName + '</u></strong></h4><table border="1" cellspacing="0" cellpadding="3"><tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>';
+        var s = '<table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>';
         var start = 0;
         while (start < shop.length) {
             s = s + '<tr><td>' + shop[start][0] + '</td><td>' + shop[start][1] + '</td><td>' + shop[start][2] + '</td></tr>';
             start++;
         }
-        s += '</tbody></table><br>To buy an item from the shop, use /buy <em>command</em>.<br></center>';
+        s += '</tbody></table><center>To buy an item from the shop, use /buy <em>command</em>.</center>';
         return s;
     },
 

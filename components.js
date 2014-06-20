@@ -203,7 +203,7 @@ var components = exports.components = {
 
     shop: function (target, room, user) {
         if (!this.canBroadcast()) return;
-        return this.sendReplyBox(Core.shop(true));
+        return this.sendReply('|raw|' + Core.shop(true));
     },
 
     buy: function (target, room, user) {
@@ -336,7 +336,7 @@ var components = exports.components = {
             "fell into the void.",
             "went into a cave without a repel!",
             "has left the building.",
-            "was forced to give BlakJack's mom an oil massage!",
+            "was forced to give Zarel's mom an oil massage!",
             "was hit by Magikarp's Revenge!",
             "ate a bomb!",
             "is blasting off again!",
