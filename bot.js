@@ -504,6 +504,26 @@ var commands = {
         }, botDelay);
     },
 
+    rps: function (target, room, user) {
+        if (!target) return;
+        var options = ['rock', 'paper', 'scissors'],
+            rng = options[Math.floor(Math.random() * options.length)],
+            target = toId(target);
+
+        if (options.join('').toString().indexOf(target) < 0) return;
+
+        if (rng === target) return this.sendReply('Tie!');
+        if (rng === options[0])
+            if (target === options[1]) return this.sendReply(user.name + ' wins! I had ' + rng + '.');
+            if (target === options[2]) return this.sendReply('I win! I had ' + rng + '.');
+        if (rng === options[1])
+            if (target === options[2]) return this.sendReply(user.name + ' wins! I had ' + rng + '.');
+            if (target === options[0]) return this.sendReply('I win! I had ' + rng + '.');
+        if (rng === options[2])
+            if (target === options[0]) return this.sendReply(user.name + ' wins! I had ' + rng + '.');
+            if (target === options[1]) return this.sendReply('I win! I had ' + rng + '.');
+    },
+
 };
 
 exports.joinServer = joinServer;
