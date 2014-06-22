@@ -510,8 +510,6 @@ var commands = {
             rng = options[Math.floor(Math.random() * options.length)],
             target = toId(target);
 
-        if (options.join('').toString().indexOf(target) < 0) return;
-
         if (rng === target) return this.sendReply('Tie!');
         if (rng === options[0])
             if (target === options[1]) return this.sendReply(user.name + ' wins! I had ' + rng + '.');
