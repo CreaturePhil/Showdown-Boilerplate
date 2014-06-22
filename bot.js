@@ -27,7 +27,8 @@ var config = {
     privaterooms: ['staff'],
     hosting: {},
     laddering: true,
-    ladderPercentage: 70
+    ladderPercentage: 70,
+    debug: false
 };
 
 /**
@@ -213,7 +214,7 @@ var parse = {
         }
         cmd = cmd.toLowerCase();
 
-        if (message.charAt(0) === '.' && Object.keys(Bot.commands).join(' ').toString().indexOf(cmd) >= 0 && message.substr(1) !== '') {
+        if ((message.charAt(0) === '.' && Object.keys(Bot.commands).join(' ').toString().indexOf(cmd) >= 0 && message.substr(1) !== '') && !Bot.config.debug) {
 
             if ((now - user.lastBotCmd) * 0.001 < 30) {
                 connection.sendTo(room, 'Please wait ' + Math.floor((30 - (now - user.lastBotCmd) * 0.001)) + ' seconds until the next command.');
@@ -510,16 +511,19 @@ var commands = {
             rng = options[Math.floor(Math.random() * options.length)],
             target = toId(target);
 
-        if (rng === target) return this.sendReply('Tie!');
-        if (rng === options[0])
-            if (target === options[1]) return this.sendReply(user.name + ' wins! I had ' + rng + '.');
-            if (target === options[2]) return this.sendReply('I win! I had ' + rng + '.');
-        if (rng === options[1])
-            if (target === options[2]) return this.sendReply(user.name + ' wins! I had ' + rng + '.');
-            if (target === options[0]) return this.sendReply('I win! I had ' + rng + '.');
-        if (rng === options[2])
-            if (target === options[0]) return this.sendReply(user.name + ' wins! I had ' + rng + '.');
-            if (target === options[1]) return this.sendReply('I win! I had ' + rng + '.');
+        if (rng === target) return this.sendReply('I chose ' + rng + '. The result is a tie!');
+        if (rng === options[0]) {
+            if (target === options[1]) return this.sendReply('I chose ' + rng + '. ' + user.name + ' wins!');
+            if (target === options[2]) return this.sendReply('I chose ' + rng + '. I win and ' + user.name + ' loses!');
+        }
+        if (rng === options[1]) {
+            if (target === options[2]) return this.sendReply('I chose ' + rng + '. ' + user.name + ' wins!');
+            if (target === options[0]) return this.sendReply('I chose ' + rng + '. I win and ' + user.name + ' loses!');
+        }
+        if (rng === options[2]) {
+            if (target === options[0]) return this.sendReply('I chose ' + rng + '. ' + user.name + ' wins!');
+            if (target === options[1]) return this.sendReply('I chose ' + rng + '. I win and ' + user.name + ' loses!');
+        }
     },
 
 };
