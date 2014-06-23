@@ -1012,7 +1012,7 @@ var components = exports.components = {
     },
 
     cp: 'controlpanel',
-    controlpanel: function (target, room, user) {
+    controlpanel: function (target, room, user, connection) {
         if (!this.can('controlpanel')) return;
         if (target.toLowerCase() === 'help') {
             return this.sendReplyBox(
@@ -1025,6 +1025,12 @@ var components = exports.components = {
                 );
         }
         var parts = target.split(',');
+        Core.profile.color = Core.stdin('control-panel', 'color');
+        Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
+        Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
+        Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));
+        Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
+        Core.tournaments.runnerUpElo = Number(Core.stdin('control-panel', 'runnerup'));
         if (parts.length !== 2) {
             return this.sendReplyBox(
                 '<center>' +
@@ -1045,30 +1051,30 @@ var components = exports.components = {
             match = false,
             cmds = {
                 color: function () {
-                    Core.profile.color = parts[1];
-                    self.sendReply('Color is now ' + Core.profile.color);
+                    Core.stdout('control-panel', 'color', parts[1]);
+                    self.sendReply('Color is now ' + parts[1]);
                 },
                 avatar: function () {
-                    Core.profile.avatarurl = parts[1];
-                    self.sendReply('Avatar URL is now ' + Core.profile.avatarurl);
+                    Core.stdout('control-panel', 'avatar', parts[1]);
+                    self.sendReply('Avatar URL is now ' + parts[1]);
                 },
                 toursize: function () {
-                    Core.tournaments.tourSize = Number(parts[1]);
-                    self.sendReply('Tournament Size to earn money is now ' + Core.tournaments.tourSize);
+                    Core.stdout('control-panel', 'toursize', parts[1]);
+                    self.sendReply('Tournament Size to earn money is now ' + parts[1]);
                 },
                 money: function () {
-                    if (parts[1].trim().toLowerCase() === 'standard') Core.tournaments.amountEarn = 10;
-                    if (parts[1].trim().toLowerCase() === 'double') Core.tournaments.amountEarn = 4;
-                    if (parts[1].trim().toLowerCase() === 'quadruple') Core.tournaments.amountEarn = 2;
+                    if (parts[1].trim().toLowerCase() === 'standard') Core.stdout('control-panel', 'money', 10);
+                    if (parts[1].trim().toLowerCase() === 'double') Core.stdout('control-panel', 'money', 4);
+                    if (parts[1].trim().toLowerCase() === 'quadruple') Core.stdout('control-panel', 'money', 2);
                     self.sendReply('Earning money amount is now ' + parts[1]);
                 },
                 winner: function () {
-                    Core.tournaments.winningElo = Number(parts[1]);
-                    self.sendReply('Winner Elo Bonus is now ' + Core.tournaments.winningElo);
+                    Core.stdout('control-panel', 'winner', parts[1]);
+                    self.sendReply('Winner Elo Bonus is now ' + parts[1]);
                 },
                 runnerup: function () {
-                    Core.tournaments.runnerUpElo = Number(parts[1]);
-                    self.sendReply('RunnerUp Elo Bonus is now ' + Core.tournaments.runnerUpElo);
+                    Core.stdout('control-panel', 'runnerup', parts[1]);
+                    self.sendReply('RunnerUp Elo Bonus is now ' + parts[1]);
                 }
             };
 
