@@ -659,8 +659,8 @@ var Tournament = (function () {
 
         tourSize = this.generator.users.size;
 
-        if (this.room.isOfficial && tourSize >= 8) {
-            firstMoney = Math.round(tourSize / 10);
+        if (this.room.isOfficial && tourSize >= Core.tournaments.tourSize) {
+            firstMoney = Math.round(tourSize / Core.tournaments.amountEarn);
             secondMoney = Math.round(firstMoney / 2);
             firstBuck = 'buck';
             secondBuck = 'buck';
@@ -684,14 +684,14 @@ var Tournament = (function () {
                         runnerUpElo = Number(Core.stdin('elo', rid));
                     Core.stdout('money', rid, (runnerUpMoney + secondMoney), function () {
                         Core.stdout('tourWins', wid, (tourWin + 1), function () {
-                            Core.stdout('elo', wid, (winnerElo + 50), function () {
-                                Core.stdout('elo', rid, (runnerUpElo + 25));
+                            Core.stdout('elo', wid, (winnerElo + Core.tournaments.winningElo), function () {
+                                Core.stdout('elo', rid, (runnerUpElo + Core.tournaments.runnerUpElo));
                             });
                         });
                     });
                 } else {
                     Core.stdout('tourWins', wid, (tourWin + 1), function () {
-                        Core.stdout('elo', wid, (winnerElo + 50));
+                        Core.stdout('elo', wid, (winnerElo + Core.tournaments.winningElo));
                     });
                 }
             });

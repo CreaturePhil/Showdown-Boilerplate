@@ -1011,6 +1011,76 @@ var components = exports.components = {
         }
     },
 
+    cp: 'controlpanel',
+    controlpanel: function (target, room, user) {
+        if (!this.can('controlpanel')) return;
+        if (target.toLowerCase() === 'help') {
+            return this.sendReplyBox(
+                '/cp color, [COLOR]<br/>' +
+                '/cp avatar, [AVATAR COLOR URL]<br/>' +
+                '/cp toursize, [TOURNAMENT SIZE TO EARN MONEY]<br/>' +
+                '/cp money, [EARNING MONEY AMOUNT]<br/>' + 
+                '/cp winner, [WINNER ELO BONUS]<br/>' +
+                '/cp runnerup, [RUNNERUP ELO BONUS]<br/>'
+                );
+        }
+        var parts = target.split(',');
+        if (parts.length !== 2) {
+            return this.sendReplyBox(
+                '<center>' +
+                '<h3><b><u>Control Panel</u></b></h3>' +
+                '<i>Color:</i> ' + '<font color="' + Core.profile.color + '">' + Core.profile.color + '</font><br />' +
+                '<i>Custom Avatar URL:</i> ' + Core.profile.avatarurl + '<br />' +
+                '<i>Tournament Size to earn money: </i>' + Core.tournaments.tourSize + '<br />' +
+                '<i>Earning money amount:</i> ' + Core.tournaments.earningMoney() + '<br />' +
+                '<i>Winner Elo Bonus:</i> ' + Core.tournaments.winningElo + '<br />' +
+                '<i>RunnerUp Elo Bonus:</i> ' + Core.tournaments.runnerUpElo + '<br /><br />' +
+                'To edit this info, use /cp help' +
+                '</center>' +
+                '<br clear="all">'
+                );
+        }
+
+        var self = this,
+            match = false,
+            cmds = {
+                color: function () {
+                    Core.profile.color = parts[1];
+                    self.sendReply('Color is now ' + Core.profile.color);
+                },
+                avatar: function () {
+                    Core.profile.avatarurl = parts[1];
+                    self.sendReply('Avatar URL is now ' + Core.profile.avatarurl);
+                },
+                toursize: function () {
+                    Core.tournaments.tourSize = Number(parts[1]);
+                    self.sendReply('Tournament Size to earn money is now ' + Core.tournaments.tourSize);
+                },
+                money: function () {
+                    if (parts[1].trim().toLowerCase() === 'standard') Core.tournaments.amountEarn = 10;
+                    if (parts[1].trim().toLowerCase() === 'double') Core.tournaments.amountEarn = 4;
+                    if (parts[1].trim().toLowerCase() === 'quadruple') Core.tournaments.amountEarn = 2;
+                    self.sendReply('Earning money amount is now ' + parts[1]);
+                },
+                winner: function () {
+                    Core.tournaments.winningElo = Number(parts[1]);
+                    self.sendReply('Winner Elo Bonus is now ' + Core.tournaments.winningElo);
+                },
+                runnerup: function () {
+                    Core.tournaments.runnerUpElo = Number(parts[1]);
+                    self.sendReply('RunnerUp Elo Bonus is now ' + Core.tournaments.runnerUpElo);
+                }
+            };
+
+        for (cmd in cmds) {
+            if (parts[0].toLowerCase() === cmd) match = true; 
+        }
+
+        if (!match) return this.parse('/cp help');
+
+        cmds[parts[0].toLowerCase()]();
+    },
+
 };
 
 Object.merge(CommandParser.commands, components);
