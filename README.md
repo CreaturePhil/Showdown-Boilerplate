@@ -29,23 +29,40 @@ Features
 * Built-in bot for moderation and fun
 * Emoticons in chat
 
-_More coming soon_
-
-Configuration
+Getting Started
 ------------------------------------------------------------------------
+To get started with this boilerplate, just download this as a zip or clone it and install a [Pokemon Showdown server][1] as you usually do.
+If you forgot how to do this, here is a quick reference:
 
-### Setting up files
+	git clone https://github.com/CreaturePhil/Showdown-Boilerplate.git showdown-boilerplate
+	cd showdown-boilerplate
+	npm install
 
-Create __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, and __tourWins.csv__ files in the __config__ folder.
+Once you done that, create __usergroups.csv__, __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, and __tourWins.csv__ files in the _config_ folder.
 
-### Modifying core
+To do this quickly in your terminal or command line:
 
-* For profile, you can change the color property. (_Line 69_) and also change the custom avatar url to your own server. (_Line 74 & Line 80_)
-* For shop, you can add, remove, or change items in the shop.
-In the array, each index means [Command, Description, Cost]. (_Lines 244 - 252_)
-* For tournaments, you can change the amount of users it takes for the winner to win money in tournaments/frontend.js. 
-If you decrease the amount of users require, also decrease the amount divided by the tourSize. For example, if you changed
-it from 8 to 4. You would change the amount divided by the tourSize from 10 to 5. (_Lines 597-598_)
+On Windows:
+
+	cd config
+	Type NUL > usergroups.csv
+	Type NUL > about.csv
+	Type NUL > elo.csv
+	Type NUL > money.csv
+	Type NUL > lastSeen.csv
+	Type NUL > tourWins.csv
+	cd ..
+
+On Linux or Mac:
+
+	cd config
+	touch usergroups.csv about.csv elo.csv money.csv lastSeen.csv tourWins.csv
+	cd ..
+
+`cd ..` is to go back to the showdown-boilerplate directory.
+Once you get your server up and running, you can manage certain settings with the `/controlpanel` or `/cp` command.
+
+![Control Panel](http://i.imgur.com/ImBbK5x.png "Control Panel")
 
 License
 ------------------------------------------------------------------------

@@ -374,6 +374,18 @@ var core = exports.core = {
         return false;
     },
 
+    tournaments: {
+        tourSize: 8,
+        amountEarn: 10,
+        winningElo: 50,
+        runnerUpElo: 25,
+        earningMoney: function () {
+            if (this.amountEarn === 10) return '<u>Standard (8 players = 1 buck)</u> Double (4 players = 1 buck) Quadruple (2 players = 1 bucks)';
+            if (this.amountEarn === 4) return 'Standard (8 players = 1 buck) <u>Double (4 players = 1 buck)</u> Quadruple (2 players = 1 bucks)';
+            if (this.amountEarn === 2) return 'Standard (8 players = 1 buck) Double (4 players = 1 buck) <u>Quadruple (2 players = 1 bucks)</u>';
+        }
+    },
+
 };
 
 exports.sysopAccess = function () {

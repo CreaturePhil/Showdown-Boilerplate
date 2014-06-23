@@ -1663,6 +1663,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/control [username], [say/pm], [message/user that you want to pm to], [pm message] - Controls what the user says and pm. Requires: ~");
 		}
+		if (target === '~' || target === 'controlpanel' || target === 'cp') {
+			matched = true;
+			this.sendReply("/controlpanel - Displays settings to be editted by adminstration. Requires: ~");
+		}
 		if (!target) {
 			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))");
