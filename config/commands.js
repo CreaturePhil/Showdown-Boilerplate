@@ -1667,6 +1667,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/controlpanel - Displays settings to be editted by adminstration. Requires: ~");
 		}
+		if (target === '~' || target === 'clearall') {
+			matched = true;
+			this.sendReply("/clearall - Clears all messages in the room. Requires: ~");
+		}
 		if (!target) {
 			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))");
