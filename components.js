@@ -1019,7 +1019,7 @@ var components = exports.components = {
                 '/cp color, [COLOR]<br/>' +
                 '/cp avatar, [AVATAR COLOR URL]<br/>' +
                 '/cp toursize, [TOURNAMENT SIZE TO EARN MONEY]<br/>' +
-                '/cp money, [EARNING MONEY AMOUNT]<br/>' + 
+                '/cp money, [STANDARD/DOUBLE/QUADRUPLE]<br/>' + 
                 '/cp winner, [WINNER ELO BONUS]<br/>' +
                 '/cp runnerup, [RUNNERUP ELO BONUS]<br/>'
                 );
@@ -1047,6 +1047,8 @@ var components = exports.components = {
                 );
         }
 
+        parts[1] = parts[1].trim().toLowerCase()
+
         var self = this,
             match = false,
             cmds = {
@@ -1063,9 +1065,9 @@ var components = exports.components = {
                     self.sendReply('Tournament Size to earn money is now ' + parts[1]);
                 },
                 money: function () {
-                    if (parts[1].trim().toLowerCase() === 'standard') Core.stdout('control-panel', 'money', 10);
-                    if (parts[1].trim().toLowerCase() === 'double') Core.stdout('control-panel', 'money', 4);
-                    if (parts[1].trim().toLowerCase() === 'quadruple') Core.stdout('control-panel', 'money', 2);
+                    if (parts[1] === 'standard') Core.stdout('control-panel', 'money', 10);
+                    if (parts[1] === 'double') Core.stdout('control-panel', 'money', 4);
+                    if (parts[1] === 'quadruple') Core.stdout('control-panel', 'money', 2);
                     self.sendReply('Earning money amount is now ' + parts[1]);
                 },
                 winner: function () {
