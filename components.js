@@ -813,28 +813,26 @@ var components = exports.components = {
     customavatars: 'customavatar',
     customavatar: (function () {
         try {
-            const script = (function () {
-                /*
-                    FILENAME=`mktemp`
-                    function cleanup {
-                        rm -f $FILENAME
-                    }
-                    trap cleanup EXIT
+            const script = (function () {/*
+                FILENAME=`mktemp`
+                function cleanup {
+                    rm -f $FILENAME
+                }
+                trap cleanup EXIT
 
-                    set -xe
+                set -xe
 
-                    timeout 10 wget "$1" -nv -O $FILENAME
+                timeout 10 wget "$1" -nv -O $FILENAME
 
-                    FRAMES=`identify $FILENAME | wc -l`
-                    if [ $FRAMES -gt 1 ]; then
-                        EXT=".gif"
-                    else
-                        EXT=".png"
-                    fi
+                FRAMES=`identify $FILENAME | wc -l`
+                if [ $FRAMES -gt 1 ]; then
+                    EXT=".gif"
+                else
+                    EXT=".png"
+                fi
 
-                    timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
-                */
-            }).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+                timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
+            */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
         } catch (e) {}
 
         var pendingAdds = {};
@@ -860,24 +858,8 @@ var components = exports.components = {
                 if (!userid) return this.sendReply("You didn't specify a user.");
                 if (Config.customAvatars[userid]) return this.sendReply(userid + " already has a custom avatar.");
 
-                // if (process.platform === 'win32') {
-                //     var download = function (uri, filename, callback) {
-                //         request.head(uri, function (err, res, body) {
-                //             if (err) return false;
-                //             console.log('content-type:', res.headers['content-type']);
-                //             console.log('content-length:', res.headers['content-length']);
-                //             request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-                //         });
-                //     };
-                //     download(avatar, './config/avatars/' + userid + type, function() {doneDownload(that, userid, type);});
-                //     return;
-                // }
-
                 var hash = require('crypto').createHash('sha512').update(userid + '\u0000' + avatar).digest('hex').slice(0, 8);
-                pendingAdds[hash] = {
-                    userid: userid,
-                    avatar: avatar
-                };
+                pendingAdds[hash] = {userid: userid, avatar: avatar};
                 parts[1] = hash;
 
                 if (!user) {
