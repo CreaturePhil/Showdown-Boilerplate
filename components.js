@@ -419,19 +419,13 @@ var components = exports.components = {
     emoticons: 'emoticon',
     emoticon: function (target, room, user) {
         if (!this.canBroadcast()) return;
-        var name = [],
-            emoticons = [],
-            both = [];
-        for (var i in Core.emoticons) {
-            name.push(i);
+        var name = Object.keys(Core.emoticons),
+            emoticons = [];
+        var len = name.length;
+        while (len--) {
+            emoticons.push((Core.processEmoticons(name[len]) + '&nbsp;' + name[len]));
         }
-        for (var i = 0; i < name.length; i++) {
-            emoticons.push(Core.processEmoticons(name[i]));
-        }
-        for (var i = 0; i < name.length; i++) {
-            both.push((emoticons[i] + '&nbsp;' + name[i]));
-        }
-        this.sendReplyBox('<b><u>List of emoticons:</b></u> <br/><br/>' + both.join(' ').toString());
+        this.sendReplyBox('<b><u>List of emoticons:</b></u> <br/><br/>' + emoticons.join(' ').toString());
     },
 
     u: 'urbandefine',
