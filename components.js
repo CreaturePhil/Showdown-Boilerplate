@@ -731,61 +731,6 @@ var components = exports.components = {
         Poll[room.id].topOption = topOption;
     },
 
-    welcomemessage: function (target, room, user) {
-        if (room.type !== 'chat') return this.sendReply('This command can only be used in chatrooms.');
-
-        var index = 0,
-            parts = target.split(',');
-        cmd = parts[0].trim().toLowerCase();
-
-        if (cmd in {'': 1, show: 1, view: 1, display: 1}) {
-            if (!this.canBroadcast()) return;
-            message = '<center><u><strong>Welcome to ' + room.title + '</strong></u><br /><br />';
-            if (room.welcome && room.welcome.length > 0) {
-                message += room.welcome[0];
-                if (room.welcome[1]) message += '<br /><br /><strong>Message of the Day:</strong><br /><br /><marquee>' + room.welcome[1] + '</marquee>';
-            } else {
-                return this.sendReply('This room has no welcome message.');
-            }
-            message += '</center>';
-            return this.sendReplyBox(message);
-        }
-
-        if (!this.can('declare', room)) return;
-        if (!room.welcome) room.welcome = room.chatRoomData.welcome = [];
-
-        var message = parts.slice(1).join(',').trim();
-        if (cmd === 'new' || cmd === 'edit' || cmd === 'set') {
-            if (!message) return this.sendReply('Your welcome message was empty.');
-            if (message.length > 250) return this.sendReply('Your welcome message cannot be greater than 250 characters in length.');
-
-            room.welcome[0] = message;
-            Rooms.global.writeChatRoomData();
-            if (cmd === 'new' || cmd === 'set') return this.sendReply('Your welcome message has been created.');
-            if (cmd === 'edit') return this.sendReply('You have successfully edited your welcome mesage.');
-        }
-        if (cmd === 'motd') {
-            if (!room.welcome[0]) return this.sendReply('You must have a welcome message first.');
-            if (!message) return this.sendReply('Your motd was empty.');
-            if (message.length > 100) return this.sendReply('Your motd cannot be greater than 100 characters in length.');
-
-            room.welcome[1] = message;
-            Rooms.global.writeChatRoomData();
-            return this.sendReply('You have successfully added or edited your motd.');
-        }
-        if (cmd === 'delete') {
-            if (message === 'motd') index = 1;
-            if (!room.welcome[index]) return this.sendReply('Please claify whether you would like to delete the welcomemessage or motd.');
-
-            this.sendReply(room.welcome.splice(index, 1)[0]);
-            Rooms.global.writeChatRoomData();
-            return this.sendReply('You have sucessfully deleted ' + message + '.');
-        }
-        this.sendReply("/welcomemessage [set/new/edit], [message] - Sets a new welcome message or edit the current one.");
-        this.sendReply("/welcomemessage [motd], [message] - Sets a motd if a welcome message has already been set.");
-        this.sendReply("/welcomemessage [delete], [welcomemessage/motd] - Deletes the welcomemessage or motd.");
-    },
-
     control: function (target, room, user) {
         if (!this.can('control')) return;
         var parts = target.split(',');
