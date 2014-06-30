@@ -703,68 +703,69 @@ var Tournament = (function () {
 })();
 
 var commands = {
-    basic: {
-        j: 'join',
-        in : 'join',
-        join: function (tournament, user) {
-            tournament.addUser(user, false, this);
-        },
-        l: 'leave',
-        out: 'leave',
-        leave: function (tournament, user) {
-            if (tournament.isTournamentStarted) {
-                tournament.disqualifyUser(user, this);
-            } else {
-                tournament.removeUser(user, this);
-            }
-        },
-        getupdate: function (tournament, user) {
-            tournament.update(user);
-        },
-        challenge: function (tournament, user, params, cmd) {
-            if (params.length < 1)
-                return this.sendReply("Usage: " + cmd + " <user>");
-            var targetUser = Users.get(params[0]);
-            if (!targetUser)
-                return this.sendReply("User " + params[0] + " not found.");
-            tournament.challenge(user, targetUser, this);
-        },
-        cancelchallenge: function (tournament, user) {
-            tournament.cancelChallenge(user, this);
-        },
-        acceptchallenge: function (tournament, user) {
-            tournament.acceptChallenge(user, this);
-        }
-    },
-    creation: {
-        settype: function (tournament, user, params, cmd) {
-            if (params.length < 1)
-                return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
-            var generator = createTournamentGenerator(params.shift(), params, this);
-            if (generator)
-                tournament.setGenerator(generator, this);
-        },
-        begin: 'start',
-        start: function (tournament) {
-            tournament.startTournament(this);
-        }
-    },
-    moderation: {
-        dq: 'disqualify',
-        disqualify: function (tournament, user, params, cmd) {
-            if (params.length < 1)
-                return this.sendReply("Usage: " + cmd + " <user>");
-            var targetUser = Users.get(params[0]);
-            if (!targetUser)
-                return this.sendReply("User " + params[0] + " not found.");
-            tournament.disqualifyUser(targetUser, this);
-        },
-        end: 'delete',
-        stop: 'delete',
-        delete: function (tournament) {
-            deleteTournament(tournament.room.title, this);
-        }
-    }
+	basic: {
+		j: 'join',
+		in: 'join',
+		join: function (tournament, user) {
+			tournament.addUser(user, false, this);
+		},
+		l: 'leave',
+		out: 'leave',
+		leave: function (tournament, user) {
+			if (tournament.isTournamentStarted) {
+				tournament.disqualifyUser(user, this);
+			} else {
+				tournament.removeUser(user, this);
+			}
+		},
+		getupdate: function (tournament, user) {
+			tournament.update(user);
+		},
+		challenge: function (tournament, user, params, cmd) {
+			if (params.length < 1)
+				return this.sendReply("Usage: " + cmd + " <user>");
+			var targetUser = Users.get(params[0]);
+			if (!targetUser)
+				return this.sendReply("User " + params[0] + " not found.");
+			tournament.challenge(user, targetUser, this);
+		},
+		cancelchallenge: function (tournament, user) {
+			tournament.cancelChallenge(user, this);
+		},
+		acceptchallenge: function (tournament, user) {
+			tournament.acceptChallenge(user, this);
+		}
+	},
+	creation: {
+		settype: function (tournament, user, params, cmd) {
+			if (params.length < 1)
+				return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
+			var generator = createTournamentGenerator(params.shift(), params, this);
+			if (generator)
+				tournament.setGenerator(generator, this);
+		},
+		begin: 'start',
+		start: function (tournament) {
+			tournament.startTournament(this);
+		}
+	},
+	moderation: {
+		dq: 'disqualify',
+		disqualify: function (tournament, user, params, cmd) {
+			if (params.length < 1)
+				return this.sendReply("Usage: " + cmd + " <user>");
+			var targetUser = Users.get(params[0]);
+			if (!targetUser)
+				return this.sendReply("User " + params[0] + " not found.");
+			tournament.disqualifyUser(targetUser, this);
+			this.privateModCommand("("+targetUser.name+" was disqualified from the tournament by "+user.name+")");
+		},
+		end: 'delete',
+		stop: 'delete',
+		delete: function (tournament) {
+			deleteTournament(tournament.room.title, this);
+		}
+	}
 };
 
 CommandParser.commands.tour = 'tournament';
