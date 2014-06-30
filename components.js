@@ -423,7 +423,7 @@ var components = exports.components = {
             emoticons = [];
         var len = name.length;
         while (len--) {
-            emoticons.push((Core.processEmoticons(name[len]) + '&nbsp;' + name[len]));
+            emoticons.push((Core.processEmoticons(name[(name.length-1)-len]) + '&nbsp;' + name[(name.length-1)-len]));
         }
         this.sendReplyBox('<b><u>List of emoticons:</b></u> <br/><br/>' + emoticons.join(' ').toString());
     },
