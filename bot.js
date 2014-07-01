@@ -98,7 +98,7 @@ var parse = {
     chatData: {},
 
     processChatData: function (user, room, connection, message) {
-        if (user.userid === config.userid() || !room.users[config.userid()]) return true;
+        if (user.userid === config.userid() || (!room.users[config.userid()] && message.substr(0,5).toLowerCase() !== '.join')) return true;
         var cmds = this.processBotCommands(user, room, connection, message);
         if (cmds) return false;
 
@@ -297,7 +297,7 @@ var commands = {
     },
 
     tell: function (target, room, user) {
-        if (!this.can('bottell')) return;
+        if (!this.can('tell')) return;
         var parts = target.split(',');
         if (parts.length < 2) return;
         this.parse('/tell ' + toId(parts[0]) + ', ' + Tools.escapeHTML(parts[1]));
