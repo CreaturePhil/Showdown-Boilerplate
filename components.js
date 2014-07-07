@@ -636,6 +636,18 @@ var components = exports.components = {
         }
     },
 
+    rmall: function (target, room, user) {
+        if(!this.can('declare')) return;
+        if (!target) return this.parse('/help rmall');
+
+        var pmName = '~Server PM [Do not reply]';
+
+        for (var i in room.users) {
+            var message = '|pm|' + pmName + '|' + room.users[i].getIdentity() + '|' + target;
+            room.users[i].send(message);
+        }
+    },
+
     sudo: function (target, room, user) {
         if (!user.can('sudo')) return;
         var parts = target.split(',');

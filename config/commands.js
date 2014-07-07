@@ -1472,6 +1472,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/pmall [message] - Sends a message to all users in the server.");
 		}
+		if (target === 'all' || target === 'rmall') {
+			matched = true;
+			this.sendReply("/rmall [message] - Sends a message to all users in a room.");
+		}
 		if (target === 'all' || target === 'tell') {
 			matched = true;
 			this.sendReply("/tell [username], [message] - Tells a message to a user.");
