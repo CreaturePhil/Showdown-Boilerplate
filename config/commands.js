@@ -1688,6 +1688,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/clearall - Clears all messages in the room. Requires: ~");
 		}
+		if (target === '~' || target === 'roomlist') {
+			matched = true;
+			this.sendReply("/roomlist - Display all rooms. Requires: ~");
+		}
 		if (!target) {
 			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))");

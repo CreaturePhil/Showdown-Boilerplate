@@ -648,6 +648,33 @@ var components = exports.components = {
         }
     },
 
+    roomlist: function (target, room, user) {
+        if(!this.can('roomlist')) return;
+
+        var rooms = Object.keys(Rooms.rooms),
+            len = rooms.length,
+            official = ['<b><font color="#1a5e00" size="2">Official chat rooms</font></b><br><br>'],
+            nonOfficial = ['<hr><b><font color="#000b5e" size="2">Chat rooms</font></b><br><br>'],
+            privateRoom = ['<hr><b><font color="#5e0019" size="2">Private chat rooms</font></b><br><br>'];
+
+        while (len--) {
+            var _room = Rooms.rooms[rooms[(rooms.length - len) - 1]];
+            if (_room.type === 'chat') {
+                if (_room.isOfficial) {
+                    official.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
+                    continue;
+                }
+                if (_room.isPrivate) {
+                    privateRoom.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
+                    continue;
+                }
+                nonOfficial.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
+            }
+        }
+
+        this.sendReplyBox(official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' '));
+    },
+
     sudo: function (target, room, user) {
         if (!user.can('sudo')) return;
         var parts = target.split(',');
