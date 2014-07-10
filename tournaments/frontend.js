@@ -641,28 +641,28 @@ var Tournament = (function () {
             bracketData: this.getBracketData()
         }));
 
-        data = {
+        var data = {
             results: this.generator.getResults().map(usersToNames),
             bracketData: this.getBracketData()
         };
         data = data['results'].toString();
 
-        runnerUp = false;
+        var runnerUp = false;
 
         if (data.indexOf(',') >= 0) {
             data = data.split(',');
-            winner = data[0];
+            var winner = data[0];
             if (data[1]) runnerUp = data[1];
         } else {
-            winner = data;
+            var winner = data;
         }
 
-        tourSize = this.generator.users.size;
+        var tourSize = this.generator.users.size;
 
         if (this.room.isOfficial && tourSize >= Core.tournaments.tourSize) {
-            firstMoney = Math.round(tourSize / Core.tournaments.amountEarn);
-            secondMoney = Math.round(firstMoney / 2);
-            firstBuck = 'buck';
+            var firstMoney = Math.round(tourSize / Core.tournaments.amountEarn),
+            secondMoney = Math.round(firstMoney / 2),
+            firstBuck = 'buck',
             secondBuck = 'buck';
             if (firstMoney > 1) firstBuck = 'bucks';
             if (secondMoney > 1) secondBuck = 'bucks';
@@ -671,8 +671,8 @@ var Tournament = (function () {
             this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(winner) + '</font> has also won <font color=' + Core.profile.color + '>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</strong>');
             if (runnerUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> ' + secondBuck + ' for winning the tournament!</strong>');
 
-            var wid = toId(winner); // winner's userid
-            var rid = toId(runnerUp); // runnerUp's userid
+            var wid = toId(winner), // winner's userid
+                rid = toId(runnerUp); // runnerUp's userid
 
             // file i/o
             var winnerMoney = Number(Core.stdin('money', wid));
