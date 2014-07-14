@@ -153,7 +153,13 @@ exports.BattleScripts = {
 				// if a targeted foe faints, the move is retargeted
 				target = this.resolveTarget(pokemon, move);
 			}
-			if (target.fainted) {
+			var lacksTarget = target.fainted;
+			if (!lacksTarget) {
+				if (move.target === 'adjacentFoe' || move.target === 'adjacentAlly' || move.target === 'normal' || move.target === 'randomNormal') {
+					lacksTarget = !this.isAdjacent(target, pokemon);
+				}
+			}
+			if (lacksTarget) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
 				return true;
@@ -187,12 +193,20 @@ exports.BattleScripts = {
 			pokemon.hp = 0;
 		}
 
-		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
+		this.setActiveMove(move, pokemon, target);
+		var hitResult = true;
+
+		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
 			return false;
 		}
 
-		this.setActiveMove(move, pokemon, target);
-		var hitResult = true;
+		this.runEvent('PrepareHit', pokemon, target, move);
+
+		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
+			return false;
+		}
 
 		if (typeof move.affectedByImmunities === 'undefined') {
 			move.affectedByImmunities = (move.category !== 'Status');
