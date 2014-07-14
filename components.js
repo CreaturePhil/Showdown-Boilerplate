@@ -288,18 +288,9 @@ var components = exports.components = {
         return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
     },
 
-    viewtell: 'viewtells',
-    viewtells: function (target, room, user, connection) {
-        if (user.authenticated && global.tells) {
-            var alts = user.getAlts();
-            alts.push(user.name);
-            alts.map(toId).forEach(function (user) {
-                if (tells[user]) {
-                    tells[user].forEach(connection.sendTo.bind(connection, room));
-                    delete tells[user];
-                }
-            });
-        }
+    viewtells: 'showtells',
+    showtells: function (target, room, user){
+        return this.sendReply("These users have currently have queued tells: " + Object.keys(tells));
     },
 
     vote: function (target, room, user) {
