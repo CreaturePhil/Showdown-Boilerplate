@@ -657,7 +657,6 @@ var Tournament = (function () {
             }
         }
 
-
         if (result === 'draw' && !this.generator.isDrawingSupported) {
             this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(',') + '|fail');
 

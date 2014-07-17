@@ -1024,28 +1024,34 @@ var components = exports.components = {
             cmds = {
                 color: function () {
                     Core.stdout('control-panel', 'color', parts[1]);
+                    Core.profile.color = Core.stdin('control-panel', 'color');
                     self.sendReply('Color is now ' + parts[1]);
                 },
                 avatar: function () {
                     Core.stdout('control-panel', 'avatar', parts[1]);
+                    Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
                     self.sendReply('Avatar URL is now ' + parts[1]);
                 },
                 toursize: function () {
                     Core.stdout('control-panel', 'toursize', parts[1]);
+                    Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
                     self.sendReply('Tournament Size to earn money is now ' + parts[1]);
                 },
                 money: function () {
                     if (parts[1] === 'standard') Core.stdout('control-panel', 'money', 10);
                     if (parts[1] === 'double') Core.stdout('control-panel', 'money', 4);
                     if (parts[1] === 'quadruple') Core.stdout('control-panel', 'money', 2);
+                    Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));
                     self.sendReply('Earning money amount is now ' + parts[1]);
                 },
                 winner: function () {
                     Core.stdout('control-panel', 'winner', parts[1]);
+                    Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
                     self.sendReply('Winner Elo Bonus is now ' + parts[1]);
                 },
                 runnerup: function () {
                     Core.stdout('control-panel', 'runnerup', parts[1]);
+                    Core.tournaments.runnerUpElo = Number(Core.stdin('control-panel', 'runnerup'));
                     self.sendReply('RunnerUp Elo Bonus is now ' + parts[1]);
                 }
             };
