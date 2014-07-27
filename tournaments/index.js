@@ -416,8 +416,8 @@ var Tournament = (function () {
     };
 
     Tournament.prototype.disqualifyUser = function (user, output) {
-        var isTournamentEnded = this.generator.disqualifyUser(user);
-        if (typeof isTournamentEnded === 'string') {
+        var error = this.generator.disqualifyUser(user);
+        if (error) {
             output.sendReply('|tournament|error|' + isTournamentEnded);
             return false;
         }
@@ -468,7 +468,7 @@ var Tournament = (function () {
         this.isBracketInvalidated = true;
         this.isAvailableMatchesInvalidated = true;
 
-        if (isTournamentEnded) {
+        if (this.generator.isTournamentEnded()) {
             this.onTournamentEnd();
         } else {
             this.update();
@@ -608,7 +608,8 @@ var Tournament = (function () {
     Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
         if (!result) return;
 
-        // Prevent double accepts
+        // Prevent double accepts and users that have been disqualified while between these two functions
+        if (!this.pendingChallenges.get(challenge.from)) return;
         if (!this.pendingChallenges.get(user)) return;
 
         var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
@@ -672,10 +673,10 @@ var Tournament = (function () {
             return;
         }
 
-        var isTournamentEnded = this.generator.setMatchResult([from, to], result, room.battle.score);
-        if (typeof isTournamentEnded === 'string') {
+        var error = this.generator.setMatchResult([from, to], result, room.battle.score);
+        if (error) {
             // Should never happen
-            this.room.add("Unexpected " + isTournamentEnded + " from setMatchResult() in onBattleWin(" + room.id + ", " + winner.userid + "). Please report this to an admin.");
+            this.room.add("Unexpected " + error + " from setMatchResult([" + from.userid + ", " + to.userid + "], " + result + ", " + room.battle.score + ") in onBattleWin(" + room.id + ", " + winner.userid + "). Please report this to an admin.");
             return;
         }
 
@@ -688,7 +689,7 @@ var Tournament = (function () {
         this.isBracketInvalidated = true;
         this.isAvailableMatchesInvalidated = true;
 
-        if (isTournamentEnded) {
+        if (this.generator.isTournamentEnded()) {
             this.onTournamentEnd();
         } else {
             this.runAutoDisqualify();
@@ -782,7 +783,7 @@ var commands = {
         },
         getusers: function (tournament) {
             if (!this.canBroadcast()) return;
-            var users = usersToNames(tournament.generator.getUsers()).sort();
+            var users = usersToNames(tournament.generator.getUsers().sort());
             this.sendReplyBox("<strong>" + users.length + " users are in this tournament:</strong><br />" + users.join(", "));
         },
         getupdate: function (tournament, user) {

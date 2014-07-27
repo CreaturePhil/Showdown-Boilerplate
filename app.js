@@ -122,7 +122,7 @@ try {
 	console.log('Custom avatar failed to load. Try this:\nIn config.js on line 140, change customavatar to customAvatar.');
 }
 
-var watchFile = function () {
+var watchFile = global.watchFile = function () {
 	try {
 		return fs.watchFile.apply(fs, arguments);
 	} catch (e) {
@@ -364,11 +364,6 @@ global.string = function (str) {
 
 global.LoginServer = require('./loginserver.js');
 
-watchFile('./config/custom.css', function (curr, prev) {
-	LoginServer.request('invalidatecss', {}, function () {});
-});
-LoginServer.request('invalidatecss', {}, function () {});
-
 global.Users = require('./users.js');
 
 global.Rooms = require('./rooms.js');
@@ -380,7 +375,7 @@ global.CommandParser = require('./command-parser.js');
 
 global.Simulator = require('./simulator.js');
 
-global.Tournaments = require('./tournaments/middleend.js');
+global.Tournaments = require('./tournaments');
 
 try {
 	global.Dnsbl = require('./dnsbl.js');

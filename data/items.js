@@ -3686,7 +3686,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		onAfterMoveSelf: function (source, target) {
+		onAfterMoveSecondarySelfPriority: -1,
+		onAfterMoveSecondarySelf: function (source, target) {
 			if (source.lastDamage > 0) {
 				this.heal(source.lastDamage / 8, source);
 			}
@@ -4467,6 +4468,6 @@ exports.BattleItems = {
 		},
 		num: 276,
 		gen: 4,
-		desc: "The accuracy of attacks by the holder is 1.2x if it moves after the target."
+		desc: "The accuracy of attacks by the holder is 1.2x if it is the last to move in a turn."
 	}
 };
