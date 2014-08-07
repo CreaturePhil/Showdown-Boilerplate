@@ -278,6 +278,9 @@ var GlobalRoom = (function () {
 		// users must be different
 		if (user1 === user2) return false;
 
+		// users must have different IPs
+		if (user1.latestIp === user2.latestIp) return false;
+
 		// users must not have been matched immediately previously
 		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
 
@@ -478,6 +481,13 @@ var GlobalRoom = (function () {
 		this.cancelSearch(p2, true);
 		if (Config.reportbattles && rooms.lobby) {
 			rooms.lobby.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
+		}
+		if (Config.logladderip && rated) {
+			if (!this.ladderIpLog) {
+				this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {flags: 'a'});
+			}
+			this.ladderIpLog.write(p1.userid+': '+p1.latestIp+'\n');
+			this.ladderIpLog.write(p2.userid+': '+p2.latestIp+'\n');
 		}
 		return newRoom;
 	};

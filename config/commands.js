@@ -199,7 +199,8 @@ var commands = exports.commands = {
 		}
 		if (!this.broadcasting && (user.can('ip', targetUser) || user === targetUser)) {
 			var ips = Object.keys(targetUser.ips);
-			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", "));
+			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
+					(user.group !== ' ' && targetUser.latestHost ? "\nHost: " + targetUser.latestHost : ""));
 		}
 		var output = "In rooms: ";
 		var first = true;
@@ -635,6 +636,7 @@ var commands = exports.commands = {
 	},
 
 	weak: 'weakness',
+	resist: 'weakness',
 	weakness: function (target, room, user){
 		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
@@ -656,20 +658,37 @@ var commands = exports.commands = {
 		}
 
 		var weaknesses = [];
+		var resistances = [];
+		var immunities = [];
 		Object.keys(Tools.data.TypeChart).forEach(function (type) {
 			var notImmune = Tools.getImmunity(type, pokemon);
 			if (notImmune) {
 				var typeMod = Tools.getEffectiveness(type, pokemon);
-				if (typeMod === 1) weaknesses.push(type);
-				if (typeMod === 2) weaknesses.push("<b>" + type + "</b>");
+				switch (typeMod) {
+				case 1:
+					weaknesses.push(type);
+					break;
+				case 2:
+					weaknesses.push("<b>" + type + "</b>");
+					break;
+				case -1:
+					resistances.push(type);
+					break;
+				case -2:
+					resistances.push("<b>" + type + "</b>");
+					break;
+				}
+			} else {
+				immunities.push(type);
 			}
 		});
-
-		if (!weaknesses.length) {
-			this.sendReplyBox("" + target + " has no weaknesses.");
-		} else {
-			this.sendReplyBox("" + target + " is weak to: " + weaknesses.join(", ") + " (not counting abilities).");
-		}
+ 
+		var buffer = []
+		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':')
+		buffer.push('<span class=\"message-effect-weak\">Weaknesses</span>: ' + (weaknesses.join(', ') || 'None'));
+		buffer.push('<span class=\"message-effect-resist\">Resistances</span>: ' + (resistances.join(', ') || 'None'));
+		buffer.push('<span class=\"message-effect-immune\">Immunities</span>: ' + (immunities.join(', ') || 'None'));
+		this.sendReplyBox(buffer.join('<br>'));
 	},
 
 	eff: 'effectiveness',
@@ -1118,7 +1137,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'rarelyused' || target === 'ru') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3510066/\">np: RU Stage 2.5</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3513684/\">np: RU Stage 3</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3506500/\">RU Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === 'neverused' || target === 'nu') {
