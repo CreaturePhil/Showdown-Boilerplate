@@ -1,7 +1,7 @@
 Showdown Boilerplate
 ========================================================================
 
-Showdown Boilerplate is a template for private servers of [Pokémon Showdown][1]. Pokémon Showdown is created [Zarel][2].
+Showdown Boilerplate is a template for private servers of [Pokémon Showdown][1]. Pokémon Showdown is created by [Zarel][2].
 
 What is a boilerplate? Boilerplate is any text that is or can be reused in new contexts or applications without being greatly changed from the original.
 
