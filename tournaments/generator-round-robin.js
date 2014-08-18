@@ -10,7 +10,7 @@ var RoundRobin = (function () {
 
 		if (isDoubles)
 			this.name = "Double " + this.name;
-	};
+	}
 
 	RoundRobin.prototype.name = "Round Robin";
 	RoundRobin.prototype.isDrawingSupported = true;
@@ -173,7 +173,7 @@ var RoundRobin = (function () {
 		if (userIndexA < 0 || userIndexB < 0)
 			return 'UserNotAdded';
 
-		var match = this.matches[userIndexA][userIndexB];
+		match = this.matches[userIndexA][userIndexB];
 		if (!match || match.state !== 'available')
 			return 'InvalidMatch';
 
@@ -197,7 +197,7 @@ var RoundRobin = (function () {
 
 	RoundRobin.prototype.isTournamentEnded = function () {
 		return this.isBracketFrozen && this.pendingMatches === 0;
-	}
+	};
 
 	RoundRobin.prototype.getResults = function () {
 		if (!this.isTournamentEnded())

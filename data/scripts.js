@@ -277,7 +277,8 @@ exports.BattleScripts = {
 			var moveDamage;
 			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 			var isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
-			for (var i = 0; i < hits && target.hp && pokemon.hp; i++) {
+			var i;
+			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
 
 				moveDamage = this.moveHit(target, pokemon, move);
@@ -757,10 +758,10 @@ exports.BattleScripts = {
 	},
 	randomSet: function (template, i, noMega) {
 		if (i === undefined) i = 1;
-		var baseTemplate = template = this.getTemplate(template);
+		var baseTemplate = (template = this.getTemplate(template));
 		var name = template.name;
 
-		if (!template.exists || (!template.viableMoves && !template.learnset)) {
+		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
 			template = this.getTemplate('unown');
 
@@ -775,7 +776,7 @@ exports.BattleScripts = {
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
 
-		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
+		var moveKeys = (template.randomBattleMoves || Object.keys(template.learnset)).randomize();
 		var moves = [];
 		var ability = '';
 		var item = '';
@@ -1246,7 +1247,7 @@ exports.BattleScripts = {
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
-					if (!type1 in hasStab && !type2 in hasStab) {
+					if (!(type1 in hasStab) && !(type2 in hasStab)) {
 						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
 						rejectCombo = false;
@@ -1629,7 +1630,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].viableMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0,4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0,4) !== 'Mega')) {
 				keys.push(i);
 			}
 		}
@@ -1688,9 +1689,9 @@ exports.BattleScripts = {
 				if (i === 1) {
 					template = potd;
 					if (template.species === 'Magikarp') {
-						template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
+						template.randomBattleMoves = ['magikarpsrevenge', 'splash', 'bounce'];
 					} else if (template.species === 'Delibird') {
-						template.viableMoves = {present:1, bestow:1};
+						template.randomBattleMoves = ['present', 'bestow'];
 					}
 				} else if (template.species === potd.species) {
 					continue; // No, thanks, I've already got one
@@ -1742,127 +1743,13 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomBetaTeam: function (side) {
-		var keys = [];
-		var pokemonLeft = 0;
-		var pokemon = [];
-		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && i !== 'missingno') {
-				keys.push(i);
-			}
-		}
-		keys = keys.randomize();
-		keys.splice(1 + Math.floor(Math.random() * 5), 0, 'missingno');
-
-		// PotD stuff
-		var potd = {};
-		if ('Rule:potd' in this.getFormat().banlistTable) {
-			potd = this.getTemplate(Config.potd);
-		}
-
-		var typeCount = {};
-		var typeComboCount = {};
-		var baseFormes = {};
-		var uberCount = 0;
-		var nuCount = 0;
-		var megaCount = 0;
-
-		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
-			var template = this.getTemplate(keys[i]);
-			if (!template || !template.name || !template.types) continue;
-			var tier = template.tier;
-			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
-			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
-			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
-			if (tier === 'LC' && nuCount > 1) continue;
-			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
-			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
-
-			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
-			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
-			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
-			if (keys[i].substr(0, 8) === 'basculin' && Math.random() * 2 > 1) continue;
-			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
-			if (keys[i].substr(0, 8) === 'genesect' && Math.random() * 5 > 1) continue;
-			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
-			if (keys[i].substr(0, 9) === 'gourgeist' && Math.random() * 4 > 1) continue;
-			// Not available on XY
-			if (template.species === 'Pichu-Spiky-eared') continue;
-
-			// Limit 2 of any type
-			var types = template.types;
-			var skip = false;
-			for (var t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 && Math.random() * 5 > 1) {
-					skip = true;
-					break;
-				}
-			}
-			if (skip) continue;
-
-			if (potd && potd.name && potd.types) {
-				// The Pokemon of the Day belongs in slot 2
-				if (i === 1) {
-					template = potd;
-					if (template.species === 'Magikarp') {
-						template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
-					} else if (template.species === 'Delibird') {
-						template.viableMoves = {present:1, bestow:1};
-					}
-				} else if (template.species === potd.species) {
-					continue; // No, thanks, I've already got one
-				}
-			}
-
-			var set = this.randomSet(template, i);
-
-			// Limit 1 of any type combination
-			var typeCombo = types.join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
-				// Drought and Drizzle don't count towards the type combo limit
-				typeCombo = set.ability;
-			}
-			if (typeCombo in typeComboCount) continue;
-
-			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
-
-			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseSpecies]) continue;
-			baseFormes[template.baseSpecies] = 1;
-
-			// Okay, the set passes, add it to our team
-			pokemon.push(set);
-
-			pokemonLeft++;
-			// Now that our Pokemon has passed all checks, we can increment the type counter
-			for (var t = 0; t < types.length; t++) {
-				if (types[t] in typeCount) {
-					typeCount[types[t]]++;
-				} else {
-					typeCount[types[t]] = 1;
-				}
-			}
-			typeComboCount[typeCombo] = 1;
-
-			// Increment Uber/NU and mega counter
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
-				nuCount++;
-			}
-			if (this.getItem(set.item).megaStone) megaCount++;
-
-		}
-		return pokemon;
-	},
 	randomDoublesTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].viableMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0,4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0,4) !== 'Mega')) {
 				keys.push(i);
 			}
 		}
@@ -1905,14 +1792,9 @@ exports.BattleScripts = {
 
 			// More potd stuff
 			if (potd && potd.name && potd.types) {
-				// The Pokemon of the Day belongs in slot 2
-				if (i === 1) {
+				// The Pokemon of the Day belongs in slot 3
+				if (i === 2) {
 					template = potd;
-					if (template.species === 'Magikarp') {
-						template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
-					} else if (template.species === 'Delibird') {
-						template.viableMoves = {present:1, bestow:1};
-					}
 				} else if (template.species === potd.species) {
 					continue; // No, thanks, I've already got one
 				}
@@ -1956,10 +1838,10 @@ exports.BattleScripts = {
 		return pokemon;
 	},
 	randomDoublesSet: function (template, noMega) {
-		var baseTemplate = template = this.getTemplate(template);
+		var baseTemplate = (template = this.getTemplate(template));
 		var name = template.name;
 
-		if (!template.exists || (!template.viableDoublesMoves && !template.viableMoves && !template.learnset)) {
+		if (!template.exists || (!template.randomDoubleBattleMoves && !template.randomBattleMoves && !template.learnset)) {
 			template = this.getTemplate('unown');
 
 			var stack = 'Template incompatible with random battles: ' + name;
@@ -1973,7 +1855,7 @@ exports.BattleScripts = {
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
 
-		var moveKeys = Object.keys(template.viableDoublesMoves || template.viableMoves || template.learnset).randomize();
+		var moveKeys = (template.randomDoubleBattleMoves || template.randomBattleMoves || Object.keys(template.learnset)).randomize();
 		// Make protect viable for everyone
 		// Delete this once all Pokémon have viable doubles sets
 		var hasProtectingMove = false;
@@ -2434,7 +2316,7 @@ exports.BattleScripts = {
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
-					if (!type1 in hasStab && !type2 in hasStab) {
+					if (!(type1 in hasStab) && !(type2 in hasStab)) {
 						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
 						rejectCombo = false;

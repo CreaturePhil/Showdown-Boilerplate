@@ -52,6 +52,8 @@ global.string = function (str) {
 
 global.Tools = require('./tools.js');
 
+var Battle, BattleSide, BattlePokemon;
+
 var Battles = {};
 
 // Receive and process a message sent using Simulator.prototype.send in
@@ -97,7 +99,7 @@ battleEngineFakeProcess.client.on('message', function (message) {
 						'Additional information:\n' +
 						'message = ' + message + '\n' +
 						'currentRequest = ' + prevRequest + '\n\n' +
-						'Log:\n' + battle.log.join('\n');
+						'Log:\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n');
 				var fakeErr = {stack: stack};
 				require('./crashlogger.js')(fakeErr, 'A battle');
 
@@ -122,7 +124,7 @@ battleEngineFakeProcess.client.on('message', function (message) {
 	}
 });
 
-var BattlePokemon = (function () {
+BattlePokemon = (function () {
 	function BattlePokemon(set, side) {
 		this.side = side;
 		this.battle = side.battle;
@@ -554,7 +556,7 @@ var BattlePokemon = (function () {
 		}
 		return boosts;
 	};
-	BattlePokemon.prototype.boostBy = function (boost, source, effect) {
+	BattlePokemon.prototype.boostBy = function (boost) {
 		var changed = false;
 		for (var i in boost) {
 			var delta = boost[i];
@@ -1003,7 +1005,7 @@ var BattlePokemon = (function () {
 		if (oldAbility in {multitype:1, stancechange:1}) return false;
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
-		if (ability.id) {
+		if (ability.id && this.battle.gen > 3) {
 			this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
 		}
 		return oldAbility;
@@ -1196,7 +1198,7 @@ var BattlePokemon = (function () {
 	return BattlePokemon;
 })();
 
-var BattleSide = (function () {
+BattleSide = (function () {
 	function BattleSide(name, battle, n, team) {
 		this.battle = battle;
 		this.n = n;
@@ -1351,7 +1353,7 @@ var BattleSide = (function () {
 	return BattleSide;
 })();
 
-var Battle = (function () {
+Battle = (function () {
 	var Battle = {};
 
 	Battle.construct = (function () {
@@ -1371,7 +1373,7 @@ var Battle = (function () {
 				var battle = Object.create(proto);
 				var ret = Object.create(battle);
 				tools.install(ret);
-				return battleProtoCache[formatarg] = ret;
+				return (battleProtoCache[formatarg] = ret);
 			})());
 			Battle.prototype.init.call(battle, roomid, formatarg, rated);
 			return battle;
@@ -1799,7 +1801,6 @@ var Battle = (function () {
 			this.add('message', 'Event: ' + eventid);
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
-			return false;
 		}
 		//this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
 		effect = this.getEffect(effect);
@@ -1957,7 +1958,6 @@ var Battle = (function () {
 			this.add('message', 'Event: ' + eventid);
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
-			return false;
 		}
 		if (!target) target = this;
 		var statuses = this.getRelevantEffects(target, 'on' + eventid, 'onSource' + eventid, source);
@@ -2084,7 +2084,7 @@ var Battle = (function () {
 		if (status.thing && status.thing.getStat) status.speed = status.thing.speed;
 	};
 	// bubbles up to parents
-	Battle.prototype.getRelevantEffects = function (thing, callbackType, foeCallbackType, foeThing, checkChildren) {
+	Battle.prototype.getRelevantEffects = function (thing, callbackType, foeCallbackType, foeThing) {
 		var statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
 		statuses.sort(Battle.comparePriority);
 		//if (statuses[0]) this.debug('match ' + callbackType + ': ' + statuses[0].status.id);
@@ -2363,6 +2363,9 @@ var Battle = (function () {
 		if (!pokemon || pokemon.isActive) return false;
 		if (!pos) pos = 0;
 		var side = pokemon.side;
+		if (pos >= side.active.length) {
+			throw new Error("Invalid switch position");
+		}
 		if (side.active[pos]) {
 			var oldActive = side.active[pos];
 			var lastMove = null;
@@ -2455,6 +2458,9 @@ var Battle = (function () {
 		return true;
 	};
 	Battle.prototype.swapPosition = function (pokemon, slot, attributes) {
+		if (slot >= pokemon.side.active.length) {
+			throw new Error("Invalid swap position");
+		}
 		var target = pokemon.side.active[slot];
 		if (slot !== 1 && (!target || target.fainted)) return false;
 
@@ -2816,12 +2822,13 @@ var Battle = (function () {
 		}
 		basePower = this.clampIntRange(basePower, 1);
 
+		var critMult;
 		if (this.gen <= 5) {
 			move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
-			var critMult = [0, 16, 8, 4, 3, 2];
+			critMult = [0, 16, 8, 4, 3, 2];
 		} else {
 			move.critRatio = this.clampIntRange(move.critRatio, 0, 4);
-			var critMult = [0, 16, 8, 2, 1];
+			critMult = [0, 16, 8, 2, 1];
 		}
 
 		move.crit = move.willCrit || false;
@@ -2861,12 +2868,8 @@ var Battle = (function () {
 			ignorePositiveDefensive = true;
 		}
 
-		if (move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0)) {
-			var ignoreOffensive = true;
-		}
-		if (move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0)) {
-			var ignoreDefensive = true;
-		}
+		var ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
+		var ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
 
 		if (ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
@@ -3052,17 +3055,15 @@ var Battle = (function () {
 		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
 	};
 	Battle.prototype.checkFainted = function () {
-		function isFainted(a) {
-			if (!a) return false;
+		function check(a) {
+			if (!a) return;
 			if (a.fainted) {
 				a.switchFlag = true;
-				return true;
 			}
-			return false;
 		}
-		// make sure these don't get short-circuited out; all switch flags need to be set
-		var p1fainted = this.p1.active.map(isFainted);
-		var p2fainted = this.p2.active.map(isFainted);
+
+		this.p1.active.forEach(check);
+		this.p2.active.forEach(check);
 	};
 	Battle.prototype.faintMessages = function (lastFirst) {
 		if (this.ended) return;
@@ -3182,7 +3183,7 @@ var Battle = (function () {
 	};
 	Battle.prototype.willAct = function () {
 		for (var i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {	
+			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {
 				return this.queue[i];
 			}
 		}
@@ -3302,9 +3303,8 @@ var Battle = (function () {
 			decision.side.pokemon[0] = pokemon;
 			decision.side.pokemon[i].position = i;
 			decision.side.pokemon[0].position = 0;
-			return;
 			// we return here because the update event would crash since there are no active pokemon yet
-			break;
+			return;
 		case 'pass':
 			if (!decision.priority || decision.priority <= 101) return;
 			if (decision.pokemon) {
@@ -3331,12 +3331,15 @@ var Battle = (function () {
 				}
 			}
 			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
+				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
+					// in gen 2-4, the switch still happens
 					decision.priority = -101;
-					this.addQueue(decision, true);
+					this.queue.unshift(decision);
 					this.debug('Pursuit target fainted');
 					break;
 				}
+				// in gen 5+, the switch is cancelled
 				this.debug('A Pokemon can\'t switch between when it runs out of HP and when it faints');
 				break;
 			}
@@ -3391,7 +3394,9 @@ var Battle = (function () {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.length) {
+		if (!this.queue.length || (this.gen <= 3 && this.queue[0].choice in {move:1,residual:1})) {
+			// in gen 3 or earlier, switching in fainted pokemon is done after
+			// every move, rather than only at the end of the turn.
 			this.checkFainted();
 		} else if (decision.choice === 'pass') {
 			this.eachEvent('Update');
@@ -3413,6 +3418,10 @@ var Battle = (function () {
 		}
 
 		if (p1switch || p2switch) {
+			if (this.gen <= 1) {
+				// in gen 1, fainting ends the turn; residuals do not happen
+				this.queue = [];
+			}
 			this.makeRequest('switch');
 			return true;
 		}
@@ -3434,25 +3443,14 @@ var Battle = (function () {
 		}
 		this.addQueue(null);
 
-		var currentPriority = 6;
-
 		while (this.queue.length) {
 			var decision = this.queue.shift();
-
-			/* while (decision.priority < currentPriority && currentPriority > -6) {
-				this.eachEvent('Priority', null, currentPriority);
-				currentPriority--;
-			} */
 
 			this.runDecision(decision);
 
 			if (this.currentRequest) {
 				return;
 			}
-
-			// if (!this.queue.length || this.queue[0].choice === 'runSwitch') {
-			// 	if (this.faintMessages()) return;
-			// }
 
 			if (this.ended) return;
 		}
@@ -3609,7 +3607,6 @@ var Battle = (function () {
 				return false;
 			}
 
-			var decision = null;
 			switch (choice) {
 			case 'team':
 				decisions.push({

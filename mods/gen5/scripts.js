@@ -5,7 +5,7 @@ exports.BattleScripts = {
 		template = this.getTemplate(template);
 		var name = template.name;
 
-		if (!template.exists || (!template.viableMoves && !template.learnset)) {
+		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
 			template = this.getTemplate('unown');
 
@@ -14,7 +14,7 @@ exports.BattleScripts = {
 			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
 		}
 
-		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
+		var moveKeys = (template.randomBattleMoves || Object.keys(template.learnset)).randomize();
 		var moves = [];
 		var ability = '';
 		var item = '';
@@ -457,7 +457,7 @@ exports.BattleScripts = {
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
-					if (!type1 in hasStab && !type2 in hasStab) {
+					if (!(type1 in hasStab) && !(type2 in hasStab)) {
 						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
 						rejectCombo = false;
@@ -822,7 +822,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && this.getTemplate(i).gen < 6) {
+			if (this.data.FormatsData[i].randomBattleMoves && this.getTemplate(i).gen < 6) {
 				keys.push(i);
 			}
 		}
@@ -875,9 +875,9 @@ exports.BattleScripts = {
 				if (i === 1) {
 					template = potd;
 					if (template.species === 'Magikarp') {
-						template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
+						template.randomBattleMoves = {magikarpsrevenge:1, splash:1, bounce:1};
 					} else if (template.species === 'Delibird') {
-						template.viableMoves = {present:1, bestow:1};
+						template.randomBattleMoves = {present:1, bestow:1};
 					}
 				} else if (template.species === potd.species) {
 					continue; // No, thanks, I've already got one

@@ -261,11 +261,13 @@ exports.BattleScripts = {
 				hits = Math.floor(hits);
 				// In gen 1, all the hits have the same damage for multihits move
 				var moveDamage = 0;
-				for (var i = 0; i < hits && target.hp && pokemon.hp; i++) {
+				var firstDamage;
+				var i;
+				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 					if (i === 0) {
 						// First hit, we calculate
 						moveDamage = this.moveHit(target, pokemon, move);
-						var firstDamage = moveDamage;
+						firstDamage = moveDamage;
 					} else {
 						// We get the previous damage to make it fix damage
 						move.damage = firstDamage;
@@ -274,7 +276,7 @@ exports.BattleScripts = {
 					if (moveDamage === false) break;
 					damage = (moveDamage || 0);
 					if (target.subFainted) {
-						i++
+						i++;
 						break;
 					}
 				}
@@ -500,15 +502,12 @@ exports.BattleScripts = {
 				return false;
 			}
 		}
+		var targetHasSub = false;
 		if (target) {
 			var targetSub = target.getVolatile('substitute');
-			if (targetSub === null) {
-				var targetHasSub = false;
-			} else {
-				var targetHasSub = (targetSub.hp > 0);
+			if (targetSub !== null) {
+				targetHasSub = (targetSub.hp > 0);
 			}
-		} else {
-			var targetHasSub = false;
 		}
 
 		var doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
@@ -945,7 +944,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			//if (this.data.FormatsData[i].viableMoves) {
+			//if (this.data.FormatsData[i].randomBattleMoves) {
 				keys.push(i);
 			//}
 		}
@@ -969,7 +968,7 @@ exports.BattleScripts = {
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1
 
-		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
+		var moveKeys = (template.randomBattleMoves || Object.keys(template.learnset)).randomize();
 		var moves = [];
 		var hasType = {};
 		hasType[template.types[0]] = true;
@@ -980,6 +979,20 @@ exports.BattleScripts = {
 
 		var j = 0;
 		do {
+			// Choose next 4 moves from learnset/viable moves and add them to moves list:
+			while (moves.length < 4 && j < moveKeys.length) {
+				var moveid = toId(moveKeys[j]);
+				j++;
+				if (moveid.substr(0, 11) === 'hiddenpower') {
+					if (!hasMove['hiddenpower']) {
+						hasMove['hiddenpower'] = true;
+					} else {
+						continue;
+					}
+				}
+				moves.push(moveid);
+			}
+
 			hasMove = {};
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
