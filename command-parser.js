@@ -124,13 +124,6 @@ function canTalk(user, room, connection, message) {
 			}
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
-
-			if (user.group === ' ') {
-				if (message.toLowerCase().indexOf('spoiler:') >= 0 || message.toLowerCase().indexOf('spoilers:') >= 0) {
-					connection.sendTo(room, "Due to spam, spoilers can't be sent to the lobby.");
-					return false;
-				}
-			}
 		}
 
 		if (Config.chatfilter) {
@@ -378,6 +371,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
+	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
+		return parse(message, room, user, connection, levelsDeep + 1);
+	}
 
 	if (user.authenticated && global.tells) {
 		var alts = user.getAlts();
