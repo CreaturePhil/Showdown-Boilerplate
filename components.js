@@ -810,7 +810,7 @@ var components = exports.components = {
 
                 set -xe
 
-                timeout 10 wget "$1" -nv -O $FILENAME
+                wget "$1" -nv -O $FILENAME
 
                 FRAMES=`identify $FILENAME | wc -l`
                 if [ $FRAMES -gt 1 ]; then
@@ -819,7 +819,7 @@ var components = exports.components = {
                     EXT=".png"
                 fi
 
-                timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
+                convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
             */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
         } catch (e) {}
 
