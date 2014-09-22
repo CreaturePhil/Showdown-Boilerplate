@@ -1,11 +1,10 @@
-.userbar:before{
+body{
 
+
+     background:url(http://img1.wikia.nocookie.net/__cb20111104142830/zelda/images/b/b4/Eldin_Volcano_Artwork.png)!important; 
+     .userbar:before{
      background:url(http://www.serebii.net/pokedex-xy/icon/323.png); 
      left:-8px}
-a{
-     color:none}
-body{
-     background:url(http://img1.wikia.nocookie.net/__cb20111104142830/zelda/images/b/b4/Eldin_Volcano_Artwork.png)!important; 
 }
 .pfx-topbar, .pfx-topbar.header {height:0px}
 .logo{display:none;}
