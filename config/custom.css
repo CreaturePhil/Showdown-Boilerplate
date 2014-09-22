@@ -1,38 +1,1321 @@
+.userbar:before{
+
+     background:url(http://www.serebii.net/pokedex-xy/icon/323.png); 
+     left:-8px}
+
+a{
+
+     color:none}
+
 body{
- 
- 
-     background:url(http://img1.wikia.nocookie.net/__cb20111104142830/zelda/images/b/b4/Eldin_Volcano_Artwork.png)!important;
- 
+  
+
+     background:url(http://img1.wikia.nocookie.net/__cb20111104142830/zelda/images/b/b4/Eldin_Volcano_Artwork.png)!important; 
+
 }
-.menugroup .button {
-background: #151515;
-border-color: #000;
-color: #FFF;
-font-size: 10pt;
-opacity: .7;
+
+.pfx-topbar, .pfx-topbar.header {height:0px}
+.logo{display:none;}
+#header:after{content:url("http://i.imgur.com/CkMRhfO.png?1");padding-left:8px;z-index:1;position:relative;}
+
+.userbar {top: 10px;}
+
+.userbar .username{
+
+      text-shadow:1px 1px black; 
+
+      text-shadow:1px 1px black}
+
+  
+.userbar:before{
+
+      display:block; 
+
+      content:""; 
+
+      width:27px; 
+
+      height:27px; 
+
+      float:left; 
+
+      position:relative; 
+
+      top:-7px}
+
+  
+.icon-user{
+
+      display:none}
+
+
+.ps-room.ps-room-opaque{
+
+    background:url(http://i.imgur.com/I03iboW.png); 
+ 
+    position:absolute;
+
+    color:none}
+
+.turnstatus-protect{
+    background:url(http://i.imgur.com/RVxCoHz.png); 
+    opacity:1!important;
+    height:103px!important;
+    width:150px!important;
+    border-radius:0; 
+    border-width:0; 
+    box-shadow:none; 
 }
-.menugroup .button {
-box-sizing: border-box;
-font-size: 12pt;
-font-family: Verdana,Helvetica,Arial,sans-serif;
-display: inline-block;
-padding: 5px 7px 3px 7px;
-width: 200px;
-outline: none;
-cursor: pointer;
-text-align: center;
-text-decoration: none;
-text-shadow: 0 -1px 0 hsl(210,40%,10%);
-border-radius: 5px;
--webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2),inset 0 1px 1px rgba(255,255,255,.8);
--moz-box-shadow: 0 1px 2px rgba(0,0,0,.2),inset 0 1px 1px rgba(255,255,255,.8);
-box-shadow: 0 1px 2px rgba(0,0,0,.2),inset 0 1px 1px rgba(255,255,255,.8);
-color: #FFFFFF;
-border: solid 1px #AAAAAA;
-background: #779EC5;
-background: hsl(210,40%,62%);
-background: -webkit-gradient(linear,left top,left bottom,from(hsl(210,40%,72%)),to(hsl(210,40%,52%)));
-background: -moz-linear-gradient(top,hsl(210,40%,72%),hsl(210,40%,52%));
-background: linear-gradient(top,hsl(210,40%,72%),hsl(210,40%,52%));
-border-color: hsl(210,40%,40%);
-} 
+    .sidecondition-reflect{
+    background:url(http://i.imgur.com/X1XDxVB.png); 
+    opacity:0.7!important;
+    height:90px!important;
+    width:130px!important;
+    border-radius:0; 
+    border-width:0; 
+    box-shadow:none;
+}
+    
+    .sidecondition-safeguard{
+    background:url(http://i.imgur.com/FrCoWCW.png); 
+    opacity:0.6!important;
+    height:90px!important;
+    width:130px!important;
+    border-radius:0; 
+    border-width:0; 
+    box-shadow:none; 
+}
+    
+        .sidecondition-lightscreen{
+    background:url(http://i.imgur.com/8eLftNA.png); 
+    opacity:0.6!important;
+    height:90px!important;
+    width:130px!important;
+    border-radius:0; 
+    border-width:0; 
+    box-shadow:none; 
+  
+}  
+  
+
+.ps-room{
+
+    position:absolute;
+     
+    display:block; 
+
+    top:56px; 
+
+    left:0; 
+
+    right:0; 
+
+    bottom:0; 
+
+    border:1px solid none; 
+
+    border-top:none}
+    
+.ps-room .pad{
+
+    opacity:0.8;
+
+}
+    
+.ps-room .battle{
+
+top:60px; 
+
+border-width:0px}
+
+.foehint{   
+position:relative; 
+
+top:45px}       
+        
+.battle{
+
+    border:0px solid #AAAAAA; 
+
+    width:640px; 
+
+    height:360px; 
+
+    overflow:visible; 
+
+    font-family:Verdana,sans-serif; 
+
+    font-size:10pt}
+
+.backdrop:before{
+
+        display:block; 
+
+        content:""; 
+
+        background:url(http://i.imgur.com/QjLsolX.gif); 
+
+        background-size:cover; 
+
+        width:640px; 
+
+    height:360px}
+
+.backdrop{
+
+    width:640px; 
+
+    height:360px; 
+
+    position:absolute; 
+
+    top:0px; 
+
+    left:0px; 
+
+    overflow:hidden; 
+
+    background:-50px -90px; 
+
+    opacity:1 !important}
+
+.backdrop:after {
+
+display:block ; 
+
+content:""; 
+
+background:url(http://i.imgur.com/ALNRPPT.png); 
+    
+position:absolute; 
+
+top:0; 
+
+left:0; 
+
+width:640px; 
+
+height:360px}
+
+.ps-room .battle-controls{
+
+top:430px}
+
+.turn{
+
+    position:absolute; 
+
+    top:-70px; 
+
+    left:270px !important; 
+
+    width:101px; 
+
+    height:17px; 
+
+    font-size:8pt; 
+
+    font-weight:bold; 
+
+    margin:0px; 
+
+    padding:0px; 
+
+    padding-top:35px; 
+
+    border:0; 
+
+    border-radius:0; 
+
+    opacity:1 !important; 
+
+    background:url(http://i.imgur.com/6SgSXmb.png); 
+
+    text-align:center; 
+
+    color:#cccccc}
+
+.rightbar{
+
+position:absolute; 
+
+top:-60px; 
+
+right:15px; 
+
+height:100px; 
+
+width:320px; 
+
+background-color:rgba(255,255,255,0); 
+
+border:0px solid rgba(215,215,215,0.5); 
+
+color:#777777; 
+
+background-image:url(http://i.imgur.com/nTem8oK.png); 
+
+background-position:0px -21px}
+
+.rightbar .trainer{
+
+margin-top:0px; 
+
+left:08px}
+
+.rightbar .trainersprite{
+
+position:absolute; 
+
+top:0px; 
+
+left:40px; 
+
+opacity:1 !important}
+    
+    
+.trainer strong{
+
+display:block; 
+
+font-size:12pt; 
+
+overflow:hidden; 
+
+padding-top:10px; 
+
+padding-left:110px; 
+    
+color:#fafafa}
+    
+.rightbar .trainer strong{
+
+display:block; 
+    
+
+font-size:12pt; 
+    
+text-align:left;
+    
+overflow:hidden; 
+    
+position:relative;
+    
+left:20px;
+
+}  
+
+  
+.rightbar .trainer .teamicons{
+
+float:left; 
+      
+position:relative; 
+
+top:0px; 
+
+left:108px}
+
+.leftbar{
+
+position:absolute; 
+
+top:-60px; 
+
+left:15px; 
+
+height:100px; 
+
+width:320px; 
+
+background-color:rgba(255,255,255,0); 
+
+border:0px solid rgba(215,215,215,0.5); 
+
+color:#777777; 
+
+background-image:url(http://i.imgur.com/oIjX6jC.png); 
+
+background-position:0px -21px}
+
+.leftbar .trainer{
+
+margin-top:0px; 
+
+text-align:left}
+
+.leftbar .trainersprite{
+
+position:absolute; 
+
+top:0px; 
+
+right:40px; 
+
+opacity:1 !important}
+
+.leftbar .trainer strong{
+
+display:block; 
+
+font-size:12pt; 
+
+overflow:hidden; 
+
+padding-top:10px; 
+    
+    text-align:right;
+    
+    position:relative;
+    
+left:-130px;
+
+}
+
+  
+  
+.leftbar .trainer .teamicons{
+
+float:right; 
+
+position:relative; 
+
+top:1px; 
+
+right:108px}
+    
+.whatdo {
+      
+position:relative; 
+
+z-index: 1;
+    
+color:#fbfbfb!important;
+    
+font-size:11.5pt!important;   
+       
+opacity:0.7;
+       
+bottom:59px; 
+    
+font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+
+right:-20px} 
+    
+.whatdo strong{
+      
+font-weight:normal;
+    
+font-size:11.5pt!important;   
+}
+    
+
+.healthy{
+
+float:right; 
+color:#b4b4b4;
+position:relative; 
+top:1px;
+opacity:0;     
+right:-350px}  
+    
+.weak{
+
+float:right; 
+position:relative; 
+top:1px; 
+opacity:0; 
+right:-350px}    
+    
+.critical{
+
+float:right; 
+position:relative; 
+top:1px; 
+opacity:0; 
+right:-350px}   
+ 
+    
+
+.weather{
+
+text-shadow:none; 
+
+color:rgba(0,0,0,0)}
+    
+.weather:after {
+
+display:block ; 
+
+content:""; 
+
+background:url(http://i.imgur.com/ALNRPPT.png); 
+    
+position:absolute; 
+
+top:0; 
+
+left:0; 
+
+width:640px; 
+
+height:360px}   
+    
+    
+
+ 
+.weather em small{
+
+    font-size:0pt; 
+
+    color:white; 
+
+    text-shadow:1px 1px black; 
+
+    position:absolute; 
+
+    left:0; 
+
+    top:85px; 
+
+    width:95px; 
+
+    text-align:center}
+
+ 
+.sunweather, .sunnydayweather{
+
+    
+    background:url(http://i.imgur.com/FypwhbA.gif) no-repeat scroll left top; 
+
+    opacity:0.5;     
+    
+    background-size:cover}
+
+ 
+.rainweather, .raindanceweather{
+
+    background:url(http://i.imgur.com/hic1nf9.gif) no-repeat scroll left top; 
+    
+    opacity:0.5; 
+    
+    background-size:cover}
+    
+    
+    
+    
+
+  
+.sandstormweather{
+
+    background:url(http://i.imgur.com/qOw9a6v.gif) no-repeat scroll left top; 
+
+    opacity:0.5; 
+
+    background-size:cover}
+
+ 
+.hailweather{
+
+    background:url(http://i.imgur.com/eUqkcVW.gif) no-repeat scroll left top; 
+    
+    opacity:0.5; 
+    
+    background-size:cover}
+
+ 
+.pseudoweather{
+
+    background:url(http://i.imgur.com/WCrYols.gif) no-repeat scroll left top; 
+    
+    opacity:0.5; 
+    
+    background-size:cover; 
+
+    width:640px; 
+
+    height:360px}
+    
+.switchmenu{
+
+    width: 430px;
+    
+    left: 102px;
+    
+    top: -35px;
+    
+    position:relative;
+    
+    padding-bottom:135px;
+    
+    background:url(http://i.imgur.com/zkXf6PL.png); 
+    
+}
+
+    
+.switchmenu button, .switchmenu button:disabled{
+
+    width:137px;   
+    
+    height:48px; 
+
+    background:url(http://i.imgur.com/WMic5PP.png) !important; 
+
+    border:none; 
+
+    box-shadow:none; 
+
+    border-radius:0; 
+
+    font-size:10pt}
+
+.switchmenu button{
+    
+    transition:All 1.6116s ease;
+    
+    color:black; 
+    
+    text-align: left;
+    
+    text-shadow:1px 1px grey}
+    
+.switchmenu button .pokemonicon{
+    
+    margin-bottom:5px;
+    
+    margin-left: 4px;
+}
+    
+.switchmenu button .status {
+    
+	top: 4px;
+    
+	right: 24px;
+    
+    width: 15px;
+    
+    border-color: #3a8247;
+}
+    
+.switchmenu button .hpbar{
+    
+    height:2px;
+        
+	width: 92px;
+        
+    border-color: #0e0e0e;
+        
+    margin-bottom:8px;
+        
+	margin-left: 27px;
+}
+
+.switchmenu button:disabled{
+
+opacity:.5}
+    
+  
+.switchmenu button:hover{
+
+transition:All 1.6116s ease;
+    
+transform: rotate(0deg) scale(1.05) skew(0deg) translate(0px);
+    
+background:url(http://i.imgur.com/rJmTxtU.png) !important; 
+    
+}
+    
+.switchselect{
+ 
+opacity:0;   
+    
+transform: translate(280px);
+    
+position:relative; 
+    
+left:0; 
+    
+top:115px; 
+    
+}  
+   
+.movecontrols:after {
+
+content:""; 
+
+background:url(http://i.imgur.com/V4WGvVA.png); 
+    
+opacity:1;
+    
+position:absolute; 
+
+top:-95px; 
+
+left:14px; 
+
+width:612px; 
+
+height:72px}   
+    
+
+.moveselect{
+    
+opacity:0;
+
+}   
+    
+.movemenu{
+    
+width: 330px;
+    
+left: 160px;
+    
+top: -45px;
+    
+position:relative;
+
+}  
+    
+
+.movemenu button{
+    
+transition:All 1.6116s ease;
+    
+width:150px; 
+    
+height:50px; 
+    
+border-radius:0; 
+    
+border-width:0; 
+    
+box-shadow:none; 
+    
+color:grey; 
+text-shadow:1px 1px black; 
+    
+font-size:10pt; 
+    
+padding-top:0px}
+
+.movemenu button small{
+
+text-align:center; 
+
+width:62px; 
+
+margin-top:2px}
+
+.movemenu button small.type, .movemenu button small.pp{
+
+padding-top:8px; 
+
+color:whitesmoke}
+
+.movemenu button.type-Normal{
+
+    background:url(http://i.imgur.com/1ctemFU.png)}
+
+.movemenu button.type-Normal:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/vTfBrkj.png)}
+
+    
+    .movemenu button.type-Fairy{
+
+    background:url(http://i.imgur.com/rdPeaVu.png)}
+
+.movemenu button.type-Fairy:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/bxU4lIL.png)}
+
+.movemenu button.type-Fire{
+
+    background:url(http://i.imgur.com/aP39wjQ.png)}
+
+.movemenu button.type-Fire:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/Wbbty9g.png)}
+
+.movemenu button.type-Water{
+
+    background:url(http://i.imgur.com/cMJaVjV.png)}
+
+.movemenu button.type-Water:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/Ufx3H8C.png)}
+
+.movemenu button.type-Electric{
+
+    background:url(http://i.imgur.com/UF3tbwp.png)}
+
+.movemenu button.type-Electric:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/MQHXttp.png)}
+
+.movemenu button.type-Grass{
+
+    background:url(http://i.imgur.com/bNq1PyT.png)}
+
+.movemenu button.type-Grass:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/k2PpmJa.png)}
+
+.movemenu button.type-Ice{
+
+    background:url(http://i.imgur.com/Kwcx3yV.png)}
+
+.movemenu button.type-Ice:hover{
+
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);    
+    background:url(http://i.imgur.com/uufLOLk.png)}
+
+.movemenu button.type-Fighting{
+
+    background:url(http://i.imgur.com/hkBjSQ2.png)}
+
+.movemenu button.type-Fighting:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/IvimpSI.png)}
+
+.movemenu button.type-Poison{
+
+    background:url(http://i.imgur.com/F4JSeNV.png)}
+
+.movemenu button.type-Poison:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/cKmY6Kn.png)}
+
+.movemenu button.type-Ground{
+
+    background:url(http://i.imgur.com/HfD3UW8.png)}
+
+.movemenu button.type-Ground:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/Szrf2un.png)}
+
+.movemenu button.type-Flying{
+
+    background:url(http://i.imgur.com/Y6XAWm6.png)}
+
+.movemenu button.type-Flying:hover{
+
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/qiEnZhM.png)}
+
+.movemenu button.type-Psychic{
+
+    background:url(http://i.imgur.com/ta9EV9f.png)}
+
+.movemenu button.type-Psychic:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/wyCTbE4.png)}
+
+.movemenu button.type-Bug{
+
+    background:url(http://i.imgur.com/mvJWmou.png)}
+
+.movemenu button.type-Bug:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/lqdXcxD.png)}
+
+.movemenu button.type-Rock{
+
+    background:url(http://i.imgur.com/523IIPS.png)}
+
+.movemenu button.type-Rock:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/kPd2jmf.png)}
+
+.movemenu button.type-Ghost{
+
+    background:url(http://i.imgur.com/bGT4IB7.png)}
+
+.movemenu button.type-Ghost:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/gnZ14wY.png)}
+
+.movemenu button.type-Dragon{
+
+    background:url(http://i.imgur.com/dJUGqK6.png)}
+
+.movemenu button.type-Dragon:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/kIGBRyq.png)}
+
+
+.movemenu button.type-Dark{
+
+    background:url(http://i.imgur.com/PtLZlWc.png)}
+
+.movemenu button.type-Dark:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/cWSnAJs.png)}
+
+.movemenu button.type-Steel{
+
+    background:url(http://i.imgur.com/2A1Rzvs.png)}
+
+.movemenu button.type-Steel:hover{
+    
+    transform: rotate(0deg) scale(1.10) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/vGQVEtf.png)}
+
+.movemenu button.type-undefined, .movemenu button.type-undefined:hover{
+
+    background:url(http://i.imgur.com/1ctemFU.png)}
+
+.movemenu button:disabled{
+
+    background:url(http://i.imgur.com/5V27fmf.png) !important; 
+    opacity:.20}
+    
+.movemenu button:disabled:hover{
+    
+    transform: rotate(0deg) scale(0.90) skew(0deg) translate(0px);
+    background:url(http://i.imgur.com/vGQVEtf.png)}
+   
+    .movemenu label {
+    
+    text-transform:uppercase;
+    font-size: 0px;
+    width:110px;
+    height:110px;
+    color:#b4b4b4;
+	font-weight: bold;
+    position:relative;
+    left:49px;
+    top:33px;
+    margin:0px 0px 0px 45px;
+    padding:61px;
+    background:url(http://i.imgur.com/wHPOyb9.png); 
+
+}  
+   .movemenu label:hover{
+    
+    background:url(http://i.imgur.com/3ffb8Os.png);
+    
+}  
+       
+   .movemenu input{
+
+    width:15px; 
+    color:#b4b4b4;
+    height:40px; 
+    position:relative;
+    top:-33px;
+    left:-104px;
+    margin:-15px -114px 70px 94px}
+}
+
+width:284px} 
+    
+.statbar
+
+{
+
+position:absolute; 
+
+display:none; 
+
+width:200px; 
+    
+height:23px;
+    
+background:url(http://i.imgur.com/x76Yv1K.png); 
+    
+min-height:0px; 
+
+padding:3px 0px 0px 32px}
+
+.statbar strong
+
+{
+
+position:absolute; 
+left:1px; 
+top:-22px; 
+font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+font-size:17px; 
+font-weight:normal; 
+display:block; 
+text-align:Center; 
+color:#FFF; 
+text-shadow:#000 1px 1px 0,#000 1px -1px 0,#000 -1px 1px 0,#000 -1px -1px 0}
+
+.statbar strong small
+
+{
+
+font-size:17px; 
+font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+color:#acc5d4;
+font-weight:normal}
+
+.statbar .hpbar
+
+{
+
+position:relative; 
+
+border:1px solid #131313; 
+
+background:url(http://i.imgur.com/ByYA9T2.png); 
+
+height:6px; 
+
+margin:0 0 0 0; 
+
+width:151px; 
+
+border-radius:0px; 
+
+padding:0; 
+
+top:3px}
+
+.hptextborder{
+
+display:none !important}
+    
+
+.statbar .hpbar .hp
+
+{
+
+height:3px; 
+
+border-top:1px solid #007734; 
+
+background:#00bb51; 
+
+border-bottom:2px solid #007734; 
+
+border-radius:0px}
+
+.statbar .hpbar .hp-yellow
+
+{
+
+background-color:#f5d538; 
+
+border-color:#be9f0a}
+
+.statbar .hpbar .hp-red
+
+{
+
+background-color:#ee4928; 
+
+border-color:#a3260d}
+
+.statbar .hpbar .prevhp
+
+{
+
+background:url(http://i.imgur.com/ByYA9T2.png);  
+
+height:6px; 
+
+border-radius:0px}
+
+.statbar .hpbar .prevhp-yellow
+
+{
+
+background:url(http://i.imgur.com/ByYA9T2.png); }
+
+.statbar .hpbar .prevhp-red
+
+{
+
+background-color:#facec5}
+
+.hptext{
+
+margin-top:2px}
+
+  
+.statbar .hpbar .hptext
+
+{
+
+position:absolute; 
+
+color:#FFFFFF; 
+
+text-shadow:1px 0 black,-1px 0 black,0 1px black,0 -1px black; 
+
+font-size:9px; 
+
+width:32px; 
+
+height:12px; 
+
+top:-1px; 
+
+text-align:center}
+
+.rstatbar .hpbar .hptext
+
+{
+
+width:42px; 
+
+height:16px; 
+
+background:url(http://i.imgur.com/LPDWEbx.png); 
+
+right:-47px; 
+
+    top:-7px; 
+
+    font-size:11px; 
+
+    color:#49c39f; 
+
+border-radius:0 4px 4px 0}
+    
+    
+
+.lstatbar .hpbar .hptext
+
+{
+
+width:40px; 
+
+height:16px; 
+
+background:url(http://i.imgur.com/LPDWEbx.png); 
+
+left:155px; 
+
+ top:-7px; 
+
+ font-size:11px; 
+
+ color:#49c39f; 
+
+border-radius:4px 0 0 4px; 
+
+padding-left:2px}
+
+.statbar .status
+
+{
+
+ margin-top:15px; 
+
+min-height:10px; 
+
+font-size:7pt}
+
+  
+.statbar span.frz
+
+{
+
+position:absolute; 
+
+left:-107px; 
+
+top:-5.5px; 
+ 
+font-size:0px; 
+    
+background:url(http://i.imgur.com/L7UTW2y.png); 
+
+padding:10px 36px; 
+
+border:0; 
+
+border-radius:3px} 
+    
+.statbar span.frz:hover{
+    
+transition:All 1.6116s ease;   
+transform: rotate(0deg) scale(0.90) skew(0deg) translate(0px);
+    
+}    
+    
+    
+.statbar span.slp
+
+{
+
+position:absolute; 
+
+left:-107px; 
+
+top:-5.5px; 
+ 
+font-size:0px; 
+    
+background:url(http://i.imgur.com/D3VqIVw.png); 
+
+padding:10px 36px; 
+
+border:0; 
+
+border-radius:3px}
+    
+.statbar span.slp:hover{
+    
+transition:All 1.6116s ease;    
+transform: rotate(0deg) scale(0.90) skew(0deg) translate(0px);
+    
+}    
+    
+.statbar span.par
+
+{
+
+position:absolute; 
+
+left:-107px; 
+
+top:-5.5px; 
+ 
+font-size:0px; 
+    
+background:url(http://i.imgur.com/4XrzuuB.png); 
+
+padding:10px 36px; 
+
+border:0; 
+
+border-radius:3px} 
+    
+.statbar span.par:hover{
+    
+transition:All 1.6116s ease;    
+transform: rotate(0deg) scale(0.90) skew(0deg) translate(0px);
+    
+}
+       
+    
+.statbar span.brn
+
+{
+
+position:absolute; 
+
+left:-107px; 
+
+top:-5.5px; 
+ 
+font-size:0px; 
+    
+background:url(http://i.imgur.com/4F0lebL.png); 
+
+padding:10px 36px; 
+
+border:0; 
+
+border-radius:3px} 
+    
+.statbar span.brn:hover{
+    
+transition:All 1.6116s ease;    
+transform: rotate(0deg) scale(0.90) skew(0deg) translate(0px);
+    
+}    
+    
+.statbar span.psn
+
+{
+
+position:absolute; 
+
+left:-107px; 
+
+top:-5.5px; 
+ 
+font-size:0px; 
+    
+background:url(http://i.imgur.com/4wrWKR0.png); 
+
+padding:10px 36px; 
+
+border:0; 
+
+border-radius:3px}    
+    
+.statbar span.psn:hover{
+    
+transition:All 1.6116s ease;    
+transform: rotate(0deg) scale(0.90) skew(0deg) translate(0px);
+    
+}
+    
+.statbar span.bad
+
+{
+
+background:#e74c3c; 
+
+color:#ecf0f1; 
+
+border-color:#c0392b}
+
+.statbar span.good
+
+{
+
+background:#27ae60; 
+
+color:#ecf0f1; 
+
+border-color:#067A37}
+
+.statbar span.neutral
+
+{
+
+background:#7f8c8d; 
+
+color:#ecf0f1; 
+
+border:solid #2c3e50}
+
+.pfx-panel{
+
+ background:#333}
+
+ 
+.pfx-topbar{
+
+background:#2e2e2e; 
+
+ border-bottom-color:#2f2f2f}
+    
+.header{
+
+background:#2e2e2e; 
+
+border-bottom-color:#2f2f2f}
+
+ 
+.replay-wrapper .battle-log{
+
+ height:410px; 
+
+ top:-35px} 
+.replay-wrapper{
+
+top:40px}
