@@ -2,37 +2,21 @@
 
      background:url(http://www.serebii.net/pokedex-xy/icon/323.png); 
      left:-8px}
-
 a{
-
      color:none}
-
 body{
-  
-
      background:url(http://img1.wikia.nocookie.net/__cb20111104142830/zelda/images/b/b4/Eldin_Volcano_Artwork.png)!important; 
-
 }
-
 .pfx-topbar, .pfx-topbar.header {height:0px}
 .logo{display:none;}
 #header:after{content:url("http://i.imgur.com/CkMRhfO.png?1");padding-left:8px;z-index:1;position:relative;}
-
 .userbar {top: 10px;}
-
 .userbar .username{
-
       text-shadow:1px 1px black; 
-
       text-shadow:1px 1px black}
-
-  
 .userbar:before{
-
       display:block; 
-
       content:""; 
-
       width:27px; 
 
       height:27px; 
@@ -42,12 +26,9 @@ body{
       position:relative; 
 
       top:-7px}
-
-  
 .icon-user{
 
       display:none}
-
 
 .ps-room.ps-room-opaque{
 
@@ -75,7 +56,6 @@ body{
     border-width:0; 
     box-shadow:none;
 }
-    
     .sidecondition-safeguard{
     background:url(http://i.imgur.com/FrCoWCW.png); 
     opacity:0.6!important;
@@ -85,7 +65,6 @@ body{
     border-width:0; 
     box-shadow:none; 
 }
-    
         .sidecondition-lightscreen{
     background:url(http://i.imgur.com/8eLftNA.png); 
     opacity:0.6!important;
@@ -97,7 +76,6 @@ body{
   
 }  
   
-
 .ps-room{
 
     position:absolute;
@@ -119,7 +97,6 @@ body{
 .ps-room .pad{
 
     opacity:0.8;
-
 }
     
 .ps-room .battle{
