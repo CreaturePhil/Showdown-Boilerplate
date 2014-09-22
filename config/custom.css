@@ -2,6 +2,14 @@ body{
  
  
      background:url(http://img1.wikia.nocookie.net/__cb20111104142830/zelda/images/b/b4/Eldin_Volcano_Artwork.png)!important;
+
+ 
+}     
+logo{
+ 
+.pfx-topbar, .pfx-topbar.header {height:0px}
+.logo{display:none;}
+#header:after{content:url("http://i.imgur.com/CkMRhfO.png?1");padding-left:8px;z-index:1;position:relative;}
  
 }
 .menugroup .button {
