@@ -19,10 +19,10 @@ var config = {
     rooms: ['lobby'],
     punishvals: {
         1: 'warn',
-        2: 'mute',
-        3: 'hourmute',
-        4: 'roomban',
-        5: 'ban'
+        2: 'warn',
+        3: 'warn',
+        4: 'warn',
+        5: 'warn'
     },
     privaterooms: ['staff'],
     hosting: {},
@@ -87,7 +87,7 @@ function joinServer() {
 }
 
 const ACTION_COOLDOWN = 3 * 1000;
-const FLOOD_MESSAGE_NUM = 5;
+const FLOOD_MESSAGE_NUM = 10;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
 const FLOOD_MESSAGE_TIME = 6 * 1000;
 const MIN_CAPS_LENGTH = 18;
