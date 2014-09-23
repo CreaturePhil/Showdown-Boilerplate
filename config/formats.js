@@ -530,7 +530,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Ignore Illegal Abilities', 'Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar', 'Archen', 'Damp Rock', 'Smooth Rock', 'Heat Rock'],
 		validateSet: function(set) {
-			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Gale Wings': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
+			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Gale Wings': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Sand Veil': 1, 'Shadow Tag': 1, 'Simple':1, 'Snow Cloak':1, 'Speed Boost': 1, 'Wonder Guard': 1};
 			if (set.ability in bannedAbilities) {
 				var template = this.getTemplate(set.species || set.name);
 				var legalAbility = false;
