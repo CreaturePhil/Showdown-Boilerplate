@@ -4,7 +4,8 @@ body{
      background:url(http://i.imgur.com/3qf0aG9.jpg?1)!important;
 
  
-}     
+}  
+
 logo{
  
 .pfx-topbar, .pfx-topbar.header {height:0px}
@@ -12,14 +13,18 @@ logo{
 #header:after{content:url("http://i.imgur.com/CkMRhfO.png?1");padding-left:8px;z-index:1;position:relative;}
  
 }
+
 .menugroup .button {
 background: #151515;
 border-color: #000;
 color: #FFF;
 font-size: 10pt;
 opacity: .7;
+
 }
+
 .menugroup .button {
+ 
 box-sizing: border-box;
 font-size: 12pt;
 font-family: Verdana,Helvetica,Arial,sans-serif;
