@@ -49,6 +49,13 @@ exports.Formats = [
 		banlist: ['RU', 'BL3']
 	},
 	{
+		name: "PU",
+		section: "XY Singles",
+
+		ruleset: ['NU'],
+		banlist: ['NU']
+	},
+	{
 		name: "LC",
 		section: "XY Singles",
 
@@ -58,7 +65,7 @@ exports.Formats = [
 	},
 	{	
 		name: "LC UU",
-		section: "Other Metagames",
+		section: "XY Singles",
 
 		maxLevel: 5,
 		ruleset: ['LC'],
@@ -343,13 +350,6 @@ exports.Formats = [
 
 		mod: 'tiershift',
 		ruleset: ['OU']
-	},
-	{
-		name: "PU",
-		section: "Other Metagames",
-
-		ruleset: ['NU'],
-		banlist: ['NU']
 	},
 	{
 		name: "LC 1v1",
