@@ -319,25 +319,6 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Almost Any Ability",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Ignore Illegal Abilities', 'Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar', 'Archen', 'Damp Rock', 'Smooth Rock', 'Heat Rock'],
-		validateSet: function(set) {
-			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Gale Wings': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
-			if (set.ability in bannedAbilities) {
-				var template = this.getTemplate(set.species || set.name);
-				var legalAbility = false;
-				for (var i in template.abilities) {
-					if (set.ability === template.abilities[i]) legalAbility = true;
-				}
-				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pokémon that do not naturally have it.'];
-			}
-		}
-	},
-	
-	{
 		name: "Haxmons",
 		section: "OM of the Month",
 		column: 2,
@@ -462,6 +443,23 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "LC 1v1",
+		section: 'Other Metagames',
+
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview 1v1', 'LC'],
+		banlist: ['LC Uber', 'Focus Sash', 'Sturdy + Berry Juice'],
+		validateTeam: function (team, format) {
+			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
+		},
+		onBegin: function () {
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
 		name: "Almost Any Ability",
 		section: "Other Metagames",
 
@@ -473,6 +471,25 @@ exports.Formats = [
 		],
 		validateSet: function(set) {
 			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
+			if (set.ability in bannedAbilities) {
+				var template = this.getTemplate(set.species || set.name);
+				var legalAbility = false;
+				for (var i in template.abilities) {
+					if (set.ability === template.abilities[i]) legalAbility = true;
+				}
+				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pokémon that do not naturally have it.'];
+			}
+		}
+	},
+	{
+		name: "Almost Any Ability LC",
+		section: "Other Metagames",
+		
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Ignore Illegal Abilities', 'Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar', 'Archen', 'Damp Rock', 'Smooth Rock', 'Heat Rock'],
+		validateSet: function(set) {
+			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Gale Wings': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
 			if (set.ability in bannedAbilities) {
 				var template = this.getTemplate(set.species || set.name);
 				var legalAbility = false;
@@ -850,6 +867,15 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber', 'Smeargle + Ingrain']
 	},
+	{
+        	name: "[Gen 3] LC",
+        	section: "Past Generations",
+    
+        	maxLevel: 5,
+        	mod: 'gen3',
+        	ruleset: ['Pokemon', 'Standard', 'Little Cup'],
+        	banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'Scyther', 'Chansey', 'Meditite', 'Omanyte', 'Wynaut', 'Zigzagoon', 'OU', 'BL', 'UU', 'NU', 'Uber']
+    	},
 	{
 		name: "[Gen 3] Custom Game",
 		section: "Past Generations",
