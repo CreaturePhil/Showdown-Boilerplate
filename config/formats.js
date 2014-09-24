@@ -117,7 +117,70 @@ exports.Formats = [
 
 	// Past Generations
 	///////////////////////////////////////////////////////////////////
+	
+	{
+		name: "[Gen 5] OU",
+		section: "BW2 Singles",
+		column: 3,
 
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+	},
+	{
+		name: "[Gen 5] Ubers",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
+		banlist: []
+	},
+	{
+		name: "[Gen 5] UU",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		ruleset: ['[Gen 5] OU'],
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Snow Warning']
+	},
+	{
+		name: "[Gen 5] RU",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		ruleset: ['[Gen 5] UU'],
+		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning']
+	},
+	{
+		name: "[Gen 5] NU",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		ruleset: ['[Gen 5] RU'],
+		banlist: ['RU', 'BL3', 'Prankster + Assist']
+	},
+	{
+		name: "[Gen 5] LC",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Gligar', 'Scyther', 'Sneasel', 'Tangela']
+	},
+	{
+		name: "[Gen 5] Custom Game",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		searchShow: false,
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 9999,
+		defaultLevel: 100,
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview']
+	},
 	{
 		name: "[Gen 4] OU",
 		section: "Past Generations",
@@ -678,73 +741,6 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
-	},
-
-	// BW2 Singles
-	///////////////////////////////////////////////////////////////////
-
-	{
-		name: "[Gen 5] OU",
-		section: "BW2 Singles",
-		column: 3,
-
-		mod: 'gen5',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
-	},
-	{
-		name: "[Gen 5] Ubers",
-		section: "BW2 Singles",
-
-		mod: 'gen5',
-		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
-		banlist: []
-	},
-	{
-		name: "[Gen 5] UU",
-		section: "BW2 Singles",
-
-		mod: 'gen5',
-		ruleset: ['[Gen 5] OU'],
-		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Snow Warning']
-	},
-	{
-		name: "[Gen 5] RU",
-		section: "BW2 Singles",
-
-		mod: 'gen5',
-		ruleset: ['[Gen 5] UU'],
-		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning']
-	},
-	{
-		name: "[Gen 5] NU",
-		section: "BW2 Singles",
-
-		mod: 'gen5',
-		ruleset: ['[Gen 5] RU'],
-		banlist: ['RU', 'BL3', 'Prankster + Assist']
-	},
-	{
-		name: "[Gen 5] LC",
-		section: "BW2 Singles",
-
-		mod: 'gen5',
-		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Gligar', 'Scyther', 'Sneasel', 'Tangela']
-	},
-	{
-		name: "[Gen 5] Custom Game",
-		section: "BW2 Singles",
-
-		mod: 'gen5',
-		searchShow: false,
-		canUseRandomTeam: true,
-		debug: true,
-		maxLevel: 9999,
-		defaultLevel: 100,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview']
 	},
 
 	// BW2 Doubles
