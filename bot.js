@@ -353,6 +353,8 @@ var commands = {
             if (target === 'zarel') message = 'Pokemon Showdown Creator';
             if (target === 'stevoduhhero') message = 'STEVO DUH GOD DAMN HERO! Respect him!';
             if (target === 'rickycocaine') message = 'RICKY COCAAAAAAAINE﻿';
+            if (target === 'sparktrain') message = 'a salty nerd';
+            if (target === 'zeriloa') message = 'a nerdy fgt';
 
             this.sendReply(message);
         };
