@@ -180,7 +180,7 @@ exports.Formats = [
         	maxLevel: 5,
         	mod: 'gen3',
         	ruleset: ['Pokemon', 'Standard', 'Little Cup'],
-        	banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'Scyther', 'Chansey', 'Meditite', 'Omanyte', 'Wynaut', 'Zigzagoon', 'OU', 'BL', 'UU', 'NU', 'Uber']
+        	banlist: ['Dragon Rage', 'Sonic Boom', 'Scyther', 'Chansey', 'Meditite', 'Omanyte', 'Wynaut', 'Zigzagoon', 'OU', 'BL', 'UU', 'NU', 'Uber', 'HP Percentage Mod']
     	},
 	{
 		name: "[Gen 3] Custom Game",
@@ -207,8 +207,16 @@ exports.Formats = [
 			'Sleep Powder + Perish Song + Mean Look',
 			'Sleep Powder + Perish Song + Spider Web',
 			'Spore + Perish Song + Mean Look',
-			'Spore + Perish Song + Spider Web'
-		]
+			'Spore + Perish Song + Spider Web']
+	},
+	{
+		name: "[Gen 2] LC",
+        	section: "Past Generations",
+    
+        	maxLevel: 5,
+        	mod: 'gen2',
+        	ruleset: ['Pokemon', 'Standard', 'Little Cup'],
+        	banlist: ['Dragon Rage', 'Sonic Boom', 'Wrap', 'Bind', 'Clamp', 'Fire Spin', 'Whirlpool', 'Scyther', 'Chansey', 'Omanyte', 'Wynaut', 'OU', 'BL', 'UU', 'NU', 'Uber', 'HP Percentage Mod']
 	},
 	{
 		name: "[Gen 2] Custom Game",
@@ -233,8 +241,16 @@ exports.Formats = [
 			'Eevee + Tackle + Growl',
 			'Vaporeon + Tackle + Growl',
 			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
-			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember'
-		]
+			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember']
+	},
+	{	
+		name: "[Gen 1] LC",
+        	section: "Past Generations",
+    
+        	maxLevel: 5,
+        	mod: 'gen1',
+        	ruleset: ['Pokemon', 'Standard', 'Little Cup'],
+        	banlist: ['Dragon Rage', 'Sonic Boom', 'Wrap', 'Bind', 'Clamp', 'Fire Spin', 'OU', 'BL', 'UU', 'NU', 'Uber', 'HP Percentage Mod']
 	},
 	{
 		name: "[Gen 1] Custom Game",
