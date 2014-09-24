@@ -120,7 +120,7 @@ exports.Formats = [
 	
 	{
 		name: "[Gen 5] OU",
-		section: "BW2 Singles",
+		section: "Past Generations",
 		column: 3,
 
 		mod: 'gen5',
@@ -129,7 +129,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] Ubers",
-		section: "BW2 Singles",
+		section: "Past Generations",
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
@@ -137,7 +137,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] UU",
-		section: "BW2 Singles",
+		section: "Past Generations",
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] OU'],
@@ -145,7 +145,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] RU",
-		section: "BW2 Singles",
+		section: "Past Generations",
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] UU'],
@@ -153,7 +153,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] NU",
-		section: "BW2 Singles",
+		section: "Past Generations",
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] RU'],
@@ -161,7 +161,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] LC",
-		section: "BW2 Singles",
+		section: "Past Generations",
 
 		mod: 'gen5',
 		maxLevel: 5,
@@ -170,7 +170,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] Custom Game",
-		section: "BW2 Singles",
+		section: "Past Generations",
 
 		mod: 'gen5',
 		searchShow: false,
@@ -229,7 +229,7 @@ exports.Formats = [
 		ruleset: []
 	},
 	{
-		name: "[Gen 3] OU (beta)",
+		name: "[Gen 3] OU",
 		section: "Past Generations",
 
 		mod: 'gen3',
@@ -255,7 +255,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 	{
-		name: "[Gen 2] OU (beta)",
+		name: "[Gen 2] OU",
 		section: "Past Generations",
 
 		mod: 'gen2',
@@ -291,7 +291,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 	{
-		name: "[Gen 1] OU (beta)",
+		name: "[Gen 1] OU",
 		section: "Past Generations",
 
 		mod: 'gen1',
@@ -742,13 +742,9 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
 	},
-
-	// BW2 Doubles
-	///////////////////////////////////////////////////////////////////
-
-	{
+	{	
 		name: "[Gen 5] Smogon Doubles",
-		section: 'BW2 Doubles',
+		section: 'Other Metagames',
 		column: 3,
 
 		mod: 'gen5',
@@ -767,9 +763,7 @@ exports.Formats = [
 			'Arceus',
 			'Reshiram',
 			'Zekrom',
-			'Kyurem-White'
-		]
-
-	}
+			'Kyurem-White']
+	},
 
 ];
