@@ -74,7 +74,7 @@ var cmds = {
 		if (!user.can('broadcast', null, room)) {
 			return this.sendReply('You do not have enough authority to do this.');
 		}
-		if(room.id === 'lobby') {
+		if(room.id === 'lobbya') {
 				return this.sendReply('|html|Please play this in another room; it\'s too spammy for lobby.');
 		}
 		if (!hangman[room.id]) hangman.reset(room.id);
