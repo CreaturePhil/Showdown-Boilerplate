@@ -242,8 +242,8 @@ exports.Formats = [
     
         	maxLevel: 5,
         	mod: 'gen3',
-        	ruleset: ['Pokemon', 'Standard', 'Little Cup'],
-        	banlist: ['Dragon Rage', 'Sonic Boom', 'Scyther', 'Chansey', 'Meditite', 'Omanyte', 'Wynaut', 'Zigzagoon', 'OU', 'BL', 'UU', 'NU', 'Uber', 'HP Percentage Mod']
+        	ruleset: ['Pokemon', 'Standard', 'Little Cup', 'HP Percentage Mod'],
+        	banlist: ['Dragon Rage', 'Sonic Boom', 'Scyther', 'Chansey', 'Meditite', 'Omanyte', 'Wynaut', 'Zigzagoon']
     	},
 	{
 		name: "[Gen 3] Custom Game",
@@ -278,8 +278,8 @@ exports.Formats = [
     
         	maxLevel: 5,
         	mod: 'gen2',
-        	ruleset: ['Pokemon', 'Standard', 'Little Cup'],
-        	banlist: ['Dragon Rage', 'Sonic Boom', 'Wrap', 'Bind', 'Clamp', 'Fire Spin', 'Whirlpool', 'Scyther', 'Chansey', 'Omanyte', 'Wynaut', 'OU', 'BL', 'UU', 'NU', 'Uber', 'HP Percentage Mod']
+        	ruleset: ['Pokemon', 'Standard', 'Little Cup', 'HP Percentage Mod'],
+        	banlist: ['Dragon Rage', 'Sonic Boom', 'Wrap', 'Bind', 'Clamp', 'Fire Spin', 'Whirlpool', 'Scyther', 'Chansey']
 	},
 	{
 		name: "[Gen 2] Custom Game",
@@ -312,8 +312,8 @@ exports.Formats = [
     
         	maxLevel: 5,
         	mod: 'gen1',
-        	ruleset: ['Pokemon', 'Standard', 'Little Cup'],
-        	banlist: ['Dragon Rage', 'Sonic Boom', 'Wrap', 'Bind', 'Clamp', 'Fire Spin', 'OU', 'BL', 'UU', 'NU', 'Uber', 'HP Percentage Mod']
+        	ruleset: ['Pokemon', 'Standard', 'Little Cup', 'HP Percentage Mod'],
+        	banlist: ['Dragon Rage', 'Sonic Boom', 'Wrap', 'Bind', 'Clamp', 'Fire Spin']
 	},
 	{
 		name: "[Gen 1] Custom Game",
