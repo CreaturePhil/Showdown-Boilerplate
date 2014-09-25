@@ -714,6 +714,13 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Eviolite']
 	},
+	{	
+		name: "LC Ubers",
+        	section: "Other Metagames",
+        	           
+        	maxLevel: 5,
+        	ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup']
+	},
 	{
 		name: "OM Mashup",
 		section: "Other Metagames",
