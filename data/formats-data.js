@@ -687,8 +687,8 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	seel: {
-		randomBattleMoves: ["surf","icebeam","aquajet","protect","rest","toxic","drillrun"],
-		randomDoubleBattleMoves: ["surf","icebeam","aquajet","protect","rest","fakeout","drillrun","icywind"],
+		randomBattleMoves: ["aquajet","drillrun","encore","icebeam","iciclespear","protect","raindance","rest","surf","swagger","toxic","waterfall"],
+		randomDoubleBattleMoves: ["aquajet","drillrun","fakeout","helpinghand","icebeam","iciclespear","icywind","protect","raindance","rest","surf","swagger","toxic","waterfall"],
 		eventPokemon: [
 			{"generation":3,"level":23,"abilities":["thickfat"],"moves":["helpinghand","surf","safeguard","icebeam"]}
 		],

@@ -1748,6 +1748,7 @@ var commands = exports.commands = {
 		if (target === 'makechatroom') {
 			matched = true;
 			this.sendReply("/makechatroom [roomname] - Creates a new room named [roomname]. Requires: ~");
+			hangman.reset(id);
 		}
 		if (target === 'deregisterchatroom') {
 			matched = true;

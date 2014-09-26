@@ -1842,7 +1842,7 @@ exports.BattleFormatsData = {
 	},
 	trapinch: {
 		randomBattleMoves: ["earthquake","rockslide","crunch","quickattack","superpower"],
-		tier: "NU"
+		tier: "LC"
 	},
 	vibrava: {
 		randomBattleMoves: ["substitute","earthquake","outrage","roost","uturn","superpower"],

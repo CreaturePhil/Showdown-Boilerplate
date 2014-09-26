@@ -68,14 +68,45 @@ var components = exports.components = {
                 buffer.voices.push(staff[0]);
             }
         }
-
+        
+        buffer.admins.sort(function(a,b) {
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+            if( a == b) return 0;
+            return a < b ? -1 : 1;
+            });
+        buffer.leaders.sort(function(a,b) {
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+            if( a == b) return 0;
+            return a < b ? -1 : 1;
+            });
+        buffer.mods.sort(function(a,b) {
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+            if( a == b) return 0;
+            return a < b ? -1 : 1;
+            });
+        buffer.drivers.sort(function(a,b) {
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+            if( a == b) return 0;
+            return a < b ? -1 : 1;
+            });
+        buffer.voices.sort(function(a,b) {
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+            if( a == b) return 0;
+            return a < b ? -1 : 1;
+            });
+            
         buffer.admins = buffer.admins.join(', ');
         buffer.leaders = buffer.leaders.join(', ');
         buffer.mods = buffer.mods.join(', ');
         buffer.drivers = buffer.drivers.join(', ');
         buffer.voices = buffer.voices.join(', ');
 
-        this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
+        this.popupReply('__**Ember Staff**__\n\nAdministrators (~):\n' + buffer.admins + '\n\nLeaders (&):\n' + buffer.leaders + '\n\nModerators (@):\n' + buffer.mods + '\n\nDrivers (%):\n' + buffer.drivers + '\n\nVoices (+):\n' + buffer.voices + '\n\nTotal Staff Members: ' + numStaff);
     },
 
     regdate: function (target, room, user, connection) {
@@ -588,7 +619,7 @@ var components = exports.components = {
 
     hide: function (target, room, user) {
         // add support for away
-        if (!this.can('lock')) return;
+        if (!this.can('declare')) return;
         user.getIdentity = function () {
             var name = this.name + (this.away ? " - Ⓐⓦⓐⓨ" : "");
             if (this.locked) return '‽' + name;
@@ -598,20 +629,6 @@ var components = exports.components = {
         user.hiding = true;
         user.updateIdentity();
         this.sendReply('You have hidden your staff symbol.');
-    },
-
-    kick: function (target, room, user) {
-        if (!this.can('kick')) return;
-        if (!target) return this.parse('/help kick');
-
-        var targetUser = Users.get(target);
-        if (!targetUser) return this.sendReply('User ' + target + ' not found.');
-
-        if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
-        targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.');
-        targetUser.leaveRoom(room);
-        room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
-        this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
     },
 
     masspm: 'pmall',
@@ -810,7 +827,7 @@ var components = exports.components = {
 
                 set -xe
 
-                timeout 10 wget "$1" -nv -O $FILENAME
+                wget "$1" -nv -O $FILENAME
 
                 FRAMES=`identify $FILENAME | wc -l`
                 if [ $FRAMES -gt 1 ]; then
@@ -819,7 +836,7 @@ var components = exports.components = {
                     EXT=".png"
                 fi
 
-                timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
+                convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
             */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
         } catch (e) {}
 

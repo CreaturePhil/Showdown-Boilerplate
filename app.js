@@ -460,3 +460,5 @@ global.Components = require('./components.js');
 global.Poll = require('./core.js').core.poll();
 
 global.SysopAccess = require('./core.js').sysopAccess();
+
+global.hangman = require('./hangman.js').hangman();
