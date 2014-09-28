@@ -455,20 +455,21 @@ User = (function () {
 		this.send('|popup|' + message.replace(/\n/g, '||'));
 	};
 	User.prototype.getIdentity = function (roomid) {
-		if (!roomid) roomid = 'lobby';
 		var name = this.name + (this.away ? " - Ⓐⓦⓐⓨ" : "");
 		if (this.locked) {
 			return '‽' + name;
 		}
-		if (this.mutedRooms[roomid]) {
-			return '!' + name;
-		}
-		var room = Rooms.rooms[roomid];
-		if (room && room.auth) {
-			if (room.auth[this.userid]) {
-				return room.auth[this.userid] + name;
+		if (roomid) {
+			if (this.mutedRooms[roomid]) {
+				return '!' + name;
 			}
-			if (room.isPrivate) return ' ' + name;
+			var room = Rooms.rooms[roomid];
+			if (room && room.auth) {
+				if (room.auth[this.userid]) {
+					return room.auth[this.userid] + name;
+				}
+				if (room.isPrivate) return ' ' + name;
+			}
 		}
 		return this.group + name;
 	};
@@ -483,7 +484,7 @@ User = (function () {
 		var checkedGroups = {};
 
 		// does not inherit
-		if (groupData['root']) {
+		if (groupData && groupData['root']) {
 			return true;
 		}
 
