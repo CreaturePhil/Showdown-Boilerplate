@@ -1,4 +1,4 @@
-# Showdown Boilerplate [![Build Status](https://travis-ci.org/CreaturePhil/Showdown-Boilerplate.svg)](https://travis-ci.org/CreaturePhil/Showdown-Boilerplate)
+# Showdown Boilerplate
 
 Showdown Boilerplate is a template for private servers of [Pokémon Showdown][1]. Pokémon Showdown is created by [Zarel][2].
 
