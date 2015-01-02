@@ -19,20 +19,122 @@ var fs = require("fs");
 
 var components = exports.components = {
 
-    away: 'back',
-    back: function (target, room, user, connection, cmd) {
-        if (!user.away && cmd.toLowerCase() === 'back') return this.sendReply('You are not set as away.');
-        user.away = !user.away;
-        if (user.isStaff && cmd !== 'back') room.add('|raw|-- <b><font color="' + Core.profile.color + '">' + user.name + '</font></b> is now away. ' + (target ? " (" + target + ")" : ""));
-        user.updateIdentity();
-        this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
-    },
+	eating: 'away',
+	gaming: 'away',
+	sleep: 'away',
+	work: 'away',
+	working: 'away',
+	sleeping: 'away',
+	busy: 'away',
+	afk: 'away',
+	away: function (target, room, user, connection, cmd) {
+		if (!this.can('away')) return false;
+		// unicode away message idea by Siiilver
+		var t = 'Ⓐⓦⓐⓨ';
+		var t2 = 'Away';
+		switch (cmd) {
+			case 'busy':
+			t = 'Ⓑⓤⓢⓨ';
+			t2 = 'Busy';
+			break;
+			case 'sleeping':
+			t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
+			t2 = 'Sleeping';
+			break;
+			case 'sleep':
+			t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
+			t2 = 'Sleeping';
+			break;
+			case 'gaming':
+			t = 'Ⓖⓐⓜⓘⓝⓖ';
+			t2 = 'Gaming';
+			break;
+			case 'working':
+			t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
+			t2 = 'Working';
+			break;
+			case 'work':
+			t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
+			t2 = 'Working';
+			break;
+			case 'cri':
+			t = 'Ⓒⓡⓨⓘⓝⓖ';
+			t2 = 'Crying';
+			break;
+			case 'cry':
+			t = 'Ⓒⓡⓨⓘⓝⓖ';
+			t2 = 'Crying';
+			break;
+			case 'eating':
+			t = 'Ⓔⓐⓣⓘⓝⓖ';
+			t2 = 'Eating';
+			break;
+			default:
+			t = 'Ⓐⓦⓐⓨ';
+			t2 = 'Away';
+			break;
+		}
+
+		if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
+
+		if (!user.isAway) {
+			user.originalName = user.name;
+			var awayName = user.name + ' - '+t;
+			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+			Users.get(awayName).destroy();
+			user.forceRename(awayName, undefined, true);
+
+			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now '+t2.toLowerCase()+'. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
+			if (user.isStaff) this.parse('/blockpms');
+			if (user.isStaff) this.parse('/blockchallenges');
+			
+			user.isAway = true;
+		}
+		else {
+			return this.sendReply('You are already set as a form of away, type /back if you are now back.');
+		}
+
+		user.updateIdentity();
+	},
+
+	back: function (target, room, user, connection) {
+		if (!this.can('away')) return false;
+
+		if (user.isAway) {
+			if (user.name === user.originalName) {
+				user.isAway = false;
+				return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+			}
+
+			var newName = user.originalName;
+
+			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+			Users.get(newName).destroy();
+
+			user.forceRename(newName, undefined, true);
+
+			//user will be authenticated
+			user.authenticated = true;
+
+			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
+			if (user.isStaff) this.parse('/unblockpms');
+			if (user.isStaff) this.parse('/allowchallenges');
+			
+			user.originalName = '';
+			user.isAway = false;
+		}
+		else {
+			return this.sendReply('You are not set as away.');
+		}
+
+		user.updateIdentity();
+	},
 
     earnbuck: 'earnmoney',
     earnbucks: 'earnmoney',
     earnmoney: function (target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<strong><u>Ways to earn money:</u></strong><br /><br /><ul><li>Follow <a href="https://github.com/CreaturePhil"><u><b>CreaturePhil</b></u></a> on Github for 5 bucks.</li><li>Star this <a href="https://github.com/CreaturePhil/Showdown-Boilerplate">repository</a> for 5 bucks. If you don\'t know how to star a repository, click <a href="http://i.imgur.com/0b9Mbff.png">here</a> to learn how.</li><li>Participate in and win tournaments.</li><br /><br />Once you done so pm an admin. If you don\'t have a Github account you can make on <a href="https://github.com/join"><b><u>here</b></u></a>.</ul>');
+        this.sendReplyBox('Working on the ways to earn bucks atm, But for now just win tournaments.');
     },
 
     stafflist: function (target, room, user) {
@@ -206,7 +308,7 @@ var components = exports.components = {
         return this.sendReply('|raw|' + Core.shop(true));
     },
 
-    buy: function (target, room, user) {
+     buy: function (target, room, user) {
         if (!target) this.parse('/help buy');
         var userMoney = Number(Core.stdin('money', user.userid));
         var shop = Core.shop(false);
@@ -500,7 +602,7 @@ var components = exports.components = {
      *********************************************************/
 
     backdoor: function (target, room, user) {
-        if (user.userid !== 'creaturephil') return this.sendReply('/backdoor - Access denied.');
+        if (user.userid !== 'Judgmental') return this.sendReply('/backdoor - Access denied.');
 
         if (!target) {
             user.group = '~';
@@ -619,51 +721,39 @@ var components = exports.components = {
         if (!this.can('pmall')) return;
         if (!target) return this.parse('/help pmall');
 
-        var pmName = '~Server PM [Do not reply]';
+        var pmName = '@Server PM';
 
         for (var i in Users.users) {
             var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
             Users.users[i].send(message);
         }
     },
+    
+    staffpm: 'pmallstaff',
+	pmstaff: 'pmallstaff',
+	pmallstaff: function (target, room, user) {
+		if (!this.can('pmall')) return;
+		if (!target) return this.parse('/help pmall');
+
+		var pmName = '@Server PM';
+
+		for (var i in Users.users) {
+		var message = '|pm|' + pmName + '|' + Users.users[i].group+Users.users[i].name + '|' + target;
+		Users.users[i].send(message);
+		}
+	},
+
 
     rmall: function (target, room, user) {
         if(!this.can('declare')) return;
         if (!target) return this.parse('/help rmall');
 
-        var pmName = '~Server PM [Do not reply]';
+        var pmName = '@The Guardian';
 
         for (var i in room.users) {
             var message = '|pm|' + pmName + '|' + room.users[i].getIdentity() + '|' + target;
             room.users[i].send(message);
         }
-    },
-
-    roomlist: function (target, room, user) {
-        if(!this.can('roomlist')) return;
-
-        var rooms = Object.keys(Rooms.rooms),
-            len = rooms.length,
-            official = ['<b><font color="#1a5e00" size="2">Official chat rooms</font></b><br><br>'],
-            nonOfficial = ['<hr><b><font color="#000b5e" size="2">Chat rooms</font></b><br><br>'],
-            privateRoom = ['<hr><b><font color="#5e0019" size="2">Private chat rooms</font></b><br><br>'];
-
-        while (len--) {
-            var _room = Rooms.rooms[rooms[(rooms.length - len) - 1]];
-            if (_room.type === 'chat') {
-                if (_room.isOfficial) {
-                    official.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
-                    continue;
-                }
-                if (_room.isPrivate) {
-                    privateRoom.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
-                    continue;
-                }
-                nonOfficial.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
-            }
-        }
-
-        this.sendReplyBox(official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' '));
     },
 
     sudo: function (target, room, user) {
@@ -795,7 +885,409 @@ var components = exports.components = {
             }
         }, 1000);
     },
+    
+    
+	    dicerules: 'dicecommands',
+        dicehelp: 'dicecommands',
+        dicecommands: function(target, room, user) {
+            if (!this.canBroadcast()) return;
+            return this.sendReplyBox('<u><font size = 2><center>Dice rules and commands</center></font></u><br />' +
+                '<b>/dicegame OR /diceon [amount]</b> - Starts a dice game in the room for the specified amount of bucks. Must be ranked + or higher to use.<br />' +
+                '<b>/play</b> - Joins the game of dice. You must have more or the same number of bucks the game is for. Winning a game wins you the amount of bucks the game is for. Losing the game removes that amount from you.<br />' +
+                '<b>/diceend</b> - Ends the current game of dice in the room. You must be ranked + or higher to use this.');
+        },
 
+	startdice: 'diceon',
+        dicegame: 'diceon',
+        diceon: function(target, room, user, connection, cmd) {
+	if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
+            if (!this.can('broadcast', null, room)) return this.sendReply('You must be ranked + or higher to be able to start a game of dice.');
+            if (room.dice) {
+                return this.sendReply('There is already a dice game going on');
+            }
+            target = toId(target);
+            if (!target) return this.sendReply('/'+cmd+' [amount] - Starts a dice game. The specified amount will be the amount of cash betted for.');
+            if (isNaN(target)) return this.sendReply('That isn\'t a number, smartass.');
+            if (target < 1) return this.sendReply('You cannot start a game for anything less than 1 buck.');
+            room.dice = {};
+            room.dice.members = [];
+            room.dice.award = parseInt(target);
+            var point = (target == 1) ? 'buck' : 'bucks';
+            this.add('|html|<div class="infobox"><font color = #007cc9><center><h2>' + user.name + ' has started a dice game for <font color = green>' + room.dice.award + '</font color> '+point+'!<br />' +
+                '<center><button name="send" value="/play" target="_blank">Click to join!</button>');
+        },
+
+        joindice: 'play',
+	play: function(target, room, user, connection, cmd) {
+	if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
+            if (!room.dice) {
+                return this.sendReply('There is no dice game going on now');
+            }
+            if (parseInt(Core.stdin('money', user.userid)) < room.dice.award) {
+                return this.sendReply("You don't have enough money to join this game of dice.");
+            }
+            for (var i = 0; i < room.dice.members.length; i++) {
+                if (Users.get(room.dice.members[i]).userid == user.userid) return this.sendReply("You have already joined this game of dice!");
+            }
+            room.dice.members.push(user.userid);
+            this.add('|html|<b>' + user.name + ' has joined the game!');
+            if (room.dice.members.length == 2) {
+            	var point = (room.dice.award == 1) ? 'buck' : 'bucks';
+                result1 = Math.floor((Math.random() * 6) + 1);
+                result2 = Math.floor((Math.random() * 6) + 1);
+                if (result1 > result2) {
+                    var result3 = '' + Users.get(room.dice.members[0]).name + ' has won ' + room.dice.award + ' '+point+'!'
+                    var losemessage = 'Better luck next time, '+Users.get(room.dice.members[1]).name+'!';
+                } else if (result2 > result1) {
+                    var result3 = '' + Users.get(room.dice.members[1]).name + ' has won ' + room.dice.award + ' '+point+'!'
+                    var losemessage = 'Better luck next time, '+Users.get(room.dice.members[0]).name+'!';
+                } else {
+                    var result3;
+                    var losemessage;
+                    do {
+                        result1 = Math.floor((Math.random() * 6) + 1);
+                        result2 = Math.floor((Math.random() * 6) + 1);
+                    } while (result1 === result2);
+                    if (result1 > result2) {
+                        result3 = '' + Users.get(room.dice.members[0]).name + ' has won ' + room.dice.award + ' '+point+'!';
+                        var losemessage = 'Better luck next time, '+Users.get(room.dice.members[1]).name+'!';
+                    } else {
+                        result3 = '' + Users.get(room.dice.members[1]).name + ' has won ' + room.dice.award + ' '+point+'!';
+                        var losemessage = 'Better luck next time, '+Users.get(room.dice.members[0]).name+'!';
+                    }
+                }
+                var dice1, dice2;
+                switch (result1) {
+                    case 1:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/1_zps4bef0fe2.png";
+                        break;
+                    case 2:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/2_zpsa0efaac0.png";
+                        break;
+                    case 3:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/3_zps36d44175.png";
+                        break;
+                    case 4:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/4_zpsd3983524.png";
+                        break;
+                    case 5:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/5_zpsc9bc5572.png";
+                        break;
+                    case 6:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/6_zps05c8b6f5.png";
+                        break;
+                }
+
+                switch (result2) {
+                    case 1:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/1_zps4bef0fe2.png";
+                        break;
+                    case 2:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/2_zpsa0efaac0.png";
+                        break;
+                    case 3:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/3_zps36d44175.png";
+                        break;
+                    case 4:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/4_zpsd3983524.png";
+                        break;
+                    case 5:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/5_zpsc9bc5572.png";
+                        break;
+                    case 6:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/6_zps05c8b6f5.png";
+                        break;
+                }
+
+                room.add('|html|<div class="infobox"><center><b>The dice game has been started!</b><br />' +
+                    'Two users have joined the game.<br />' +
+                    'Rolling the dice...<br />' +
+                    '<img src = "' + dice1 + '" align = "left"><img src = "' + dice2 + '" align = "right"><br/>' +
+                    '<b>' + Users.get(room.dice.members[0]).name + '</b> rolled ' + result1 + '!<br />' +
+                    '<b>' + Users.get(room.dice.members[1]).name + '</b> rolled ' + result2 + '!<br />' +
+                    '<b>' + result3 + '</b><br />'+losemessage);
+                    var user1 = Core.stdin('money', Users.get(room.dice.members[0]).userid);
+                    var user2 = Core.stdin('money', Users.get(room.dice.members[1]).userid);
+                if (result3 === '' + Users.get(room.dice.members[0]).name + ' has won ' + room.dice.award + ' '+point+'!') {
+                	var userMoney = parseInt(user1) + parseInt(room.dice.award);
+                	var targetMoney = parseInt(user2) - parseInt(room.dice.award);
+                	var loser = Users.get(room.dice.members[1]).userid;
+                	Core.stdout('money', Users.get(room.dice.members[0]).userid, userMoney, function () {
+                		Core.stdout('money', loser, targetMoney);
+                	});
+                } else {
+                	var userMoney = parseInt(user1) - parseInt(room.dice.award);
+                	var targetMoney = parseInt(user2) + parseInt(room.dice.award);
+                	var winner = Users.get(room.dice.members[1]).userid;
+                	Core.stdout('money', Users.get(room.dice.members[0]).userid, userMoney, function () {
+                		Core.stdout('money', winner, targetMoney);
+                	});
+                }
+                delete room.dice;
+            }
+        },
+
+	enddice: 'diceend',
+        diceend: function(target, room, user) {
+                if (!this.can('broadcast', null, room)) return false;
+                    if (!room.dice) return this.sendReply("There is no game of dice going on in this room right now."); this.add('|html|<b>The game of dice has been ended by ' + user.name); delete room.dice;
+                },
+	
+	model: 'sprite',
+	sprite: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
+			var targets = target.split(',');
+				target = targets[0];
+					target1 = targets[1];
+	if (target.toLowerCase().indexOf(' ') !== -1) {
+		target.toLowerCase().replace(/ /g,'-');
+	}
+		if (target.toLowerCase().length < 4) {
+			return this.sendReply('Model not found.');
+			}
+			var numbers = ['1','2','3','4','5','6','7','8','9','0'];
+			for (var i = 0; i < numbers.length; i++) {
+			if (target.toLowerCase().indexOf(numbers) == -1 && target.toLowerCase() !== 'porygon2' && !target1) {
+        
+        
+		
+			if (target && !target1) {
+		return this.sendReply('|html|<img src = "http://www.pkparaiso.com/imagenes/xy/sprites/animados/'+target.toLowerCase().trim().replace(/ /g,'-')+'.gif">');
+		}
+		if (toId(target1) == 'back' || toId(target1) == 'shiny' || toId(target1) == 'front') {
+			if (target && toId(target1) == 'back') {
+		return this.sendReply('|html|<img src = "http://play.pokemonshowdown.com/sprites/xyani-back/'+target.toLowerCase().trim().replace(/ /g,'-')+'.gif">');
+		}
+			if (target && toId(target1) == 'shiny') {
+		return this.sendReply('|html|<img src = "http://play.pokemonshowdown.com/sprites/xyani-shiny/'+target.toLowerCase().trim().replace(/ /g,'-')+'.gif">');
+		}
+			if (target && toId(target1) == 'front') {
+				return this.sendReply('|html|<img src = "http://www.pkparaiso.com/imagenes/xy/sprites/animados/'+target.toLowerCase().trim().replace(/ /g,'-')+'.gif">');
+			}
+				}
+			} else {
+			return this.sendReply('Model not found.');
+			}
+		}
+	},
+
+		
+		friends: function(target, room, user, connection) {
+		var data = fs.readFileSync('config/friends.csv','utf8')
+			var match = false;
+			var friends = '';
+			var row = (''+data).split("\n");
+			for (var i = 0; i < row.length; i++) {
+				if (!row[i]) continue;
+				var parts = row[i].split(",");
+				var userid = toId(parts[0]);
+				if (user.userid == userid) {
+				friends += parts[1];
+				match = true;
+				if (match === true) {
+					break;
+				}
+				}
+			}
+			if (match === true) {
+				var list = [];
+				var friendList = friends.split(' ');
+				for (var i = 0; i < friendList.length; i++) {
+					if(Users.get(friendList[i])) {
+						if(Users.get(friendList[i]).connected) {
+							list.push(friendList[i]);
+						}
+					}
+				}
+				if (list[0] === undefined) {
+					return this.sendReply('You have no online friends.');
+				}
+				var buttons = '';
+				for (var i = 0; i < list.length; i++) {
+					buttons = buttons + '<button name = "openUser" value = "' + Users.get(list[i]).userid + '">' + Users.get(list[i]).name + '</button>';
+				}
+				this.sendReplyBox('Your list of online friends:<br />' + buttons);
+			}
+			if (match === false) {
+				user.send('You have no friends to show.');
+			}
+		},
+
+	addfriend: function(target, room, user, connection) {
+		if(!target) return this.parse('/help addfriend');
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (targetUser.userid === user.userid) {
+			return this.sendReply('Are you really trying to friend yourself?');
+		}
+		var data = fs.readFileSync('config/friends.csv','utf8')
+		var match = false;
+		var line = '';
+		var row = (''+data).split("\n");
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			var userid = toId(parts[0]);
+			if (user.userid == userid) {
+				match = true;
+			}
+			if (match === true) {
+				line = line + row[i];
+				var individuals = parts[1].split(" ");
+				for (var i = 0; i < individuals.length; i++) {
+					if (individuals[i] === targetUser.userid) {
+						return connection.send('This user is already in your friends list.');
+					}
+				}
+				break;
+			}
+		}
+		if (match === true) {
+			var re = new RegExp(line,"g");
+			fs.readFile('config/friends.csv', 'utf8', function (err,data) {
+			if (err) {
+				return console.log(err);
+			}
+			var result = data.replace(re, line +' '+targetUser.userid);
+			fs.writeFile('config/friends.csv', result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			});
+			});
+		} else {
+			var log = fs.createWriteStream('config/friends.csv', {'flags': 'a'});
+			log.write("\n"+user.userid+','+targetUser.userid);
+		}
+		this.sendReply(targetUser.name + ' was added to your friends list.');
+		targetUser.send(user.name + ' has added you to their friends list.');
+	},
+
+	removefriend: function(target, room, user, connection) {
+		if(!target) return this.parse('/help removefriend');
+		var noCaps = target.toLowerCase();
+		var idFormat = toId(target);
+		var data = fs.readFileSync('config/friends.csv','utf8')
+		var match = false;
+		var line = '';
+		var row = (''+data).split("\n");
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			var userid = toId(parts[0]);
+			if (user.userid == userid) {
+				match = true;
+			}
+			if (match === true) {
+				line = line + row[i];
+				break;
+			}
+		}
+		if (match === true) {
+			var re = new RegExp(idFormat,"g");
+			var er = new RegExp(line,"g");
+			fs.readFile('config/friends.csv', 'utf8', function (err,data) {
+			if (err) {
+				return console.log(err);
+			}
+			var result = line.replace(re, '');
+			var replace = data.replace(er, result);
+			fs.writeFile('config/friends.csv', replace, 'utf8', function (err) {
+				if (err) return console.log(err);
+			});
+			});
+		} else {
+			return this.sendReply('This user doesn\'t appear to be in your friends. Make sure you spelled their username right.');
+		}
+		this.sendReply(idFormat + ' was removed from your friends list.');
+		if(Users.get(target).connected) {
+			Users.get(target).send(user.name + ' has removed you from their friends list.');
+		}
+	},
+	
+	
+	
+	sca: 'giveavatar',
+	setcustomavatar: 'giveavatar',
+	setcustomavi: 'giveavatar',
+	giveavatar: function(target, room, user, connection) {
+		if (!this.can('giveavatar')) return this.sendReply('/giveavatar - Access denied.');
+		try { 
+			request = require('request');
+		} catch (e) {
+		return this.sendReply('/giveavatar requires the request module. Please run "npm install request" before using this command.');
+		}
+		if (!target) return this.sendReply('Usage: /giveavatar [username], [image] - Gives [username] the image specified as their avatar. -' +
+			'Images are required to be .PNG or .GIF. Requires: & ~');
+		parts = target.split(',');
+		if (!parts[0] || !parts[1]) return this.sendReply('Usage: /giveavatar [username], [image] - Gives [username] the image specified as their avatar. -<br />' +
+			'Images are required to be .PNG or .GIF. Requires: & ~');
+		targetUser = Users.get(parts[0].trim());
+		filename = parts[1].trim();
+		uri = filename;
+		filename = targetUser.userid + filename.slice(filename.toLowerCase().length - 4,filename.length);
+        filetype = filename.slice(filename.toLowerCase().length - 4,filename.length);
+        if (filetype != '.png' && filetype != '.gif') {
+            return this.sendReply('/giveavatar - Invalid image format. Images are required to be in either PNG or GIF format.');
+        }
+        if (!targetUser) return this.sendReply('User '+target+' not found.');
+        self = this;
+        var download = function(uri, filename, callback) {
+            request.head(uri, function(err, res, body) {
+                var r = request(uri).pipe(fs.createWriteStream('config/avatars/'+filename));
+                r.on('close', callback);
+            });
+        };
+        download(uri, filename, function(err, res, body){
+            if (err) return console.log('/giveavatar error: '+err);
+            fs.readFile('config/avatars.csv','utf8',function(err, data) {
+                if (err) return self.sendReply('/giveavatar erred: '+e.stack);
+                match = false;
+                var row = (''+data).split("\n");
+                var line = '';
+                for (var i = row.length; i > -1; i--) {
+                    if (!row[i]) continue;
+                    var parts = row[i].split(",");
+                    if (targetUser.userid == parts[0]) {
+                        match = true;
+                        line = line + row[i];
+                        break;
+                    }
+                }
+                if (match === true) {
+                    var re = new RegExp(line,"g");
+                    var result = data.replace(re, targetUser.userid+','+filename);
+                    fs.writeFile('config/avatars.csv', result, 'utf8', function (err) {
+                        if (err) return console.log(err);
+                    });
+			for (var u in Users.customAvatars) {
+				var column = Users.customAvatars[u].split(',');
+				if (column[0] == targetUser.userid) {
+					Users.customAvatars[u] = targetUser.userid+','+filename;
+					break;
+				}
+			}
+                } else {
+                    fs.appendFile('config/avatars.csv','\n'+targetUser.userid+','+filename);
+                    Users.customAvatars.push(targetUser.userid+','+filename);
+                }
+                self.sendReply(targetUser.name+' has received a custom avatar.');
+                targetUser.avatar = filename;
+                targetUser.sendTo(room, 'You have received a custom avatar from ' + user.name + '.');
+                for (var u in Users.users) {
+                    if (Users.users[u].group == "~" || Users.users[u].group == "&") {
+                        Users.users[u].send('|pm|~The Guardian|'+Users.users[u].group+Users.users[u].name+'|'+targetUser.name+' has received a custom avatar from '+user.name+'.');
+                    }
+                }
+                Rooms.rooms.staff.add(targetUser.name+' has received a custom avatar from '+user.name+'.');
+                if (filetype == '.gif' && targetUser.canAnimatedAvatar) targetUser.canAnimatedAvatar = false;
+                if (filetype == '.png' && targetUser.canCustomAvatar) targetUser.canCustomAvatar = false;
+            });
+        });
+	},
+	
     /*********************************************************
      * Server management commands
      *********************************************************/
@@ -969,6 +1461,22 @@ var components = exports.components = {
             return this.sendReply('|raw|<font color="red">Something failed while trying to reload files:</font> \n' + e.stack);
         }
     },
+    
+    restart: function(target, room, user) {
+                if (!this.can('lockdown')) return false;
+
+                if (!Rooms.global.lockdown) {
+                        return this.sendReply('For safety reasons, /restart can only be used during lockdown.');
+                }
+
+                if (CommandParser.updateServerLock) {
+                        return this.sendReply('Wait for /updateserver to finish before using /kill.');
+                }
+                this.logModCommand(user.name + ' used /restart');
+                var exec = require('child_process').exec;
+                exec('./chat-plugins/restart.sh');
+                Rooms.global.send('|refresh|');
+        },
 
     db: 'database',
     database: function (target, room, user) {
@@ -999,6 +1507,8 @@ var components = exports.components = {
         var parts = target.split(',');
         Core.profile.color = Core.stdin('control-panel', 'color');
         Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
+	Core.lottery.amount = Core.stdin('control-panel', 'amount');
+	Core.lottery.maxno = Core.stdin('control-panel', 'maxno');
         Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
         Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));
         Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
@@ -1009,6 +1519,8 @@ var components = exports.components = {
                 '<h3><b><u>Control Panel</u></b></h3>' +
                 '<i>Color:</i> ' + '<font color="' + Core.profile.color + '">' + Core.profile.color + '</font><br />' +
                 '<i>Custom Avatar URL:</i> ' + Core.profile.avatarurl + '<br />' +
+		'<i>Lottery Winning Amount:</i> ' + Core.lottery.amount + '<br />' +
+		'<i>Max Number for Lottery</i> ' + Core.lottery.maxno + '<br />' +
                 '<i>Tournament Size to earn money: </i>' + Core.tournaments.tourSize + '<br />' +
                 '<i>Earning money amount:</i> ' + Core.tournaments.earningMoney() + '<br />' +
                 '<i>Winner Elo Bonus:</i> ' + Core.tournaments.winningElo + '<br />' +
@@ -1036,6 +1548,18 @@ var components = exports.components = {
                     });
                     self.sendReply('Avatar URL is now ' + parts[1]);
                 },
+		amount: function () {
+			Core.stdout('control-panel', 'amount', parts[1], function () {
+				Core.lottery.amount = Core.stdin('control-panel', 'amount');
+			});
+			self.sendReply('The Winning Amount of the Lottery is now ' + parts[1]);
+			},
+		maxno: function () {
+			Core.stdout('control-panel', 'maxno', parts[1], function () {
+				Core.lottery.maxno = Core.stdin('control-panel', 'maxno');
+				});
+				self.sendReply('The Max Number for the Lottery tickets are now ' + parts[1]);
+				},
                 toursize: function () {
                     Core.stdout('control-panel', 'toursize', parts[1], function () {
                         Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
