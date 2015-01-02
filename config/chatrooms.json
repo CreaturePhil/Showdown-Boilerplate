@@ -1,0 +1,8 @@
+[
+{"title":"Lobby","isOfficial":true,"autojoin":true,"desc":"Welcome to the Guardian Server's Lobby, Join and Have Fun!"},
+{"title":"Staff","isPrivate":true,"staffRoom":true,"staffAutojoin":true},
+{"title":"The Pokemon Help Center","isOfficial":true},
+{"title":"Sports","auth":{"judgmental":"★"}},
+{"title":"Casino","isOfficial":true},
+{"title":"Tiers","isOfficial":true}
+]
