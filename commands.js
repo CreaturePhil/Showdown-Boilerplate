@@ -10,13 +10,170 @@
  *
  * @license MIT license
  */
+var fs = require('fs');
+var isMotd = false;
+var closeShop = false;
+var closedShop = 0;
+var bank = exports.bank = {
+	tokens: function(uid, amount, take) {
+	   	var data = fs.readFileSync('config/token.csv','utf8')
+		var match = false;
+		var token = 0;
+		var row = (''+data).split("\n");
+		var line = '';
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			var userid = toId(parts[0]);
+			if (uid.userid == userid) {
+				var x = Number(parts[1]);
+				var token = x;
+				match = true;
+				if (match === true) {
+					line = line + row[i];
+					break;
+				}
+			}
+		}
+		uid.token = token;
+		if (take === true) {
+			if (amount <= uid.token){
+				uid.token = uid.token - amount; take = false;
+			}
+			else return false;
+		}
+		else {uid.token = uid.token + amount;}
+		if (match === true) {
+			var re = new RegExp(line,"g");
+			fs.readFile('config/token.csv', 'utf8', function (err,data) {
+				if (err) {
+					return console.log(err);
+				}
+				var result = data.replace(re, uid.userid+','+uid.token);
+				fs.writeFile('config/token.csv', result, 'utf8', function (err) {
+					if (err) return console.log(err);
+				});
+			});
+		} else {
+			var log = fs.createWriteStream('config/token.csv', {'flags': 'a'});
+			log.write("\n"+uid.userid+','+uid.token);
+		}
+		return true;
+	},
+	
+	coins: function(uid, amount, take) {
+		var lore = fs.readFileSync('config/coins.csv','utf8');
+		var match = false;
+		var coins = 0;
+		var spag = (''+lore).split("\n");
+		var hetti = '';
+		for (var i = spag.length; i > -1; i--) {
+			if (!spag[i]) continue;
+			var parts = spag[i].split(",");
+			var userid = toId(parts[0]);
+			if (uid.userid == userid) {
+				var x = Number(parts[1]);
+				var coins = x;
+				match = true;
+				if (match === true) {
+					hetti = hetti + spag[i];
+					break;
+				}
+			}
+		}
+		uid.coins = coins;
+		if (take === true) {
+			if (amount <= uid.coins){
+				uid.coins = uid.coins - amount; take = false;
+			} else return false;
+		} else {
+			uid.coins = uid.coins + amount;
+		}
+                if (match === true) {
+			var be = new RegExp(hetti,"g");
+			fs.readFile('config/coins.csv', 'utf8', function (err,lore) {
+				if (err) {
+					return console.log(err);
+				}
+				var result = lore.replace(be, uid.userid+','+uid.coins);
+				fs.writeFile('config/coins.csv', result, 'utf8', function (err) {
+					if (err) return console.log(err);
+				});
+			});
+                } else {
+			var log = fs.createWriteStream('config/coins.csv', {'flags': 'a'});
+			log.write("\n"+uid.userid+','+uid.coins);
+		} return true;
+	}
+}
+var economy = exports.economy = {
+	writetoken: function(uid, amount) {
+		var data = fs.readFileSync('config/token.csv','utf8');
+		var match = false;
+		var token = 0;
+		var row = (''+data).split("\n");
+		var line = '';
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			var userid = toId(parts[0]);
+			if (uid.userid == userid) {
+				var x = Number(parts[1]);
+				var token = x;
+				match = true;
+				if (match === true) {
+					line = line + row[i];
+					break;
+				}
+			}
+		}
+		uid.token = token;
+		uid.token = uid.token + amount;
+		if (match === true) {
+			var re = new RegExp(line,"g");
+			fs.readFile('config/token.csv', 'utf8', function (err,data) {
+				if (err) {
+					return console.log(err);
+				}
+				var result = data.replace(re, uid.userid+','+uid.token);
+				fs.writeFile('config/token.csv', result, 'utf8', function (err) {
+					if (err) return console.log(err);
+				});
+			});
+		} else {
+			var log = fs.createWriteStream('config/token.csv', {'flags': 'a'});
+			log.write("\n"+uid.userid+','+uid.token);
+		}
+	},
+}
+var ipbans = fs.createWriteStream('config/ipbans.txt', {'flags': 'a'});
+var avatar = fs.createWriteStream('config/avatars.csv', {'flags': 'a'});
+//spamroom
+if (typeof spamroom == "undefined") {
+	spamroom = new Object();
+}
+if (!Rooms.rooms.spamroom) {
+	Rooms.rooms.spamroom = new Rooms.ChatRoom("spamroom", "spamroom");
+	Rooms.rooms.spamroom.isPrivate = true;
+}
+
+//tells
+if (typeof tells === 'undefined') {
+	tells = {};
+}
 
 var crypto = require('crypto');
+var poofeh = true;
+/*
+var aList = ["kupo","panpaw","corn","stevoduhhero","fallacie","fallacies","imanalt",
+		"ipad","orivexes","treecko","theimmortal","talktakestime","oriv","v4",
+		"jac","geminiiii", "lepandaw", "cattelite","foe"];
+*/
+var canTalk;
 var fs = require('fs');
-
 const MAX_REASON_LENGTH = 300;
-
 var commands = exports.commands = {
+	/**** normal stuff ****/
 
 	version: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -143,7 +300,9 @@ var commands = exports.commands = {
 		user.ignorePMs = false;
 		return this.sendReply("You are no longer blocking Private Messages.");
 	},
-
+	
+	createchat: 'makechatroom',
+	makechat: 'makechatroom',
 	makechatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
@@ -151,10 +310,14 @@ var commands = exports.commands = {
 		if (Rooms.rooms[id]) return this.sendReply("The room '" + target + "' already exists.");
 		if (Rooms.global.addChatRoom(target)) {
 			return this.sendReply("The room '" + target + "' was created.");
+			return console.log("The room '" + target + "' has been made by '" + targetUser.name + "'.");
 		}
 		return this.sendReply("An error occurred while trying to create the room '" + target + "'.");
 	},
-
+	
+	removechat: 'deregisterchatroom',
+	removeroom: 'deregisterchatroom',
+	deletechat: 'deregisterchatroom',
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
@@ -319,6 +482,51 @@ var commands = exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+	
+	roomfounder: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomfounder - This room is't designed for per-room moderation to be added.");
+		}
+		var target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
+		if (!this.can('makeroom')) return false;
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+		var name = targetUser.name;
+		room.auth[targetUser.userid] = '#';
+		room.founder = targetUser.userid;
+		this.addModCommand(''+name+' was appointed to Room Founder by '+user.name+'.');
+		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.founder = room.founder;
+		Rooms.global.writeChatRoomData();
+	},
+	
+	roomlist: function (target, room, user) {
+        if(!this.can('roomlist')) return;
+
+        var rooms = Object.keys(Rooms.rooms),
+            len = rooms.length,
+            official = ['<b><font color="#1a5e00" size="2">Official chat rooms</font></b><br><br>'],
+            nonOfficial = ['<hr><b><font color="#000b5e" size="2">Chat rooms</font></b><br><br>'],
+            privateRoom = ['<hr><b><font color="#5e0019" size="2">Private chat rooms</font></b><br><br>'];
+
+        while (len--) {
+            var _room = Rooms.rooms[rooms[(rooms.length - len) - 1]];
+            if (_room.type === 'chat') {
+                if (_room.isOfficial) {
+                    official.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title +  ', ' + '</a>'));
+                    continue;
+                }
+                if (_room.isPrivate) {
+                    privateRoom.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + ', ' + '</a>'));
+                    continue;
+                }
+                nonOfficial.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + ', ' + '</a>'));
+            }
+        }
+
+        this.sendReplyBox(official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' '));
+    },
 
 	roomowner: function (target, room, user) {
 		if (!room.chatRoomData) {
@@ -448,13 +656,12 @@ var commands = exports.commands = {
 	rb: 'roomban',
 	roomban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomban');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
-
+		
 		if (!userid || !targetUser) return this.sendReply("User '" + name + "' does not exist.");
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!room.bannedUsers || !room.bannedIps) {
@@ -547,6 +754,15 @@ var commands = exports.commands = {
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' could not be joined.");
 		}
+		if (target.toLowerCase() == "lobby") {
+			return connection.sendTo('lobby','|html|<div><center><b><font size="4">Welcome to Guardian Server!</b></font><br/>' + +
+                                        'Well if you need any help, ask an Staff Consider that their symbols show as an; Driver (%), Moderator (@), Leader (&), or an Admin (~)<br/>' +
+                                        'If you need anything or need help with a different server, feel free to pm Judgmental.<br/>' +
+                                        'We hope you have fun while you\'re here at the Guardian Server! If so, then please be sure to tell your friends about us!<br/>' +
+                                           '<hr width="85%">' +                                        
+                                        '</div>');
+		}
+		
 	},
 
 	leave: 'part',
@@ -558,40 +774,318 @@ var commands = exports.commands = {
 		}
 		user.leaveRoom(targetRoom || room, connection);
 	},
+	
+	wallet: 'tokens',
+        satchel: 'tokens',
+        fannypack: 'tokens',
+        purse: 'tokens',
+        bag: 'tokens',
+        bank: 'tokens',
+        tokens: function(target, room, user, connection, cmd) {
+        if (!this.canBroadcast()) return;
+        var mMatch = false;
+        var token = 0;
+        var total = '';
+        if (!target) {
+        var data = fs.readFileSync('config/token.csv','utf8')
+                var row = (''+data).split("\n");
+                for (var i = row.length; i > -1; i--) {
+                        if (!row[i]) continue;
+                        var parts = row[i].split(",");
+                        var userid = toId(parts[0]);
+                        if (user.userid == userid) {
+                        var x = Number(parts[1]);
+                        var token = x;
+                        mMatch = true;
+                        if (mMatch === true) {
+                                break;
+                        }
+                        }
+                }
+                if (mMatch === true) {
+                        var p = 'Casino tokens';
+                        if (token === 1) p = 'Casino token';
+                        total += user.name + ' has ' + token + ' ' + p + '.<br />';
+                }
+                if (mMatch === false) {
+                        total += 'You have no Casino tokens.<br />';
+                }
+                user.token = token;
+        } else {
+                var data = fs.readFileSync('config/token.csv','utf8')
+                target = this.splitTarget(target);
+                var targetUser = this.targetUser;
+                if (!targetUser) {
+                        return this.sendReply('User '+this.targetUsername+' not found.');
+                }
+                var token = 0;
+                var row = (''+data).split("\n");
+                for (var i = row.length; i > -1; i--) {
+                        if (!row[i]) continue;
+                        var parts = row[i].split(",");
+                        var userid = toId(parts[0]);
+                        if (targetUser.userid == userid || target == userid) {
+                        var x = Number(parts[1]);
+                        var token = x;
+                        mMatch = true;
+                        if (mMatch === true) {
+                                break;
+                        }
+                        }
+                }
+                if (mMatch === true) {
+                        var p = 'Casino tokens';
+                        if (token < 2) p = 'Casino token';
+                        total += targetUser.name + ' has ' + token + ' ' + p + '.<br />';
+                }
+                if (mMatch === false) {
+                        total += targetUser.name + ' has  no Casino tokens.<br />';
+                }
+                targetUser.token = token;
+                                }
+        return this.sendReplyBox('<b>Casino Wallet~</b><br>'+total+'');
+        },
+
+	awardtokens: 'givetokens',
+	gb: 'givetokens',
+	givetokens: function(target, room, user) {
+		if(!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
+		if(!target) return this.parse('/help givetokens');
+		if (target.indexOf(',') != -1) {
+			var parts = target.split(',');
+			parts[0] = this.splitTarget(parts[0]);
+			var targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (isNaN(parts[1])) {
+			return this.sendReply('Very funny, now use a real number.');
+		}
+		var cleanedUp = parts[1].trim();
+		var givetoken = Number(cleanedUp);
+		var data = fs.readFileSync('config/token.csv','utf8')
+		var match = false;
+		var token = 0;
+		var line = '';
+		var row = (''+data).split("\n");
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			var userid = toId(parts[0]);
+			if (targetUser.userid == userid) {
+			var x = Number(parts[1]);
+			var token = x;
+			match = true;
+			if (match === true) {
+				line = line + row[i];
+				break;
+			}
+			}
+		}
+		targetUser.token = token;
+		targetUser.token += givetoken;
+		if (match === true) {
+			var re = new RegExp(line,"g");
+			fs.readFile('config/token.csv', 'utf8', function (err,data) {
+			if (err) {
+				return console.log(err);
+			}
+			var result = data.replace(re, targetUser.userid+','+targetUser.token);
+			fs.writeFile('config/token.csv', result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			});
+			});
+		} else {
+			var log = fs.createWriteStream('config/token.csv', {'flags': 'a'});
+			log.write("\n"+targetUser.userid+','+targetUser.token);
+		}
+		var p = 'tokens';
+		if (givetoken < 2) p = 'token';
+		this.sendReply(targetUser.name + ' was given ' + givetoken + ' ' + p + '. This user now has ' + targetUser.token + ' tokens.');
+		targetUser.send(user.name + ' has given you ' + givetoken + ' ' + p + '.');
+		} else {
+			return this.parse('/help givetokens');
+		}
+	},
+
+	tb: 'transfertokens',
+	transfertokens: function(target, room, user) {
+		if(!target) return this.sendReply('|raw|Correct Syntax: /transfertokens <i>user</i>, <i>amount</i>');
+		if (target.indexOf(',') >= 0) {
+			var parts = target.split(',');
+			if (parts[0].toLowerCase() === user.name.toLowerCase()) {
+				return this.sendReply('You can\'t transfer tokens to yourself.');
+			}
+			parts[0] = this.splitTarget(parts[0]);
+			var targetUser = this.targetUser;
+		}
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (isNaN(parts[1])) {
+			return this.sendReply('Very funny, now use a real number.');
+		}
+		if (parts[1] < 0) {
+			return this.sendReply('Number cannot be negative.');
+		}
+		if (parts[1] == 0) {
+			return this.sendReply('No! You cannot transfer 0 tokens, you fool!');
+		}
+		if (String(parts[1]).indexOf('.') >= 0) {
+			return this.sendReply('You cannot transfer numbers with decimals.');
+		}
+		if (parts[1] > user.token) {
+			return this.sendReply('You cannot transfer more token than what you have.');
+		}
+		var p = 'tokens';
+		var cleanedUp = parts[1].trim();
+		var transfertoken = Number(cleanedUp);
+		if (transfertoken === 1) {
+			p = 'token';
+		}
+		economy.writetoken(user, -transfertoken);
+		//set time delay because of node asynchronous so it will update both users' token instead of either updating one or the other
+		setTimeout(function(){economy.writetoken(targetUser, transfertoken);fs.appendFile('logs/transactions.log','\n'+Date()+': '+user.name+' has transferred '+transfertoken+' '+p+' to ' + targetUser.name + '. ' +  user.name +' now has '+user.token + ' ' + p + ' and ' + targetUser.name + ' now has ' + targetUser.token +' ' + p +'.');},3000);
+		this.sendReply('You have successfully transferred ' + transfertoken + ' to ' + targetUser.name + '. You now have ' + user.token + ' ' + p + '.');
+		targetUser.popup(user.name + ' has transferred ' + transfertoken + ' ' +  p + ' to you.');
+		this.logModCommand('('+user.name+'  has transferred ' + transfertoken + ' ' +  p + ' to ' + targetUser.name + '.)');
+	},
+
+	taketokens: 'removetokens',
+	removetokens: function(target, room, user) {
+		if(!user.can('pban')) return this.sendReply('You do not have enough authority to do this.');
+		if(!target) return this.parse('/help removetokens');
+		if (target.indexOf(',') != -1) {
+			var parts = target.split(',');
+			parts[0] = this.splitTarget(parts[0]);
+			var targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (isNaN(parts[1])) {
+			return this.sendReply('Very funny, now use a real number.');
+		}
+		var cleanedUp = parts[1].trim();
+		var taketoken = Number(cleanedUp);
+		var data = fs.readFileSync('config/token.csv','utf8')
+		var match = false;
+		var token = 0;
+		var line = '';
+		var row = (''+data).split("\n");
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			var userid = toId(parts[0]);
+			if (targetUser.userid == userid) {
+			var x = Number(parts[1]);
+			var token = x;
+			match = true;
+			if (match === true) {
+				line = line + row[i];
+				break;
+			}
+			}
+		}
+		targetUser.token = token;
+		targetUser.token -= taketoken;
+		if (match === true) {
+			var re = new RegExp(line,"g");
+			fs.readFile('config/token.csv', 'utf8', function (err,data) {
+			if (err) {
+				return console.log(err);
+			}
+			var result = data.replace(re, targetUser.userid+','+targetUser.token);
+			fs.writeFile('config/token.csv', result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			});
+			});
+		} else {
+			var log = fs.createWriteStream('config/token.csv', {'flags': 'a'});
+			log.write("\n"+targetUser.userid+','+targetUser.token);
+		}
+		var p = 'tokens';
+		if (taketoken < 2) p = 'token';
+		this.sendReply(targetUser.name + ' has had ' + taketoken + ' ' + p + ' removed. This user now has ' + targetUser.token + ' tokens.');
+		targetUser.send(user.name + ' has removed ' + taketoken + ' tokens from you.');
+		} else {
+			return this.parse('/help removetokens');
+		}
+	},
 
 	/*********************************************************
 	 * Moderating: Punishments
 	 *********************************************************/
 
-	kick: 'warn',
-	k: 'warn',
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
+		var warnMax = 4;
+		function isOdd(num) { return num % 2;}
+
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
+		if (!room.users[targetUser]) return this.sendReply(this.targetUsername + " is not in this room.");
 		if (room.isPrivate && room.auth) {
 			return this.sendReply("You can't warn here: This is a privately-owned room not subject to global rules.");
+		}
+		 if (targetUser.can('hotpatch')) {
+			this.sendReply("You cannot mute an administrator.");
+			return false;
+		}
+		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
+			return this.sendReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
 		if (!this.can('warn', targetUser, room)) return false;
+		if (targetUser.punished) return this.sendReply(targetUser.name+' has recently been warned, muted, or locked. Please wait a few seconds before warning them.');
 
-		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
-		targetUser.send('|c|~|/warn ' + target);
+		targetUser.warnTimes += 1;
+		targetUser.punished = true;
+		targetUser.punishTimer = setTimeout(function(){
+			targetUser.punished = false;
+		},7000);
+
+		if (targetUser.warnTimes >= warnMax && !room.auth) {
+			if (targetUser.warnTimes === 4) {
+				targetUser.popup('You have been automatically muted for 7 minutes due to being warned '+warnMax+' times.');
+				targetUser.mute(room.id, 7*60*1000);
+				this.addModCommand(''+targetUser.name+' was automatically muted for 7 minutes.');
+				var alts = targetUser.getAlts();
+				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
+				return;
+			}
+			else if (targetUser.warnTimes >= 6 && isOdd(targetUser.warnTimes) === 0) {
+				targetUser.popup('You have been automatically muted for 60 minutes due to being warned '+warnMax+' or more times.');
+				targetUser.mute(room.id, 60*60*1000);
+				this.addModCommand(''+targetUser.name+' was automatically muted for 60 minutes.');
+				var alts = targetUser.getAlts();
+				if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "), room.id);
+				return;
+			}
+		}
+
+		this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
+		targetUser.send('|c|~|/warn '+target);
+		try {
+			var frostcommands = global.frostcommands;
+			frostcommands.addWarnCount(user.userid);
+		} catch (e) {
+			return;
+		}
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 	},
 
 	redirect: 'redir',
 	redir: function (target, room, user, connection) {
 		if (!target) return this.parse('/help redirect');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
-		var targetRoom = Rooms.get(target) || Rooms.get(toId(target)) || Rooms.aliases[toId(target)];
+		var targetRoom = Rooms.search(target);
 		if (!targetRoom) {
 			return this.sendReply("The room '" + target + "' does not exist.");
 		}
@@ -614,13 +1108,17 @@ var commands = exports.commands = {
 	m: 'mute',
 	mute: function (target, room, user) {
 		if (!target) return this.parse('/help mute');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+		}
+		if (targetUser.can('hotpatch')) {
+			this.sendReply("You cannot mute an administrator.");
+			return false;
 		}
 		if (!this.can('mute', targetUser, room)) return false;
 		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
@@ -631,7 +1129,7 @@ var commands = exports.commands = {
 			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		targetUser.popup("" + user.name + " has muted you for 7 minutes. " + target);
+		targetUser.popup("" + user.name + " has muted you for 7 minutes. " + (target ? "\n\nReason: " + target : ""));
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 7 minutes." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.privateModCommand("(" + targetUser.name + "'s alts were also muted: " + alts.join(", ") + ")");
@@ -643,7 +1141,7 @@ var commands = exports.commands = {
 	hm: 'hourmute',
 	hourmute: function (target, room, user) {
 		if (!target) return this.parse('/help hourmute');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -658,7 +1156,7 @@ var commands = exports.commands = {
 			return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
 		}
 
-		targetUser.popup("" + user.name + " has muted you for 60 minutes. " + target);
+		targetUser.popup("" + user.name + " has muted you for 60 minutes. " + (target ? "\n\nReason: " + target : ""));
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 60 minutes." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.privateModCommand("(" + targetUser.name + "'s alts were also muted: " + alts.join(", ") + ")");
@@ -670,7 +1168,7 @@ var commands = exports.commands = {
 	um: 'unmute',
 	unmute: function (target, room, user) {
 		if (!target) return this.parse('/help unmute');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 		var targetUser = Users.get(target);
 		if (!targetUser) return this.sendReply("User '" + target + "' does not exist.");
 		if (!this.can('mute', targetUser, room)) return false;
@@ -688,13 +1186,17 @@ var commands = exports.commands = {
 	ipmute: 'lock',
 	lock: function (target, room, user) {
 		if (!target) return this.parse('/help lock');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+		}
+		if (targetUser.can('hotpatch')) {
+			this.sendReply("You cannot lock an administrator.");
+			return false;
 		}
 		if (!this.can('lock', targetUser)) return false;
 
@@ -703,15 +1205,11 @@ var commands = exports.commands = {
 			return this.privateModCommand("(" + targetUser.name + " would be locked by " + user.name + problem + ".)");
 		}
 
-		targetUser.popup("" + user.name + " has locked you from talking in chats, battles, and PMing regular users.\n\n" + target + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it.");
+		targetUser.popup("" + user.name + " has locked you from talking in chats, battles, and PMing regular users." + (target ? "\n\nReason: " + target : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
 
 		this.addModCommand("" + targetUser.name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
-		if (alts.length) {
-			this.privateModCommand("(" + targetUser.name + "'s " + (targetUser.autoconfirmed ? " ac account: " + targetUser.autoconfirmed + ", " : "") + "locked alts: " + alts.join(", ") + ")");
-		} else if (targetUser.autoconfirmed) {
-			this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
-		}
+		if (alts.length) this.privateModCommand("(" + targetUser.name + "'s alts were also locked: " + alts.join(", ") + ")");
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 
 		targetUser.lock();
@@ -719,7 +1217,7 @@ var commands = exports.commands = {
 
 	unlock: function (target, room, user) {
 		if (!target) return this.parse('/help unlock');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!this.can('lock')) return false;
 
 		var unlocked = Users.unlock(target);
@@ -750,7 +1248,7 @@ var commands = exports.commands = {
 	b: 'ban',
 	ban: function (target, room, user) {
 		if (!target) return this.parse('/help ban');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -765,17 +1263,15 @@ var commands = exports.commands = {
 			return this.privateModCommand("(" + targetUser.name + " would be banned by " + user.name + problem + ".)");
 		}
 
-		targetUser.popup("" + user.name + " has banned you." + (Config.appealurl ? (" If you feel that your banning was unjustified you can appeal the ban:\n" + Config.appealurl) : "") + "\n\n" + target);
+		targetUser.popup("" + user.name + " has banned you." + (target ? "\n\nReason: " + target : "") + (Config.appealurl ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealurl : "") + "\n\nYour ban will expire in a few days.");
 
 		this.addModCommand("" + targetUser.name + " was banned by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
 		var alts = targetUser.getAlts();
 		if (alts.length) {
-			this.privateModCommand("(" + targetUser.name + "'s " + (targetUser.autoconfirmed ? " ac account: " + targetUser.autoconfirmed + ", " : "") + "banned alts: " + alts.join(", ") + ")");
+			this.privateModCommand("(" + targetUser.name + "'s alts were also banned: " + alts.join(", ") + ")");
 			for (var i = 0; i < alts.length; ++i) {
 				this.add('|unlink|' + toId(alts[i]));
 			}
-		} else if (targetUser.autoconfirmed) {
-			this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		}
 
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
@@ -784,7 +1280,7 @@ var commands = exports.commands = {
 
 	unban: function (target, room, user) {
 		if (!target) return this.parse('/help unban');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!this.can('ban')) return false;
 
 		var name = Users.unban(target);
@@ -798,7 +1294,7 @@ var commands = exports.commands = {
 
 	unbanall: function (target, room, user) {
 		if (!this.can('rangeban')) return false;
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 		// we have to do this the hard way since it's no longer a global
 		for (var i in Users.bannedIps) {
 			delete Users.bannedIps[i];
@@ -810,7 +1306,7 @@ var commands = exports.commands = {
 	},
 
 	banip: function (target, room, user) {
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 		target = target.trim();
 		if (!target) {
 			return this.parse('/help banip');
@@ -823,7 +1319,7 @@ var commands = exports.commands = {
 	},
 
 	unbanip: function (target, room, user) {
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
 		target = target.trim();
 		if (!target) {
 			return this.parse('/help unbanip');
@@ -836,6 +1332,29 @@ var commands = exports.commands = {
 		this.addModCommand("" + user.name + " unbanned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 
+	rangelock: function (target, room, user) {
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
+		if (!target) return this.sendReply("Please specify a domain to lock.");
+		if (!this.can('rangeban')) return false;
+
+		var domain = Users.shortenHost(target);
+		if (Users.lockedDomains[domain]) return this.sendReply("The domain " + domain + " has already been temporarily locked.");
+
+		Users.lockDomain(domain);
+		this.addModCommand("" + user.name + " temporarily locked the domain " + domain + ".");
+	},
+
+	rangeunlock: function (target, room, user) {
+		if ((user.locked || user.mutedRooms[room.id]) && !user.can('hotpatch')) return this.sendReply("You cannot do this while unable to talk.");
+		if (!target) return this.sendReply("Please specify a domain to unlock.");
+		if (!this.can('rangeban')) return false;
+
+		var domain = Users.shortenHost(target);
+		if (!Users.lockedDomains[domain]) return this.sendReply("The domain " + domain + " is not locked.");
+
+		Users.unlockDomain(domain);
+		this.addModCommand("" + user.name + " unlocked the domain " + domain + ".");
+	},
 	/*********************************************************
 	 * Moderating: Other
 	 *********************************************************/
@@ -965,35 +1484,127 @@ var commands = exports.commands = {
 		}
 	},
 
-	declare: function (target, room, user) {
+	spop: 'sendpopup',
+	sendpopup: function(target, room, user) {
+		if (!this.can('popup')) return false;
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.sendReply('/sendpopup [user], [message] - You missed the user.');
+		if (!target) return this.sendReply('/sendpopup [user], [message] - You missed the message.');
+
+		targetUser.popup(target);
+		this.sendReply(targetUser.name + ' got the message as popup: ' + target);
+
+		targetUser.send(user.name+' sent a popup message to you.');
+
+		this.logModCommand(user.name+' sent a popup message to '+targetUser.name);
+	},
+
+	image: function(target, room, user) {
+		if (!user.can('declare')) return false;
+		if (!target) return this.sendReply('/image [url], [width percentile]');
+		var targets = target.split(',');
+		var url = targets[0];
+		var width = targets[1];
+		if (!url || !width) return this.sendReply('/image [url], [width percentile]');
+		if (url.indexOf('.png') === -1 && url.indexOf('.jpg') === -1 && url.indexOf('.gif') === -1) {
+			return this.sendReply('The url you supply must end in .png, .jpg or .gif.');
+		}
+		if (isNaN(width)) return this.sendReply('The width must be a number.');
+		if (width < 1 || width > 100) return this.sendReply('The width must be greater than 0 but less than or equal to 100.');
+		this.add('|raw|<center><img width="'+width+'%" src="'+url+'"></center>');
+	},
+
+	declaregreen: 'declare',
+	declarered: 'declare',
+	declare: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
 
 		if (!this.canTalk()) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + Tools.escapeHTML(target) + '</b></div>');
-		this.logModCommand(user.name + " declared " + target);
+		if (cmd === 'declare') {
+			this.add('|raw|<div class="broadcast-blue"><b>'+target+'</b></div>');
+		}
+		else if (cmd === 'declarered') {
+			this.add('|raw|<div class="broadcast-red"><b>'+target+'</b></div>');
+		}
+		else if (cmd === 'declaregreen') {
+			this.add('|raw|<div class="broadcast-green"><b>'+target+'</b></div>');
+		}
+		this.logModCommand(user.name+' declared '+target);
 	},
 
-	htmldeclare: function (target, room, user) {
-		if (!target) return this.parse('/help htmldeclare');
-		if (!this.can('gdeclare', null, room)) return false;
+	gdeclarered: 'gdeclare',
+	gdeclaregreen: 'gdeclare',
+	gdeclare: function(target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help '+cmd);
+		if (!this.can('gdeclare')) return false;
+		var staff = '';
+		staff = 'a ' + Config.groups[user.group].name;
+		if (user.owner) staff = 'the Server Owner';
+		if (user.group === '~') staff = 'an Administrator';
+		if (user.dev) staff = 'a Developer';
+
+		//var roomName = (room.isPrivate)? 'a private room' : room.id;
+
+		if (cmd === 'gdeclare'){
+			for (var id in Rooms.rooms) {
+				if (id !== 'global' && !Rooms.rooms[id].blockGlobalDeclares) {
+					Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
+					Rooms.rooms[id].update();
+				}
+			}
+		}
+		if (cmd === 'gdeclarered'){
+			for (var id in Rooms.rooms) {
+				if (id !== 'global' && !Rooms.rooms[id].blockGlobalDeclares) {
+					Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
+					Rooms.rooms[id].update();
+				}
+			}
+		}
+		else if (cmd === 'gdeclaregreen'){
+			for (var id in Rooms.rooms) {
+				if (id !== 'global' && !Rooms.rooms[id].blockGlobalDeclares) {
+					Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
+					Rooms.rooms[id].update();
+				}
+			}
+		}
+		this.logModCommand(user.name + " globally declared " + target);
+	},
+
+	pgdeclare: function(target, room, user) {
+		if (!target) return this.parse('/help pgdeclare');
+		if (!this.can('pgdeclare')) return;
 
 		if (!this.canTalk()) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + target + '</b></div>');
-		this.logModCommand(user.name + " declared " + target);
+		for (var r in Rooms.rooms) {
+			if (Rooms.rooms[r].type === 'chat' && !Rooms.rooms[r].blockGlobalDeclares) {
+				Rooms.rooms[r].add('|raw|<b>'+target+'</b></div>');
+				Rooms.rooms[r].update();
+			}
+		}
+
+		this.logModCommand(user.name+' declared '+target+' to all rooms.');
 	},
 
-	gdeclare: 'globaldeclare',
-	globaldeclare: function (target, room, user) {
-		if (!target) return this.parse('/help globaldeclare');
-		if (!this.can('gdeclare')) return false;
+	staffdeclare: 'declaremod',
+	modmsg: 'declaremod',
+	moddeclare: 'declaremod',
+	declaremod: function(target, room, user) {
+		if (!target) return this.sendReply('/declaremod [message] - Also /moddeclare and /modmsg');
+		if (!this.can('declare', null, room)) return false;
 
-		for (var id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>');
-		}
-		this.logModCommand(user.name + " globally declared " + target);
+		if (!this.canTalk()) return;
+
+		this.privateModCommand('|raw|<div class="broadcast-red"><b><font size=1><i>Staff declare from '+user.name+'<br /></i></font size>'+target+'</b></div>');
+
+		this.logModCommand(user.name+' mod declared '+target);
 	},
 
 	cdeclare: 'chatdeclare',
@@ -1002,7 +1613,10 @@ var commands = exports.commands = {
 		if (!this.can('gdeclare')) return false;
 
 		for (var id in Rooms.rooms) {
-			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>');
+			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle' && !Rooms.rooms[id].blockGlobalDeclares) {
+				Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>'+target+'</b></div>');
+				Rooms.rooms[id].update();
+			}
 		}
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
