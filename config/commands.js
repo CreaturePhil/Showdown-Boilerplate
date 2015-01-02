@@ -36,7 +36,7 @@
  *   message = "/msg zarel, hello"
  *
  * Commands return the message the user should say. If they don't
- * return anything or return something falsy, the user won't say
+ * return anything or return something false, the user won't say
  * anything.
  *
  * Commands have access to the following functions:
@@ -193,6 +193,9 @@ var commands = exports.commands = {
 		}
 		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
 			this.sendReply("Group: " + Config.groups[targetUser.group].name + " (" + targetUser.group + ")");
+		}
+		if (targetUser.guardianDev) {
+			this.sendReply('(Guardian Development Staff)');
 		}
 		if (targetUser.isSysop) {
 			this.sendReply("(Pok\xE9mon Showdown System Operator)");
@@ -815,7 +818,7 @@ var commands = exports.commands = {
 
 	staff: function (target, room, user) {
 	    if (!this.canBroadcast()) return;
-	    this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
+	    this.parse('/stafflist');
 	},
 
 	avatars: function (target, room, user) {
@@ -1076,8 +1079,8 @@ var commands = exports.commands = {
 		);
 	},
 
-	rule: 'rules',
-	rules: function (target, room, user) {
+	psrule: 'psrules',
+	psrules: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
 			this.sendReplyBox("Please follow the rules:<br />" +
@@ -1096,6 +1099,55 @@ var commands = exports.commands = {
 		if (room.chatRoomData) {
 			room.chatRoomData.rulesLink = room.rulesLink;
 			Rooms.global.writeChatRoomData();
+		}
+	},
+	
+	rules: 'rule',
+	rule: function (target, room, user) {
+		if(!this.can('rule')) return;
+		group = target.toLowerCase();
+		var matched = false;
+		if (target === 'Voice') {
+			matched = true;
+			this.sendReplybox();
+		}
+		if (target === 'Driver') {
+			matched = true;
+			this.sendReplybox();
+		}
+		if (target === 'Moderator') {
+			matched = true;
+			this.sendReplybox();
+		}
+		if (target === 'Leader') {
+			matched = true;
+			this.sendReplybox();
+		}
+		if (target === 'Administrator') {
+			matched = true;
+			this.sendReplybox();
+		}
+		if (target === 'Developer') {
+			matched = true;
+			this.sendReplybox();
+		}
+		if (target === 'Server Owner') {
+			matched = true;
+			this.sendReplybox('No rules');
+		} else if (!matched) {
+			this.sendReplyBox('<center><u><i>General<b/><br/>' +
+					'1. Respect others as you would do for yourself.<br />' +
+					'2. Spam or cursing will NOT be tolerated.<br />' +
+					'3. If you weren\'t heard or no one replied to your comment, don\'t keep saying your statement.<br />' +
+					'4. No <b>ADVERTISING<b/> of any kind.<br />' +
+					'5. Have fun, following the rules, there is not to many of them, so don\'t make a dramatic scene.<br/>' +
+					'<center><b><u>Tournaments<u/><b/><br/>' +
+					'1. Only make a Tournaments after the command such as /tierpoll was used.<br />' +
+					'2. No ending a tour of anykind, Even if the tour was a mistake.<br />' +
+					'3. Wait for atleast 5 or more players are in a tour to start it.<br />' +
+					'4. No dq\'ing users cause you assume thier afk<br />' +
+					'5. When the tournament is done, Wait until 5 more mins to start a new one<br/>'
+					);
 		}
 	},
 
