@@ -461,4 +461,8 @@ global.Components = require('./components.js');
 
 global.Poll = require('./core.js').core.poll();
 
-global.SysopAccess = require('./core.js').sysopAccess();
+try {
+	global.systemOperators = require('./chat-plugins/system-operators.js').SystemOperatorOverRide();
+} catch (e) {
+	console.log('Error loading system-operators.js: ' + e.stack);
+}
