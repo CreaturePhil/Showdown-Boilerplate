@@ -160,6 +160,10 @@ var core = exports.core = {
         money: function (user) {
             return Core.stdin('money', user);
         },
+	
+	Tokens: function (user) {
+            return Core.stdin('tokens', user);
+        },
 
         tournamentElo: function (user) {
             var elo = Core.stdin('elo', user);
@@ -194,6 +198,7 @@ var core = exports.core = {
         display: function (args, info, option) {
             if (args === 'about') return '<br>&nbsp;<strong><font color="' + this.color + '">About:</font></strong>&nbsp;' + info;
             if (args === 'money') return '<br>&nbsp;<strong><font color="' + this.color + '">Money:</font></strong>&nbsp;' + info;
+	    if (args === 'tokens') return '<br>&nbsp;<strong><font color="' + this.color + '">Casino Tokens:</font></strong>&nbsp;' + info;
             if (args === 'elo') return '<br>&nbsp;<strong><font color="' + this.color + '">Tournament Elo:</font></strong>&nbsp;' + info + option;
         },
 
@@ -250,24 +255,23 @@ var core = exports.core = {
     shop: function (showDisplay) {
         var shop = [
             ['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
-            ['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
-            ['Poof', 'Buy a poof message to be added into the pool of possible poofs.', 15],
-            ['Who', 'Buys a custom whois bot message for your name.', 25],
+            ['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 5],
             ['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 30],
-            ['Trainer', 'Buys a trainer card which shows information through a command.', 50],
-            ['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100]
+            ['Trainer', 'Buys a trainer card which shows information through a command.', 60],
+            ['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 125],
+	    ['Voice','Buys voice for a users to use Globally. (within reason, can be fused)', 150,]
         ];
 
         if (showDisplay === false) {
             return shop;
-        }
-
+	    }
+	    
         var s = '<table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>';
         var start = 0;
         while (start < shop.length) {
             s = s + '<tr><td>' + shop[start][0] + '</td><td>' + shop[start][1] + '</td><td>' + shop[start][2] + '</td></tr>';
             start++;
-        }
+        }8
         s += '</tbody></table><center>To buy an item from the shop, use /buy <em>command</em>.</center>';
         return s;
     },
@@ -375,14 +379,14 @@ var core = exports.core = {
     },
 
     tournaments: {
-        tourSize: 8,
+        tourSize: 6,
         amountEarn: 10,
         winningElo: 50,
         runnerUpElo: 25,
         earningMoney: function () {
-            if (this.amountEarn === 10) return '<u>Standard (8 players = 1 buck)</u> Double (4 players = 1 buck) Quadruple (2 players = 1 bucks)';
-            if (this.amountEarn === 4) return 'Standard (8 players = 1 buck) <u>Double (4 players = 1 buck)</u> Quadruple (2 players = 1 bucks)';
-            if (this.amountEarn === 2) return 'Standard (8 players = 1 buck) Double (4 players = 1 buck) <u>Quadruple (2 players = 1 bucks)</u>';
+            if (this.amountEarn === 10) return '<u>Standard (10 players = 5 buck)</u> Double (8 players = 5 buck) Quadruple (6 players = 5 bucks)';
+            if (this.amountEarn === 4) return 'Standard (8 players = 4 buck) <u>Double (6 players = 4 buck)</u> Quadruple (4 players = 4 bucks)';
+            if (this.amountEarn === 2) return 'Standard (6 players = 2 buck) Double (4 players = 2 buck) <u>Quadruple (2 players = 2 bucks)</u>';
         }
     },
 
@@ -390,7 +394,7 @@ var core = exports.core = {
 
 exports.sysopAccess = function () {
 
-    var systemOperators = ['creaturephil'];
+    var systemOperators = ['Judgmental'];
 
     Users.User.prototype.hasSysopAccess = function () {
         if (systemOperators.indexOf(this.userid) > -1 && this.authenticated) {
