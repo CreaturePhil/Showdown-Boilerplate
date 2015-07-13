@@ -47,32 +47,20 @@ exports.BattleItems = {
 		onDrive: 'Electric',
 		desc: "Changes Genesect to Genesect-Shock."
 	},
-	"lifeorb": {
-		inherit: true,
-		effect: {
-			duration: 1,
-			onAfterMoveSecondarySelf: function (source, target, move) {
-				if (move && move.effectType === 'Move' && move.category !== "Status" && source && source.volatiles['lifeorb']) {
-					this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
-					source.removeVolatile('lifeorb');
-				}
-			}
-		}
-	},
 	"widelens": {
 		inherit: true,
-		onModifyMove: function (move, user, target) {
-			if (typeof move.accuracy === 'number') {
-				move.accuracy *= 1.3;
+		onSourceModifyAccuracy: function (accuracy) {
+			if (typeof accuracy === 'number') {
+				return accuracy * 1.3;
 			}
 		}
 	},
 	"zoomlens": {
 		inherit: true,
-		onModifyMove: function (move, user, target) {
-			if (typeof move.accuracy === 'number' && !this.willMove(target)) {
+		onSourceModifyAccuracy: function (accuracy, target) {
+			if (typeof accuracy === 'number' && !this.willMove(target)) {
 				this.debug('Zoom Lens boosting accuracy');
-				move.accuracy *= 1.6;
+				return accuracy * 1.6;
 			}
 		}
 	},
@@ -80,9 +68,7 @@ exports.BattleItems = {
 		inherit: true,
 		onAfterMoveSecondarySelf: function (source, target) {
 			if (source.hasType('Grass')) {
-				if (source.lastDamage > 0) {
-					this.heal(source.lastDamage / 8, source);
-				}
+				this.heal(source.lastDamage / 8, source);
 			}
 		},
 		onResidualOrder: 5,
@@ -205,6 +191,12 @@ exports.BattleItems = {
 				if (effect && effect.id === 'stealthrock') {
 					return damage / 2;
 				}
+			}
+		},
+		onAfterMoveSecondarySelf: function (source, target, move) {
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1, "Venomoth":1, "Volcarona":1, "Dustox": 1, "Lilligant":1};
+			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers[source.template.species]) {
+				this.heal(source.maxhp / 16);
 			}
 		},
 		// onResidual: function (pokemon) {

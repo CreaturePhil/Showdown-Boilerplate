@@ -15,8 +15,12 @@ var battles = Object.create(null);
 
 var SimulatorProcess = (function () {
 	function SimulatorProcess() {
+<<<<<<< HEAD
 		global.battleEngineFakeProcess = new (require('./fake-process').FakeProcess)();
 		this.process = battleEngineFakeProcess.server;
+=======
+		this.process = require('child_process').fork('battle-engine.js', {cwd: __dirname});
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 		this.process.on('message', function (message) {
 			var lines = message.split('\n');
 			var battle = battles[lines[0]];
@@ -73,10 +77,10 @@ SimulatorProcess.processes.push(new SimulatorProcess());
 
 var slice = Array.prototype.slice;
 
-var Battle = (function (){
+var Battle = (function () {
 	function Battle(id, format, rated, room) {
 		if (battles[id]) {
-			throw new Error("Battle with ID "+id+" already exists.");
+			throw new Error("Battle with ID " + id + " already exists.");
 		}
 
 		this.id = id;
@@ -84,6 +88,7 @@ var Battle = (function (){
 		this.format = toId(format);
 		this.players = [null, null];
 		this.playerids = [null, null];
+		this.lastPlayers = [room.p1.userid, room.p2.userid];
 		this.playerTable = {};
 		this.requests = {};
 		this.field = {}; // Bot battling AI
@@ -102,6 +107,7 @@ var Battle = (function (){
 	Battle.prototype.active = false;
 	Battle.prototype.players = null;
 	Battle.prototype.playerids = null;
+	Battle.prototype.lastPlayers = null;
 	Battle.prototype.playerTable = null;
 	Battle.prototype.format = null;
 	Battle.prototype.room = null;
@@ -123,7 +129,7 @@ var Battle = (function (){
 	Battle.prototype.sendFor = function (user, action) {
 		var player = this.playerTable[toId(user)];
 		if (!player) {
-			console.log('SENDFOR FAILED: Player doesn\'t exist: ' + user.name);
+			console.log('SENDFOR FAILED in ' + this.id + ': Player doesn\'t exist: ' + user.name);
 			return;
 		}
 
@@ -162,6 +168,13 @@ var Battle = (function (){
 			this.inactiveSide = -1;
 			break;
 
+		case 'sideupdate':
+			player = this.getPlayer(lines[2]);
+			if (player) {
+				player.sendTo(this.id, lines[3]);
+			}
+			break;
+
 		case 'callback':
 			player = this.getPlayer(lines[2]);
 			if (player) {
@@ -198,9 +211,10 @@ var Battle = (function (){
 		ResourceMonitor.activeIp = null;
 	};
 
-	Battle.prototype.resendRequest = function (user) {
-		if (this.requests[user.userid]) {
-			user.sendTo(this.id, '|request|' + this.requests[user.userid]);
+	Battle.prototype.resendRequest = function (connection) {
+		var request = this.requests[connection.user];
+		if (request) {
+			connection.sendTo(this.id, '|request|' + request);
 		}
 	};
 	Battle.prototype.win = function (user) {
@@ -261,10 +275,11 @@ var Battle = (function (){
 			}
 			this.playerTable[player.userid] = 'p' + (i + 1);
 		}
+		if (this.active) this.lastPlayers = this.playerids.slice();
 	};
 	Battle.prototype.getPlayer = function (slot) {
 		if (typeof slot === 'string') {
-			if (slot.substr(0, 1) === 'p') {
+			if (slot.charAt(0) === 'p') {
 				slot = parseInt(slot.substr(1), 10) - 1;
 			} else {
 				slot = parseInt(slot, 10);

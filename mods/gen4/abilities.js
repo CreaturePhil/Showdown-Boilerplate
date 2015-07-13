@@ -3,9 +3,12 @@ exports.BattleAbilities = {
 		inherit: true,
 		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
 		shortDesc: "If this Pokemon is hit by a critical hit, its Attack is boosted by 12.",
-		onCriticalHit: function (target) {
-			target.setBoost({atk: 6});
-			this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
+		onAfterSubDamage: function (damage, target, source, move) {
+			if (!target.hp) return;
+			if (move && move.effectType === 'Move' && move.crit) {
+				target.setBoost({atk: 6});
+				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
+			}
 		}
 	},
 	"leafguard": {
@@ -18,13 +21,11 @@ exports.BattleAbilities = {
 		}
 	},
 	"lightningrod": {
+		inherit: true,
 		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment.",
 		shortDesc: "This Pokemon draws Electric moves to itself.",
-		// drawing not implemented
-		id: "lightningrod",
-		name: "Lightningrod",
-		rating: 0,
-		num: 32
+		onTryHit: function () {},
+		rating: 0
 	},
 	"magicguard": {
 		//desc: "",
@@ -63,13 +64,22 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 58
 	},
+	"normalize": {
+		inherit: true,
+		onModifyMovePriority: -1,
+		onModifyMove: function (move) {
+			if (move.id !== 'struggle') {
+				move.type = 'Normal';
+			}
+		}
+	},
 	"pickup": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",
 		id: "pickup",
 		name: "Pickup",
 		rating: 0,
-		num: 1
+		num: 53
 	},
 	"plus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Minus ability.",
@@ -90,6 +100,33 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 57
 	},
+	"pressure": {
+		desc: "If this Pokemon is the target of another Pokemon's move, that move loses one additional PP.",
+		shortDesc: "If this Pokemon is the target of a move, that move loses one additional PP.",
+		onStart: function (pokemon) {
+			this.add('-ability', pokemon, 'Pressure');
+		},
+		onSourceDeductPP: function (pp, target, source) {
+			if (target === source) return;
+			return pp + 1;
+		},
+		id: "pressure",
+		name: "Pressure",
+		rating: 1.5,
+		num: 46
+	},
+	"simple": {
+		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
+		onModifyBoost: function (boosts) {
+			for (var key in boosts) {
+				boosts[key] *= 2;
+			}
+		},
+		id: "simple",
+		name: "Simple",
+		rating: 4,
+		num: 86
+	},
 	"stench": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",
@@ -99,33 +136,21 @@ exports.BattleAbilities = {
 		num: 1
 	},
 	"stormdrain": {
+		inherit: true,
 		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball.",
 		shortDesc: "This Pokemon draws Water moves to itself.",
-		// drawing not implemented
-		id: "stormdrain",
-		name: "Storm Drain",
-		rating: 0,
-		num: 114
+		onTryHit: function () {},
+		rating: 0
 	},
 	"sturdy": {
-		desc: "This Pokemon is immune to OHKO moves.",
-		shortDesc: "OHKO moves fail on this Pokemon.",
-		onDamagePriority: -100,
-		onDamage: function (damage, target, source, effect) {
-			if (effect && effect.ohko) {
-				this.add('-activate', target, 'Sturdy');
-				return 0;
-			}
-		},
-		id: "sturdy",
-		name: "Sturdy",
-		rating: 0.5,
-		num: 5
+		inherit: true,
+		onDamage: function () {}
 	},
 	"synchronize": {
 		inherit: true,
-		onAfterSetStatus: function (status, target, source) {
+		onAfterSetStatus: function (status, target, source, effect) {
 			if (!source || source === target) return;
+			if (effect && effect.id === 'toxicspikes') return;
 			var id = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
@@ -152,7 +177,7 @@ exports.BattleAbilities = {
 		onTryHit: function (target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.id === 'firefang') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (this.getEffectiveness(move.type, target) <= 0) {
+			if (target.runEffectiveness(move) <= 0) {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;
 			}

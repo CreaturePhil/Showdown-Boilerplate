@@ -59,8 +59,8 @@ Major changes:
   It doubles its SpA, SpD, and Spe, and changes its type to the type of its
   Hidden Power.
 
-- Weather-inducing abilities now last for only 5 turns (or 8 with the right
-  item). Weather moves have +1 priority.
+- Weather moves, such as Sunny Day, Rain Dance, Hail, and Sandstorm have +1
+  Priority.
 
 - Forecast will make weather moves last forever. Cherrim will make Sunny Day
   last forever. Phione will make Rain Dance last forever. Cryogonal will make
@@ -77,6 +77,8 @@ Major changes:
 - Freezing doesn't have a 20% thaw chance. Instead, thawing happens at the end
   of the second turn. Because this new freeze effect is a nerf, Blizzard now
   has a 30% chance of inflicting freeze.
+
+- Swift Swim, Chlorophyll, and Sand Rush are nerfed to give a 1.5x speed buff instead.
 
 - Every Hidden Ability is released.
 
@@ -105,10 +107,11 @@ Major changes:
 - Flower Gift now only boosts Sp. Def, but if Sunny Day is used while Cherrim
   is out, the next switch-in also receives +1 SpD
 
-- All Quiver Dancers (except Smeargle) get an item named GossamerWing (Select
+- All Quiver Dancers (except Smeargle) get an item named Gossamer Wing (Select
   "Stick" in the teambuilder). It makes them take half damage from Rock, Ice,
   and Electric moves if they are Flying type, prevents them from taking
-  double SR damage, and makes Twister do 1.5x Damage.
+  double SR damage, heals 1/16 after using a Status move, and makes Twister
+  do 1.5x Damage.
 
 - Relic Song switches Meloetta's SpA and Atk EVs, boosts, and certain natures,
   specifically: Modest <-> Adamant, Jolly <-> Timid, other natures are left
@@ -136,13 +139,13 @@ Major changes:
 
 - Twister is now a 80 base power Flying move with a 30% confusion chance
 
-- Hoopa and Volcanion are released
+- - Hoopa (both forms), Floette-Eternal-Flower, and Volcanion are released.
 
-New mechanic: Signature Pokemon:
+New mechanic: Signature Pokémon:
 
-- Certain moves have a Signature Pokemon associated with them. A move will
-  deal 1.5x its usual damage when used by its Signature Pokemon. Some of these
-  moves also receive other changes that apply to all Pokemon using the move -
+- Certain moves have a Signature Pokémon associated with them. A move will
+  deal 1.5x its usual damage when used by its Signature Pokémon. Some of these
+  moves also receive other changes that apply to all Pokémon using the move -
   those changes are listed in parentheses.
 
   - Flareon: Fire Fang (20% burn, 30% flinch, 100% accuracy)
@@ -164,6 +167,8 @@ New mechanic: Signature Pokemon:
   - Darmanitan: Flame Wheel
 
   - Eelektross: Spark
+
+  - Hitmontop: Triple Kick
 
   - Kingdra: BubbleBeam (30% -1 Spe)
 
@@ -197,12 +202,12 @@ New mechanic: Signature Pokemon:
 
   - Persian: Slash (60 base power 30% -1 Def)
 
-- Again, note that while the Signature Pokemon will get the 1.5x damage boost,
-  all Pokemon will get the other changes to the move listed above.
+- Again, note that while the Signature Pokémon will get the 1.5x damage boost,
+  all Pokémon will get the other changes to the move listed above.
 
 New mechanic: Intrinsics:
 
-- Pokemon that previously get Levitate are now immune to Ground intrinsically.
+- Pokémon that previously get Levitate are now immune to Ground intrinsically.
   Instead, they get new abilities in addition to their Ground immunity:
 
   - Unown: Shadow Tag
@@ -239,7 +244,7 @@ New: Type-specific items:
 
 - Focus Band: always works, but breaks after getting hit once for
   pure Fighting types (so basically it'd be a Sash that stays intact
-  after residual damage); does nothing for other pokemon
+  after residual damage); does nothing for other Pokémon
 
 - Wise Glasses: 1.2x Special damage for pure Psychic types
 
@@ -298,7 +303,7 @@ Minor move changes:
 - Cut and Rock Smash are 50 base power and now have a 100% chance of
   lowering foe's Def
 
-- Drill Peck, Needle Arm, Attack Order, Leaf Blade, and Crabhammers's Base
+- Drill Peck, Needle Arm, Attack Order, and Leaf Blade's Base
   Powers are now 100
 
 - Stomp and Steamroller now have 100 Base Power and perfect accuracy to
@@ -318,9 +323,9 @@ Minor move changes:
 - Sound-based moves are no longer affected by immunities (ghosts can hear
   things)
 
-- Bonemerang and Bone Rush no longer affected by immunities (you can throw
-  a bone to hit air), Bone Rush nerfed to 20 base power since it should never
-  be viable
+- Bonemerang, Bone Club and Bone Rush are no longer affected by immunities 
+  (you can throw a bone to hit birds), Bone Rush nerfed to 20 base power 
+  since it should never be viable
 
 - Wing Attack and Power Gem are now like Dual Chop: 40 base power, 2-hit
 
@@ -330,7 +335,7 @@ Minor move changes:
   Drain, Earthquake, Stone Edge, Superpower, X-Scissor
 
 - if Illusion is active, Night Daze now displays as a random non-Status move
-  in the copied pokemon's moveset
+  in the copied Pokémon's moveset
 
 - Selfdestruct and Explosion are now 200 and 250 base power autocrit moves,
   respectively, and they are both perfect-accuracy
@@ -370,7 +375,7 @@ Minor learnset changes:
 
 - Virizion gets Horn Leech
 
-- Milotic, Scolipede, and Steelix get Coil
+- Scolipede and Steelix get Coil
 
 - Spinda gets Superpower with no incompatibilities
 
@@ -405,8 +410,11 @@ Minor ability changes:
 
 - Justified now caps base power to 100 against non-Dark foes:
   Musketeers are recommended to use Sacred Sword over Close Combat and
-  Surf over Hydro Pump, other pokemon are recommended not to use
+  Surf over Hydro Pump, other Pokémon are recommended not to use
   Justified
+
+- Static, Poison Point, and Cute Charm now always activate on
+  contact.
 
 - Weak Armor reduces incoming move damage by 1/10 of the user's max HP
   and increases the user's Speed for the first hit after switch-in (and
@@ -423,7 +431,7 @@ Minor ability changes:
 
 - Adaptability is now 1.33x to non-STAB moves instead of to STAB moves.
 
-- Crawdaunt is given Tough Claws to compensate
+- Crawdaunt is given Tough Claws instead of Adaptability to compensate.
 
 - Shadow Tag now lasts only one turn
 
@@ -464,7 +472,7 @@ Minor ability changes:
 - Cursed Body works like Aftermath now, but instead of dealing damage, it
   causes the foe to be Cursed (like Ghost-type Curse)
 
-- Gluttony allows a Pokemon to use a Berry twice.
+- Gluttony allows a Pokémon to use a Berry twice.
 
 - Guts, Quick Feet, and Toxic Boost take half damage from poisoning
 
@@ -487,8 +495,8 @@ Minor item changes:
 
 Bans:
 
-- The OU banlist (i.e. Pokemon considered Uber) is now:
-  - Every Pokemon with over 600 BST except Slaking and Regigigas
+- The OU banlist (i.e. Pokémon considered Uber) is now:
+  - Every Pokémon with over 600 BST except Slaking and Regigigas
   - Deoxys (all formes)
   - Darkrai
   - Shaymin-Sky
@@ -500,7 +508,7 @@ Bans:
 
 Specifically, differences from regular OU:
 
-- unbanned: Gengarite, Kangaskhanite, Lucarionite, Blaziken, Genesect
+- unbanned: Gengarite, Kangaskhanite, Lucarionite, Blaziken, Genesect, Mawilite, Salamencite
 
 - banned: Kyurem, Kyurem-Black
 

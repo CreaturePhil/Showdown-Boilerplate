@@ -2,7 +2,7 @@ exports.BattleAbilities = {
 	"cutecharm": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact) {
+			if (move && move.flags['contact']) {
 				if (this.random(3) < 1) {
 					source.addVolatile('attract', target);
 				}
@@ -12,18 +12,22 @@ exports.BattleAbilities = {
 	"effectspore": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact && !source.status) {
+			if (move && move.flags['contact'] && !source.status) {
 				var r = this.random(300);
-				if (r < 10) source.setStatus('slp');
-				else if (r < 20) source.setStatus('par');
-				else if (r < 30) source.setStatus('psn');
+				if (r < 10) {
+					source.setStatus('slp');
+				} else if (r < 20) {
+					source.setStatus('par');
+				} else if (r < 30) {
+					source.setStatus('psn');
+				}
 			}
 		}
 	},
 	"flamebody": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact) {
+			if (move && move.flags['contact']) {
 				if (this.random(3) < 1) {
 					source.trySetStatus('brn', target, move);
 				}
@@ -45,7 +49,7 @@ exports.BattleAbilities = {
 		}
 	},
 	"lightningrod": {
-		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment. The user is immune to Electric and its Special Attack is increased one stage when hit by one.",
+		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment.",
 		shortDesc: "This Pokemon draws opposing Electric moves to itself.",
 		onFoeRedirectTargetPriority: 1,
 		onFoeRedirectTarget: function (target, source, source2, move) {
@@ -55,7 +59,7 @@ exports.BattleAbilities = {
 			}
 		},
 		id: "lightningrod",
-		name: "Lightningrod",
+		name: "Lightning Rod",
 		rating: 3.5,
 		num: 32
 	},
@@ -68,7 +72,7 @@ exports.BattleAbilities = {
 	"poisonpoint": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact) {
+			if (move && move.flags['contact']) {
 				if (this.random(3) < 1) {
 					source.trySetStatus('psn', target, move);
 				}
@@ -79,16 +83,10 @@ exports.BattleAbilities = {
 		inherit: true,
 		onStart: function () { }
 	},
-	"rockhead": {
-		inherit: true,
-		onModifyMove: function (move) {
-			if (move.id !== 'struggle') delete move.recoil;
-		}
-	},
 	"roughskin": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.isContact) {
+			if (source && source !== target && move && move.flags['contact']) {
 				this.damage(source.maxhp / 16, source, target);
 			}
 		}
@@ -102,7 +100,7 @@ exports.BattleAbilities = {
 	"static": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, effect) {
-			if (effect && effect.isContact) {
+			if (effect && effect.flags['contact']) {
 				if (this.random(3) < 1) {
 					source.trySetStatus('par', target, effect);
 				}
@@ -111,16 +109,11 @@ exports.BattleAbilities = {
 	},
 	"stench": {
 		inherit: true,
-		onModifyMove: function (){}
+		onModifyMove: function () {}
 	},
 	"sturdy": {
 		inherit: true,
-		onDamage: function (damage, target, source, effect) {
-			if (effect && effect.ohko) {
-				this.add('-activate', target, 'Sturdy');
-				return 0;
-			}
-		}
+		onDamage: function () {}
 	},
 	"synchronize": {
 		inherit: true,
@@ -139,11 +132,10 @@ exports.BattleAbilities = {
 			if (!target || target.fainted) return;
 			var ability = this.getAbility(target.ability);
 			var bannedAbilities = {forecast:1, multitype:1, trace:1};
-			var onStartAbilities = {drizzle:1, drought:1, intimidate:1};
 			if (bannedAbilities[target.ability]) {
 				return;
 			}
-			if (onStartAbilities[target.ability] || pokemon.setAbility(ability)) {
+			if (pokemon.setAbility(ability)) {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		}

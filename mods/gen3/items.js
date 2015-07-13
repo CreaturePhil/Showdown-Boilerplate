@@ -26,6 +26,22 @@ exports.BattleItems = {
 		},
 		desc: "Holder's Fire-type attacks have 1.1x power."
 	},
+	"deepseascale": {
+		inherit: true,
+		onModifySpD: function (spd, pokemon) {
+			if (pokemon.template.species === 'Clamperl') {
+				return this.chainModify(2);
+			}
+		}
+	},
+	"deepseatooth": {
+		inherit: true,
+		onModifySpA: function (spa, pokemon) {
+			if (pokemon.template.species === 'Clamperl') {
+				return this.chainModify(2);
+			}
+		}
+	},
 	"dragonfang": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
@@ -44,9 +60,34 @@ exports.BattleItems = {
 		},
 		desc: "Holder's Rock-type attacks have 1.1x power."
 	},
+	"kingsrock": {
+		inherit: true,
+		onModifyMove: function (move) {
+			if (move.category !== "Status") {
+				if (move.secondaries && move.secondaries.length) return;
+				move.secondaries = [{
+					chance: 10,
+					volatileStatus: 'flinch'
+				}];
+			}
+		}
+	},
 	"lightball": {
 		inherit: true,
-		onModifyAtk: function () { }
+		onModifyAtk: function () {},
+		onModifySpA: function (spa, pokemon) {
+			if (pokemon.template.species === 'Pikachu') {
+				return this.chainModify(2);
+			}
+		}
+	},
+	"luckypunch": {
+		inherit: true,
+		onModifyMove: function (move, user) {
+			if (user.template.species === 'Chansey') {
+				move.critRatio += 2;
+			}
+		}
 	},
 	"magnet": {
 		inherit: true,
@@ -110,6 +151,14 @@ exports.BattleItems = {
 		},
 		desc: "Holder's Poison-type attacks have 1.1x power."
 	},
+	"quickclaw": {
+		inherit: true,
+		onModifyPriority: function (priority, pokemon) {
+			if (this.random(5) === 0) {
+				return priority + 0.1;
+			}
+		}
+	},
 	"seaincense": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
@@ -170,6 +219,22 @@ exports.BattleItems = {
 		},
 		desc: "Holder's Ghost-type attacks have 1.1x power."
 	},
+	"stick": {
+		inherit: true,
+		onModifyMove: function (move, user) {
+			if (user.template.species === 'Farfetch\'d') {
+				move.critRatio += 2;
+			}
+		}
+	},
+	"thickclub": {
+		inherit: true,
+		onModifyAtk: function (atk, pokemon) {
+			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak') {
+				return this.chainModify(2);
+			}
+		}
+	},
 	"twistedspoon": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
@@ -178,26 +243,5 @@ exports.BattleItems = {
 			}
 		},
 		desc: "Holder's Psychic-type attacks have 1.1x power."
-	},
-	"kingsrock": {
-		id: "kingsrock",
-		name: "King's Rock",
-		spritenum: 236,
-		fling: {
-			basePower: 30,
-			volatileStatus: 'flinch'
-		},
-		onModifyMove: function (move) {
-			if (move.category !== "Status") {
-				if (move.secondaries && move.secondaries.length) return;
-				move.secondaries = [{
-					chance: 10,
-					volatileStatus: 'flinch'
-				}];
-			}
-		},
-		num: 221,
-		gen: 2,
-		desc: "Holder's attacks without a secondary gain a 10% chance to flinch."
 	}
 };

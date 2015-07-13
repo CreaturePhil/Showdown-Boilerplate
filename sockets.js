@@ -15,16 +15,27 @@
 global.Config = require('./config/config');
 var fakeProcess = new (require('./fake-process').FakeProcess)();
 
+<<<<<<< HEAD
 /*if (cluster.isMaster) {
 
 	cluster.setupMaster({
 		exec: 'sockets.js'
 	});*/
+=======
+if (cluster.isMaster) {
+	cluster.setupMaster({
+		exec: require('path').resolve(__dirname, 'sockets.js')
+	});
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 
 	var workers = exports.workers = {};
 
 	var spawnWorker = exports.spawnWorker = function () {
+<<<<<<< HEAD
 		var worker = fakeProcess.server;
+=======
+		var worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 		var id = worker.id;
 		workers[id] = worker;
 		worker.on('message', function (data) {
@@ -115,12 +126,18 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);
 	};
+<<<<<<< HEAD
 
 //} else {
 
+=======
+} else {
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 	// is worker
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
+	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
+	if (+process.env.PSNOSSL) Config.ssl = null;
 
 	// ofe is optional
 	// if installed, it will heap dump if the process runs out of memory
@@ -232,10 +249,14 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			}
 		}
 	};
+<<<<<<< HEAD
 	var interval;
 	if (!Config.herokuHack) {
 		interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
 	}
+=======
+	var interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 
 	fakeProcess.client.on('message', function (data) {
 		// console.log('worker received: ' + data);
@@ -359,6 +380,10 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		}
 	});
 
+	process.on('disconnect', function () {
+		process.exit();
+	});
+
 	// this is global so it can be hotpatched if necessary
 	var isTrustedProxyIp = Cidr.checker(Config.proxyIps);
 	var socketCounter = 0;
@@ -392,6 +417,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 		fakeProcess.client.send('*' + socketid + '\n' + socket.remoteAddress);
 
+<<<<<<< HEAD
 		// console.log('CONNECT: ' + socket.remoteAddress + ' [' + socket.id + ']');
 		var interval;
 		if (Config.herokuHack) {
@@ -403,6 +429,8 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			}, 15000);
 		}
 
+=======
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 		socket.on('data', function (message) {
 			// drop empty messages (DDoS?)
 			if (!message) return;
@@ -410,16 +438,21 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			var pipeIndex = message.indexOf('|');
 			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
 			// drop legacy JSON messages
+			if (!message.charAt) throw new Error('message: ' + JSON.stringify(message));
 			if (message.charAt(0) === '{') return;
 			fakeProcess.client.send('<' + socketid + '\n' + message);
 		});
 
 		socket.on('close', function () {
+<<<<<<< HEAD
 			if (interval) {
 				clearInterval(interval);
 			}
 			fakeProcess.client.send('!' + socketid);
 
+=======
+			process.send('!' + socketid);
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 			delete sockets[socketid];
 			for (var channelid in channels) {
 				delete channels[channelid][socketid];
@@ -427,6 +460,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		});
 	});
 	server.installHandlers(app, {});
+<<<<<<< HEAD
 	app.listen(Config.port);
 	console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening on port ' + Config.port);
 
@@ -434,8 +468,23 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		server.installHandlers(appssl, {});
 		appssl.listen(Config.ssl.port);
 		console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening for SSL on port ' + Config.ssl.port);
+=======
+	if (!Config.bindaddress) Config.bindaddress = '0.0.0.0';
+	app.listen(Config.port, Config.bindaddress);
+	console.log('Worker ' + cluster.worker.id + ' now listening on ' + Config.bindaddress + ':' + Config.port);
+
+	if (appssl) {
+		server.installHandlers(appssl, {});
+		appssl.listen(Config.ssl.port, Config.bindaddress);
+		console.log('Worker ' + cluster.worker.id + ' now listening for SSL on port ' + Config.ssl.port);
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 	}
 
-	console.log('Test your server at http://localhost:' + Config.port);
+	console.log('Test your server at http://' + (Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress) + ':' + Config.port);
 
+<<<<<<< HEAD
 //}
+=======
+	require('./repl.js').start('sockets-', cluster.worker.id + '-' + process.pid, function (cmd) { return eval(cmd); });
+}
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2

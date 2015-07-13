@@ -48,44 +48,46 @@
 // aren't
 
 function runNpm(command) {
-	console.log('Running `npm ' + command + '`...');
-	var child_process = require('child_process');
-	var npm = child_process.spawn('npm', [command]);
-	npm.stdout.on('data', function (data) {
-		process.stdout.write(data);
-	});
-	npm.stderr.on('data', function (data) {
-		process.stderr.write(data);
-	});
-	npm.on('close', function (code) {
-		if (!code) {
-			child_process.fork('app.js').disconnect();
-		}
-	});
+	if (require.main !== module) throw new Error("Dependencies unmet");
+
+	command = 'npm ' + command + ' && ' + process.execPath + ' app.js';
+	console.log('Running `' + command + '`...');
+	require('child_process').spawn('sh', ['-c', command], {stdio: 'inherit', detached: true});
+	process.exit(0);
 }
 
-try {
-	require('sugar');
-} catch (e) {
-	return runNpm('install');
-}
-if (!Object.select) {
-	return runNpm('update');
-}
-
-// Make sure config.js exists, and copy it over from config-example.js
-// if it doesn't
+var isLegacyEngine = !(''.includes);
 
 var fs = require('fs');
-
-// Synchronously, since it's needed before we can start the server
-if (!fs.existsSync('./config/config.js')) {
-	console.log("config.js doesn't exist - creating one with default settings...");
-	fs.writeFileSync('./config/config.js',
-		fs.readFileSync('./config/config-example.js')
-	);
+var path = require('path');
+try {
+	require('sugar');
+	if (isLegacyEngine) require('es6-shim');
+} catch (e) {
+	runNpm('install --production');
+}
+if (isLegacyEngine && !(''.includes)) {
+	runNpm('update --production');
 }
 
+/*********************************************************
+ * Load configuration
+ *********************************************************/
+
+try {
+	global.Config = require('./config/config.js');
+} catch (err) {
+	if (err.code !== 'MODULE_NOT_FOUND') throw err;
+
+	// Copy it over synchronously from config-example.js since it's needed before we can start the server
+	console.log("config.js doesn't exist - creating one with default settings...");
+	fs.writeFileSync(path.resolve(__dirname, 'config/config.js'),
+		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
+	);
+	global.Config = require('./config/config.js');
+}
+
+<<<<<<< HEAD
 /*********************************************************
  * Load configuration
  *********************************************************/
@@ -124,20 +126,32 @@ try {
     console.log('Custom avatar failed to load. Try this:\nIn config.js on line 140, change customavatar to customAvatar.');
 }
 
+=======
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 if (Config.watchconfig) {
-	fs.watchFile('./config/config.js', function (curr, prev) {
+	fs.watchFile(path.resolve(__dirname, 'config/config.js'), function (curr, prev) {
 		if (curr.mtime <= prev.mtime) return;
 		try {
 			delete require.cache[require.resolve('./config/config.js')];
 			global.Config = require('./config/config.js');
+<<<<<<< HEAD
 			reloadCustomAvatars();
+=======
+			if (global.Users) Users.cacheGroupData();
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 			console.log('Reloaded config/config.js');
 		} catch (e) {}
 	});
 }
 
-if (process.argv[2] && parseInt(process.argv[2])) {
+// Autoconfigure the app when running in cloud hosting environments:
+var cloudenv = require('cloud-env');
+Config.bindaddress = cloudenv.get('IP', Config.bindaddress || '');
+Config.port = cloudenv.get('PORT', Config.port);
+
+if (require.main === module && process.argv[2] && parseInt(process.argv[2])) {
 	Config.port = parseInt(process.argv[2]);
+	Config.ssl = null;
 }
 
 global.ResourceMonitor = {
@@ -159,7 +173,15 @@ global.ResourceMonitor = {
 	 */
 	log: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) Rooms.rooms.staff.add('||' + text);
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add('||' + text).update();
+		}
+	},
+	logHTML: function (text) {
+		console.log(text);
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add('|html|' + text).update();
+		}
 	},
 	countConnection: function (ip, name) {
 		var now = Date.now();
@@ -167,16 +189,19 @@ global.ResourceMonitor = {
 		name = (name ? ': ' + name : '');
 		if (ip in this.connections && duration < 30 * 60 * 1000) {
 			this.connections[ip]++;
-			if (this.connections[ip] < 500 && duration < 5 * 60 * 1000 && this.connections[ip] % 20 === 0) {
+			if (this.connections[ip] < 500 && duration < 5 * 60 * 1000 && this.connections[ip] % 60 === 0) {
 				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
-			} else if (this.connections[ip] < 500 && this.connections[ip] % 60 === 0) {
+			} else if (this.connections[ip] < 500 && this.connections[ip] % 120 === 0) {
 				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
 			} else if (this.connections[ip] === 500) {
 				this.log('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + this.connections[ip] + ' times in the last ' + duration.duration() + name + ')');
 				return true;
 			} else if (this.connections[ip] > 500) {
-				if (this.connections[ip] % 200 === 0) {
-					this.log('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
+				if (this.connections[ip] % 500 === 0) {
+					var c = this.connections[ip] / 500;
+					if (c < 5 || c % 2 === 0 && c < 10 || c % 5 === 0) {
+						this.log('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
+					}
 				}
 				return true;
 			}
@@ -237,7 +262,7 @@ global.ResourceMonitor = {
 		for (var i in this.networkUse) {
 			buf += '' + this.networkUse[i] + '\t' + this.networkCount[i] + '\t' + i + '\n';
 		}
-		fs.writeFile('logs/networkuse.tsv', buf);
+		fs.writeFile(path.resolve(__dirname, 'logs/networkuse.tsv'), buf);
 	},
 	clearNetworkUse: function () {
 		this.networkUse = {};
@@ -253,12 +278,15 @@ global.ResourceMonitor = {
 
 		while (stack.length) {
 			var value = stack.pop();
-			if (typeof value === 'boolean') bytes += 4;
-			else if (typeof value === 'string') bytes += value.length * 2;
-			else if (typeof value === 'number') bytes += 8;
-			else if (typeof value === 'object' && objectList.indexOf( value ) === -1) {
-				objectList.push( value );
-				for (var i in value) stack.push( value[ i ] );
+			if (typeof value === 'boolean') {
+				bytes += 4;
+			} else if (typeof value === 'string') {
+				bytes += value.length * 2;
+			} else if (typeof value === 'number') {
+				bytes += 8;
+			} else if (typeof value === 'object' && objectList.indexOf(value) < 0) {
+				objectList.push(value);
+				for (var i in value) stack.push(value[i]);
 			}
 		}
 
@@ -313,47 +341,13 @@ global.ResourceMonitor = {
  * Otherwise, an empty string will be returned.
  */
 global.toId = function (text) {
-	if (text && text.id) text = text.id;
-	else if (text && text.userid) text = text.userid;
-
-	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-};
-
-/**
- * Sanitizes a username or Pokemon nickname
- *
- * Returns the passed name, sanitized for safe use as a name in the PS
- * protocol.
- *
- * Such a string must uphold these guarantees:
- * - must not contain any ASCII whitespace character other than a space
- * - must not start or end with a space character
- * - must not contain any of: | , [ ]
- * - must not be the empty string
- *
- * If no such string can be found, returns the empty string. Calling
- * functions are expected to check for that condition and deal with it
- * accordingly.
- *
- * toName also enforces that there are not multiple space characters
- * in the name, although this is not strictly necessary for safety.
- */
-global.toName = function (name) {
-	name = string(name);
-	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-	if (name.length > 18) name = name.substr(0, 18).trim();
-	return name;
-};
-
-/**
- * Safely ensures the passed variable is a string
- * Simply doing '' + str can crash if str.toString crashes or isn't a function
- * If we're expecting a string and being given anything that isn't a string
- * or a number, it's safe to assume it's an error, and return ''
- */
-global.string = function (str) {
-	if (typeof str === 'string' || typeof str === 'number') return '' + str;
-	return '';
+	if (text && text.id) {
+		text = text.id;
+	} else if (text && text.userid) {
+		text = text.userid;
+	}
+	if (typeof text !== 'string' && typeof text !== 'number') return '';
+	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
 global.LoginServer = require('./loginserver.js');
@@ -374,7 +368,7 @@ global.Tournaments = require('./tournaments');
 try {
 	global.Dnsbl = require('./dnsbl.js');
 } catch (e) {
-	global.Dnsbl = {query:function (){}};
+	global.Dnsbl = {query:function () {}};
 }
 
 global.Cidr = require('./cidr.js');
@@ -422,14 +416,14 @@ Rooms.global.formatListText = Rooms.global.getFormatListText();
 global.TeamValidator = require('./team-validator.js');
 
 // load ipbans at our leisure
-fs.readFile('./config/ipbans.txt', function (err, data) {
+fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), function (err, data) {
 	if (err) return;
 	data = ('' + data).split("\n");
 	var rangebans = [];
 	for (var i = 0; i < data.length; i++) {
 		data[i] = data[i].split('#')[0].trim();
 		if (!data[i]) continue;
-		if (data[i].indexOf('/') >= 0) {
+		if (data[i].includes('/')) {
 			rangebans.push(data[i]);
 		} else if (!Users.bannedIps[data[i]]) {
 			Users.bannedIps[data[i]] = '#ipban';
@@ -438,6 +432,7 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
 
+<<<<<<< HEAD
 // uptime recording
 fs.readFile('./logs/uptime.txt', function (err, uptime) {
 	if (!err) global.uptimeRecord = parseInt(uptime, 10);
@@ -462,3 +457,10 @@ global.Components = require('./components.js');
 global.Poll = require('./core.js').core.poll();
 
 global.SysopAccess = require('./core.js').sysopAccess();
+=======
+/*********************************************************
+ * Start up the REPL server
+ *********************************************************/
+
+require('./repl.js').start('app', function (cmd) { return eval(cmd); });
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2

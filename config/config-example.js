@@ -41,16 +41,14 @@ exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
 	"-----END RSA PUBLIC KEY-----\n";
 
 // crashguardemail - if the server has been running for more than an hour
-// and crashes, send an email using these settings, rather than locking down
-// the server. Uncomment this definition if you want to use this feature;
-// otherwise, all crashes will lock down the server.
+//   and crashes, send an email using these settings, rather than locking down
+//   the server. Uncomment this definition if you want to use this feature;
+//   otherwise, all crashes will lock down the server.
 /**exports.crashguardemail = {
-	transport: 'SMTP',
 	options: {
 		host: 'mail.example.com',
 		port: 465,
-		secureConnection: true,
-		maxConnections: 1,
+		secure: true,
 		auth: {
 			user: 'example@domain.com',
 			pass: 'password'
@@ -64,14 +62,27 @@ exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
 // report joins and leaves - shows messages like "<USERNAME> joined"
 //   Join and leave messages are small and consolidated, so there will never
 //   be more than one line of messages.
+//   If this setting is set to `true`, it will override the client-side
+//   /hidejoins configuration for users.
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 80 or so users.
 exports.reportjoins = false;
+
+// report joins and leaves periodically - sends silent join and leave messages in batches
+//   This setting will only be effective if `reportjoins` is set to false, and users will
+//   only be able to see the messages if they have the /showjoins client-side setting enabled.
+//   Set this to a positive amount of milliseconds if you want to enable this feature.
+exports.reportjoinsperiod = 0;
 
 // report battles - shows messages like "OU battle started" in the lobby
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 160 or so users.
 exports.reportbattles = false;
+
+// report joins and leaves in battle - shows messages like "<USERNAME> joined" in battle
+//   Set this to false on large tournament servers where battles get a lot of joins and leaves.
+//   Note that the feature of turning this off is deprecated.
+exports.reportbattlejoins = true;
 
 // moderated chat - prevent unvoiced users from speaking
 //   This should only be enabled in special situations, such as temporarily
@@ -79,6 +90,11 @@ exports.reportbattles = false;
 exports.chatmodchat = false;
 exports.battlemodchat = false;
 exports.pmmodchat = false;
+
+// forced timer - force the timer on for all battles
+//   Players will be unable to turn it off.
+//   This setting can also be turned on with the command /forcetimer.
+exports.forcetimer = false;
 
 // backdoor - allows Pokemon Showdown system operators to provide technical
 //            support for your server
@@ -90,13 +106,13 @@ exports.pmmodchat = false;
 //   disable this feature.
 exports.backdoor = true;
 
-// List of IPs from which the dev console (>> and >>>) can be used.
+// List of IPs and user IDs with dev console (>> and >>>) access.
 // The console is incredibly powerful because it allows the execution of
 // arbitrary commands on the local computer (as the user running the
 // server). If an account with the console permission were compromised,
 // it could possibly be used to take over the server computer. As such,
-// you should only specify a small range of trusted IPs here, or none
-// at all. By default, only localhost can use the dev console.
+// you should only specify a small range of trusted IPs and users here,
+// or none at all. By default, only localhost can use the dev console.
 // In addition to connecting from a valid IP, a user must *also* have
 // the `console` permission in order to use the dev console.
 // Setting this to an empty array ([]) will disable the dev console.
@@ -110,6 +126,9 @@ exports.watchconfig = true;
 
 // logchat - whether to log chat rooms.
 exports.logchat = false;
+
+// logchallenges - whether to log challenge battles. Useful for tournament servers.
+exports.logchallenges = false;
 
 // loguserstats - how often (in milliseconds) to write user stats to the
 // lobby log. This has no effect if `logchat` is disabled.
@@ -126,9 +145,6 @@ exports.simulatorprocesses = 1;
 // from the `users` array. The default is 1 hour.
 exports.inactiveuserthreshold = 1000 * 60 * 60;
 
-// Set this to true if you are using Pokemon Showdown on Heroku.
-exports.herokuhack = false;
-
 // Custom avatars.
 // This allows you to specify custom avatar images for users on your server.
 // Place custom avatar files under the /config/avatars/ directory.
@@ -141,16 +157,29 @@ exports.customAvatars = {
 	//'userid': 'customavatar.png'
 };
 
+// Tournament announcements
+// When tournaments are created in rooms listed below, they will be announced in
+// the server's main tournament room (either the specified tourroom or by default
+// the room 'tournaments')
+exports.tourroom = '';
+exports.tourannouncements = [/* roomids */];
+
 // appealurl - specify a URL containing information on how users can appeal
 // disciplinary actions on your section. You can also leave this blank, in
 // which case users won't be given any information on how to appeal.
 exports.appealurl = '';
 
+// replsocketprefix - the prefix for the repl sockets to be listening on
+// replsocketmode - the file mode bits to use for the repl sockets
+exports.replsocketprefix = './logs/repl/';
+exports.replsocketmode = 0600;
+
 // permissions and groups:
-//   Each entry in `groupsranking' specifies the ranking of the groups.
-//   Each entry in `groups' is a seperate group. Some of the members are "special"
+//   Each entry in `grouplist' is a seperate group. Some of the members are "special"
 //     while the rest is just a normal permission.
+//   The order of the groups determines their ranking.
 //   The special members are as follows:
+//     - symbol: Specifies the symbol of the group (as shown in front of the username)
 //     - id: Specifies an id for the group.
 //     - name: Specifies the human-readable name for the group.
 //     - root: If this is true, the group can do anything.
@@ -163,6 +192,8 @@ exports.appealurl = '';
 //                       's' is a special group where it means the user itself only
 //                       and 'u' is another special group where it means all groups
 //                       lower in rank than the current group.
+//     - roomonly: forces the group to be a per-room moderation rank only.
+//     - globalonly: forces the group to be a global rank only.
 //   All the possible permissions are as follows:
 //     - console: Developer console (>>).
 //     - lockdown: /lockdown and /endlockdown commands.
@@ -170,13 +201,16 @@ exports.appealurl = '';
 //     - ignorelimits: Ignore limits such as chat message length.
 //     - promote: Promoting and demoting. Will only work if the target user's current
 //                  group and target group are both in jurisdiction.
+//     - room<rank>: /roompromote to <rank> (eg. roomvoice)
 //     - ban: Banning and unbanning.
 //     - mute: Muting and unmuting.
+//     - lock: locking (ipmute) and unlocking.
 //     - receivemutedpms: Receive PMs from muted users.
 //     - forcerename: /fr command.
 //     - redirect: /redir command.
 //     - ip: IP checking.
 //     - alts: Alt checking.
+//     - modlog: view the moderator logs.
 //     - broadcast: Broadcast informational commands.
 //     - declare: /declare command.
 //     - announce: /announce command.
@@ -184,16 +218,19 @@ exports.appealurl = '';
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
-exports.groupsranking = [' ', '+', '%', '@', '\u2605', '#', '&', '~'];
-exports.groups = {
-	'~': {
+//     - tournaments: creating tournaments (/tour new, settype etc.)
+//     - tournamentsmoderation: /tour dq, autodq, end etc.
+//     - tournamentsmanagement: enable/disable tournaments.
+exports.grouplist = [
+	{
+		symbol: '~',
 		id: "admin",
 		name: "Administrator",
 		root: true,
-		globalonly: true,
-		rank: 7
+		globalonly: true
 	},
-	'&': {
+	{
+		symbol: '&',
 		id: "leader",
 		name: "Leader",
 		inherit: '@',
@@ -206,10 +243,10 @@ exports.groups = {
 		potd: true,
 		disableladder: true,
 		globalonly: true,
-		tournamentsmanagement: true,
-		rank: 6
+		tournamentsmanagement: true
 	},
-	'#': {
+	{
+		symbol: '#',
 		id: "owner",
 		name: "Room Owner",
 		inherit: '@',
@@ -219,10 +256,10 @@ exports.groups = {
 		declare: true,
 		modchatall: true,
 		roomonly: true,
-		tournamentsmanagement: true,
-		rank: 5
+		tournamentsmanagement: true
 	},
-	'\u2605': {
+	{
+		symbol: '\u2605',
 		id: "player",
 		name: "Player",
 		inherit: '+',
@@ -230,9 +267,10 @@ exports.groups = {
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
-		rank: 4
+		joinbattle: true
 	},
-	'@': {
+	{
+		symbol: '@',
 		id: "mod",
 		name: "Moderator",
 		inherit: '%',
@@ -244,10 +282,10 @@ exports.groups = {
 		ip: true,
 		tournamentsmoderation: true,
 		alts: '@u',
-		tournaments: true,
-		rank: 3
+		tournaments: true
 	},
-	'%': {
+	{
+		symbol: '%',
 		id: "driver",
 		name: "Driver",
 		inherit: '+',
@@ -264,20 +302,26 @@ exports.groups = {
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
-		rank: 2
+		jeopardy: true,
+		joinbattle: true
 	},
-	'+': {
+	{
+		symbol: '+',
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
+<<<<<<< HEAD
 		broadcast: true,
 		joinbattle: true,
 		tournaments: true,
 		rank: 1
+=======
+		broadcast: true
+>>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 	},
-	' ': {
+	{
+		symbol: ' ',
 		ip: 's',
-		alts: 's',
-		rank: 0
+		alts: 's'
 	}
-};
+];
