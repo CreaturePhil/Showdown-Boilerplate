@@ -52,13 +52,14 @@ var patternRegex = new RegExp(patterns.join('|'), 'g');
  * @returns {Boolean|String}
  */
 function parseEmoticons(message, room, user, pm) {
-	if (!pm && room.disableEmoticons) return false;
+	if (typeof message !== 'string' || (!pm && room.disableEmoticons)) return false;
 
 	var match = false;
 	var len = emotesKeys.length;
 
+
 	while (len--) {
-		if (message.indexOf(emotesKeys[len]) >= 0) {
+		if (message && message.indexOf(emotesKeys[len]) >= 0) {
 			match = true;
 			break;
 		}

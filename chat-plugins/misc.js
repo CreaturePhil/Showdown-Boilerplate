@@ -85,6 +85,36 @@ exports.commands = {
 	},
 	kickhelp: ["/kick - Kick a user out of a room. Requires: % @ # & ~"],
 
+	masspm: 'pmall',
+	pmall: function (target, room, user) {
+		if (!this.can('pmall')) return false;
+		if (!target) return this.parse('/help pmall');
+
+		var pmName = ' Server PM [Do not reply]';
+
+		for (var i in Users.users) {
+			var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
+			Users.users[i].send(message);
+		}
+	},
+	pmallhelp: ["/pmall [message] - PM all users in the server."],
+
+	staffpm: 'pmallstaff',
+	pmstaff: 'pmallstaff',
+	pmallstaff: function (target, room, user) {
+		if (!this.can('forcewin')) return false;
+		if (!target) return this.parse('/help pmallstaff');
+
+		var pmName = ' Staff PM [Do not reply]';
+
+		for (var i in Users.users) {
+			if (Users.users[i].isStaff) {
+				Users.users[i].send('|pm|' + pmName + '|' + Users.users[i].group + Users.users[i].name + '|' + target);
+			}
+		}
+	},
+	pmallstaffhelp: ["/pmallstaff [message] - Sends a PM to every staff member online."],
+
 	d: 'poof',
 	cpoof: 'poof',
 	poof: function (target, room, user) {
