@@ -18,6 +18,25 @@ var messages = [
 ];
 
 exports.commands = {
+	rk: 'kick',
+	roomkick: 'kick',
+	kick: function (target, room, user) {
+		if (!target) return this.parse('/help kick');
+		if (user.locked && !user.can('bypassall')) {
+			return this.sendReply("You cannot do this while unable to talk.");
+		}
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) return this.sendReply("User \"" + this.targetUsername + "\" not found.");
+		if (!this.can('mute', targetUser, room)) return false;
+
+		this.addModCommand(targetUser.name + " was kicked from the room by " + user.name + ".");
+		targetUser.popup("You were kicked from " + room.id + " by " + user.name + ".");
+		targetUser.leaveRoom(room.id);
+	},
+	kickhelp: ["/kick - Kick a user out of a room. Requires: % @ # & ~"],
+
 	d: 'poof',
 	cpoof: 'poof',
 	poof: function (target, room, user) {
@@ -54,22 +73,10 @@ exports.commands = {
 	},
 	poofoffhelp: ["/poofoff - Disable the use of the /poof command."],
 
-	rk: 'kick',
-	roomkick: 'kick',
-	kick: function (target, room, user) {
-		if (!target) return this.parse('/help kick');
-		if (user.locked && !user.can('bypassall')) {
-			return this.sendReply("You cannot do this while unable to talk.");
-		}
-
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-		if (!targetUser || !targetUser.connected) return this.sendReply("User \"" + this.targetUsername + "\" not found.");
-		if (!this.can('mute', targetUser, room)) return false;
-
-		this.addModCommand(targetUser.name + " was kicked from the room by " + user.name + ".");
-		targetUser.popup("You were kicked from " + room.id + " by " + user.name + ".");
-		targetUser.leaveRoom(room.id);
+	sb: 'showdownboilerplate',
+	showdownboilerplate: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReply("|raw|This server uses <a href='https://github.com/CreaturePhil/Showdown-Boilerplate'>Showdown-Boilerplate</a>.");
 	},
-	kickhelp: ["/kick - Kick a user out of a room. Requires: % @ # & ~"]
+	showdownboilerplatehelp: ["/showdownboilerplate - Links to the Showdown-Boilerplate repository on Github."]
 };
