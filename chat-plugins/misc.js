@@ -151,6 +151,20 @@ exports.commands = {
 	},
 	poofoffhelp: ["/poofoff - Disable the use of the /poof command."],
 
+	hide: function (target, room, user) {
+		if (!this.can('lock')) return false;
+		user.hiding = true;
+		user.updateIdentity();
+		this.sendReply("You have hidden your staff symbol.");
+	},
+
+	show: function (target, room, user) {
+		if (!this.can('lock')) return false;
+		user.hiding = false;
+		user.updateIdentity();
+		this.sendReply("You have revealed your staff symbol.");
+	},
+
 	sb: 'showdownboilerplate',
 	showdownboilerplate: function (target, room, user) {
 		if (!this.canBroadcast()) return;

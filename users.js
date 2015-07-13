@@ -571,6 +571,9 @@ User = (function () {
 				if (room.isPrivate === true) return ' ' + this.name;
 			}
 		}
+		if (this.hiding) {
+			return ' ' + this.name;
+		}
 		return this.group + this.name;
 	};
 	User.prototype.isStaff = false;
