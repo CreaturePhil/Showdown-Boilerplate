@@ -116,5 +116,5 @@ exports.commands = {
 		}
 		request(options, callback);
 	},
-	udhelp: ["/urbandefine [phrase] - Shows the urban definition of the phrase."]
+	udhelp: ["/urbandefine [phrase] - Shows the urban definition of the phrase. If you don't put in a phrase, it will show you a random phrase from urbandefine."]
 };
