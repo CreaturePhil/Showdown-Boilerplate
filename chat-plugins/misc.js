@@ -18,6 +18,54 @@ var messages = [
 ];
 
 exports.commands = {
+	stafflist: 'authority',
+	auth: 'authority',
+	authlist: 'authority',
+	authority: function (target, room, user, connection) {
+		var rankLists = {};
+		var ranks = Object.keys(Config.groups);
+		for (var u in Users.usergroups) {
+			var rank = Users.usergroups[u].charAt(0);
+			// In case the usergroups.csv file is not proper, we check for the server ranks.
+			if (ranks.indexOf(rank) > -1) {
+				var name = Users.usergroups[u].substr(1);
+				if (!rankLists[rank]) rankLists[rank] = [];
+				if (name) rankLists[rank].push(((Users.getExact(name) && Users.getExact(name).connected) ? '**' + name + '**' : name));
+			}
+		}
+
+		var buffer = [];
+		Object.keys(rankLists).sort(function (a, b) {
+			return (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank;
+		}).forEach(function (r) {
+			buffer.push((Config.groups[r] ? r + Config.groups[r].name + "s (" + rankLists[r].length + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
+		});
+
+		if (!buffer.length) buffer = "This server has no auth.";
+		connection.popup(buffer.join("\n\n"));
+	},
+
+	clearall: function (target, room, user) {
+		if (!this.can('declare')) return false;
+		if (room.battle) return this.sendReply("You cannot clearall in battle rooms.");
+
+		var len = room.log.length;
+		var users = [];
+		while (len--) {
+			room.log[len] = '';
+		}
+		for (var u in room.users) {
+			users.push(u);
+			Users.get(u).leaveRoom(room, Users.get(u).connections[0]);
+		}
+		len = users.length;
+		setTimeout(function () {
+			while (len--) {
+				Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
+			}
+		}, 1000);
+	},
+
 	rk: 'kick',
 	roomkick: 'kick',
 	kick: function (target, room, user) {

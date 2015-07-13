@@ -28,6 +28,7 @@ If you would like to use the old version of Showdown-Boilerplate, go to this
 
 - Numerous *cool* commands such as /urbandefine or /poof
 - Emoticons in chat and private messages
+- Polls
 
 # Maintainers
 
