@@ -24,6 +24,10 @@ now.
 If you would like to use the old version of Showdown-Boilerplate, go to this
 [commit](https://github.com/CreaturePhil/Showdown-Boilerplate/tree/79ede733015af70047fef1f5ea53011f6d5368df).
 
+# Features
+
+- Numerous of __cool__ commands such as /urbandefine or /poof
+
 # Maintainers
 
 This boilerplate is brought to you and maintained by the following people:
