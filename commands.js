@@ -15,7 +15,7 @@
 
 var crypto = require('crypto');
 var fs = require('fs');
-var parseEmoticons = require('./chat-plugins/emoticons');
+var parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;

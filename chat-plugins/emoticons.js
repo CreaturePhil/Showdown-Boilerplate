@@ -1,6 +1,6 @@
 var color = require('../config/color');
 
-module.exports = parseEmoticons;
+exports.parseEmoticons = parseEmoticons;
 
 var emotes = {
 	'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
@@ -52,7 +52,7 @@ var patternRegex = new RegExp(patterns.join('|'), 'g');
  * @returns {Boolean|String}
  */
 function parseEmoticons(message, room, user, pm) {
-	if (room.disableEmoticons) return false;
+	if (!pm && room.disableEmoticons) return false;
 
 	var match = false;
 	var len = emotesKeys.length;
@@ -99,3 +99,60 @@ function parseEmoticons(message, room, user, pm) {
 
 	return true;
 }
+
+/**
+ * Create a two column table listing emoticons.
+ *
+ * @return {String} emotes table
+ */
+function create_table() {
+	var emotes_name = Object.keys(emotes);
+	var emotes_list = [];
+	var emotes_group_list = [];
+	var len = emotes_name.length;
+
+	for (var i = 0; i < len; i++) {
+		emotes_list.push("<td>" +
+			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "'>" +
+			emotes_name[i] + "</td>");
+	}
+
+	var emotes_list_right = emotes_list.splice(len / 2, len / 2);
+
+	for (var i = 0; i < len / 2; i++) {
+		var emote1 = emotes_list[i],
+			emote2 = emotes_list_right[i];
+		if (emote2) {
+			emotes_group_list.push("<tr>" + emote1 + emote2 + "</tr>");
+		} else {
+			emotes_group_list.push("<tr>" + emote1 + "</tr>");
+		}
+	}
+
+	return "<center><b><u>List of Emoticons</u></b></center>" + "<table border='1' cellspacing='0' cellpadding='5' width='100%'>" + "<tbody>" + emotes_group_list.join("") + "</tbody>" + "</table>";
+}
+
+var emotes_table = create_table();
+
+exports.commands = {
+	emotes: 'emoticons',
+	emoticons: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReply("|raw|" + emotes_table);
+	},
+	emoticonshelp: ["/emoticons - Get a list of emoticons."],
+
+	toggleemote: 'toggleemoticons',
+	toggleemotes: 'toggleemoticons',
+	toggleemoticons: function (target, room, user) {
+		if (!this.can('declare', null, room)) return false;
+		room.disableEmoticons = !room.disableEmoticons;
+		this.sendReply("Disallowing emoticons is set to " + room.disableEmoticons + " in this room.");
+		if (room.disableEmoticons) {
+			this.add("|raw|<div class=\"broadcast-red\"><b>Emoticons are disabled!</b><br />Emoticons will not work.</div>");
+		} else {
+			this.add("|raw|<div class=\"broadcast-blue\"><b>Emoticons are enabled!</b><br />Emoticons will work now.</div>");
+		}
+	},
+	toggleemoticonshelp: ["/toggleemoticons - Toggle emoticons on or off."]
+};
