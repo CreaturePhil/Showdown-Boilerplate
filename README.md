@@ -22,6 +22,9 @@ update this repository.
 I recommend using [Infinite](https://github.com/FakeSloth/Infinite) server for
 now.
 
+If you would like to use the old version of Showdown-Boilerplate, go to this
+[commit](https://github.com/CreaturePhil/Showdown-Boilerplate/tree/79ede733015af70047fef1f5ea53011f6d5368df).
+
 # License
 
 [MIT](LICENSE)
