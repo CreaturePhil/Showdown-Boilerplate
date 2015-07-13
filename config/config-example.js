@@ -66,7 +66,7 @@ exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
 //   /hidejoins configuration for users.
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 80 or so users.
-exports.reportjoins = false;
+exports.reportjoins = true;
 
 // report joins and leaves periodically - sends silent join and leave messages in batches
 //   This setting will only be effective if `reportjoins` is set to false, and users will
@@ -77,7 +77,7 @@ exports.reportjoinsperiod = 0;
 // report battles - shows messages like "OU battle started" in the lobby
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 160 or so users.
-exports.reportbattles = false;
+exports.reportbattles = true;
 
 // report joins and leaves in battle - shows messages like "<USERNAME> joined" in battle
 //   Set this to false on large tournament servers where battles get a lot of joins and leaves.
@@ -153,7 +153,7 @@ exports.inactiveuserthreshold = 1000 * 60 * 60;
 //
 // Your server *must* be registered in order for your custom avatars to be
 // displayed in the client.
-exports.customAvatars = {
+exports.customavatars = {
 	//'userid': 'customavatar.png'
 };
 
@@ -280,7 +280,6 @@ exports.grouplist = [
 		roomvoice: true,
 		forcerename: true,
 		ip: true,
-		tournamentsmoderation: true,
 		alts: '@u',
 		tournaments: true
 	},
@@ -310,14 +309,7 @@ exports.grouplist = [
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
-<<<<<<< HEAD
-		broadcast: true,
-		joinbattle: true,
-		tournaments: true,
-		rank: 1
-=======
 		broadcast: true
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 	},
 	{
 		symbol: ' ',

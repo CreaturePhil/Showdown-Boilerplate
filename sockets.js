@@ -11,31 +11,18 @@
  * @license MIT license
  */
 
-//var cluster = require('cluster');
+var cluster = require('cluster');
 global.Config = require('./config/config');
-var fakeProcess = new (require('./fake-process').FakeProcess)();
 
-<<<<<<< HEAD
-/*if (cluster.isMaster) {
-
-	cluster.setupMaster({
-		exec: 'sockets.js'
-	});*/
-=======
 if (cluster.isMaster) {
 	cluster.setupMaster({
 		exec: require('path').resolve(__dirname, 'sockets.js')
 	});
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 
 	var workers = exports.workers = {};
 
 	var spawnWorker = exports.spawnWorker = function () {
-<<<<<<< HEAD
-		var worker = fakeProcess.server;
-=======
 		var worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 		var id = worker.id;
 		workers[id] = worker;
 		worker.on('message', function (data) {
@@ -61,13 +48,13 @@ if (cluster.isMaster) {
 		});
 	};
 
-	//var workerCount = Config.workers || 1;
-	//for (var i = 0; i < workerCount; i++) {
+	var workerCount = Config.workers || 1;
+	for (var i = 0; i < workerCount; i++) {
 		spawnWorker();
-	//}
+	}
 
 	var killWorker = exports.killWorker = function (worker) {
-		/*var idd = worker.id + '-';
+		var idd = worker.id + '-';
 		var count = 0;
 		for (var connectionid in Users.connections) {
 			if (connectionid.substr(idd.length) === idd) {
@@ -80,18 +67,17 @@ if (cluster.isMaster) {
 			worker.kill();
 		} catch (e) {}
 		delete workers[worker.id];
-		return count;*/
-		return 0;
+		return count;
 	};
 
 	var killPid = exports.killPid = function (pid) {
-		/*pid = '' + pid;
+		pid = '' + pid;
 		for (var id in workers) {
 			var worker = workers[id];
 			if (pid === '' + worker.process.pid) {
 				return killWorker(worker);
 			}
-		}*/
+		}
 		return false;
 	};
 
@@ -111,7 +97,7 @@ if (cluster.isMaster) {
 		worker.send('#' + channelid + '\n' + message);
 	};
 	exports.channelAdd = function (worker, channelid, socketid) {
-		worker.send('+'+channelid + '\n' + socketid);
+		worker.send('+' + channelid + '\n' + socketid);
 	};
 	exports.channelRemove = function (worker, channelid, socketid) {
 		worker.send('-' + channelid + '\n' + socketid);
@@ -122,17 +108,10 @@ if (cluster.isMaster) {
 			workers[workerid].send(':' + channelid + '\n' + message);
 		}
 	};
-
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);
 	};
-<<<<<<< HEAD
-
-//} else {
-
-=======
 } else {
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 	// is worker
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
@@ -154,10 +133,12 @@ if (cluster.isMaster) {
 
 	global.Cidr = require('./cidr');
 
-	// graceful crash
-	/*process.on('uncaughtException', function (err) {
-		require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')');
-	});*/
+	if (Config.crashguard) {
+		// graceful crash
+		process.on('uncaughtException', function (err) {
+			require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')');
+		});
+	}
 
 	var app = require('http').createServer();
 	var appssl;
@@ -166,7 +147,6 @@ if (cluster.isMaster) {
 	}
 	try {
 		(function () {
-			var fs = require('fs');
 			var nodestatic = require('node-static');
 			var cssserver = new nodestatic.Server('./config');
 			var avatarserver = new nodestatic.Server('./config/avatars');
@@ -174,7 +154,10 @@ if (cluster.isMaster) {
 			var staticRequestHandler = function (request, response) {
 				request.resume();
 				request.addListener('end', function () {
-					if (Config.customHttpResponse && Config.customHttpResponse(request, response)) return;
+					if (Config.customhttpresponse &&
+							Config.customhttpresponse(request, response)) {
+						return;
+					}
 					var server;
 					if (request.url === '/custom.css') {
 						server = cssserver;
@@ -188,10 +171,6 @@ if (cluster.isMaster) {
 						server = staticserver;
 					}
 					server.serve(request, response, function (e, res) {
-						fs.appendFile('logs/access.log',
-							request.socket.remoteAddress + ' - - [' + new Date().toLocaleString() + '] "' +
-							request.method + ' ' + request.url + ' HTTP/' + request.httpVersion + '" ' +
-							(e ? e.status : 200) + ' ? "' + (request.headers['referer'] || '-') + '" "' + (request.headers['user-agent'] || '-') + '"\n');
 						if (e && (e.status === 404)) {
 							staticserver.serveFile('404.html', 404, {}, request, response);
 						}
@@ -220,7 +199,7 @@ if (cluster.isMaster) {
 			if (severity === 'error') console.log('ERROR: ' + message);
 		},
 		prefix: '/showdown',
-		websocket: !Config.disableWebsocket
+		websocket: !Config.disablewebsocket
 	});
 
 	var sockets = {};
@@ -249,16 +228,9 @@ if (cluster.isMaster) {
 			}
 		}
 	};
-<<<<<<< HEAD
-	var interval;
-	if (!Config.herokuHack) {
-		interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
-	}
-=======
 	var interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 
-	fakeProcess.client.on('message', function (data) {
+	process.on('message', function (data) {
 		// console.log('worker received: ' + data);
 		var socket = null;
 		var channel = null;
@@ -385,7 +357,7 @@ if (cluster.isMaster) {
 	});
 
 	// this is global so it can be hotpatched if necessary
-	var isTrustedProxyIp = Cidr.checker(Config.proxyIps);
+	var isTrustedProxyIp = Cidr.checker(Config.proxyip);
 	var socketCounter = 0;
 	server.on('connection', function (socket) {
 		if (!socket) {
@@ -415,22 +387,8 @@ if (cluster.isMaster) {
 			}
 		}
 
-		fakeProcess.client.send('*' + socketid + '\n' + socket.remoteAddress);
+		process.send('*' + socketid + '\n' + socket.remoteAddress);
 
-<<<<<<< HEAD
-		// console.log('CONNECT: ' + socket.remoteAddress + ' [' + socket.id + ']');
-		var interval;
-		if (Config.herokuHack) {
-			// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
-			interval = setInterval(function () {
-				try {
-					socket._session.recv.didClose();
-				} catch (e) {}
-			}, 15000);
-		}
-
-=======
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 		socket.on('data', function (message) {
 			// drop empty messages (DDoS?)
 			if (!message) return;
@@ -440,19 +398,11 @@ if (cluster.isMaster) {
 			// drop legacy JSON messages
 			if (!message.charAt) throw new Error('message: ' + JSON.stringify(message));
 			if (message.charAt(0) === '{') return;
-			fakeProcess.client.send('<' + socketid + '\n' + message);
+			process.send('<' + socketid + '\n' + message);
 		});
 
 		socket.on('close', function () {
-<<<<<<< HEAD
-			if (interval) {
-				clearInterval(interval);
-			}
-			fakeProcess.client.send('!' + socketid);
-
-=======
 			process.send('!' + socketid);
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 			delete sockets[socketid];
 			for (var channelid in channels) {
 				delete channels[channelid][socketid];
@@ -460,15 +410,6 @@ if (cluster.isMaster) {
 		});
 	});
 	server.installHandlers(app, {});
-<<<<<<< HEAD
-	app.listen(Config.port);
-	console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening on port ' + Config.port);
-
-	if (appssl) {
-		server.installHandlers(appssl, {});
-		appssl.listen(Config.ssl.port);
-		console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening for SSL on port ' + Config.ssl.port);
-=======
 	if (!Config.bindaddress) Config.bindaddress = '0.0.0.0';
 	app.listen(Config.port, Config.bindaddress);
 	console.log('Worker ' + cluster.worker.id + ' now listening on ' + Config.bindaddress + ':' + Config.port);
@@ -477,14 +418,9 @@ if (cluster.isMaster) {
 		server.installHandlers(appssl, {});
 		appssl.listen(Config.ssl.port, Config.bindaddress);
 		console.log('Worker ' + cluster.worker.id + ' now listening for SSL on port ' + Config.ssl.port);
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 	}
 
 	console.log('Test your server at http://' + (Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress) + ':' + Config.port);
 
-<<<<<<< HEAD
-//}
-=======
 	require('./repl.js').start('sockets-', cluster.worker.id + '-' + process.pid, function (cmd) { return eval(cmd); });
 }
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2

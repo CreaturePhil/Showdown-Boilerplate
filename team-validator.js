@@ -7,7 +7,9 @@
  * @license MIT license
  */
 
-/*if (!process.send) {
+var Validator;
+
+if (!process.send) {
 	var validationCount = 0;
 	var pendingValidations = {};
 
@@ -77,19 +79,10 @@
 	ValidatorProcess.spawn();
 
 	exports.ValidatorProcess = ValidatorProcess;
-	exports.pendingValidations = pendingValidations;*/
+	exports.pendingValidations = pendingValidations;
 
 	exports.validateTeam = function (format, team, callback) {
-		var parsedTeam = Tools.fastUnpackTeam(team);
-		var problems = this.validateTeamSync(format, parsedTeam);
-		if (problems && problems.length)
-			setImmediate(callback.bind(null, false, problems.join('\n')));
-		else {
-			var packedTeam = Tools.packTeam(parsedTeam);
-			if (packedTeam === team)
-				packedTeam = '';
-			setImmediate(callback.bind(null, true, packedTeam));
-		}
+		ValidatorProcess.send(format, team, callback);
 	};
 
 	var synchronousValidators = {};
@@ -105,7 +98,7 @@
 		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
 		return synchronousValidators[format].checkLearnset(move, template, lsetData);
 	};
-/*} else {
+} else {
 	require('sugar');
 	if (!''.includes) require('es6-shim');
 	global.Config = require('./config/config.js');
@@ -113,7 +106,8 @@
 	if (Config.crashguard) {
 		process.on('uncaughtException', function (err) {
 			require('./crashlogger.js')(err, 'A team validator process');
-		});*/
+		});
+	}
 
 	/**
 	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -123,41 +117,6 @@
 	 * If an object with an ID is passed, its ID will be returned.
 	 * Otherwise, an empty string will be returned.
 	 */
-<<<<<<< HEAD
-	/*global.toId = function (text) {
-		if (text && text.id) text = text.id;
-		else if (text && text.userid) text = text.userid;
-
-		return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-	};*/
-
-	/**
-	 * Validates a username or Pokemon nickname
-	 */
-	/*var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
-	global.toName = function (name) {
-		name = string(name);
-		name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-		while (bannedNameStartChars[name.charAt(0)]) {
-			name = name.substr(1);
-		}
-		if (name.length > 18) name = name.substr(0, 18);
-		if (Config.namefilter) {
-			name = Config.namefilter(name);
-		}
-		return name.trim();
-	};*/
-
-	/**
-	 * Safely ensures the passed variable is a string
-	 * Simply doing '' + str can crash if str.toString crashes or isn't a function
-	 * If we're expecting a string and being given anything that isn't a string
-	 * or a number, it's safe to assume it's an error, and return ''
-	 */
-	/*global.string = function (str) {
-		if (typeof str === 'string' || typeof str === 'number') return '' + str;
-		return '';
-=======
 	global.toId = function (text) {
 		if (text && text.id) {
 			text = text.id;
@@ -167,7 +126,6 @@
 
 		if (typeof text !== 'string' && typeof text !== 'number') return '';
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 	};
 
 	global.Tools = require('./tools.js');
@@ -176,9 +134,9 @@
 
 	var validators = {};
 
-	function respond(id, success, details) {
+	var respond = function respond(id, success, details) {
 		process.send(id + (success ? '|1' : '|0') + details);
-	}
+	};
 
 	process.on('message', function (message) {
 		// protocol:
@@ -214,17 +172,13 @@
 			respond(id, true, packedTeam);
 		}
 	});
-<<<<<<< HEAD
-}*/
-=======
 
 	process.on('disconnect', function () {
 		process.exit();
 	});
 }
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 
-var Validator = (function () {
+Validator = (function () {
 	function Validator(format) {
 		this.format = Tools.getFormat(format);
 		this.tools = Tools.mod(this.format);
@@ -405,18 +359,6 @@ var Validator = (function () {
 		}
 		setHas[toId(set.ability)] = true;
 		if (banlistTable['illegal']) {
-			var totalEV = 0;
-			for (var k in set.evs) {
-				if (typeof set.evs[k] !== 'number' || set.evs[k] < 0) {
-					set.evs[k] = 0;
-				}
-				totalEV += set.evs[k];
-			}
-			// In gen 1 and 2, it was possible to max out all EVs
-			if (tools.gen >= 3 && totalEV > 510) {
-				problems.push(name + " has more than 510 total EVs.");
-			}
-
 			// Don't check abilities for metagames with All Abilities
 			if (tools.gen <= 2) {
 				set.ability = 'None';
@@ -504,23 +446,23 @@ var Validator = (function () {
 					if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0], 10)];
 					if (eventData) {
 						if (eventData.nature && eventData.nature !== set.nature) {
-							problems.push(name + " must have a " + eventData.nature + " nature because it comes from a specific event.");
+							problems.push(name + " must have a " + eventData.nature + " nature because it has a move only available from a specific event.");
 						}
 						if (eventData.shiny) {
 							set.shiny = true;
 						}
 						if (eventData.generation < 5) eventData.isHidden = false;
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
-							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it comes from a specific event.");
+							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific event.");
 						}
 						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
-							problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it comes from a specific event.");
+							problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it has a move only available from a specific event.");
 						}
 						if (eventData.gender) {
 							set.gender = eventData.gender;
 						}
 						if (eventData.level && set.level < eventData.level) {
-							problems.push(name + " must be at least level " + eventData.level + " because it comes from a specific event.");
+							problems.push(name + " must be at least level " + eventData.level + " because it has a move only available from a specific event.");
 						}
 					}
 					isHidden = false;
@@ -544,7 +486,7 @@ var Validator = (function () {
 			}
 			if (banlistTable['illegal'] && set.level < template.evoLevel) {
 				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
-				problems.push(name + " must be at least level " + template.evoLevel + ".");
+				problems.push(name + " must be at least level " + template.evoLevel + " to be evolved.");
 			}
 			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && tools.getAbility(set.ability).gen === 4 && !template.prevo && tools.gen <= 5) {
 				problems.push(name + " has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");

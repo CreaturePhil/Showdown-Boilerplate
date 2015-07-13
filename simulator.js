@@ -15,12 +15,7 @@ var battles = Object.create(null);
 
 var SimulatorProcess = (function () {
 	function SimulatorProcess() {
-<<<<<<< HEAD
-		global.battleEngineFakeProcess = new (require('./fake-process').FakeProcess)();
-		this.process = battleEngineFakeProcess.server;
-=======
 		this.process = require('child_process').fork('battle-engine.js', {cwd: __dirname});
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 		this.process.on('message', function (message) {
 			var lines = message.split('\n');
 			var battle = battles[lines[0]];
@@ -29,23 +24,22 @@ var SimulatorProcess = (function () {
 			}
 		});
 		this.send = this.process.send.bind(this.process);
-		setImmediate(require.bind(global, './battle-engine'));
 	}
 	SimulatorProcess.prototype.load = 0;
 	SimulatorProcess.prototype.active = true;
 	SimulatorProcess.processes = [];
 	SimulatorProcess.spawn = function (num) {
-		/*if (!num) num = Config.simulatorprocesses || 1;
+		if (!num) num = Config.simulatorprocesses || 1;
 		for (var i = this.processes.length; i < num; ++i) {
 			this.processes.push(new SimulatorProcess());
-		}*/
+		}
 	};
 	SimulatorProcess.respawn = function () {
-		/*this.processes.splice(0).forEach(function (process) {
+		this.processes.splice(0).forEach(function (process) {
 			process.active = false;
 			if (!process.load) process.process.disconnect();
 		});
-		this.spawn();*/
+		this.spawn();
 	};
 	SimulatorProcess.acquire = function () {
 		var process = this.processes[0];
@@ -59,9 +53,9 @@ var SimulatorProcess = (function () {
 	};
 	SimulatorProcess.release = function (process) {
 		process.load--;
-		/*if (!process.load && !process.active) {
+		if (!process.load && !process.active) {
 			process.process.disconnect();
-		}*/
+		}
 	};
 	SimulatorProcess.eval = function (code) {
 		this.processes.forEach(function (process) {
@@ -72,8 +66,7 @@ var SimulatorProcess = (function () {
 })();
 
 // Create the initial set of simulator processes.
-// SimulatorProcess.spawn();
-SimulatorProcess.processes.push(new SimulatorProcess());
+SimulatorProcess.spawn();
 
 var slice = Array.prototype.slice;
 
@@ -91,7 +84,6 @@ var Battle = (function () {
 		this.lastPlayers = [room.p1.userid, room.p2.userid];
 		this.playerTable = {};
 		this.requests = {};
-		this.field = {}; // Bot battling AI
 
 		this.process = SimulatorProcess.acquire();
 
@@ -187,7 +179,6 @@ var Battle = (function () {
 			var rqid = lines[3];
 			if (player) {
 				this.requests[player.userid] = lines[4];
-				this.field[player.userid] = JSON.parse(this.requests[player.userid]); // Bot battling AI
 				player.sendTo(this.id, '|request|' + lines[4]);
 			}
 			if (rqid !== this.rqid) {

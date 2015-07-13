@@ -1444,18 +1444,10 @@ var commands = exports.commands = {
 				return this.sendReply("Something failed while trying to hotpatch tournaments: \n" + e.stack);
 			}
 		} else if (target === 'battles') {
-<<<<<<< HEAD
-
-			/*Simulator.SimulatorProcess.respawn();
-			return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");*/
-			return this.sendReply("Battle hotpatching is not supported with the single process hack.");
-
-=======
 			Simulator.SimulatorProcess.respawn();
 			return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 		} else if (target === 'formats') {
-			/*try {
+			try {
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
@@ -1472,13 +1464,7 @@ var commands = exports.commands = {
 				return this.sendReply("Formats have been hotpatched.");
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch formats: \n" + e.stack);
-<<<<<<< HEAD
-			}*/
-			return this.sendReply("Formats hotpatching is not supported with the single process hack.");
-
-=======
 			}
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 		} else if (target === 'learnsets') {
 			try {
 				// uncache the tools.js dependency tree
@@ -1624,9 +1610,9 @@ var commands = exports.commands = {
 			return this.sendReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		/*for (var i in Sockets.workers) {
+		for (var i in Sockets.workers) {
 			Sockets.workers[i].kill();
-		}*/
+		}
 
 		if (!room.destroyLog) {
 			process.exit();
@@ -2120,13 +2106,9 @@ var commands = exports.commands = {
 		});
 	},
 
-<<<<<<< HEAD
-	idle: 'blockchallenges',
-=======
 	bch: 'blockchallenges',
 	blockchall: 'blockchallenges',
 	blockchalls: 'blockchallenges',
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 	blockchallenges: function (target, room, user) {
 		if (user.blockChallenges) return this.sendReply("You are already blocking challenges!");
 		user.blockChallenges = true;
@@ -2134,13 +2116,10 @@ var commands = exports.commands = {
 	},
 	blockchallengeshelp: ["/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges."],
 
-<<<<<<< HEAD
-=======
 	unbch: 'allowchallenges',
 	unblockchall: 'allowchallenges',
 	unblockchalls: 'allowchallenges',
 	unblockchallenges: 'allowchallenges',
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 	allowchallenges: function (target, room, user) {
 		if (!user.blockChallenges) return this.sendReply("You are already available for challenges!");
 		user.blockChallenges = false;

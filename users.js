@@ -556,32 +556,22 @@ User = (function () {
 		this.send('|popup|' + message.replace(/\n/g, '||'));
 	};
 	User.prototype.getIdentity = function (roomid) {
-		var name = this.name + (this.away ? " - Ⓐⓦⓐⓨ" : "");
 		if (this.locked) {
-			return '‽' + name;
+			return '‽' + this.name;
 		}
 		if (roomid) {
-<<<<<<< HEAD
-			if (this.mutedRooms[roomid]) {
-				return '!' + name;
-=======
 			var room = Rooms.rooms[roomid];
 			if (room.isMuted(this)) {
 				return '!' + this.name;
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 			}
 			if (room && room.auth) {
 				if (room.auth[this.userid]) {
-					return room.auth[this.userid] + name;
+					return room.auth[this.userid] + this.name;
 				}
-<<<<<<< HEAD
-				if (room.isPrivate) return ' ' + name;
-=======
 				if (room.isPrivate === true) return ' ' + this.name;
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 			}
 		}
-		return this.group + name;
+		return this.group + this.name;
 	};
 	User.prototype.isStaff = false;
 	User.prototype.can = function (permission, target, room) {
@@ -1183,7 +1173,6 @@ User = (function () {
 		}
 	};
 	User.prototype.onDisconnect = function (connection) {
-		Core.stdout('lastSeen', this.userid, Date.now());
 		for (var i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);

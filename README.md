@@ -1,10 +1,8 @@
-# Showdown Boilerplate
+Pokémon Showdown
+========================================================================
 
-Showdown Boilerplate is a template for private servers of [Pokémon Showdown][1]. Pokémon Showdown is created by [Zarel][2].
+Navigation: [Website][1] | **Server repository** | [Client repository][2]
 
-<<<<<<< HEAD
-What is a boilerplate? Boilerplate is any text that is or can be reused in new contexts or applications without being greatly changed from the original.
-=======
   [1]: http://pokemonshowdown.com/
   [2]: https://github.com/Zarel/Pokemon-Showdown-Client
 
@@ -16,34 +14,18 @@ Introduction
 ------------------------------------------------------------------------
 
 This is the source code for the game server of [Pokémon Showdown][3], a website for Pokémon battling. Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 6).
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 
-This repository contains the files needed to set up your own Pokémon Showdown server with all the amazing stuff that Pokémon Showdown private servers like Frost and Pandora has. This also includes [Pokemon-Showdown-Addons][3] created by [kota][4] and parser from [Pokemon-Showdown-Bot][5] by [TalkTakesTime][6].
+This repository contains the files needed to set up your own Pokémon Showdown server. Note that to set up a server, you'll also need a server computer.
 
-For more information on Pokémon Showdown, setting up your own server, or viewing the credits, go visit the main [Pokémon Showdown repository][1].
+You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, which sometimes requires [port forwarding][4] (note that this isn't possible on certain internet connections).
 
-  [1]: https://github.com/Zarel/Pokemon-Showdown
-  [2]: https://github.com/Zarel
-  [3]: https://github.com/kotarou3/Pokemon-Showdown-Addons
-  [4]: https://github.com/kotarou3
-  [5]: https://github.com/TalkTakesTime/Pokemon-Showdown-Bot
-  [6]: https://github.com/TalkTakesTime
+  [3]: http://pokemonshowdown.com/
+  [4]: http://en.wikipedia.org/wiki/Port_forwarding
 
 
-Features
+Installing
 ------------------------------------------------------------------------
 
-<<<<<<< HEAD
-* Single Process Hack for improve performance.
-* Money (bucks) system for winning tournaments.
-* Polls for voting
-* Profile command to check to see when the user's last online, their money, etc.
-* A bunch of useful commands like /away, /hide, /poof, etc.
-* Built-in bot for moderation and fun
-* Emoticons in chat
-
-Getting Started
-=======
 Pokémon Showdown requires you to have [io.js][5] installed, any version. (Alternatively, you can install [node.js][6] version 0.10.2 or later.)
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone" button in the bottom of the right sidebar, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
@@ -88,42 +70,23 @@ If you truly want to host the client yourself, there is [a repository for the Po
 
 
 Setting up an Administrator account
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 ------------------------------------------------------------------------
-To get started with this boilerplate, just download this as a zip or clone it and install a [Pokemon Showdown server][1] as you usually do.
-If you forgot how to do this, here is a quick reference:
 
-	git clone https://github.com/CreaturePhil/Showdown-Boilerplate.git showdown-boilerplate
-	cd showdown-boilerplate
-	npm install
+Once your server is up, you probably want to make yourself an Administrator (~) on it.
 
-Once you done that, create __usergroups.csv__, __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, and __tourWins.csv__ files in the _config_ folder.
+### config/usergroups.csv
 
-To do this quickly in your terminal or command line:
+To become an Administrator, create a file named `config/usergroups.csv` containing
 
-On Windows:
+    USER,~
 
-	cd config
-	Type NUL > usergroups.csv
-	Type NUL > about.csv
-	Type NUL > elo.csv
-	Type NUL > money.csv
-	Type NUL > lastSeen.csv
-	Type NUL > tourWins.csv
-	cd ..
+Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the tilde.
 
-On Linux or Mac:
+This username must be registered. If you do not have a registered account, you can create one using the Register button in the settings menu (it looks like a gear) in the upper-right of Pokémon Showdown.
 
-	cd config
-	touch usergroups.csv about.csv elo.csv money.csv lastSeen.csv tourWins.csv
-	cd ..
+Once you're an administrator, you can promote/demote others easily with the `/admin`, `/leader`, `/mod`, etc commands.
 
-`cd ..` is to go back to the showdown-boilerplate directory.
-Once you get your server up and running, you can manage certain settings with the `/controlpanel` or `/cp` command.
 
-<<<<<<< HEAD
-![Control Panel](http://i.imgur.com/ImBbK5x.png "Control Panel")
-=======
 Browser support
 ------------------------------------------------------------------------
 
@@ -151,16 +114,10 @@ You can also visit the [Pokémon Showdown forums][8] for discussion and help.
 
   [8]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
 
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 
 License
 ------------------------------------------------------------------------
 
-<<<<<<< HEAD
-Pokémon Showdown's server is distributed under the terms of the [MIT License][7].
-
-  [7]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
-=======
 Pokémon Showdown's server is distributed under the terms of the [MIT License][9].
 
   [9]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
@@ -200,4 +157,3 @@ Contributors
 - Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)
 - Vivian Zou [Vtas] - Art (alternate main background)
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2

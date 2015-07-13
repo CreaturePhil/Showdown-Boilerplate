@@ -517,25 +517,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 
 	message = canTalk.call(context, user, room, connection, message);
 
-<<<<<<< HEAD
-	if (user.authenticated && global.tells) {
-		var alts = user.getAlts();
-		alts.push(user.name);
-		alts.map(toId).forEach(function (user) {
-			if (tells[user]) {
-				tells[user].forEach(connection.sendTo.bind(connection, room));
-				delete tells[user];
-			}
-		});
-	}
-
-	if (!Bot.parse.processChatData(user, room, connection, message)) return false;
-	if (!Core.processChatData(user, room, connection, message)) return false;
-
-	return message;
-=======
 	return message || false;
->>>>>>> 803c202c5fff2faae6dcaa5eefa1b9508f821ad2
 };
 
 exports.package = {};
