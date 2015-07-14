@@ -55,36 +55,20 @@ exports.commands = {
 	u: 'ud',
 	urbandefine: 'ud',
 	ud: function (target, room, user, connection, cmd) {
-		var random;
-		if (!target) {
-			target = '';
-			random = true;
-		} else {
-			random = false;
-		}
+		if (!target) return this.parse('/help ud');
 		if (target.toString().length > 50) return this.sendReply("Phrase cannot be longer than 50 characters.");
 		if (!this.canBroadcast()) return;
 
-		var options;
-		if (!random) {
-			options = {
-				url: 'http://www.urbandictionary.com/iphone/search/define',
-				term: target,
-				headers: {
-					'Referer': 'http://m.urbandictionary.com'
-				},
-				qs: {
-					'term': target
-				}
-			};
-		} else {
-			options = {
-				url: 'http://www.urbandictionary.com/iphone/search/random',
-				headers: {
-					'Referer': 'http://m.urbandictionary.com'
-				}
-			};
-		}
+		var options = {
+			url: 'http://www.urbandictionary.com/iphone/search/define',
+			term: target,
+			headers: {
+				'Referer': 'http://m.urbandictionary.com'
+			},
+			qs: {
+				'term': target
+			}
+		};
 
 		var milliseconds = ((44640 * 60) * 1000);
 
