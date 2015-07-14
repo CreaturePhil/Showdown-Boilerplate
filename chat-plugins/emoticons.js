@@ -136,7 +136,9 @@ function create_table() {
 var emotes_table = create_table();
 
 exports.commands = {
+	blockemote: 'blockemoticons',
 	blockemotes: 'blockemoticons',
+	blockemoticon: 'blockemoticons',
 	blockemoticons: function (target, room, user) {
 		if (user.blockEmoticons === (target || true)) return this.sendReply("You are already blocking emoticons in private messages! To unblock, use /unblockemoticons");
 		user.blockEmoticons = true;
@@ -144,7 +146,9 @@ exports.commands = {
 	},
 	blockemoticonshelp: ["/blockemoticons - Blocks emoticons in private messages. Unblock them with /unblockemoticons."],
 
+	unblockemote: 'unblockemoticons',
 	unblockemotes: 'unblockemoticons',
+	unblockemoticon: 'unblockemoticons',
 	unblockemoticons: function (target, room, user) {
 		if (!user.blockEmoticons) return this.sendReply("You are not blocking emoticons in private messages! To block, use /blockemoticons");
 		user.blockEmoticons = false;
