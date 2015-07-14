@@ -18,24 +18,26 @@ databases.lowdb = function () {
 	 */
 	methods.read = function (key, username, callback) {
 		var user = db('users').find({username: username});
-		if (!user) user = db('users').push({username: toId(username)})[0];
+		if (!user) user = db('users').push({username: username})[0];
 		if (!user[key]) return callback('Key does not exist.');
 		callback(null, user[key]);
 	};
 
 	/**
-	 * Writes a key to value in thedatabase.
+	 * Writes a key to value in the database.
 	 *
 	 * @param {String} key
 	 * @param {String} user
 	 * @param {Function} callback(err, value)
 	 */
 	methods.write = function (key, value, username, callback) {
+		var user = db('users').find({username: username});
+		if (!user) db('users').push({username: username});
 		var obj = {};
 		obj[key] = value;
 		var val = db('users')
 						.chain()
-						.find({user: username})
+						.find({username: username})
 						.assign(obj)
 						.value();
 
