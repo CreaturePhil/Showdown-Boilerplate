@@ -11,13 +11,13 @@ describe('lowdb', function () {
 	});
 
 	it('should create a user when reading', function (done) {
-		Database.read('money', 'testuser', function(err, value) {
+		Database.read('money', 'testuser', function (err, value) {
 			assert.deepEqual(typeof err, 'string');
 			assert.deepEqual(err, 'Key does not exist.');
 			assert.deepEqual(value, undefined);
 
-			setTimeout(function() {
-				fs.readFile(file, 'utf8', function(err, data) {
+			setTimeout(function () {
+				fs.readFile(file, 'utf8', function (err, data) {
 					if (err) return done(err);
 					assert.deepEqual(data.indexOf('testuser') >= 0, true);
 					var json = JSON.parse(data);
@@ -30,12 +30,12 @@ describe('lowdb', function () {
 	});
 
 	it('should create a user when writing', function (done) {
-		Database.write('money', 1, 'testuser2', function(err, value) {
+		Database.write('money', 1, 'testuser2', function (err, value) {
 			assert.deepEqual(typeof err, 'object');
 			assert.deepEqual(typeof value, 'object');
 
-			setTimeout(function() {
-				fs.readFile(file, 'utf8', function(err, data) {
+			setTimeout(function () {
+				fs.readFile(file, 'utf8', function (err, data) {
 					if (err) return done(err);
 					assert.deepEqual(data.indexOf('testuser2') >= 0, true);
 					var json = JSON.parse(data);
