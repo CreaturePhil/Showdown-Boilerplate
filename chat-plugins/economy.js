@@ -112,5 +112,19 @@ exports.commands = {
 			});
 		});
 	},
-	takemoneyhelp: ["/takemoney [user], [amount] - Take a certain amount of money from a user."]
+	takemoneyhelp: ["/takemoney [user], [amount] - Take a certain amount of money from a user."],
+
+	resetbuck: 'resetmoney',
+	resetbucks: 'resetmoney',
+	resetmoney: function (target, room, user) {
+		if (!user.can('resetmoney')) return false;
+		Database.write('money', 0, toId(target), function (err) {
+			if (err) throw err;
+			this.sendReply(target + " now has 0" + currencyName(0) + ".");
+			logMoney(user.name + " reset the money of " + target + ".");
+			room.update();
+		}.bind(this));
+	},
+	resetmoneyhelp: ["/resetmoney [user] - Reset user's money to zero."]
+
 };
