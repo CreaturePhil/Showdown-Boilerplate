@@ -3,15 +3,15 @@ var database = require('../../database');
 var fs = require('fs');
 var path = require('path');
 
-var Database, file;
+var DB, file;
 describe('lowdb', function () {
 	before(function () {
-		Database = database('lowdb');
+		DB = database('lowdb');
 		file = path.join(__dirname, '../../config/db.json');
 	});
 
 	it('should create a user when writing', function (done) {
-		Database.write('money', 1, 'testuser2', function (err, value) {
+		DB.write('money', 1, 'testuser2', function (err, value) {
 			assert.deepEqual(typeof err, 'object');
 
 			setTimeout(function () {

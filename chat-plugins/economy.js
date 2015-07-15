@@ -1,11 +1,27 @@
 var fs = require('fs');
 var path = require('path');
 
-function currencyName(amount) {
+/**
+ * Gets an amount and returns the amount with the name of the currency.
+ *
+ * @examples
+ * currencyName(0); // 0 bucks
+ * currencyName(1); // 1 buck
+ * currencyName(5); // 5 bucks
+ *
+ * @param {Number} amount
+ * @returns {String}
+ */
+function currencyName (amount) {
 	var name = " buck";
 	return amount === 1 ? name : name + "s";
 }
 
+/**
+ * Log money to logs/money.txt file.
+ *
+ * @param {String} message
+ */
 function logMoney (message) {
 	if (!message) return;
 	var file = path.join(__dirname, '../logs/money.txt');
@@ -14,6 +30,12 @@ function logMoney (message) {
 	fs.appendFile(file, date + msg);
 }
 
+/**
+ * Checks if the money input is actually money.
+ *
+ * @param {String} money
+ * @return {String|Number}
+ */
 function isMoney (money) {
 	var numMoney = Number(money);
 	if (!numMoney) return "Must be a number.";
@@ -21,7 +43,6 @@ function isMoney (money) {
 	if (numMoney < 1) return "You can't give less than one buck.";
 	return numMoney;
 }
-
 
 exports.commands = {
 	atm: 'wallet',
