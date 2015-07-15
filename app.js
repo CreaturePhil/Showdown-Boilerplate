@@ -316,6 +316,8 @@ global.Rooms = require('./rooms.js');
 
 global.Tells = require('./tells.js');
 
+global.Database = require('./database.js')('lowdb');
+
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier.js');
 
