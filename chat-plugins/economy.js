@@ -122,9 +122,42 @@ exports.commands = {
 			if (err) throw err;
 			this.sendReply(target + " now has 0" + currencyName(0) + ".");
 			logMoney(user.name + " reset the money of " + target + ".");
-			room.update();
 		}.bind(this));
 	},
-	resetmoneyhelp: ["/resetmoney [user] - Reset user's money to zero."]
+	resetmoneyhelp: ["/resetmoney [user] - Reset user's money to zero."],
+
+	transfer: 'transfermoney',
+	transferbuck: 'transfermoney',
+	transferbucks: 'transfermoney',
+	transfermoney: function (target, room, user) {
+		if (!target || target.indexOf(',') < 0) return this.parse('/help transfermoney');
+		if (toId(target) === user.userid) return this.sendReply("You cannot transfer to yourself.");
+
+		var parts = target.split(',');
+		var username = parts[0];
+		var amount = isMoney(parts[1]);
+
+		if (typeof amount === 'string') return this.sendReply(amount);
+
+		var _this = this;
+		Database.read('money', user.userid, function (err, userTotal) {
+			if (err) userTotal = 0;
+			if (amount > userTotal) return _this.sendReply("You cannot transfer more money than what you have.");
+			Database.read('money', toId(username), function (err, targetTotal) {
+				if (err) targetTotal = 0;
+				Database.write('money', userTotal - amount, user.userid, function (err, userTotal) {
+					Database.write('money', targetTotal + amount, toId(username), function (err, targetTotal) {
+						amount = amount + currencyName(amount);
+						userTotal = userTotal + currencyName(userTotal);
+						targetTotal = targetTotal + currencyName(targetTotal);
+						_this.sendReply("You have successfully transferred " + amount + ". You now have " + userTotal + ".");
+						if (Users.get(username)) Users.get(username).popup(user.name + " has transferred " + amount + ". You now have " + targetTotal + ".");
+						logMoney(user.name + " transferred " + amount + " to " + username + ".");
+					});
+				});
+			});
+		});
+	},
+	transfermoneyhelp: ["/transfer [user], [amount] - Transfer a certain amount of money to a user."]
 
 };
