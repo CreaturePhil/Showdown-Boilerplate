@@ -18,19 +18,6 @@ function currencyName (amount) {
 }
 
 /**
- * Log money to logs/money.txt file.
- *
- * @param {String} message
- */
-function logMoney (message) {
-	if (!message) return;
-	var file = path.join(__dirname, '../logs/money.txt');
-	var date = "[" + new Date().toUTCString() + "] ";
-	var msg = message + "\n";
-	fs.appendFile(file, date + msg);
-}
-
-/**
  * Checks if the money input is actually money.
  *
  * @param {String} money
@@ -42,6 +29,19 @@ function isMoney (money) {
 	if (String(money).includes('.')) return "Cannot contain a decimal.";
 	if (numMoney < 1) return "You can't give less than one buck.";
 	return numMoney;
+}
+
+/**
+ * Log money to logs/money.txt file.
+ *
+ * @param {String} message
+ */
+function logMoney (message) {
+	if (!message) return;
+	var file = path.join(__dirname, '../logs/money.txt');
+	var date = "[" + new Date().toUTCString() + "] ";
+	var msg = message + "\n";
+	fs.appendFile(file, date + msg);
 }
 
 exports.commands = {
@@ -85,5 +85,32 @@ exports.commands = {
 			});
 		});
 	},
-	givemoneyhelp: ["/givemoney [user], [amount] - Give a user a certain amount of money."]
+	givemoneyhelp: ["/givemoney [user], [amount] - Give a user a certain amount of money."],
+
+	takebuck: 'takemoney',
+	takebucks: 'takemoney',
+	takemoney: function (target, room, user) {
+		if (!user.can('forcewin')) return false;
+		if (!target || target.indexOf(',') < 0) return this.parse('/help takemoney');
+
+		var parts = target.split(',');
+		var username = parts[0];
+		var amount = isMoney(parts[1]);
+
+		if (typeof amount === 'string') return this.sendReply(amount);
+
+		var _this = this;
+		Database.read('money', toId(username), function (err, initial) {
+			if (err) initial = 0;
+			Database.write('money', initial - amount, toId(username), function (err, total) {
+				if (err) throw err;
+				amount = amount + currencyName(amount);
+				total = total + currencyName(total);
+				_this.sendReply(username + " losted " + amount + ". " + username + " now has " + total + ".");
+				if (Users.get(username)) Users.get(username).popup(user.name + " has taken " + amount + " from you. You now have " + total + ".");
+				logMoney(username + " had " + amount + " taken away by " + user.name + ".");
+			});
+		});
+	},
+	takemoneyhelp: ["/takemoney [user], [amount] - Take a certain amount of money from a user."]
 };
