@@ -20,7 +20,7 @@ describe('lowdb', function () {
 					assert.deepEqual(data.indexOf('testuser2') >= 0, true);
 					var json = JSON.parse(data);
 					assert.deepEqual(typeof json, 'object');
-					assert.deepEqual(json.users.length, 2);
+					assert.deepEqual(json.users.length, 1);
 					done();
 				});
 			}, 50);
