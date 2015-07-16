@@ -1,6 +1,18 @@
 var fs = require('fs');
 var path = require('path');
 
+var shop = [
+	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
+	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
+	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
+	['League Room', 'Purchases a room at a reduced rate for use with a league.  A roster must be supplied with at least 10 members for this room.', 25],
+	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 40],
+	['Staff Help', 'Staff member will help set up roomintros and anything else needed in a room. Response may not be immediate.', 50],
+	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100]
+];
+
+var shopDisplay = getShopDisplay(shop);
+
 /**
  * Gets an amount and returns the amount with the name of the currency.
  *
@@ -42,6 +54,77 @@ function logMoney (message) {
 	var date = "[" + new Date().toUTCString() + "] ";
 	var msg = message + "\n";
 	fs.appendFile(file, date + msg);
+}
+
+/**
+ * Displays the shop
+ *
+ * @param {Array} shop
+ * @return {String} display
+ */
+function getShopDisplay (shop) {
+	var display = "<table border='1' cellspacing='0' cellpadding='5' width='100%'>" +
+					"<tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>";
+	var start = 0;
+	while (start < shop.length) {
+		display += "<tr>" +
+						"<td align='center'><button name='send' value='/buy " + shop[start][0] + "'><b>" + shop[start][0] + "</b></button>" + "</td>" +
+						"<td align='center'>" + shop[start][1] + "</td>" +
+						"<td align='center'>" + shop[start][2] + "</td>" +
+					"</tr>";
+		start++;
+	}
+	display += "</tbody></table><center>To buy an item from the shop, use /buy <em>command</em>.</center>";
+	return display;
+}
+
+
+/**
+ * Find the item in the shop.
+ *
+ * @param {String} item
+ * @param {Number} money
+ * @return {Object}
+ */
+function findItem (item, money) {
+	var len = shop.length;
+	var price = 0;
+	var amount = 0;
+	while (len--) {
+		if (item.toLowerCase() !== shop[len][0].toLowerCase()) continue;
+		price = shop[len][2];
+		if (price > money) {
+			amount = price - money;
+			this.sendReply("You don't have you enough money for this. You need " + amount + currencyName(amount) + " more to buy " + item + ".");
+			return false;
+		}
+		return price;
+	}
+	this.sendReply(item + " not found in shop.");
+}
+
+/**
+ * Handling the bought item from the shop.
+ *
+ * @param {String} item
+ * @param {Object} user
+ */
+function handleBoughtItem (item, user) {
+	if (item === 'symbol') {
+		user.canCustomSymbol = true;
+		this.sendReply("You have purchased a custom symbol. You can use /customsymbol to get your custom symbol.");
+		this.sendReply("You will have this until you log off for more than an hour.");
+		this.sendReply("If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.");
+	} else {
+		var msg = '**' + user.name + " has bought " + item + ".**";
+		Rooms.rooms.staff.add('|c|~Shop Alert|' + msg);
+		Rooms.rooms.staff.update();
+		for (var i in Users.users) {
+			if (Users.users[i].group === '~' || Users.users[i].group === '&') {
+				Users.users[i].send('|pm|~Shop Alert|' + Users.users[i].getIdentity() + '|' + msg);
+			}
+		}
+	}
 }
 
 exports.commands = {
@@ -158,6 +241,29 @@ exports.commands = {
 			});
 		});
 	},
-	transfermoneyhelp: ["/transfer [user], [amount] - Transfer a certain amount of money to a user."]
+	transfermoneyhelp: ["/transfer [user], [amount] - Transfer a certain amount of money to a user."],
+
+	shop: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReply("|raw|" + shopDisplay);
+	},
+	shophelp: ["/shop - Display items you can buy with money."],
+
+	buy: function (target, room, user) {
+		if (!target) return this.parse('/help buy');
+		var _this = this;
+		Database.read('money', user.userid, function (err, amount) {
+			var cost = findItem.call(_this, target, amount);
+			if (!cost) return room.update();
+			Database.write('money', amount - cost, user.userid, function (err, total) {
+				_this.sendReply("You have bought " + target + " for " + cost +  currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
+				room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
+				logMoney(user.name + " has bought " + target + " from the shop.");
+				handleBoughtItem.call(_this, target.toLowerCase(), user);
+				room.update();
+			});
+		});
+	},
+	buyhelp: ["/buy [command] - Buys an item from the shop."]
 
 };
