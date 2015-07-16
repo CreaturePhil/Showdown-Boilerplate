@@ -25,7 +25,7 @@ var commands = exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 
-		this.sendReply("|raw|User: " + targetUser.name + (!targetUser.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
+		this.sendReply("|raw|User: " + Tools.escapeHTML(targetUser.name) + (!targetUser.connected ? " <em style=\"color:gray\">(offline)</em>" : ""));
 		if (user.can('alts', targetUser)) {
 			var alts = targetUser.getAlts(true);
 			var output = Object.keys(targetUser.prevNames).join(", ");
@@ -36,7 +36,7 @@ var commands = exports.commands = {
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
-				this.sendReply("|raw|Alt: " + targetAlt.name + (!targetAlt.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
+				this.sendReply("|raw|Alt: " + Tools.escapeHTML(targetAlt.name) + (!targetAlt.connected ? " <em style=\"color:gray\">(offline)</em>" : ""));
 				output = Object.keys(targetAlt.prevNames).join(", ");
 				if (output) this.sendReply("Previous names: " + output);
 			}
@@ -1876,7 +1876,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'monotype') {
 			matched = true;
 			if (target !== 'all') buffer += "All Pok\u00e9mon on a team must share a type.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3544507/\">Monotype</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517737/\">Monotype Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
@@ -1914,6 +1914,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === '2v2doubles' || target === '2v2') {
 			matched = true;
+			if (target !== 'all') buffer += "Double battle where you bring four Pok\u00e9mon to Team Preview and choose only two.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505227/\">2v2 Doubles</a><br />";
 		}
 		if (target === 'all' || target === 'averagemons') {
@@ -1928,7 +1929,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536615/\">OU Theorymon</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3541537/\">OU Theorymon</a><br />";
 		}
 		if (!matched) {
 			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help.");
@@ -2430,7 +2431,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help htmlbox');
 		if (!this.canHTML(target)) return;
 
-		if (room.id === 'development') {
+		if (user.userid === 'github') {
 			if (!this.can('announce', null, room)) return;
 			if (message.charAt(0) === '!') this.broadcasting = true;
 		} else {
