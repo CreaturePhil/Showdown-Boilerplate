@@ -574,6 +574,9 @@ User = (function () {
 		if (this.hiding) {
 			return ' ' + this.name;
 		}
+		if (this.customSymbol) {
+			return this.customSymbol + this.name;
+		}
 		return this.group + this.name;
 	};
 	User.prototype.isStaff = false;
