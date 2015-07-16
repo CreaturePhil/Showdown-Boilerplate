@@ -287,6 +287,19 @@ exports.commands = {
 		user.hasCustomSymbol = false;
 		this.sendReply("Your symbol has been reset.");
 	},
-	resetsymbolhelp: ["/resetsymbol - Resets your custom symbol."]
+	resetsymbolhelp: ["/resetsymbol - Resets your custom symbol."],
+
+	moneylog: function (target, room, user, connection) {
+		if (!this.can('modlog')) return;
+		var topMsg = "Displaying the last 15 lines of transactions:\n";
+		var file = path.join(__dirname, '../logs/money.txt');
+		fs.exists(file, function (exists) {
+			if (!exists) return connection.popup("No transactions.");
+			fs.readFile(file, 'utf8', function (err, data) {
+				data = data.split('\n');
+				connection.popup(topMsg + data.slice(-15).join('\n'));
+			});
+		});
+	}
 
 };
