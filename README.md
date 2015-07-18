@@ -17,10 +17,6 @@ EOS, Frost, or Pandora has.
 For more information on Pokémon Showdown, visit the main
 [Pokémon Showdown](https://github.com/Zarel/Pokemon-Showdown) repository.
 
-Showdown-Boilerplate is currently a **work in progress**.
-We recommend using [Infinite](https://github.com/FakeSloth/Infinite) server for
-now.
-
 If you would like to use the old version of Showdown-Boilerplate, go to this
 [commit](https://github.com/CreaturePhil/Showdown-Boilerplate/tree/79ede733015af70047fef1f5ea53011f6d5368df).
 
@@ -30,6 +26,14 @@ If you would like to use the old version of Showdown-Boilerplate, go to this
 - Emoticons in chat and private messages
 - Polls, Hangman, and Tells
 - Economy (bucks system, shop, tournament winnings)
+
+# Quick Start
+
+```bash
+$ git clone https://github.com/CreaturePhil/Showdown-Boilerplate.git
+$ cd Showdown-Boilerplate && npm install
+$ node app.js
+```
 
 # Maintainers
 
