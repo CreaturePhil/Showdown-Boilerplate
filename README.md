@@ -20,14 +20,14 @@ For more information on Pokémon Showdown, visit the main
 If you would like to use the old version of Showdown-Boilerplate, go to this
 [commit](https://github.com/CreaturePhil/Showdown-Boilerplate/tree/79ede733015af70047fef1f5ea53011f6d5368df).
 
-# Features
+## Features
 
 - Numerous *cool* commands such as /urbandefine or /poof
 - Emoticons in chat and private messages
 - Polls, Hangman, and Tells
 - Economy (bucks system, shop, tournament winnings)
 
-# Quick Start
+## Quick Start
 
 ```bash
 $ git clone https://github.com/CreaturePhil/Showdown-Boilerplate.git
@@ -35,7 +35,7 @@ $ cd Showdown-Boilerplate && npm install
 $ node app.js
 ```
 
-# Maintainers
+## Maintainers
 
 This boilerplate is brought to you and maintained by the following people:
 
@@ -43,6 +43,6 @@ This boilerplate is brought to you and maintained by the following people:
 :---:|:---:|:---:|:---:|:---:
 [Philip La](http://creaturephil.github.io) | [jd](https://github.com/jd4564)
 
-# License
+## License
 
 [MIT](LICENSE)
