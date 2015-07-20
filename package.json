@@ -5,6 +5,7 @@
     "cloud-env": "0.1.0",
     "es6-shim": "0.27.1",
     "lowdb": "^0.10.1",
+    "moment": "^2.10.3",
     "node-static": "0.7.6",
     "request": "^2.58.0",
     "sockjs": "0.3.15",

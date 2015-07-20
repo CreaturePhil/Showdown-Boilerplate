@@ -1180,6 +1180,11 @@ User = (function () {
 		}
 	};
 	User.prototype.onDisconnect = function (connection) {
+		if (!this.userid.includes('guest')) {
+			Database.write('seen', Date.now(), this.userid, function (err) {
+				if (err) throw err;
+			});
+		}
 		for (var i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);

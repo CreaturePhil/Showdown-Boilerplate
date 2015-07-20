@@ -2,6 +2,8 @@
  * Miscellaneous commands
  */
 
+var moment = require('moment');
+
 var messages = [
 	"has vanished into nothingness!",
 	"used Explosion!",
@@ -64,6 +66,13 @@ exports.commands = {
 				Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
 			}
 		}, 1000);
+	},
+
+	hide: function (target, room, user) {
+		if (!this.can('lock')) return false;
+		user.hiding = true;
+		user.updateIdentity();
+		this.sendReply("You have hidden your staff symbol.");
 	},
 
 	rk: 'kick',
@@ -151,13 +160,6 @@ exports.commands = {
 	},
 	poofoffhelp: ["/poofoff - Disable the use of the /poof command."],
 
-	hide: function (target, room, user) {
-		if (!this.can('lock')) return false;
-		user.hiding = true;
-		user.updateIdentity();
-		this.sendReply("You have hidden your staff symbol.");
-	},
-
 	show: function (target, room, user) {
 		if (!this.can('lock')) return false;
 		user.hiding = false;
@@ -171,6 +173,23 @@ exports.commands = {
 		this.sendReply("|raw|This server uses <a href='https://github.com/CreaturePhil/Showdown-Boilerplate'>Showdown-Boilerplate</a>.");
 	},
 	showdownboilerplatehelp: ["/showdownboilerplate - Links to the Showdown-Boilerplate repository on Github."],
+
+	seen: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (!target) return this.parse('/help seen');
+		var targetUser = Users.get(target);
+		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
+		Database.read('seen', toId(target), function (err, seen) {
+			target = Tools.escapeHTML(target);
+			if (err) {
+				this.sendReplyBox(target + " has never been online on this server.");
+			} else {
+				this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
+			}
+			room.update();
+		}.bind(this));
+	},
+	seenhelp: ["/seen - Shows when the user last connected on the server."],
 
 	tell: function (target, room, user, connection) {
 		if (!target) return this.parse('/help tell');
