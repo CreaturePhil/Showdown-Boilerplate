@@ -492,6 +492,55 @@ BattlePokemon = (function () {
 		}
 		return null;
 	};
+	BattlePokemon.prototype.getMoveTargets = function (move, target) {
+		var targets = [];
+		switch (move.target) {
+		case 'all':
+		case 'foeSide':
+		case 'allySide':
+		case 'allyTeam':
+			if (!move.target.startsWith('foe')) {
+				for (var i = 0; i < this.side.active.length; i++) {
+					if (this.side.active[i] && !this.side.active[i].fainted) {
+						targets.push(this.side.active[i]);
+					}
+				}
+			}
+			if (!move.target.startsWith('ally')) {
+				for (var i = 0; i < this.side.foe.active.length; i++) {
+					if (this.side.foe.active[i] && !this.side.foe.active[i].fainted) {
+						targets.push(this.side.foe.active[i]);
+					}
+				}
+			}
+			break;
+		case 'allAdjacent':
+		case 'allAdjacentFoes':
+			if (move.target === 'allAdjacent') {
+				for (var i = 0; i < this.side.active.length; i++) {
+					if (this.side.active[i] && this.battle.isAdjacent(this, this.side.active[i])) {
+						targets.push(this.side.active[i]);
+					}
+				}
+			}
+			for (var i = 0; i < this.side.foe.active.length; i++) {
+				if (this.side.foe.active[i] && this.battle.isAdjacent(this, this.side.foe.active[i])) {
+					targets.push(this.side.foe.active[i]);
+				}
+			}
+			break;
+		default:
+			if (!target || (target.fainted && target.side !== this.side)) {
+				// If a targeted foe faints, the move is retargeted
+				target = this.battle.resolveTarget(this, move);
+			}
+			if (target.side.active.length > 1) {
+				target = this.battle.runEvent('RedirectTarget', this, this, move, target);
+			}
+			targets = [target];
+		}
+		return targets;
+	};
 	BattlePokemon.prototype.ignoringAbility = function () {
 		return !!((this.battle.gen >= 5 && !this.isActive) || this.volatiles['gastroacid']);
 	};
@@ -506,7 +555,7 @@ BattlePokemon = (function () {
 			ppData.used = true;
 		}
 		if (ppData && ppData.pp) {
-			ppData.pp -= this.battle.runEvent('DeductPP', this, source || this, move, amount || 1);
+			ppData.pp -= amount || 1;
 			if (ppData.pp <= 0) {
 				ppData.pp = 0;
 			}
@@ -2063,7 +2112,7 @@ Battle = (function () {
 			this.debug(eventid + ' handler suppressed by Gastro Acid');
 			return relayVar;
 		}
-		if (effect.effectType === 'Weather' && eventid !== 'Residual' && eventid !== 'End' && this.suppressingWeather()) {
+		if (effect.effectType === 'Weather' && eventid !== 'Start' && eventid !== 'Residual' && eventid !== 'End' && this.suppressingWeather()) {
 			this.debug(eventid + ' handler suppressed by Air Lock');
 			return relayVar;
 		}
@@ -2250,6 +2299,7 @@ Battle = (function () {
 					ModifyWeight: 1,
 					TryHit: 1,
 					TryHitSide: 1,
+					TryMove: 1,
 					TrySecondaryHit: 1,
 					Hit: 1,
 					Boost: 1,

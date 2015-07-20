@@ -1067,6 +1067,9 @@ User = (function () {
 			if (room.battle) {
 				room.battle.resendRequest(connection);
 			}
+			if (global.Tournaments && Tournaments.get(room.id)) {
+				Tournaments.get(room.id).updateFor(this, connection);
+			}
 		}
 	};
 	User.prototype.debugData = function () {
@@ -1304,6 +1307,7 @@ User = (function () {
 					}
 				}
 			}
+			lockedUsers[userid] = userid;
 		}
 
 		for (var ip in this.ips) {
@@ -1312,9 +1316,10 @@ User = (function () {
 		if (this.autoconfirmed) bannedUsers[this.autoconfirmed] = userid;
 		if (this.registered) {
 			bannedUsers[this.userid] = userid;
-			this.locked = userid; // in case of merging into a recently banned account
 			this.autoconfirmed = '';
 		}
+		this.locked = userid; // in case of merging into a recently banned account
+		lockedUsers[this.userid] = userid;
 		this.disconnectAll();
 	};
 	User.prototype.lock = function (noRecurse, userid) {
@@ -1330,13 +1335,14 @@ User = (function () {
 					}
 				}
 			}
+			lockedUsers[userid] = userid;
 		}
 
 		for (var ip in this.ips) {
 			lockedIps[ip] = userid;
 		}
 		if (this.autoconfirmed) lockedUsers[this.autoconfirmed] = userid;
-		if (this.registered) lockedUsers[this.userid] = userid;
+		lockedUsers[this.userid] = userid;
 		this.locked = userid;
 		this.autoconfirmed = '';
 		this.updateIdentity();

@@ -108,7 +108,7 @@ function canTalk(user, room, connection, message, targetUser) {
 					connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
 					return false;
 				}
-			} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat)) {
+			} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat) && !user.can('bypassall')) {
 				var groupName = Config.groups[room.modchat].name || room.modchat;
 				connection.sendTo(room, "Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
 				return false;
@@ -361,6 +361,7 @@ var Context = exports.Context = (function () {
 	Context.prototype.targetUserOrSelf = function (target, exactName) {
 		if (!target) {
 			this.targetUsername = this.user.name;
+			this.inputUsername = this.user.name;
 			return this.user;
 		}
 		this.splitTarget(target, exactName);
@@ -378,12 +379,15 @@ var Context = exports.Context = (function () {
 			this.targetUsername = targetUser ? targetUser.name : target;
 			return '';
 		}
-		var targetUser = Users.get(target.substr(0, commaIndex), exactName);
-		if (!targetUser) {
-			targetUser = null;
+		this.inputUsername = target.substr(0, commaIndex);
+		var targetUser = Users.get(this.inputUsername, exactName);
+		if (targetUser) {
+			this.targetUser = targetUser;
+			this.targetUsername = this.inputUsername = targetUser.name;
+		} else {
+			this.targetUser = null;
+			this.targetUsername = this.inputUsername;
 		}
-		this.targetUser = targetUser;
-		this.targetUsername = targetUser ? targetUser.name : target.substr(0, commaIndex);
 		return target.substr(commaIndex + 1).trim();
 	};
 
