@@ -137,6 +137,7 @@ exports.commands = {
 
 		Database.read('money', toId(target), function (err, amount) {
 			if (err && err.includes('User')) return this.sendReplyBox(Tools.escapeHTML(target) + " has 0 bucks.");
+			if (typeof amount === 'undefined') amount = 0;
 			this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
 			room.update();
 		}.bind(this));
