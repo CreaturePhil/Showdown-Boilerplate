@@ -133,11 +133,10 @@ exports.commands = {
 	wallet: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		if (!target) target = user.name;
-		if (!toId(target)) return this.sendReplyBox(Tools.escapeHTML(target) + " has 0 bucks.");
 
 		Database.read('money', toId(target), function (err, amount) {
-			if (err && err.includes('User')) return this.sendReplyBox(Tools.escapeHTML(target) + " has 0 bucks.");
-			if (typeof amount === 'undefined') amount = 0;
+			if (err) throw err;
+			if (!amount) amount = 0;
 			this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
 			room.update();
 		}.bind(this));
@@ -158,7 +157,8 @@ exports.commands = {
 
 		var _this = this;
 		Database.read('money', toId(username), function (err, initial) {
-			if (err) initial = 0;
+			if (err) throw err;
+			if (!initial) initial = 0;
 			Database.write('money', initial + amount, toId(username), function (err, total) {
 				if (err) throw err;
 				amount = amount + currencyName(amount);
@@ -185,7 +185,8 @@ exports.commands = {
 
 		var _this = this;
 		Database.read('money', toId(username), function (err, initial) {
-			if (err) initial = 0;
+			if (err) throw err;
+			if (!initial) initial = 0;
 			Database.write('money', initial - amount, toId(username), function (err, total) {
 				if (err) throw err;
 				amount = amount + currencyName(amount);
@@ -202,9 +203,9 @@ exports.commands = {
 	resetbucks: 'resetmoney',
 	resetmoney: function (target, room, user) {
 		if (!user.can('resetmoney')) return false;
-		Database.write('money', 0, toId(target), function (err) {
+		Database.write('money', 0, toId(target), function (err, total) {
 			if (err) throw err;
-			this.sendReply(target + " now has 0" + currencyName(0) + ".");
+			this.sendReply(target + " now has " + total + currencyName(total) + ".");
 			logMoney(user.name + " reset the money of " + target + ".");
 		}.bind(this));
 	},
@@ -225,10 +226,12 @@ exports.commands = {
 
 		var _this = this;
 		Database.read('money', user.userid, function (err, userTotal) {
-			if (err) userTotal = 0;
+			if (err) throw err;
+			if (!userTotal) userTotal = 0;
 			if (amount > userTotal) return _this.sendReply("You cannot transfer more money than what you have.");
 			Database.read('money', toId(username), function (err, targetTotal) {
-				if (err) targetTotal = 0;
+				if (err) throw err;
+				if (!targetTotal) targetTotal = 0;
 				Database.write('money', userTotal - amount, user.userid, function (err, userTotal) {
 					Database.write('money', targetTotal + amount, toId(username), function (err, targetTotal) {
 						amount = amount + currencyName(amount);
@@ -254,9 +257,12 @@ exports.commands = {
 		if (!target) return this.parse('/help buy');
 		var _this = this;
 		Database.read('money', user.userid, function (err, amount) {
+			if (err) throw err;
+			if (!amount) amount = 0;
 			var cost = findItem.call(_this, target, amount);
 			if (!cost) return room.update();
 			Database.write('money', amount - cost, user.userid, function (err, total) {
+				if (err) throw err;
 				_this.sendReply("You have bought " + target + " for " + cost +  currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
 				room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
 				logMoney(user.name + " has bought " + target + " from the shop.");

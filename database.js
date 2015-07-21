@@ -18,8 +18,7 @@ databases.lowdb = function () {
 	 */
 	methods.read = function (key, username, callback) {
 		var user = db('users').find({username: username});
-		if (!user) return callback('User does not exist.');
-		if (!user.hasOwnProperty(key)) return callback('Key does not exist.');
+		if (!user) return callback(null);
 		callback(null, user[key]);
 	};
 

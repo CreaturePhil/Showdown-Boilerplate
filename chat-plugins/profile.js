@@ -131,8 +131,10 @@ Profile.prototype.show = function (callback) {
 	var userid = toId(this.username);
 
 	Database.read('money', userid, function (err, money) {
-		if (err) money = 0;
+		if (err) throw err;
+		if (!money) money = 0;
 		Database.read('seen', userid, function (err, seen) {
+			if (err) throw err;
 			callback(_this.avatar() +
 				SPACE + _this.name() + BR +
 				SPACE + _this.group() + BR +

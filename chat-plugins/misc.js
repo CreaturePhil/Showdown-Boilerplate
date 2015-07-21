@@ -180,8 +180,9 @@ exports.commands = {
 		var targetUser = Users.get(target);
 		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
 		Database.read('seen', toId(target), function (err, seen) {
+			if (err) throw err;
 			target = Tools.escapeHTML(target);
-			if (err) {
+			if (!seen) {
 				this.sendReplyBox(target + " has never been online on this server.");
 			} else {
 				this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");

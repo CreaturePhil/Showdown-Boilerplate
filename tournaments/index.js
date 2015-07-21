@@ -760,15 +760,21 @@ Tournament = (function () {
 			var secondMoney = Math.round(firstMoney / 2);
 
 			Database.read('money', wid, function (err, amount) {
-				if (err) amount = 0;
-				Database.write('money', amount + firstMoney, wid, function () {});
+				if (err) throw err;
+				if (!amount) amount = 0;
+				Database.write('money', amount + firstMoney, wid, function (err) {
+					if (err) throw err;
+				});
 			});
 			this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(winner) + "</font> has won " + "<font color='" + color + "'>" + firstMoney + "</font>" + currencyName(firstMoney) + " for winning the tournament!</b>");
 
 			if (runnerUp) {
 				Database.read('money', rid, function (err, amount) {
-					if (err) amount = 0;
-					Database.write('money', amount + secondMoney, rid, function () {});
+					if (err) throw err;
+					if (!amount) amount = 0;
+					Database.write('money', amount + secondMoney, rid, function (err) {
+						if (err) throw err;
+					});
 				});
 				this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(runnerUp) + "</font> has won " +  "<font color='" + color + "'>" + secondMoney + "</font>" + currencyName(secondMoney) + " for winning the tournament!</b>");
 			}
