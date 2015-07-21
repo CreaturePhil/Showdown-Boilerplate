@@ -37,7 +37,7 @@ function currencyName (amount) {
  */
 function isMoney (money) {
 	var numMoney = Number(money);
-	if (!numMoney) return "Must be a number.";
+	if (isNaN(money)) return "Must be a number.";
 	if (String(money).includes('.')) return "Cannot contain a decimal.";
 	if (numMoney < 1) return "You can't give less than one buck.";
 	return numMoney;
