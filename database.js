@@ -66,6 +66,23 @@ databases.lowdb = function () {
 		return callback(null, db('users').size());
 	};
 
+	/**
+	 * Sort by a key in descending order.
+	 *
+	 * @param {String} key
+	 * @param {Number} amount
+	 * @param {Function} callback(err, array)
+	 */
+	methods.sortDesc = function (key, amount, callback) {
+		var value = db('users')
+						.chain()
+						.sortByOrder('money', ['desc'])
+						.take(amount)
+						.value();
+
+		callback(null, value);
+	};
+
 	return methods;
 };
 

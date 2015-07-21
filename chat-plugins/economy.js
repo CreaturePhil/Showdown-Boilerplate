@@ -307,6 +307,28 @@ exports.commands = {
 				connection.popup(topMsg + data.slice(-15).join('\n'));
 			});
 		});
+	},
+
+	moneyladder: 'richestuser',
+	richladder: 'richestuser',
+	richestusers: 'richestuser',
+	richestuser: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		var _this = this;
+		var display = '<center><u><b>Richest Users</b></u></center><br><table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Rank</th><th>Username</th><th>Money</th></tr>';
+		Database.sortDesc('money', 10, function (err, users) {
+			if (err) throw err;
+			if (!users.length) {
+				_this.sendReplyBox("Money ladder is empty.");
+			} else {
+				users.forEach(function (user, index) {
+					display += "<tr><td>" + (index + 1) + "</td><td>" + user.username + "</td><td>" + user.money + "</td></tr>";
+				});
+				display += "</tbody></table>";
+				_this.sendReply("|raw|" + display);
+			}
+			room.update();
+		});
 	}
 
 };
