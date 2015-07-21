@@ -239,7 +239,7 @@ exports.commands = {
 						targetTotal = targetTotal + currencyName(targetTotal);
 						_this.sendReply("You have successfully transferred " + amount + ". You now have " + userTotal + ".");
 						if (Users.get(username)) Users.get(username).popup(user.name + " has transferred " + amount + ". You now have " + targetTotal + ".");
-						logMoney(user.name + " transferred " + amount + " to " + username + ".");
+						logMoney(user.name + " transferred " + amount + " to " + username + ". " + user.name + " now has " + userTotal + " and " + username + " now has " + targetTotal + ".");
 					});
 				});
 			});
