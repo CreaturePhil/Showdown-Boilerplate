@@ -374,8 +374,8 @@ exports.commands = {
 			var output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br>" + room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
 			while (p1Number === p2Number) {
 				output += "Tie... rolling again.<br>";
-				var p1Number = Math.floor(6 * Math.random()) + 1;
-				var p2Number = Math.floor(6 * Math.random()) + 1;
+				p1Number = Math.floor(6 * Math.random()) + 1;
+				p2Number = Math.floor(6 * Math.random()) + 1;
 				output += room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
 			}
 			var winner = room.dice[p1Number > p2Number ? 'p1' : 'p2'];
