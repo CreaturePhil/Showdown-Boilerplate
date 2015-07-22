@@ -95,6 +95,7 @@ exports.BattleScripts = {
 		if (target === false) {
 			this.attrLastMove('[notarget]');
 			this.add('-notarget');
+			if (move.target === 'normal') pokemon.isStaleCon = 0;
 			return true;
 		}
 
@@ -150,6 +151,7 @@ exports.BattleScripts = {
 			if (lacksTarget) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
+				if (move.target === 'normal') pokemon.isStaleCon = 0;
 				return true;
 			}
 			damage = this.tryMoveHit(target, pokemon, move);
@@ -1242,6 +1244,9 @@ exports.BattleScripts = {
 					break;
 				case 'dragonpulse': case 'spacialrend':
 					if (hasMove['dracometeor']) rejected = true;
+					break;
+				case 'outrage':
+					if (hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
 					break;
 				case 'thunder':
 					if (hasMove['thunderbolt'] && !hasMove['raindance']) rejected = true;

@@ -8522,7 +8522,8 @@ exports.BattleMovedex = {
 				maxpp: move.pp,
 				target: move.target,
 				disabled: false,
-				used: false
+				used: false,
+				virtual: true
 			};
 			source.moves[moveslot] = toId(move.name);
 			this.add('-start', source, 'Mimic', move.name);
@@ -13042,7 +13043,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit: function (target) {
 			if (target.deductPP(target.lastMove, 4)) {
-				this.add("-activate", target, 'move: Spite', target.lastMove, 4);
+				this.add("-activate", target, 'move: Spite', this.getMove(target.lastMove).name, 4);
 				return;
 			}
 			return false;
@@ -13376,7 +13377,7 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {contact: 1, protect: 1},
-		onModifyMove: function (move, pokemon) {
+		onModifyMove: function (move, pokemon, target) {
 			move.type = '???';
 			this.add('-activate', pokemon, 'move: Struggle');
 		},
