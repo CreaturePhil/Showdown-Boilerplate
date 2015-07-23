@@ -76,6 +76,9 @@ databases.lowdb = function () {
 	methods.sortDesc = function (key, amount, callback) {
 		var value = db('users')
 						.chain()
+						.filter(function(user) {
+							return user.money >= 0;
+						})
 						.sortByOrder('money', ['desc'])
 						.take(amount)
 						.value();
