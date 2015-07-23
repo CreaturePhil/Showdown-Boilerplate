@@ -220,6 +220,8 @@ exports.commands = {
 		var parts = target.split(',');
 		var username = parts[0];
 		var amount = isMoney(parts[1]);
+		
+		if (toId(username) === user.userid) return this.sendReply("You cannot transfer to yourself.");
 
 		if (toId(username) === user.userid) return this.sendReply("You cannot transfer to yourself.");
 		if (typeof amount === 'string') return this.sendReply(amount);
