@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 
 var shop = [
+	['Ticket', 'Buys a lottery ticket for a chance to win big money.', 5],
 	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
 	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
 	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
@@ -108,13 +109,33 @@ function findItem (item, money) {
  *
  * @param {String} item
  * @param {Object} user
+ * @param {Number} cost - for lottery
  */
-function handleBoughtItem (item, user) {
+function handleBoughtItem (item, user, cost) {
 	if (item === 'symbol') {
 		user.canCustomSymbol = true;
 		this.sendReply("You have purchased a custom symbol. You can use /customsymbol to get your custom symbol.");
 		this.sendReply("You will have this until you log off for more than an hour.");
 		this.sendReply("If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.");
+	} else if (item === 'ticket') {
+		var _this = this;
+		Database.get('pot', function (err, pot) {
+			if (err) throw err;
+			if (!pot) pot = 0;
+			Database.set('pot', pot + cost,  function (err) {
+				if (err) throw err;
+				Database.read('tickets', user.userid, function (err, tickets) {
+					if (err) throw err;
+					if (!tickets) tickets = [];
+					var ticket = '' + rng() + rng() + rng();
+					tickets.push(ticket);
+					Database.write('tickets', tickets, user.userid, function (err) {
+						if (err) throw err;
+						_this.sendReply("Your ticket has this id: " + ticket + ". The jackpot currently worth " + pot + currencyName(pot) + ". Use /tickets to view your ticket(s).");
+					});
+				});
+			});
+		});
 	} else {
 		var msg = '**' + user.name + " has bought " + item + ".**";
 		Rooms.rooms.staff.add('|c|~Shop Alert|' + msg);
@@ -125,6 +146,15 @@ function handleBoughtItem (item, user) {
 			}
 		}
 	}
+}
+
+/**
+ * Generates a random number between 0 and 1000.
+ *
+ * @return {Number}
+ */
+function rng() {
+	return Math.floor(Math.random() * 1000);
 }
 
 exports.commands = {
@@ -266,7 +296,7 @@ exports.commands = {
 				_this.sendReply("You have bought " + target + " for " + cost +  currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
 				room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
 				logMoney(user.name + " has bought " + target + " from the shop.");
-				handleBoughtItem.call(_this, target.toLowerCase(), user);
+				handleBoughtItem.call(_this, target.toLowerCase(), user, cost);
 				room.update();
 			});
 		});
@@ -408,6 +438,61 @@ exports.commands = {
 		if ((Date.now() - room.dice.startTime) < 60000 && !user.can('broadcast', null, room)) return this.sendReply("Regular users may not end a dice game within the first minute of it starting.");
 		delete room.dice;
 		room.addRaw("<b>" + user.name + " ended the dice game.");
+	},
+
+	ticket: 'tickets',
+	tickets: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		Database.read('tickets', user.userid, function (err, tickets) {
+				if (err) throw err;
+				if (!tickets || !tickets.length) {
+					this.sendReplyBox("You have no tickets.");
+				} else {
+					this.sendReplyBox("You have a total of " + tickets.length + " ticket(s). These are your ticket's ids: " + tickets.join(", ") + ".");
+				}
+				room.update();
+			}.bind(this));
+	},
+
+	picklottery: function (target, room, user) {
+		if (!user.can('picklottery')) return false;
+		var winner;
+		var winningId = '' + rng() + rng() + rng();
+		var _this = this;
+		Database.users(function (err, users) {
+			if (err) throw err;
+			users.filter(function (user) {
+				return user.tickets && user.tickets.length > 0;
+			}).forEach(function (user) {
+				Database.write('tickets', [], user.username, function (err) {
+					if (err) throw err;
+				});
+				if (user.tickets.indexOf(winningId) < 0) return;
+				winner = true;
+				Database.get('pot', function (err, pot) {
+					if (err) throw err;
+					var winnings = Math.floor(pot * 3 / 4);
+					Database.read('money', user.username, function (err, amount) {
+						if (err) throw err;
+						if (!amount) amount = 0;
+						Database.write('money', amount + winnings, user.username, function (err, total) {
+							if (err) throw err;
+							var msg = "<center><h2>Lottery!</h2><h4><font color='red'><b>" + user.username + "</b></font> has won the lottery with the ticket id of " + winningId + "! This user has gained " + winnings + currencyName(winnings) + " and now has a total of " + total + currencyName(total) + ".</h4></center>";
+							_this.parse('/gdeclare ' + msg);
+							_this.parse('/pmall /html ' + msg);
+							Database.set('pot', 0, function (err) {
+								if (err) throw err;
+							});
+						});
+					});
+				});
+			});
+			if (!winner) {
+				var msg = "<center><h2>Lottery!</h2>Nobody has won the lottery. Good luck to everyone next time!</center>";
+				_this.parse('/gdeclare ' + msg);
+				_this.parse('/pmall /html ' + msg);
+			}
+		});
 	}
 
 };
