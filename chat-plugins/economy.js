@@ -146,7 +146,7 @@ exports.commands = {
 	givebuck: 'givemoney',
 	givebucks: 'givemoney',
 	givemoney: function (target, room, user) {
-		if (!user.can('forcewin')) return false;
+		if (!user.can('forcewin')) return this.sendReply('/givebucks - Access denied.');
 		if (!target || target.indexOf(',') < 0) return this.parse('/help givemoney');
 
 		var parts = target.split(',');
@@ -174,7 +174,7 @@ exports.commands = {
 	takebuck: 'takemoney',
 	takebucks: 'takemoney',
 	takemoney: function (target, room, user) {
-		if (!user.can('forcewin')) return false;
+		if (!user.can('forcewin')) return this.sendReply('/takebucks - Access denied.');
 		if (!target || target.indexOf(',') < 0) return this.parse('/help takemoney');
 
 		var parts = target.split(',');
