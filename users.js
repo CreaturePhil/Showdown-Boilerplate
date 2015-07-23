@@ -1183,7 +1183,7 @@ User = (function () {
 		}
 	};
 	User.prototype.onDisconnect = function (connection) {
-		if (!this.userid.includes('guest')) {
+		if (this.registered) {
 			Database.write('seen', Date.now(), this.userid, function (err) {
 				if (err) throw err;
 			});
