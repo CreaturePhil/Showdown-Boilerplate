@@ -252,6 +252,7 @@ exports.commands = {
 		var amount = isMoney(parts[1]);
 
 		if (toId(username) === user.userid) return this.sendReply("You cannot transfer to yourself.");
+		if (username.length > 19) return this.sendReply("Username cannot be longer than 19 characters.");
 		if (typeof amount === 'string') return this.sendReply(amount);
 
 		var _this = this;
