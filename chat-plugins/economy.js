@@ -490,6 +490,21 @@ exports.commands = {
 				_this.parse('/pmall /html ' + msg);
 			}
 		});
+	},
+
+	bucks: 'economystats',
+	economystats: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		var _this = this;
+		Database.total('money', function (err, total) {
+			Database.countUsers(function (err, numUsers) {
+				var average = Math.floor(total / numUsers);
+				var output = "There is " + total + currencyName(total) + " circulating in the economy. ";
+				output += "The average user has " + average + currencyName(average) + ".";
+				_this.sendReplyBox(output);
+			});
+			room.update();
+		});
 	}
 
 };

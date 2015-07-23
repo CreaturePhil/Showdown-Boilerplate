@@ -51,10 +51,11 @@ databases.lowdb = function () {
 	 * @param {Function} callback(err, total)
 	 */
 	methods.total = function (key, callback) {
-		var total = db('users').reduce(function (total, obj) {
-			return total + obj[key];
+		var total = db('users').reduce(function (acc, user) {
+			if (!acc[key] || !user[key]) return {money: acc[key]};
+			return {money: acc[key] + user[key]};
 		});
-		callback(null, total);
+		callback(null, total.money);
 	};
 
 	/**
