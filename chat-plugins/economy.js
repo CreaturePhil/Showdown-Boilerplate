@@ -295,7 +295,7 @@ exports.commands = {
 				if (err) throw err;
 				_this.sendReply("You have bought " + target + " for " + cost +  currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
 				room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
-				logMoney(user.name + " has bought " + target + " from the shop.");
+				logMoney(user.name + " has bought " + target + " from the shop. This user now have " + total + currencyName(total) + ".");
 				handleBoughtItem.call(_this, target.toLowerCase(), user, cost);
 				room.update();
 			});
@@ -391,42 +391,38 @@ exports.commands = {
 			if (err) throw err;
 			if (!userMoney) userMoney = 0;
 			if (userMoney < room.dice.bet) return _this.sendReply("You don't have enough bucks to join this game.");
-			if (!room.dice.p1) {
-				room.dice.p1 = user.userid;
+			Database.write('money', userMoney - room.dice.bet, user.userid, function (err) {
+				if (err) throw err;
+				if (!room.dice.p1) {
+					room.dice.p1 = user.userid;
+					room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
+					return room.update();
+				}
+				if (room.dice.p1 === user.userid) return _this.sendReply("You already enter this dice game.");
+				room.dice.p2 = user.userid;
 				room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
-				return room.update();
-			}
-			if (room.dice.p1 === user.userid) return _this.sendReply("You already enter this dice game.");
-			room.dice.p2 = user.userid;
-			room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
-			var p1Number = Math.floor(6 * Math.random()) + 1;
-			var p2Number = Math.floor(6 * Math.random()) + 1;
-			var output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br>" + room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
-			while (p1Number === p2Number) {
-				output += "Tie... rolling again.<br>";
-				p1Number = Math.floor(6 * Math.random()) + 1;
-				p2Number = Math.floor(6 * Math.random()) + 1;
-				output += room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
-			}
-			var winner = room.dice[p1Number > p2Number ? 'p1' : 'p2'];
-			var loser = room.dice[p1Number < p2Number ? 'p1' : 'p2'];
-			var bet = room.dice.bet;
-			output += "<font color=#24678d><b>" + winner + "</b></font> has won <font color=#24678d><b>" + bet + "</b></font>" + currencyName(bet) + ".<br>Better luck next time " + loser + "!</div>";
-			room.addRaw(output);
-			room.update();
-			delete room.dice;
-			Database.read('money', winner, function (err, total) {
-				if (err) throw err;
-				if (!total) total = 0;
-				Database.write('money', total + bet, winner, function (err) {
+				var p1Number = Math.floor(6 * Math.random()) + 1;
+				var p2Number = Math.floor(6 * Math.random()) + 1;
+				var output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br>" + room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
+				while (p1Number === p2Number) {
+					output += "Tie... rolling again.<br>";
+					p1Number = Math.floor(6 * Math.random()) + 1;
+					p2Number = Math.floor(6 * Math.random()) + 1;
+					output += room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
+				}
+				var winner = room.dice[p1Number > p2Number ? 'p1' : 'p2'];
+				var loser = room.dice[p1Number < p2Number ? 'p1' : 'p2'];
+				var bet = room.dice.bet;
+				output += "<font color=#24678d><b>" + winner + "</b></font> has won <font color=#24678d><b>" + bet + "</b></font>" + currencyName(bet) + ".<br>Better luck next time " + loser + "!</div>";
+				room.addRaw(output);
+				room.update();
+				delete room.dice;
+				Database.read('money', winner, function (err, total) {
 					if (err) throw err;
-				});
-			});
-			Database.read('money', loser, function (err, total) {
-				if (err) throw err;
-				if (!total) total = 0;
-				Database.write('money', total - bet, loser, function (err) {
-					if (err) throw err;
+					if (!total) total = 0;
+					Database.write('money', total + bet * 2, winner, function (err) {
+						if (err) throw err;
+					});
 				});
 			});
 		});
