@@ -216,12 +216,12 @@ exports.commands = {
 	transferbucks: 'transfermoney',
 	transfermoney: function (target, room, user) {
 		if (!target || target.indexOf(',') < 0) return this.parse('/help transfermoney');
-		if (toId(target) === user.userid) return this.sendReply("You cannot transfer to yourself.");
 
 		var parts = target.split(',');
 		var username = parts[0];
 		var amount = isMoney(parts[1]);
 
+		if (toId(username) === user.userid) return this.sendReply("You cannot transfer to yourself.");
 		if (typeof amount === 'string') return this.sendReply(amount);
 
 		var _this = this;
