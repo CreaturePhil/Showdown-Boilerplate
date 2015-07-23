@@ -1,3 +1,5 @@
+var request = require('request');
+
 var Poll = {
 	reset: function (roomId) {
 		Poll[roomId] = {
@@ -145,5 +147,58 @@ exports.commands = {
 		if (!Poll[room.id]) Poll.reset(room.id);
 		if (!Poll[room.id].question) return this.sendReply("There is no poll currently going on in this room.");
 		this.sendReply("NUMBER OF VOTES: " + Object.keys(Poll[room.id].options).length);
-	}
+	}, 
+	
+	strawpoll: function(target, room, user) {
+        	if (!this.can('strawpoll')) return this.sendReply('/strawpoll - Access denied.');
+        	if (!target || target.split(',').length < 2) return this.sendReply('/strawpoll [question], [option 1], [option 2]... - Create a strawpoll, declares the link to all rooms and pm all users in the server.');
+
+        var formData = {
+            title:  target.split(',')[0],
+            options: target.split(',').slice(1).map(function(option) {
+                return option.trim();
+            })
+        };
+
+        var hash;
+        request.post({url:'http://strawpoll.me/api/v2/polls', form: formData}, function(err, res, body) {
+            hash = body.split(':')[1].slice(0, -1);
+            for (var id in Rooms.rooms) {
+                if (id !== 'global') {
+                    Rooms.rooms[id].addRaw('\
+                        <div class="broadcast-blue">\
+                        <center><h1>' + formData.title + '</h1>\
+                        <h2><a href="http://strawpoll.me/' + hash + '">\
+                        http://strawpoll.me/' + hash +
+                        '</a></h2></center><br>\
+                        </div>\
+                        ');
+                    Rooms.rooms[id].update();
+                }
+            }
+            for (var name in Users.users) {
+                Users.users[name].send('|pm|~StrawPoll| ' + Users.users[name].userid + '|' + formData.title + ': http://strawpoll.me/' + hash);
+            }
+        });
+
+        var fiveMinutes = 1000 * 60 * 5;
+        setTimeout(function() {
+            for (var id in Rooms.rooms) {
+                if (id !== 'global') {
+                    Rooms.rooms[id].addRaw('\
+                        <div class="broadcast-blue">\
+                        <center><h1>' + formData.title + '\'s Results</h1>\
+                        <h2><a href="http://strawpoll.me/' + hash + '/r">\
+                        http://strawpoll.me/' + hash + '/r\
+                        </a></h2></center><br>\
+                        </div>\
+                        ');
+                    Rooms.rooms[id].update();
+                }
+            }
+            for (var name in Users.users) {
+                Users.users[name].send('|pm|~StrawPoll| ' + Users.users[name].userid + '|' + formData.title + '\'s Results: http://strawpoll.me/' + hash + '/r');
+            }
+        }, fiveMinutes);
+    }
 };
