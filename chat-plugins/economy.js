@@ -471,42 +471,53 @@ exports.commands = {
 
 	picklottery: function (target, room, user) {
 		if (!user.can('picklottery')) return false;
-		var winner;
-		var winningId = '' + rng() + rng() + rng();
+		var randNum = function () {
+			return Math.floor(Math.random() * 4) === Math.floor(Math.random() * 4);
+		};
+		var chance = randNum() === randNum();
 		var _this = this;
 		Database.users(function (err, users) {
 			if (err) throw err;
-			users.filter(function (user) {
+			users = users.filter(function (user) {
 				return user.tickets && user.tickets.length > 0;
-			}).forEach(function (user) {
-				Database.write('tickets', [], user.username, function (err) {
-					if (err) throw err;
-				});
-				if (user.tickets.indexOf(winningId) < 0) return;
-				winner = true;
-				Database.get('pot', function (err, pot) {
-					if (err) throw err;
-					var winnings = Math.floor(pot * 3 / 4);
-					Database.read('money', user.username, function (err, amount) {
+			});
+			var winningIndex = Math.floor(Math.random() * users.length);
+			console.log(winningIndex);
+			var winner = users[winningIndex];
+			console.log(users);
+			console.log(winner);
+			if (!chance) {
+				var msg = "<center><h2>Lottery!</h2>Nobody has won the lottery. Good luck to everyone next time!</center>";
+				_this.parse('/gdeclare ' + msg);
+				_this.parse('/pmall /html ' + msg);
+				return users.forEach(function (user) {
+					Database.write('tickets', [], user.username, function (err) {
 						if (err) throw err;
-						if (!amount) amount = 0;
-						Database.write('money', amount + winnings, user.username, function (err, total) {
+					});
+				});
+			}
+			Database.get('pot', function (err, pot) {
+				if (err) throw err;
+				var winnings = Math.floor(pot * 3 / 4);
+				Database.read('money', winner.username, function (err, amount) {
+					if (err) throw err;
+					if (!amount) amount = 0;
+					Database.write('money', amount + winnings, winner.username, function (err, total) {
+						if (err) throw err;
+						var msg = "<center><h2>Lottery!</h2><h4><font color='red'><b>" + winner.username + "</b></font> has won the lottery with the ticket id of " + winner.tickets[0] + "! This user has gained " + winnings + currencyName(winnings) + " and now has a total of " + total + currencyName(total) + ".</h4></center>";
+						_this.parse('/gdeclare ' + msg);
+						_this.parse('/pmall /html ' + msg);
+						Database.set('pot', 0, function (err) {
 							if (err) throw err;
-							var msg = "<center><h2>Lottery!</h2><h4><font color='red'><b>" + user.username + "</b></font> has won the lottery with the ticket id of " + winningId + "! This user has gained " + winnings + currencyName(winnings) + " and now has a total of " + total + currencyName(total) + ".</h4></center>";
-							_this.parse('/gdeclare ' + msg);
-							_this.parse('/pmall /html ' + msg);
-							Database.set('pot', 0, function (err) {
-								if (err) throw err;
+							users.forEach(function (user) {
+								Database.write('tickets', [], user.username, function (err) {
+									if (err) throw err;
+								});
 							});
 						});
 					});
 				});
 			});
-			if (!winner) {
-				var msg = "<center><h2>Lottery!</h2>Nobody has won the lottery. Good luck to everyone next time!</center>";
-				_this.parse('/gdeclare ' + msg);
-				_this.parse('/pmall /html ' + msg);
-			}
 		});
 	},
 
