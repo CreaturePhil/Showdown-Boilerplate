@@ -70,7 +70,7 @@ exports.Formats = [
 
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Alakazite', 'Altarianite', 'Diancite', 'Heracronite', 'Galladite', 'Gardevoirite', 'Lopunnite', 'Medichamite',
-			'Metagrossite', 'Pinsirite', 'Drizzle', 'Drought', 'Shadow Tag'
+			'Metagrossite', 'Pidgeotite', 'Pinsirite', 'Drizzle', 'Drought', 'Shadow Tag'
 		]
 	},
 	{
@@ -441,6 +441,9 @@ exports.Formats = [
 			case 'ampharosite': case 'garchompite': case 'heracronite':
 				if (template.baseStats.spe <= 10) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
 				break;
+			case 'cameruptite':
+				if (template.baseStats.spe <= 20) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
+				break;
 			case 'abomasite': case 'sablenite':
 				if (template.baseStats.spe <= 30) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
 				break;
@@ -702,7 +705,7 @@ exports.Formats = [
 			'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Gothita', 'Houndour', 'Larvesta',
 			'Magnemite', 'Mienfoo', 'Munchlax', 'Omanyte', 'Onix', 'Pawniard', 'Ponyta', 'Porygon', 'Pumpkaboo-Super', 'Scraggy',
 			'Shellder', 'Skrelp', 'Snivy', 'Snubbull', 'Spritzee', 'Staryu', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby',
-			'Vulpix', 'Zigzagoon', 'Shell Smash'
+			'Vulpix', 'Zigzagoon', 'Shell Smash', 'Pancham'
 		]
 	},
 	{
