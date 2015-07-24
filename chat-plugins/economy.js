@@ -131,7 +131,7 @@ function handleBoughtItem (item, user, cost) {
 					tickets.push(ticket);
 					Database.write('tickets', tickets, user.userid, function (err) {
 						if (err) throw err;
-						_this.sendReply("Your ticket has this id: " + ticket + ". The jackpot currently worth " + pot + currencyName(pot) + ". Use /tickets to view your ticket(s).");
+						_this.sendReply("Your ticket has this id: " + ticket + ". The jackpot is currently worth " + pot + currencyName(pot) + ". Use /tickets to view your ticket(s).");
 					});
 				});
 			});
