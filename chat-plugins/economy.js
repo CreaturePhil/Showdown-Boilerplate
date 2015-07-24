@@ -471,10 +471,7 @@ exports.commands = {
 
 	picklottery: function (target, room, user) {
 		if (!user.can('picklottery')) return false;
-		var randNum = function () {
-			return Math.floor(Math.random() * 4) === Math.floor(Math.random() * 4);
-		};
-		var chance = randNum() === randNum();
+		var chance = Math.floor(Math.random() * 4) === 3;
 		var _this = this;
 		Database.users(function (err, users) {
 			if (err) throw err;
@@ -482,10 +479,7 @@ exports.commands = {
 				return user.tickets && user.tickets.length > 0;
 			});
 			var winningIndex = Math.floor(Math.random() * users.length);
-			console.log(winningIndex);
 			var winner = users[winningIndex];
-			console.log(users);
-			console.log(winner);
 			if (!chance) {
 				var msg = "<center><h2>Lottery!</h2>Nobody has won the lottery. Good luck to everyone next time!</center>";
 				_this.parse('/gdeclare ' + msg);
@@ -499,6 +493,7 @@ exports.commands = {
 			Database.get('pot', function (err, pot) {
 				if (err) throw err;
 				var winnings = Math.floor(pot * 3 / 4);
+				if (!winner) return _this.sendReply("No one has bought tickets.");
 				Database.read('money', winner.username, function (err, amount) {
 					if (err) throw err;
 					if (!amount) amount = 0;
