@@ -122,7 +122,7 @@ function handleBoughtItem (item, user, cost) {
 		Database.get('pot', function (err, pot) {
 			if (err) throw err;
 			if (!pot) pot = 0;
-			Database.set('pot', pot + cost,  function (err) {
+			Database.set('pot', pot + cost,  function (err, pot) {
 				if (err) throw err;
 				Database.read('tickets', user.userid, function (err, tickets) {
 					if (err) throw err;
@@ -508,6 +508,16 @@ exports.commands = {
 				_this.parse('/pmall /html ' + msg);
 			}
 		});
+	},
+
+	jackpot: 'pot',
+	pot: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		Database.get('pot', function (err, pot) {
+			if (err) throw err;
+			if (!pot) pot = 0;
+			this.sendReplyBox("The current jackpot is " + pot + currencyName(pot) + ".");
+		}.bind(this));
 	},
 
 	bucks: 'economystats',
