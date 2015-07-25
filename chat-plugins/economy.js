@@ -478,8 +478,6 @@ exports.commands = {
 			users = users.filter(function (user) {
 				return user.tickets && user.tickets.length > 0;
 			});
-			var winningIndex = Math.floor(Math.random() * users.length);
-			var winner = users[winningIndex];
 			if (!chance) {
 				var msg = "<center><h2>Lottery!</h2>Nobody has won the lottery. Good luck to everyone next time!</center>";
 				_this.parse('/gdeclare ' + msg);
@@ -490,6 +488,14 @@ exports.commands = {
 					});
 				});
 			}
+			var tickets = [];
+			users.forEach(function (user) {
+				user.tickets.forEach(function (ticket) {
+					tickets.push({username: user.username, ticket: ticket});
+				});
+			});
+			var winningIndex = Math.floor(Math.random() * tickets.length);
+			var winner = tickets[winningIndex];
 			Database.get('pot', function (err, pot) {
 				if (err) throw err;
 				var winnings = Math.floor(pot * 3 / 4);
@@ -499,7 +505,7 @@ exports.commands = {
 					if (!amount) amount = 0;
 					Database.write('money', amount + winnings, winner.username, function (err, total) {
 						if (err) throw err;
-						var msg = "<center><h2>Lottery!</h2><h4><font color='red'><b>" + winner.username + "</b></font> has won the lottery with the ticket id of " + winner.tickets[0] + "! This user has gained " + winnings + currencyName(winnings) + " and now has a total of " + total + currencyName(total) + ".</h4></center>";
+						var msg = "<center><h2>Lottery!</h2><h4><font color='red'><b>" + winner.username + "</b></font> has won the lottery with the ticket id of " + winner.ticket + "! This user has gained " + winnings + currencyName(winnings) + " and now has a total of " + total + currencyName(total) + ".</h4></center>";
 						_this.parse('/gdeclare ' + msg);
 						_this.parse('/pmall /html ' + msg);
 						Database.set('pot', 0, function (err) {
