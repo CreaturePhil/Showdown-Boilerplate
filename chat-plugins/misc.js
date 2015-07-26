@@ -196,7 +196,6 @@ exports.commands = {
 		var fs = require('fs');
 		var fileName = "pokedex.js";
 		if (!this.canBroadcast()) return;
-		
 		var shinyPoke = ''	
 		if (/shiny/i.test(target)) {
 			var shinyPoke = '-shiny';
@@ -224,10 +223,8 @@ exports.commands = {
 		if (kanto === false && johto === false && hoenn === false && sinnoh === false && kalos === false && unova === false) {
 			var x = Math.floor(Math.random() * (856 - 1)) + 1;
 		};
-		
 		var randP = '';
 		var pokeNum = parseInt(x);
-		
 		var pokedex = fs.readFileSync('./data/pokedex.js').toString().split("\n");
 		var pokemon = (pokedex[x]);
 		var speciesIndex1 = pokemon.indexOf('species:"') + 9; var speciesIndex2 = pokemon.indexOf('",', speciesIndex1);
@@ -281,7 +278,6 @@ exports.commands = {
 			var pokeEgg2 = ", " + pokemon.slice(egg2Index1, egg2Index2);
 		};
 		var pokeEgg1 = pokemon.slice(egg1Index1, egg1Index2);
-		
 		if (pokeName === "Ho-Oh" || pokeName === "Nidoran-F" || pokeName === "Nidoran-M" || pokeName === "Farfetch'd" || pokeName === "Porygon-Z") {
 			randP = '<table><tr><td><img src="http://play.pokemonshowdown.com/sprites/bw' + shinyPoke + '/' + pokeName.toLowerCase().replace(/[-]+/g, '').replace(/[']+/g, '') + '.png" height="96" width="96"></td><td><b>Name: </b>' + pokeName + '<br/><b>Type(s): </b>' + pokeType1 + ' ' + pokeType2 + '<br/><b>Ability: </b>' + pokeAbility1 + pokeAbility2 + pokeAbility3 + '<br/><b>Stats: </b>' + pokeStats + '<br/><b>Color: </b><font color="' + pokeColor + '">' + pokeColor + '</font><br/><b>Egg Group(s): </b>' + pokeEgg1 + pokeEgg2 + '</td></tr></table>';
 		} else if (pokeName === "Basculin-Blue-Striped") {
