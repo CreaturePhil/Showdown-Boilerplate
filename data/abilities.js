@@ -288,9 +288,9 @@ exports.BattleAbilities = {
 	},
 	"chlorophyll": {
 		shortDesc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
-		onModifySpe: function (speMod) {
+		onModifySpe: function (spe) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
-				return this.chain(speMod, 2);
+				return this.chainModify(2);
 			}
 		},
 		id: "chlorophyll",
@@ -782,14 +782,14 @@ exports.BattleAbilities = {
 		},
 		onModifyAtkPriority: 3,
 		onAllyModifyAtk: function (atk) {
-			if (this.effectData.target.template.speciesid !== 'cherrim') return;
+			if (this.effectData.target.baseTemplate.speciesid !== 'cherrim') return;
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 4,
 		onAllyModifySpD: function (spd) {
-			if (this.effectData.target.template.speciesid !== 'cherrim') return;
+			if (this.effectData.target.baseTemplate.speciesid !== 'cherrim') return;
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
@@ -2030,9 +2030,9 @@ exports.BattleAbilities = {
 	"quickfeet": {
 		desc: "If this Pokemon has a major status condition, its Speed is multiplied by 1.5; the Speed drop from paralysis is ignored.",
 		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop from paralysis.",
-		onModifySpe: function (speMod, pokemon) {
+		onModifySpe: function (spe, pokemon) {
 			if (pokemon.status) {
-				return this.chain(speMod, 1.5);
+				return this.chainModify(1.5);
 			}
 		},
 		id: "quickfeet",
@@ -2188,9 +2188,9 @@ exports.BattleAbilities = {
 	"sandrush": {
 		desc: "If Sandstorm is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from Sandstorm.",
 		shortDesc: "If Sandstorm is active, this Pokemon's Speed is doubled; immunity to Sandstorm.",
-		onModifySpe: function (speMod, pokemon) {
+		onModifySpe: function (spe, pokemon) {
 			if (this.isWeather('sandstorm')) {
-				return this.chain(speMod, 2);
+				return this.chainModify(2);
 			}
 		},
 		onImmunity: function (type, pokemon) {
@@ -2400,8 +2400,8 @@ exports.BattleAbilities = {
 			onModifyAtk: function (atk, pokemon) {
 				return this.chainModify(0.5);
 			},
-			onModifySpe: function (speMod, pokemon) {
-				return this.chain(speMod, 0.5);
+			onModifySpe: function (spe, pokemon) {
+				return this.chainModify(0.5);
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Slow Start');
@@ -2722,9 +2722,9 @@ exports.BattleAbilities = {
 	},
 	"swiftswim": {
 		shortDesc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
-		onModifySpe: function (speMod, pokemon) {
+		onModifySpe: function (spe, pokemon) {
 			if (this.isWeather(['raindance', 'primordialsea'])) {
-				return this.chain(speMod, 2);
+				return this.chainModify(2);
 			}
 		},
 		id: "swiftswim",
@@ -2998,9 +2998,9 @@ exports.BattleAbilities = {
 			pokemon.removeVolatile('unburden');
 		},
 		effect: {
-			onModifySpe: function (speMod, pokemon) {
+			onModifySpe: function (spe, pokemon) {
 				if (!pokemon.item) {
-					return this.chain(speMod, 2);
+					return this.chainModify(2);
 				}
 			}
 		},
@@ -3099,7 +3099,7 @@ exports.BattleAbilities = {
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",
 		onAfterDamage: function (damage, target, source, move) {
 			if (move.category === 'Physical') {
-				this.boost({spe:1, def:-1});
+				this.boost({def:-1, spe:1});
 			}
 		},
 		id: "weakarmor",

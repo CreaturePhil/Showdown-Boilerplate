@@ -11,7 +11,21 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"flowergift": {
+		inherit: true,
+		onAllyModifyAtk: function (atk) {
+			if (this.isWeather('sunnyday')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onAllyModifySpD: function (spd) {
+			if (this.isWeather('sunnyday')) {
+				return this.chainModify(1.5);
+			}
+		}
+	},
 	"leafguard": {
+		inherit: true,
 		onSetStatus: function (status, target, source, effect) {
 			if (effect && effect.id === 'rest') {
 				return;

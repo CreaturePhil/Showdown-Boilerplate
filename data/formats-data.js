@@ -152,7 +152,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":61,"gender":"M","nature":"Naughty","isHidden":false,"abilities":["keeneye"],"moves":["whirlwind","wingattack","skyattack","mirrormove"],"pokeball":"cherishball"}
 		],
-		tier: "UU"
+		tier: "PU"
 	},
 	pidgeotmega: {
 		randomBattleMoves: ["roost","heatwave","uturn","hurricane","defog"],
@@ -5266,11 +5266,13 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":6,"level":50,"moves":["hyperspacehole","nastyplot","psychic","astonish"],"pokeball":"cherishball"}
 		],
+		unobtainableShiny: true,
 		tier: "OU"
 	},
 	hoopaunbound: {
 		randomBattleMoves: ["nastyplot","psyshock","darkpulse","focusblast","hyperspacefury","zenheadbutt","icepunch","drainpunch","knockoff","trick"],
 		randomDoubleBattleMoves: ["psychic","darkpulse","focusblast","protect","hyperspacefury","zenheadbutt","icepunch","drainpunch"],
+		unobtainableShiny: true,
 		tier: "OU"
 	},
 	volcanion: {

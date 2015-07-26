@@ -5290,8 +5290,8 @@ exports.BattleMovedex = {
 			onEnd: function (targetSide) {
 				this.add('-sideend', targetSide, 'Grass Pledge');
 			},
-			onModifySpe: function (speMod, pokemon) {
-				return this.chain(speMod, 0.25);
+			onModifySpe: function (spe, pokemon) {
+				return this.chainModify(0.25);
 			}
 		},
 		secondary: false,
@@ -8037,7 +8037,7 @@ exports.BattleMovedex = {
 				}
 			}
 			if (!targets.length) return false;
-			for (var i = 0; i < targets.length; i++) this.boost({spd: 1, def: 1}, targets[i], source, 'move: Magnetic Flux');
+			for (var i = 0; i < targets.length; i++) this.boost({def: 1, spd: 1}, targets[i], source, 'move: Magnetic Flux');
 		},
 		secondary: false,
 		target: "allySide",
@@ -12021,8 +12021,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		boosts: {
-			atk: 1,
-			spe: 2
+			spe: 2,
+			atk: 1
 		},
 		secondary: false,
 		target: "self",
@@ -13944,8 +13944,8 @@ exports.BattleMovedex = {
 			onStart: function (side) {
 				this.add('-sidestart', side, 'move: Tailwind');
 			},
-			onModifySpe: function (speMod, pokemon) {
-				return this.chain(speMod, 2);
+			onModifySpe: function (spe, pokemon) {
+				return this.chainModify(2);
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 4,
