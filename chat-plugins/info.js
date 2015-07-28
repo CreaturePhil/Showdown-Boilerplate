@@ -444,30 +444,36 @@ var commands = exports.commands = {
 			var inequality = target.search(/>|<|=/);
 			if (inequality >= 0) {
 				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in stat ranges.");
-				inequality = target.charAt(inequality);
+				if (target.charAt(inequality + 1) === '=') {
+					inequality = target.substr(inequality, 2);
+				} else {
+					inequality = target.charAt(inequality);
+				}
+				var inequalityOffset = (inequality.charAt(1) === '=' ? 0 : -1);
 				var targetParts = target.replace(/\s/g, '').split(inequality);
-				var numSide, statSide, direction;
+				var num, stat, direction;
 				if (!isNaN(targetParts[0])) {
-					numSide = 0;
-					statSide = 1;
-					switch (inequality) {
-					case '>': direction = 'less'; break;
-					case '<': direction = 'greater'; break;
+					// e.g. 100 < spe
+					num = parseFloat(targetParts[0]);
+					stat = targetParts[1];
+					switch (inequality.charAt(0)) {
+					case '>': direction = 'less'; num += inequalityOffset; break;
+					case '<': direction = 'greater'; num -= inequalityOffset; break;
 					case '=': direction = 'equal'; break;
 					}
 				} else if (!isNaN(targetParts[1])) {
-					numSide = 1;
-					statSide = 0;
-					switch (inequality) {
-					case '<': direction = 'less'; break;
-					case '>': direction = 'greater'; break;
+					// e.g. spe > 100
+					num = parseFloat(targetParts[1]);
+					stat = targetParts[0];
+					switch (inequality.charAt(0)) {
+					case '<': direction = 'less'; num += inequalityOffset; break;
+					case '>': direction = 'greater'; num -= inequalityOffset; break;
 					case '=': direction = 'equal'; break;
 					}
 				} else {
 					return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
 				}
-				var stat = targetParts[statSide];
-				switch (toId(targetParts[statSide])) {
+				switch (toId(stat)) {
 				case 'attack': stat = 'atk'; break;
 				case 'defense': stat = 'def'; break;
 				case 'specialattack': stat = 'spa'; break;
@@ -481,12 +487,12 @@ var commands = exports.commands = {
 				if (direction === 'equal') {
 					if (searches['stats'][stat]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
 					searches['stats'][stat] = {};
-					searches['stats'][stat]['less'] = parseFloat(targetParts[numSide]);
-					searches['stats'][stat]['greater'] = parseFloat(targetParts[numSide]);
+					searches['stats'][stat]['less'] = num;
+					searches['stats'][stat]['greater'] = num;
 				} else {
 					if (!searches['stats'][stat]) searches['stats'][stat] = {};
 					if (searches['stats'][stat][direction]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
-					searches['stats'][stat][direction] = parseFloat(targetParts[numSide]);
+					searches['stats'][stat][direction] = num;
 				}
 				continue;
 			}
@@ -666,13 +672,15 @@ var commands = exports.commands = {
 		}
 
 		var resultsStr = this.broadcasting ? "" : ("<font color=#999999>" + message + ":</font><br>");
-		if (results.length > 0) {
+		if (results.length > 1) {
 			if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 				results.sort();
 				resultsStr += results.join(", ");
 			} else {
 				resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
+		} else if (results.length === 1) {
+			return CommandParser.commands.data.call(this, results[0], room, user, connection, 'dt');
 		} else {
 			resultsStr += "No Pok&eacute;mon found.";
 		}
