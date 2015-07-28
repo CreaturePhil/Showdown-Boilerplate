@@ -18,7 +18,7 @@ function Profile (isOnline, user, image) {
 	this.user = user || null;
 	this.image = image;
 
-	this.username = this.isOnline ? this.user.name : this.user;
+	this.username = Tools.escapeHTML(this.isOnline ? this.user.name : this.user);
 	this.url = Config.avatarurl || '';
 }
 
