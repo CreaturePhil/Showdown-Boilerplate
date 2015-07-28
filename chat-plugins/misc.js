@@ -3,6 +3,7 @@
  */
 
 var moment = require('moment');
+var request = require("request");
 
 var messages = [
 	"has vanished into nothingness!",
@@ -159,6 +160,34 @@ exports.commands = {
 		return this.sendReply("Poof is now disabled.");
 	},
 	poofoffhelp: ["/poofoff - Disable the use of the /poof command."],
+
+	regdate: function (target, room, user, connection) {
+		if (!this.canBroadcast()) return;
+		if (!target || target === "0") target = toId(user.userid);
+		if (!target || target === "." || target === "," || target === "'") return this.parse('/help regdate');
+		var username = toId(target);
+		target = target.replace(/\s+/g, '');
+		var self = this, data;
+		request('http://pokemonshowdown.com/users/~' + target, function (error, response, content) {
+			if (!(!error && response.statusCode === 200)) return;
+			content = content + '';
+			content = content.split("<em");
+			if (content[1]) {
+				content = content[1].split("</p>");
+				if (content[0]) {
+					content = content[0].split("</em>");
+					if (content[1]) {
+						var regdate = content[1].split('</small>')[0] + '.';
+						data = Tools.escapeHTML(username) + " was registered on" + regdate;
+					}
+				}
+			} else {
+				data = Tools.escapeHTML(username) + " is not registered.";
+			}
+			self.sendReplyBox(Tools.escapeHTML(data));
+		});
+	},
+	regdatehelp: ["/regdate - Please specify a valid username."],
 
 	show: function (target, room, user) {
 		if (!this.can('lock')) return false;
