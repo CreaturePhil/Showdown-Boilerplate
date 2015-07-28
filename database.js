@@ -4,55 +4,55 @@
  *
  *
  * methods.read(key, username, callback)
- *   Reads a key in the database.
+ *	 Reads a key in the database.
  *
- *   @param {String} key
- *   @param {String} user
- *   @param {Function} callback(err, value)
+ *	 @param {String} key
+ *	 @param {String} user
+ *	 @param {Function} callback(err, value)
  *
  * methods.write(key, value, user, callback)
- *   Writes a key to value in the database.
+ *	 Writes a key to value in the database.
  *
- *   @param {String} key
- *   @param {*} value
- *   @param {String} user
- *   @param {Function} callback(err, value)
+ *	 @param {String} key
+ *	 @param {*} value
+ *	 @param {String} user
+ *	 @param {Function} callback(err, value)
  *
  * methods.total(key, callback)
- *   Combined value from all rows.
+ *	 Combined value from all rows.
  *
- *   @param {String} key
- *   @param {Function} callback(err, total)
+ *	 @param {String} key
+ *	 @param {Function} callback(err, total)
  *
  * methods.countUsers(callback)
- *   Gets how many users there are.
+ *	 Gets how many users there are.
  *
- *   @param {Function} callback(err, size)
+ *	 @param {Function} callback(err, size)
  *
  * methods.sortDesc(key, amount, callback)
- *   Sort by a key in descending order.
+ *	 Sort by a key in descending order.
  *
- *   @param {String} key
- *   @param {Number} amount
- *   @param {Function} callback(err, array)
+ *	 @param {String} key
+ *	 @param {Number} amount
+ *	 @param {Function} callback(err, array)
  *
  * methods.get(key, callback)
- *   Get a key in the database.
+ *	 Get a key in the database.
  *
- *   @param {String} key
- *   @param {Function} callback(err, key)
+ *	 @param {String} key
+ *	 @param {Function} callback(err, key)
  *
  * methods.set(key, value, callback)
- *   Set a key in the database.
+ *	 Set a key in the database.
  *
- *   @param {String} key
- *   @param {Number} value
- *   @param {Function} callback(err, newKey)
+ *	 @param {String} key
+ *	 @param {Number} value
+ *	 @param {Function} callback(err, newKey)
  *
  * methods.users(callback)
- *   Get the users array in the database.
+ *	 Get the users array in the database.
  *
- *   @param {Function} callback(err, users)
+ *	 @param {Function} callback(err, users)
  *
  * @license MIT license
  */
@@ -132,12 +132,12 @@ databases.lowdb = function () {
 	return methods;
 };
 
-methods.mysql = function () {
-		var methods = {};
-		var connection = mysql.createConnection(Config.mysql);
-		connection.connect();
+databases.mysql = function () {
+	var methods = {};
+	var connection = mysql.createConnection(Config.mysql);
+	connection.connect();
 
-		return methods;
+	return methods;
 };
 
 function Database (database) {
