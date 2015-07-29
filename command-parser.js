@@ -154,7 +154,7 @@ function canTalk(user, room, connection, message, targetUser) {
 }
 
 var Context = exports.Context = (function () {
-	function Context (options) {
+	function Context(options) {
 		this.cmd = options.cmd || '';
 		this.cmdToken = options.cmdToken || '';
 

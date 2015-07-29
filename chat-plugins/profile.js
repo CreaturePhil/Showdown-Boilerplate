@@ -13,7 +13,7 @@ var trainersprites = [1, 2, 101, 102, 169, 170, 265, 266, 168];
  * @param {Object|String} user - if isOnline then Object else String
  * @param {String} image
  */
-function Profile (isOnline, user, image) {
+function Profile(isOnline, user, image) {
 	this.isOnline = isOnline || false;
 	this.user = user || null;
 	this.image = image;
@@ -33,7 +33,7 @@ function Profile (isOnline, user, image) {
  * @param {String} text
  * @return {String}
  */
-function bold (text) {
+function bold(text) {
 	return '<b>' + text + '</b>';
 }
 
@@ -48,7 +48,7 @@ function bold (text) {
  * @param {String} text
  * @return {String}
  */
-function font (color, text) {
+function font(color, text) {
 	return '<font color="' + color + '">' + text + '</font>';
 }
 
@@ -62,7 +62,7 @@ function font (color, text) {
  * @param {String} link
  * @return {String}
  */
-function img (link) {
+function img(link) {
 	return '<img src="' + link + '" height="80" width="80" align="left">';
 }
 
@@ -78,11 +78,11 @@ function img (link) {
  * @param {String} text
  * @return {String}
  */
-function label (text) {
+function label(text) {
 	return bold(font(profileColor, text + ':')) + SPACE;
 }
 
-function currencyName (amount) {
+function currencyName(amount) {
 	var name = " buck";
 	return amount === 1 ? name : name + "s";
 }

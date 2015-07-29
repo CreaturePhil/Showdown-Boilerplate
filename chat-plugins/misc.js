@@ -161,7 +161,7 @@ exports.commands = {
 	},
 	poofoffhelp: ["/poofoff - Disable the use of the /poof command."],
 
-	regdate: function (target, room, user, connection) {
+	regdate: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		if (!target || target === "0") target = toId(user.userid);
 		if (!target || target === "." || target === "," || target === "'") return this.parse('/help regdate');
@@ -185,6 +185,7 @@ exports.commands = {
 				data = Tools.escapeHTML(username) + " is not registered.";
 			}
 			self.sendReplyBox(Tools.escapeHTML(data));
+			room.update();
 		});
 	},
 	regdatehelp: ["/regdate - Please specify a valid username."],
