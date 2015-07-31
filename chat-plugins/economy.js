@@ -432,7 +432,7 @@ exports.commands = {
 	enddice: function (target, room, user) {
 		if (!user.can('broadcast', null, room)) return false;
 		if (!room.dice) return this.sendReply("There is no dice game in this room.");
-		if ((Date.now() - room.dice.startTime) < 60000 && !user.can('broadcast', null, room)) return this.sendReply("Regular users may not end a dice game within the first minute of it starting.");
+		if ((Date.now() - room.dice.startTime) < 60000 && !user.can('ban', null, room)) return this.sendReply("Regular users may not end a dice game within the first minute of it starting.");
 		if (room.dice.p1) {
 			Database.read('money', room.dice.p1, function (err, total) {
 				if (err) throw err;
