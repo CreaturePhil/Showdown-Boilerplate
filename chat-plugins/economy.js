@@ -387,6 +387,7 @@ exports.commands = {
 	joindice: function (target, room, user) {
 		if (!room.dice || (room.dice.p1 && room.dice.p2)) return this.sendReply("There is no dice game in it's signup phase in this room.");
 		if (!this.canTalk()) return this.sendReply("You may not join dice games while unable to speak.");
+		if (room.dice.p1 === user.userid) return this.sendReply("You already enter this dice game.");
 		var _this = this;
 		Database.read('money', user.userid, function (err, userMoney) {
 			if (err) throw err;
@@ -399,7 +400,6 @@ exports.commands = {
 					room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
 					return room.update();
 				}
-				if (room.dice.p1 === user.userid) return _this.sendReply("You already enter this dice game.");
 				room.dice.p2 = user.userid;
 				room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
 				var p1Number = Math.floor(6 * Math.random()) + 1;
