@@ -25,7 +25,7 @@ var shopDisplay = getShopDisplay(shop);
  * @param {Number} amount
  * @returns {String}
  */
-function currencyName (amount) {
+function currencyName(amount) {
 	var name = " buck";
 	return amount === 1 ? name : name + "s";
 }
@@ -36,7 +36,7 @@ function currencyName (amount) {
  * @param {String} money
  * @return {String|Number}
  */
-function isMoney (money) {
+function isMoney(money) {
 	var numMoney = Number(money);
 	if (isNaN(money)) return "Must be a number.";
 	if (String(money).includes('.')) return "Cannot contain a decimal.";
@@ -49,7 +49,7 @@ function isMoney (money) {
  *
  * @param {String} message
  */
-function logMoney (message) {
+function logMoney(message) {
 	if (!message) return;
 	var file = path.join(__dirname, '../logs/money.txt');
 	var date = "[" + new Date().toUTCString() + "] ";
@@ -63,7 +63,7 @@ function logMoney (message) {
  * @param {Array} shop
  * @return {String} display
  */
-function getShopDisplay (shop) {
+function getShopDisplay(shop) {
 	var display = "<table border='1' cellspacing='0' cellpadding='5' width='100%'>" +
 					"<tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>";
 	var start = 0;
@@ -87,7 +87,7 @@ function getShopDisplay (shop) {
  * @param {Number} money
  * @return {Object}
  */
-function findItem (item, money) {
+function findItem(item, money) {
 	var len = shop.length;
 	var price = 0;
 	var amount = 0;
@@ -111,7 +111,7 @@ function findItem (item, money) {
  * @param {Object} user
  * @param {Number} cost - for lottery
  */
-function handleBoughtItem (item, user, cost) {
+function handleBoughtItem(item, user, cost) {
 	if (item === 'symbol') {
 		user.canCustomSymbol = true;
 		this.sendReply("You have purchased a custom symbol. You can use /customsymbol to get your custom symbol.");
@@ -433,20 +433,21 @@ exports.commands = {
 		if (!user.can('broadcast', null, room)) return false;
 		if (!room.dice) return this.sendReply("There is no dice game in this room.");
 		if ((Date.now() - room.dice.startTime) < 60000 && !user.can('ban', null, room)) return this.sendReply("Regular users may not end a dice game within the first minute of it starting.");
-		if (room.dice.p1) {
-			Database.read('money', room.dice.p1, function (err, total) {
+		var dice = room.dice;
+		if (dice.p1) {
+			Database.read('money', dice.p1, function (err, total) {
 				if (err) throw err;
 				if (!total) total = 0;
-				Database.write('money', total + room.dice.bet, room.dice.p1, function (err) {
+				Database.write('money', total + dice.bet, dice.p1, function (err) {
 					if (err) throw err;
 				});
 			});
 		}
-		if (room.dice.p2) {
-			Database.read('money', room.dice.p2, function (err, total) {
+		if (dice.p2) {
+			Database.read('money', dice.p2, function (err, total) {
 				if (err) throw err;
 				if (!total) total = 0;
-				Database.write('money', total + room.dice.bet, room.dice.p2, function (err) {
+				Database.write('money', total + dice.bet, dice.p2, function (err) {
 					if (err) throw err;
 				});
 			});
