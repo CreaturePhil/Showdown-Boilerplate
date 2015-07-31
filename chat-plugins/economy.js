@@ -433,21 +433,13 @@ exports.commands = {
 		if (!user.can('broadcast', null, room)) return false;
 		if (!room.dice) return this.sendReply("There is no dice game in this room.");
 		if ((Date.now() - room.dice.startTime) < 60000 && !user.can('ban', null, room)) return this.sendReply("Regular users may not end a dice game within the first minute of it starting.");
+		if (room.dice.p2) return this.sendReply("Dice game has already started.");
 		var dice = room.dice;
 		if (dice.p1) {
 			Database.read('money', dice.p1, function (err, total) {
 				if (err) throw err;
 				if (!total) total = 0;
 				Database.write('money', total + dice.bet, dice.p1, function (err) {
-					if (err) throw err;
-				});
-			});
-		}
-		if (dice.p2) {
-			Database.read('money', dice.p2, function (err, total) {
-				if (err) throw err;
-				if (!total) total = 0;
-				Database.write('money', total + dice.bet, dice.p2, function (err) {
 					if (err) throw err;
 				});
 			});
