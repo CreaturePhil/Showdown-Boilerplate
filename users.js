@@ -899,7 +899,7 @@ User = (function () {
 			} else if (userType === '4') {
 				this.autoconfirmed = userid;
 			} else if (userType === '5') {
-				this.lock(false, userid);
+				this.lock(false, userid + '#permalock');
 			} else if (userType === '6') {
 				this.ban(false, userid);
 			}
@@ -928,14 +928,14 @@ User = (function () {
 			if (this.named) user.prevNames[this.userid] = this.name;
 			this.destroy();
 			Rooms.global.checkAutojoin(user);
-			if (Config.loginfilter) Config.loginfilter(user, this);
+			if (Config.loginfilter) Config.loginfilter(user, this, userType);
 			return true;
 		}
 
 		// rename success
 		if (this.forceRename(name, registered)) {
 			Rooms.global.checkAutojoin(this);
-			if (Config.loginfilter) Config.loginfilter(this);
+			if (Config.loginfilter) Config.loginfilter(this, null, userType);
 			return true;
 		}
 		return false;
