@@ -1185,7 +1185,9 @@ User = (function () {
 		}
 	};
 	User.prototype.onDisconnect = function (connection) {
-		if (this.registered) {
+		var name = 'Guest ' + this.guestNum;
+		var userid = toId(name);
+		if (this.registered && this.userid !== userid) {
 			Database.write('seen', Date.now(), this.userid, function (err) {
 				if (err) throw err;
 			});
