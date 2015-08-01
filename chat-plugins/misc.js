@@ -2,6 +2,7 @@
  * Miscellaneous commands
  */
 
+var fs = require('fs');
 var moment = require('moment');
 var request = require("request");
 
@@ -209,16 +210,26 @@ exports.commands = {
 		if (!target) return this.parse('/help seen');
 		var targetUser = Users.get(target);
 		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
-		Database.read('seen', toId(target), function (err, seen) {
-			if (err) throw err;
-			target = Tools.escapeHTML(target);
-			if (!seen) {
-				this.sendReplyBox(target + " has never been online on this server.");
-			} else {
-				this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
+		var _this = this;
+		target = Tools.escapeHTML(target);
+		fs.exists('config/seen.json', function (exists) {
+			if (!exists) {
+				_this.sendReplyBox(target + " has never been online on this server.");
+				return room.update();
 			}
-			room.update();
-		}.bind(this));
+			fs.readFile('config/seen.json', 'utf8', function (err, data) {
+				if (err) throw err;
+				if (!data) data = '{}';
+				var obj = JSON.parse(data);
+				var seen = obj[toId(target)];
+				if (!seen) {
+					_this.sendReplyBox(target + " has never been online on this server.");
+				} else {
+					_this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
+				}
+				room.update();
+			});
+		});
 	},
 	seenhelp: ["/seen - Shows when the user last connected on the server."],
 

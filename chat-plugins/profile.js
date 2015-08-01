@@ -1,4 +1,5 @@
 var color = require('../config/color');
+var fs = require('fs');
 var moment = require('moment');
 
 var BR = '<br>';
@@ -133,14 +134,27 @@ Profile.prototype.show = function (callback) {
 	Database.read('money', userid, function (err, money) {
 		if (err) throw err;
 		if (!money) money = 0;
-		Database.read('seen', userid, function (err, seen) {
-			if (err) throw err;
-			callback(_this.avatar() +
+		fs.exists('config/seen.json', function (exists) {
+			if (!exists) {
+				return callback(_this.avatar() +
+				SPACE + _this.name() + BR +
+				SPACE + _this.group() + BR +
+				SPACE + _this.money(money) + BR +
+				SPACE + _this.seen() +
+				'<br clear="all">');
+			}
+			fs.readFile('config/seen.json', 'utf8', function (err, data) {
+				if (err) throw err;
+				if (!data) data = '{}';
+				var obj = JSON.parse(data);
+				var seen = obj[userid];
+				callback(_this.avatar() +
 				SPACE + _this.name() + BR +
 				SPACE + _this.group() + BR +
 				SPACE + _this.money(money) + BR +
 				SPACE + _this.seen(seen) +
 				'<br clear="all">');
+			});
 		});
 	});
 };
@@ -161,5 +175,5 @@ exports.commands = {
 			room.update();
 		}.bind(this));
 	},
-	profilehelp: ["/profile -  Shows information regarding user's name, group, money, and when they were last seen."]
+	profilehelp: ["/profile -	Shows information regarding user's name, group, money, and when they were last seen."]
 };

@@ -1187,9 +1187,26 @@ User = (function () {
 	User.prototype.onDisconnect = function (connection) {
 		var name = 'Guest ' + this.guestNum;
 		var userid = toId(name);
+		var _this = this;
 		if (this.registered && this.userid !== userid) {
-			Database.write('seen', Date.now(), this.userid, function (err) {
-				if (err) throw err;
+			fs.exists('config/seen.json', function (exists) {
+				if (!exists) {
+					var obj = {};
+					obj[_this.userid] = Date.now();
+					fs.writeFile('config/seen.json', JSON.stringify(obj, null, 2), function (err) {
+						if (err) throw err;
+					});
+				} else {
+					fs.readFile('config/seen.json', 'utf8', function (err, data) {
+						if (err) throw err;
+						if (!data) data = '{}';
+						var obj = JSON.parse(data);
+						obj[_this.userid] = Date.now();
+						fs.writeFile('config/seen.json', JSON.stringify(obj, null, 2), function (err) {
+							if (err) throw err;
+						});
+					});
+				}
 			});
 		}
 		for (var i = 0; i < this.connections.length; i++) {
