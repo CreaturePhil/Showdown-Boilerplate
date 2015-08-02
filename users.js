@@ -28,6 +28,7 @@ const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
 
 var fs = require('fs');
+var steno = require('steno');
 
 /* global Users: true */
 var Users = module.exports = getUser;
@@ -1208,7 +1209,7 @@ User = (function () {
 							throw e;
 						}
 						obj[_this.userid] = Date.now();
-						fs.writeFile('config/seen.json', JSON.stringify(obj, null, 2), function (err) {
+						steno.writeFile('config/seen.json', JSON.stringify(obj, null, 2), function (err) {
 							if (err) throw err;
 						});
 					});
