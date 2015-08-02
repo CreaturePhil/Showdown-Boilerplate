@@ -1200,7 +1200,13 @@ User = (function () {
 					fs.readFile('config/seen.json', 'utf8', function (err, data) {
 						if (err) throw err;
 						if (!data) data = '{}';
-						var obj = JSON.parse(data);
+						var obj;
+						try {
+							obj = JSON.parse(data);
+						} catch (e) {
+							if (e instanceof SyntaxError) e.message = 'Malformed JSON in seen.json: \n' + e.message;
+							throw e;
+						}
 						obj[_this.userid] = Date.now();
 						fs.writeFile('config/seen.json', JSON.stringify(obj, null, 2), function (err) {
 							if (err) throw err;

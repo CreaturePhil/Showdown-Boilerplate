@@ -220,7 +220,13 @@ exports.commands = {
 			fs.readFile('config/seen.json', 'utf8', function (err, data) {
 				if (err) throw err;
 				if (!data) data = '{}';
-				var obj = JSON.parse(data);
+				var obj;
+				try {
+					obj = JSON.parse(data);
+				} catch (e) {
+					if (e instanceof SyntaxError) e.message = 'Malformed JSON in seen.json: \n' + e.message;
+					throw e;
+				}
 				var seen = obj[toId(target)];
 				if (!seen) {
 					_this.sendReplyBox(target + " has never been online on this server.");
