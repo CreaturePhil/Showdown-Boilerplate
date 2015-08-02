@@ -155,6 +155,9 @@ exports.tellsexpiryage = 1000 * 60 * 60 * 24 * 7;
 // to send offline messages.
 exports.tellrank = '+';
 
+// database use to store user's money, tickets, etc.
+exports.database = 'lowdb';
+
 // mysql configuration to create the connection to the database.
 exports.mysql = {
 	host: 'localhost',
