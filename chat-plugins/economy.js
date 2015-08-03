@@ -232,7 +232,7 @@ exports.commands = {
 	resetbuck: 'resetmoney',
 	resetbucks: 'resetmoney',
 	resetmoney: function (target, room, user) {
-		if (!user.can('resetmoney')) return false;
+		if (!user.can('forcewin')) return false;
 		Database.write('money', 0, toId(target), function (err, total) {
 			if (err) throw err;
 			this.sendReply(target + " now has " + total + currencyName(total) + ".");
