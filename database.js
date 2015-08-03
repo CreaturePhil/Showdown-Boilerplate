@@ -135,7 +135,37 @@ databases.lowdb = function () {
 databases.mysql = function () {
 	var methods = {};
 	var connection = mysql.createConnection(Config.mysql);
-	connection.connect();
+	connection.connect(function (err) {
+		if (err) return console.error('error connecting: ' + err.stack);
+		console.log('connected as id ' + connection.threadId);
+	});
+
+	var creationStr = "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+							"username VARCHAR(20)," +
+							"money INTEGER," +
+							"tickets TEXT);";
+
+	connection.query(creationStr, function (err) {
+		if (err) throw err;
+	});
+
+	methods.read = function (key, username, callback) {
+		connection.query("SELECT " + key + " from users WHERE username=\"" + username + "\";", function (err, rows) {
+			if (err) return callback(new Error(err));
+			if (!rows.length) return callback(null);
+			callback(null, rows[0][key]);
+		});
+	};
+
+	methods.write = function (key, value, username, callback) {
+		connection.query("DELETE FROM users WHERE username=\"" + username + "\";", function (err) {
+			if (err) return callback(new Error(err));
+			connection.query("INSERT INTO users (username, " + key + ") VALUES (\"" + username + "\", " + value + ");", function (err) {
+				if (err) return callback(new Error(err));
+				callback(null, value);
+			});
+		});
+	};
 
 	return methods;
 };
