@@ -140,12 +140,18 @@ databases.mysql = function () {
 		console.log('connected as id ' + connection.threadId);
 	});
 
-	var creationStr = "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+	var createUserTableStr = "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT," +
 							"username VARCHAR(20)," +
 							"money INTEGER," +
 							"tickets TEXT);";
 
-	connection.query(creationStr, function (err) {
+	connection.query(createUserTableStr, function (err) {
+		if (err) throw err;
+	});
+
+	var createSymbolTableStr = "CREATE TABLE IF NOT EXISTS symbols (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, k TEXT, v TEXT);";
+
+	connection.query(createSymbolTableStr, function (err) {
 		if (err) throw err;
 	});
 
@@ -168,9 +174,9 @@ databases.mysql = function () {
 	};
 
 	methods.total = function (key, callback) {
-		connection.query("SELECT SUM(?) from users;", [key], function (err, rows) {
+		connection.query("SELECT SUM(??) FROM users;", [key], function (err, rows) {
 			if (err) return callback(new Error(err));
-			callback(null, rows[0]['SUM(' + key + ')']);
+			callback(null, rows[0]['SUM(`' + key + '`)']);
 		});
 	};
 
@@ -178,6 +184,38 @@ databases.mysql = function () {
 		connection.query("SELECT * FROM users;", function (err, rows) {
 			if (err) return callback(new Error(err));
 			callback(null, rows.length);
+		});
+	};
+
+	methods.sortDesc = function (key, amount, callback) {
+		connection.query("SELECT username, ?? FROM users ORDER BY ?? DESC LIMIT ?;", [key, key, amount], function (err, rows) {
+			if (err) return callback(new Error(err));
+			callback(null, rows);
+		});
+	};
+
+	methods.get = function (key, callback) {
+		connection.query("SELECT * FROM symbols WHERE k = ?;", [key], function (err, rows) {
+			if (err) return callback(new Error(err));
+			if (key === 'pot') return callback(null, Number(rows[0]['v']));
+			callback(null, rows[0][key]);
+		});
+	};
+
+	methods.set = function (key, value, callback) {
+		connection.query("DELETE FROM symbols WHERE k = ?;", [key], function (err) {
+			if (err) return callback(new Error(err));
+			connection.query("INSERT INTO symbols (k, v) VALUES (?, ?);", [key, value], function (err) {
+				if (err) return callback(new Error(err));
+				callback(null, value);
+			});
+		});
+	};
+
+	methods.users = function (callback) {
+		connection.query("SELECT * FROM users;", function (err, rows) {
+			if (err) return callback(new Error(err));
+			callback(null, rows);
 		});
 	};
 

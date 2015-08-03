@@ -531,6 +531,8 @@ exports.commands = {
 		var _this = this;
 		Database.total('money', function (err, total) {
 			Database.countUsers(function (err, numUsers) {
+				console.log(total);
+				console.log(numUsers);
 				var average = Math.floor(total / numUsers);
 				var output = "There is " + total + currencyName(total) + " circulating in the economy. ";
 				output += "The average user has " + average + currencyName(average) + ".";
