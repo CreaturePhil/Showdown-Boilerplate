@@ -176,7 +176,7 @@ exports.commands = {
 	givebuck: 'givemoney',
 	givebucks: 'givemoney',
 	givemoney: function (target, room, user) {
-		if (!user.can('forcewin')) return this.sendReply("/givebucks - Access denied.");
+		if (!this.can('forcewin')) return false;
 		if (!target || target.indexOf(',') < 0) return this.parse('/help givemoney');
 
 		var parts = target.split(',');
@@ -204,7 +204,7 @@ exports.commands = {
 	takebuck: 'takemoney',
 	takebucks: 'takemoney',
 	takemoney: function (target, room, user) {
-		if (!user.can('forcewin')) return this.sendReply("/takebucks - Access denied.");
+		if (!this.can('forcewin')) return false;
 		if (!target || target.indexOf(',') < 0) return this.parse('/help takemoney');
 
 		var parts = target.split(',');
@@ -232,7 +232,7 @@ exports.commands = {
 	resetbuck: 'resetmoney',
 	resetbucks: 'resetmoney',
 	resetmoney: function (target, room, user) {
-		if (!user.can('forcewin')) return false;
+		if (!this.can('forcewin')) return false;
 		Database.write('money', 0, toId(target), function (err, total) {
 			if (err) throw err;
 			this.sendReply(target + " now has " + total + currencyName(total) + ".");
@@ -365,7 +365,7 @@ exports.commands = {
 	dicegame: 'startdice',
 	dicestart: 'startdice',
 	startdice: function (target, room, user) {
-		if (!user.can('broadcast', null, room)) return false;
+		if (!this.can('broadcast', null, room)) return false;
 		if (!target) return this.parse('/help startdice');
 		if (!this.canTalk()) return this.sendReply("You can not start dice games while unable to speak.");
 
@@ -463,7 +463,7 @@ exports.commands = {
 	},
 
 	picklottery: function (target, room, user) {
-		if (!user.can('picklottery')) return false;
+		if (!this.can('picklottery')) return false;
 		var chance = Math.floor(Math.random() * 4) === 3;
 		var _this = this;
 		Database.users(function (err, users) {

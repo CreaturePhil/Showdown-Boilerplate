@@ -119,12 +119,11 @@ exports.commands = {
 		this.sendReplyBox(Poll[room.id].display);
 	},
 
-
 	tpoll: 'tierpoll',
 	tierspoll: 'tierpoll',
 	tierpoll: function (target, room, user) {
-		if (!this.can('broadcast', null, room)) return this.sendReply('/tierpoll - Access denied.');
-		this.parse('/poll Tournament Tier, Ubers, OU, UU, RU, NU, PU, LC, Monotype, Anything Goes, Random Battle, Random Monotype, Doubles OU, Seasonal, Battle Factory, Challenge Cup 1v1, Challenge Cup, Gen 1 Random Battle, 1v1, Super Staff Bros.');
+		if (!this.can('broadcast', null, room)) return false;
+		this.parse('/poll ' + Object.values(Tools.data.Formats).filter(function (f) { return f.effectType === 'Format' && f.tournamentShow; }).map('name').join(", "));
 	},
 
 	vote: function (target, room, user) {
