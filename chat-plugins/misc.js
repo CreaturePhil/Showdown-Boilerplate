@@ -210,32 +210,10 @@ exports.commands = {
 		if (!target) return this.parse('/help seen');
 		var targetUser = Users.get(target);
 		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
-		var _this = this;
 		target = Tools.escapeHTML(target);
-		fs.exists('config/seen.json', function (exists) {
-			if (!exists) {
-				_this.sendReplyBox(target + " has never been online on this server.");
-				return room.update();
-			}
-			fs.readFile('config/seen.json', 'utf8', function (err, data) {
-				if (err) throw err;
-				if (!data) data = '{}';
-				var obj;
-				try {
-					obj = JSON.parse(data);
-				} catch (e) {
-					if (e instanceof SyntaxError) e.message = 'Malformed JSON in seen.json: \n' + e.message;
-					throw e;
-				}
-				var seen = obj[toId(target)];
-				if (!seen) {
-					_this.sendReplyBox(target + " has never been online on this server.");
-				} else {
-					_this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
-				}
-				room.update();
-			});
-		});
+		var seen = Seen[toId(target)];
+		if (!seen) return this.sendReplyBox(target + " has never been online on this server.");
+		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
 	},
 	seenhelp: ["/seen - Shows when the user last connected on the server."],
 

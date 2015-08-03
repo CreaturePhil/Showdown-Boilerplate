@@ -1188,32 +1188,10 @@ User = (function () {
 	User.prototype.onDisconnect = function (connection) {
 		var name = 'Guest ' + this.guestNum;
 		var userid = toId(name);
-		var _this = this;
 		if (this.registered && this.userid !== userid) {
-			fs.exists('config/seen.json', function (exists) {
-				if (!exists) {
-					var obj = {};
-					obj[_this.userid] = Date.now();
-					fs.writeFile('config/seen.json', JSON.stringify(obj, null, 2), function (err) {
-						if (err) throw err;
-					});
-				} else {
-					fs.readFile('config/seen.json', 'utf8', function (err, data) {
-						if (err) throw err;
-						if (!data) data = '{}';
-						var obj;
-						try {
-							obj = JSON.parse(data);
-						} catch (e) {
-							if (e instanceof SyntaxError) e.message = 'Malformed JSON in seen.json: \n' + e.message;
-							throw e;
-						}
-						obj[_this.userid] = Date.now();
-						steno.writeFile('config/seen.json', JSON.stringify(obj, null, 2), function (err) {
-							if (err) throw err;
-						});
-					});
-				}
+			Seen[this.userid] = Date.now();
+			steno.writeFile('config/seen.json', JSON.stringify(Seen, null, 2), function (err) {
+				if (err) throw err;
 			});
 		}
 		for (var i = 0; i < this.connections.length; i++) {

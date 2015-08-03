@@ -128,41 +128,18 @@ Profile.prototype.seen = function (timeAgo) {
 };
 
 Profile.prototype.show = function (callback) {
-	var _this = this;
 	var userid = toId(this.username);
 
 	Database.read('money', userid, function (err, money) {
 		if (err) throw err;
 		if (!money) money = 0;
-		fs.exists('config/seen.json', function (exists) {
-			if (!exists) {
-				return callback(_this.avatar() +
-				SPACE + _this.name() + BR +
-				SPACE + _this.group() + BR +
-				SPACE + _this.money(money) + BR +
-				SPACE + _this.seen() +
-				'<br clear="all">');
-			}
-			fs.readFile('config/seen.json', 'utf8', function (err, data) {
-				if (err) throw err;
-				if (!data) data = '{}';
-				var obj;
-				try {
-					obj = JSON.parse(data);
-				} catch (e) {
-					if (e instanceof SyntaxError) e.message = 'Malformed JSON in seen.json: \n' + e.message;
-					throw e;
-				}
-				var seen = obj[userid];
-				callback(_this.avatar() +
-				SPACE + _this.name() + BR +
-				SPACE + _this.group() + BR +
-				SPACE + _this.money(money) + BR +
-				SPACE + _this.seen(seen) +
-				'<br clear="all">');
-			});
-		});
-	});
+		return callback(this.avatar() +
+										SPACE + this.name() + BR +
+										SPACE + this.group() + BR +
+										SPACE + this.money(money) + BR +
+										SPACE + this.seen(Seen[userid]) +
+										'<br clear="all">');
+	}.bind(this));
 };
 
 exports.commands = {
