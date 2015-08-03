@@ -25,7 +25,8 @@ If you would like to use the old version of Showdown-Boilerplate, go to this
 - Numerous *cool* commands such as /urbandefine or /poof
 - Emoticons in chat and private messages
 - Polls, Hangman, Profile, and Tells
-- Economy (bucks system, shop, tournament winnings)
+- Economy (bucks system, shop, tournament winnings, lottery)
+- Lowdb and MySql database support
 
 ## Quick Start
 
