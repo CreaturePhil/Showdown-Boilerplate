@@ -150,7 +150,7 @@ databases.mysql = function () {
 	});
 
 	methods.read = function (key, username, callback) {
-		connection.query("SELECT " + key + " from users WHERE username=\"" + username + "\";", function (err, rows) {
+		connection.query("SELECT ?? from users WHERE username = ?;", [key, username], function (err, rows) {
 			if (err) return callback(new Error(err));
 			if (!rows.length) return callback(null);
 			callback(null, rows[0][key]);
@@ -158,12 +158,26 @@ databases.mysql = function () {
 	};
 
 	methods.write = function (key, value, username, callback) {
-		connection.query("DELETE FROM users WHERE username=\"" + username + "\";", function (err) {
+		connection.query("DELETE FROM users WHERE username = ?;", [username], function (err) {
 			if (err) return callback(new Error(err));
-			connection.query("INSERT INTO users (username, " + key + ") VALUES (\"" + username + "\", " + value + ");", function (err) {
+			connection.query("INSERT INTO users (username, ??) VALUES (?, ?);", [key, username, value], function (err) {
 				if (err) return callback(new Error(err));
 				callback(null, value);
 			});
+		});
+	};
+
+	methods.total = function (key, callback) {
+		connection.query("SELECT SUM(?) from users;", [key], function (err, rows) {
+			if (err) return callback(new Error(err));
+			callback(null, rows[0]['SUM(' + key + ')']);
+		});
+	};
+
+	methods.countUsers = function (callback) {
+		connection.query("SELECT * FROM users;", function (err, rows) {
+			if (err) return callback(new Error(err));
+			callback(null, rows.length);
 		});
 	};
 
