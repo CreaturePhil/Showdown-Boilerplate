@@ -464,7 +464,7 @@ exports.commands = {
 
 	picklottery: function (target, room, user) {
 		if (!this.can('picklottery')) return false;
-		var chance = Math.floor(Math.random() * 4) === 3;
+		var chance = Math.floor(Math.random());
 		var _this = this;
 		Database.users(function (err, users) {
 			if (err) throw err;
