@@ -159,8 +159,9 @@ databases.mysql = function () {
 		connection.query("SELECT ?? from users WHERE username = ?;", [key, username], function (err, rows) {
 			if (err) return callback(new Error(err));
 			if (!rows.length) return callback(null);
-			if (key === 'tickets') return callback(null, rows[0][key].split(','));
-			callback(null, rows[0][key]);
+			var value = rows[0][key];
+			if (key === 'tickets' && value) return callback(null, value.split(','));
+			callback(null, value);
 		});
 	};
 
