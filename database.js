@@ -141,7 +141,7 @@ databases.mysql = function () {
 	});
 
 	var createUserTableStr = "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-							"username VARCHAR(20)," +
+							"username VARCHAR(20) UNIQUE," +
 							"money INTEGER," +
 							"tickets TEXT);";
 
@@ -159,17 +159,16 @@ databases.mysql = function () {
 		connection.query("SELECT ?? from users WHERE username = ?;", [key, username], function (err, rows) {
 			if (err) return callback(new Error(err));
 			if (!rows.length) return callback(null);
+			if (key === 'tickets') return callback(null, rows[0][key].split(','));
 			callback(null, rows[0][key]);
 		});
 	};
 
 	methods.write = function (key, value, username, callback) {
-		connection.query("DELETE FROM users WHERE username = ?;", [username], function (err) {
+		if (Array.isArray(value)) value = value.join(', ');
+		connection.query("INSERT INTO users (username, ??) VALUES (?, ?) ON DUPLICATE KEY UPDATE ?? = VALUES (??);", [key, username, value, key, key], function (err) {
 			if (err) return callback(new Error(err));
-			connection.query("INSERT INTO users (username, ??) VALUES (?, ?);", [key, username, value], function (err) {
-				if (err) return callback(new Error(err));
-				callback(null, value);
-			});
+			callback(null, value);
 		});
 	};
 
