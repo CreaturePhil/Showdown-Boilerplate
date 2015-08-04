@@ -222,7 +222,7 @@ databases.mysql = function () {
 	return methods;
 };
 
-function Database (database) {
+function Database(database) {
 	return databases[database]();
 }
 
