@@ -1,6 +1,6 @@
 /**
  * Database file
- * To easily switch between different database using a common API.
+ * To easily switch between different databases using a common API.
  *
  *
  * methods.read(key, username, callback)
