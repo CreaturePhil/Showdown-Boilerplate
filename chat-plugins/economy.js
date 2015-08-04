@@ -278,6 +278,7 @@ exports.commands = {
 	},
 	transfermoneyhelp: ["/transfer [user], [amount] - Transfer a certain amount of money to a user."],
 
+	store: 'shop',
 	shop: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		return this.sendReply("|raw|" + shopDisplay);
