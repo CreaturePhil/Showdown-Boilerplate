@@ -105,9 +105,9 @@ databases.lowdb = function () {
 		var value = db('users')
 						.chain()
 						.filter(function (user) {
-							return user.money >= 0;
+							return user[key] >= 0;
 						})
-						.sortByOrder('money', ['desc'])
+						.sortByOrder(key, ['desc'])
 						.take(amount)
 						.value();
 
