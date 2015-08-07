@@ -310,11 +310,15 @@ global.toId = function (text) {
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
+global.Tools = require('./tools.js').includeFormats();
+
 global.LoginServer = require('./loginserver.js');
 
 global.Users = require('./users.js');
 
 global.Rooms = require('./rooms.js');
+
+Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.Tells = require('./tells.js');
 
@@ -373,15 +377,6 @@ global.Sockets = require('./sockets.js');
 /*********************************************************
  * Set up our last global
  *********************************************************/
-
-// This slow operation is done *after* we start listening for connections
-// to the server. Anybody who connects while this require() is running will
-// have to wait a couple seconds before they are able to join the server, but
-// at least they probably won't receive a connection error message.
-global.Tools = require('./tools.js');
-
-// After loading tools, generate and cache the format list.
-Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.TeamValidator = require('./team-validator.js');
 

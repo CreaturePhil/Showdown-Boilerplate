@@ -12,7 +12,7 @@
 
 const RESULTS_MAX_LENGTH = 10;
 
-var commands = exports.commands = {
+var commands = {
 
 	ip: 'whois',
 	rooms: 'whois',
@@ -748,7 +748,7 @@ var commands = exports.commands = {
 		var searches = {};
 		var allCategories = {'physical':1, 'special':1, 'status':1};
 		var allProperties = {'basePower':1, 'accuracy':1, 'priority':1, 'pp':1};
-		var allFlags = {'bite':1, 'bullet':1, 'contact':1, 'defrost':1, 'powder':1, 'pulse':1, 'punch':1, 'secondary':1, 'snatch':1, 'sound':1};
+		var allFlags = {'authentic':1, 'bite':1, 'bullet':1, 'contact':1, 'defrost':1, 'powder':1, 'pulse':1, 'punch':1, 'secondary':1, 'snatch':1, 'sound':1};
 		var allStatus = {'psn':1, 'tox':1, 'brn':1, 'par':1, 'frz':1, 'slp':1};
 		var allVolatileStatus = {'flinch':1, 'confusion':1, 'partiallytrapped':1};
 		var allBoosts = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'accuracy':1, 'evasion':1};
@@ -782,6 +782,7 @@ var commands = exports.commands = {
 				continue;
 			}
 
+			if (target === 'bypassessubstitute') target = 'authentic';
 			if (target in allFlags) {
 				if (!searches['flags']) searches['flags'] = {};
 				if ((searches['flags'][target] && isNotSearch) || (searches['flags'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include \'' + target + '\'.');
@@ -1090,6 +1091,7 @@ var commands = exports.commands = {
 		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
+		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, sound",
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from it's movepool.",
 		"The order of the parameters does not matter."],
 
@@ -2084,6 +2086,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#gxe\">What does GXE mean?</a><br />";
 		}
+		if (target === 'all'  || target === 'coil') {
+			matched = true;
+			buffer += "<a href=\"http://www.smogon.com/forums/threads/coil-explained.3508013\">What is COIL?</a><br />";
+		}
 		if (!matched) {
 			return this.sendReply("The FAQ entry '" + target + "' was not found. Try /faq for general help.");
 		}
@@ -2354,3 +2360,14 @@ var commands = exports.commands = {
 	},
 	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority"]
 };
+
+process.nextTick(function () {
+	// This slow operation is done *after* we start listening for connections
+	// to the server. Anybody who connects while data is loading will
+	// have to wait a couple seconds before they are able to join the server, but
+	// at least they probably won't receive a connection error message.
+
+	Tools.includeData();
+	exports.commands = commands;
+	Object.merge(CommandParser.commands, commands);
+});

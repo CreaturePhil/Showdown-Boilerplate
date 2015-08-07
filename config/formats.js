@@ -411,9 +411,9 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon',
-			'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Landorus', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew'
+		banlist: ['Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja',
+			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Landorus', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Soul Dew'
 		],
 		validateSet: function (set) {
 			var problems = [];
@@ -591,6 +591,7 @@ exports.Formats = [
 				}
 			}
 		},
+		onEffectivenessPriority: -5,
 		onEffectiveness: function (typeMod, target, type, move) {
 			if (move.id !== 'swift') return;
 			// Only calculate color effectiveness once
