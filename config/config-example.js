@@ -178,6 +178,9 @@ exports.customavatars = {
 	//'userid': 'customavatar.png'
 };
 
+//Custom avatars appear in profile by specifiying server url.
+exports.avatarurl = '';
+
 // Tournament announcements
 // When tournaments are created in rooms listed below, they will be announced in
 // the server's main tournament room (either the specified tourroom or by default
