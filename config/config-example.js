@@ -178,7 +178,7 @@ exports.customavatars = {
 	//'userid': 'customavatar.png'
 };
 
-//Custom avatars appear in profile by specifiying server url.
+// custom avatars appear in profile by specifiying server url.
 exports.avatarurl = '';
 
 // Tournament announcements
