@@ -123,7 +123,7 @@ exports.commands = {
 	tierspoll: 'tierpoll',
 	tierpoll: function (target, room, user) {
 		if (!this.can('broadcast', null, room)) return false;
-		this.parse('/poll ' + Object.values(Tools.data.Formats).filter(function (f) { return f.effectType === 'Format' && f.tournamentShow; }).map('name').join(", "));
+		this.parse('/poll Tier for the next tournament?,' + Object.values(Tools.data.Formats).filter(function (f) { return f.effectType === 'Format' && f.tournamentShow; }).map('name').join(", "));
 	},
 
 	vote: function (target, room, user) {
