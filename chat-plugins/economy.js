@@ -368,13 +368,13 @@ exports.commands = {
 	startdice: function (target, room, user) {
 		if (!this.can('broadcast', null, room)) return false;
 		if (!target) return this.parse('/help startdice');
-		if (!this.canTalk()) return this.sendReply("You can not start dice games while unable to speak.");
+		if (!this.canTalk()) return this.errorReply("You can not start dice games while unable to speak.");
 
 		var amount = isMoney(target);
 
 		if (typeof amount === 'string') return this.sendReply(amount);
 		if (!room.dice) room.dice = {};
-		if (room.dice.started) return this.sendReply("A dice game has already started in this room.");
+		if (room.dice.started) return this.errorReply("A dice game has already started in this room.");
 
 		room.dice.started = true;
 		room.dice.bet = amount;
@@ -386,14 +386,14 @@ exports.commands = {
 	startdicehelp: ["/startdice [bet] - Start a dice game to gamble for money."],
 
 	joindice: function (target, room, user) {
-		if (!room.dice || (room.dice.p1 && room.dice.p2)) return this.sendReply("There is no dice game in it's signup phase in this room.");
-		if (!this.canTalk()) return this.sendReply("You may not join dice games while unable to speak.");
-		if (room.dice.p1 === user.userid) return this.sendReply("You already enter this dice game.");
+		if (!room.dice || (room.dice.p1 && room.dice.p2)) return this.errorReply("There is no dice game in it's signup phase in this room.");
+		if (!this.canTalk()) return this.errorReply("You may not join dice games while unable to speak.");
+		if (room.dice.p1 === user.userid) return this.errorReply("You already entered this dice game.");
 		var _this = this;
 		Database.read('money', user.userid, function (err, userMoney) {
 			if (err) throw err;
 			if (!userMoney) userMoney = 0;
-			if (userMoney < room.dice.bet) return _this.sendReply("You don't have enough bucks to join this game.");
+			if (userMoney < room.dice.bet) return _this.errorReply("You don't have enough bucks to join this game.");
 			Database.write('money', userMoney - room.dice.bet, user.userid, function (err) {
 				if (err) throw err;
 				if (!room.dice.p1) {
@@ -432,9 +432,9 @@ exports.commands = {
 
 	enddice: function (target, room, user) {
 		if (!user.can('broadcast', null, room)) return false;
-		if (!room.dice) return this.sendReply("There is no dice game in this room.");
-		if ((Date.now() - room.dice.startTime) < 15000 && !user.can('broadcast', null, room)) return this.sendReply("Regular users may not end a dice game within the first minute of it starting.");
-		if (room.dice.p2) return this.sendReply("Dice game has already started.");
+		if (!room.dice) return this.errorReply("There is no dice game in this room.");
+		if ((Date.now() - room.dice.startTime) < 15000 && !user.can('broadcast', null, room)) return this.errorReply("Regular users may not end a dice game within the first minute of it starting.");
+		if (room.dice.p2) return this.errorReply("Dice game has already started.");
 		var dice = room.dice;
 		if (dice.p1) {
 			Database.read('money', dice.p1, function (err, total) {
