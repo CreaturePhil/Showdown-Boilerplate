@@ -48,7 +48,7 @@ global.toId = function (text) {
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
-global.Tools = require('./tools.js').includeData();
+global.Tools = require('./tools.js').includeMods();
 
 var Battle, BattleSide, BattlePokemon;
 
@@ -817,8 +817,8 @@ BattlePokemon = (function () {
 				if (this.battle.gen === 1) {
 					this.modifiedStats[statName] = Math.floor(stat);
 					// ...and here is where the gen 1 games re-apply burn and para drops.
-					if (this.status === 'par') this.modifyStat('spe', 0.25);
-					if (this.status === 'brn') this.modifyStat('atk', 0.5);
+					if (this.status === 'par' && statName === 'spe') this.modifyStat('spe', 0.25);
+					if (this.status === 'brn' && statName === 'atk') this.modifyStat('atk', 0.5);
 				}
 			}
 			this.speed = this.stats.spe;
@@ -3900,6 +3900,9 @@ Battle = (function () {
 				var lastMove = this.getMove(decision.pokemon.lastMove);
 				if (lastMove.selfSwitch !== 'copyvolatile') {
 					this.runEvent('BeforeSwitchOut', decision.pokemon);
+					if (this.gen >= 5) {
+						this.eachEvent('Update');
+					}
 				}
 				if (!this.runEvent('SwitchOut', decision.pokemon)) {
 					// Warning: DO NOT interrupt a switch-out
