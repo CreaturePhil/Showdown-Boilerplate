@@ -123,6 +123,20 @@ exports.commands = {
 	tierspoll: 'tierpoll',
 	tierpoll: function (target, room, user) {
 		if (!this.can('broadcast', null, room)) return false;
+		this.parse('/poll Tier for the next tournament?, Random Battles, Double Random Battles, Triple Random Battles, Gen [5] Random Battles, Gen [5] Double Random Battles, Gen [1] Random Battles, Gen [2] Random Battles, Challenge Cup 1v1, Hackmons Cup, Battle Factory, Seasonal, Monotype Random Battle, Uber, OU, UU, RU, NU, PU, LC, AG, Doubles OU, No Status, MonsJustMons, Tier Shift, Monotype');
+	},
+
+	rpoll: 'randompoll',
+	randomspoll: 'randompoll',
+	randompoll: function (target, room, user) {
+		if (!this.can('broadcast', null, room)) return false;
+		this.parse('/poll Tier for the next tournament?, Random Battles, Double Random Battles, Triple Random Battles, Gen [5] Random Battles, Gen [5] Double Random Battles, Gen [1] Random Battles, Gen [2] Random Battles, Challenge Cup 1v1, Hackmons Cup, Double Hackmons Cup, Triple Hackmons Cup, Battle Factory, Seasonal, Monotype Random Battle');
+	},
+
+	fpoll: 'formatpoll',
+	formatspoll: 'formatpoll',
+	formatpoll: function (target, room, user) {
+		if (!this.can('broadcast', null, room)) return false;
 		this.parse('/poll Tier for the next tournament?,' + Object.values(Tools.data.Formats).filter(function (f) { return f.effectType === 'Format' && f.tournamentShow; }).map('name').join(", "));
 	},
 
