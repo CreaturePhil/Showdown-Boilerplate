@@ -330,13 +330,24 @@ exports.commands = {
 
 	moneylog: function (target, room, user, connection) {
 		if (!this.can('modlog')) return;
-		var topMsg = "Displaying the last 15 lines of transactions:\n";
+		var numLines = 15;
+		var matching = true;
+		if (target.match(/\d/g) && !isNaN(target)) {
+			numLines = Number(target);
+			matching = false;
+		}
+		var topMsg = "Displaying the last " + numLines + " lines of transactions:\n";
 		var file = path.join(__dirname, '../logs/money.txt');
 		fs.exists(file, function (exists) {
 			if (!exists) return connection.popup("No transactions.");
 			fs.readFile(file, 'utf8', function (err, data) {
 				data = data.split('\n');
-				connection.popup(topMsg + data.slice(-15).join('\n'));
+				if (target && matching) {
+					data = data.filter(function (line) {
+						return line.toLowerCase().indexOf(target.toLowerCase()) >= 0;
+					});
+				}
+				connection.popup('|wide|' + topMsg + data.slice(-(numLines + 1)).join('\n'));
 			});
 		});
 	},
