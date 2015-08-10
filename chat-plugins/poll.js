@@ -119,11 +119,12 @@ exports.commands = {
 		this.sendReplyBox(Poll[room.id].display);
 	},
 
+	formatpoll: 'tierpoll',
 	tpoll: 'tierpoll',
 	tierspoll: 'tierpoll',
 	tierpoll: function (target, room, user) {
 		if (!this.can('broadcast', null, room)) return false;
-		this.parse('/poll ' + Object.values(Tools.data.Formats).filter(function (f) { return f.effectType === 'Format' && f.tournamentShow; }).map('name').join(", "));
+		this.parse("/poll Tournament tier?," + "Random Battle, OU, Ubers, UU, RU, NU, LC, Anything Goes, Battle Spot Singles, Custom Game, Random Doubles Battle, Doubles OU, Battle Spot Doubles (VGC 2015), Doubles Custom Game, Random Triples Battle, Smogon Triples, Triples Custom Game, CAP, Battle Factory, Challenge Cup 1v1, Balanced Hackmons, 1v1, Monotype, Tier Shift, PU, Inverse Battle, Monotype Random Battle");
 	},
 
 	vote: function (target, room, user) {
