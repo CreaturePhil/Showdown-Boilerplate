@@ -39,6 +39,7 @@ exports.commands = {
 			if (!room.hangmanEnabled) return this.sendReply("Hangman is disabled in this room.");
 			if (!targetSplit || !targetSplit[2]) return this.sendReply("Usage: /hangman [create], [word], [topic]");
 			var word = toId(targetSplit[1]);
+			if (!word || word.length < 2) return this.sendReply("Hangman must have more than 2 characters.");
 			word = word.replace(/[^a-z]+/g, '');
 			if (word.length > 10) return this.sendReply("Words may not be longer than 10 characters.");
 			targetSplit.splice(0, 2);
