@@ -155,6 +155,9 @@ exports.tellsexpiryage = 1000 * 60 * 60 * 24 * 7;
 // to send offline messages.
 exports.tellrank = '+';
 
+// poofOff - enable or disable the use of poofs in the lobby.
+exports.poofOff = 'false';
+
 // database use to store user's money, tickets, etc.
 exports.database = 'lowdb';
 
