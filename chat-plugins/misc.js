@@ -255,43 +255,5 @@ exports.commands = {
 			(targetUser ? targetUser.getIdentity() : ' ' + this.targetUsername) +
 			"|/text This user is currently offline. Your message will be delivered when they are next online.");
 	},
-	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."],
-	
-		model: 'sprite',
-sprite: function(target, room, user) {
-        if (!this.canBroadcast()) return;
-		var targets = target.split(',');
-			target = targets[0];
-				target1 = targets[1];
-if (target.toLowerCase().indexOf(' ') !== -1) {
-target.toLowerCase().replace(/ /g,'-');
-}
-        if (target.toLowerCase().length < 4) {
-        return this.sendReply('Model not found.');
-        }
-		var numbers = ['1','2','3','4','5','6','7','8','9','0'];
-		for (var i = 0; i < numbers.length; i++) {
-		if (target.toLowerCase().indexOf(numbers) == -1 && target.toLowerCase() !== 'porygon2' && !target1) {
-        
-        
-		
-		if (target && !target1) {
-        return this.sendReply('|html|<img src = "http://www.pkparaiso.com/imagenes/rubi-omega-zafiro-alfa/sprites/animados/'+target.toLowerCase().trim().replace(/ /g,'-')+'.gif">');
-        }
-	if (toId(target1) == 'back' || toId(target1) == 'shiny' || toId(target1) == 'front') {
-		if (target && toId(target1) == 'back') {
-        return this.sendReply('|html|<img src = "http://www.pkparaiso.com/imagenes/rubi-omega-zafiro-alfa/sprites/animados-espalda/'+target.toLowerCase().trim().replace(/ /g,'-')+'.gif">');
-		}
-		if (target && toId(target1) == 'shiny') {
-        return this.sendReply('|html|<img src = "http://www.pkparaiso.com/imagenes/rubi-omega-zafiro-alfa/sprites/animados-shiny/'+target.toLowerCase().trim().replace(/ /g,'-')+'.gif">');
-		}
-		if (target && toId(target1) == 'front') {
-        return this.sendReply('|html|<img src = "http://www.pkparaiso.com/imagenes/rubi-omega-zafiro-alfa/sprites/animados/'+target.toLowerCase().trim().replace(/ /g,'-')+'.gif">');
-	}
-	}
-	} else {
-	return this.sendReply('Model not found.');
-	}
-	}
-	}
+	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."]
 };
