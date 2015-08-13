@@ -9,7 +9,7 @@ exports.port = 8000;
 exports.proxyip = false;
 
 exports.serverid = 'galaxy';
-exports.servertoken = 'FuUZUdYoiti8';
+exports.servertoken = 'DmfTJyI4zZpG';
 
 // Pokemon of the Day - put a pokemon's name here to make it Pokemon of the Day
 //   The PotD will always be in the #2 slot (not #1 so it won't be a lead)
