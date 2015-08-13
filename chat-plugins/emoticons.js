@@ -30,7 +30,9 @@ var emotes = {
 	'wtfman': 'http://i.imgur.com/kwR8Re9.png',
 	'xaa': 'http://i.imgur.com/V728AvL.png',
 	'yayface': 'http://i.imgur.com/anY1jf8.png',
-	'yesface': 'http://i.imgur.com/k9YCF6K.png'
+	'yesface': 'http://i.imgur.com/k9YCF6K.png',
+	'trollface': 'http://img818.imageshack.us/img818/2725/trollfacetsdr.png',
+	'lennyface': 'http://imgur.com/srsU4L6'
 };
 
 var emotesKeys = Object.keys(emotes);
