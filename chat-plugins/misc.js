@@ -255,7 +255,7 @@ exports.commands = {
 			(targetUser ? targetUser.getIdentity() : ' ' + this.targetUsername) +
 			"|/text This user is currently offline. Your message will be delivered when they are next online.");
 	},
-	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."]
+	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."],
 	
 	gdeclarered: 'gdeclare',
 	gdeclaregreen: 'gdeclare',
