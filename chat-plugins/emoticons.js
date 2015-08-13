@@ -4,6 +4,7 @@ exports.parseEmoticons = parseEmoticons;
 
 var emotes = {
 	'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
+	'dwi': 'http://forum.arhn.eu/images/arhnicons/dealwithit.gif',
 	'feelsbd': 'http://i.imgur.com/YyEdmwX.png',
 	'feelsbn': 'http://i.imgur.com/wp51rIg.png',
 	'feelsdd': 'http://i.imgur.com/fXtdLtV.png',
