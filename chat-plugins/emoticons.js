@@ -32,7 +32,7 @@ var emotes = {
 	'yayface': 'http://i.imgur.com/anY1jf8.png',
 	'yesface': 'http://i.imgur.com/k9YCF6K.png',
 	'trollface': 'http://img818.imageshack.us/img818/2725/trollfacetsdr.png',
-	'lennyface': 'http://imgur.com/srsU4L6'
+	'lennyface': 'http://imgur.com/srsU4L6',
 	'bordll': 'http://i.imgur.com/IfJIOtR.jpg'
 };
 
