@@ -39,7 +39,7 @@ var emotes = {
 	'medaglieuomo': 'http://i.imgur.com/0MGVlhT.jpg',
 	'memesevr': 'http://i.imgur.com/DHgLs1T.png',
 	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
-	'jsapproves': 'http://i.imgur.com/p3VYpcU.jpg'
+	'jsapproves': 'http://i.imgur.com/p3VYpcU.jpg',
 	'miofigliopt': 'http://i.imgur.com/gMqpVRQ.jpg',
 	'avatarchari': 'http://i.imgur.com/y9ZT8Vn.png',
 	'avatarsawk': 'http://i.imgur.com/hkg7vWa.png',
