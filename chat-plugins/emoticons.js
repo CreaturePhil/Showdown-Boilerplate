@@ -33,7 +33,21 @@ var emotes = {
 	'yesface': 'http://i.imgur.com/k9YCF6K.png',
 	'trollface': 'http://img818.imageshack.us/img818/2725/trollfacetsdr.png',
 	'lennyface': 'http://i.imgur.com/DrKuSjy.jpg',
-	'bordll': 'http://i.imgur.com/IfJIOtR.jpg'
+	'bordll': 'http://i.imgur.com/IfJIOtR.jpg',
+	'surprisd': 'http://i.imgur.com/BDTR4NI.png',
+	'cistorimt': 'http://i.imgur.com/4n5ss6O.jpg',
+	'medaglieuomo': 'http://i.imgur.com/w9DpTdB.jpg',
+	'memesevr': 'http://i.imgur.com/H5JKGAM.png',
+	'noncnfrega': 'http://i.imgur.com/IHkzmsA.jpg'
+	'miofigliopt': 'http://i.imgur.com/elfCMOb.jpg',
+	'avatarchari': 'http://i.imgur.com/y9ZT8Vn.png',
+	'avatarsawk': 'http://i.imgur.com/hkg7vWa.png',
+	'avatardun': 'http://i.imgur.com/5hOgGNJ.png',
+	'avatarpeter': 'http://i.imgur.com/lNhXAx4.gif',
+	'avatarpokekit': 'http://play.pokemonshowdown.com/sprites/trainers/crushindefeat.png',
+	'avatarghecis': 'http://play.pokemonshowdown.com/sprites/trainers/darkintruder.png'
+	'avatarray': 'http://play.pokemonshowdown.com/sprites/trainers/haunter3.png',
+	'avatarmew2': 'http://play.pokemonshowdown.com/sprites/trainers/mjb.png'
 };
 
 var emotesKeys = Object.keys(emotes);
