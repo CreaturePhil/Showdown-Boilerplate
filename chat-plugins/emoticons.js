@@ -35,11 +35,12 @@ var emotes = {
 	'lennyface': 'http://i.imgur.com/DrKuSjy.jpg',
 	'bordll': 'http://i.imgur.com/IfJIOtR.jpg',
 	'surprisd': 'http://i.imgur.com/BDTR4NI.png',
-	'cistorimt': 'http://i.imgur.com/4n5ss6O.jpg',
-	'medaglieuomo': 'http://i.imgur.com/w9DpTdB.jpg',
-	'memesevr': 'http://i.imgur.com/H5JKGAM.png',
-	'noncnfrega': 'http://i.imgur.com/IHkzmsA.jpg'
-	'miofigliopt': 'http://i.imgur.com/elfCMOb.jpg',
+	'cistorimt': 'http://i.imgur.com/pCF4Qoa.jpg',
+	'medaglieuomo': 'http://i.imgur.com/0MGVlhT.jpg',
+	'memesevr': 'http://i.imgur.com/DHgLs1T.png',
+	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
+	'jsapproves': 'http://i.imgur.com/p3VYpcU.jpg'
+	'miofigliopt': 'http://i.imgur.com/gMqpVRQ.jpg',
 	'avatarchari': 'http://i.imgur.com/y9ZT8Vn.png',
 	'avatarsawk': 'http://i.imgur.com/hkg7vWa.png',
 	'avatardun': 'http://i.imgur.com/5hOgGNJ.png',
