@@ -878,7 +878,7 @@ exports.BattleAbilities = {
 			}
 			if (!warnMoves.length) return;
 			var warnMove = warnMoves[this.random(warnMoves.length)];
-			this.add('-activate', pokemon, 'ability: Forewarn', '[from] ' + warnMove[0], '[of] ' + warnMove[1]);
+			this.add('-activate', pokemon, 'ability: Forewarn', warnMove[0], '[of] ' + warnMove[1]);
 		},
 		id: "forewarn",
 		name: "Forewarn",
@@ -2268,6 +2268,7 @@ exports.BattleAbilities = {
 	},
 	"serenegrace": {
 		shortDesc: "This Pokemon's moves have their secondary effect chance doubled.",
+		onModifyMovePriority: -2,
 		onModifyMove: function (move) {
 			if (move.secondaries && move.id !== 'secretpower') {
 				this.debug('doubling secondary chance');
