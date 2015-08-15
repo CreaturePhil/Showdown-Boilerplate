@@ -975,15 +975,6 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
-		name: "Random Inverse Battle",
-		section: "Random Metagames",
-		mod: 'inverse',
-
-		searchShow: false,
-		team: 'random',
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Sleep Clause Mod']
-	},
-	{
 		name: "Random Haxmons",
 		section: "Random Metagames",
 
