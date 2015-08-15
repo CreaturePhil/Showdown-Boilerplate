@@ -983,6 +983,15 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Random Inverse Battle",
+		section: "Random Metagames",
+		mod: 'inversebattle.js',
+
+		searchShow: false,
+		team: 'random',
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Sleep Clause Mod']
+	},
+	{
 		name: "Random Sky Battle",
 		section: "Random Metagames",
 		mod: 'randoms',
