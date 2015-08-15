@@ -961,6 +961,37 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	
+	// Past VGC
+	///////////////////////////////////////////////////////////////////
+	
+	{
+		name: "VGC 2010",
+		section: "Past VGC",
+		gameType: 'doubles',
+		searchShow: true,
+		
+		mod: 'gen4',
+		maxForcedLevel: 50,
+		ruleset: ['Species Clause', 'Item Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew', 'Huntail + Shell Smash + Sucker Punch', 'Manaphy', 'Mew', 'Arceus', 'Shaymin', 'Darkrai', 'Celebi', 'Jirachi', 'Deoxys', 'Phione'],
+		onBegin: function () {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		validateTeam: function (team) {
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
+			var legendCount = 0;
+			for (var i = 0; i < 4; i++) {
+				var pokemon = Tools.getTemplate(team[i].species || team[i].name);
+				if (pokemon.species in {'Mewtwo': 1, 'Lugia': 1, 'Ho-Oh': 1, 'Rayquaza': 1, 'Kyogre': 1, 'Groudon': 1, 'Dialga': 1, 'Palkia': 1, 'Giratina': 1}) legendCount ++;
+			}
+			if (legendCount > 2) return ['You can\'t use more than two of these pokemon: Mewtwo, Lugia, Ho-Oh, Rayquaza, Kyogre, Groudon, Dialga, Palkia, Giratina.'];
+		}
+	},
+	
 	// Random Metagames
 	///////////////////////////////////////////////////////////////////
 
