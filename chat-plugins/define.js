@@ -8,7 +8,7 @@ try {
 	urbanCache = {};
 }
 
-function cacheUrbanWord (word, definition) {
+function cacheUrbanWord(word, definition) {
 	word = word.toLowerCase().replace(/ /g, '');
 	urbanCache[word] = {"definition": definition, "time": Date.now()};
 	fs.writeFile('config/urbancache.json', JSON.stringify(urbanCache));
@@ -19,8 +19,9 @@ exports.commands = {
 	define: function (target, room, user) {
 		if (!target) return this.parse('/help define');
 		target = toId(target);
-		if (target > 50) return this.sendReply("Word can not be longer than 50 characters.");
+		if (target > 50) return this.errorReply("Word can not be longer than 50 characters.");
 		if (!this.canBroadcast()) return;
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to speak.");
 
 		var options = {
 			url: 'http://api.wordnik.com:80/v4/word.json/' + target + '/definitions?limit=3&sourceDictionaries=all' +
@@ -56,8 +57,9 @@ exports.commands = {
 	urbandefine: 'ud',
 	ud: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ud');
-		if (target.toString().length > 50) return this.sendReply("Phrase cannot be longer than 50 characters.");
+		if (target.toString().length > 50) return this.errorReply("Phrase cannot be longer than 50 characters.");
 		if (!this.canBroadcast()) return;
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to speak.");
 
 		var options = {
 			url: 'http://www.urbandictionary.com/iphone/search/define',
