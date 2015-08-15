@@ -985,7 +985,7 @@ exports.Formats = [
 	{
 		name: "Random Inverse Battle",
 		section: "Random Metagames",
-		mod: 'inversebattle.js',
+		mod: 'inverse',
 
 		searchShow: false,
 		team: 'random',
