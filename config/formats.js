@@ -965,16 +965,6 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Random Monotype",
-		section: "Random Metagames",
-		mod: 'randoms',
-		column: 3,
-
-		searchShow: true,
-		team: 'randomMonoType',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
-	},
-	{
 		name: "Random Haxmons",
 		section: "Random Metagames",
 
