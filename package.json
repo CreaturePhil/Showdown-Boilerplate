@@ -10,12 +10,13 @@
     "node-static": "0.7.6",
     "request": "^2.58.0",
     "sockjs": "0.3.15",
+    "es6-shim": "0.27.1",
+    "elo-rank": "0.2.2"
     "steno": "^0.4.2",
     "sugar": "1.4.1"
   },
   "optionalDependencies": {
     "cloud-env": "0.1.1",
-    "es6-shim": "0.32.2",
     "http-proxy": "0.10.0",
     "nodemailer": "1.4.0",
     "node-static": "0.7.7"
