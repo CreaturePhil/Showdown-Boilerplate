@@ -43,6 +43,7 @@ var emotes = {
 	'miofigliopt': 'http://i.imgur.com/gMqpVRQ.jpg',
 	'avatarchari': 'http://i.imgur.com/y9ZT8Vn.png',
 	'avatarsawk': 'http://i.imgur.com/hkg7vWa.png',
+	'avatardani': 'http://i.imgur.com/HC9pAXn.png',
 	'avatardun': 'http://i.imgur.com/5hOgGNJ.png',
 	'avatarpeter': 'http://i.imgur.com/lNhXAx4.gif',
 	'avatarpokekit': 'http://play.pokemonshowdown.com/sprites/trainers/crushindefeat.png',
