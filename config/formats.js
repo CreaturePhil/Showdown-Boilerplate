@@ -1188,7 +1188,7 @@ exports.Formats = [
 		name: "Mega Tier",
 		section: "Local Metagames",
 		mod: 'megatier',
-		ruleset: ['Ubers']
+		ruleset: ['OU']
 	},
 	{
 		name: "Metagamiate",
