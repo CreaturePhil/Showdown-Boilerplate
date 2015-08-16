@@ -130,16 +130,12 @@ Profile.prototype.seen = function (timeAgo) {
 Profile.prototype.show = function (callback) {
 	var userid = toId(this.username);
 
-	Database.read('money', userid, function (err, money) {
-		if (err) throw err;
-		if (!money) money = 0;
-		return callback(this.avatar() +
-										SPACE + this.name() + BR +
-										SPACE + this.group() + BR +
-										SPACE + this.money(money) + BR +
-										SPACE + this.seen(Seen[userid]) +
-										'<br clear="all">');
-	}.bind(this));
+	return callback(this.avatar() +
+									SPACE + this.name() + BR +
+									SPACE + this.group() + BR +
+									SPACE + this.money(Db('money')[userid] || 0) + BR +
+									SPACE + this.seen(Db('seen')[userid]) +
+									'<br clear="all">');
 };
 
 exports.commands = {

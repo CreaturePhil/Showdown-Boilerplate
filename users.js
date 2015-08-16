@@ -1199,10 +1199,8 @@ User = (function () {
 		var name = 'Guest ' + this.guestNum;
 		var userid = toId(name);
 		if (this.registered && this.userid !== userid) {
-			Seen[this.userid] = Date.now();
-			steno.writeFile('config/seen.json', JSON.stringify(Seen, null, 2), function (err) {
-				if (err) throw err;
-			});
+			Db('seen')[this.userid] = Date.now();
+			Db.save();
 		}
 		for (var i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
