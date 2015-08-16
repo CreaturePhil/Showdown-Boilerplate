@@ -1,4 +1,4 @@
-# Showdown-Boilerplate
+# Showdown-Boilerplate (EosDB Alternative)
 
 [![Build Status](https://travis-ci.org/CreaturePhil/Showdown-Boilerplate.svg)](https://travis-ci.org/CreaturePhil/Showdown-Boilerplate)
 [![Dependency Status](https://david-dm.org/CreaturePhil/Showdown-Boilerplate.svg)](https://david-dm.org/CreaturePhil/Showdown-Boilerplate)
@@ -26,7 +26,6 @@ If you would like to use the old version of Showdown-Boilerplate, go to this
 - Emoticons in chat and private messages
 - Polls, Hangman, Profile, and Tells
 - Economy (bucks system, shop, tournament winnings, lottery)
-- Lowdb and MySql database support
 
 ## Quick Start
 
