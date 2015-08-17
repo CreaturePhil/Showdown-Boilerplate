@@ -100,8 +100,16 @@ jscsOptions.base = {
 
 	"disallowMixedSpacesAndTabs": "smart",
 	"requireSpaceAfterKeywords": true,
-	"disallowSpacesInsideArrayBrackets": true,
-	"disallowSpacesInsideObjectBrackets": true,
+	"requireSpaceAfterBinaryOperators": [
+		'=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '>>>=',
+		'&=', '|=', '^=',
+
+		'+', '-', '*', '/', '%', '<<', '>>', '>>>', '&',
+		'|', '^', '&&', '||', '===', '==', '>=',
+		'<=', '<', '>', '!=', '!==',
+
+		','
+	],
 
 	"disallowSpacesInCallExpression": true,
 	"validateParameterSeparator": ", ",
