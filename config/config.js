@@ -179,15 +179,15 @@ exports.mysql = {
 // displayed in the client.
 exports.customavatars = {
 	//'userid': 'customavatar.png'
-	'pokekit': 'https://cloud.githubusercontent.com/assets/8029592/9327061/8f0c9c16-459e-11e5-8d86-4edf039738ec.png',
-	'andrypm': 'https://cloud.githubusercontent.com/assets/8029592/9327070/94570c4c-459e-11e5-94f3-cb6b3066c1bf.png',
-	'hackuo23': 'https://cloud.githubusercontent.com/assets/8029592/9327081/a97efe40-459e-11e5-98d9-68c5aefad775.png',
-	'basedpokébattler': 'https://cloud.githubusercontent.com/assets/8029592/9327073/99adb38a-459e-11e5-87ac-1e33d8502eb3.png',
-	'lugas': 'https://cloud.githubusercontent.com/assets/8029592/9327082/aa6788c2-459e-11e5-8142-7d065d58cc06.png',
-	'sunding': 'https://cloud.githubusercontent.com/assets/8029592/9327082/aa6788c2-459e-11e5-8142-7d065d58cc06.png',
-	'liviusi': 'https://cloud.githubusercontent.com/assets/8029592/9327078/a53f24cc-459e-11e5-9ccf-ffc6c08c07dd.png',
-	'peterpanpm': 'https://cloud.githubusercontent.com/assets/8029592/9327080/a72d13b6-459e-11e5-8ee2-7f2fed584170.gif',
-	'danipika97': 'https://cloud.githubusercontent.com/assets/8029592/9327074/9d7e8af2-459e-11e5-8909-466670ab5c67.png'
+	'pokekit': 'sora.png',
+	'andrypm': 'ghecis.png',
+	'hackuo23': 'mew2.png',
+	'basedpokébattler': 'rayquaza.png',
+	'lugas': 'chari.png',
+	'sunding': 'chari.png',
+	'liviusi': 'sawk.png',
+	'peterpanpm': 'peterpan.gif',
+	'danipika97': 'pikachu.png'
 };
 
 // custom avatars appear in profile by specifiying server url.
