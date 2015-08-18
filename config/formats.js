@@ -935,6 +935,22 @@ exports.Formats = [
 		ruleset: ['OU']
 	},
 	{
+		name: "Middle Cup",
+		section: "Other Metagames",
+
+		searchShow: false,
+		maxLevel: 50,
+		defaultLevel: 50,
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0 || !template.prevo) {
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
+			}
+		},
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Chansey', 'Frogadier', 'Eviolite']
+	},
+	{
 		name: "OU Theorymon",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3541537/\">OU Theorymon</a>"],
 		section: "Other Metagames",
