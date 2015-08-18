@@ -263,18 +263,6 @@ exports.commands = {
 	},
 	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."]
 
-        arlert: 'alert',	
-	alert: function(target, room, user) {
-		if (!this.can('declare')) return false;
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-		if (!target || !targetUser) return this.sendReply("/alert user, message: Sends a popup to a user. Requires &~");
-		if (!targetUser || !targetUser.connected) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
-		msg = Tools.escapeHTML(user.name) + " has sent you an alert (" + new Date().toUTCString() + "): " + target;
-		if (target.length > 500) return this.sendReply("ERROR - alert is too long.");
-		if (!targetUser.connected) return this.sendReply(targetUser + " not found.  Check spelling?");
-		targetUser.popup(msg);
-	},
         pb: 'permaban',
 	pban: 'permaban',
 	permban: 'permaban',
