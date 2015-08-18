@@ -179,6 +179,15 @@ exports.mysql = {
 // displayed in the client.
 exports.customavatars = {
 	//'userid': 'customavatar.png'
+	'pokekit': 'http://play.pokemonshowdown.com/sprites/trainers/crushindefeat.png',
+	'andrypm': 'http://play.pokemonshowdown.com/sprites/trainers/darkintruder.png',
+	'hackuo23': 'http://play.pokemonshowdown.com/sprites/trainers/mjb.png',
+	'basedpokébattler': 'http://play.pokemonshowdown.com/sprites/trainers/haunter3.png',
+	'lugas': 'http://i.imgur.com/y9ZT8Vn.png',
+	'sunding': 'http://i.imgur.com/y9ZT8Vn.png',
+	'liviusi': 'http://i.imgur.com/hkg7vWa.png',
+	'peterpanpm': 'http://i.imgur.com/lNhXAx4.gif',
+	'danipika97': 'http://i.imgur.com/HC9pAXn.png'
 };
 
 // custom avatars appear in profile by specifiying server url.
