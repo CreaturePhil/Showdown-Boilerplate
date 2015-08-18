@@ -179,15 +179,6 @@ exports.mysql = {
 // displayed in the client.
 exports.customavatars = {
 	//'userid': 'customavatar.png'
-	'pokekit': 'sora.png',
-	'andrypm': 'ghecis.png',
-	'hackuo23': 'mew2.png',
-	'basedpokébattler': 'rayquaza.png',
-	'lugas': 'chari.png',
-	'sunding': 'chari.png',
-	'liviusi': 'sawk.png',
-	'peterpanpm': 'peterpan.gif',
-	'danipika97': 'pikachu.png'
 };
 
 // custom avatars appear in profile by specifiying server url.
