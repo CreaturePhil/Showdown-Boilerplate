@@ -374,8 +374,6 @@ if (Config.crashguard) {
 
 global.Sockets = require('./sockets.js');
 
-global.Bot = require('./bot.js');
-
 /*********************************************************
  * Set up our last global
  *********************************************************/
