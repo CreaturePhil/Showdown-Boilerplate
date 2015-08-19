@@ -1275,6 +1275,55 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Skillmons OU",
+		section: "Local Metagames",
+		column: 3,
+
+		mod: 'skillmons',
+		ruleset: ['Pokemon', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Endless Battle Clause', 'Exact HP Mod', 'Baton Pass Clause'],
+		banlist: ['Unreleased', 'Illegal', 'Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
+	},
+	{
+		name: "Skillmons Ubers",
+		section: "Skillmons",
+
+		mod: 'skillmons',
+		ruleset: ['Pokemon', 'Team Preview', 'Species Clause', 'Endless Battle Clause', 'Exact HP Mod', 'Mega Rayquaza Ban Mod'],
+		banlist: ['Unreleased', 'Illegal']
+	},
+	{
+		name: "Skillmons Doubles",
+		section: "Local Metagames",
+
+		mod: 'skillmons',
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Team Preview', 'Species Clause', 'Endless Battle Clause', 'Exact HP Mod'],
+		banlist: ['Unreleased', 'Illegal',
+			'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
+			'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom', 'Salamencite', 'Soul Dew', 'Dark Void'
+		]
+	},
+	{
+		name: "Skillmons 1v1",
+		section: "Local Metagames",
+
+		mod: 'skillmons',
+		ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview 1v1'],
+		banlist: ['Illegal', 'Unreleased', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin',
+			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky',
+			'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew'
+		],
+		validateTeam: function (team, format) {
+			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
+		},
+		onBegin: function () {
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
 		name: "Mega Tier",
 		section: "Local Metagames",
 		mod: 'megatier',
