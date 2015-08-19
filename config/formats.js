@@ -187,21 +187,11 @@ exports.Formats = [
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
-		searchShow: false,
 		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
 		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
 			'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom', 'Salamencite', 'Soul Dew', 'Dark Void',
 			'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder', 'Gravity ++ Spore'
 		]
-	},
-	{
-		name: "Doubles OU (suspect test)",
-		section: "ORAS Doubles",
-
-		gameType: 'doubles',
-		challengeShow: false,
-		ruleset: ['Doubles OU'],
-		banlist: []
 	},
 	{
 		name: "Doubles Ubers",
@@ -690,6 +680,11 @@ exports.Formats = [
 	},
 	{
 		name: "CAP",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3537407/\">CAP Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/dex/xy/formats/cap/\">CAP Banlist</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545628/\">CAP Viability Ranking</a>"
+		],
 		section: "Other Metagames",
 		column: 2,
 
@@ -763,9 +758,9 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
-		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh',
+		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh',
 			'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Altarianite', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Metagrossite', 'Salamencite', 'Slowbronite', 'Soul Dew'
+			'Altarianite', 'Charizardite X', 'Damp Rock', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Metagrossite', 'Salamencite', 'Slowbronite', 'Smooth Rock', 'Soul Dew'
 		]
 	},
 	{
@@ -849,7 +844,7 @@ exports.Formats = [
 		name: "STABmons",
 		desc: [
 			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3493081/\">STABmons</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547279/\">STABmons</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3512215/\">STABmons Viability Ranking</a>"
 		],
 		section: "Other Metagames",

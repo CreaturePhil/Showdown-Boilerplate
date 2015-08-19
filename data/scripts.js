@@ -697,23 +697,20 @@ exports.BattleScripts = {
 			var template = this.getTemplate(poke);
 
 			// Random item
-			var item = '';
-			if (template.requiredItem) {
-				item = template.requiredItem;
-			} else {
-				item = items[this.random(items.length)];
-			}
+			var item = items[this.random(items.length)];
 
 			// Make sure forme is legal
-			if (template.species.indexOf('-Mega') >= 0 || template.species.indexOf('-Primal') >= 0 ||
-					template.num === 351 || template.num === 421 || template.num === 555 ||
-					template.num === 648 || template.num === 681) {
+			if ((template.requiredItem && item !== template.requiredItem) || template.num === 351 ||
+					template.num === 421 || template.num === 555 || template.num === 648 || template.num === 681 ||
+					template.species.indexOf('-Mega') >= 0 || template.species.indexOf('-Primal') >= 0) {
 				template = this.getTemplate(template.baseSpecies);
 				poke = template.name;
 			}
 
 			// Make sure forme/item combo is correct
-			while ((poke === 'Arceus' && item.substr(-5) === 'plate') || (poke === 'Giratina' && item === 'griseousorb') || (poke === 'Genesect' && item.substr(-5) === 'drive')) {
+			while ((poke === 'Arceus' && item.substr(-5) === 'plate') ||
+					(poke === 'Giratina' && item === 'griseousorb') ||
+					(poke === 'Genesect' && item.substr(-5) === 'drive')) {
 				item = items[this.random(items.length)];
 			}
 
@@ -1290,7 +1287,7 @@ exports.BattleScripts = {
 					if (hasMove['discharge'] || (hasMove['thunder'] && hasMove['raindance']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
 					break;
 				case 'drainingkiss':
-					if (hasMove['dazzlinggleam']) rejected = true;
+					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'aurasphere': case 'drainpunch':
 					if (!hasMove['bulkup'] && (hasMove['closecombat'] || hasMove['highjumpkick'])) rejected = true;
@@ -1625,7 +1622,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'];
 			} else if (ability === 'Unburden') {
-				rejectAbility = template.baseStats.spe > 120;
+				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
 			}
 
 			if (rejectAbility) {
@@ -2794,7 +2791,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'];
 			} else if (ability === 'Unburden') {
-				rejectAbility = template.baseStats.spe > 120;
+				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
 			}
 
 			if (rejectAbility) {
