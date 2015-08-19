@@ -1285,7 +1285,7 @@ exports.Formats = [
 	},
 	{
 		name: "Skillmons Ubers",
-		section: "Skillmons",
+		section: "Local Metagames",
 
 		mod: 'skillmons',
 		ruleset: ['Pokemon', 'Team Preview', 'Species Clause', 'Endless Battle Clause', 'Exact HP Mod', 'Mega Rayquaza Ban Mod'],
