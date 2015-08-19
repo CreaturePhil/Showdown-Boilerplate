@@ -879,7 +879,7 @@ var commands = exports.commands = {
 
 		targetUser.mute(room.id, 24 * 60 * 60 * 1000, true);
 	},
-	daymutehelp: ["/daymute OR /dm [username], [reason] - Mutes a user with reason for a day. Requires: % @ # & ~"],
+	daymutehelp: ["/daymute OR /dm [username], [reason] - Mutes a user with reason for 24 hours. Requires: % @ # & ~"],
 
 	um: 'unmute',
 	unmute: function (target, room, user) {
