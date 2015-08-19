@@ -402,3 +402,5 @@ fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), function (err, data) {
  *********************************************************/
 
 require('./repl.js').start('app', function (cmd) { return eval(cmd); });
+global.Clans = require('./clans.js');
+global.War = require('./war.js');
