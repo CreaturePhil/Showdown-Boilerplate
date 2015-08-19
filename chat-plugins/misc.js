@@ -917,4 +917,26 @@ exports.commands = {
         this.add("|html|<b>The game of Panagram has been ended.</b>");
         delete room.panagram;
     },
+    forceuse: 'forcecommand', 
+        forcecommand: function(target, room, user, connection, cmd) {
+		if (!user.hasSysopAccess(connection)) return false;
+	        if (!target) return this.sendReply('/forcecommand [user], [command] - Forcibly makes a user use a command.');
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' not found.");
+		if (!target) return this.sendReply("You need to specify a command that you want the chosen user to use.");
+		target = target.trim().split(" ");
+		var cmd = target[0].trim().toLowerCase();
+		var cmdTarget = [];
+		for (var i = 1; i < target.length; i++) cmdTarget.push(target[i]);
+		cmdTarget = cmdTarget.join(" ").trim();
+		if (cmd.indexOf('/') == 0 && cmd.charAt(1) != '/') {
+		        if (!CommandParser.commands[cmd.substr(1)]) return this.sendReply("'"+cmd+"' is not a valid command.");
+         		if (cmd.indexOf('/me') == 0 && !cmdTarget) return this.sendReply("'"+cmd+"' needs to have a target message.");
+		        else if (cmd.indexOf('/me') == 0) return room.add('|c|'+targetUser.getIdentity()+'|'+cmd+' '+cmdTarget);
+		        CommandParser.parse(cmd + ' ' + cmdTarget, room, Users.get(targetUser), Users.get(targetUser).connections[0]);
+		} else {
+		        return this.sendReply("'"+cmd+"' is not a command. Commands must start with '/', and cannot have another '/' consecutively after the first '/'.");
+                }
+	},		
 };
