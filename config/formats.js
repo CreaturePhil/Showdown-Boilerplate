@@ -730,6 +730,46 @@ exports.Formats = [
 		banlist: ['Groudon-Primal', 'Kyogre-Primal', 'Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter']
 	},
 	{
+		name: "Classic Hackmons",
+		section: "Other Metagames",
+
+		searchShow: false,
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species);
+			var item = this.getItem(set.item);
+			var problems = [];
+
+			if (set.species === set.name) delete set.name;
+			if (template.isNonstandard) {
+				problems.push(set.species + ' is not a real Pokemon.');
+			}
+			if (item.isNonstandard) {
+				problems.push(item.name + ' is not a real item.');
+			}
+			var ability = {};
+			if (set.ability) ability = this.getAbility(set.ability);
+			if (ability.isNonstandard) {
+				problems.push(ability.name + ' is not a real ability.');
+			}
+			if (set.moves) {
+				for (var i = 0; i < set.moves.length; i++) {
+					var move = this.getMove(set.moves[i]);
+					if (move.isNonstandard) {
+						problems.push(move.name + ' is not a real move.');
+					}
+				}
+				if (set.moves.length > 4) {
+					problems.push((set.name || set.species) + ' has more than four moves.');
+				}
+			}
+			if (set.level && set.level > 100) {
+				problems.push((set.name || set.species) + ' is higher than level 100.');
+			}
+			return problems;
+		}
+	},
+	{
 		name: "1v1",
 		desc: [
 			"Bring three Pok&eacute;mon to Team Preview and choose one to battle.",
@@ -791,6 +831,19 @@ exports.Formats = [
 
 		ruleset: ['NU'],
 		banlist: ['NU', 'BL4', 'Altarianite', 'Beedrillite', 'Lopunnite', 'Chatter', 'Shell Smash + Baton Pass']
+	},
+	{
+		name: "FU",
+		section: "Other Metagames",
+
+		ruleset: ['PU'],
+		banlist: ['Altaria', 'Aurorus', 'Avalugg', 'Barbaracle', 'Basculin', 'Bastiodon', 'Beheeyem', 'Bouffalant', 'Camerupt', 'Carracosta',
+			'Chatot', 'Dodrio', 'Dusclops', 'Dusknoir', 'Electrode', 'Flareon', 'Floatzel', 'Garbodor', 'Gogoat', 'Golem',
+			'Gourgeist-Super', 'Haunter', 'Heatmor', 'Kadabra', 'Kecleon', 'Kingler', 'Leavanny', 'Lickilicky', 'Lumineon', 'Luxray',
+			'Mantine', 'Marowak', 'Mightyena', 'Mr. Mime', 'Musharna', 'Ninetales', 'Pelipper', 'Piloswine', 'Poliwrath', 'Purugly',
+			'Raichu', 'Rampardos', 'Rapidash', 'Regice', 'Rotom-Frost', 'Scyther', 'Serperior', 'Slaking', 'Sneasel', 'Stoutland',
+			'Tangela', 'Tauros', 'Throh', 'Togetic', 'Torterra', 'Ursaring', 'Vigoroth', 'Wartortle', 'Zebstrika'
+		]
 	},
 	{
 		name: "Inverse Battle",
