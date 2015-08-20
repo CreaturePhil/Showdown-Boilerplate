@@ -460,7 +460,7 @@ exports.commands = {
 		var numUsers = users.length;
 		var total = 0;
 		users.forEach(function (key) {
-			total += numUsers[key];
+			total += Db('money')[key];
 		});
 		var average = Math.floor(total / numUsers);
 		var output = "There is " + total + currencyName(total) + " circulating in the economy. ";
