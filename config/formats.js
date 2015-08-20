@@ -837,12 +837,12 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['PU'],
-		banlist: ['Altaria', 'Aurorus', 'Avalugg', 'Barbaracle', 'Basculin', 'Bastiodon', 'Beheeyem', 'Bouffalant', 'Camerupt', 'Carracosta',
-			'Chatot', 'Dodrio', 'Dusclops', 'Dusknoir', 'Electrode', 'Flareon', 'Floatzel', 'Garbodor', 'Gogoat', 'Golem',
-			'Gourgeist-Super', 'Haunter', 'Heatmor', 'Kadabra', 'Kecleon', 'Kingler', 'Leavanny', 'Lickilicky', 'Lumineon', 'Luxray',
-			'Mantine', 'Marowak', 'Mightyena', 'Mr. Mime', 'Musharna', 'Ninetales', 'Pelipper', 'Piloswine', 'Poliwrath', 'Purugly',
-			'Raichu', 'Rampardos', 'Rapidash', 'Regice', 'Rotom-Frost', 'Scyther', 'Serperior', 'Slaking', 'Sneasel', 'Stoutland',
-			'Tangela', 'Tauros', 'Throh', 'Togetic', 'Torterra', 'Ursaring', 'Vigoroth', 'Wartortle', 'Zebstrika'
+		banlist: ['Vigoroth', 'Chatot', 'Fraxure', 'Sticky Web', 'Heat Rock', 'Piloswine', 'Zebstrika', 'Roselia', 'Kadabra', 'Raichu', 'Machoke',
+		         'Togetic', 'Misdreavus', 'Stoutland', 'Armaldo', 'Lickilicky', 'Pelipper', 'Ninetales', 'Golem', 'Rapidash', 'Gourgeist-Super',
+		         'Probopass', 'Leafeon', 'Torterra', 'Dusknoir', 'Aurorus', 'Ursaring', 'Jumpluff', 'Tangela', 'Mr. Mime', 'Monferno', 'Arbok',
+		         'Grumpig', 'Rotom-Frost', 'Torkoal', 'Carracosta', 'Beheeyem', 'Avalugg', 'Barbaracle', 'Flareon', 'Dodrio', 'Marowak', 'Floatzel',
+		         'Simipour', 'Basculin', 'Victreebel', 'Mightyena', 'Leavanny', 'Volbeat', 'Articuno', 'Sawsbuck', 'Drifblim', 'Ninjask', 'Lapras',
+		         'Electrode', 'Meowstic', 'Luxray', 'Gigalith', 'Clefairy'
 		]
 	},
 	{
