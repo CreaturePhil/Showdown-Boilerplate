@@ -118,7 +118,7 @@ function handleBoughtItem(item, user, cost) {
 		this.sendReply("You will have this until you log off for more than an hour.");
 		this.sendReply("If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.");
 	} else if (item === 'ticket') {
-		var pot = (Db('lottery').pot ? Db('lottery').pot : 0) + cost;
+		var pot = (Db('lottery').pot || 0) + cost;
 		var ticket = '' + rng() + rng() + rng();
 		Db('lottery').pot = pot;
 		if (!Array.isArray(Db('lottery')[user.userid])) Db('lottery')[user.userid] = [];
@@ -156,7 +156,7 @@ exports.commands = {
 		var targetId = toId(target);
 		if (!targetId) return this.parse('/help wallet');
 
-		var amount = Db('money')[targetId] ? Db('money')[targetId] : 0;
+		var amount = Db('money')[targetId] || 0;
 		this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
@@ -174,7 +174,7 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.sendReply(amount);
 
-		var total = (Db('money')[uid] ? Db('money')[uid] : 0) + amount;
+		var total = (Db('money')[uid] || 0) + amount;
 		Db('money')[uid] = total;
 		Db.save();
 		this.sendReply(username + " was given " + amount + ". " + username + " now has " + total + ".");
@@ -196,7 +196,7 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.sendReply(amount);
 
-		var total = (Db('money')[uid] ? Db('money')[uid] : 0) - amount;
+		var total = (Db('money')[uid] || 0) - amount;
 		Db('money')[uid] = total;
 		Db.save();
 		this.sendReply(username + " losted " + amount + ". " + username + " now has " + total + ".");
@@ -232,8 +232,8 @@ exports.commands = {
 		if (typeof amount === 'string') return this.sendReply(amount);
 		if (amount > Db('money')[user.userid]) return this.sendReply("You cannot transfer more money than what you have.");
 
-		var userTotal = (Db('money')[user.userid] ? Db('money')[user.userid] : 0) - amount;
-		var targetTotal = (Db('money')[uid] ? Db('money')[uid] : 0) + amount;
+		var userTotal = (Db('money')[user.userid] || 0) - amount;
+		var targetTotal = (Db('money')[uid] || 0) + amount;
 		Db('money')[user.userid] = userTotal;
 		Db('money')[uid] = targetTotal;
 		Db.save();
@@ -358,7 +358,7 @@ exports.commands = {
 		if (!room.dice || (room.dice.p1 && room.dice.p2)) return this.errorReply("There is no dice game in it's signup phase in this room.");
 		if (!this.canTalk()) return this.errorReply("You may not join dice games while unable to speak.");
 		if (room.dice.p1 === user.userid) return this.errorReply("You already entered this dice game.");
-		if (!Db('money')[user.userid] || Db('money')[user.userid] < room.dice.bet) return this.errorReply("You don't have enough bucks to join this game.");
+		if (!Db('money')[user.userid] || (Db('money')[user.userid] < room.dice.bet)) return this.errorReply("You don't have enough bucks to join this game.");
 		Db('money')[user.userid] -= room.dice.bet;
 		Db.save();
 		if (!room.dice.p1) {
@@ -437,7 +437,7 @@ exports.commands = {
 		var winner = tickets[winningIndex];
 		var winnings = Math.floor(Db('lottery').pot * 3 / 4);
 		if (!winner) return this.sendReply("No one has bought tickets.");
-		var total = (Db('money')[winner.username] ? Db('money')[winner.username] : 0) + winnings;
+		var total = (Db('money')[winner.username] || 0) + winnings;
 		Db('money')[winner.username] = total;
 		Db('lottery').pot = 0;
 		Db.save();
