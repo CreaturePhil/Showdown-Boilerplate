@@ -21,11 +21,9 @@ var emotes = {
 	'fukya': 'http://i.imgur.com/ampqCZi.gif',
 	'funnylol': 'http://i.imgur.com/SlzCghq.png',
 	'hmmface': 'http://i.imgur.com/Z5lOwfZ.png',
-	'Kappa': 'http://i.imgur.com/5qRROqN.png',
 	'noface': 'http://i.imgur.com/H744eRE.png',
 	'Obama': 'http://i.imgur.com/rBA9M7A.png',
 	'oshet': 'http://i.imgur.com/yr5DjuZ.png',
-	'ResidentSleeper': 'http://i.imgur.com/NZ0wUqN.png',
 	'Sanic': 'http://i.imgur.com/Y6etmna.png',
 	'wtfman': 'http://i.imgur.com/kwR8Re9.png',
 	'xaa': 'http://i.imgur.com/V728AvL.png',
@@ -75,7 +73,7 @@ function parseEmoticons(message, room, user, pm) {
 	// add emotes
 	message = message.replace(patternRegex, function (match) {
 		var emote = emotes[match];
-		return typeof emote === 'string' ? '<img src="' + emote + '" title="' + match + '" />' : match;
+		return typeof emote === 'string' ? '<img src="' + emote + '" title="' + match + '" height="50" width="50" />' : match;
 	});
 
 	// __italics__
