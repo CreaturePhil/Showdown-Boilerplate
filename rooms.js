@@ -327,7 +327,7 @@ var GlobalRoom = (function () {
 			var room = Rooms.createChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
 			if (room.aliases) {
 				for (var a = 0; a < room.aliases.length; a++) {
-					aliases[room.aliases[a]] = room;
+					aliases[room.aliases[a]] = id;
 				}
 			}
 			this.chatRooms.push(room);
@@ -548,6 +548,10 @@ var GlobalRoom = (function () {
 		});
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2, formatid) {
+		// users must exist
+		// TODO: ACTUALLY REMOVE THESE USERS FROM THE SEARCH LIST
+		if (!user1 || !user2) return false;
+
 		// users must be different
 		if (user1 === user2) return false;
 
@@ -558,7 +562,7 @@ var GlobalRoom = (function () {
 		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
 
 		// search must be within range
-		var searchRange = 100, elapsed = Math.abs(search1.time - search2.time);
+		var searchRange = 100, elapsed = Date.now() - Math.min(search1.time, search2.time);
 		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'randombattle') searchRange = 50;
 		searchRange += elapsed / 300; // +1 every .3 seconds
 		if (searchRange > 300) searchRange = 300;
@@ -1681,6 +1685,12 @@ var ChatRoom = (function () {
 		rooms.global.deregisterChatRoom(this.id);
 		rooms.global.delistChatRoom(this.id);
 
+		if (this.aliases) {
+			for (var i = 0; i < this.aliases.length; i++) {
+				delete aliases[this.aliases[i]];
+			}
+		}
+
 		// get rid of some possibly-circular references
 		delete rooms[this.id];
 	};
@@ -1698,7 +1708,7 @@ function getRoom(roomid, fallback) {
 }
 Rooms.get = getRoom;
 Rooms.search = function (name, fallback) {
-	return getRoom(name) || getRoom(toId(name)) || Rooms.aliases[toId(name)] || (fallback ? rooms.global : undefined);
+	return getRoom(name) || getRoom(toId(name)) || getRoom(Rooms.aliases[toId(name)]) || (fallback ? rooms.global : undefined);
 };
 
 Rooms.createBattle = function (roomid, format, p1, p2, options) {
