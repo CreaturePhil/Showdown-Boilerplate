@@ -330,6 +330,9 @@ Validator = (function () {
 			return ['"' + set.item + "' is an invalid item."];
 		}
 		ability = tools.getAbility(set.ability);
+		if (tools.gen >= 3 && !ability.exists) {
+			return ['"' + set.ability + "' is an invalid ability."];
+		}
 
 		var banlistTable = tools.getBanlistTable(format);
 
@@ -408,9 +411,13 @@ Validator = (function () {
 			// in the cartridge-compliant set validator: rulesets.js:pokemon
 			set.moves = set.moves.slice(0, 24);
 
+			// Sketchmons hack
+			var sketched = false;
+
 			for (var i = 0; i < set.moves.length; i++) {
 				if (!set.moves[i]) continue;
 				var move = tools.getMove(Tools.getString(set.moves[i]));
+				if (!move.exists) return ['"' + move.name + '" is an invalid move.'];
 				set.moves[i] = move.name;
 				check = move.id;
 				setHas[check] = true;
@@ -426,6 +433,10 @@ Validator = (function () {
 				if (banlistTable['illegal']) {
 					var problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
+						if (banlistTable['allowonesketch'] && !sketched && move.id !== 'chatter') {
+							sketched = true;
+							continue;
+						}
 						var problemString = name + " can't learn " + move.name;
 						if (problem.type === 'incompatible') {
 							if (isHidden) {

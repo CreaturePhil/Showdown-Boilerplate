@@ -551,12 +551,13 @@ exports.BattleScripts = {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 		}
-		if (moveData.secondaries && this.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
+		if (moveData.secondaries) {
 			var secondaryRoll;
-			for (var i = 0; i < moveData.secondaries.length; i++) {
+			var secondaries = this.runEvent('ModifySecondaries', target, pokemon, moveData, moveData.secondaries.slice());
+			for (var i = 0; i < secondaries.length; i++) {
 				secondaryRoll = this.random(100);
-				if (typeof moveData.secondaries[i].chance === 'undefined' || secondaryRoll < moveData.secondaries[i].chance) {
-					this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
+				if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
+					this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
 				}
 			}
 		}
@@ -972,7 +973,7 @@ exports.BattleScripts = {
 		};
 		// Moves that shouldn't be the only STAB moves:
 		var NoStab = {
-			bounce:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1
+			aquajet:1, bounce:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1
 		};
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
@@ -1032,19 +1033,24 @@ exports.BattleScripts = {
 			// Moves that change stats:
 			if (RecoveryMove[moveid]) counter['recovery']++;
 			if (ContraryMove[moveid]) counter['contrary']++;
-			if (PhysicalSetup[moveid]) counter['physicalsetup']++;
-			if (SpecialSetup[moveid]) counter['specialsetup']++;
-			if (MixedSetup[moveid]) counter['mixedsetup']++;
+			if (PhysicalSetup[moveid]) {
+				counter['physicalsetup']++;
+				if (!counter.setupType) counter.setupType = 'Physical';
+			}
+			if (SpecialSetup[moveid]) {
+				counter['specialsetup']++;
+				if (!counter.setupType) counter.setupType = 'Special';
+			}
+			if (MixedSetup[moveid]) {
+				counter['mixedsetup']++;
+				counter.setupType = 'Mixed';
+			}
 			if (SpeedSetup[moveid]) counter['speedsetup']++;
 		}
 
 		// Choose a setup type:
-		if (counter['mixedsetup']) {
-			counter.setupType = 'Mixed';
-		} else if (counter['specialsetup']) {
-			counter.setupType = 'Special';
-		} else if (counter['physicalsetup']) {
-			counter.setupType = 'Physical';
+		if (!counter['mixedsetup'] && counter['physicalsetup'] && counter['specialsetup'] && counter.Physical !== counter.Special) {
+			counter.setupType = (counter.Physical > counter.Special) ? 'Physical' : 'Special';
 		}
 
 		return counter;
@@ -1268,6 +1274,9 @@ exports.BattleScripts = {
 					break;
 				case 'darkpulse':
 					if (hasMove['crunch'] && counter.setupType !== 'Special') rejected = true;
+					break;
+				case 'foulplay':
+					if (hasMove['darkpulse'] || hasMove['knockoff']) rejected = true;
 					break;
 				case 'suckerpunch':
 					if ((hasMove['crunch'] || hasMove['darkpulse']) && (hasMove['knockoff'] || hasMove['pursuit'])) rejected = true;
