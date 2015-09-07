@@ -1,0 +1,40 @@
+body {
+    background-image: url(http://i.imgur.com/I9ueeRx.jpg) !important;
+}
+
+.header .logo {
+    display: none !important;
+}
+
+.header {
+    background-image: url(http://i.picresize.com/images/2015/04/09/M0gYV.png);
+    background-repeat: no-repeat;
+}
+
+.roomlist {
+    margin: auto;
+    text-align: center;
+}
+
+.chat-log {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    background-image: url(http://i.imgur.com/PlZJbVg.png) !important;
+}
+
+.userlist {
+    background-color: white;
+}
+
+.menugroup .button {
+    background: black;
+    border-color: aqua;
+}
+
+.menugroup .button.big {
+    background: black;
+    border-color: aqua;
+}
+    
+.pm-log {
+    background-color: white;
+}
