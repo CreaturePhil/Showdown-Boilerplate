@@ -8,8 +8,8 @@ var shop = [
 	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
 	['League Room', 'Purchases a room at a reduced rate for use with a league.  A roster must be supplied with at least 10 members for this room.', 25],
 	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 40],
-	['Humans', 'Staff member will help set up roomintros and anything else needed in a room. Response may not be immediate.', 50],
 	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100]
+	['Art', 'Artist Ice will draw you a nicely coloured painting, ask her if you wanna see samples!', 150],
 ];
 
 var shopDisplay = getShopDisplay(shop);
