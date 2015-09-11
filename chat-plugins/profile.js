@@ -64,7 +64,7 @@ function font(color, text) {
  * @return {String}
  */
 function img(link) {
-	return '<img src="' + link + '" height="80" width="80" align="left">';
+	return '<img src="' + link + '" height="80" width="80">';
 }
 
 /**
@@ -102,6 +102,11 @@ Profile.prototype.avatar = function () {
 	return img('http://play.pokemonshowdown.com/sprites/trainers/' + selectedSprite + '.png');
 };
 
+Profile.prototype.buttonAvatar = function () {
+	var css = 'border:none;background:none;padding:0;float:left;';
+	return '<button style="' + css + '" name="parseCommand" value="/user ' + this.username + '">' + this.avatar() + "</button>";
+};
+
 Profile.prototype.group = function () {
 	if (this.isOnline && this.user.group === ' ') return label('Group') + 'Regular User';
 	if (this.isOnline) return label('Group') + Config.groups[this.user.group].name;
@@ -130,7 +135,7 @@ Profile.prototype.seen = function (timeAgo) {
 Profile.prototype.show = function (callback) {
 	var userid = toId(this.username);
 
-	return callback(this.avatar() +
+	return callback(this.buttonAvatar() +
 									SPACE + this.name() + BR +
 									SPACE + this.group() + BR +
 									SPACE + this.money(Db('money')[userid] || 0) + BR +
