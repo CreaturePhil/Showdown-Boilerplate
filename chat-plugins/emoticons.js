@@ -44,7 +44,7 @@ var emotes = {
 	'avatarchari': 'http://i.imgur.com/y9ZT8Vn.png',
 	'avatarsawk': 'http://i.imgur.com/hkg7vWa.png',
 	'avatardani': 'http://i.imgur.com/HC9pAXn.png',
-	'avatardun': 'http://i.imgur.com/5hOgGNJ.png',
+	'avatardel': 'http://i.imgur.com/jDXgrhs.png',
 	'avatarpeter': 'http://i.imgur.com/lNhXAx4.gif',
 	'avatarpokekit': 'http://play.pokemonshowdown.com/sprites/trainers/crushindefeat.png',
 	'avatarghecis': 'http://play.pokemonshowdown.com/sprites/trainers/darkintruder.png',
