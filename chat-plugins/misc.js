@@ -164,30 +164,21 @@ exports.commands = {
 
 	regdate: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		if (!target || target === "0") target = toId(user.userid);
-		if (!target || target === "." || target === "," || target === "'") return this.parse('/help regdate');
+		if (!target || !toId(target)) return this.parse('/help regdate');
 		var username = toId(target);
-		target = target.replace(/\s+/g, '');
-		var self = this, data;
-		request('http://pokemonshowdown.com/users/~' + target, function (error, response, content) {
-			if (!(!error && response.statusCode === 200)) return;
-			content = content + '';
-			content = content.split("<em");
-			if (content[1]) {
-				content = content[1].split("</p>");
-				if (content[0]) {
-					content = content[0].split("</em>");
-					if (content[1]) {
-						var regdate = content[1].split('</small>')[0] + '.';
-						data = Tools.escapeHTML(username) + " was registered on" + regdate;
-					}
-				}
-			} else {
-				data = Tools.escapeHTML(username) + " is not registered.";
+		request('http://pokemonshowdown.com/users/' + username, function (error, response, body) {
+			if (error && response.statusCode !== 200) {
+				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
+				return room.update();
 			}
-			self.sendReplyBox(Tools.escapeHTML(data));
+			var regdate = body.split('<small>')[1].split('</small>')[0].replace(/(<em>|<\/em>)/g, '');
+			if (regdate === '(Unregistered)') {
+				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
+			} else {
+				this.sendReplyBox(Tools.escapeHTML(target) + " was registered on " + regdate.slice(7) + ".");
+			}
 			room.update();
-		});
+		}.bind(this));
 	},
 	regdatehelp: ["/regdate - Please specify a valid username."],
 
