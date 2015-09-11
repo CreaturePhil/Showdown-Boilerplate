@@ -111,6 +111,13 @@ exports.commands = {
 		this.parse('/tour new ' + target + ', roundrobin');
 	},
 
+	randomtour: 'randtour',
+	randtour: function (target, room, user) {
+		var rand = ['ou', 'pu', 'randombattle', 'ubers', 'uu', 'ru', 'pu', '1v1', 'hackmonscup', 'monotype', 'challengecup1v1', 'ubers', 'lc'][Math.floor(Math.random() * 13)];
+		if (!this.can('broadcast', null, room)) return;
+		this.parse('/tour new ' + rand + ', elimination');
+	},
+
 	pr: 'pollremind',
 	pollremind: function (target, room, user) {
 		if (!Poll[room.id]) Poll.reset(room.id);

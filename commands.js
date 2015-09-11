@@ -272,8 +272,17 @@ var commands = exports.commands = {
 				targetRoom.isPrivate = true;
 				targetRoom.chatRoomData.isPrivate = true;
 				Rooms.global.writeChatRoomData();
+				if (Rooms('upperstaff')) {
+					Rooms('upperstaff').add('|raw|<div class="broadcast-green">Private chat room created: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
+				}
 				return this.sendReply("The private chat room '" + target + "' was created.");
 			} else {
+				if (Rooms('staff')) {
+					Rooms('staff').add('|raw|<div class="broadcast-green">Public chat room created: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
+				}
+				if (Rooms('upperstaff')) {
+					Rooms('upperstaff').add('|raw|<div class="broadcast-green">Public chat room created: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
+				}
 				return this.sendReply("The chat room '" + target + "' was created.");
 			}
 		}
@@ -325,6 +334,9 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
+			if (room.isPrivate === setting) {
+				return this.errorReply("This room is already " + (setting === true ? 'secret' : setting) + ".");
+			}
 			room.isPrivate = setting;
 			this.addModCommand("" + user.name + " made this room " + (setting === true ? 'secret' : setting) + ".");
 			if (room.chatRoomData) {
@@ -500,7 +512,7 @@ var commands = exports.commands = {
 
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
 
-		if (!this.can('makeroom', targetUser, room)) return false;
+		if (!this.can('makeroom')) return false;
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
@@ -526,7 +538,7 @@ var commands = exports.commands = {
 		if (!userid || userid === '') return this.sendReply("User '" + name + "' does not exist.");
 
 		if (room.auth[userid] !== '#') return this.sendReply("User '" + name + "' is not a room owner.");
-		if (!this.can('makeroom', null, room)) return false;
+		if (!this.can('makeroom')) return false;
 
 		delete room.auth[userid];
 		this.sendReply("(" + name + " is no longer Room Owner.)");
@@ -578,11 +590,13 @@ var commands = exports.commands = {
 		if ((room.auth[userid] || Config.groupsranking[0]) === nextGroup) {
 			return this.sendReply("User '" + name + "' is already a " + groupName + " in this room.");
 		}
-		if (currentGroup !== ' ' && !user.can('room' + (Config.groups[currentGroup] ? Config.groups[currentGroup].id : 'voice'), null, room)) {
-			return this.sendReply("/" + cmd + " - Access denied for promoting/demoting from " + (Config.groups[currentGroup] ? Config.groups[currentGroup].name : "an undefined group") + ".");
-		}
-		if (nextGroup !== ' ' && !user.can('room' + Config.groups[nextGroup].id, null, room)) {
-			return this.sendReply("/" + cmd + " - Access denied for promoting/demoting to " + Config.groups[nextGroup].name + ".");
+		if (!user.can('makeroom')) {
+			if (currentGroup !== ' ' && !user.can('room' + (Config.groups[currentGroup] ? Config.groups[currentGroup].id : 'voice'), null, room)) {
+				return this.sendReply("/" + cmd + " - Access denied for promoting/demoting from " + (Config.groups[currentGroup] ? Config.groups[currentGroup].name : "an undefined group") + ".");
+			}
+			if (nextGroup !== ' ' && !user.can('room' + Config.groups[nextGroup].id, null, room)) {
+				return this.sendReply("/" + cmd + " - Access denied for promoting/demoting to " + Config.groups[nextGroup].name + ".");
+			}
 		}
 
 		if (nextGroup === ' ') {
@@ -1960,6 +1974,8 @@ var commands = exports.commands = {
 
 	addplayer: function (target, room, user) {
 		if (!target) return this.parse('/help addplayer');
+		if (!room.battle) return this.sendReply("You can only do this in battle rooms.");
+		if (room.rated) return this.sendReply("You can only add a Player to unrated battles.");
 
 		target = this.splitTarget(target, true);
 		var userid = toId(this.targetUsername);
@@ -1967,7 +1983,6 @@ var commands = exports.commands = {
 		var name = this.targetUsername;
 
 		if (!targetUser) return this.sendReply("User " + name + " not found.");
-		if (!room.joinBattle) return this.sendReply("You can only do this in battle rooms.");
 		if (targetUser.can('joinbattle', null, room)) {
 			return this.sendReply("" + name + " can already join battles as a Player.");
 		}

@@ -48,7 +48,7 @@ if (cluster.isMaster) {
 		});
 	};
 
-	var workerCount = Config.workers || 1;
+	var workerCount = typeof Config.workers !== 'undefined' ? Config.workers : 1;
 	for (var i = 0; i < workerCount; i++) {
 		spawnWorker();
 	}
@@ -136,7 +136,7 @@ if (cluster.isMaster) {
 	if (Config.crashguard) {
 		// graceful crash
 		process.on('uncaughtException', function (err) {
-			require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')');
+			require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')', true);
 		});
 	}
 
