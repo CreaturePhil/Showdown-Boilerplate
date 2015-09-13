@@ -21,6 +21,24 @@ var messages = [
 	"{{user}}'s mama accidently kicked {{user}} from the server!"
 ];
 
+function clearRoom(room) {
+	var len = (room.log && room.log.length) || 0;
+	var users = [];
+	while (len--) {
+		room.log[len] = '';
+	}
+	for (var u in room.users) {
+		users.push(u);
+		Users.get(u).leaveRoom(room, Users.get(u).connections[0]);
+	}
+	len = users.length;
+	setTimeout(function () {
+		while (len--) {
+			Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
+		}
+	}, 1000);
+}
+
 exports.commands = {
 	stafflist: 'authority',
 	auth: 'authority',
@@ -53,21 +71,20 @@ exports.commands = {
 		if (!this.can('declare')) return false;
 		if (room.battle) return this.sendReply("You cannot clearall in battle rooms.");
 
-		var len = room.log.length;
-		var users = [];
-		while (len--) {
-			room.log[len] = '';
+		clearRoom(room);
+	},
+
+	gclearall: 'globalclearall',
+	globalclearall: function (target, room, user) {
+		if (!this.can('gdeclare')) return false;
+
+		for (var u in Users.users) {
+			Users.users[u].popup("All rooms are being clear.");
 		}
-		for (var u in room.users) {
-			users.push(u);
-			Users.get(u).leaveRoom(room, Users.get(u).connections[0]);
+
+		for (var r in Rooms.rooms) {
+			clearRoom(Rooms.rooms[r]);
 		}
-		len = users.length;
-		setTimeout(function () {
-			while (len--) {
-				Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
-			}
-		}, 1000);
 	},
 
 	hide: function (target, room, user) {
