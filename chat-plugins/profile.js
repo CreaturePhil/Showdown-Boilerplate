@@ -95,7 +95,7 @@ Profile.prototype.avatar = function () {
 	}
 	for (var name in Config.customAvatars) {
 		if (this.username === name) {
-			return img(this.url + '/avatars/' + Config.customAvatars[name]);
+			return img(this.url + ':' + Config.port + '/avatars/' + Config.customAvatars[name]);
 		}
 	}
 	var selectedSprite = trainersprites[Math.floor(Math.random() * trainersprites.length)];
