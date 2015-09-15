@@ -219,10 +219,11 @@ Blackjack.prototype.nextTurn = function () {
  */
 Blackjack.prototype.chooseWinner = function () {
 	var winner = Object.keys(this.players).reduce(function (acc, cur) {
-		acc = this.players[acc], cur = this.players[cur];
-		if (!cur) return acc;
-		if (!acc) return cur;
-		return acc.total > cur.total ? acc : cur;
+		var accP = this.players[acc];
+		var curP = this.players[cur];
+		if (!curP) return accP;
+		if (!accP) return curP;
+		return accP.total > curP.total ? accP : curP;
 	}.bind(this));
 
 	if (typeof winner === 'string') {
