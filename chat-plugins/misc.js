@@ -587,6 +587,10 @@ exports.commands = {
 		else if (type === 'bwshiny') url = 'http://play.pokemonshowdown.com/sprites/bwani-shiny/';
 		else if (type === 'bwback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back/';
 		else if (type === 'bwshinyback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back-shiny/';
+		else if (type === 'afd') url = 'http://play.pokemonshowdown.com/sprites/afd/';
+		else if (type === 'afdshiny') url = 'http://play.pokemonshowdown.com/sprites/afd-shiny/';
+		else if (type === 'afdback') url = 'http://play.pokemonshowdown.com/sprites/afd-back/';
+		else if (type === 'afdshinyback') url = 'http://play.pokemonshowdown.com/sprites/afd-back-shiny/';
 		else if (type === 'backshiny' || type === 'shinyback') url = 'http://play.pokemonshowdown.com/sprites/xyani-back-shiny/';
 		else url = 'http://play.pokemonshowdown.com/sprites/xyani/';
 
