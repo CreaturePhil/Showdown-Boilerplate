@@ -709,4 +709,39 @@ exports.commands = {
         this.add("|html|<b>The game of Panagram has been ended.</b>");
         delete room.panagram;
     },
+    sudo: function (target, room, user) {
+        if (!user.can('sudo')) return;
+        var parts = target.split(',');
+        if (parts.length < 2) return this.parse('/help sudo');
+        if (parts.length >= 3) parts.push(parts.splice(1, parts.length).join(','));
+        var targetUser = parts[0],
+            cmd = parts[1].trim().toLowerCase(),
+            commands = Object.keys(CommandParser.commands).join(' ').toString(),
+            spaceIndex = cmd.indexOf(' '),
+            targetCmd = cmd;
+
+        if (spaceIndex > 0) targetCmd = targetCmd.substr(1, spaceIndex - 1);
+
+        if (!Users.get(targetUser)) return this.sendReply('User ' + targetUser + ' not found.');
+        if (commands.indexOf(targetCmd.substring(1, targetCmd.length)) < 0 || targetCmd === '') return this.sendReply('Not a valid command.');
+        if (cmd.match(/\/me/)) {
+            if (cmd.match(/\/me./)) return this.parse('/control ' + targetUser + ', say, ' + cmd);
+            return this.sendReply('You must put a target to make a user use /me.');
+        }
+        CommandParser.parse(cmd, room, Users.get(targetUser), Users.get(targetUser).connections[0]);
+        this.sendReply('You have made ' + targetUser + ' do ' + cmd + '.');
+    },
+    control: function (target, room, user) {
+        if (!this.can('control')) return;
+        var parts = target.split(',');
+
+        if (parts.length < 3) return this.parse('/help control');
+
+        if (parts[1].trim().toLowerCase() === 'say') {
+            return room.add('|c|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + parts[2].trim());
+        }
+        if (parts[1].trim().toLowerCase() === 'pm') {
+            return Users.get(parts[2].trim()).send('|pm|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + Users.get(parts[2].trim()).group + Users.get(parts[2].trim()).name + '|' + parts[3].trim());
+        }
+    },
 };
