@@ -33,14 +33,4 @@ exports.commands = {
 		}
 		this.sendReplyBox('<details><summary><b>Gym Leaders</b></summary><center>' + total + '</table></details></center>');
 	},
-	
-        ////////////
-	//Music Cards
-	//////////////
-	dueloffates: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<div class="infobox" style="border: 0px>' +
-			'<br \><center><font size=3><b><i>Duel of Fates</i></b></font><br \>' +
-			'<audio src="http://puu.sh/kdpjM/889962c97d.mp3" controls="" loop style="width: 100% ; border: 2px solid #58FAF4 ; </audio></center><br \><br \>');
-	},
 };
