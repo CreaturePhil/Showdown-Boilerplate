@@ -43,3 +43,4 @@ exports.commands = {
 			'<br \><center><font size=3><b><i>Duel of Fates</i></b></font><br \>' +
 			'<audio src="http://puu.sh/kdpjM/889962c97d.mp3" controls="" loop style="width: 100% ; border: 2px solid #58FAF4 ; </audio></center><br \><br \>');
 	},
+};
