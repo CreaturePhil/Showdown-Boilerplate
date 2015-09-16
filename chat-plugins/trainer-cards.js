@@ -34,7 +34,7 @@ exports.commands = {
 		this.sendReplyBox('<details><summary><b>Gym Leaders</b></summary><center>' + total + '</table></details></center>');
 	},
 	
-////////////
+        ////////////
 	//Music Cards
 	//////////////
 	dueloffates: function (target, room, user) {
