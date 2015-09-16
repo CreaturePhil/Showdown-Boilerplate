@@ -34,21 +34,14 @@ var emotes = {
 	'trollface': 'http://img818.imageshack.us/img818/2725/trollfacetsdr.png',
 	'lennyface': 'http://i.imgur.com/DrKuSjy.jpg',
 	'bordll': 'http://i.imgur.com/IfJIOtR.jpg',
-	'surprisd': 'http://i.imgur.com/BDTR4NI.png',
-	'cistorimt': 'http://i.imgur.com/pCF4Qoa.jpg',
 	'medaglieuomo': 'http://i.imgur.com/0MGVlhT.jpg',
-	'memesevr': 'http://i.imgur.com/DHgLs1T.png',
 	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
-	'jsapproves': 'http://i.imgur.com/p3VYpcU.jpg',
-	'miofigliopt': 'http://i.imgur.com/gMqpVRQ.jpg',
-	'avatarchari': 'http://i.imgur.com/y9ZT8Vn.png',
-	'avatarsawk': 'http://i.imgur.com/hkg7vWa.png',
 	'avatardani': 'http://i.imgur.com/HC9pAXn.png',
 	'avatardel': 'http://i.imgur.com/jDXgrhs.png',
 	'avatarpeter': 'http://i.imgur.com/lNhXAx4.gif',
-	'avatarpokekit': 'http://play.pokemonshowdown.com/sprites/trainers/crushindefeat.png',
+	'facepalm': 'http://i.imgur.com/E0oDNFB.gif',
+	'fg': 'http://i.imgur.com/TUXMPdA.gif',
 	'avatarlatios': 'http://i.imgur.com/KZhGnBF.png',
-	'avatarray': 'http://play.pokemonshowdown.com/sprites/trainers/haunter3.png',
 	'avatarmew2': 'http://play.pokemonshowdown.com/sprites/trainers/mjb.png'
 };
 
