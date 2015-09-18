@@ -17,7 +17,6 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'audinomega').abilities['0'] = 'Simple';
 		this.modData('Learnsets', 'ampharos').learnset.wish = ['6T'];
 		this.modData('Pokedex', 'absolmega').types = ['Dark', 'Fairy'];
-		this.modData('Pokedex', 'weavile').abilities['1'] = 'Moxie';
 		this.modData('Learnsets', 'pangoro').learnset.suckerpunch = ['6T'];
 		this.modData('Pokedex', 'rotomfan').types = ['Electric', 'Steel'];
 		this.modData('Learnsets', 'rotomfan').learnset.flashcannon = this.data.Learnsets.rotomfan.learnset.airslash;
@@ -30,12 +29,18 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'forretress').abilities['1'] = 'Water Absorb';
 		this.modData('Learnsets', 'bronzong').learnset.recover = ['6T'];
 		this.modData('Learnsets', 'sandslash').learnset.thousandarrows = ['6T'];
+		this.modData('Movedex', 'thousandarrows').isUnreleased = false;
 		this.modData('Learnsets', 'braviary').learnset.extremespeed = ['6T'];
 		this.modData('Pokedex', 'cacturne').abilities['1'] = 'Sand Rush';
 		this.modData('Pokedex', 'beedrillmega').types = ['Bug', 'Ground'];
 		this.modData('Pokedex', 'swanna').abilities['1'] = 'Gale Wings';
 		this.modData('Pokedex', 'kyurem').abilities['1'] = 'Sheer Force';
 		this.modData('Pokedex', 'donphan').types = ['Ground', 'Fairy'];
-		this.modData('Pokedex', 'hydreigon').abilities['1'] = 'Protean';
+		this.modData('Pokedex', 'virizion').abilities['1'] = 'Trace';
+		this.modData('Pokedex', 'gastrodon').abilities['H'] = 'Poison Heal';
+		this.modData('Learnsets', 'krookodile').learnset.dragondance = ['6T'];
+		this.modData('Pokedex', 'torterra').abilities['1'] = 'Drought';
+		this.modData('Pokedex', 'banettemega').types = ['Ghost', 'Fighting'];
+		this.modData('Learnsets', 'banette').learnset.drainpunch = ['6T'];
 	}
 };

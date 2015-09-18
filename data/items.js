@@ -94,7 +94,7 @@ exports.BattleItems = {
 		spritenum: 5,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Dragon"
 		},
 		onUpdate: function (pokemon) {
@@ -132,7 +132,7 @@ exports.BattleItems = {
 		},
 		onAfterDamage: function (damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
-			if (effect.effectType === 'Move') {
+			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				this.itemData = {id: '', target: this};
@@ -141,7 +141,7 @@ exports.BattleItems = {
 		},
 		onAfterSubDamage: function (damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
-			if (effect.effectType === 'Move') {
+			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.setItem('');
 			}
@@ -1277,17 +1277,9 @@ exports.BattleItems = {
 			basePower: 100,
 			type: "Bug"
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
+		onHit: function (target, source, move) {
 			if (move && move.typeMod > 0) {
-				target.addVolatile('enigmaberry');
-			}
-		},
-		effect: {
-			duration: 1,
-			onUpdate: function (target) {
-				if (target.eatItem()) {
-					target.removeVolatile('enigmaberry');
-				}
+				target.eatItem();
 			}
 		},
 		onEatItem: function (item, pokemon) {
@@ -2180,6 +2172,7 @@ exports.BattleItems = {
 			basePower: 30,
 			volatileStatus: 'flinch'
 		},
+		onModifyMovePriority: -1,
 		onModifyMove: function (move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
@@ -3396,7 +3389,7 @@ exports.BattleItems = {
 		spritenum: 351,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 90,
 			type: "Ice"
 		},
 		num: 169,
@@ -3453,7 +3446,7 @@ exports.BattleItems = {
 		spritenum: 371,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 90,
 			type: "Poison"
 		},
 		num: 171,
@@ -3570,6 +3563,7 @@ exports.BattleItems = {
 			basePower: 30,
 			volatileStatus: 'flinch'
 		},
+		onModifyMovePriority: -1,
 		onModifyMove: function (move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];

@@ -309,10 +309,8 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 
 	Dnsbl.query(connection.ip, function (isBlocked) {
 		if (isBlocked) {
-			connection.popup("You are locked because someone using your IP (" + connection.ip + ") has spammed/hacked other websites. This usually means you're using a proxy, in a country where other people commonly hack, or have a virus on your computer that's spamming websites.");
 			if (connection.user && !connection.user.locked && !connection.user.autoconfirmed) {
 				connection.user.semilocked = '#dnsbl';
-				connection.user.updateIdentity();
 			}
 		}
 	});
@@ -737,6 +735,7 @@ User = (function () {
 		}
 	};
 	User.prototype.filterName = function (name) {
+		name = name.substr(0, 30);
 		if (Config.namefilter) {
 			name = Config.namefilter(name, this);
 		}
@@ -1130,9 +1129,19 @@ User = (function () {
 		}
 
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		if (!this.isStaff) {
+			var staffRoom = Rooms.get('staff');
+			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
+		}
 		if (this.confirmed) {
 			this.autoconfirmed = this.confirmed;
 			this.locked = false;
+		}
+		if (this.autoconfirmed && this.semilocked) {
+			if (this.semilocked === '#dnsbl') {
+				this.popup("You are locked because someone using your IP has spammed/hacked other websites. This usually means you're using a proxy, in a country where other people commonly hack, or have a virus on your computer that's spamming websites.");
+				this.semilocked = '#dnsbl.';
+			}
 		}
 		if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
 	};
@@ -1143,6 +1152,10 @@ User = (function () {
 	User.prototype.setGroup = function (group, forceConfirmed) {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		if (!this.isStaff) {
+			var staffRoom = Rooms.get('staff');
+			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
+		}
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
 			if (forceConfirmed || this.group !== Config.groupsranking[0]) {
@@ -1268,40 +1281,6 @@ User = (function () {
 		}
 		return alts;
 	};
-	User.prototype.doWithMMR = function (formatid, callback) {
-		var self = this;
-		var userid = this.userid;
-		formatid = toId(formatid);
-
-		// this should relieve login server strain
-		// this.mmrCache[formatid] = 1000;
-
-		if (this.mmrCache[formatid]) {
-			callback(this.mmrCache[formatid]);
-			return;
-		}
-		LoginServer.request('mmr', {
-			format: formatid,
-			user: userid
-		}, function (data, statusCode, error) {
-			if (!data) return callback(1000, error || new Error("No data received"));
-			if (data.errorip) return self.popup("This server's request IP " + data.errorip + " is not a registered server.");
-
-			var mmr = parseInt(data, 10);
-			if (isNaN(mmr)) return callback(1000, error || new Error("Invalid rating"));
-			if (self.userid !== userid) return callback(1000, new Error("Expired rating"));
-
-			self.mmrCache[formatid] = mmr;
-			callback(mmr, null);
-		});
-	};
-	User.prototype.cacheMMR = function (formatid, mmr) {
-		if (typeof mmr === 'number') {
-			this.mmrCache[formatid] = mmr;
-		} else {
-			this.mmrCache[formatid] = Number(mmr.acre);
-		}
-	};
 	User.prototype.ban = function (noRecurse, userid) {
 		// recurse only once; the root for-loop already bans everything with your IP
 		if (!userid) userid = this.userid;
@@ -1366,7 +1345,16 @@ User = (function () {
 				return false;
 			}
 		}
-		if (room.modjoin && !this.can('bypassall')) {
+		var bypassAll = this.can('bypassall');
+		if (room.tour && !bypassAll) {
+			var tour = room.tour.tour;
+			var errorMessage = tour.onBattleJoin(room, this);
+			if (errorMessage) {
+				connection.sendTo(roomid, "|noinit|joinfailed|" + errorMessage);
+				return false;
+			}
+		}
+		if (room.modjoin && !bypassAll) {
 			var userGroup = this.group;
 			if (room.auth) {
 				if (room.isPrivate === true) {
@@ -1389,8 +1377,8 @@ User = (function () {
 			}
 		}
 
-		if (Rooms.aliases[toId(roomid)] === room) {
-			connection.send(">" + toId(roomid) + "\n|deinit");
+		if (Rooms.aliases[roomid] === room.id) {
+			connection.send(">" + roomid + "\n|deinit");
 		}
 
 		var joinResult = this.joinRoom(room, connection);

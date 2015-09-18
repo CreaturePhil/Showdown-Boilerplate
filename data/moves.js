@@ -1724,6 +1724,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, distance: 1, authentic: 1},
+		noSketch: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'confusion'
@@ -7010,6 +7011,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
+		pressureTarget: "foeSide",
 		target: "self",
 		type: "Psychic"
 	},
@@ -12292,6 +12294,10 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
+			onStart: function () {
+				this.effectData.source.removeVolatile('followme');
+				this.effectData.source.removeVolatile('ragepowder');
+			},
 			onAnyDragOut: function (pokemon) {
 				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
 			},
@@ -12699,6 +12705,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
+		pressureTarget: "foeSide",
 		target: "self",
 		type: "Dark"
 	},
@@ -13349,6 +13356,7 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {contact: 1, protect: 1},
+		noSketch: true,
 		onModifyMove: function (move, pokemon, target) {
 			move.type = '???';
 			this.add('-activate', pokemon, 'move: Struggle');
@@ -15700,6 +15708,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, recharge: 1, protect: 1, mirror: 1},
+		noSketch: true,
 		drain: [1, 2],
 		onTry: function (pokemon) {
 			if (pokemon.template.name !== 'Magikarp') {

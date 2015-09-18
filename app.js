@@ -134,7 +134,13 @@ global.ResourceMonitor = {
 	log: function (text) {
 		console.log(text);
 		if (Rooms.get('staff')) {
-			Rooms.get('staff').add('||' + text).update();
+			Rooms.get('staff').add('|c|~|' + text).update();
+		}
+	},
+	adminlog: function (text) {
+		console.log(text);
+		if (Rooms.get('upperstaff')) {
+			Rooms.get('upperstaff').add('|c|~|' + text).update();
 		}
 	},
 	logHTML: function (text) {
@@ -149,18 +155,14 @@ global.ResourceMonitor = {
 		name = (name ? ': ' + name : '');
 		if (ip in this.connections && duration < 30 * 60 * 1000) {
 			this.connections[ip]++;
-			if (this.connections[ip] < 500 && duration < 5 * 60 * 1000 && this.connections[ip] % 60 === 0) {
-				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
-			} else if (this.connections[ip] < 500 && this.connections[ip] % 120 === 0) {
-				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
-			} else if (this.connections[ip] === 500) {
-				this.log('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + this.connections[ip] + ' times in the last ' + duration.duration() + name + ')');
+			if (this.connections[ip] === 500) {
+				this.adminlog('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + this.connections[ip] + ' times in the last ' + duration.duration() + name + ')');
 				return true;
 			} else if (this.connections[ip] > 500) {
 				if (this.connections[ip] % 500 === 0) {
 					var c = this.connections[ip] / 500;
 					if (c < 5 || c % 2 === 0 && c < 10 || c % 5 === 0) {
-						this.log('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
+						this.adminlog('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
 					}
 				}
 				return true;
@@ -314,6 +316,8 @@ global.Tools = require('./tools.js').includeFormats();
 
 global.LoginServer = require('./loginserver.js');
 
+global.Ladders = require('./ladders-remote.js');
+
 global.Users = require('./users.js');
 
 global.Rooms = require('./rooms.js');
@@ -354,7 +358,7 @@ if (Config.crashguard) {
 	var lastCrash = 0;
 	process.on('uncaughtException', function (err) {
 		var dateNow = Date.now();
-		var quietCrash = require('./crashlogger.js')(err, 'The main process');
+		var quietCrash = require('./crashlogger.js')(err, 'The main process', true);
 		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
 		lastCrash = Date.now();
 		if (quietCrash) return;
@@ -363,7 +367,6 @@ if (Config.crashguard) {
 			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		}
-		Config.modchat = 'crash';
 		Rooms.global.lockdown = true;
 	});
 }

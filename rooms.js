@@ -296,7 +296,7 @@ var GlobalRoom = (function () {
 
 		this.chatRoomData = [];
 		try {
-			this.chatRoomData = JSON.parse(fs.readFileSync('config/chatrooms.json'));
+			this.chatRoomData = require('./config/chatrooms.json');
 			if (!Array.isArray(this.chatRoomData)) this.chatRoomData = [];
 		} catch (e) {} // file doesn't exist [yet]
 
@@ -327,7 +327,7 @@ var GlobalRoom = (function () {
 			var room = Rooms.createChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
 			if (room.aliases) {
 				for (var a = 0; a < room.aliases.length; a++) {
-					aliases[room.aliases[a]] = room;
+					aliases[room.aliases[a]] = id;
 				}
 			}
 			this.chatRooms.push(room);
@@ -539,16 +539,18 @@ var GlobalRoom = (function () {
 			time: new Date().getTime()
 		};
 		var self = this;
-		user.doWithMMR(formatid, function (mmr, error) {
-			if (error) {
-				user.popup("Connection to ladder server failed with error: " + error.message + "; please try again later");
-				return;
-			}
-			newSearch.rating = mmr;
+		Ladders(formatid).getRating(user.userid).then(function (rating) {
+			newSearch.rating = rating;
 			self.addSearch(newSearch, user, formatid);
+		}, function (error) {
+			// The promise only rejects if the user changed names before the search
+			// could start; the search simply doesn't happen in this case.
 		});
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2, formatid) {
+		// This should never happen. TODO: cover any edge cases that could make this happen.
+		if (!user1 || !user2) return void require('./crashlogger.js')(new Error("Matched user " + (user1 ? search2.userid : search1.userid) + " not found"), "The main process");
+
 		// users must be different
 		if (user1 === user2) return false;
 
@@ -559,7 +561,7 @@ var GlobalRoom = (function () {
 		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
 
 		// search must be within range
-		var searchRange = 100, elapsed = Math.abs(search1.time - search2.time);
+		var searchRange = 100, elapsed = Date.now() - Math.min(search1.time, search2.time);
 		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'randombattle') searchRange = 50;
 		searchRange += elapsed / 300; // +1 every .3 seconds
 		if (searchRange > 300) searchRange = 300;
@@ -930,62 +932,8 @@ var BattleRoom = (function () {
 				if (winner && !winner.registered) {
 					this.sendUser(winner, '|askreg|' + winner.userid);
 				}
-				var p1rating, p2rating;
 				// update rankings
-				this.push('|raw|Ladder updating...');
-				var self = this;
-				LoginServer.request('ladderupdate', {
-					p1: p1name,
-					p2: p2name,
-					score: p1score,
-					format: toId(rated.format)
-				}, function (data, statusCode, error) {
-					if (!self.battle) {
-						console.log('room expired before ladder update was received');
-						return;
-					}
-					if (!data) {
-						self.addRaw('Ladder (probably) updated, but score could not be retrieved (' + error.message + ').');
-						// log the battle anyway
-						if (!Tools.getFormat(self.format).noLog) {
-							self.logBattle(p1score);
-						}
-						return;
-					} else if (data.errorip) {
-						self.addRaw("This server's request IP " + data.errorip + " is not a registered server.");
-						return;
-					} else {
-						try {
-							p1rating = data.p1rating;
-							p2rating = data.p2rating;
-
-							//self.add("Ladder updated.");
-
-							var oldacre = Math.round(data.p1rating.oldacre);
-							var acre = Math.round(data.p1rating.acre);
-							var reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.99 ? 'winning' : (p1score < 0.01 ? 'losing' : 'tying'));
-							if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-							self.addRaw(Tools.escapeHTML(p1name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
-
-							oldacre = Math.round(data.p2rating.oldacre);
-							acre = Math.round(data.p2rating.acre);
-							reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.99 ? 'losing' : (p1score < 0.01 ? 'winning' : 'tying'));
-							if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-							self.addRaw(Tools.escapeHTML(p2name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
-
-							if (p1 && p1.userid === rated.p1) p1.cacheMMR(rated.format, data.p1rating);
-							if (p2 && p2.userid === rated.p2) p2.cacheMMR(rated.format, data.p2rating);
-							self.update();
-						} catch (e) {
-							self.addRaw('There was an error calculating rating changes.');
-							self.update();
-						}
-
-						if (!Tools.getFormat(self.format).noLog) {
-							self.logBattle(p1score, p1rating, p2rating);
-						}
-					}
-				});
+				Ladders(rated.format).updateRating(p1name, p2name, p1score, this);
 			}
 		} else if (Config.logchallenges) {
 			// Log challenges if the challenge logging config is enabled.
@@ -1567,7 +1515,11 @@ var ChatRoom = (function () {
 			if (!user.named) {
 				++guests;
 			}
-			++groups[user.group];
+			if (this.auth && this.auth[user.userid] && this.auth[user.userid] in groups) {
+				++groups[this.auth[user.userid]];
+			} else {
+				++groups[user.group];
+			}
 		}
 		var entry = '|userstats|total:' + total + '|guests:' + guests;
 		for (var i in groups) {
@@ -1736,6 +1688,12 @@ var ChatRoom = (function () {
 		rooms.global.deregisterChatRoom(this.id);
 		rooms.global.delistChatRoom(this.id);
 
+		if (this.aliases) {
+			for (var i = 0; i < this.aliases.length; i++) {
+				delete aliases[this.aliases[i]];
+			}
+		}
+
 		// get rid of some possibly-circular references
 		delete rooms[this.id];
 	};
@@ -1753,7 +1711,7 @@ function getRoom(roomid, fallback) {
 }
 Rooms.get = getRoom;
 Rooms.search = function (name, fallback) {
-	return getRoom(name) || getRoom(toId(name)) || Rooms.aliases[toId(name)] || (fallback ? rooms.global : undefined);
+	return getRoom(name) || getRoom(toId(name)) || getRoom(Rooms.aliases[toId(name)]) || (fallback ? rooms.global : undefined);
 };
 
 Rooms.createBattle = function (roomid, format, p1, p2, options) {
