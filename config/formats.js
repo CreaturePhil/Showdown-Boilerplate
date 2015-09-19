@@ -1383,7 +1383,14 @@ exports.Formats = [
 			return problems;
 		}
 	},
-	
+	{
+		name: "C&E",
+		section: "Other Metagames",
+
+		searchShow: false,
+		maxLevel: 100,
+		ruleset: ['Team Preview']
+	},
 	{
 		name: "Balanced Hackmons (Doubles)",
 		section: "Local Metagames",
