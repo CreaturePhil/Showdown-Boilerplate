@@ -45,73 +45,6 @@ function clearRoom(room) {
 	}, 1000);
 }
 
-function getRPSmsg(name1, name2, choice1, choice2) {
-	var winner = ""
-	var loser = ""
-	var wchoice = ""
-	var lchoice = ""
-	var context = " in a rock-paper-scissors-lizard-Spock match."
-	choice1 = choice1.toLowerCase()
-	choice2 = choice2.toLowerCase()
-	if (choice1 === "spock") choice1 = "Spock"
-	if (choice2 === "spock") choice2 = "Spock"
-	if (choice1 === choice2) {
-		return ('|raw|<div>' + 'The rock-paper-scissors-lizard-Spock match between ' + '<b>' + name1 + " and " + name2 + '</b>' + ' ended in a ' + '<i>' + choice1 + '</i>' + '<b>' + ' tie.' + '</b>' + '</div>');
-	}
-	else if (choice1 === "rock") {
-		switch (choice2) {
-			case "scissors": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="crushed "; break;
-			case "lizard": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="crushed "; break;
-			case "Spock": winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="vaporized "; break;
-			default: winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="covered "; break;
-		}
-	}
-	else if (choice1 === "lizard") {
-		switch (choice2) {
-			case "Spock": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="poisoned "; break;
-			case "paper": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="eaten "; break;
-			case "scissors": winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="decapitated "; break;
-			default: winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="crushed "; break;
-		 }
-	}
-	else if (choice1 === "Spock") {
-		switch (choice2) {
-			case "scissors": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="smashed "; break;
-			case "rock":  winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="vaporized "; break;
-			case "paper":  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="disproven "; break;
-			default:  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="poisoned "; break;
-		}
-	}
-	else if (choice1 === "scissors") {
-		switch (choice2) {
-			case "lizard": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="decapitated "; break;
-			case "paper": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="cut "; break;
-			case "Spock": winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="smashed "; break;
-			default:  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="crushed "; break;
-		}
-	}
-	else {
-		switch (choice2) {
-			case "Spock":  winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="disproven "; break;
-			case "rock":  winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="covered "; break;
-			case "scissors":  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="cut "; break;
-			default:  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="eaten "; break;
-		}
-	}
-	return ('|raw|<div>' + '<b>' + winner + "\'s " + '</b>' + '<i>' + wchoice + '</i>' + ' has ' + '<b>' + action + loser + '\'s ' + '</b>' + '<i>' + lchoice + '</i>' + context + '</div>');
-}
-
-function getRPShope(choice) {
-	var randbool = Math.round(Math.random()) === 1;
-	switch(choice.toLowerCase()) {
-			case "rock": return (randbool ? "scissors" : "lizard"); break;
-			case "paper": return (randbool ? "rock" : "Spock"); break;
-			case "scissors": return (randbool ? "paper" : "lizard"); break;
-			case "lizard": return (randbool ? "paper" : "Spock"); break;
-			default: return (randbool ? "scissors" : "rock"); break;
-	}
-}
-
 exports.commands = {
 	stafflist: 'authority',
 	auth: 'authority',
@@ -906,82 +839,32 @@ exports.commands = {
 		return this.sendReply("The user "+targetUser+" is now un-namelocked.");
 	}
 	
-	rock: function(target,room, user) {return this.parse('/rps rock ' + target);},
-	paper: function(target,room, user) {return this.parse('/rps paper ' + target);},
-	scissors: function(target,room, user) {return this.parse('/rps scissors ' + target);},
-	lizard: function(target,room, user) {return this.parse('/rps lizard ' + target);},
-	spock: function(target,room, user) {return this.parse('/rps Spock ' + target);},
+	hide: 'hideauth',
+	hideauth: function (target, room, user) {
+		if (!this.can('hideauth')) return false;
+		target = target || Config.groups.default.global;
+		if (!Config.groups.global[target]) {
+			target = Config.groups.default.global;
+			this.sendReply("You have picked an invalid group, defaulting to '" + target + "'.");
+		} else if (Config.groups.bySymbol[target].globalRank >= Config.groups.bySymbol[user.group].globalRank) {
+			return this.sendReply("The group you have chosen is either your current group OR one of higher rank. You cannot hide like that.");
+		}
 
-	rps: function(target, room, user) {
-		user.blockrps=false;
-		var parts = target.split(",");
-		var spind = target.indexOf(" ");
-		var blankarray = ["blank","no","none","nothing","void"]
-		var lcasearray = ["rock","paper","scissors","lizard","spock"]
-
-
-		if (!parts[0]) return this.sendReply("The proper syntaxis is /rps [choice],[targetuser]. The parameter [targetuser] is optional.");
-
-		if (blankarray.indexOf(parts[0].toLowerCase()) != -1) {
-			user.rpschoice = "";
-			return this.sendReply("Your previous choice has been deleted.");
-		}
-		if (lcasearray.indexOf(parts[0].toLowerCase()) != -1) {
-			user.rpschoice = parts[0];
-		}
-		else if (lcasearray.indexOf(target.substr(0, spind).toLowerCase()) != -1 ) {
-			//this.sendReply("The proper syntaxis is /rps [choice],[targetuser]. The parameter [targetuser] is optional.");
-			parts[0] = target.substr(0, spind);
-			user.rpschoice = parts[0];
-			parts[1] = target.substr(spind+1,target.length - spind - 1);
-		}
-		else
-		{
-			return this.sendReply("Want it or not, your choice is invalid! The proper syntaxis is /rps [choice],[targetuser].");
-		}
-		var targetuser =  Users.get(parts[1]);
-		if (targetuser === null) {
-			if(user.rpschallengedby === "" || !user.rpschallengedby) return this.sendReply("Your choice has been set to " + user.rpschoice + ".");
-			this.parse('/rps '+parts[0]+","+user.rpschallengedby);
-			return user.rpschallengedby = "";
-		}
-		else if (targetuser === undefined) {
-			return this.sendReply("Your choice has been set to " + user.rpschoice + " but your opponent is not online or doesn't exist.");
-		}
-		if(targetuser == user) return this.sendReply("Your choice has been set to " + user.rpschoice + ", but remember that you can't play against yourself!");
-		if (targetuser.blockrps) return this.sendReply("Your choice has been set to " + user.rpschoice + ". However, your opponent is currently blocking challenges to this game.");
-		if (!targetuser.rpschoice || targetuser.rpschoice === "") {
-			if (targetuser.popped) {
-				targetuser.send(user.name+" has challenged you to a RPS-lizard-Spock game. Use the command /rps to play.")
-			}
-			else {
-				targetuser.popped = true
-				targetuser.popup(user.name+" has challenged you to a rock-paper-scissors-lizard-Spock game. Use the command /rps to play.");
-			}
-			targetuser.rpschallengedby = user;
-			return this.sendReply("Your choice has been set to " + user.rpschoice + ". Hope that " + targetuser.name + " shoots " + getRPShope(user.rpschoice) + ".");
-		}
-		var msg = getRPSmsg(user.name,targetuser.name,user.rpschoice,targetuser.rpschoice);
-		user.rpschoice = "";
-		targetuser.rpschoice = "";
-		if(user.can('broadcast') || targetuser.can('broadcast')) {
-			return this.add(msg);
-		}
-		else {
-			targetuser.send(msg);
-			return this.sendReply(msg);
-		}
-	},
-	
-	disallowrps: 'blockrps',
-	blockrps: function(target,room,user) {
-		user.blockrps=true;
-		return this.sendReply('RPS Challenges are now blocked.');
+		user.getIdentity = function (roomid) {
+			var identity = Object.getPrototypeOf(this).getIdentity.call(this, roomid);
+			if (identity[0] === this.group)
+				return target + identity.slice(1);
+			return identity;
+		};
+		user.updateIdentity();
+		return this.sendReply("You are now hiding your auth as '" + target + "'.");
 	},
 
-	unblockrps: 'allowrps',	
-	allowrps: function(target,room,user) {
-		user.blockrps=false;
-		return this.sendReply('RPS Challenges are now allowed.');
-	},
+	show: 'showauth',
+	showauth: function (target, room, user) {
+		if (!this.can('hideauth')) return false;
+		delete user.getIdentity;
+		user.updateIdentity();
+		return this.sendReply("You are now showing your authority!");
+	}
 };
