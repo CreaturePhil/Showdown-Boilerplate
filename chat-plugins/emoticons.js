@@ -20,7 +20,7 @@ var emotes = {
 	'fukya': 'http://i.imgur.com/ampqCZi.gif',
 	'funnylol': 'http://i.imgur.com/SlzCghq.png',
 	'hmmface': 'http://i.imgur.com/Z5lOwfZ.png',
-	'Kappa': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-ddc6e3a8732cb50f-25x28.png',
+	'Kappa': 'http://i.imgur.com/5qRROqN.png',
 	'noface': 'http://i.imgur.com/H744eRE.png',
 	'Obama': 'http://i.imgur.com/rBA9M7A.png',
 	'oshet': 'http://i.imgur.com/yr5DjuZ.png',
@@ -40,7 +40,6 @@ var emotes = {
 	'avatardel': 'http://i.imgur.com/jDXgrhs.png',
 	'avatarpeter': 'http://i.imgur.com/lNhXAx4.gif',
 	'facepalm': 'http://i.imgur.com/E0oDNFB.gif',
-	'fg': 'http://i.imgur.com/TUXMPdA.gif',
 	'avatarlatios': 'http://i.imgur.com/KZhGnBF.png',
 	'avatarmew2': 'http://play.pokemonshowdown.com/sprites/trainers/mjb.png'
 };
@@ -87,7 +86,7 @@ function parseEmoticons(message, room, user, pm) {
 	// add emotes
 	message = message.replace(patternRegex, function (match) {
 		var emote = emotes[match];
-		return typeof emote === 'string' ? '<img src="' + emote + '" title="' + match + '" />' : match;
+		return typeof emote === 'string' ? '<img src="' + emote + '" title="' + match + '" height="50" width="50" />' : match;
 	});
 
 	// __italics__
@@ -122,7 +121,7 @@ function create_table() {
 
 	for (var i = 0; i < len; i++) {
 		emotes_list.push("<td>" +
-			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "'>" +
+			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='50' width='50' />" +
 			emotes_name[i] + "</td>");
 	}
 
@@ -138,7 +137,7 @@ function create_table() {
 		}
 	}
 
-	return "<center><b><u>List of Emoticons</u></b></center>" + "<table border='1' cellspacing='0' cellpadding='5' width='100%'>" + "<tbody>" + emotes_group_list.join("") + "</tbody>" + "</table>";
+	return "<div class='infobox'><center><b><u>List of Emoticons</u></b></center>" + "<div class='infobox-limited'><table border='1' cellspacing='0' cellpadding='5' width='100%'>" + "<tbody>" + emotes_group_list.join("") + "</tbody>" + "</table></div></div>";
 }
 
 var emotes_table = create_table();
@@ -184,4 +183,13 @@ exports.commands = {
 		}
 	},
 	toggleemoticonshelp: ["/toggleemoticons - Toggle emoticons on or off."]
+	
+	rande: 'randemote',
+	randemote: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		var rng = Math.floor(Math.random() * emotesKeys.length);
+		var randomEmote = emotesKeys[rng];
+		this.sendReplyBox("<img src='" + emotes[randomEmote] + "' title='" + randomEmote + "' height='50' width='50' />");
+	},
+	randemotehelp: ["/randemote - Get a random emote."]
 };

@@ -64,7 +64,7 @@ function font(color, text) {
  * @return {String}
  */
 function img(link) {
-	return '<img src="' + link + '" height="80" width="80" align="left">';
+	return '<img src="' + link + '" height="80" width="80">';
 }
 
 /**
@@ -95,11 +95,16 @@ Profile.prototype.avatar = function () {
 	}
 	for (var name in Config.customAvatars) {
 		if (this.username === name) {
-			return img(this.url + '/avatars/' + Config.customAvatars[name]);
+			return img(this.url + ':' + Config.port + '/avatars/' + Config.customAvatars[name]);
 		}
 	}
 	var selectedSprite = trainersprites[Math.floor(Math.random() * trainersprites.length)];
 	return img('http://play.pokemonshowdown.com/sprites/trainers/' + selectedSprite + '.png');
+};
+
+Profile.prototype.buttonAvatar = function () {
+	var css = 'border:none;background:none;padding:0;float:left;';
+	return '<button style="' + css + '" name="parseCommand" value="/user ' + this.username + '">' + this.avatar() + "</button>";
 };
 
 Profile.prototype.group = function () {
@@ -133,7 +138,7 @@ Profile.prototype.show = function (callback) {
 	Database.read('money', userid, function (err, money) {
 		if (err) throw err;
 		if (!money) money = 0;
-		return callback(this.avatar() +
+		return callback(this.buttonAvatar() +
 										SPACE + this.name() + BR +
 										SPACE + this.group() + BR +
 										SPACE + this.money(money) + BR +

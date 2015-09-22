@@ -12,7 +12,7 @@ var messages = [
 	"fell into the void.",
 	"went into a cave without a repel!",
 	"has left the building.",
-	"was forced to give StevoDuhHero's mom an oil massage!",
+	"was forced to give Hackuo23's mom an oil massage!",
 	"was hit by Magikarp's Revenge!",
 	"ate a bomb!",
 	"is blasting off again!",
@@ -26,6 +26,24 @@ var ipbans = fs.createWriteStream('config/ipbans.txt', {
 var badges = fs.createWriteStream('badges.txt', {
 	'flags': 'a'
 });
+
+function clearRoom(room) {
+	var len = (room.log && room.log.length) || 0;
+	var users = [];
+	while (len--) {
+		room.log[len] = '';
+	}
+	for (var u in room.users) {
+		users.push(u);
+		Users.get(u).leaveRoom(room, Users.get(u).connections[0]);
+	}
+	len = users.length;
+	setTimeout(function () {
+		while (len--) {
+			Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
+		}
+	}, 1000);
+}
 
 exports.commands = {
 	stafflist: 'authority',
@@ -59,21 +77,20 @@ exports.commands = {
 		if (!this.can('declare')) return false;
 		if (room.battle) return this.sendReply("You cannot clearall in battle rooms.");
 
-		var len = room.log.length;
-		var users = [];
-		while (len--) {
-			room.log[len] = '';
+		clearRoom(room);
+	},
+
+	gclearall: 'globalclearall',
+	globalclearall: function (target, room, user) {
+		if (!this.can('gdeclare')) return false;
+
+		for (var u in Users.users) {
+			Users.users[u].popup("All rooms are being clear.");
 		}
-		for (var u in room.users) {
-			users.push(u);
-			Users.get(u).leaveRoom(room, Users.get(u).connections[0]);
+
+		for (var r in Rooms.rooms) {
+			clearRoom(Rooms.rooms[r]);
 		}
-		len = users.length;
-		setTimeout(function () {
-			while (len--) {
-				Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
-			}
-		}, 1000);
 	},
 
 	hide: function (target, room, user) {
@@ -170,30 +187,21 @@ exports.commands = {
 
 	regdate: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		if (!target || target === "0") target = toId(user.userid);
-		if (!target || target === "." || target === "," || target === "'") return this.parse('/help regdate');
+		if (!target || !toId(target)) return this.parse('/help regdate');
 		var username = toId(target);
-		target = target.replace(/\s+/g, '');
-		var self = this, data;
-		request('http://pokemonshowdown.com/users/~' + target, function (error, response, content) {
-			if (!(!error && response.statusCode === 200)) return;
-			content = content + '';
-			content = content.split("<em");
-			if (content[1]) {
-				content = content[1].split("</p>");
-				if (content[0]) {
-					content = content[0].split("</em>");
-					if (content[1]) {
-						var regdate = content[1].split('</small>')[0] + '.';
-						data = Tools.escapeHTML(username) + " was registered on" + regdate;
-					}
-				}
-			} else {
-				data = Tools.escapeHTML(username) + " is not registered.";
+		request('http://pokemonshowdown.com/users/' + username, function (error, response, body) {
+			if (error && response.statusCode !== 200) {
+				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
+				return room.update();
 			}
-			self.sendReplyBox(Tools.escapeHTML(data));
+			var regdate = body.split('<small>')[1].split('</small>')[0].replace(/(<em>|<\/em>)/g, '');
+			if (regdate === '(Unregistered)') {
+				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
+			} else {
+				this.sendReplyBox(Tools.escapeHTML(target) + " was registered on " + regdate.slice(7) + ".");
+			}
 			room.update();
-		});
+		}.bind(this));
 	},
 	regdatehelp: ["/regdate - Please specify a valid username."],
 
@@ -781,26 +789,5 @@ exports.commands = {
 		}
 
 		this.sendReplyBox(official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' '));
-	},
-	frt: 'forcerenameto',		
-	forcerenameto: function(target, room, user) {		
-		if (!target) return this.parse('/help forcerenameto');		
-		target = this.splitTarget(target);		
-		var targetUser = this.targetUser;		
-		if (!targetUser) {		
-			return this.sendReply('User '+this.targetUsername+' not found.');		
-		}		
-		if (!target) {		
-			return this.sendReply('No new name was specified.');		
-		}		
-		if (!this.can('forcerenameto', targetUser)) return false;		
- 		 
-		if (targetUser.userid === toUserid(this.targetUser)) {		
-			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';		
-			this.privateModCommand('(' + entry + ')');		
-			targetUser.forceRename(target, undefined, true);		
-		} else {		
-			this.sendReply("User "+targetUser.name+" is no longer using that name.");		
-		}		
 	},
 };
