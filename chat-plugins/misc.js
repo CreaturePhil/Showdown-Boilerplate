@@ -790,4 +790,52 @@ exports.commands = {
 
 		this.sendReplyBox(official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' '));
 	},
+	
+	spop: 'sendpopup',
+	sendpopup: function(target, room, user) {
+		if (!this.can('popup')) return false;
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.sendReply('/sendpopup [user], [message] - You missed the user');
+		if (!target) return this.sendReply('/sendpopup [user], [message] - You missed the message');
+
+		targetUser.popup(target);
+		this.sendReply(targetUser.name + ' got the message as popup: ' + target);
+
+		targetUser.send(user.name+' sent a popup message to you.');
+
+		this.logModCommand(user.name+' send a popup message to '+targetUser.name);
+	},
+	
+	namelock: 'nl',
+	nl: function(target, room, user) {
+		if (!this.can('ban')) return false;
+		target = this.splitTarget(target);
+		targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('/namelock - Lock a user into a username.');
+		}
+		if (targetUser.namelock === true) {
+			return this.sendReply("The user "+targetUser+" is already namelocked.");
+		}
+		targetUser.namelock = true;
+		return this.sendReply("The user "+targetUser+" is now namelocked.");
+	},
+	
+	unnamelock: 'unl',
+	unl: function(target, room, user) {
+		if (!this.can('ban')) return false;
+		target = this.splitTarget(target);
+		targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('/unnamelock - Unlock a user from a username.');
+		}
+		if (targetUser.namelock === false) {
+			return this.sendReply("The user "+targetUser+" is already un-namelocked.");
+		}
+		targetUser.namelock = false;
+		return this.sendReply("The user "+targetUser+" is now un-namelocked.");
+	}
 };
