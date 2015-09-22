@@ -400,7 +400,7 @@ exports.commands = {
 		if (room.dice.p2) return this.errorReply("Dice game has already started.");
 		var dice = room.dice;
 		if (dice.p1) {
-			Db('money')[dice.p1] -= dice.bet;
+			Db('money')[dice.p1] += dice.bet;
 			Db.save();
 		}
 		delete room.dice;
