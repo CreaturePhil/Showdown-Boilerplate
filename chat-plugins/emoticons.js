@@ -121,7 +121,7 @@ function create_table() {
 
 	for (var i = 0; i < len; i++) {
 		emotes_list.push("<td>" +
-			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "'>" +
+			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='50' width='50' />" +
 			emotes_name[i] + "</td>");
 	}
 
