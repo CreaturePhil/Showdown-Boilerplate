@@ -45,6 +45,73 @@ function clearRoom(room) {
 	}, 1000);
 }
 
+function getRPSmsg(name1, name2, choice1, choice2) {
+	var winner = ""
+	var loser = ""
+	var wchoice = ""
+	var lchoice = ""
+	var context = " in a rock-paper-scissors-lizard-Spock match."
+	choice1 = choice1.toLowerCase()
+	choice2 = choice2.toLowerCase()
+	if (choice1 === "spock") choice1 = "Spock"
+	if (choice2 === "spock") choice2 = "Spock"
+	if (choice1 === choice2) {
+		return ('|raw|<div>' + 'The rock-paper-scissors-lizard-Spock match between ' + '<b>' + name1 + " and " + name2 + '</b>' + ' ended in a ' + '<i>' + choice1 + '</i>' + '<b>' + ' tie.' + '</b>' + '</div>');
+	}
+	else if (choice1 === "rock") {
+		switch (choice2) {
+			case "scissors": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="crushed "; break;
+			case "lizard": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="crushed "; break;
+			case "Spock": winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="vaporized "; break;
+			default: winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="covered "; break;
+		}
+	}
+	else if (choice1 === "lizard") {
+		switch (choice2) {
+			case "Spock": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="poisoned "; break;
+			case "paper": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="eaten "; break;
+			case "scissors": winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="decapitated "; break;
+			default: winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="crushed "; break;
+		 }
+	}
+	else if (choice1 === "Spock") {
+		switch (choice2) {
+			case "scissors": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="smashed "; break;
+			case "rock":  winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="vaporized "; break;
+			case "paper":  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="disproven "; break;
+			default:  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="poisoned "; break;
+		}
+	}
+	else if (choice1 === "scissors") {
+		switch (choice2) {
+			case "lizard": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="decapitated "; break;
+			case "paper": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="cut "; break;
+			case "Spock": winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="smashed "; break;
+			default:  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="crushed "; break;
+		}
+	}
+	else {
+		switch (choice2) {
+			case "Spock":  winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="disproven "; break;
+			case "rock":  winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="covered "; break;
+			case "scissors":  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="cut "; break;
+			default:  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="eaten "; break;
+		}
+	}
+	return ('|raw|<div>' + '<b>' + winner + "\'s " + '</b>' + '<i>' + wchoice + '</i>' + ' has ' + '<b>' + action + loser + '\'s ' + '</b>' + '<i>' + lchoice + '</i>' + context + '</div>');
+}
+
+function getRPShope(choice) {
+	var randbool = Math.round(Math.random()) === 1;
+	switch(choice.toLowerCase()) {
+			case "rock": return (randbool ? "scissors" : "lizard"); break;
+			case "paper": return (randbool ? "rock" : "Spock"); break;
+			case "scissors": return (randbool ? "paper" : "lizard"); break;
+			case "lizard": return (randbool ? "paper" : "Spock"); break;
+			default: return (randbool ? "scissors" : "rock"); break;
+	}
+}
+
 exports.commands = {
 	stafflist: 'authority',
 	auth: 'authority',
@@ -918,70 +985,3 @@ exports.commands = {
 		return this.sendReply('RPS Challenges are now allowed.');
 	},
 };
-
-function getRPSmsg(name1, name2, choice1, choice2) {
-	var winner = ""
-	var loser = ""
-	var wchoice = ""
-	var lchoice = ""
-	var context = " in a rock-paper-scissors-lizard-Spock match."
-	choice1 = choice1.toLowerCase()
-	choice2 = choice2.toLowerCase()
-	if (choice1 === "spock") choice1 = "Spock"
-	if (choice2 === "spock") choice2 = "Spock"
-	if (choice1 === choice2) {
-		return ('|raw|<div>' + 'The rock-paper-scissors-lizard-Spock match between ' + '<b>' + name1 + " and " + name2 + '</b>' + ' ended in a ' + '<i>' + choice1 + '</i>' + '<b>' + ' tie.' + '</b>' + '</div>');
-	}
-	else if (choice1 === "rock") {
-		switch (choice2) {
-			case "scissors": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="crushed "; break;
-			case "lizard": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="crushed "; break;
-			case "Spock": winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="vaporized "; break;
-			default: winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="covered "; break;
-		}
-	}
-	else if (choice1 === "lizard") {
-		switch (choice2) {
-			case "Spock": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="poisoned "; break;
-			case "paper": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="eaten "; break;
-			case "scissors": winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="decapitated "; break;
-			default: winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="crushed "; break;
-		 }
-	}
-	else if (choice1 === "Spock") {
-		switch (choice2) {
-			case "scissors": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="smashed "; break;
-			case "rock":  winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="vaporized "; break;
-			case "paper":  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="disproven "; break;
-			default:  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="poisoned "; break;
-		}
-	}
-	else if (choice1 === "scissors") {
-		switch (choice2) {
-			case "lizard": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="decapitated "; break;
-			case "paper": winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="cut "; break;
-			case "Spock": winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="smashed "; break;
-			default:  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="crushed "; break;
-		}
-	}
-	else {
-		switch (choice2) {
-			case "Spock":  winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="disproven "; break;
-			case "rock":  winner=name1; wchoice=choice1; loser=name2; lchoice=choice2; action="covered "; break;
-			case "scissors":  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="cut "; break;
-			default:  winner=name2; wchoice=choice2; loser=name1; lchoice=choice1; action="eaten "; break;
-		}
-	}
-	return ('|raw|<div>' + '<b>' + winner + "\'s " + '</b>' + '<i>' + wchoice + '</i>' + ' has ' + '<b>' + action + loser + '\'s ' + '</b>' + '<i>' + lchoice + '</i>' + context + '</div>');
-}
-
-function getRPShope(choice) {
-	var randbool = Math.round(Math.random()) === 1;
-	switch(choice.toLowerCase()) {
-			case "rock": return (randbool ? "scissors" : "lizard"); break;
-			case "paper": return (randbool ? "rock" : "Spock"); break;
-			case "scissors": return (randbool ? "paper" : "lizard"); break;
-			case "lizard": return (randbool ? "paper" : "Spock"); break;
-			default: return (randbool ? "scissors" : "rock"); break;
-	}
-}
