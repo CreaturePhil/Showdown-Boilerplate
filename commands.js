@@ -581,7 +581,7 @@ var commands = exports.commands = {
 			return this.sendReply("Group '" + nextGroup + "' does not exist.");
 		}
 
-		if (Config.groups[nextGroup].globalonly) {
+		if (Config.groups[nextGroup].globalonly || (Config.groups[nextGroup].battleonly && !room.battle)) {
 			return this.sendReply("Group 'room" + Config.groups[nextGroup].id + "' does not exist as a room rank.");
 		}
 
@@ -624,7 +624,8 @@ var commands = exports.commands = {
 	roomauth: function (target, room, user, connection) {
 		var targetRoom = room;
 		if (target) targetRoom = Rooms.search(target);
-		if (!targetRoom || (targetRoom !== room && targetRoom.modjoin && !user.can('bypassall'))) return this.sendReply("The room '" + target + "' does not exist.");
+		var unavailableRoom = (targetRoom !== room && (targetRoom.modjoin || targetRoom.staffRoom) && !user.can('makeroom'));
+		if (!targetRoom || unavailableRoom) return this.sendReply("The room '" + target + "' does not exist.");
 		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list.");
 
 		var rankLists = {};
@@ -669,11 +670,26 @@ var commands = exports.commands = {
 		if (innerBuffer.length) {
 			buffer.push('Room auth: ' + innerBuffer.join(', '));
 		}
+		if (targetId === user.userid || user.can('alts')) {
+			innerBuffer = [];
+			for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
+				var curRoom = Rooms.global.chatRooms[i];
+				if (!curRoom.auth || !curRoom.isPrivate) continue;
+				if (curRoom.isPrivate === true) continue;
+				var auth = curRoom.auth[targetId];
+				if (!auth) continue;
+				innerBuffer.push(auth + curRoom.id);
+			}
+			if (innerBuffer.length) {
+				buffer.push('Hidden room auth: ' + innerBuffer.join(', '));
+			}
+		}
 		if (targetId === user.userid || user.can('makeroom')) {
 			innerBuffer = [];
 			for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
 				var curRoom = Rooms.global.chatRooms[i];
 				if (!curRoom.auth || !curRoom.isPrivate) continue;
+				if (curRoom.isPrivate !== true) continue;
 				var auth = curRoom.auth[targetId];
 				if (!auth) continue;
 				innerBuffer.push(auth + curRoom.id);
@@ -2270,9 +2286,9 @@ var commands = exports.commands = {
 				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
 			});
 		} else {
-			// default to sending undefined
+			// default to sending null
 			if (!trustable) return false;
-			connection.send('|queryresponse|' + cmd + '|undefined');
+			connection.send('|queryresponse|' + cmd + '|null');
 		}
 	},
 
