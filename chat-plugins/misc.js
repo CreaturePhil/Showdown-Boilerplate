@@ -839,7 +839,7 @@ exports.commands = {
 		return this.sendReply("The user "+targetUser+" is now un-namelocked.");
 	}
 	
-	hide: 'hideauth',
+	hidea: 'hideauth',
 	hideauth: function (target, room, user) {
 		if (!this.can('hideauth')) return false;
 		target = target || Config.groups.default.global;
@@ -860,7 +860,7 @@ exports.commands = {
 		return this.sendReply("You are now hiding your auth as '" + target + "'.");
 	},
 
-	show: 'showauth',
+	showa: 'showauth',
 	showauth: function (target, room, user) {
 		if (!this.can('hideauth')) return false;
 		delete user.getIdentity;
