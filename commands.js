@@ -191,6 +191,14 @@ var commands = exports.commands = {
 						return this.errorReply('The room "' + innerTarget + '" does not exist.');
 					}
 				}
+				if (targetRoom.modjoin) {
+					if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !(targetUser.userid in targetRoom.auth)) {
+						this.parse('/roomvoice ' + targetUser.name, false, targetRoom);
+						if (!(targetUser.userid in targetRoom.auth)) {
+							return;
+						}
+					}
+				}
 
 				target = '/invite ' + targetRoom.id;
 				break;
@@ -289,6 +297,69 @@ var commands = exports.commands = {
 		return this.sendReply("An error occurred while trying to create the room '" + target + "'.");
 	},
 	makechatroomhelp: ["/makechatroom [roomname] - Creates a new room named [roomname]. Requires: ~"],
+
+	makegroupchat: function (target, room, user, connection, cmd) {
+		var targets = target.split(',');
+
+		// Title defaults to a random 8-digit number.
+		var title = targets[0] || ('' + Math.floor(Math.random() * 100000000));
+		// `,` is a delimiter used by a lot of /commands
+		// `|` and `[` are delimiters used by the protocol
+		// `-` has special meaning in roomids
+		if (title.includes(',') || title.includes('|') || title.includes('[') || title.includes('-')) {
+			return this.sendReply("Room titles can't contain any of: ,|[-");
+		}
+
+		// Even though they're different namespaces, to cut down on confusion, you
+		// can't share names with registered chatrooms.
+		var existingRoom = Rooms.search(toId(title));
+		if (existingRoom && !existingRoom.modjoin) return this.sendReply("The room '" + title + "' already exists.");
+		// Room IDs for groupchats are groupchat-TITLEID
+		var roomid = "groupchat-" + toId(title);
+		// Titles must be unique.
+		if (Rooms.search(roomid)) return this.sendReply("A group chat named '" + title + "' already exists.");
+		// Tab title is prefixed with '[G]' to distinguish groupchats from
+		// registered chatrooms
+		title = title;
+
+		if (ResourceMonitor.countGroupChat(connection.ip)) {
+			connection.popup("Due to high load, you are limited to creating 4 group chats every hour.");
+			return;
+		}
+
+		// Privacy settings, default to private.
+		var privacy = toId(targets[1]) || 'private';
+		var privacySettings = {private: true, hidden: 'hidden', public: false};
+		if (!(privacy in privacySettings)) privacy = 'private';
+
+		var groupChatLink = '<code>&lt;&lt;' + roomid + '>></code>';
+		var groupChatURL = '';
+		if (Config.serverid) {
+			groupChatURL = 'http://' + (Config.serverid === 'showdown' ? 'psim.us' : Config.serverid + '.psim.us') + '/' + roomid;
+			groupChatLink = '<a href="' + groupChatURL + '">' + groupChatLink + '</a>';
+		}
+		var titleHTML = '';
+		if (/^[0-9]+$/.test(title)) {
+			titleHTML = groupChatLink;
+		} else {
+			titleHTML = Tools.escapeHTML(title) + ' <small style="font-weight:normal;font-size:9pt">' + groupChatLink + '</small>';
+		}
+		var targetRoom = Rooms.createChatRoom(roomid, '[G] ' + title, {
+			isPersonal: true,
+			isPrivate: privacySettings[privacy],
+			auth: {},
+			introMessage: '<h2 style="margin-top:0">' + titleHTML + '</h2><p>There are several ways to invite people:<br />- in this chat: <code>/invite USERNAME</code><br />- anywhere in PS: link to <code>&lt;&lt;' + roomid + '>></code>' + (groupChatURL ? '<br />- outside of PS: link to <a href="' + groupChatURL + '">' + groupChatURL + '</a>' : '') + '</p><p>This room will expire after 40 minutes of inactivity or when the server is restarted.</p><p style="margin-bottom:0"><button name="send" value="/roomhelp">Room management</button>'
+		});
+		if (targetRoom) {
+			// The creator is RO.
+			targetRoom.auth[user.userid] = '#';
+			// Join after creating room. No other response is given.
+			user.joinRoom(targetRoom.id);
+			return;
+		}
+		return this.sendReply("An unknown error occurred while trying to create the room '" + title + "'.");
+	},
+	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat named [roomname]. Leave off privacy to default to private."],
 
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
@@ -472,6 +543,7 @@ var commands = exports.commands = {
 		var alias = toId(target);
 		if (!alias.length) return this.sendReply("Only alphanumeric characters are valid in an alias.");
 		if (Rooms.get(alias) || Rooms.aliases[alias]) return this.sendReply("You cannot set an alias to an existing room or alias.");
+		if (room.isPersonal) return this.sendReply("Personal rooms can't have aliases.");
 
 		Rooms.aliases[alias] = room.id;
 		this.privateModCommand("(" + user.name + " added the room alias '" + target + "'.)");
@@ -717,6 +789,9 @@ var commands = exports.commands = {
 		var userid = toId(name);
 
 		if (!userid || !targetUser) return this.sendReply("User '" + name + "' does not exist.");
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+		}
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!room.bannedUsers || !room.bannedIps) {
 			return this.sendReply("Room bans are not meant to be used in room " + room.id + ".");
@@ -829,7 +904,7 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		var targetRoom = Rooms.search(target);
-		if (!targetRoom) {
+		if (!targetRoom || targetRoom.modjoin) {
 			return this.sendReply("The room '" + target + "' does not exist.");
 		}
 		if (!this.can('warn', targetUser, room) || !this.can('warn', targetUser, targetRoom)) return false;
