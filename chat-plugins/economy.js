@@ -234,6 +234,7 @@ exports.commands = {
 		if (toId(username) === user.userid) return this.sendReply("You cannot transfer to yourself.");
 		if (username.length > 19) return this.sendReply("Username cannot be longer than 19 characters.");
 		if (typeof amount === 'string') return this.sendReply(amount);
+		if(!Db('money')[user.userid]) Db('money')[user.userid] = 0;
 		if (amount > (Db('money')[user.userid] || 0)) return this.sendReply("You cannot transfer more money than what you have.");
 
 		var userTotal = (Db('money')[user.userid] || 0) - amount;
