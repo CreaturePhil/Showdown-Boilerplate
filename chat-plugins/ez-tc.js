@@ -11,7 +11,7 @@ function loadTrainerCards() {
 	try {
 		trainerCards = serialize.unserialize(fs.readFileSync('config/trainercards.json', 'utf8'));
 		Object.merge(CommandParser.commands, trainerCards);
-	} catch (e) {}
+	} catch (e) {};
 }
 setTimeout(function(){loadTrainerCards();},1000);
 
@@ -20,7 +20,7 @@ function saveTrainerCards() {
 	Object.merge(CommandParser.commands, trainerCards);
 }
 
-module.exports = {
+exports.commands = {
 	eztc: 'trainercard',
 	trainercards: 'trainercard',
 	tc: 'trainercard',
@@ -31,14 +31,12 @@ module.exports = {
 
 		switch (parts[0]) {
 			case 'add':
-				if (!this.can('eztc')) return false;
+				if (!this.can('trainercard')) return false;
 				if (!parts[2]) return this.sendReply("Usage: /trainercard add, [command name], [html]");
 				var commandName = toId(parts[1]);
 				if (CommandParser.commands[commandName]) return this.sendReply("/trainercards - The command \"" + commandName + "\" already exists.");
 				var html = parts.splice(2, parts.length).join(',');
-				/* jshint ignore:start */
 				trainerCards[commandName] = new Function('target', 'room', 'user', "if (!room.disableTrainerCards) if (!this.canBroadcast()) return; this.sendReplyBox('" + html.replace(/'/g, "\\'") + "');");
-				/* jshint ignore:end */
 				saveTrainerCards();
 				this.sendReply("The trainer card \"" + commandName + "\" has been added.");
 				this.logModCommand(user.name + " added the trainer card " + commandName);
@@ -48,9 +46,9 @@ module.exports = {
 			case 'del':
 			case 'delete':
 			case 'remove':
-				if (!this.can('eztc')) return false;
+				if (!this.can('trainercard')) return false;
 				if (!parts[1]) return this.sendReply("Usage: /trainercard remove, [command name]");
-				commandName = toId(parts[1]);
+				var commandName = toId(parts[1]);
 				if (!trainerCards[commandName]) return this.sendReply("/trainercards - The command \"" + commandName + "\" does not exist, or was added manually.");
 				delete CommandParser.commands[commandName];
 				delete trainerCards[commandName];
@@ -60,7 +58,7 @@ module.exports = {
 				break;
 
 			case 'list':
-				if (!this.can('eztc')) return false;
+				if (!this.can('trainercard')) return false;
 				var output = "<b>There's a total of " + Object.size(trainerCards) + " trainer cards added with this command:</b><br />";
 				for (var tc in trainerCards) {
 					output += tc + "<br />";
@@ -86,9 +84,9 @@ module.exports = {
 				this.privateModCommand("(" + user.name + " has enabled broadcasting trainer cards in this room.)");
 				break;
 
-			default:
 			case 'info':
 			case 'help':
+			default:
 				if (!this.canBroadcast()) return;
 				this.sendReplyBox(
 					"EZ-TC Commands:<br />" +
