@@ -860,10 +860,6 @@ exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/afd/'+target+'.png">');
         },
-        xyicon: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReply('|raw| <img src="http://www.serebii.net/pokedex-xy/icon/'+target+'.png">');
-        },
 };
 	
 	
