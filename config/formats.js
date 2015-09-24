@@ -1305,6 +1305,39 @@ exports.Formats = [
 		ruleset: ['OU']
 	},
 	{
+		name: "Ball Cup",
+		section: "Local Metagames",
+		mod: 'ballcup',
+		ruleset: ['OU']
+	},
+	{
+		name: "Move Equality",
+		section: "Local Metagames",
+		
+		mod: "moveequality",
+		ruleset: ["OU"],
+		banlist: ["Greninja", "Dynamic Punch"]
+	}
+	{
+		name: "Minor Meta",
+		section: "Local Metagames",
+		mod: 'minormeta',
+		ruleset: ['OU']
+	},
+	{
+                name: "Megas For All",
+                section: "Local Metagames",
+
+                mod: 'megasforall',
+                ruleset: ['OU']
+        },
+        {
+		name: "More Weather",
+		section: "Local Metagames",
+		mod: 'moreweather',
+		ruleset: ['OU']
+	},
+	{
 		name: "Metagamiate",
 		section: "Local Metagames",
 
