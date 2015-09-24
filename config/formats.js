@@ -1326,7 +1326,7 @@ exports.Formats = [
 		mod: "moveequality",
 		ruleset: ["OU"],
 		banlist: ["Greninja", "Dynamic Punch"]
-	}
+	},
 	{
 		name: "Minor Meta",
 		section: "Local Metagames",
