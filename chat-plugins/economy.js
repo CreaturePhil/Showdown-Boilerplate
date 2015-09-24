@@ -404,7 +404,7 @@ exports.commands = {
 			Db.save();
 		}
 		delete room.dice;
-		room.addRaw("<b>" + user.name + " ended the dice game.");
+		room.addRaw("<b>" + user.name + " ended the dice game.</b>");
 	},
 
 	ticket: 'tickets',

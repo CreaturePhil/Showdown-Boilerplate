@@ -49,6 +49,7 @@ var commands = exports.commands = {
 
 			var output = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
 			if (targetRoom.isPrivate === true) {
+				if (targetRoom.modjoin === '~') continue;
 				if (privaterooms) privaterooms += " | ";
 				privaterooms += output;
 			} else if (targetRoom.isPrivate) {
@@ -105,7 +106,7 @@ var commands = exports.commands = {
 		if ((user === targetUser || user.can('alts')) && hiddenrooms) {
 			buf += '<br />Hidden rooms: ' + hiddenrooms;
 		}
-		if ((user === targetUser || user.hasConsoleAccess(connection)) && privaterooms) {
+		if ((user === targetUser || user.can('makeroom')) && privaterooms) {
 			buf += '<br />Private rooms: ' + privaterooms;
 		}
 		this.sendReplyBox(buf);
@@ -124,6 +125,7 @@ var commands = exports.commands = {
 	},
 	hosthelp: ["/host [ip] - Gets the host for a given IP. Requires: & ~"],
 
+	searchip: 'ipsearch',
 	ipsearchall: 'ipsearch',
 	hostsearch: 'ipsearch',
 	ipsearch: function (target, room, user, connection, cmd) {
@@ -531,7 +533,7 @@ var commands = exports.commands = {
 
 		for (var cat = 0; cat < categories.length; cat++) {
 			var search = categories[cat];
-			if (!searches[search]) continue;
+			if (!(search in searches)) continue;
 			switch (search) {
 			case 'types':
 				for (var mon in dex) {
@@ -1709,6 +1711,206 @@ var commands = exports.commands = {
 		"!coverage [move 1], [move 2] ... - Shows this information to everyone.",
 		"Adding the parameter 'all' or 'table' will display the information with a table of all type combinations."],
 
+	statcalc: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (!target) return this.parse("/help statcalc");
+
+		var targets = target.split(' ');
+
+		var lvlSet, natureSet, ivSet, evSet, baseSet, modSet = false;
+
+		var pokemon;
+		var useStat = '';
+
+		var level = 100;
+		var calcHP = false;
+		var nature = 1.0;
+		var iv = 31;
+		var ev = 252;
+		var statValue = -1;
+		var modifier = 0;
+		var positiveMod = true;
+
+		for (var i in targets) {
+			var lowercase = targets[i].toLowerCase();
+
+			if (!lvlSet) {
+				if (lowercase === 'lc') {
+					level = 5;
+					lvlSet = true;
+					continue;
+				} else if (lowercase === 'vgc') {
+					level = 50;
+					lvlSet = true;
+					continue;
+				} else if (lowercase.startsWith('lv') || lowercase.startsWith('level')) {
+					level = parseInt(targets[i].replace(/\D/g, ''), 10);
+					lvlSet = true;
+					if (level < 1 || level > 9999) {
+						return this.sendReplyBox('Invalid value for level: ' + level);
+					}
+					continue;
+				}
+			}
+
+			if (!useStat) {
+				switch (lowercase) {
+				case 'hp':
+				case 'hitpoints':
+					calcHP = true;
+					useStat = 'hp';
+					break;
+				case 'atk':
+				case 'attack':
+					useStat = 'atk';
+					break;
+				case 'def':
+				case 'defense':
+					useStat = 'def';
+					break;
+				case 'spa':
+					useStat = 'spa';
+					break;
+				case 'spd':
+				case 'sdef':
+					useStat = 'spd';
+					break;
+				case 'spe':
+				case 'speed':
+					useStat = 'spe';
+					break;
+				}
+				continue;
+			}
+
+			if (!natureSet) {
+				if (lowercase === 'boosting' || lowercase === 'positive') {
+					nature = 1.1;
+					natureSet = true;
+					continue;
+				} else if (lowercase === 'negative' || lowercase === 'inhibiting') {
+					nature = 0.9;
+					natureSet = true;
+					continue;
+				} else if (lowercase === 'neutral') {
+					continue;
+				}
+			}
+
+			if (!ivSet) {
+				if (lowercase.endsWith('iv') || lowercase.endsWith('ivs')) {
+					iv = parseInt(targets[i]);
+					ivSet = true;
+
+					if (isNaN(iv)) {
+						return this.sendReplyBox('Invalid value for IVs: ' + Tools.escapeHTML(targets[i]));
+					}
+
+					continue;
+				}
+			}
+
+			if (!evSet) {
+				if (lowercase === 'invested' || lowercase === 'max') {
+					evSet = true;
+				} else if (lowercase === 'uninvested') {
+					ev = 0;
+					evSet = true;
+				} else if (lowercase.endsWith('ev') || lowercase.endsWith('evs')) {
+					ev = parseInt(targets[i]);
+					evSet = true;
+
+					if (isNaN(ev)) {
+						return this.sendReplyBox('Invalid value for EVs: ' + Tools.escapeHTML(targets[i]));
+					}
+					if (ev > 255 || ev < 0) {
+						return this.sendReplyBox('The amount of EVs should be between 0 and 255.');
+					}
+
+					if (!natureSet) {
+						if (targets[i].indexOf('+') > -1) {
+							nature = 1.1;
+							natureSet = true;
+						} else if (targets[i].indexOf('-') > -1) {
+							nature = 0.9;
+							natureSet = true;
+						}
+					}
+
+					continue;
+				}
+			}
+
+			if (!modSet) {
+				if (targets[i] === 'scarf' || targets[i] === 'specs' || targets[i] === 'band') {
+					modifier = 1;
+					modSet = true;
+				} else if (targets[i].charAt(0) === '+') {
+					modifier = parseInt(targets[i].charAt(1));
+					modSet = true;
+				} else if (targets[i].charAt(0) === '-') {
+					positiveMod = false;
+					modifier = parseInt(targets[i].charAt(1));
+					modSet = true;
+				}
+				if (isNaN(modifier)) {
+					return this.sendReplyBox('Invalid value for modifier: ' + Tools.escapeHTML(modifier));
+				}
+				if (modifier > 6) {
+					return this.sendReplyBox('Modifier should be a number between -6 and +6');
+				}
+			}
+
+			if (!pokemon) {
+				var testPoke = Tools.getTemplate(targets[i]);
+				if (testPoke.baseStats) {
+					pokemon = testPoke.baseStats;
+					baseSet = true;
+					continue;
+				}
+			}
+
+			var tempStat = parseInt(targets[i]);
+
+			if (!isNaN(tempStat) && !baseSet && tempStat > 0 && tempStat < 256) {
+				statValue = tempStat;
+				baseSet = true;
+			}
+
+			var pokemon = Tools.getTemplate(targets[i]);
+		}
+
+		if (pokemon) {
+			if (useStat) {
+				statValue = pokemon[useStat];
+			} else {
+				return this.sendReplyBox('No stat found.');
+			}
+		}
+
+		if (statValue < 0) {
+			return this.sendReplyBox('No valid value for base stat found.');
+		}
+
+		var output;
+
+		if (calcHP) {
+			output = (((iv + (2 * statValue) + (ev / 4) + 100) * level) / 100) + 10;
+		} else {
+			output = Math.floor((((iv + (2 * statValue) + (ev / 4)) * level) / 100) + 5) * nature;
+			if (positiveMod) {
+				output *= (2 + modifier) / 2;
+			} else {
+				output *= 2 / (2 + modifier);
+			}
+		}
+		return this.sendReplyBox('Base ' + statValue + (calcHP ? ' HP ' : ' ') + 'at level ' + level + ' with ' + iv + ' IVs, ' + ev + (nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')) + ' EVs' + (modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : '') + ': <b>' + Math.floor(output) + '</b>.');
+	},
+
+	statcalchelp: ["/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252 scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.",
+		"!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.",
+		"Inputing 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount to signify a boosting or inihibting nature."],
+
 	/*********************************************************
 	 * Informational commands
 	 *********************************************************/
@@ -1987,6 +2189,7 @@ var commands = exports.commands = {
 			"- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />" +
 			"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />" +
 			"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />" +
+			"- /roomdeauth <em>username</em>: remove all room auth from a user<br />" +
 			"- /modchat <em>[%/@/#]</em>: set modchat level<br />" +
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
