@@ -1375,6 +1375,14 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Galaxy LC",
+		section: "Local Metagames",
+
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Gligar', 'Misdreavus', 'Swirlix', 'Meditite', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger']
+	},
+	{
 		name: "C&E",
 		section: "Other Metagames",
 
