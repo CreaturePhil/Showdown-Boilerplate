@@ -330,10 +330,11 @@ var commands = exports.commands = {
 		var existingRoom = Rooms.search(toId(title));
 		if (existingRoom && !existingRoom.modjoin) return this.errorReply("The room '" + title + "' already exists.");
 		// Room IDs for groupchats are groupchat-TITLEID
-		var roomid = 'groupchat-' + toId(title);
-		if (!toId(title)) {
-			roomid = 'groupchat-' + Math.floor(Math.random() * 100000000);
+		var titleid = toId(title);
+		if (!titleid) {
+			titleid = '' + Math.floor(Math.random() * 100000000);
 		}
+		var roomid = 'groupchat-' + user.userid + '-' + titleid;
 		// Titles must be unique.
 		if (Rooms.search(roomid)) return this.errorReply("A group chat named '" + title + "' already exists.");
 		// Tab title is prefixed with '[G]' to distinguish groupchats from
@@ -1463,6 +1464,10 @@ var commands = exports.commands = {
 			var targets = target.split(',');
 			target = targets[1].trim();
 			roomId = toId(targets[0]) || room.id;
+		}
+
+		if (room.id.startsWith('battle-') || room.id.startsWith('groupchat-')) {
+			return this.errorReply("Battles and groupchats do not have modlogs.");
 		}
 
 		// Let's check the number of lines to retrieve or if it's a word instead
