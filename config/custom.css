@@ -21,18 +21,6 @@ ul.userlist {
 }
 
 .backdrop {
-	width: 640px;
-	height: 360px;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	overflow: hidden;
-	background: 0px 0px !important;
-	background-size: 640px 360px !important;
-	opacity: 1 !important;
-}
-
-.backdrop {
 	background-image: url(http://i.imgur.com/uV0jC6c.png; 
 	) !important;
 }
@@ -95,16 +83,6 @@ ul.userlist {
 .backdrop {
 	background-image: url(http://i.imgur.com/Xny5VcE.png;
 	) !important;
-}
-
-.backdrop:after {
-	display: block;
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 640px;
-	height: 360px;
 }
 
 a.button.cur, a.button.cur:hover {
