@@ -39,7 +39,7 @@ exports.BattleScripts = {
 		// wobbuffett
 		this.modData('Learnsets','wobbuffet').learnset.recover = ['6L1'];
 		// jirachi
-		this.modData('Pokedex','jirachi').types = ["Electric","Fairy"];
+		this.modData('Pokedex','jirachi').types = ["Steel","Fairy"];
 		this.modData('Learnsets','jirachi').learnset.playrough = ['6L1'];
 		this.modData('Learnsets','jirachi').learnset.moonblast = ['6L1'];
 		// rampardos
