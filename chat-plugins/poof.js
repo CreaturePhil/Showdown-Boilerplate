@@ -1,4 +1,4 @@
-onst fileName = 'config/poofs.json';
+const fileName = 'config/poofs.json';
 
 var fs = require('fs');
 var poofoff = false;
