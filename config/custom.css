@@ -1,0 +1,34 @@
+/*Light blue- #b2e1ff,#97d5fc Normal blue- #007fff Dark Blue:#003972*/
+.header {
+	background-image:url("http://i.imgur.com/Ow9h3oI.png");
+	background-repeat:no-repeat
+}
+body {
+	background-image:url("http://i.imgur.com/qltHpyz.jpg");
+	background-repeat:no-repeat;
+	background-position:center
+}
+.header .logo {
+	opacity: 0;
+}
+
+li#lobby-userlist-user-flareninja {
+    background: url("http://i1171.photobucket.com/albums/r545/Brahak/adminteamthing_zpspbese1su.png");
+}
+
+ul.userlist {
+    background: url("http://i1171.photobucket.com/albums/r545/Brahak/userlistsky_zpsd9aqoolr.png");
+}
+
+a.button.cur, a.button.cur:hover {
+    background: url("http://i1171.photobucket.com/albums/r545/Brahak/fade_zpsyfkbeayl.png?t=1439400353");
+}
+.maintabbarbottom, a.button {
+    background: #dde7ff;
+}
+a.button:hover {
+    background: #c7d7fc;
+}
+a.button i, a.button span {
+    color: black;
+}
