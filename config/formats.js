@@ -1025,7 +1025,6 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		searchShow: false,
-		maxLevel: 50,
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (!template.evos || template.evos.length === 0 || !template.prevo) {
