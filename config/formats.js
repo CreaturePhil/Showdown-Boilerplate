@@ -1320,6 +1320,20 @@ exports.Formats = [
 		ruleset: ['OU']
 	},
 	{
+		name: "Move Equality",
+		section: "Local Metagames",
+		
+		mod: "moveequality",
+		ruleset: ["OU"],
+		banlist: ["Greninja", "Dynamic Punch"]
+	},
+	{
+		name: "Minor Meta",
+		section: "Local Metagames",
+		mod: 'minormeta',
+		ruleset: ['OU']
+	},
+	{
 		name: "Metagamiate",
 		section: "Local Metagames",
 
