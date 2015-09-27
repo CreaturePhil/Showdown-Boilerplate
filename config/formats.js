@@ -1305,6 +1305,12 @@ exports.Formats = [
 		ruleset: ['OU']
 	},
 	{
+		name: "Ball Cup",
+		section: "Local Metagames",
+		mod: 'ballcup',
+		ruleset: ['OU']
+	},
+	{
 		name: "Metagamiate",
 		section: "Local Metagames",
 
