@@ -1328,12 +1328,6 @@ exports.Formats = [
 		banlist: ["Greninja", "Dynamic Punch"]
 	},
 	{
-		name: "Minor Meta",
-		section: "Local Metagames",
-		mod: 'minormeta',
-		ruleset: ['OU']
-	},
-	{
 		name: "Metagamiate",
 		section: "Local Metagames",
 
