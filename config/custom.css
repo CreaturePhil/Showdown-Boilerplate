@@ -11,7 +11,11 @@ body {
 .header .logo {
 	opacity: 0;
 }
-
+/*
+li#lobby-userlist-user-flareninja {
+    background: url("http://i1171.photobucket.com/albums/r545/Brahak/adminteamthing_zpspbese1su.png");
+}
+*/
 ul.userlist {
     background: url("http://i1171.photobucket.com/albums/r545/Brahak/userlistsky_zpsd9aqoolr.png");
 }
