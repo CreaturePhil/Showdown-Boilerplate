@@ -1319,6 +1319,13 @@ exports.Formats = [
 		banlist: ["Greninja", "Dynamic Punch"]
 	},
 	{
+		name: "Noble Items",
+		section: "Local Metagames",
+		
+		mod: "nobleitems",
+		ruleset: ["OU"],
+	},
+	{
 		name: "Level Balance",
 		section: "Local Metagames",
 		
