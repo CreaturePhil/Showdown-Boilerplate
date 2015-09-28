@@ -1,9 +1,5 @@
 var fs = require('fs');
 
-var jukeboxtxt = require('/home/ubuntu/workspace/config/jukebox.txt');
-
-var jukebox = JSON.parse(fs.readFileSync('/home/ubuntu/workspace/config/jukebox.txt'));
-
 exports.commands = {
 
 jukebox: function(target, room, user, connection, cmd) {
