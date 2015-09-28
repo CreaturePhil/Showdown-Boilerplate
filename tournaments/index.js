@@ -739,7 +739,6 @@ Tournament = (function () {
 			bracketData: this.getBracketData()
 		}));
 		this.isEnded = true;
-		delete exports.tournaments[toId(this.room.id)];
 
 		//
 		// Tournament Winnings
@@ -780,6 +779,7 @@ Tournament = (function () {
 
 			Db.save();
 		}
+		delete exports.tournaments[this.room.id];
 	};
 
 	return Tournament;
@@ -943,7 +943,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).filter(function (tournament) {
 			tournament = exports.tournaments[tournament];
-			return !tournament.room.isPrivate && !tournament.room.staffRoom;
+			return !tournament.room.isPrivate && !tournament.room.isPersonal && !tournament.room.staffRoom;
 		}).map(function (tournament) {
 			tournament = exports.tournaments[tournament];
 			return {room: tournament.room.title, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
