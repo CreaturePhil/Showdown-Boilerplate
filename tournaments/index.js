@@ -739,7 +739,6 @@ Tournament = (function () {
 			bracketData: this.getBracketData()
 		}));
 		this.isEnded = true;
-		delete exports.tournaments[toId(this.room.id)];
 
 		//
 		// Tournament Winnings
@@ -790,6 +789,7 @@ Tournament = (function () {
 				this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(runnerUp) + "</font> has won " +  "<font color='" + color + "'>" + secondMoney + "</font>" + currencyName(secondMoney) + " for winning the tournament!</b>");
 			}
 		}
+		delete exports.tournaments[this.room.id];
 	};
 
 	return Tournament;
