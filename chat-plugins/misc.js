@@ -860,156 +860,106 @@ exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/afd/'+target+'.png">');
         },
+        
+        db: 'database',
+    database: function (target, room, user) {
+        if (!this.can('db')) return;
+        if (!target) return user.send('|popup|You must enter a target.');
 
-    roulcommands: 'roulrules',
-    roulhelp: 'roulrules',
-    roulrules: function(target, room, user) {
-        if (!this.canBroadcast()) return;
-        if (room.id === 'lobby') return this.sendReply('This command is too spammy for lobby.');
-        return this.sendReplyBox('<u><font size = 2><center>Roulette rules and commands</center></font></u><br />' +
-            '<b>/roul</b> - Starts a roulette game in the room. Must be ranked + or higher to use.<br />' +
-            '<b>/bet [color]</b> - Bets on a roulette color. Using this multiple times increases the number of times you\'ve bet to that color by 1. You require 1 buck per bet. Clicking on a different color changes the color your\'re betting on. <br />' +
-            '<b>/participants</b> - Shows the number of participants in the game.<br />' +
-            '<b>/deletebets</b> OR <b>/db</b> - Erases all of the bets you have made so far. All bucks spent for betting are refunded.<br />' +
-            '<b>/spin</b> - Spins the roulette. Must be ranked + or higher to use.<br />' +
-            '<b>/endroul</b> - Ends the game of roulette in the room. Any bets made will be refunded. Must be ranked + or higher to use.<br />' +
-            'The values of red and yellow are 4, blue and green 5, and black, 8. The cash reward is equal to the color\'s prize value multiplied by the number of bets you\'ve made, if the roulette lands on the color you\'ve bet on.');
+        try {
+            var log = fs.readFileSync(('config/' + target + '.csv'), 'utf8');
+            return user.send('|popup|' + log);
+        } catch (e) {
+            return user.send('|popup|Something bad happen:\n\n ' + e.stack);
+        }
     },
 
-    roulette: 'roul',
-    roul: function(target, room, user) {
-        if (!this.can('broadcast', null, room)) return this.sendReply('You need to be ranked + or higher to start a roulette in the room.');
-        if (room.roulette) {
-            return this.sendReply('There is already a roulette going on.');
+    cp: 'controlpanel',
+    controlpanel: function (target, room, user, connection) {
+        if (!this.can('controlpanel')) return;
+        if (target.toLowerCase() === 'help') {
+            return this.sendReplyBox(
+                '/cp color, [COLOR]<br/>' +
+                '/cp avatar, [AVATAR COLOR URL]<br/>' +
+                '/cp toursize, [TOURNAMENT SIZE TO EARN MONEY]<br/>' +
+                '/cp money, [STANDARD/DOUBLE/QUADRUPLE]<br/>' + 
+                '/cp winner, [WINNER ELO BONUS]<br/>' +
+                '/cp runnerup, [RUNNERUP ELO BONUS]<br/>'
+                );
         }
-        room.roulette = {};
-        this.add('|html|<div class = "infobox"><font size = 3, color = "green"><center><b>' + user.name + ' has started a roulette!</font><br />' +
-            '<center><button name = "send", value = "/bet red"><font color = "red"><b>Red</b></font><button name = "send", value = "/bet yellow"><font color = "yellow"><b>Yellow</b></font></button><button name = "send", value = "/bet blue"><font color = "blue"><b>Blue</b></font></button><button name = "send", value = "/bet green"><font color = "green"><b>Green</b></font><button name = "send", value = "/bet black"><font color = "black"><b>Black</b></font></button>' +
-            '<font size = 1><center>Click one of the buttons or do /bet [color] to place a bet on a color!</font><br />' +
-            '<font size = 1><center>Type /roulrules in the chat for a list of roulette commands and rules.</font><br /></div>');
-    },
-
-    bet: function(target, room, user, connection, cmd) {
-        if (!room.roulette) {
-            return this.sendReply('There is no roulette going on right now.');
-        }
-        if (money.checkAmt(user.userid, 'money') < 1) return this.sendReply("You don't have enough money to place bets.");
-        target = toId(target);
-        var targets = ['red', 'blue', 'yellow', 'green', 'black'];
-        if (targets.indexOf(target) === -1) {
-            return this.sendReply('Sorry, but that isn\'t a valid color.');
-        }
-        if (!room.roulette[user.userid]) {
-            room.roulette[user.userid] = {};
-            room.roulette[user.userid].color = target;
-            room.roulette[user.userid].bets = 0;
-        }
-
-        if (room.roulette[user.userid].color != target) {
-            var oldcolor = room.roulette[user.userid].color
-            var newcolor = target;
-            room.roulette[user.userid].color = target;
-            var bets = (room.roulette[user.userid].bets == 1) ? 'bet' : 'bets';
-            return this.sendReply('You are now betting on ' + newcolor + ' instead of ' + oldcolor + '. You are currently placing ' + room.roulette[user.userid].bets + ' ' + bets + ' on ' + newcolor + '.');
-        }
-
-        room.roulette[user.userid].color = target;
-        room.roulette[user.userid].bets++;
-        var bets = (room.roulette[user.userid].bets == 1) ? 'bet' : 'bets';
-        this.sendReply('You have placed ' + room.roulette[user.userid].bets + ' ' + bets + ' on ' + target);
-        money.removeAmt(user.userid, 'money', 1);
-    },
-
-    db: 'deletebets',
-    deletebets: function(target, room, user, connection, cmd) {
-        if (!room.roulette) {
-            return this.sendReply('There is no roulette going on right now.');
-        }
-        if (!room.roulette[user.userid]) return this.sendReply("You haven't placed any bets yet!");
-        money.giveAmt(user.userid, 'money', room.roulette[user.userid].bets);
-        delete room.roulette[user.userid];
-        return this.sendReply('All your bets in the current roulette have been removed.');
-    },
-
-
-    participants: function(target, room, user, connection, cmd) {
-        if (!this.canBroadcast()) return;
-        if (!room.roulette) {
-            return this.sendReply('There is no roulette going on in this room right now.');
-        }
-        this.sendReplyBox('Number of roulette participants: ' + Object.keys(room.roulette).length);
-    },
-
-    sp: 'spin',
-    spin: function(target, room, user, connection, cmd) {
-        if (!room.roulette) return this.sendReply('There is no roulette going on right now.');
-        if (Object.keys(room.roulette).length < 1) return this.sendReply('No bets have been made yet!');
-        var random = Math.floor((Math.random() * 11) + 1);
-        var payout;
-        var color = '';
-        var winners = [];
-        if (random <= 3) {
-            color = 'red';
-            payout = 4;
-        } else if (random <= 6) {
-            color = 'yellow';
-            payout = 4;
-        } else if (random <= 8) {
-            color = 'blue';
-            payout = 5;
-        } else if (random <= 10) {
-            color = 'green';
-            payout = 5;
-        } else if (random <= 11) {
-            color = 'black';
-            payout = 8;
-        } else {
-            color = 'red';
-            payout = 4;
+        var parts = target.split(',');
+        Core.profile.color = Core.stdin('control-panel', 'color');
+        Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
+        Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
+        Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));
+        Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
+        Core.tournaments.runnerUpElo = Number(Core.stdin('control-panel', 'runnerup'));
+        if (parts.length !== 2) {
+            return this.sendReplyBox(
+                '<center>' +
+                '<h3><b><u>Control Panel</u></b></h3>' +
+                '<i>Color:</i> ' + '<font color="' + Core.profile.color + '">' + Core.profile.color + '</font><br />' +
+                '<i>Custom Avatar URL:</i> ' + Core.profile.avatarurl + '<br />' +
+                '<i>Tournament Size to earn money: </i>' + Core.tournaments.tourSize + '<br />' +
+                '<i>Earning money amount:</i> ' + Core.tournaments.earningMoney() + '<br />' +
+                '<i>Winner Elo Bonus:</i> ' + Core.tournaments.winningElo + '<br />' +
+                '<i>RunnerUp Elo Bonus:</i> ' + Core.tournaments.runnerUpElo + '<br /><br />' +
+                'To edit this info, use /cp help' +
+                '</center>' +
+                '<br clear="all">'
+                );
         }
 
-        for (var i in room.roulette) {
-            if (room.roulette[i].color == color) winners.push(i);
-        }
-        if (winners.length <= 0) {
-            this.add('|html|<div class = "infobox"><font size = 2, color = "green"><center><b>The roulette has been spun!</font><br />' +
-                '<center>The roulette landed on <font color = "' + color + '"><b>' + color + '<b>!</font><br />' +
-                '<center>But nobody won this time...');
-        } else {
-            var winnerz = '';
-            for (var i = 0; i < winners.length; i++) {
-                var winamount = room.roulette[toId(winners[i])].bets * payout;
-                var name = (Users.getExact(winners[i])) ? Users.getExact(winners[i]).name : winners[i];
-                winnerz += '<b>' + name + '</b> who won <b>' + winamount + '</b> points<br/>';
-            }
-            if (winners.length == 1) {
-                this.add('|html|<div class = "infobox"><font size = 2, color = "green"><center><b>The roulette has been spun!</font><br />' +
-                    '<center>The roulette landed on <font color = "' + color + '"><b>' + color + '<b>!</font><br />' +
-                    '<center>The only winner is ' + winnerz);
-            } else {
-                this.add('|html|<div class = "infobox"><font size = 2, color = "green"><center><b>The roulette has been spun!</font><br />' +
-                    '<center>The roulette landed on <font color = "' + color + '"><b>' + color + '<b>!</font><br />' +
-                    '<center>The winners are:<br/>' +
-                    '<center>' + winnerz);
-            }
+        parts[1] = parts[1].trim().toLowerCase()
 
-            for (var x = 0; x < winners.length; x++) {
-                money.giveAmt(toId(winners[x]), 'money', (payout * room.roulette[toId(winners[x])].bets));
-            }
-        }
-        delete room.roulette;
-    },
+        var self = this,
+            match = false,
+            cmds = {
+                color: function () {
+                    Core.stdout('control-panel', 'color', parts[1], function () {
+                        Core.profile.color = Core.stdin('control-panel', 'color');
+                    });
+                    self.sendReply('Color is now ' + parts[1]);
+                },
+                avatar: function () {
+                    Core.stdout('control-panel', 'avatar', parts[1], function () {
+                        Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
+                    });
+                    self.sendReply('Avatar URL is now ' + parts[1]);
+                },
+                toursize: function () {
+                    Core.stdout('control-panel', 'toursize', parts[1], function () {
+                        Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
+                    });
+                    self.sendReply('Tournament Size to earn money is now ' + parts[1]);
+                },
+                money: function () {
+                    if (parts[1] === 'standard') Core.stdout('control-panel', 'money', 10, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));});
+                    if (parts[1] === 'double') Core.stdout('control-panel', 'money', 4, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));});
+                    if (parts[1] === 'quadruple') Core.stdout('control-panel', 'money', 2, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));});
+                    self.sendReply('Earning money amount is now ' + parts[1]);
+                },
+                winner: function () {
+                    Core.stdout('control-panel', 'winner', parts[1], function () {
+                        Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
+                    });
+                    self.sendReply('Winner Elo Bonus is now ' + parts[1]);
+                },
+                runnerup: function () {
+                    Core.stdout('control-panel', 'runnerup', parts[1], function () {
+                        Core.tournaments.runnerUpElo = Number(Core.stdin('control-panel', 'runnerup'));
+                    });
+                    self.sendReply('RunnerUp Elo Bonus is now ' + parts[1]);
+                }
+            };
 
-    endroulette: 'endroul',
-    rouletteend: 'endroul',
-    roulend: 'endroul',
-    endroul: function(target, room, user, connection, cmd) {
-        if (!room.roulette) return this.sendReply('There is no roulette going on right now.');
-        for (var i in room.roulette) {
-            money.giveAmt(toId(i), 'money', room.roulette[i].bets);
+        for (cmd in cmds) {
+            if (parts[0].toLowerCase() === cmd) match = true; 
         }
-        delete room.roulette;
-        this.add('|html|<b>' + user.name + ' has ended the current roulette.');
+
+        if (!match) return this.parse('/cp help');
+
+        cmds[parts[0].toLowerCase()]();
     },
 };
 	
