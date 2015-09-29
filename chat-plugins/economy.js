@@ -156,7 +156,7 @@ exports.commands = {
 		var targetId = toId(target);
 		if (!targetId) return this.parse('/help wallet');
 
-		var amount = Db('money')[targetId] || 0;
+		var amount = Db.nget('money', targetId);
 		this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
@@ -174,7 +174,7 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.sendReply(amount);
 
-		var total = (Db('money')[uid] || 0) + amount;
+		var total = Db.nget('money', uid) + amount;
 		Db('money')[uid] = total;
 		Db.save();
 		amount = amount + currencyName(amount);
@@ -198,7 +198,7 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.sendReply(amount);
 
-		var total = (Db('money')[uid] || 0) - amount;
+		var total = Db.nget('money', uid) - amount;
 		Db('money')[uid] = total;
 		Db.save();
 		amount = amount + currencyName(amount);
@@ -234,10 +234,10 @@ exports.commands = {
 		if (toId(username) === user.userid) return this.sendReply("You cannot transfer to yourself.");
 		if (username.length > 19) return this.sendReply("Username cannot be longer than 19 characters.");
 		if (typeof amount === 'string') return this.sendReply(amount);
-		if (amount > (Db('money')[user.userid] || 0)) return this.sendReply("You cannot transfer more money than what you have.");
+		if (amount > Db.nget('money', user.userid)) return this.sendReply("You cannot transfer more money than what you have.");
 
-		var userTotal = (Db('money')[user.userid] || 0) - amount;
-		var targetTotal = (Db('money')[uid] || 0) + amount;
+		var userTotal = Db.nget('money', user.userid) - amount;
+		var targetTotal = Db.nget('money', uid) + amount;
 		Db('money')[user.userid] = userTotal;
 		Db('money')[uid] = targetTotal;
 		Db.save();
@@ -259,7 +259,7 @@ exports.commands = {
 
 	buy: function (target, room, user) {
 		if (!target) return this.parse('/help buy');
-		var cost = findItem.call(this, target, Db('money')[user.userid] || 0);
+		var cost = findItem.call(this, target, Db.nget('money', user.userid));
 		if (!cost) return;
 		var total = Db('money')[user.userid] - cost;
 		Db('money')[user.userid] = total;
@@ -364,7 +364,7 @@ exports.commands = {
 		if (!room.dice || (room.dice.p1 && room.dice.p2)) return this.errorReply("There is no dice game in it's signup phase in this room.");
 		if (!this.canTalk()) return this.errorReply("You may not join dice games while unable to speak.");
 		if (room.dice.p1 === user.userid) return this.errorReply("You already entered this dice game.");
-		if (!Db('money')[user.userid] || (Db('money')[user.userid] < room.dice.bet)) return this.errorReply("You don't have enough bucks to join this game.");
+		if (Db.nget('money', user.userid) < room.dice.bet) return this.errorReply("You don't have enough bucks to join this game.");
 		Db('money')[user.userid] -= room.dice.bet;
 		Db.save();
 		if (!room.dice.p1) {
@@ -410,7 +410,7 @@ exports.commands = {
 	ticket: 'tickets',
 	tickets: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		if (!Db('lottery')[user.userid] || !Db('lottery')[user.userid].length) return this.sendReplyBox("You have no tickets.");
+		if (Db.aget('lottery', user.userid).length < 1) return this.sendReplyBox("You have no tickets.");
 		var tickets = Db('lottery')[user.userid];
 		this.sendReplyBox("You have a total of " + tickets.length + " ticket(s). These are your ticket's ids: " + tickets.join(", ") + ".");
 	},
@@ -443,7 +443,7 @@ exports.commands = {
 		var winner = tickets[winningIndex];
 		var winnings = Math.floor(Db('lottery').pot * 3 / 4);
 		if (!winner) return this.sendReply("No one has bought tickets.");
-		var total = (Db('money')[winner.username] || 0) + winnings;
+		var total = Db.nget('money', winner.username) + winnings;
 		Db('money')[winner.username] = total;
 		Db('lottery').pot = 0;
 		Db.save();
@@ -455,7 +455,7 @@ exports.commands = {
 	jackpot: 'pot',
 	pot: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		var pot = Db('lottery').pot || 0;
+		var pot = Db.nget('lottery', 'pot');
 		this.sendReplyBox("The current jackpot is " + pot + currencyName(pot) + ".");
 	},
 

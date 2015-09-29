@@ -3,7 +3,7 @@
   "version": "0.10.2",
   "dependencies": {
     "cloud-env": "0.1.0",
-    "eosdb": "^1.1.0",
+    "eosdb": "^1.2.0",
     "es6-shim": "0.27.1",
     "moment": "^2.10.3",
     "node-static": "0.7.6",
