@@ -3130,7 +3130,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	registeel: {
-		randomBattleMoves: ["stealthrock","ironhead","curse","rest","thunderwave","toxic","seismictoss"],
+		randomBattleMoves: ["stealthrock","thunderwave","toxic","protect","seismictoss","curse","ironhead","rest","sleeptalk"],
 		randomDoubleBattleMoves: ["stealthrock","ironhead","curse","rest","thunderwave","protect","seismictoss"],
 		eventPokemon: [
 			{"generation":3,"level":40,"moves":["curse","superpower","ancientpower","hyperbeam"]}
@@ -4397,8 +4397,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	cinccino: {
-		randomBattleMoves: ["tailslap","wakeupslap","uturn","knockoff","bulletseed","rockblast"],
-		randomDoubleBattleMoves: ["tailslap","wakeupslap","uturn","knockoff","bulletseed","rockblast","protect"],
+		randomBattleMoves: ["tailslap","aquatail","uturn","knockoff","bulletseed","rockblast"],
+		randomDoubleBattleMoves: ["tailslap","aquatail","uturn","knockoff","bulletseed","rockblast","protect"],
 		tier: "RU"
 	},
 	gothita: {
