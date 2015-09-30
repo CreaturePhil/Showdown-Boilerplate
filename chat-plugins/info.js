@@ -1933,12 +1933,14 @@ var commands = exports.commands = {
 	groups: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
-			"% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />" +
-			"@ <b>Moderator</b> - The above, and they can ban users<br />" +
-			"&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />" +
-			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br />" +
-			"~ <b>Administrator</b> - They can do anything, like change what this message says"
+			"+ <b>Voice</b> - They are the Voices of the server, Lectures are usual for them.<br />" +
+			"$ <b>Barista</b> - They are Bartenders, pay them and they'll make you a delicious drink.<br />"+
+			"% <b>Driver</b> - They are the Drivers of the server, Monitoring every single place.<br />" +
+			"@ <b>Moderator</b> - They are the ruthless Law, Punishments are the only they're good at.<br />" +
+			"&amp; <b>Leader</b> - They are Leader of the server, managers of battles.<br />" +
+			"♪ <b>Musician</b> - They are the composers of the server, every piece is a Master Piece!<br />" +
+			"# <b>Room Owner</b> - They are the Owners of a room and can control it to their likings.<br />" +
+			"~ <b>Administrator</b> - They can do anything, like literally, anything."
 		);
 	},
 	groupshelp: ["/groups - Explains what the + % @ # & next to people's names mean.",
