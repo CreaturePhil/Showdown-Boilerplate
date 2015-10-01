@@ -4,6 +4,11 @@
   "dependencies": {
     "cloud-env": "0.1.0",
     "es6-shim": "0.27.1",
+    "express": "~3.4.4",
+	  "jquery": "2.1.1",
+	  "jsdom": "1.0.1",
+	  "needle": "^0.7.2",
+	  "pg": "^3.3.0",
     "lowdb": "^0.10.1",
     "moment": "^2.10.3",
     "mysql": "^2.8.0",
