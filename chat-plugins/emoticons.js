@@ -36,12 +36,7 @@ var emotes = {
 	'bordll': 'http://i.imgur.com/IfJIOtR.jpg',
 	'medaglieuomo': 'http://i.imgur.com/0MGVlhT.jpg',
 	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
-	'avatardani': 'http://i.imgur.com/HC9pAXn.png',
-	'avatardel': 'http://i.imgur.com/jDXgrhs.png',
-	'avatarpeter': 'http://i.imgur.com/lNhXAx4.gif',
-	'facepalm': 'http://i.imgur.com/E0oDNFB.gif',
-	'avatarlatios': 'http://i.imgur.com/KZhGnBF.png',
-	'avatarmew2': 'http://play.pokemonshowdown.com/sprites/trainers/mjb.png'
+	'facepalm': 'http://i.imgur.com/E0oDNFB.gif'
 };
 
 var emotesKeys = Object.keys(emotes);
