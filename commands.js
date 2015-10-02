@@ -300,8 +300,9 @@ var commands = exports.commands = {
 
 	makegroupchat: function (target, room, user, connection, cmd) {
 		if (!user.autoconfirmed) {
-			return this.errorReply("You don't have permission to make a group chat right now.");
+			return this.errorReply("You must be autoconfirmed to make a groupchat.");
 		}
+		if (!this.can('makegroupchat')) return false;
 		if (target.length > 64) return this.errorReply("Title must be under 32 characters long.");
 		var targets = target.split(',', 2);
 
@@ -844,13 +845,15 @@ var commands = exports.commands = {
 		this.addModCommand("" + targetUser.name + " was banned from room " + room.id + " by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var acAccount = (targetUser.autoconfirmed !== targetUser.userid && targetUser.autoconfirmed);
 		var alts = room.roomBan(targetUser);
-		if (alts.length) {
-			this.privateModCommand("(" + targetUser.name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "roombanned alts: " + alts.join(", ") + ")");
-			for (var i = 0; i < alts.length; ++i) {
-				this.add('|unlink|' + toId(alts[i]));
+		if (!(room.isPersonal || room.isPrivate === true) || user.can('alts', targetUser)) {
+			if (alts.length) {
+				this.privateModCommand("(" + targetUser.name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "roombanned alts: " + alts.join(", ") + ")");
+				for (var i = 0; i < alts.length; ++i) {
+					this.add('|unlink|' + toId(alts[i]));
+				}
+			} else if (acAccount) {
+				this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 			}
-		} else if (acAccount) {
-			this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 		}
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 	},
@@ -1503,10 +1506,6 @@ var commands = exports.commands = {
 			roomId = toId(targets[0]) || room.id;
 		}
 
-		if (room.id.startsWith('battle-') || room.id.startsWith('groupchat-')) {
-			return this.errorReply("Battles and groupchats do not have modlogs.");
-		}
-
 		// Let's check the number of lines to retrieve or if it's a word instead
 		if (!target.match('[^0-9]')) {
 			lines = parseInt(target || 20, 10);
@@ -1526,6 +1525,8 @@ var commands = exports.commands = {
 			for (var i = 0; i < fileList.length; ++i) {
 				filename += path.normalize(__dirname + '/' + logPath + fileList[i]) + ' ';
 			}
+		} else if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) {
+			return this.errorReply("Battles and groupchats do not have modlogs.");
 		} else {
 			if (!this.can('modlog', null, Rooms.get(roomId))) return;
 			roomNames = "the room " + roomId;
