@@ -20,6 +20,34 @@ ul.userlist {
     background: url("http://i1171.photobucket.com/albums/r545/Brahak/userlistsky_zpsd9aqoolr.png");
 }
 
+.ps-room {
+	position: absolute;
+	display: block;
+	top: 56px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border: 1px solid #333;
+	border-top: none;
+}
+
+.ps-room .battle {
+	border-width: 0px;
+}
+
+.battle {
+	border: 0px solid #AAAAAA;
+	width: 640px;
+	height: 360px;
+	overflow: visible;
+	font-family: Verdana, sans-serif;
+	font-size: 10pt;
+}
+
+.innerbattle {
+	height: 360px;
+}
+
 .backdrop {
 	width: 640px;
 	height: 360px;
@@ -32,69 +60,53 @@ ul.userlist {
 	opacity: 1 !important;
 }
 
-.backdrop {
-	background-image: url("http://i.imgur.com/uV0jC6c.png"; 
-	) !important;
+.backdrop[style*="bg-beach.png"] {
+	background-image: url(http://i.imgur.com/uV0jC6c.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/T7qZ766.png";
-	) !important;
+.backdrop[style*="bg-beachshore.png"] {
+	background-image: url(http://i.imgur.com/T7qZ766.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/vPEOfSg.png";
-	) !important;
+.backdrop[style*="bg-city.png"] {
+	background-image: url(http://i.imgur.com/vPEOfSg.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/T8cg9IA.png";
-	) !important;
+.backdrop[style*="bg-dampcave.png"] {
+	background-image: url(http://i.imgur.com/T8cg9IA.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/2PrGdGW.png";
-	) !important;
+.backdrop[style*="bg-deepsea.png"] {
+	background-image: url(http://i.imgur.com/2PrGdGW.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/m88MSHq.png";
-	) !important;
+.backdrop[style*="bg-desert.png"] {
+	background-image: url(http://i.imgur.com/m88MSHq.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/X2n8bpp.png";
-	) !important;
+.backdrop[style*="bg-earthycave.png"] {
+	background-image: url(http://i.imgur.com/X2n8bpp.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/s8FI5T1.png";
-	) !important;
+.backdrop[style*="bg-forest.png"] {
+	background-image: url(http://i.imgur.com/s8FI5T1.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/t1eqdIO.png";
-	) !important;
+.backdrop[style*="bg-icecave.png"] {
+	background-image: url(http://i.imgur.com/t1eqdIO.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/J7sUYdp.png";
-	) !important;
+.backdrop[style*="bg-meadow.png"] {
+	background-image: url(http://i.imgur.com/J7sUYdp.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/c2DQubK.png";
-	) !important;
+.backdrop[style*="bg-mountain.png"] {
+	background-image: url(http://i.imgur.com/c2DQubK.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/yhpqgcE.png";
-	) !important;
+.backdrop[style*="bg-river.png"] {
+	background-image: url(http://i.imgur.com/yhpqgcE.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/5yfCdpD.png";
-	) !important;
+.backdrop[style*="bg-route.png"] {
+	background-image: url(http://i.imgur.com/5yfCdpD.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/srmDKjw.png";
-	) !important;
+.backdrop[style*="bg-thunderplains.png"] {
+	background-image: url(http://i.imgur.com/srmDKjw.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/4XpRSfi.png";
-	) !important;
+.backdrop[style*="bg-volcanocave.png"] {
+	background-image: url(http://i.imgur.com/4XpRSfi.png) !important;
 }
-.backdrop {
-	background-image: url("http://i.imgur.com/Xny5VcE.png";
-	) !important;
+.backdrop[style*="bg.jpg"] {
+	background-image: url(http://i.imgur.com/Xny5VcE.png) !important;
 }
 
 
