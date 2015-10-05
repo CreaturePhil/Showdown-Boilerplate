@@ -317,7 +317,7 @@ exports.grouplist = [
 		symbol: '%',
 		id: "driver",
 		name: "Driver",
-		inherit: '=',
+		inherit: '§',
 		jurisdiction: 'u',
 		announce: true,
 		warn: true,
@@ -335,7 +335,7 @@ exports.grouplist = [
 		joinbattle: true
 	},
 	{
-		symbol: '=',
+		symbol: '§',
 		id: "subdriver",
 		name: "Subdriver",
 		inherit: '+',
