@@ -1930,7 +1930,10 @@ var commands = exports.commands = {
 	groups: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
+			"$ <b>Destacado</b> - They can use ! commands like !groups<br />" +
 			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
+			"\u2295 <b>Operator</b> - They can also create and manage tournaments<br />" +
+			"\u00A5 <b>Youtuber</b> - They can also warn users<br />" +
 			"% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />" +
 			"@ <b>Moderator</b> - The above, and they can ban users<br />" +
 			"&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />" +
