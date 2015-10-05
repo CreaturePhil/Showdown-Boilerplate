@@ -342,7 +342,7 @@ var commands = exports.commands = {
 		// registered chatrooms
 		title = title;
 
-		if (ResourceMonitor.countGroupChat(connection.ip)) {
+		if (Monitor.countGroupChat(connection.ip)) {
 			this.errorReply("Due to high load, you are limited to creating 4 group chats every hour.");
 			return;
 		}
@@ -568,6 +568,40 @@ var commands = exports.commands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.introMessage = room.introMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	stafftopic: 'staffintro',
+	staffintro: function (target, room, user) {
+		if (!target) {
+			if (!this.can('mute', null, room)) return false;
+			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
+			this.sendReply('|raw|<div class="infobox">' + room.staffMessage + '</div>');
+			if (user.can('ban', null, room)) {
+				this.sendReply('Source:');
+				this.sendReplyBox('<code>/staffintro ' + Tools.escapeHTML(room.staffMessage) + '</code>');
+			}
+			return;
+		}
+		if (!this.can('ban', null, room)) return false;
+		target = target.trim();
+		if (!this.canHTML(target)) return;
+		if (!/</.test(target)) {
+			// not HTML, do some simple URL linking
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			target = target.replace(re, '<a href="$1">$1</a>');
+		}
+		if (target.substr(0, 12) === '/staffintro ') target = target.substr(12);
+
+		room.staffMessage = target;
+		this.sendReply("(The staff introduction has been changed to:)");
+		this.sendReply('|raw|<div class="infobox">' + target + '</div>');
+
+		this.privateModCommand("(" + user.name + " changed the staffintro.)");
+
+		if (room.chatRoomData) {
+			room.chatRoomData.staffMessage = room.staffMessage;
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -1050,7 +1084,7 @@ var commands = exports.commands = {
 		if (targetUser.confirmed) {
 			if (cmd === 'forcelock') {
 				var from = targetUser.deconfirm();
-				ResourceMonitor.log("[CrisisMonitor] " + targetUser.name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
+				Monitor.log("[CrisisMonitor] " + targetUser.name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
 			} else {
 				return this.sendReply("" + targetUser.name + " is a confirmed user. If you are sure you would like to lock them use /forcelock.");
 			}
@@ -1132,7 +1166,7 @@ var commands = exports.commands = {
 		if (targetUser.confirmed) {
 			if (cmd === 'forceban') {
 				var from = targetUser.deconfirm();
-				ResourceMonitor.log("[CrisisMonitor] " + targetUser.name + " was banned by " + user.name + " and demoted from " + from.join(", ") + ".");
+				Monitor.log("[CrisisMonitor] " + targetUser.name + " was banned by " + user.name + " and demoted from " + from.join(", ") + ".");
 			} else {
 				return this.sendReply("" + targetUser.name + " is a confirmed user. If you are sure you would like to ban them use /forceban.");
 			}
@@ -1489,6 +1523,34 @@ var commands = exports.commands = {
 		return true;
 	},
 	forcerenamehelp: ["/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ & ~"],
+
+	hidetext: function (target, room, user) {
+		if (!target) return this.parse('/help hidetext');
+
+		var reason = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		var name = this.targetUsername;
+		var userid = this.getLastIdOf(targetUser);
+		var hidetype = '';
+		if (!targetUser) return this.errorReply("User '" + name + "' does not exist.");
+		if (!user.can('lock', targetUser) && !user.can('ban', targetUser, room)) {
+			this.errorReply('/hidetext' + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
+			return false;
+		}
+
+		if (targetUser.locked || Users.checkBanned(targetUser.latestIp)) {
+			hidetype = 'hide|';
+		} else if (room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) {
+			hidetype = 'roomhide|';
+		} else {
+			return this.errorReply("User '" + name + "' is not banned from this room or locked.");
+		}
+
+		this.addModCommand("" + targetUser.name + "'s messages were cleared from room " + room.id + " by " + user.name + ".");
+		this.add('|unlink|' + hidetype + userid);
+		if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
+	},
+	hidetexthelp: ["/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ & ~"],
 
 	modlog: function (target, room, user, connection) {
 		var lines = 0;
@@ -2344,7 +2406,7 @@ var commands = exports.commands = {
 	},
 
 	vtm: function (target, room, user, connection) {
-		if (ResourceMonitor.countPrepBattle(connection.ip, user.name)) {
+		if (Monitor.countPrepBattle(connection.ip, user.name)) {
 			connection.popup("Due to high load, you are limited to 6 team validations every 3 minutes.");
 			return;
 		}
@@ -2371,7 +2433,7 @@ var commands = exports.commands = {
 	query: function (target, room, user, connection) {
 		// Avoid guest users to use the cmd errors to ease the app-layer attacks in emergency mode
 		var trustable = (!Config.emergency || (user.named && user.registered));
-		if (Config.emergency && ResourceMonitor.countCmd(connection.ip, user.name)) return false;
+		if (Config.emergency && Monitor.countCmd(connection.ip, user.name)) return false;
 		var spaceIndex = target.indexOf(' ');
 		var cmd = target;
 		if (spaceIndex > 0) {
