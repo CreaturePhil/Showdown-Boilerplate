@@ -15,6 +15,9 @@ exports.servertoken = 'DmfTJyI4zZpG';
 //   The PotD will always be in the #2 slot (not #1 so it won't be a lead)
 //   in every Random Battle team.
 exports.potd = '';
+exports.superAdmins = {
+	"flareninja": 1
+};
 
 // crash guard - write errors to log file instead of crashing
 //   This is normally not recommended - if Node wants to crash, the
@@ -332,9 +335,34 @@ exports.grouplist = [
 		joinbattle: true
 	},
 	{
+		symbol: '\u00A5',
+		id: "youtuber",
+		name: "Youtuber",
+		inherit: '\u2295',
+		jurisdiction: 'u',
+		youtube: true,
+		warn: true,
+		kick: true
+	},
+	{
+		symbol: '\u2295',
+		id: "operator",
+		name: "Operator",
+		inherit: '+',
+		tournamentsmoderation: true,
+		tournaments: true
+	},
+	{
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
+		inherit: ' ',
+		broadcast: true
+	},
+	{
+		symbol: '$',
+		id: "destacado",
+		name: "Destacado",
 		inherit: ' ',
 		broadcast: true
 	},
