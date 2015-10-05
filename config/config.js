@@ -253,6 +253,13 @@ exports.replsocketmode = 0600;
 //     - tournamentsmanagement: enable/disable tournaments.
 exports.grouplist = [
 	{
+		symbol: 'Ж',
+		id: "founder",
+		name: "Founder",
+		root: true,
+		globalonly: true
+	},
+	{
 		symbol: '~',
 		id: "admin",
 		name: "Administrator",
