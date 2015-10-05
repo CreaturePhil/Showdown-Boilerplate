@@ -317,7 +317,7 @@ exports.grouplist = [
 		symbol: '%',
 		id: "driver",
 		name: "Driver",
-		inherit: '+',
+		inherit: '=',
 		jurisdiction: 'u',
 		announce: true,
 		warn: true,
@@ -333,6 +333,24 @@ exports.grouplist = [
 		tournamentsmoderation: true,
 		jeopardy: true,
 		joinbattle: true
+	},
+	{
+		symbol: '=',
+		id: "subdriver",
+		name: "Subdriver",
+		inherit: '+',
+		jurisdiction: 'u',
+		warn: true,
+		kick: true,
+		mute: true,
+		lock: true,
+		forcerename: true,
+		timer: true,
+		modlog: true,
+		bypassblocks: 'u%@&~',
+		receiveauthmessages: true,
+		tournamentsmoderation: true,
+		jeopardy: true
 	},
 	{
 		symbol: '\u00A5',
