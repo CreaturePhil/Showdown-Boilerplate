@@ -860,6 +860,82 @@ exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/afd/'+target+'.png">');
         },
+        
+        cries: function (target) {
+		if (!this.canBroadcast()) return; 
+		if (!target || (isNaN(target) && toId(target) !== 'random')) return false;
+		target = toId(target);
+		if (target === 'random' || target === 'rand' || target === 'aleatoire') {
+			target = Math.floor(Math.random() * 718);
+		}
+		if (target < 1 || target > 718) { 
+			return this.sendReply('Le Pokémon indiqué doit avoir un numéro de Pokédex national entre 1 et 718.');
+		}	
+		if (target < 100 && target > 9) {
+			target = '0' + target; 
+		} 
+		if (target < 10) {
+			target = '00' + target;
+		}
+		this.sendReplyBox(
+			'<center><audio src="http://play.pokemonshowdown.com/audio/cries/'+ target +'.wav" controls="" style="padding: 5px 7px ; background: #8e44ad ; color: #ecf0f1 ; -webkit-border-radius: 4px ; -moz-border-radius: 4px ; border-radius: 4px ; border: solid 1px #20538d ; text-shadow: 0 -1px 0 rgba(0 , 0 , 0 , 0.4) ; -webkit-box-shadow: inset 0 1px 0 rgba(255 , 255 , 255 , 0.4) , 0 1px 1px rgba(0 , 0 , 0 , 0.2) ; -moz-box-shadow: inset 0 1px 0 rgba(255 , 255 , 255 , 0.4) , 0 1px 1px rgba(0 , 0 , 0 , 0.2) ; box-shadow: inset 0 1px 0 rgba(255 , 255 , 255 , 0.4) , 0 1px 1px rgba(0 , 0 , 0 , 0.2)" target="_blank"></audio>'
+		)
+	},
+
+        yt: function(target, room, user) {
+       	if (!this.canBroadcast()) return false;
+        if (!target) return false;
+        var params_spl = target.split(' ');
+        var g = '';
+
+        for (var i = 0; i < params_spl.length; i++) {
+            g += '+' + params_spl[i];
+        }
+        g = g.substr(1);
+
+        var reqOpts = {
+            hostname: "www.googleapis.com",
+            method: "GET",
+            path: '/youtube/v3/search?part=snippet&q=' + g + '&type=video&key=AIzaSyA4fgl5OuqrgLE1B7v8IWYr3rdpTGkTmns',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        var self = this;
+        var data = '';
+        var req = require('https').request(reqOpts, function(res) {
+            res.on('data', function(chunk) {
+                data += chunk;
+            });
+            res.on('end', function(chunk) {
+                var d = JSON.parse(data);
+                if (d.pageInfo.totalResults == 0) {
+                    room.add('Aucune vidéo trouvée :(. T\'as voulu me ruser ?');
+                    room.update();
+                    return false;
+                } 
+                self.sendReplyBox('<a href="https://www.youtube.com/watch?v=' + d.items[0].id.videoId +'"><b> '+ d.items[0].snippet.title +'</b>');
+            	room.update();
+            });
+        });
+        req.end();
+        console.log('[YT] '+ user +': '+ target);
+    },
+
+	 
+	 serveur: 'sendserver',
+	 server: 'sendserver',
+	 sayserver: 'sendserver',
+	 sendserver: function(target, room, user, connection) {
+		if (!this.can('lock')) return false; 
+		if (!target) {
+			return this.sendReply('Syntaxe incorrecte.');
+		}
+		this.add('|c| [Server]|'+ target);
+		
+		this.privateModCommand(user.name +" a envoyé un message de [serveur] sous les paramètres: "+ target);
+	},
 };
 	
 	
