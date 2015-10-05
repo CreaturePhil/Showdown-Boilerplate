@@ -148,6 +148,9 @@ exports.simulatorprocesses = 1;
 // from the `users` array. The default is 1 hour.
 exports.inactiveuserthreshold = 1000 * 60 * 60;
 
+// Set this to true if you are using Pokemon Showdown on Heroku.
+exports.herokuhack = true;
+
 // tellsexpiryage - how long an offline message remains in existence before being removed.
 // By default, 7 days
 exports.tellsexpiryage = 1000 * 60 * 60 * 24 * 7;
