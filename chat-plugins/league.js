@@ -236,4 +236,3 @@ exports.commands = {
 		return this.sendReply('Usage: /quitarmedalla [user], (id)');
 	}
 };
-**/
