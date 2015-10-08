@@ -6,6 +6,7 @@ var shop = [
 	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 10],
 	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
 	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 25],
+	['League Room', 'Buys you a league room.', 25],
 	['Hot Chocolate', 'Seasonal Special! A cup of heart warming chocolate that warms you for the whole winter!', 30],
 	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 50],
 	['Art', 'Buys a majestic and beautiful piece of Digital Art drawn by Ice. PM IceDragon_X for samples.', 80],
