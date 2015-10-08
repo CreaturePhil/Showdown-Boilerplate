@@ -922,20 +922,6 @@ exports.commands = {
         req.end();
         console.log('[YT] '+ user +': '+ target);
     },
-
-	 
-	 serveur: 'sendserver',
-	 server: 'sendserver',
-	 sayserver: 'sendserver',
-	 sendserver: function(target, room, user, connection) {
-		if (!this.can('lock')) return false; 
-		if (!target) {
-			return this.sendReply('Syntaxe incorrecte.');
-		}
-		this.add('|c| [Server]|'+ target);
-		
-		this.privateModCommand(user.name +" a envoyé un message de [serveur] sous les paramètres: "+ target);
-	},
 };
 	
 	
