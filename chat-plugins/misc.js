@@ -331,57 +331,37 @@ exports.commands = {
 		f
 		this.logEntry(user.name + ' used /gdeclare');
 	},
-	gdeclarered: 'gdeclare',
-	gdeclaregreen: 'gdeclare',
-	gdeclare: function(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help gdeclare');
-		if (!this.can('lockdown')) return false;
-		var roomName = (room.isPrivate) ? 'a private room' : room.id;
-		if (cmd === 'gdeclare') {
-			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from ' + roomName + '<br /></i></font size>' + target + '</b></div>');
-			}
-		}
-		if (cmd === 'gdeclarered') {
-			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from ' + roomName + '<br /></i></font size>' + target + '</b></div>');
-			}
-		} else if (cmd === 'gdeclaregreen') {
-			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from ' + roomName + '<br /></i></font size>' + target + '</b></div>');
-			}
-		}
-		this.logModCommand(user.name + ' globally declared ' + target);
-	},
-	declaregreen: 'declarered',
-	declarered: function(target, room, user, connection, cmd) {
+	reddeclare: 'declare',
+	declarered: 'declare',
+	declaregreen: 'declare',
+	greendeclare: 'declare',
+	yellowdeclare: 'declare',
+	declareyellow: 'declare',
+	purpledeclare: 'declare',
+	declarepurple: 'declare',
+	declare: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
+
 		if (!this.canTalk()) return;
-		if (cmd === 'declarered') {
-			this.add('|raw|<div class="broadcast-red"><b>' + target + '</b></div>');
-		} else if (cmd === 'declaregreen') {
-			this.add('|raw|<div class="broadcast-green"><b>' + target + '</b></div>');
+		
+		var message = '<b>' + Tools.escapeHTML(target) + '</b>';
+		switch (cmd) {
+			case 'reddeclare': case 'declarered':
+				this.add('|raw|<div class="broadcast-red">' + message);
+				break;
+			case 'declaregreen': case 'greendeclare':
+				this.add('|raw|<div class="broadcast-green">' + message);
+				break;
+			case 'declareyellow': case 'yellowdeclare':
+				this.add('|raw|<div style = "background: #ffe100; color: black; padding: 2px 4px;">' + message);
+				break;
+			case 'declarepurple': case 'purpledeclare':
+				this.add('|raw|<div style = "background: #993399; color: white; padding: 2px 4px;">' + message);
+				break;
+			default: this.add('|raw|<div class="broadcast-blue">' + message);
 		}
-		this.logModCommand(user.name + ' declared ' + target);
-	},
-	golddeclare: function(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help declare');
-		if (!this.can('declare', null, room)) return false;
-		if (!this.canTalk()) return;
-		this.add('|raw|<div class="broadcast-gold"><b>' + target + '</b></div>');
-		this.logModCommand(user.name + ' declared ' + target);
-	},
-	pdeclare: function(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help declare');
-		if (!this.can('declare', null, room)) return false;
-		if (!this.canTalk()) return;
-		if (cmd === 'pdeclare') {
-			this.add('|raw|<div class="broadcast-purple"><b>' + target + '</b></div>');
-		} else if (cmd === 'pdeclare') {
-			this.add('|raw|<div class="broadcast-purple"><b>' + target + '</b></div>');
-		}
-		this.logModCommand(user.name + ' declared ' + target);
+		this.logModCommand(user.name + " declared " + target);
 	},
 	sd: 'declaremod',
 	staffdeclare: 'declaremod',
@@ -931,6 +911,43 @@ exports.commands = {
         req.end();
         console.log('[YT] '+ user +': '+ target);
     },
+    dm: 'daymute',
+	daymute: function (target, room, user, connection, cmd) {
+		if (!target) return this.errorReply()
+		if (room.isMuted(user) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+		}
+
+		var muteDuration = 24 * 60 * 60 * 1000;
+		if (!this.can('mute', targetUser, room)) return false;
+		var canBeMutedFurther = ((room.getMuteTime(targetUser) || 0) <= (muteDuration * 5 / 6));
+		if ((room.isMuted(targetUser) && !canBeMutedFurther) || targetUser.locked || !targetUser.connected) {
+			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "muted");
+			if (!target) {
+				return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
+			}
+			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
+		}
+
+		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for 24 hours. " + target);
+		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 24 hours." + (target ? " (" + target + ")" : ""));
+		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
+		this.add('|unlink|' + this.getLastIdOf(targetUser));
+
+		room.mute(targetUser, muteDuration, false);
+	},
+	givesymbol: 'gs',
+	gs: function(target, room, user) {
+		if (!target) return this.errorReply('/givesymbol [user] - Gives permission for this user to set a custom symbol.');
+		if (!Users(target)) return this.errorReply("Target user not found.  Check spelling?");
+		Users(target).canCustomSymbol = true;
+		Users(target).popup('|modal|' + user.name + ' have given you a FREE custom symbol.  Use /customsymbol to set your symbol.');
+	},
 };
 	
 	
