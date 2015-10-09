@@ -911,6 +911,43 @@ exports.commands = {
         req.end();
         console.log('[YT] '+ user +': '+ target);
     },
+    dm: 'daymute',
+	daymute: function (target, room, user, connection, cmd) {
+		if (!target) return this.errorReply()
+		if (room.isMuted(user) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+		}
+
+		var muteDuration = 24 * 60 * 60 * 1000;
+		if (!this.can('mute', targetUser, room)) return false;
+		var canBeMutedFurther = ((room.getMuteTime(targetUser) || 0) <= (muteDuration * 5 / 6));
+		if ((room.isMuted(targetUser) && !canBeMutedFurther) || targetUser.locked || !targetUser.connected) {
+			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "muted");
+			if (!target) {
+				return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
+			}
+			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
+		}
+
+		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for 24 hours. " + target);
+		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 24 hours." + (target ? " (" + target + ")" : ""));
+		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
+		this.add('|unlink|' + this.getLastIdOf(targetUser));
+
+		room.mute(targetUser, muteDuration, false);
+	},
+	givesymbol: 'gs',
+	gs: function(target, room, user) {
+		if (!target) return this.errorReply('/givesymbol [user] - Gives permission for this user to set a custom symbol.');
+		if (!Users(target)) return this.errorReply("Target user not found.  Check spelling?");
+		Users(target).canCustomSymbol = true;
+		Users(target).popup('|modal|' + user.name + ' have given you a FREE custom symbol.  Use /customsymbol to set your symbol.');
+	},
 };
 	
 	
