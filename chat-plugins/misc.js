@@ -331,57 +331,37 @@ exports.commands = {
 		f
 		this.logEntry(user.name + ' used /gdeclare');
 	},
-	gdeclarered: 'gdeclare',
-	gdeclaregreen: 'gdeclare',
-	gdeclare: function(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help gdeclare');
-		if (!this.can('lockdown')) return false;
-		var roomName = (room.isPrivate) ? 'a private room' : room.id;
-		if (cmd === 'gdeclare') {
-			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from ' + roomName + '<br /></i></font size>' + target + '</b></div>');
-			}
-		}
-		if (cmd === 'gdeclarered') {
-			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from ' + roomName + '<br /></i></font size>' + target + '</b></div>');
-			}
-		} else if (cmd === 'gdeclaregreen') {
-			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from ' + roomName + '<br /></i></font size>' + target + '</b></div>');
-			}
-		}
-		this.logModCommand(user.name + ' globally declared ' + target);
-	},
-	declaregreen: 'declarered',
-	declarered: function(target, room, user, connection, cmd) {
+	reddeclare: 'declare',
+	declarered: 'declare',
+	declaregreen: 'declare',
+	greendeclare: 'declare',
+	yellowdeclare: 'declare',
+	declareyellow: 'declare',
+	purpledeclare: 'declare',
+	declarepurple: 'declare',
+	declare: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
+
 		if (!this.canTalk()) return;
-		if (cmd === 'declarered') {
-			this.add('|raw|<div class="broadcast-red"><b>' + target + '</b></div>');
-		} else if (cmd === 'declaregreen') {
-			this.add('|raw|<div class="broadcast-green"><b>' + target + '</b></div>');
+		
+		var message = '<b>' + Tools.escapeHTML(target) + '</b>';
+		switch (cmd) {
+			case 'reddeclare': case 'declarered':
+				this.add('|raw|<div class="broadcast-red">' + message);
+				break;
+			case 'declaregreen': case 'greendeclare':
+				this.add('|raw|<div class="broadcast-green">' + message);
+				break;
+			case 'declareyellow': case 'yellowdeclare':
+				this.add('|raw|<div style = "background: #ffe100; color: black; padding: 2px 4px;">' + message);
+				break;
+			case 'declarepurple': case 'purpledeclare':
+				this.add('|raw|<div style = "background: #993399; color: white; padding: 2px 4px;">' + message);
+				break;
+			default: this.add('|raw|<div class="broadcast-blue">' + message);
 		}
-		this.logModCommand(user.name + ' declared ' + target);
-	},
-	golddeclare: function(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help declare');
-		if (!this.can('declare', null, room)) return false;
-		if (!this.canTalk()) return;
-		this.add('|raw|<div class="broadcast-gold"><b>' + target + '</b></div>');
-		this.logModCommand(user.name + ' declared ' + target);
-	},
-	pdeclare: function(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help declare');
-		if (!this.can('declare', null, room)) return false;
-		if (!this.canTalk()) return;
-		if (cmd === 'pdeclare') {
-			this.add('|raw|<div class="broadcast-purple"><b>' + target + '</b></div>');
-		} else if (cmd === 'pdeclare') {
-			this.add('|raw|<div class="broadcast-purple"><b>' + target + '</b></div>');
-		}
-		this.logModCommand(user.name + ' declared ' + target);
+		this.logModCommand(user.name + " declared " + target);
 	},
 	sd: 'declaremod',
 	staffdeclare: 'declaremod',
