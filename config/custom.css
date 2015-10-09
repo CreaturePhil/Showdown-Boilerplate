@@ -7,6 +7,8 @@ body {
 .header {
 	background-image: url(http://ares.cooltext.com/images/558/5589c3c30f08f2f8734436fdccbe5742823de766.png);
 	background-repeat: no-repeat;
+	width: 150;
+	height: 50;
 }
 .roomlist {
 	margin: auto;
@@ -15,7 +17,6 @@ body {
 .chat-log {
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	background-image: url(http://i.imgur.com/PlZJbVg.png) !important;
-	background-repeat: no-repeat;
 }
 .userlist {
 	background: black;
