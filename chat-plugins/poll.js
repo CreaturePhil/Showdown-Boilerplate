@@ -131,7 +131,7 @@ exports.commands = {
 	tierspoll: 'tierpoll',
 	tierpoll: function (target, room, user) {
 		if (!this.can('broadcast', null, room)) return false;
-		this.parse("/poll Tournament tier?," + "Random Battle, OU, Ubers, UU, RU, NU, LC, Anything Goes, BW2 OU, DPP OU, ADV OU, GSC OU, RBY OU, Battle Spot Singles, Random Doubles Battle, Doubles OU, Battle Spot Doubles (VGC 2015), Random Triples Battle, Smogon Triples, CAP, Battle Factory, Challenge Cup 1v1, Balanced Hackmons, 1v1, Monotype, Tier Shift, PU, Inverse Battle, Monotype Random Battle, LC UU, FU, Middle Cup, Metronome, Random Haxmons, Random Inverse, Random Cap, Random Lc, Random Monogen, Random Ubers, RBY Random, GSC Random, VGC 2014, VGC 2013, VGC 2010, Stabmons, AAA, Alphabet Cup, Mega Tier");
+		this.parse("/poll Tournament tier?," + "Random Battle, OU, Ubers, UU, RU, NU, LC, Anything Goes, BW2 OU, DPP OU, ADV OU, GSC OU, RBY OU, Battle Spot Singles, Random Doubles Battle, Doubles OU, VGC 2015, Random Triples Battle, Smogon Triples, CAP, Battle Factory, Challenge Cup 1v1, Balanced Hackmons, 1v1, Monotype, Tier Shift, PU, Inverse Battle, Monotype Random Battle, LC UU, FU, Middle Cup, Metronome, Random Haxmons, Random Inverse, Random Cap, Random Lc, Random Monogen, Random Ubers, RBY Random, GSC Random, VGC 2014, VGC 2013, VGC 2010, Stabmons, AAA, Alphabet Cup, Mega Tier");
 	},
 
 	vote: function (target, room, user) {
