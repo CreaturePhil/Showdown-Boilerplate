@@ -1492,6 +1492,26 @@ var commands = exports.commands = {
 		this.logModCommand(user.name + " declared " + target);
 	},
 	declarehelp: ["/declare [message] - Anonymously announces a message. Requires: # & ~"],
+	
+	odeclare: function (target, room, user) {
+		if (!target) return this.parse('/help declare');
+		if (!this.can('declare', null, room)) return false;
+
+		if (!this.canTalk()) return;
+
+		this.add('|raw|<div style="background-color: orange; border: 1px solid #D2691E; padding: 5px 5px 5px 5px; color: darkblue; font-family: Verdana;"><b><center>' + target + '</center></b></div>');
+		this.logModCommand(user.name + " declared " + target);
+	},
+	
+	zdeclare: function (target, room, user) {
+		if (!target) return this.parse('/help declare');
+		if (!this.can('declare', null, room)) return false;
+
+		if (!this.canTalk()) return;
+
+		this.add('|raw|<div style="background-color: black; border: 1px solid aqua; padding: 5px 5px 5px 5px; color: white; font-family: Verdana;"><b><center>Zmeed says:' + target + '</center></b></div>');
+		this.logModCommand(user.name + " declared " + target);
+	},
 
 	htmldeclare: function (target, room, user) {
 		if (!target) return this.parse('/help htmldeclare');
