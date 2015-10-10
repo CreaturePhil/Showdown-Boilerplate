@@ -336,7 +336,7 @@ exports.getLeagueTable = function (leagueId) {
 		}
 	}
 	if (!e) html += '<i>(vacio)</i>';
-	html += '<br /><b>Lideres:</b> ';
+	html += '<br /><b>Leaders:</b> ';
 	for (var i in league[leagueId].leaders) {
 		if (league[leagueId].leaders[i].rank === "g") {
 			g = true;
