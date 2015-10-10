@@ -1468,7 +1468,7 @@ var commands = exports.commands = {
 
 		if (!this.canTalk()) return;
 
-		this.add('|raw|<div style="background-color: black; border: 1px solid aqua; padding: 5px 5px 5px 5px; color: white; font-family: Verdana;"><b><center>Zmeed says:' + target + '</center></b></div>');
+		this.add('|raw|<div style="background-color: black; border: 1px solid aqua; padding: 5px 5px 5px 5px; color: white; font-family: Verdana;"><b><center>' + target + '</center></b></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
 
