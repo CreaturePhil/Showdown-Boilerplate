@@ -1,5 +1,5 @@
 var fs = require('fs');
-var colors = JSON.parse(fs.readFileSync('infofiles/usercolors.json'));
+var colors = JSON.parse(fs.readFileSync('config/usercolors.json'));
 var color = exports.color = {
     
     has: function(name) {
@@ -152,7 +152,7 @@ var color = exports.color = {
     set: function(name, hex) {
         colors[toId(name)] = hex;
         var finished = JSON.stringify(colors, null, 1);
-        fs.writeFile('infofiles/usercolors.json', finished);
+        fs.writeFile('config/usercolors.json', finished);
         return;
     },
 
