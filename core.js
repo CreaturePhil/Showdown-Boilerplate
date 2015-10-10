@@ -14,7 +14,7 @@ var fs = require("fs");
 var path = require("path");
 
 var core = exports.core = {
-
+};
 
 exports.sysopAccess = function () {
 
