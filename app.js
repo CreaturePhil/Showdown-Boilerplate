@@ -231,3 +231,4 @@ fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), function (err, data) {
  *********************************************************/
 
 require('./repl.js').start('app', function (cmd) { return eval(cmd); });
+global.League = require('./league.js');
