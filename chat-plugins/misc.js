@@ -557,28 +557,6 @@ exports.commands = {
 		var url;
 		if (type === 'shiny') url = 'http://play.pokemonshowdown.com/sprites/xyani-shiny/';
 		else if (type === 'back') url = 'http://play.pokemonshowdown.com/sprites/xyani-back/';
-		else if (type === 'rby') url = 'http://play.pokemonshowdown.com/sprites/rby/';
-		else if (type === 'rbyback') url = 'http://play.pokemonshowdown.com/sprites/rby-back/';
-		else if (type === 'gsc') url = 'http://play.pokemonshowdown.com/sprites/gsc/';
-		else if (type === 'gscshiny') url = 'http://play.pokemonshowdown.com/sprites/gsc-shiny/';
-		else if (type === 'gscback') url = 'http://play.pokemonshowdown.com/sprites/gsc-back/';
-		else if (type === 'gscshinyback') url = 'http://play.pokemonshowdown.com/sprites/gsc-back-shiny/';
-		else if (type === 'rse') url = 'http://play.pokemonshowdown.com/sprites/rse/';
-		else if (type === 'rseshiny') url = 'http://play.pokemonshowdown.com/sprites/rse-shiny/';
-		else if (type === 'rseback') url = 'http://play.pokemonshowdown.com/sprites/rse-back/';
-		else if (type === 'rseshinyback') url = 'http://play.pokemonshowdown.com/sprites/rse-back-shiny/';
-		else if (type === 'dpp') url = 'http://play.pokemonshowdown.com/sprites/dpp/';
-		else if (type === 'dppshiny') url = 'http://play.pokemonshowdown.com/sprites/dpp-shiny/';
-		else if (type === 'dppback') url = 'http://play.pokemonshowdown.com/sprites/dpp-back/';
-		else if (type === 'dppshinyback') url = 'http://play.pokemonshowdown.com/sprites/dpp-back-shiny/';
-		else if (type === 'bw') url = 'http://play.pokemonshowdown.com/sprites/bwani/';
-		else if (type === 'bwshiny') url = 'http://play.pokemonshowdown.com/sprites/bwani-shiny/';
-		else if (type === 'bwback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back/';
-		else if (type === 'bwshinyback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back-shiny/';
-		else if (type === 'afd') url = 'http://play.pokemonshowdown.com/sprites/afd/';
-		else if (type === 'afdshiny') url = 'http://play.pokemonshowdown.com/sprites/afd-shiny/';
-		else if (type === 'afdback') url = 'http://play.pokemonshowdown.com/sprites/afd-back/';
-		else if (type === 'afdshinyback') url = 'http://play.pokemonshowdown.com/sprites/afd-back-shiny/';
 		else if (type === 'backshiny' || type === 'shinyback') url = 'http://play.pokemonshowdown.com/sprites/xyani-back-shiny/';
 		else url = 'http://play.pokemonshowdown.com/sprites/xyani/';
 
