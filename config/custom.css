@@ -62,3 +62,13 @@ body {
 .tabbar a.closebutton { 
 	color: #aff3ff;
 }
+.backdrop {
+    background-image: url("http://goldservers.info/about/backdrop.png") !important;
+}
+/* User Icons section */
+#lobby-userlist-user-rankuro, #tournaments-userlist-user-rankuro, #royalpalace-userlist-user-rankuro, #staff-userlist-user-rankuro, #casino-userlist-user-rankuro, #portugus-userlist-user-rankuro {
+    background: #000000 url("http://pldh.net/media/pokemon/gen4/overworld/shiny_frontf2/491.png") right no-repeat;
+}
+#lobby-userlist-user-icedragonx, #tournaments-userlist-user-icedragonx, #royalpalace-userlist-user-icedragonx, #staff-userlist-user-icedragonx, #casino-userlist-user-icedragonx, #portugus-userlist-user-icedragonx {
+    background: #000000 url("http://pldh.net/media/pokecons_action/418.gif") right no-repeat;
+}
