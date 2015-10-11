@@ -374,6 +374,21 @@ exports.commands = {
 		this.privateModCommand('|raw|<div class="broadcast-red"><b><font size=1><i>Private Auth (Driver +) declare from ' + user.name + '<br /></i></font size>' + target + '</b></div>');
 		this.logModCommand(user.name + ' mod declared ' + target);
 	},
+	advdeclare: function(target, room, user, connection, cmd) {
+		if (!this.can('pban')) return false;
+		if (room.id !== 'lobby') return this.errorReply("This command can only be used in the Lobby by leaders and up.");
+		if (!this.canTalk()) return;
+		var parts = target.split(',');
+		if (!parts[1]) return this.errorReply("Usage: /advdeclare [advertisement], [room]");
+		var adRoom = (Rooms(toId(parts[1])) ? toId(parts[1]) : false);
+		if (!adRoom) return this.errorReply("That room does not exist.  Check spelling?");
+		var adv = (
+			parts[0] + '<br />' +
+			'<button name="joinRoom" value="' + adRoom + '" target="_blank">Click to join ' + parts[1] + '!</button>'
+		);
+		this.add('|raw|<div class="broadcast-blue"><b>' + adv + '</b></div>');
+		this.logModCommand(user.name + ' declared ' + adv);
+	},
 	hideuser: function(target, room, user, connection, cmd) {
 		if (!target) return this.sendReply('/hideuser [user] - Makes all prior messages posted by this user "poof" and replaces it with a button to see. Requires: @, &, ~');
 		if (!this.can('hotpatch')) return false;
