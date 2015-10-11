@@ -994,7 +994,7 @@ exports.Formats = [
 		name: "NU Monotype",
 		section: "Monotype",
 
-		ruleset: ['RU (beta)', 'Same Type Clause'],
+		ruleset: ['RU', 'Same Type Clause'],
 		banlist: ['RU', 'BL3']
 	},
 	{
@@ -1004,6 +1004,14 @@ exports.Formats = [
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Little Cup', 'Same Type Clause'],
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
+	},
+	{
+		name: "PU Monotype",
+		section: "Monotype",
+		
+
+		ruleset: ['NU', 'Same Type Clause'],
+		banlist: ['NU', 'BL4', 'Chatter', 'Shell Smash + Baton Pass']
 	},
 	
 	// Past VGC
