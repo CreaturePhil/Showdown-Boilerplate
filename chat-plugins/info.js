@@ -11,8 +11,6 @@
  */
 
 const RESULTS_MAX_LENGTH = 10;
-var geoip = require('geoip-lite');
-geoip.startWatchingDataUpdate();
 
 var commands = exports.commands = {
 
@@ -32,7 +30,6 @@ var commands = exports.commands = {
 			return this.errorReply("/alts - Access denied.");
 		}
 
-		var geo = geoip.lookup(targetUser.latestIp);
 		var buf = '<strong class="username"><small style="display:none">' + targetUser.group + '</small>' + Tools.escapeHTML(targetUser.name) + '</strong> ' + (!targetUser.connected ? ' <em style="color:gray">(offline)</em>' : '');
 		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
 			buf += "<br />" + Config.groups[targetUser.group].name + " (" + targetUser.group + ")";
