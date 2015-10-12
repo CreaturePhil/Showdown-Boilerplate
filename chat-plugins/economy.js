@@ -5,12 +5,13 @@ var shop = [
 	['Ticket', 'Buys a lottery ticket for a chance to win big money.', 5],
 	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
 	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
-	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
+	['Avatar', 'Buys a custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
 	['Recipe', 'Buys an official usable dish approved by Tokuo!', 25],
-	['Hot Chocolate', 'Seasonal Special! A cup of heart warming chocolate that warms you for the whole winter!', 30],
+	['Chocolate', 'Seasonal Special! A cup of heart warming chocolate that warms you for the whole winter!', 30],
 	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 40],
 	['Room', 'Buys a chatroom for you to own. (Half Price for Art, Music, and Culinary)', 50],
 	['Art', 'Buys a majestic and beautiful piece of Digital Art drawn by Ice. PM IceDragon_X for samples.', 80],
+	['Icon', 'Buys a userlist icon to be placed next to your name in some rooms!', 100],
 ];
 
 var shopDisplay = getShopDisplay(shop);
