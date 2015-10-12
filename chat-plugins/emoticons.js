@@ -35,6 +35,7 @@ var emotes = {
 	'lennyface': 'http://i.imgur.com/DrKuSjy.jpg',
 	'bordll': 'http://i.imgur.com/IfJIOtR.jpg',
 	'medaglieuomo': 'http://i.imgur.com/0MGVlhT.jpg',
+	'happyface': 'http://i.imgur.com/krzCL3j.jpg',
 	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
 	'facepalm': 'http://i.imgur.com/E0oDNFB.gif'
 };
