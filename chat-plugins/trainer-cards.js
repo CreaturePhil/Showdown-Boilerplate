@@ -69,6 +69,16 @@ exports.commands = {
 		this.sendReplyBox('<center><font size=2 color=#0000><b>vs Magma/Aqua Leader</b> - <i>Omega Ruby/Alpha Sapphire</i></font></center>' +
 		'<audio src="http://puu.sh/kILVA/f92db22d33.mp3" controls="" style="width: 100% ; border: 1px solid #3B3B3B ; background-color: #00000a" target="_blank" />');
 	},
+	primaldialga: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><font size=2 color=#0000><b>Primal Dialga Theme</b> - <i>Esplorers of Sky</i></font></center>' +
+		'<audio src="http://puu.sh/kIMct/edd8634477.mp3" controls="" style="width: 100% ; border: 1px solid #3B3B3B ; background-color: #00000a" target="_blank" />');
+	},
+	tetrisa: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><font size=2 color=#0000><b>Tetris Type A</b> - <i>Tetris</i></font></center>' +
+		'<audio src="http://puu.sh/kIMsP/df80682448.mp3" controls="" style="width: 100% ; border: 1px solid #3B3B3B ; background-color: #00000a" target="_blank" />');
+	},
 };
 	
 
