@@ -1940,6 +1940,24 @@ var commands = exports.commands = {
 			"~ <b>Administrator</b> - They can do anything, like literally, anything."
 		);
 	},
+	royalfamily: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox(
+			"<font size='3'><center><b>Royal Familiy</b></center></font>" +
+			"&nbsp;" +
+			"<p align='left'><font color='red'><i>Role</i></font></p>" +
+			"<p align='left'>The Royal Family is an illustrious group of users in Paradox, comprised of 7 Elites that has the Royal Blood.</p>" +
+			"<p align='left'>This organization is responsible for handling the internal evaluations, including promotion judgements as well as helping to organize events such as the Venti Cup.</p>" +
+			"<p align='left'>Their authority on the server is second only to Kitsuya, that being said, if 7 of them decides on one thing, not even an admin (other than Kit) can stop them.</p>" +
+			"&nbsp;" +
+			"<p align='right'><font color='blue'><i>Selection</i></font></p>" +
+			"<p align='right'>Currently, there are only two known ways to join the group: Through an invitation from the committee or through blood testing.</p>" +
+			"<p align='right'>Invitations will only be sent if you are worthy, but sometimes favouritism may happen.</p>" +
+			"<p align='right'>Blood testing may only happen once a day by paying 5 bucks, however there will only be 1 in 200 chance.</p>" +
+			"&nbsp;" +
+			"<center><i>Bon Chance~</i> - the Committee.</center>"
+		);
+	},
 	groupshelp: ["/groups - Explains what the + % @ # & next to people's names mean.",
 		"!groups - Shows everyone that information. Requires: + % @ # & ~"],
 
