@@ -209,7 +209,10 @@ var commands = exports.commands = {
 
 		var emoteMsg = parseEmoticons(target, room, user, true);
 		if ((!user.blockEmoticons && !targetUser.blockEmoticons) && emoteMsg) target = '/html ' + emoteMsg;
-
+		
+		//No_Advertising
+		if (target !== "paradox.psim.us" && target.has(".psim.us")) return;
+		
 		var message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
