@@ -15,7 +15,8 @@ exports.commands = {
 	freesong: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<audio src="http://puu.sh/kHI3w/c1c04a46b0.mp3" controls="" style="width: 100% ; border: 1px solid #3B3B3B ; background-color: #00000a" target="_blank" />');
-	},
+	}
+};
 	
 
 	
