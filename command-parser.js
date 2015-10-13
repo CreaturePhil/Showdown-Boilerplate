@@ -140,6 +140,9 @@ function canTalk(user, room, connection, message, targetUser) {
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
 		}
+		
+		//No_Advertising
+		if (message !== "paradox.psim.us" && message.has(".psim.us")) return;
 
 		if (Config.chatfilter) {
 			return Config.chatfilter.call(this, message, user, room, connection, targetUser);
