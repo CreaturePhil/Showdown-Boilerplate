@@ -1265,6 +1265,19 @@ var commands = exports.commands = {
 		this.addModCommand("" + user.name + " unbanned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 	unbaniphelp: ["/unbanip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~"],
+	
+	unlink: function(target, room, user) {
+		if (!target) return this.parse('/help unlink');
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply('User '+this.targetUser+' not found.');
+		if (!this.can('warn', targetUser, room)) return this.sendReply('/unlink - Access denied.');
+		this.privateModCommand('('+targetUser.name+' had their links unlinked by '+user.name+'. Any links they have posted will now be unclickable.)');
+		this.add('|unlink|'+targetUser.name);
+		for (var u in targetUser.prevNames) {
+			this.add('|unlink|'+targetUser.prevNames[u]);
+		}
+	},
 
 	rangelock: function (target, room, user) {
 		if (!target) return this.errorReply("Please specify a range to lock.");
