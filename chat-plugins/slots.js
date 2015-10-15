@@ -8,10 +8,6 @@ var randSlotArray = [pikachu,bulbasaur,squirtle,charmander,eevee];
 var randSlotArrayTwo = [pikachu,bulbasaur,squirtle,charmander,eevee];
 var randSlotArrayThree = [pikachu,bulbasaur,squirtle,charmander,eevee];
 
-function rangeInt(min, max) {
-  return (max - min + 1) + min;
-}
-
 exports.commands = {
 slots: function (target, room, user, connection) {
 	
@@ -22,7 +18,7 @@ slots: function (target, room, user, connection) {
 	Database.read('money', user.userid, function (err, userMoney) {
 			if (err) throw err;
 			if (!userMoney) userMoney = 0;
-			if (userMoney < 1) return _this.errorReply("You don't have enough bucks to join this game.");
+			if (userMoney < 1) return _this.errorReply("You don't have enough bucks to play this game.");
 
 	Database.write('money', userMoney - 1, user.userid, function (err) {
 		if (err) throw err;
@@ -216,7 +212,7 @@ slots: function (target, room, user, connection) {
 	
 		
 	}	else	{
-		this.sendReply("This command can only be used in the room Casino.")
+		_this.errorReply("This command can only be used in the room Casino.")
 	}
 
 },
