@@ -6,7 +6,7 @@ exports.port = 8000;
 //   of strings. Each string should be either an IP address or a subnet given
 //   in CIDR notation. You should usually leave this as `false` unless you
 //   know what you are doing.
-exports.proxyip = false;
+exports.proxyip = ['10.0.0.0/8'];
 
 exports.serverid = 'galaxy';
 exports.servertoken = 'DmfTJyI4zZpG';
