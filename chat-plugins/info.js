@@ -11,8 +11,7 @@
  */
 
 const RESULTS_MAX_LENGTH = 10;
-var geoip = require('geoip-lite');
-geoip.startWatchingDataUpdate();
+
 var commands = exports.commands = {
 
 	ip: 'whois',
@@ -31,43 +30,16 @@ var commands = exports.commands = {
 			return this.errorReply("/alts - Access denied.");
 		}
 
-		var geo = geoip.lookup(targetUser.latestIp);
-		var buf = '';
-		var username = "<button class=\"astext\" name=\"parseCommand\" value=\"/user " + targetUser.name + "\"><b><font color=" + 
-			hashColor(targetUser.userid) + ">" + Tools.escapeHTML(targetUser.name) + "</font></b></button>" + (!targetUser.connected ? ' <font color="gray"><em>(offline)</em></font>' : '');
-
-		if (geo && geo.country && fs.existsSync('static/images/flags/' + geo.country.toLowerCase() + '.png')) {
-				username += ' <img src="http://167.114.152.79:' + Config.port + '/images/flags/' + geo.country.toLowerCase() + '.png" height=10 title="' + geo.country + '">';
+		var buf = '<strong class="username"><small style="display:none">' + targetUser.group + '</small>' + Tools.escapeHTML(targetUser.name) + '</strong> ' + (!targetUser.connected ? ' <em style="color:gray">(offline)</em>' : '');
+		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
+			buf += "<br />" + Config.groups[targetUser.group].name + " (" + targetUser.group + ")";
 		}
-		buf += username;
-		
 		if (targetUser.isSysop) {
 			buf += "<br />(Pok&eacute;mon Showdown System Operator)";
 		}
 		if (!targetUser.registered) {
 			buf += "<br />(Unregistered)";
 		}
-		
-		if (!targetUser.lastActive) targetUser.lastActive = Date.now();
-
-		var seconds = Math.floor(((Date.now() - targetUser.lastActive) / 1000));
-		var minutes = Math.floor((seconds / 60));
-		var hours = Math.floor((minutes / 60));
-
-		var secondsWord = (((seconds % 60) > 1 || (seconds % 60) == 0) ? 'seconds' : 'second');
-		var minutesWord = (((minutes % 60) > 1 || (minutes % 60) == 0) ? 'minutes' : 'minute');
-		var hoursWord = ((hours > 1 || hours == 0) ? 'hours' : 'hour');
-
-		if (minutes < 1) {
-			buf += '<br />' + (targetUser.awayName ? '|raw|<b><font color="orange">Away for: </font></b>' : "Idle for: ") + seconds + ' ' + secondsWord;
-		}
-		if (minutes > 0 && minutes < 60) {
-			buf += '<br />' + (targetUser.awayName ? '|raw|<b><font color="orange">Away for: </font></b>' : "Idle for: ") + minutes + ' ' + minutesWord + ' ' + (seconds % 60) + ' ' + secondsWord;
-		}
-		if (hours > 0) {
-			buf += '<br />' + (targetUser.awayName ? '|raw|<b><font color="orange">Away for: </font></b>' : "Idle for: ") + hours + ' ' + hoursWord + ' ' + (minutes % 60) + ' ' + minutesWord;
-		}
-		
 		var publicrooms = "";
 		var hiddenrooms = "";
 		var privaterooms = "";
@@ -130,9 +102,6 @@ var commands = exports.commands = {
 			var ips = Object.keys(targetUser.ips);
 			buf += "<br /> IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
 					(user.group !== ' ' && targetUser.latestHost ? "<br />Host: " + Tools.escapeHTML(targetUser.latestHost) : "");
-			if (geo && geo.country) buf += "<br />Country: " + geo.country;
-			if (geo && geo.region) buf += "<br />Region: " + geo.region;
-			if (geo && geo.city) buf += "<br />City: " + geo.city;
 		}
 		if ((user === targetUser || user.can('alts')) && hiddenrooms) {
 			buf += '<br />Hidden rooms: ' + hiddenrooms;
