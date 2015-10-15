@@ -60,6 +60,13 @@ body {
 .tabbar a.closebutton { 
 	color: #aff3ff;
 }
+.astext {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+        }
 .backdrop {
     background-image: url("http://goldservers.info/about/backdrop.png") !important;
 }
