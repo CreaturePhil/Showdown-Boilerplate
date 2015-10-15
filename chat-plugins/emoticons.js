@@ -35,6 +35,7 @@ var emotes = {
 	'yesface': 'http://i.imgur.com/k9YCF6K.png',
 	'feelstea': 'http://i.imgur.com/M0f2zgJ.jpg?1',
 	'feelscri': 'http://i.imgur.com/QAuUW7u.jpg?1',
+	'feelsPoli': 'http://i.imgur.com/sbKhXZE.jpg?1',
 	'Doge': 'http://fc01.deviantart.net/fs71/f/2014/279/4/5/doge__by_honeybunny135-d81wk54.png'
 };
 
