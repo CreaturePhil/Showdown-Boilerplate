@@ -8,7 +8,6 @@ var emotes = {
 	'feelsbm': 'http://i.imgur.com/xwfJb2z.png',
 	'feelsbn': 'http://i.imgur.com/wp51rIg.png',
 	'feelsdd': 'http://i.imgur.com/fXtdLtV.png',
-	'feelsdoge': 'http://i.imgur.com/GklYWvi.png',
 	'feelsgd': 'http://i.imgur.com/Jf0n4BL.png',
 	'feelsgn': 'http://i.imgur.com/juJQh0J.png',
 	'feelshp': 'http://i.imgur.com/1W19BDG.png',
@@ -36,6 +35,9 @@ var emotes = {
 	'feelstea': 'http://i.imgur.com/M0f2zgJ.jpg?1',
 	'feelscri': 'http://i.imgur.com/QAuUW7u.jpg?1',
 	'feelsPoli': 'http://i.imgur.com/sbKhXZE.jpg?1',
+	'feelsHigh': 'http://i.imgur.com/s9I2bxp.jpg?1',
+	'feelsfdra': 'http://i.imgur.com/ZIcl9Zy.jpg',
+	'feelsdoge': 'http://i.imgur.com/GklYWvi.png',
 	'Doge': 'http://fc01.deviantart.net/fs71/f/2014/279/4/5/doge__by_honeybunny135-d81wk54.png'
 };
 
