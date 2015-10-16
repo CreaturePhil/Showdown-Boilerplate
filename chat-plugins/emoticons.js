@@ -105,17 +105,17 @@ var emotes_table = create_table();
 
 exports.commands = {
   addemote: function (target, room, user) {
-    var targets = target.split(",");
-    if (!this.can('makeroom')) return;
-    if (emotes.hasOwnProperty(targets[0])) {
-      return this.errorReply(targets[0] + " is already present in emotes.");
-    } else {
-      emotes[targets[0]] = targets[1];
-      return this.sendReply("|raw|Successfully added <img src=\"" + targets[1] + "\" width=\"50\" height=\"50\" title=\"" + targets[0] + "\">. Just /hotpatch commands to make it available now.");
-      fs.writeFile('./config/emotes.json', JSON.stringify(emotes));
-    }
-  },
-  addemotehelp: ["/addemote - Adds an emote remotely. (/hotpatch commands after adding to make it available.)"],
+  var targets = target.split(",");
+  if (!this.can('makeroom')) return;
+  if (emotes.hasOwnProperty(targets[0])) {
+   return this.errorReply(targets[0] + " is already present in emotes.");
+  } else {
+   emotes[targets[0]] = targets[1];
+   return this.sendReply("|raw|Successfully added <img src=\"" + targets[1] + "\" width=\"50\" height=\"50\" title=\"" + targets[0] + "\">. Just /hotpatch commands to make it available now.");
+   fs.writeFile('./config/emotes.json', JSON.stringify(emotes));
+  }
+ },
+ addemotehelp: ["/addemote - Adds an emote remotely. (/hotpatch commands after adding to make it available.)"],
 
 	blockemote: 'blockemoticons',
 	blockemotes: 'blockemoticons',
