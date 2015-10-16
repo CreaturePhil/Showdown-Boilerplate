@@ -186,17 +186,20 @@ var commands = exports.commands = {
 				var targetRoom = Rooms.search(innerTarget);
 				if (!targetRoom || targetRoom === Rooms.global) return this.errorReply('The room "' + innerTarget + '" does not exist.');
 				if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply('User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
-				if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
-					if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
-						return this.errorReply('The room "' + innerTarget + '" does not exist.');
-					}
-				}
 				if (targetRoom.modjoin) {
 					if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !(targetUser.userid in targetRoom.auth)) {
 						this.parse('/roomvoice ' + targetUser.name, false, targetRoom);
 						if (!(targetUser.userid in targetRoom.auth)) {
 							return;
 						}
+					}
+				}
+				if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
+					if (!(user.userid in targetRoom.auth)) {
+						return this.errorReply('The room "' + innerTarget + '" does not exist.');
+					}
+					if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
+						return this.errorReply('The user "' + targetUser.name + '" does not have permission to join "' + innerTarget + '".');
 					}
 				}
 
@@ -752,7 +755,7 @@ var commands = exports.commands = {
 			room.auth[userid] = nextGroup;
 		}
 
-		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
+		if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
 			if (targetUser && Rooms.rooms[room.id].users[targetUser.userid]) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
 		} else if (nextGroup === '#') {
@@ -1232,6 +1235,15 @@ var commands = exports.commands = {
 
 	unbanall: function (target, room, user) {
 		if (!this.can('rangeban')) return false;
+		if (!target) {
+			user.lastCommand = '/unbanall';
+			this.errorReply("THIS WILL UNBAN AND UNLOCK ALL USERS.");
+			this.errorReply("To confirm, use: /unbanall confirm");
+			return;
+		}
+		if (user.lastCommand !== '/unbanall' || target !== 'confirm') {
+			return this.parse('/help unbanall');
+		}
 		// we have to do this the hard way since it's no longer a global
 		var punishKeys = ['bannedIps', 'bannedUsers', 'lockedIps', 'lockedUsers', 'lockedRanges', 'rangeLockedUsers'];
 		for (var i = 0; i < punishKeys.length; i++) {
@@ -1241,6 +1253,35 @@ var commands = exports.commands = {
 		this.addModCommand("All bans and locks have been lifted by " + user.name + ".");
 	},
 	unbanallhelp: ["/unbanall - Unban all IP addresses. Requires: & ~"],
+
+	deroomvoiceall: function (target, room, user) {
+		if (!this.can('editroom', null, room)) return false;
+		if (!room.auth) return this.errorReply("Room does not have roomauth.");
+		if (!target) {
+			user.lastCommand = '/deroomvoiceall';
+			this.errorReply("THIS WILL DEROOMVOICE ALL ROOMVOICED USERS.");
+			this.errorReply("To confirm, use: /deroomvoiceall confirm");
+			return;
+		}
+		if (user.lastCommand !== '/deroomvoiceall' || target !== 'confirm') {
+			return this.parse('/help deroomvoiceall');
+		}
+		var count = 0;
+		for (var userid in room.auth) {
+			if (room.auth[userid] === '+') {
+				delete room.auth[userid];
+				count++;
+			}
+		}
+		if (!count) {
+			return this.sendReply("(This room has zero roomvoices)");
+		}
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
+		}
+		this.addModCommand("All " + count + " roomvoices have been cleared by " + user.name + ".");
+	},
+	deroomvoiceallhelp: ["/deroomvoiceall - Devoice all roomvoiced users. Requires: # & ~"],
 
 	banip: function (target, room, user) {
 		target = target.trim();
@@ -1534,7 +1575,7 @@ var commands = exports.commands = {
 			if (this.targetUser) {
 				return this.errorReply("User has already changed their name to '" + this.targetUser.name + "'.");
 			}
-			return this.sendReply("User '" + target + "' not found.");
+			return this.errorReply("User '" + target + "' not found.");
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
@@ -1553,17 +1594,17 @@ var commands = exports.commands = {
 		var reason = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
+		if (!targetUser) return this.errorReply("User '" + name + "' does not exist.");
 		var userid = this.getLastIdOf(targetUser);
 		var hidetype = '';
-		if (!targetUser) return this.errorReply("User '" + name + "' does not exist.");
 		if (!user.can('lock', targetUser) && !user.can('ban', targetUser, room)) {
-			this.errorReply('/hidetext' + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
+			this.errorReply("/hidetext - Access denied.");
 			return false;
 		}
 
 		if (targetUser.locked || Users.checkBanned(targetUser.latestIp)) {
 			hidetype = 'hide|';
-		} else if (room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) {
+		} else if ((room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('rangeban')) {
 			hidetype = 'roomhide|';
 		} else {
 			return this.errorReply("User '" + name + "' is not banned from this room or locked.");
@@ -1573,7 +1614,7 @@ var commands = exports.commands = {
 		this.add('|unlink|' + hidetype + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
 	},
-	hidetexthelp: ["/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ & ~"],
+	hidetexthelp: ["/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ # & ~"],
 
 	modlog: function (target, room, user, connection) {
 		var lines = 0;

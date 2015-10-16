@@ -327,10 +327,18 @@ var Context = exports.Context = (function () {
 			}
 			for (var i = 0; i < images.length; i++) {
 				if (!/width=([0-9]+|"[0-9]+")/i.test(images[i]) || !/height=([0-9]+|"[0-9]+")/i.test(images[i])) {
+					// Width and height are required because most browsers insert the
+					// <img> element before width and height are known, and when the
+					// image is loaded, this changes the height of the chat area, which
+					// messes up autoscrolling.
 					this.errorReply('All images must have a width and height attribute');
 					return false;
 				}
 			}
+		}
+		if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock') && html.match(/<button /)) {
+			this.errorReply('You do not have permission to use buttons in HTML.');
+			return false;
 		}
 		if (/>here.?</i.test(html) || /click here/i.test(html)) {
 			this.errorReply('Do not use "click here"');
@@ -374,7 +382,6 @@ var Context = exports.Context = (function () {
 		return this.targetUser;
 	};
 	Context.prototype.getLastIdOf = function (user) {
-		if (typeof user === 'string') user = Users.get(user);
 		return (user.named ? user.userid : (Object.keys(user.prevNames).last() || user.userid));
 	};
 	Context.prototype.splitTarget = function (target, exactName) {

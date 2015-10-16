@@ -28,7 +28,7 @@ the other databases.
 
 - Numerous *cool* commands such as /urbandefine or /poof
 - Emoticons in chat and private messages
-- Polls, Hangman, Profile, and Tells
+- Hangman, Profile, and Tells
 - Economy (bucks system, shop, tournament winnings, lottery)
 - Lowdb and MySql database support
 
