@@ -1948,7 +1948,7 @@ var commands = exports.commands = {
 			"<p align='right'>Invitations will only be sent if you are worthy, but sometimes favouritism may happen.</p>" +
 			"<p align='right'>Blood testing may only happen once a day by paying 5 bucks, however there will only be 1 in 200 chance.</p>" +
 			"&nbsp;" +
-			"<center><i>Bon Chance~</i> - the Committee.</center>"
+			"<center><i>Bon Chance</i> ~ the Committee.</center>"
 		);
 	},
 	groupshelp: ["/groups - Explains what the + % @ # & next to people's names mean.",
