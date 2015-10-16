@@ -2,16 +2,16 @@ var fs = require('fs');
 var path = require('path');
 
 var shop = [
-	['Ticket', 'Buys a lottery ticket for a chance to win big money.', 5],
-	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
-	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
-	['Avatar', 'Buys a custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
-	['Recipe', 'Buys an official usable dish approved by Tokuo!', 25],
+	['Ticket', 'Lottery ticket for a chance to be a Millionaire.', 5],
+	['Symbol', 'Place a Custom Symbol in front of your name (Temporary until restart, auth symbols are blocked).', 5],
+	['Fix', 'Obtain the ability to alter your current custom avatar or trainer card or room name.', 10],
+	['Avatar', 'Tired of the standard avatars? Get a custom one! (You supply, preferably 80x80)', 20],
+	['Recipe', 'Official, edible, delicious dish for you to make at home!', 25],
 	['Chocolate', 'Seasonal Special! A cup of heart warming chocolate that warms you for the whole winter!', 30],
-	['Trainer', 'Buys a trainer card which shows information through a command. (Your supply, can be refused)', 40],
-	['Room', 'Buys a chatroom for you to own. (Half Price for Art, Music, and Culinary)', 50],
-	['Art', 'Buys a majestic and beautiful piece of Digital Art drawn by Ice. PM IceDragon_X for samples.', 80],
-	['Icon', 'Buys a userlist icon to be placed next to your name in some rooms!', 100],
+	['Trainer', 'Shows Information through a command. (You supply)', 40],
+	['Room', 'Own a Chat Room! (Half Price for Art, Music, and Culinary)', 50],
+	['Art', 'Buys a majestic and beautiful piece of Digital Art drawn by Ice. (PM IceDragon_X for samples)', 80],
+	['Icon', 'Userlist Icon to be placed next to your name in some rooms!', 100],
 ];
 
 var shopDisplay = getShopDisplay(shop);
