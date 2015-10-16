@@ -23,10 +23,10 @@ slots: function (target, room, user, connection) {
 	Database.write('money', userMoney - 1, user.userid, function (err) {
 		if (err) throw err;
 	//Gives A Bank The Money Used To Play Slots.
-	Database.read('money', toId('dragoticasbank'), function (err, initial) {
+	Database.read('money', toId('safetydragon'), function (err, initial) {
 			if (err) throw err;
 			if (!initial) initial = 0;
-	Database.write('money', initial + 1, toId('dragoticasbank'), function (err, total) {
+	Database.write('money', initial + 1, toId('safetydragon'), function (err, total) {
 				if (err) throw err;				
 			});
 		});
@@ -65,7 +65,7 @@ slots: function (target, room, user, connection) {
 		});
 		
 		
-	}	else if (chancesGenerator > 800 && chancesGenerator < 850) {
+	}	else if (chancesGenerator > 820 && chancesGenerator < 850) {
 		var winningSlot = [bulbasaur];
 
 		_this.sendReply('|raw|<div style="background: url(&quot;https://s-media-cache-ak0.pinimg.com/736x/2a/d9/cc/2ad9cc5dc43e22f171e46b1b3aeb83ff.jpg&quot;); -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; border: 1px solid skyblue;"><center><img src="http://s17.postimg.org/k1buzif4v/cooltext142549968938162.png" width="300" height="80"></center><br><table width="100%" height="150%" style="padding: 0px 10px 0px 10px;"><tr style="border: 3px inset gold; width: 60%; height: 200%;"><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td></tr></table><br><br></div>');
@@ -82,7 +82,7 @@ slots: function (target, room, user, connection) {
 		});		
 		
 		
-	}	else if (chancesGenerator > 850 && chancesGenerator < 880) {
+	}	else if (chancesGenerator > 860 && chancesGenerator < 880) {
 		var winningSlot = [squirtle];
 		
 		_this.sendReply('|raw|<div style="background: url(&quot;https://s-media-cache-ak0.pinimg.com/736x/2a/d9/cc/2ad9cc5dc43e22f171e46b1b3aeb83ff.jpg&quot;); -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; border: 1px solid skyblue;"><center><img src="http://s17.postimg.org/k1buzif4v/cooltext142549968938162.png" width="300" height="80"></center><br><table width="100%" height="150%" style="padding: 0px 10px 0px 10px;"><tr style="border: 3px inset gold; width: 60%; height: 200%;"><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td></tr></table><br><br></div>');
@@ -99,7 +99,7 @@ slots: function (target, room, user, connection) {
 		});
 		
 		
-	}	else if (chancesGenerator > 880 && chancesGenerator < 900) {
+	}	else if (chancesGenerator > 885 && chancesGenerator < 900) {
 		var winningSlot = [charmander]
 
 		_this.sendReply('|raw|<div style="background: url(&quot;https://s-media-cache-ak0.pinimg.com/736x/2a/d9/cc/2ad9cc5dc43e22f171e46b1b3aeb83ff.jpg&quot;); -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; border: 1px solid skyblue;"><center><img src="http://s17.postimg.org/k1buzif4v/cooltext142549968938162.png" width="300" height="80"></center><br><table width="100%" height="150%" style="padding: 0px 10px 0px 10px;"><tr style="border: 3px inset gold; width: 60%; height: 200%;"><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td></tr></table><br><br></div>');
@@ -117,7 +117,7 @@ slots: function (target, room, user, connection) {
 		});
 			
 		
-	}	else if (chancesGenerator > 990 && chancesGenerator < 999) {
+	}	else if (chancesGenerator > 995 && chancesGenerator < 999) {
 		var winningSlot = [eevee]
 
 		_this.sendReply('|raw|<div style="background: url(&quot;https://s-media-cache-ak0.pinimg.com/736x/2a/d9/cc/2ad9cc5dc43e22f171e46b1b3aeb83ff.jpg&quot;); -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; border: 1px solid skyblue;"><center><img src="http://s17.postimg.org/k1buzif4v/cooltext142549968938162.png" width="300" height="80"></center><br><table width="100%" height="150%" style="padding: 0px 10px 0px 10px;"><tr style="border: 3px inset gold; width: 60%; height: 200%;"><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td><td style="background-color: white; box-shadow: 10px 10px 5px grey; border: 3px inset gold; padding: 10px 10px 10px 10px;"><center><img src="' + winningSlot + '" width="32" height="32"></center></td></tr></table><br><br></div>');
@@ -216,4 +216,5 @@ slots: function (target, room, user, connection) {
 	}
 
 },
+slotshelp: ["/slots - It costs 1 buck to play and has many prizes."],
 };
