@@ -1,39 +1,9 @@
 var color = require('../config/color');
+var fs = require('fs');
 
 exports.parseEmoticons = parseEmoticons;
 
-var emotes = {
-	'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
-	'feelsbd': 'http://i.imgur.com/YyEdmwX.png',
-	'feelsbm': 'http://i.imgur.com/xwfJb2z.png',
-	'feelsbn': 'http://i.imgur.com/wp51rIg.png',
-	'feelsdd': 'http://i.imgur.com/fXtdLtV.png',
-	'feelsdoge': 'http://i.imgur.com/GklYWvi.png',
-	'feelsgd': 'http://i.imgur.com/Jf0n4BL.png',
-	'feelsgn': 'http://i.imgur.com/juJQh0J.png',
-	'feelshp': 'http://i.imgur.com/1W19BDG.png',
-	'feelsmd': 'http://i.imgur.com/DJHMdSw.png',
-	'feelsnv': 'http://i.imgur.com/XF6kIdJ.png',
-	'feelsok': 'http://i.imgur.com/gu3Osve.png',
-	'feelspika': 'http://i.imgur.com/mBq3BAW.png',
-	'feelspink': 'http://i.imgur.com/jqfB8Di.png',
-	'feelspn': 'http://i.imgur.com/wSSM6Zk.png',
-	'feelspr': 'http://i.imgur.com/3VtkKfJ.png',
-	'feelsrg': 'http://i.imgur.com/DsRQCsI.png',
-	'feelsrs': 'http://i.imgur.com/qGEot0R.png',
-	'feelssc': 'http://i.imgur.com/cm6oTZ1.png',
-	'fukya': 'http://i.imgur.com/ampqCZi.gif',
-	'funnylol': 'http://i.imgur.com/SlzCghq.png',
-	'hmmface': 'http://i.imgur.com/Z5lOwfZ.png',
-	'noface': 'http://i.imgur.com/H744eRE.png',
-	'Obama': 'http://i.imgur.com/rBA9M7A.png',
-	'oshet': 'http://i.imgur.com/yr5DjuZ.png',
-	'Sanic': 'http://i.imgur.com/Y6etmna.png',
-	'wtfman': 'http://i.imgur.com/kwR8Re9.png',
-	'xaa': 'http://i.imgur.com/V728AvL.png',
-	'yayface': 'http://i.imgur.com/anY1jf8.png',
-	'yesface': 'http://i.imgur.com/k9YCF6K.png'
-};
+var emotes = require('../config/emotes.json');
 
 var emotesKeys = Object.keys(emotes);
 var patterns = [];
@@ -134,6 +104,17 @@ function create_table() {
 var emotes_table = create_table();
 
 exports.commands = {
+	addemote: function (target, room, user) {
+		if (!this.can('makeroom')) return;
+		var targets = target.split(",");
+		 if(emotes.hasOwnProperty(targets[0])) {
+			this.errorReply(targets[0] + " is already present in emotes.");
+		 } else {
+			emotes[targets[0]] = targets[1];
+			this.sendReply("|raw|Successfully added <img src=\"" + targets[1] + "\" width=\"50\" height=\"50\" title=\"" + targets[0] + "\">. Just /hotpatch commands to make it available now.");
+			fs.writeFile('./config/emotes.json', JSON.stringify(emotes));
+		 }
+	},
 	blockemote: 'blockemoticons',
 	blockemotes: 'blockemoticons',
 	blockemoticon: 'blockemoticons',
