@@ -100,7 +100,7 @@ exports.Formats = [
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3505710/\">LC Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3490462/\">LC Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3496013/\">LC Viability Ranking</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547566/\">LC Viability Ranking</a>"
 		],
 		section: "ORAS Singles",
 
@@ -462,19 +462,124 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['OU'],
-		banlist: [],
+		banlist: ['Dynamic Punch'],
 		onAccuracy: function (accuracy, target, source, move) {
 			return true;
 		}
 	},
-	/*{
-		name: "[Seasonal] Placeholder",
+	{
+		name: "[Seasonal] Spoopy Party",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "OM of the Month",
 
-		team: 'random',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod']
-	},*/
+		team: 'randomSpoopy',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+		onSwitchIn: function (pokemon) {
+			if (pokemon.species === 'Magikarp') {
+				this.boost({spe:4, spd:2, def:2}, pokemon, pokemon, 'the power of dank');
+			}
+		},
+		onModifyMove: function (move) {
+			if (move.id === 'aquaring') {
+				move.volatileStatus = 'wonderring';
+				move.onHit = function (pokemon) {
+					this.add('-start', pokemon, 'Aqua Ring');
+					this.add('-message', "7.8/10, too much water - IGN");
+				};
+			}
+			if (move.id === 'hyperbeam') {
+				move.type = 'Water';
+				move.accuracy = true;
+				delete move.self;
+				move.onTryHit = function (target, source) {
+					this.add('-message', target.name + "'s fuel cannot melt " + source.name + " beams!");
+				};
+			}
+			if (move.id === 'trickortreat') {
+				switch (this.random(7)) {
+				case 0:
+					move.category = 'Special';
+					move.type = 'Fire';
+					move.basePower = 200;
+					move.onTryHit = function () {
+						this.add('-message', "Pumpkin bomb!");
+					};
+					move.onHit = function () {};
+					break;
+				case 1:
+					move.category = 'Physical';
+					move.type = 'Poison';
+					move.basePower = 25;
+					move.multihit = 4;
+					move.onTryHit = function () {
+						this.add('-message', "Toilet paper missile attack!");
+					};
+					move.onHit = function () {};
+					break;
+				case 2:
+					move.onTryHit = function () {
+						this.add('-message', "Yum! Chocolate!");
+					};
+					move.onHit = function (target, source) {
+						this.heal(Math.ceil(target.maxhp * 0.5));
+					};
+					break;
+				case 3:
+					move.onTryHit = function () {
+						this.add('-message', "This is a rather bland candy.");
+					};
+					move.onHit = function (target, source) {
+						this.heal(Math.ceil(target.maxhp * 0.25));
+						target.setStatus('par');
+						target.addVolatile('confusion');
+					};
+					break;
+				case 4:
+					move.onTryHit = function () {
+						this.add('-message', "You are about to be rotten-egged on!");
+					};
+					move.onHit = function (target, source) {
+						target.setStatus('tox');
+						target.addVolatile('torment');
+					};
+					break;
+				case 5:
+					move.category = 'Special';
+					move.type = 'Dark';
+					move.basePower = 500;
+					move.self = {volatileStatus: 'mustrecharge'};
+					move.onTryHit = function () {
+						this.add('-message', "Ultimate Super Hiper Mega Awesome Beam destroyer of worlds!");
+					};
+					move.onHit = function (target, source) {
+						this.add('-message', source.name + " was caught in the explosion!");
+						source.setStatus('brn');
+						source.addVolatile('disabled');
+						source.addVolatile('confusion');
+					};
+					break;
+				case 6:
+					move.onTryHit = function () {
+						this.add('-message', "Have some refreshment, my fellow.");
+					};
+					move.onHit = function (target, source) {
+						target.addVolatile('aquaring');
+					};
+					break;
+				}
+			}
+		},
+		onResidual: function () {
+			var allpokes = this.p1.active.concat(this.p2.active);
+			var pokemon;
+			for (var i = 0; i < allpokes.length; i++) {
+				pokemon = allpokes[i];
+				if (pokemon.hp && pokemon.volatiles['wonderring']) {
+					this.heal(pokemon.maxhp / 8, pokemon, pokemon, 'dank memes');
+				}
+			}
+		}
+	},
 	{
 		name: "CAP",
 		desc: [
@@ -613,7 +718,7 @@ exports.Formats = [
 		desc: [
 			"Pok&eacute;mon can use any ability, barring the few that are banned.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528058/\">Almost Any Ability</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3538917/\">Almost Any Ability Viability Ranking</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3551063/\">Almost Any Ability Viability Ranking</a>"
 		],
 		section: "Other Metagames",
 
@@ -767,7 +872,10 @@ exports.Formats = [
 
 	{
 		name: "[Gen 5] OU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522693\">BW Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>"
+		],
 		section: "BW2 Singles",
 		column: 3,
 
@@ -777,7 +885,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] Ubers",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522693\">BW Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3550881/\">BW2 Ubers Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6446463/\">BW2 Ubers Sample Teams</a>"
+		],
 		section: "BW2 Singles",
 
 		mod: 'gen5',
@@ -786,7 +897,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] UU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522693\">BW Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3474024/\">BW2 UU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>"
+		],
 		section: "BW2 Singles",
 
 		mod: 'gen5',
@@ -795,7 +909,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] RU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522693\">BW Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3473124/\">BW2 RU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>"
+		],
 		section: "BW2 Singles",
 
 		mod: 'gen5',
@@ -804,7 +921,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] NU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522693\">BW Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3484121/\">BW2 NU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>"
+		],
 		section: "BW2 Singles",
 
 		mod: 'gen5',
@@ -813,7 +933,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] LC",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522693\">BW Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3485860/\">BW2 LC Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>"
+		],
 		section: "BW2 Singles",
 
 		mod: 'gen5',
@@ -857,6 +980,7 @@ exports.Formats = [
 
 	{
 		name: "[Gen 5] Doubles OU",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3485044/\">BW2 Doubles Viability Ranking</a>"],
 		section: 'BW2 Doubles',
 		column: 3,
 
@@ -905,7 +1029,10 @@ exports.Formats = [
 
 	{
 		name: "[Gen 4] OU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522692\">DPP Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>"
+		],
 		section: "Past Generations",
 		column: 3,
 
@@ -915,7 +1042,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 4] Ubers",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522692\">DPP Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3505128/\">DPP Ubers Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6446464/\">DPP Ubers Sample Teams</a>"
+		],
 		section: "Past Generations",
 
 		mod: 'gen4',
@@ -924,7 +1054,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 4] UU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522692\">DPP Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3503638/\">DPP UU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>"
+		],
 		section: "Past Generations",
 
 		mod: 'gen4',
@@ -933,7 +1066,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 4] LC",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522692\">DPP Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/dp/articles/little_cup_guide\">DPP LC Guide</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>"
+		],
 		section: "Past Generations",
 
 		mod: 'gen4',
@@ -971,7 +1107,10 @@ exports.Formats = [
 	{
 		name: "[Gen 3] OU",
 		section: "Past Generations",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522690\">ADV Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>"
+		],
 
 		mod: 'gen3',
 		ruleset: ['Pokemon', 'Standard'],
@@ -979,7 +1118,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 3] Ubers",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522690\">ADV Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3536426/\">ADV Ubers Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6446466/\">ADV Ubers Sample Teams</a>"
+		],
 		section: "Past Generations",
 
 		mod: 'gen3',
@@ -997,7 +1139,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 2] OU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522689\">GSC Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>"
+		],
 		section: "Past Generations",
 
 		mod: 'gen2',
@@ -1006,6 +1151,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 2] Ubers",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3507552/\">GSC Ubers Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>"
+		],
 		section: "Past Generations",
 
 		mod: 'gen2',
@@ -1032,7 +1181,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] OU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522688\">RBY Resources</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>"
+		],
 		section: "Past Generations",
 
 		mod: 'gen1',
@@ -1041,6 +1193,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] Ubers",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3541329/\">RBY Ubers Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>"
+		],
 		section: "Past Generations",
 
 		mod: 'gen1',
