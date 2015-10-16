@@ -1,4 +1,5 @@
 var color = require('../config/color');
+var fs = require('fs');
 
 exports.parseEmoticons = parseEmoticons;
 
@@ -106,13 +107,13 @@ exports.commands = {
 	addemote: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		var targets = target.split(",");
-		if(emotes.hasOwnProperty(targets[0])) {
+		 if(emotes.hasOwnProperty(targets[0])) {
 			this.errorReply(targets[0] + " is already present in emotes.");
-		} else {
+		 } else {
 			emotes[targets[0]] = targets[1];
 			this.sendReply("|raw|Successfully added <img src=\"" + targets[1] + "\" width=\"50\" height=\"50\" title=\"" + targets[0] + "\">. Just /hotpatch commands to make it available now.");
 			fs.writeFile('./config/emotes.json', JSON.stringify(emotes));
-		}
+		 }
 	},
 	blockemote: 'blockemoticons',
 	blockemotes: 'blockemoticons',
