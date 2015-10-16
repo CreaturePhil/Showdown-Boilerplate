@@ -212,9 +212,9 @@ slots: function (target, room, user, connection) {
 	
 		
 	}	else	{
-		_this.errorReply("This command can only be used in the room Casino.")
+		this.errorReply("This command can only be used in the room Casino.")
 	}
 
 },
-slotshelp: ["/slots - It costs 1 buck to play and has many prizes."],
+slotshelp: ["|raw|/slots - It costs 1 buck to play and has many prizes.<ul><li>Pikachu Streak - This awards 1 buck and has a high chance.</li><li>Bulbasaur Streak - This awards 3 bucks and has less chance than Pikachu Streak.</li><li>Squirtle Streak - This awards 6 bucks and has a medium chance.</li><li>Charmander Streak - This awards 9 bucks and has a low chance.</li><li>Eevee Streak - This awards 12 bucks and you have to be really lucky for this one.</li><ul>"],
 };
