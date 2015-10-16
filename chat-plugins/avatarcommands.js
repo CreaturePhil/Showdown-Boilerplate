@@ -8,7 +8,7 @@ try {
 	uninstalled = true;
 }
 
-var avatarlist = JSON.parse(fs.readFileSync('storage-files/customavatars.json'));
+var avatarlist = JSON.parse(fs.readFileSync('config/customavatars.json'));
 
 exports.commands = {
 	setavatar: function (target, room, user, connection, cmd) {
@@ -27,7 +27,7 @@ exports.commands = {
 		}).on('response', function (response) {
 			if (response.statusCode == 404) return self.sendReply("The avatar you picked is unavailable. Try picking a new avatar.");
 			avatarlist[user.userid] = user.userid + '.' + format;
-			fs.writeFile('storage-files/customavatars.json', JSON.stringify(avatarlist));
+			fs.writeFile('config/customavatars.json', JSON.stringify(avatarlist));
 			user.avatar = avatarlist[user.userid];
 			self.sendReply('|html|Your new avatar has been set to-<br/><img src = "' + target + '" width = 80 height = 80>');
 			response.pipe(fs.createWriteStream('config/avatars/' + user.userid + '.' + format));
@@ -41,7 +41,7 @@ exports.commands = {
 		delete avatarlist[user.userid];
 		fs.unlink('config/avatars/' + user.avatar);
 		user.avatar = 1;
-		fs.writeFile('storage-files/customavatars.json', JSON.stringify(avatarlist));
+		fs.writeFile('config/customavatars.json', JSON.stringify(avatarlist));
 		this.sendReply('Your custom avatar has been successfully removed.');
 	}
 };
