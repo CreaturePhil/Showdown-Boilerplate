@@ -136,6 +136,18 @@ exports.commands = {
 			return this.privateModCommand("(A poll was started by " + user.name + ".)");
 		},
 		newhelp: ["/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~"],
+		
+		tour: function (target, room, user) {
+			if (!this.can(permission, null, room)) return false;
+			if (room.poll) return this.errorReply("There is already a poll in progress in this room.");
+
+			var options = ["OU", "Random Battle", "Challenge Cup 1v1", "Monotype", "1vs1", "LC", "Ubers", "Anything Goes"];
+
+			room.poll = new Poll(room, "Next Tour Tier ? ", options);
+			room.poll.display(user, true);
+			return this.privateModCommand("(A poll was started by " + user.name + ".)");
+		},
+		tourhelp: ["/poll tour - Creates a poll for tours with 8 different tiers. Requires: % @ # & ~"],
 
 		vote: function (target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
@@ -177,7 +189,8 @@ exports.commands = {
 			return this.privateModCommand("(The poll was ended by " + user.name + ".)");
 		},
 		endhelp: ["/poll end - Ends a poll and displays the results. Requires: % @ # & ~"],
-
+		
+		recall: 'display',
 		show: 'display',
 		display: function (target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
