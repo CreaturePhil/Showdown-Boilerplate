@@ -738,31 +738,30 @@ exports.commands = {
 	},
 
 	roomlist: function (target, room, user) {
-		if (!this.can('declare')) return false;
-
+		if(!this.can('hotpatch')) return;
+	
 		var rooms = Object.keys(Rooms.rooms),
-			len = rooms.length,
-			official = ['<b><font color="#1a5e00" size="2">Official chat rooms</font></b><br><br>'],
-			nonOfficial = ['<hr><b><font color="#000b5e" size="2">Chat rooms</font></b><br><br>'],
-			privateRoom = ['<hr><b><font color="#5e0019" size="2">Private chat rooms</font></b><br><br>'];
-
+		len = rooms.length,
+		official = ['<b><font color="#1a5e00" size="2">Official chat rooms:</font></b><br>'],
+		nonOfficial = ['<hr><b><font color="#000b5e" size="2">Public chat rooms:</font></b><br>'],
+		privateRoom = ['<hr><b><font color="#5e0019" size="2">Private chat rooms:</font></b><br>'];
+	 
 		while (len--) {
 			var _room = Rooms.rooms[rooms[(rooms.length - len) - 1]];
 			if (_room.type === 'chat') {
 				if (_room.isOfficial) {
-					official.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
+					official.push(('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')'));
 					continue;
 				}
 				if (_room.isPrivate) {
-					privateRoom.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
+					privateRoom.push(('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')'));
 					continue;
 				}
-				nonOfficial.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
+				nonOfficial.push(('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')'));
 			}
 		}
-
 		this.sendReplyBox(official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' '));
-	},
+    },
 	
 	spop: 'sendpopup',
 	sendpopup: function(target, room, user) {
