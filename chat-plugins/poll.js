@@ -141,7 +141,7 @@ exports.commands = {
 			if (!this.can(permission, null, room)) return false;
 			if (room.poll) return this.errorReply("There is already a poll in progress in this room.");
 
-			var options = ["OU", "Random Battle", "Challenge Cup 1v1", "Monotype", "1vs1", "LC", "Ubers", "Anything Goes"];
+			var options = ["OU", "Random Battle", "Challenge Cup 1v1", "Monotype", "1v1", "LC", "Ubers", "Anything Goes"];
 
 			room.poll = new Poll(room, "Next Tour Tier ? ", options);
 			room.poll.display(user, true);
