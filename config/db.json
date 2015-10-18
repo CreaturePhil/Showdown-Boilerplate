@@ -1,0 +1,60 @@
+{
+  "users": [
+    {
+      "username": "flareninja",
+      "money": 999999999
+    },
+    {
+      "username": "andrypm",
+      "money": -1e+48
+    },
+    {
+      "username": "sunding",
+      "money": 1,
+      "tickets": [
+        "47374743"
+      ]
+    },
+    {
+      "username": "dentice",
+      "money": 13
+    },
+    {
+      "username": "gianky22",
+      "money": 5
+    },
+    {
+      "username": "pokbattlerpm",
+      "money": 500
+    },
+    {
+      "username": "lugas",
+      "money": 0
+    },
+    {
+      "username": "haxorus24",
+      "money": 0
+    },
+    {
+      "username": "pokekitpm",
+      "money": 0
+    },
+    {
+      "username": "",
+      "money": 0
+    },
+    {
+      "username": "lucariopm",
+      "money": 3
+    },
+    {
+      "username": "all",
+      "money": 0
+    },
+    {
+      "username": "blazizen",
+      "money": 0
+    }
+  ],
+  "pot": 5
+}
