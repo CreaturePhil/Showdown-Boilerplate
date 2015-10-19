@@ -74,6 +74,7 @@ exports.commands = {
 			}.bind(this));
 		},
 
+		'': 'help',
 		help: function (target, room, user) {
 			this.parse('/help customavatar');
 		}
