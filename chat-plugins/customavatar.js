@@ -70,7 +70,7 @@ exports.commands = {
 				} else if (err) {
 					console.error(err);
 				}
-				this.errorReply("This user's avatar has been successfully removed.");
+				this.sendReply("This user's avatar has been successfully removed.");
 			}.bind(this));
 		},
 
