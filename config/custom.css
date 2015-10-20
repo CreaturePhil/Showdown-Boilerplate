@@ -68,6 +68,10 @@ body {
 .tabbar a.closebutton { 
 	color: #FCE3F4;
 }
+.mainmenufooter a {
+	color: white;
+	text-shadow: 0px 0px 6px black;
+}
 .astext {
     background-color: Transparent;
     background-repeat:no-repeat;
@@ -76,7 +80,12 @@ body {
     overflow: hidden;
         }
 .backdrop {
-    background-image: url("http://goldservers.info/about/backdrop.png") !important;
+    background-image: url("http://i.imgur.com/3kxw375.png") !important;
+}
+.userbar button {
+	background: #48F0D4;
+	border: 1px solid aqua;
+	color: red;
 }
 /* User Icons section */
 #lobby-userlist-user-rankuro, #tournaments-userlist-user-rankuro, #royalpalace-userlist-user-rankuro, #staff-userlist-user-rankuro, #casino-userlist-user-rankuro, #ninesmeadow-userlist-user-rankuro, #dragoticslab-userlist-user-rankuro, #spamroom-userlist-user-rankuro {
