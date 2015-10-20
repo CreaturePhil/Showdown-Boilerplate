@@ -264,4 +264,34 @@ exports.commands = {
 			"|/text This user is currently offline. Your message will be delivered when they are next online.");
 	},
 	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."]
+
+	siiilver: function (target, room, user) {
+		var colorify = function (text) {
+			var colors = ['red', 'orange', 'yellow', 'lime', '#007fff', 'cyan', '#9800ff', 'violet'], set = [];
+			for (var i = 0, j = 0; i < text.length; i++) {
+				set.push(text[i].trim() ? '<span style = "color: ' + colors[j] + '; text-shadow: 0px 0px 10px;">' + text[i] + '</span>' : text[i]);
+				if (!text[i].trim()) continue;
+				if (j === colors.length - 1) j = 0; else j++;
+			}
+			return set.join('');
+		}
+		var msg;
+		if (Users.get('siiilver') && Users.get('siiilver').connected) {
+			msg = '<button name = "send" value = "/transferbucks ' + Users.get('siiilver').name + ', 1" style = "margin: 3px; transform: skewX(-30deg); text-shadow: 0px 0px 5px; border: 1px solid gold; background: black;"><div style = "transform: skewX(30deg)"><b>' + colorify('$$$ Click 2 flip bucks at me! (I liek donations) $$$') + '</b></span></button><br>' +
+				'<button name = "send" value = "/me pets Siiilver-chan :3" style = "margin: 3px; color: silver; transform: skewX(-30deg); text-shadow: 0px 0px 5px; border: 1px solid gold; background: black;"><div style = "transform: skewX(30deg)"><b>' + colorify('Pet me') + ' :3</b></span></button>' +
+				' <button name = "send" value = "/kick ' + Users.get('siiilver').name + ', 2sexy4us" style = "margin: 3px; color: silver; transform: skewX(-30deg); text-shadow: 0px 0px 5px; border: 1px solid gold; background: black;"><div style = "transform: skewX(30deg)"><b>' + colorify('Kick me') + '</b> ' + colorify('(Only 4 da mods, cuz they r sweg)') + '</span></button>';
+		} else msg = '<button name = "send" value = "/seen siiilver" style = "margin: 3px; transform: skewX(-30deg); text-shadow: 0px 0px 5px; border: 1px solid gold; background: black;"><div style = "transform: skewX(30deg)"><b>' + colorify('Click 2 see when I was in da club last~') + '</b></span></button><br>';
+		this.sendReply('|html|<center><div style = "border-radius: 7px; padding: 5px; box-shadow: 2px 2px 5px black; background: radial-gradient(circle, #1c1c1c, #333232, #1c1c1c, #333232, #1c1c1c, #333232);">' +
+			'<b style = "font-size: 17pt;">' + colorify('☆☆☆☆☆☆☆☆ S I I I L V E R ☆☆☆☆☆☆☆☆') + '</b><br>' +
+			'<i><span style = "color: silver; text-shadow: 0px 0px 5px;">"Not all heroes wear capes... Some like me wear just underwear :D"</span></i><br>' +
+			'<br><div style = "display: inline-block; width: 49%"><img style = "max-height: 100%; max-width: 100%;" src = "http://data.whicdn.com/images/56986059/large.gif"></div> ' +
+			'<div style = "display: inline-block; width: 49%"><img style = "max-height: 100%; max-width: 100%;" src = "http://i.skyrock.net/1358/86461358/pics/3227855009_1_10_BQlwaOHj.gif"></div><br>' +
+			msg + '<br><span style = "text-shadow: 0px 0px 5px"><b>' + colorify('Known 4:') + '</b>' +
+			'<span style = "color: silver; text-shadow: 0px 0px 5px"><li>Being a verr verr gud chat presence and being an inspiration to eberywun around~' +
+			'<li>Turning men on with mah sexy body<br>' + 
+			'<li>Molesting pinapples</i><br>' + 
+			(user.userid === 'siiilver' ? '' : '<br><span style = "text-shadow: 0px 0px 5px"><b><span style = "color: lime;">P</span><span style = "color: #007fff;">.</span><span style = "color: cyan;">S</span><span style = "color: #9800ff;">.</span></b>- <span style = "color: silver">' + user.name + '\'s a n00b</span></span><br>') +
+			'<marquee behavior = "alternate" scrollamount = "20"><b style = "font-size: 10pt">' + colorify('WHEEEEEEEEEEEEE!') + '</b></marquee>'
+		);
+	},
 };
