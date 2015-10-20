@@ -137,17 +137,27 @@ exports.commands = {
 		},
 		newhelp: ["/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~"],
 		
-		tour: function (target, room, user) {
+		tier: function (target, room, user) {
 			if (!this.can(permission, null, room)) return false;
 			if (room.poll) return this.errorReply("There is already a poll in progress in this room.");
 
-			var options = ["OU", "Random Battle", "Challenge Cup 1v1", "Monotype", "1v1", "LC", "Ubers", "Anything Goes"];
+			var options = ["OU", "Monotype", "1v1", "LC", "Ubers", "Doubles OU"];
 
 			room.poll = new Poll(room, "Next Tour Tier ? ", options);
 			room.poll.display(user, true);
 			return this.privateModCommand("(A poll was started by " + user.name + ".)");
 		},
-		tourhelp: ["/poll tour - Creates a poll for tours with 8 different tiers. Requires: % @ # & ~"],
+	
+		random: function (target, room, user) {
+			if (!this.can(permission, null, room)) return false;
+			if (room.poll) return this.errorReply("There is already a poll in progress in this room.");
+
+			var options = ["Random Battle", "Challenge Cup 1v1", "Random Doubles", "Random Triples", "Battle Factory", "[Seasonal] Spooky Party"];
+
+			room.poll = new Poll(room, "Next Random Tour Tier ? ", options);
+			room.poll.display(user, true);
+			return this.privateModCommand("(A poll was started by " + user.name + ".)");
+		},
 
 		vote: function (target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
