@@ -118,7 +118,7 @@ exports.commands = {
 		if (!this.can('pmall')) return false;
 		if (!target) return this.parse('/help pmall');
 
-		var pmName = ' Judgement PM';
+		var pmName = '☆Royal Family';
 
 		for (var i in Users.users) {
 			var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
@@ -133,7 +133,7 @@ exports.commands = {
 		if (!this.can('forcewin')) return false;
 		if (!target) return this.parse('/help pmallstaff');
 
-		var pmName = ' Judgement PM';
+		var pmName = '☆Royal Family';
 
 		for (var i in Users.users) {
 			if (Users.users[i].isStaff) {
