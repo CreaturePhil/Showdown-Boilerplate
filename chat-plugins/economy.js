@@ -11,7 +11,7 @@ var shop = [
 	['Trainer', 'Shows Information through a command. (You supply)', 40],
 	['Room', 'Own a Chat Room! (Half Price for Art, Music, and Culinary)', 50],
 	['Art', 'Buys a majestic and beautiful piece of Digital Art drawn by Ice. (PM IceDragon_X for samples)', 80],
-	['Icon', 'Userlist Icon to be placed next to your name in some rooms!', 100],
+	['Icon', 'Userlist Icon to be placed next to your name in three rooms! (Each Additional Room will cost 20 Bucks)', 200],
 ];
 
 var shopDisplay = getShopDisplay(shop);
