@@ -1,11 +1,11 @@
 body {
-	background-image: url(http://i.imgur.com/aucXD8r.jpg) !important;
+	background-color: white !important;
 }
 .header .logo {
 	display: none !important;
 }
 .header {
-	background-image: url(http://i.imgur.com/SjJpc8G.png);
+	background-image: url(http://i.imgur.com/uGKJfd2.png);
 	background-repeat: no-repeat;
 }
 .roomlist {
@@ -14,51 +14,59 @@ body {
 }
 .chat-log {
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	background-image: url(http://i.imgur.com/PlZJbVg.png) !important;
+	background-image: url(http://i.imgur.com/unWzLyc.jpg) !important;
 }
 .userlist {
-	background: black;
+	background: #FCE3F4;
 	color: #aff3ff;
-	text-shadow: 0px 0px 6px #afd8ff;
+	text-shadow: 0px 0px 6px #000000;
 }
 .userlist li button {
-	text-shadow: 1px 1px 2px black;
+	text-shadow: 0px 0px 2px white;
 }
 .userlist li button:hover {
-	background: #C8ACC1;
+	background: #48F0D4;
+}
+.userlist li {
+	border-bottom: white solid;
+	border-top: white solid;
+	border-left: white solid;
+	border-right: white solid;
 }
 .pm-log {
 	background-color: white;
-	font-family: Comic Sans MS, cursive, sans-serif;
+	font-family: "Comic Sans MS", cursive, sans-serif;
 }
 .tabbar .inner a.button {
-	background: black;
-	color: #aff3ff;
-	text-shadow: 0px 0px 6px #afd8ff;
+	background: #FCE3F4;
+	color: white;
+	text-shadow: 0px 0px 6px black;
 }
 .tabbar .inner a.button.subtle-notifying {
-	color: red;
-	text-shadow: 0px 0px 6px red;
+	color: black;
+	text-shadow: 0px 0px 6px white;
 }
 .maintabbarbottom {
-	box-shadow: 3px 3px 30px rgba(0, 0, 0, 0.7);	
-	background: black;
+	box-shadow: 3px 3px 30px #FCE3F4;	
+	background: #FCE3F4;
 }
 .mainmenuwrapper {
-	box-shadow: inset -3px -3px 30px rgba(0, 0, 0, 0.7);
+	box-shadow: inset -3px -3px 30px #FCE3F4;
 }
 .menugroup button.button {
 	padding: 3px 7px 3px 7px;
-	background: black !important;
-	border-color: aqua !important;
+	background: white !important;
+	border-color: #FCE3F4 !important;
+	color: black !important;
 }
 .menugroup button.button.big {
 	padding: 6px 7px 6px 7px;
-	background: black !important;
-	border-color: aqua !important;
+	background: white !important;
+	border-color: #FCE3F4 !important;
+	color: black !important;
 }
 .tabbar a.closebutton { 
-	color: #aff3ff;
+	color: #FCE3F4;
 }
 .astext {
     background-color: Transparent;
