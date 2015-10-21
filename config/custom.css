@@ -84,7 +84,7 @@ body {
     	text-shadow: 1px 1px 0px #11484F, 1px -1px 0px #11484F, -1px 1px 0px #11484F, -1px -1px 0px #11484F;
 }
 
-/*****************
+/***************
 * Roomlist CSS *
 ***************/
 
@@ -166,37 +166,298 @@ body {
 * Tournaments CSS *
 ******************/
 
+.tournament-title {
+    	background: rgba(0,255,0,0.3);
+    	text-shadow: 0px -1px 0px #000000;
+    	color: #a55ae5;
+}
+  
+.tournament-status, .tournament-toggle {
+    	background: rgba(255, 255, 255, 0.65);
+   	border-color: #1e93ea;
+	text-shadow: none;
+    	color: #a55ae5;
+}
+  
+.tournament-tools {
+    	border-color: #1e93ea;
+    	background: rgba(0,255,0,0.3);
+}
+  
+.tournament-tools .select {
+    	border-color: #1e93ea;
+    	background: #1e93ea;
+    	color: #FFFFFF;
+}
+  
+.tournament-tools .select:hover {
+    	background: #93ea1e;
+}
+  
+.tournament-tools .select:disabled, .tournament-tools .select:disabled:hover {
+    	background: rgba(255,0,255,0.3);
+    	color: #000000 !important;
+    	text-shadow: none !important;
+    	border-color: #1e93ea !important;
+}
+  
+.tournament-tools button {
+    	border-color: #1e93ea;
+    	background: #1e93ea;
+    	color: #FFFFFF;
+}
+  
+.tournament-tools button:hover {
+    	background: #1eeadb;
+}
+  
+.tournament-wrapper, .tournament-box {
+    	border-color: #1e93ea;
+}
+  
+.tournament-box {
+    	background: url("http://i.imgur.com/rD3CQZ8.png") top left no-repeat;
+}
+
+/**********************
+* Mainmenuwrapper CSS *
+**********************/
+
+.menugroup {
+    	border: 1px solid #d4d4d4;
+    	background: rgba(0,255,0,0.3);
+    	color: #FBE7F0;
+    	text-shadow: 0px 0px 2px #803C6F;
+}
+
+.menugroup .select, .menugroup .button {
+    	background: #fce3f4 !important;
+	border-color: #1e93ea !important;
+	color: #1e93ea !important;
+	text-shadow: none !important;
+	font-style: italic !important;
+}
+
+.menugroup .select:hover, .menugroup .button:hover {
+    	background: #f59ed9 !important;
+	border-color: #1e93ea !important;
+	color: #1e93ea !important;
+	text-shadow: none !important;
+	font-style: italic !important;
+}
+
+.menugroup .select:disabled, .menugroup .select:disabled:hover {
+    	background: rgba(245,158,217,0.5) !important;
+	border-color: #1e93ea !important;
+	color: #1e93ea !important;
+	text-shadow: none !important;
+}
+
 .pm-log {
 	background-color: white;
 	font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
-.mainmenuwrapper {
-	box-shadow: inset -3px -3px 30px #FCE3F4;
+.pm-window h3 {
+    	border-color: #1e93ea;
+    	background: #f59ed9 url("http://pldh.net/media/pokexycons/698.png") bottom right no-repeat;
+    	background-position: 200px;
+    	color: #FFFFFF;
+    	text-shadow: 0px -1px 0px #000000;
 }
-
-.menugroup button.button {
-	padding: 3px 7px 3px 7px;
-	background: white !important;
-	border-color: #FCE3F4 !important;
-	color: black !important;
+  
+.pm-window h3:hover {
+    	background: #f59ed9 url("http://pldh.net/media/pokexycons/698.png") bottom right no-repeat;
+    	background-position: 200px;
+    	color: #FFFFFF;
 }
-
-.menugroup button.button.big {
-	padding: 6px 7px 6px 7px;
-	background: white !important;
-	border-color: #FCE3F4 !important;
-	color: black !important;
+  
+.pm-window h3 small {
+    	color: #FFFFFF;
 }
-
-.tabbar a.closebutton { 
-	color: #FCE3F4;
+  
+.pm-window.focused h3, .pm-window.focused h3:hover {
+    	border-color: #1e93ea;
+    	background: #f59ed9 url("http://pldh.net/media/pokexycons/582.png") bottom right no-repeat;
+    	background-position: 200px;
+    	color: #FFFFFF;
+    	text-shadow: 0px -1px 0px #000000;
 }
-
+  
+.pm-window h3:hover .minimizebutton, .pm-window h3 .closebutton, .pm-window h3 .minimizebutton {
+    	color: #9deef4;
+}
+  
+.pm-window h3 .closebutton:hover {
+    	color: #F7A4A4;
+}
+  
+.pm-window h3 .minimizebutton:hover {
+    	color: #F7D0A4;
+}
+  
+.pm-window h3 .closebutton:hover + .minimizebutton {
+    	color: #D3F5E8 !important;
+}
+  
+.message-pm {
+    	color: #56a0f2;
+}
+  
+.pm-window h3.pm-notifying {
+    	border-color: #803C6F;
+    	background: #F3C5EA;
+    	color: #803C6F;
+    	text-shadow: none;
+}
+  
+.pm-window h3.pm-notifying:hover {
+    	background: #E5B6DC;
+}
+  
+.pm-window h3.pm-notifying small {
+    	color: #4cc2f0;
+}
+  
+.pm-window h3.pm-notifying .closebutton, .pm-window h3.pm-notifying .minimizebutton {
+    	color: #9deef4;
+}
+  
+.pm-window h3.pm-notifying .closebutton:hover {
+    	color: #AF3B3B;
+}
+  
+.pm-window h3.pm-notifying .minimizebutton:hover {
+    	color: #AF813B;
+}
+  
+.pm-window h3.pm-notifying .closebutton:hover + .minimizebutton {
+    	color: #803C6F !important;
+}
+  
+.pm-log, .pm-window.focused .pm-log {
+    	border-color: #5a91f0;
+}
+  
+.challenge {
+    	border-color: #f470d3;
+    	background: #F3C5EA;
+    	color: #803C6F;
+    	text-shadow: none;
+}
+  
+.challenge .select {
+    	border-color: #f470d3;
+    	background: #F3C5EA;
+    	color: #803C6F;
+    	text-shadow: 0px 0px 2px #FCE8F1;
+}
+  
+.challenge .select:hover {
+    	background: #58e4e7;
+}
+  
+.challenge .select:disabled {
+    	background: rgba(85,219,238,0.5);
+}
+  
+.challenge .select.preselected, .challenge .select.preselected:disabled {
+    	color: #4a9bf6;
+}
+  
+.challenge .buttonbar button {
+    	border: 1px solid #68caf0;
+    	background: #4cece0;
+    	color: #2e72e7;
+    	text-shadow: 0px 0px 2px #a9eff4;
+    	padding: 2px 5px;
+}
+  
+.challenge .buttonbar button:hover {
+    	background: #b7f7f2;
+}
+  
+.pm-log-add {
+    	border-color: #000000;
+    	background: rgba(246,183,247,0.7);
+}
+  
+.pm-window.focused .pm-log-add {
+    	border-color: #000000;
+    	background: rgba(246,183,247,0.7);
+}
+  
+.pm-log-add .textbox {
+    	border-color: #FFFFFF;
+}
+  
 .mainmenufooter a {
-	color: white;
-	text-shadow: 0px 0px 6px black;
+    	color: #F6B7F7;
 }
+  
+.mainmenufooter a:hover {
+    	color: #70e4f4;
+}
+  
+.mainmenufooter {
+    	color: #F6B7F7;
+}
+
+/*************
+* Battle CSS *
+*************/
+
+.turnstatus-protect {
+    	background:url(http://i.imgur.com/RVxCoHz.png);
+    	opacity: 1 !important;
+    	height: 103px !important;
+    	width: 150px !important;
+    	border-radius: 0;
+    	border-width: 0;
+    	box-shadow: none;
+    	opacity: 0.9;
+}
+ 
+.sidecondition-safeguard {
+    	background: url(http://i.imgur.com/FrCoWCW.png);
+    	opacity: 0.6 !important;
+    	height: 90px !important;
+    	width: 130px !important;
+    	border-radius: 0;
+    	opacity: 0.9;
+    	border-width: 0;
+    	box-shadow: none;
+}
+ 
+.sidecondition-reflect {
+    	background: url(http://i.imgur.com/X1XDxVB.png);
+    	opacity: 0.7 !important;
+    	height: 90px !important;
+    	width: 130px !important;
+    	border-radius: 0;
+    	border-width: 0;
+    	opacity: 0.9;
+    	box-shadow: none;
+}
+ 
+.sidecondition-lightscreen {
+    	background: url(http://i.imgur.com/8eLftNA.png);
+    	opacity: 0.6 !important;
+    	height: 90px !important;
+    	width: 130px !important;
+    	opacity: 0.9;
+    	border-radius: 0;
+    	border-width: 0;
+    	box-shadow: none;
+}
+
+.backdrop {
+    background-image: url("http://i.imgur.com/3kxw375.png") !important;
+}
+
+/********************
+* Miscellaneous CSS *
+********************/
 
 .astext {
     background-color: Transparent;
@@ -204,16 +465,6 @@ body {
     border: none;
     cursor:pointer;
     overflow: hidden;
-}
-
-.backdrop {
-    background-image: url("http://i.imgur.com/3kxw375.png") !important;
-}
-
-.userbar button {
-	background: #48F0D4;
-	border: 1px solid aqua;
-	color: red;
 }
 
 /* User Icons section */
