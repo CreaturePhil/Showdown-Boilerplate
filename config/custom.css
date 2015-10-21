@@ -1,92 +1,221 @@
+/**************
+* General CSS *
+**************/
+  
 body {
-	background-color: white !important;
+	background: url("http://www.thespectacleplace.com.au/wp-content/uploads/2015/06/White-Background-Wallpapers-HD.jpg") !important;
 }
+
+.chat.mine {
+    background: #DCF7FF;
+  }
+
+/*************
+* Header CSS *
+*************/
+
 .header .logo {
 	display: none !important;
 }
+
 .header {
 	background-image: url(http://i.imgur.com/uGKJfd2.png);
 	background-repeat: no-repeat;
+	background: rgba(255, 255, 255, 0.6);
 }
+
+.maintabbarbottom {
+	border-color: #CD9FC4;	
+	background: #FCE3F4;
+}
+
+.tabbar a.button.notifying {
+	background: #A7FFE0;
+	border-color: #5b95ff;
+	color: #bb2cbd;
+	text-shadow: none;
+	font-style: italic;
+}
+  
+.button.subtle-notifying {
+    	color: #00fff1;
+}
+
+.tabbar a.button.notifying:hover {
+	background: #5bffc5;
+	border-color: #5b95ff;
+	color: #bb2cbd;
+}
+  
+.tabbar a.button.cur, .tabbar a.button.cur:hover {
+    	border-color: #5b95ff;
+    	background: #fce3f4;
+    	color: #5b95ff;
+    	text-shadow: 0px 0px 2px #FCE8F1;
+}
+  
+.tabbar a.button {
+    	border-color: #5b95ff;
+    	background: #fce3f4;
+    	color: #73a4ff;
+    	text-shadow: none;
+}
+  
+.tabbar a.button:hover {
+    	background: #E5B6DC;
+}
+  
+.tabbar .closebutton {
+    	color: #0f64ff;
+}
+  
+.userbar button.icon {
+    	border: 1px solid #0f64ff;
+    	background: #A7FFE0;
+    	color: #0f64ff;
+    	text-shadow: 0px 0px 2px #FFFFFF;
+}
+  
+.userbar button.icon:hover {
+    	background: #FFFFFF;
+}
+  
+.userbar .username {
+    	text-shadow: 1px 1px 0px #11484F, 1px -1px 0px #11484F, -1px 1px 0px #11484F, -1px -1px 0px #11484F;
+}
+
+/*****************
+* Roomlist CSS *
+***************/
+
 .roomlist {
 	margin: auto;
 	text-align: center;
 }
+
+.roomlist h2 {
+    	color: #4d4d4d;
+    	text-shadow: 0px -1px 0px #FFFFFF;
+}
+  
+.roomlist a.ilink, .roomcounters button {
+    	background: #FFFFFF;    
+    	border-color: #0f64ff;
+    	color: #a7f2ff;
+    	text-shadow: 0px 0px 2px #000000;
+}
+  
+.roomlist a.ilink:hover, .roomcounters button:hover {
+    	background: #a7f2ff;    
+    	border-color: #320fff;
+    	color: #e51ed3;
+    	text-shadow: none;
+}
+
+/***********
+* Chat CSS *
+***********/
+
+.userlist {
+	background: #FCE3F4;
+	border-color: #FFFFFF;
+	color: #4d4d4d;
+}
+
+.userlist li {
+	background: rgba(255,0,255,0.1);
+	border-color: #FFFFFF;
+}
+
+.userlist li em.group {
+	color: #FFFFFF;
+}
+
+.userlist li button:hover, .userlist-minimized .userlist-count:hover {
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.infobox {
+	border-color: #FFFFFF;
+	box-shadow: 0px 0px 0px 3px rgba(0,0,0,0.3);
+}
+
 .chat-log {
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	background-image: url(http://i.imgur.com/unWzLyc.jpg) !important;
 }
-.userlist {
-	background: #FCE3F4;
-	color: #aff3ff;
-	text-shadow: 0px 0px 6px #000000;
+
+.chat.highlighted {
+	background: #fdff00;
 }
-.userlist li button {
-	text-shadow: 0px 0px 2px white;
+
+.chat-log-add {
+    	border-color: #1e93ea;
+   	background: rgba(0,255,0,0.3);
 }
-.userlist li button:hover {
-	background: #48F0D4;
+
+.chat-log-add .textbox {
+	border-color: #1e93ea;
 }
-.userlist li {
-	border-bottom: white solid;
-	border-top: white solid;
-	border-left: white solid;
-	border-right: white solid;
+
+.chatbox label {
+	text-shadow: 0px 0px 2px #1e93ea;
 }
+
+/*******************
+* Tournaments CSS *
+******************/
+
 .pm-log {
 	background-color: white;
 	font-family: "Comic Sans MS", cursive, sans-serif;
 }
-.tabbar .inner a.button {
-	background: #FCE3F4;
-	color: white;
-	text-shadow: 0px 0px 6px black;
-}
-.tabbar .inner a.button.subtle-notifying {
-	color: black;
-	text-shadow: 0px 0px 6px white;
-}
-.maintabbarbottom {
-	box-shadow: 3px 3px 30px #FCE3F4;	
-	background: #FCE3F4;
-}
+
 .mainmenuwrapper {
 	box-shadow: inset -3px -3px 30px #FCE3F4;
 }
+
 .menugroup button.button {
 	padding: 3px 7px 3px 7px;
 	background: white !important;
 	border-color: #FCE3F4 !important;
 	color: black !important;
 }
+
 .menugroup button.button.big {
 	padding: 6px 7px 6px 7px;
 	background: white !important;
 	border-color: #FCE3F4 !important;
 	color: black !important;
 }
+
 .tabbar a.closebutton { 
 	color: #FCE3F4;
 }
+
 .mainmenufooter a {
 	color: white;
 	text-shadow: 0px 0px 6px black;
 }
+
 .astext {
     background-color: Transparent;
     background-repeat:no-repeat;
     border: none;
     cursor:pointer;
     overflow: hidden;
-        }
+}
+
 .backdrop {
     background-image: url("http://i.imgur.com/3kxw375.png") !important;
 }
+
 .userbar button {
 	background: #48F0D4;
 	border: 1px solid aqua;
 	color: red;
 }
+
 /* User Icons section */
 #lobby-userlist-user-rankuro, #tournaments-userlist-user-rankuro, #royalpalace-userlist-user-rankuro, #staff-userlist-user-rankuro, #casino-userlist-user-rankuro, #ninesmeadow-userlist-user-rankuro, #dragoticslab-userlist-user-rankuro, #spamroom-userlist-user-rankuro {
     background: #000000 url("http://pldh.net/media/pokemon/gen4/overworld/shiny_frontf2/491.png") right no-repeat;
