@@ -7,8 +7,8 @@ body {
 }
 
 .chat.mine {
-    background: #DCF7FF;
-  }
+    	background: #DCF7FF;
+}
 
 /*************
 * Header CSS *
@@ -151,7 +151,7 @@ body {
 
 .chat-log-add {
     	border-color: #1e93ea;
-   	background: rgba(0,255,0,0.3);
+   	background: rgba(95,236,229,0.25);
 }
 
 .chat-log-add .textbox {
@@ -159,7 +159,7 @@ body {
 }
 
 .chatbox label {
-	text-shadow: 0px 0px 2px #1e93ea;
+	text-shadow: none;
 }
 
 /*******************
@@ -167,8 +167,8 @@ body {
 ******************/
 
 .tournament-title {
-    	background: rgba(0,255,0,0.3);
-    	text-shadow: 0px -1px 0px #000000;
+    	background: rgba(95,236,229,0.25);
+    	text-shadow: none;
     	color: #a55ae5;
 }
   
@@ -181,7 +181,7 @@ body {
   
 .tournament-tools {
     	border-color: #1e93ea;
-    	background: rgba(0,255,0,0.3);
+    	background: rgba(95,236,229,0.25);
 }
   
 .tournament-tools .select {
@@ -195,7 +195,7 @@ body {
 }
   
 .tournament-tools .select:disabled, .tournament-tools .select:disabled:hover {
-    	background: rgba(255,0,255,0.3);
+    	background: rgba(95,236,229,0.35);
     	color: #000000 !important;
     	text-shadow: none !important;
     	border-color: #1e93ea !important;
@@ -216,7 +216,7 @@ body {
 }
   
 .tournament-box {
-    	background: url("http://i.imgur.com/rD3CQZ8.png") top left no-repeat;
+    	background: rgba(255,255,255,0.65) url("http://i.imgur.com/rD3CQZ8.png") top left no-repeat;
 }
 
 /**********************
@@ -224,7 +224,7 @@ body {
 **********************/
 
 .menugroup {
-    	border: 1px solid #FFFFFF;
+    	border: 1px solid #909090;
     	background: rgba(255,255,255,0.3);
     	color: #676767;
 }
@@ -357,11 +357,11 @@ body {
 }
   
 .challenge .select:disabled {
-    	background: rgba(136,240,237,0.3);
+    	background: rgba(231,252,251,0.3);
 }
   
 .challenge .select.preselected, .challenge .select.preselected:disabled {
-    	color: #4a9bf6;
+    	color: #000000;
 }
   
 .challenge .buttonbar button {
