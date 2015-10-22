@@ -81,7 +81,7 @@ body {
 }
   
 .userbar .username {
-    	text-shadow: 1px 1px 0px #11484F, 1px -1px 0px #11484F, -1px 1px 0px #11484F, -1px -1px 0px #11484F;
+    	text-shadow: none;
 }
 
 /***************
@@ -102,7 +102,7 @@ body {
     	background: #FFFFFF;    
     	border-color: #0f64ff;
     	color: #a7f2ff;
-    	text-shadow: 0px 0px 2px #000000;
+    	text-shadow: 0px 0px 1px #0f64ff;
 }
   
 .roomlist a.ilink:hover, .roomcounters button:hover {
@@ -142,7 +142,7 @@ body {
 
 .chat-log {
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	background-image: url(http://i.imgur.com/unWzLyc.jpg) !important;
+	background: rgba(236,169,244,0.3) url(http://i.imgur.com/71LkYM2.png) top right no-repeat !important;
 }
 
 .chat.highlighted {
@@ -224,10 +224,9 @@ body {
 **********************/
 
 .menugroup {
-    	border: 1px solid #d4d4d4;
-    	background: rgba(0,255,0,0.3);
-    	color: #FBE7F0;
-    	text-shadow: 0px 0px 2px #803C6F;
+    	border: 1px solid #FFFFFF;
+    	background: rgba(255,255,255,0.3);
+    	color: #676767;
 }
 
 .menugroup .select, .menugroup .button {
@@ -247,7 +246,7 @@ body {
 }
 
 .menugroup .select:disabled, .menugroup .select:disabled:hover {
-    	background: rgba(245,158,217,0.5) !important;
+    	background: rgba(255,255,255,0.2) !important;
 	border-color: #1e93ea !important;
 	color: #1e93ea !important;
 	text-shadow: none !important;
@@ -358,7 +357,7 @@ body {
 }
   
 .challenge .select:disabled {
-    	background: rgba(85,219,238,0.5);
+    	background: rgba(136,240,237,0.3);
 }
   
 .challenge .select.preselected, .challenge .select.preselected:disabled {
@@ -393,14 +392,17 @@ body {
   
 .mainmenufooter a {
     	color: #F6B7F7;
+    	text-shadow: none;
 }
   
 .mainmenufooter a:hover {
     	color: #70e4f4;
+    	text-shadow: none;
 }
   
 .mainmenufooter {
     	color: #F6B7F7;
+    	text-shadow: none;
 }
 
 /*************
@@ -455,6 +457,10 @@ body {
     background-image: url("http://i.imgur.com/3kxw375.png") !important;
 }
 
+.battle-log h2 {
+	text-align: center;
+}
+
 /********************
 * Miscellaneous CSS *
 ********************/
@@ -469,11 +475,11 @@ body {
 
 /* User Icons section */
 #lobby-userlist-user-rankuro, #tournaments-userlist-user-rankuro, #royalpalace-userlist-user-rankuro, #staff-userlist-user-rankuro, #casino-userlist-user-rankuro, #ninesmeadow-userlist-user-rankuro, #dragoticslab-userlist-user-rankuro, #spamroom-userlist-user-rankuro {
-    background: #000000 url("http://pldh.net/media/pokemon/gen4/overworld/shiny_frontf2/491.png") right no-repeat;
+    background: rgba(255,0,255,0.1) url("http://pldh.net/media/pokemon/gen4/overworld/shiny_frontf2/491.png") right no-repeat;
 }
 #lobby-userlist-user-icedragonx, #tournaments-userlist-user-icedragonx, #royalpalace-userlist-user-icedragonx, #staff-userlist-user-icedragonx, #casino-userlist-user-icedragonx, #ninesmeadow-userlist-user-icedragonx, #dragoticslab-userlist-user-icedragonx, #spamroom-userlist-user-icedragonx {
-    background: #000000 url("http://pldh.net/media/pokecons_action/418.gif") right no-repeat;
+    background: rgba(255,0,255,0.1) url("http://pldh.net/media/pokecons_action/418.gif") right no-repeat;
 }
 #lobby-userlist-user-dragotic, #tournaments-userlist-user-dragotic, #royalpalace-userlist-user-dragotic, #staff-userlist-user-dragotic, #casino-userlist-user-dragotic, #ninesmeadow-userlist-user-dragotic, #dragoticslab-userlist-user-dragotic, #spamroom-userlist-user-dragotic {
-    background: #000000 url("http://pldh.net/media/pokemon/gen4/overworld/frontf2/149.png") right no-repeat;
+    background: rgba(255,0,255,0.1) url("http://pldh.net/media/pokemon/gen4/overworld/frontf2/149.png") right no-repeat;
 }
