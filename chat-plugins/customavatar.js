@@ -10,7 +10,13 @@ function download_image(image_url, name, extension) {
 		.on('error', function (err) {
 			console.error(err);
 		})
-		.pipe(fs.createWriteStream(AVATAR_PATH + name + extension));
+		.on('response', function (response) {
+			if (response.statusCode != 200) return;
+			var type = response.headers['content-type'].split('/');
+			if (type[0] !== 'image') return;
+
+			response.pipe(fs.createWriteStream(AVATAR_PATH + name + extension));
+		});
 }
 
 function load_custom_avatars() {
