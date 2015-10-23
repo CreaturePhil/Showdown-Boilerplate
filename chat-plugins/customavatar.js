@@ -39,7 +39,7 @@ exports.commands = {
 
 			var name = toId(parts[0]);
 			var image_url = parts[1];
-			if (image_url.indexOf('http://') !== 0 && image_url.indexOf('https://') !== 0) image_url = 'http://' + image_url;
+			if (image_url.match(/^https:\/\/|^http:\/\//i)) image_url = 'http://' + image_url;
 			var ext = path.extname(image_url);
 
 			if (!name || !image_url) return this.parse('/help customavatar');
