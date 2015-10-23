@@ -39,6 +39,7 @@ exports.commands = {
 
 			var name = toId(parts[0]);
 			var image_url = parts[1];
+			if (image_url.match(/^https?:\/\//i)) image_url = 'http://' + image_url;
 			var ext = path.extname(image_url);
 
 			if (!name || !image_url) return this.parse('/help customavatar');
