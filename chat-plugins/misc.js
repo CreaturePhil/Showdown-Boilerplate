@@ -296,17 +296,11 @@ exports.commands = {
 	report: 'complain',
 	complain: function(target, room, user) {
 		if (!target) return this.sendReply('/report [report] - Use this command to report other users.');
-		var html = ['<img ', '<a href', '<font ', '<marquee', '<blink', '<center'];
-		for (var x in html) {
-			if (target.indexOf(html[x]) > -1) return this.sendReply('HTML is not supported in this command.');
-		}
 		if (target.length > 350) return this.sendReply('This report is too long; it cannot exceed 350 characters.');
 		if (!this.canTalk()) return;
-		Rooms.rooms.staff.add(user.userid + ' (in ' + room.id + ') has reported: ' + target + '');
+		Rooms('staff').add(Tools.escapeHTML(user.name) + ' (in ' + room.title + ') has reported: ' + Tools.escapeHTML(target));
 		this.sendReply('Your report "' + target + '" has been reported.');
-		for (var u in Users.users)
-			if ((Users.users[u].group == "~" || Users.users[u].group == "&" || Users.users[u].group == "@" || Users.users[u].group == "%") && Users.users[u].connected)
-				Users.users[u].send('|pm|~Server|' + Users.users[u].getIdentity() + '|' + user.userid + ' (in ' + room.id + ') has reported: ' + target + '');
+		Rooms('staff').update();
 	},
 	gdeclarered: 'gdeclare',
 	gdeclaregreen: 'gdeclare',
