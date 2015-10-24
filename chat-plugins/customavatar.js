@@ -11,7 +11,7 @@ function download_image(image_url, name, extension) {
 			console.error(err);
 		})
 		.on('response', function (response) {
-			if (response.statusCode != 200) return;
+			if (response.statusCode !== 200) return;
 			var type = response.headers['content-type'].split('/');
 			if (type[0] !== 'image') return;
 
