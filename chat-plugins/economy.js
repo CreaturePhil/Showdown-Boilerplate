@@ -16,6 +16,21 @@ var shop = [
 
 var shopDisplay = getShopDisplay(shop);
 
+var mart = [
+	['Bread', 'From Poland', 5],
+	['Cheese', 'From France', 5],
+	['Egg', 'From England', 5],
+	['Beans', 'From South Africa', 5],
+	['Tofu', 'From China', 5],
+	['Apple', 'From New Zealand', 7],
+	['Banana', 'From Peru', 7],
+	['Lemon', 'From Florida', 7],
+	['Grapes', 'From Spain', 7],
+	['Orange', 'From Florida', 7],
+];
+
+var martDisplay = getMartDisplay(mart);
+
 /**
  * Gets an amount and returns the amount with the name of the currency.
  *
@@ -81,6 +96,22 @@ function getShopDisplay(shop) {
 	return display;
 }
 
+function getMartDisplay(mart) {
+	var display = "<table border='1' cellspacing='0' cellpadding='5' width='100%'>" +
+					"<tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>";
+	var start = 0;
+	while (start < mart.length) {
+		display += "<tr>" +
+						"<td align='center'><button name='send' value='/buy " + mart[start][0] + "'><b>" + mart[start][0] + "</b></button>" + "</td>" +
+						"<td align='center'>" + mart[start][1] + "</td>" +
+						"<td align='center'>" + mart[start][2] + "</td>" +
+					"</tr>";
+		start++;
+	}
+	display += "</tbody></table><center>To buy an item from the mart, use /buy <em>command</em>.</center>";
+	return display;
+}
+
 
 /**
  * Find the item in the shop.
@@ -104,6 +135,23 @@ function findItem(item, money) {
 		return price;
 	}
 	this.sendReply(item + " not found in shop.");
+}
+
+function findItem(item, money) {
+	var len = mart.length;
+	var price = 0;
+	var amount = 0;
+	while (len--) {
+		if (item.toLowerCase() !== mart[len][0].toLowerCase()) continue;
+		price = mart[len][2];
+		if (price > money) {
+			amount = price - money;
+			this.sendReply("You don't have you enough money for this. You need " + amount + currencyName(amount) + " more to buy " + item + ".");
+			return false;
+		}
+		return price;
+	}
+	this.sendReply(item + " not found in mart.");
 }
 
 /**
@@ -286,6 +334,15 @@ exports.commands = {
 		return this.sendReply("|raw|" + shopDisplay);
 	},
 	shophelp: ["/shop - Display items you can buy with money."],
+
+	mart: function (target, room, user) {
+		if (room.id === "tokuomart") {
+		if (!this.canBroadcast()) return;
+		return this.sendReply("|raw|" + martDisplay); }
+		else	{
+		this.errorReply("You can only view food ingredients in Tokuo Mart.")
+		}
+	},
 
 	buy: function (target, room, user) {
 		if (!target) return this.parse('/help buy');
