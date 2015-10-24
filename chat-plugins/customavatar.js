@@ -61,7 +61,7 @@ exports.commands = {
 			download_image(image_url, name)
 				.then(function (file) {
 					Config.customavatars[toId(name)] = file;
-					this.sendReply(name + "'s avatar has been set.")
+					this.sendReply(name + "'s avatar has been set.");
 				}.bind(this))
 				.catch(function (err) {
 					this.errorReply('Error setting ' + name + '\'s avatar: ' + err);
