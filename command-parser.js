@@ -38,6 +38,24 @@ var fs = require('fs');
 var path = require('path');
 var parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 
+function getServersAds (text) {
+	var aux = text.toLowerCase();
+	var serversAds = [];
+	var spamindex;
+	var actualAd = '';
+	while (aux.indexOf(".psim.us") > -1) {
+		spamindex = aux.indexOf(".psim.us");
+		actualAd = '';
+		for (var i = spamindex - 1; i >= 0; i--) {
+			if (aux.charAt(i).replace(/[^a-z0-9]/g, '') === '') break;
+			actualAd = aux.charAt(i) + actualAd;
+		}
+		if (actualAd.length) serversAds.push(toId(actualAd));
+		aux = aux.substr(spamindex + ".psim.us".length);
+	}
+	return serversAds;
+}
+
 /*********************************************************
  * Load command files
  *********************************************************/
@@ -143,6 +161,31 @@ function canTalk(user, room, connection, message, targetUser) {
 
 		if (Config.chatfilter) {
 			return Config.chatfilter.call(this, message, user, room, connection, targetUser);
+		}
+		//servers Spam
+		if (!user.can('bypassall') && Rooms('spam')) {
+			var serverexceptions = {'galaxy': 1, 'showdown': 1, 'smogtours': 1};
+			if (Config.serverexceptions) {
+				for (var i in Config.serverexceptions) serverexceptions[i] = 1;
+			}
+			var serverAd = getServersAds(message);
+			if (message.indexOf('pandorashowdown.net') >= 0) serverAd.push('pandora');
+			if (serverAd.length) {
+				for (var i = 0; i < serverAd.length; i++) {
+					if (!serverexceptions[serverAd[i]]) {
+						if (!room && targetUser) {
+							connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + message);
+							Rooms('spam').add('|c|' + user.getIdentity() + '|(__PM a ' + targetUser.getIdentity() + '__) -- ' + message);
+							Rooms('spam').update();
+						} else if (room) {
+							connection.sendTo(room, '|c|' + user.getIdentity(room.id) + '|' + message);
+							Rooms('spam').add('|c|' + user.getIdentity(room.id) + '|(__' + room.id + '__) -- ' + message);
+							Rooms('spam').update();
+						}
+						return false;
+					}
+				}
+			}
 		}
 		return message;
 	}

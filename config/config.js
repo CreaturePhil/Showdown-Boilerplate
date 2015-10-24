@@ -6,10 +6,11 @@ exports.port = 8000;
 //   of strings. Each string should be either an IP address or a subnet given
 //   in CIDR notation. You should usually leave this as `false` unless you
 //   know what you are doing.
-exports.proxyip = ['10.0.0.0/8'];
+exports.proxyip = ['127.0.0.0/8'];
 
+// serverid&servertoken
 exports.serverid = 'galaxy';
-exports.servertoken = 'DmfTJyI4zZpG';
+exports.servertoken = 'q2KGecNFCgeB';
 
 // Pokemon of the Day - put a pokemon's name here to make it Pokemon of the Day
 //   The PotD will always be in the #2 slot (not #1 so it won't be a lead)

