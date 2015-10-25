@@ -1,4 +1,4 @@
-const ranksDataFile = DATA_DIR + 'superranks.json';
+const ranksDataFile = 'superranks.json';
 
 var fs = require('fs');
 
