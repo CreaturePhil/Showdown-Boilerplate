@@ -2,22 +2,26 @@
   "users": [
     {
       "username": "flareninja",
-      "money": 999999999
+      "money": 9999999999999999999999999999999999999999
     },
     {
       "username": "andrypm",
-      "money": -1e+48
+      "money": 9999999999999999999999999999999999999999
     },
     {
       "username": "sunding",
       "money": 1,
       "tickets": [
-        "47374743"
+        "3"
       ]
     },
     {
       "username": "dentice",
-      "money": 13
+      "money": 99999999999999999999999999999999999999999
+    },
+    {
+      "username": "nkobellic",
+      "money": 99999999999999999999999999999999999999999
     },
     {
       "username": "gianky22",
@@ -58,3 +62,5 @@
   ],
   "pot": 5
 }
+
+      

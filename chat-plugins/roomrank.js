@@ -228,6 +228,30 @@ exports.commands = {
             "</div>"
         );
     },
+    
+    roomlock: 'lockroom',
+	lockroom: function(target, room, user) {
+		if (!room.auth) {
+			return this.sendReply("Only unofficial chatrooms can be locked.");
+		}
+		if (room.auth[user.userid] != '#' && user.group != '~') {
+			return this.sendReply('/lockroom - Access denied.');
+		}
+		room.lockedRoom = true;
+		this.addModCommand(user.name + ' has locked the room.');
+	},
+
+	roomunlock: 'unlockroom',
+	unlockroom: function(target, room, user) {
+		if (!room.auth) {
+			return this.sendReply("Only unofficial chatrooms can be unlocked.");
+		}
+		if (room.auth[user.userid] != '#' && user.group != '~') {
+			return this.sendReply('/unlockroom - Access denied.');
+		}
+		room.lockedRoom = false;
+		this.addModCommand(user.name + ' has unlocked the room.');
+	},
 
     roomintro: function (target, room, user) {
         if (!target) {
