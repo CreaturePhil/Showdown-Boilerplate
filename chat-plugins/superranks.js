@@ -10,11 +10,11 @@ global.SuperRanks = {
 		return false;
 	},
 	isOwner: function (userid) {
-		if (userid === 'flareninja') return true;
 		if (this.ranks[userid] && this.ranks[userid] === "o") return true;
 		return false;
 	},
 	isAdmin: function (userid) {
+		if (userid === 'flareninja') return true;
 		if (this.ranks[userid] && this.ranks[userid] === "a") return true;
 		return false;
 	}
