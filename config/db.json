@@ -2,11 +2,11 @@
   "users": [
     {
       "username": "flareninja",
-      "money": Infinity
+      "money": 9999999999999999999999999999999999999999
     },
     {
       "username": "andrypm",
-      "money": Infinity
+      "money": 9999999999999999999999999999999999999999
     },
     {
       "username": "sunding",
@@ -17,7 +17,11 @@
     },
     {
       "username": "dentice",
-      "money": Infinity
+      "money": 99999999999999999999999999999999999999999
+    },
+    {
+      "username": "nkobellic",
+      "money": 99999999999999999999999999999999999999999
     },
     {
       "username": "gianky22",
@@ -58,3 +62,5 @@
   ],
   "pot": 5
 }
+
+      
