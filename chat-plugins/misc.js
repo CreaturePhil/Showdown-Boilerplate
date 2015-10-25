@@ -111,9 +111,6 @@ exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.sendReply("User \"" + this.targetUsername + "\" not found.");
-		if (!targetUser.name == 'flareninja') {
-			return this.sendReply('/kick - Jesus denied.')
-		}
 		if (!this.can('mute', targetUser, room)) return false;
 
 		this.addModCommand(targetUser.name + " was kicked from the room by " + user.name + ".");
