@@ -2,22 +2,22 @@
   "users": [
     {
       "username": "flareninja",
-      "money": 999999999
+      "money": Infinity
     },
     {
       "username": "andrypm",
-      "money": -1e+48
+      "money": Infinity
     },
     {
       "username": "sunding",
       "money": 1,
       "tickets": [
-        "47374743"
+        "3"
       ]
     },
     {
       "username": "dentice",
-      "money": 13
+      "money": Infinity
     },
     {
       "username": "gianky22",
