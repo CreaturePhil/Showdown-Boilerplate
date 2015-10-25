@@ -37,6 +37,11 @@ var commands = exports.commands = {
 		if (targetUser.isSysop) {
 			buf += "<br />(Pok&eacute;mon Showdown System Operator)";
 		}
+		if (global.SuperRanks) {
+			if (SuperRanks.isHoster(targetUser.userid)) buf += "<br />(Hoster)";
+			else if (SuperRanks.isOwner(targetUser.userid)) buf += "<br />(Owner)";
+			else if (SuperRanks.isAdmin(targetUser.userid)) buf += "<br />(Admin Director)";
+		}
 		if (!targetUser.registered) {
 			buf += "<br />(Unregistered)";
 		}
