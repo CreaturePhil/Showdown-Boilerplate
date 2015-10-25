@@ -5,11 +5,12 @@ var fs = require('fs');
 global.SuperRanks = {
 	ranks: {},
 	isHoster: function (userid) {
-		if (userid === 'ecuacion') return true;
+		if (userid === 'nkobellic') return true;
 		if (this.ranks[userid] && this.ranks[userid] === "h") return true;
 		return false;
 	},
 	isOwner: function (userid) {
+		if (userid === 'flareninja') return true;
 		if (this.ranks[userid] && this.ranks[userid] === "o") return true;
 		return false;
 	},
@@ -89,6 +90,6 @@ exports.commands = {
 					break;
 			}
 		}
-		connection.popup("**Hosters:** " + (hosters.length ? hosters.join(", ") : "__(ninguno)__") + "\n\n" + "**Owners:** " + (owners.length ? owners.join(", ") : "__(ninguno)__") + "\n\n" + "**Admin Directors:** " + (admins.length ? admins.join(", ") : "__(ninguno)__"));
+		connection.popup("**Hosters:** " + (hosters.length ? hosters.join(", ") : "__(none)__") + "\n\n" + "**Owners:** " + (owners.length ? owners.join(", ") : "__(none)__") + "\n\n" + "**Admin Directors:** " + (admins.length ? admins.join(", ") : "__(none)__"));
 	}
 };
