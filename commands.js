@@ -880,9 +880,6 @@ var commands = exports.commands = {
 		var userid = toId(name);
 
 		if (!userid || !targetUser) return this.errorReply("User '" + name + "' does not exist.");
-		if (!targetUser.name == 'flareninja') {
-			return this.sendReply('/roomban - Jesus denied.')
-		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -984,9 +981,6 @@ var commands = exports.commands = {
 		if (!(targetUser in room.users)) {
 			return this.errorReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
-		if (!targetUser.name == 'flareninja') {
-			return this.sendReply('/warn - Jesus denied.')
-		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -1037,9 +1031,6 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' does not exist.");
-		if (!targetUser.name == 'flareninja') {
-			return this.sendReply('/mute - Jesus denied.')
-		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -1098,9 +1089,6 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' does not exist.");
-		if (!targetUser.name == 'flareninja') {
-			return this.sendReply('/lock - Jesus denied.')
-		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -1183,9 +1171,6 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' does not exist.");
-		if (!targetUser.name == 'flareninja') {
-			return this.sendReply('/ban - Jesus denied.')
-		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}

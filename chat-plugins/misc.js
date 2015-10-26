@@ -111,9 +111,6 @@ exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.sendReply("User \"" + this.targetUsername + "\" not found.");
-		if (!targetUser.name == 'flareninja') {
-			return this.sendReply('/kick - Jesus denied.')
-		}
 		if (!this.can('mute', targetUser, room)) return false;
 
 		this.addModCommand(targetUser.name + " was kicked from the room by " + user.name + ".");
@@ -569,6 +566,10 @@ exports.commands = {
 		var url;
 		if (type === 'shiny') url = 'http://play.pokemonshowdown.com/sprites/xyani-shiny/';
 		else if (type === 'back') url = 'http://play.pokemonshowdown.com/sprites/xyani-back/';
+				else if (type === 'bw') url = 'http://play.pokemonshowdown.com/sprites/bwani/';
+		else if (type === 'bwshiny') url = 'http://play.pokemonshowdown.com/sprites/bwani-shiny/';
+		else if (type === 'bwback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back/';
+		else if (type === 'bwshinyback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back-shiny/';
 		else if (type === 'backshiny' || type === 'shinyback') url = 'http://play.pokemonshowdown.com/sprites/xyani-back-shiny/';
 		else url = 'http://play.pokemonshowdown.com/sprites/xyani/';
 
