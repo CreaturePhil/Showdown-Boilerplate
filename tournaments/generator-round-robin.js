@@ -2,6 +2,7 @@ var RoundRobin = (function () {
 	function RoundRobin(isDoubles) {
 		this.isDoubles = !!isDoubles;
 		this.isBracketFrozen = false;
+		this.hasBracket = true;
 		this.users = [];
 		this.isUsersBusy = null;
 		this.matches = null;

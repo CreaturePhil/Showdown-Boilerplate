@@ -269,7 +269,7 @@ Tournament = (function () {
 
 		this.room.add('|tournament|join|' + user.name);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
-		this.isBracketInvalidated = true;
+		if (this.generator.hasBracket) this.isBracketInvalidated = true;
 		this.update();
 		if (this.playerCap === (users.length + 1)) this.room.add("The tournament is now full.");
 	};
@@ -282,7 +282,7 @@ Tournament = (function () {
 
 		this.room.add('|tournament|leave|' + user.name);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
-		this.isBracketInvalidated = true;
+		if (this.generator.hasBracket) this.isBracketInvalidated = true;
 		this.update();
 	};
 	Tournament.prototype.replaceUser = function (user, replacementUser, output) {
@@ -364,7 +364,8 @@ Tournament = (function () {
 			output.sendReply('|tournament|error|NotEnoughUsers');
 			return false;
 		}
-
+		
+		if (!this.generator.hasBracket && this.generator.generateBracket) this.generator.generateBracket();
 		this.generator.freezeBracket();
 
 		this.availableMatches = new Map();
