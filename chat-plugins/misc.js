@@ -933,6 +933,7 @@ exports.commands = {
 	},
 	givesymbol: 'gs',
 	gs: function(target, room, user) {
+		if (!this.can('declare')) return false;
 		if (!target) return this.errorReply('/givesymbol [user] - Gives permission for this user to set a custom symbol.');
 		if (!Users(target)) return this.errorReply("Target user not found.  Check spelling?");
 		Users(target).canCustomSymbol = true;
