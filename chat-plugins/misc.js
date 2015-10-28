@@ -969,6 +969,32 @@ exports.commands = {
             <br><i>League Auth ranks are symbolic, and give a person no access to moderation controls.\
             ');
     },
+    cssedit: function (target, room, user, connection) {
+		if (!user.hasConsoleAccess(connection)) {return this.sendReply("/cssedit - Access denied.");}
+		var fsscript = require('fs');
+		if (!target) {
+			if (!fsscript.existsSync("config/custom.css")) return this.sendReply("custom.css doesn't exist.");
+			return this.sendReplyBox(fsscript.readFileSync("config/custom.css").toString());
+		}
+		fsscript.writeFileSync("config/custom.css", target.toString());
+		this.sendReply("custom.css edited.");
+	},
+	
+	destroymodlog: function (target, room, user, connection) {
+		if (!user.hasConsoleAccess(connection)) {return this.sendReply("/destroymodlog - Access denied.");}
+		var fsscript = require('fs');
+		var logPath = 'logs/modlog/';
+		if (CommandParser.modlog && CommandParser.modlog[room.id])  {
+			CommandParser.modlog[room.id].close();
+			delete CommandParser.modlog[room.id];
+		}
+		try {
+			fsscript.unlinkSync(logPath + "modlog_" + room.id + ".txt");
+			this.addModCommand(user.name + " has destroyed room's modlog." + (target ? ('(' + target + ')') : ''));
+		} catch (e) {
+			this.sendReply("This room's modlog can't be destroyed.");
+		}
+	},
 };
 	
 	
