@@ -273,7 +273,6 @@ exports.grouplist = [
 		declare: true,
 		modchatall: true,
 		rangeban: true,
-		makeroom: true,
 		editroom: true,
 		potd: true,
 		disableladder: true,
@@ -362,10 +361,9 @@ exports.grouplist = [
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
-		inherit: '$',
+		inherit: ' ',
 		broadcast: true,
-		joinbattle: true,
-		announce: true
+		joinbattle: true
 	},
 	{
 		symbol: ' ',
