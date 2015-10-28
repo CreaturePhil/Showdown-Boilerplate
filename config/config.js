@@ -362,8 +362,10 @@ exports.grouplist = [
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
-		inherit: ' ',
-		broadcast: true
+		inherit: '$',
+		broadcast: true,
+		joinbattle: true,
+		announce: true
 	},
 	{
 		symbol: '$',
