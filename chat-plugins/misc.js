@@ -292,16 +292,6 @@ exports.commands = {
 		targetUser.ban();
 		ipbans.write('\n' + targetUser.latestIp);
 	},
-	bitch: 'complain',
-	report: 'complain',
-	complain: function(target, room, user) {
-		if (!target) return this.sendReply('/report [report] - Use this command to report other users.');
-		if (target.length > 350) return this.sendReply('This report is too long; it cannot exceed 350 characters.');
-		if (!this.canTalk()) return;
-		Rooms('staff').add(Tools.escapeHTML(user.name) + ' (in ' + room.title + ') has reported: ' + Tools.escapeHTML(target));
-		this.sendReply('Your report "' + target + '" has been reported.');
-		Rooms('staff').update();
-	},
 	gdeclarered: 'gdeclare',
 	gdeclaregreen: 'gdeclare',
 	gdeclare: function(target, room, user, connection, cmd) {
