@@ -38,7 +38,8 @@ var emotes = {
 	'feelsHigh': 'http://i.imgur.com/s9I2bxp.jpg?1',
 	'feelsfdra': 'http://i.imgur.com/ZIcl9Zy.jpg',
 	'feelsdoge': 'http://i.imgur.com/GklYWvi.png',
-	'Doge': 'http://fc01.deviantart.net/fs71/f/2014/279/4/5/doge__by_honeybunny135-d81wk54.png'
+	'Doge': 'http://fc01.deviantart.net/fs71/f/2014/279/4/5/doge__by_honeybunny135-d81wk54.png',
+	'feelspix': 'http://i.imgur.com/YIOKlWT.png',
 };
 
 var emotesKeys = Object.keys(emotes);
