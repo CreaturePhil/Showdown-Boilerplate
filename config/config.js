@@ -368,13 +368,6 @@ exports.grouplist = [
 		announce: true
 	},
 	{
-		symbol: '$',
-		id: "destacado",
-		name: "Destacado",
-		inherit: ' ',
-		broadcast: true
-	},
-	{
 		symbol: ' ',
 		ip: 's',
 		alts: 's'
