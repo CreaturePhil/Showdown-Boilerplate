@@ -1053,23 +1053,12 @@ exports.commands = {
 			if (room.id !== 'lobby') this.sendReply('The Tournament Ladder has been reset.');
 		});
 	},
-	
-	restart: function(target, room, user) {
-		if (!this.can('lockdown')) return false;
-		try {
-			var forever = require('forever');
-		} catch (e) {
-			return this.sendReply("/restart requires the \"forever\" module.");
-		}
-		if (!Rooms.global.lockdown) {
-			return this.sendReply("For safety reasons, /restart can only be used during lockdown.");
-		}
-		if (CommandParser.updateServerLock) {
-			return this.sendReply("Wait for /updateserver to finish before using /restart.");
-		}
-		this.logModCommand(user.name + ' used /restart');
-		Rooms.global.send('|refresh|');
-		forever.restart('app.js');
+	pbl: 'pbanlist',
+	permabanlist: 'pbanlist',
+	pbanlist: function(target, room, user, connection) {
+		if (!this.canBroadcast() || !user.can('lock')) return this.sendReply('/pbanlist - Access Denied.');
+		var pban = fs.readFileSync('config/pbanlist.txt', 'utf8');
+		return user.send('|popup|' + pban);
 	},
 };
 	
