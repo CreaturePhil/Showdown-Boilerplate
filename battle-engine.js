@@ -1391,6 +1391,8 @@ BattleSide = (function () {
 		var sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.merge(this, sideScripts);
 
+		this.getChoice = (this.getChoice || BattleSide.getChoice).bind(this);
+
 		this.battle = battle;
 		this.n = n;
 		this.name = name;
@@ -1419,6 +1421,11 @@ BattleSide = (function () {
 			this.pokemon[i].position = i;
 		}
 	}
+
+	BattleSide.getChoice = function (side) {
+		if (side !== this && side !== true) return '';
+		return this.choice;
+	};
 
 	BattleSide.prototype.isActive = false;
 	BattleSide.prototype.pokemonLeft = 0;
@@ -1540,7 +1547,11 @@ BattleSide = (function () {
 		this.battle.send('request', this.id + "\n" + this.battle.rqid + "\n" + JSON.stringify(update));
 	};
 	BattleSide.prototype.resolveDecision = function () {
-		if (this.decision) return this.decision;
+		if (this.decision) {
+			if (this.decision === true) this.choice = '';
+			return;
+		}
+
 		var decisions = [];
 
 		switch (this.currentRequest) {
@@ -1612,7 +1623,8 @@ BattleSide = (function () {
 			});
 		}
 
-		return decisions;
+		this.choice = '';
+		this.decision = decisions;
 	};
 	BattleSide.prototype.destroy = function () {
 		// deallocate ourself
@@ -1666,6 +1678,11 @@ Battle = (function () {
 			return battle;
 		};
 	})();
+
+	Battle.logReplay = function (data, isReplay) {
+		if (isReplay === true) return data;
+		return '';
+	};
 
 	Battle.prototype = {};
 
@@ -2317,13 +2334,12 @@ Battle = (function () {
 					BeforeMove: 1,
 					BasePower: 1,
 					Immunity: 1,
-					Accuracy: 1,
 					RedirectTarget: 1,
 					Heal: 1,
 					SetStatus: 1,
 					CriticalHit: 1,
 					ModifyPokemon: 1,
-					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1,
+					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1, ModifyAccuracy: 1,
 					ModifyBoost: 1,
 					ModifyDamage: 1,
 					ModifySecondaries: 1,
@@ -3058,8 +3074,6 @@ Battle = (function () {
 			}
 		}
 
-		this.add('turn', this.turn);
-
 		if (this.gameType === 'triples' && this.sides.map('pokemonLeft').count(1) === this.sides.length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			var center = false;
@@ -3074,6 +3088,9 @@ Battle = (function () {
 			}
 			if (center) this.add('-center');
 		}
+
+		this.add('turn', this.turn);
+
 		this.makeRequest('move');
 	};
 	Battle.prototype.start = function () {
@@ -3109,6 +3126,7 @@ Battle = (function () {
 		if (this.rated) {
 			this.add('rated');
 		}
+		this.add('seed', Battle.logReplay.bind(this, this.startingSeed.join(',')));
 		if (format && format.ruleset) {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				this.addPseudoWeather(format.ruleset[i]);
@@ -3137,6 +3155,7 @@ Battle = (function () {
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.clone(boost));
 		var success = false;
+		var boosted = false;
 		for (var i in boost) {
 			var currentBoost = {};
 			currentBoost[i] = boost[i];
@@ -3162,6 +3181,10 @@ Battle = (function () {
 					if (effect.effectType === 'Move') {
 						this.add(msg, target, i, boost[i]);
 					} else {
+						if (effect.effectType === 'Ability' && !boosted) {
+							this.add('-activate', target, effect.fullname);
+							boosted = true;
+						}
 						this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 					}
 					break;
@@ -3218,7 +3241,7 @@ Battle = (function () {
 		default:
 			if (effect.effectType === 'Move') {
 				this.add('-damage', target, target.getHealth);
-			} else if (source && source !== target) {
+			} else if (source && (source !== target || effect.effectType === 'Ability')) {
 				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
 			} else {
 				this.add('-damage', target, target.getHealth, '[from] ' + name);
@@ -3860,8 +3883,17 @@ Battle = (function () {
 		switch (decision.choice) {
 		case 'start':
 			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
-			var beginCallback = this.getFormat().onBegin;
-			if (beginCallback) beginCallback.call(this);
+			var format = this.getFormat();
+
+			if (format.onBegin) format.onBegin.call(this);
+
+			if (format.teamLength && format.teamLength.battle) {
+				// Trim the team: not all of the Pokémon brought to Preview will battle.
+				this.p1.pokemon = this.p1.pokemon.slice(0, format.teamLength.battle);
+				this.p1.pokemonLeft = this.p1.pokemon.length;
+				this.p2.pokemon = this.p2.pokemon.slice(0, format.teamLength.battle);
+				this.p2.pokemonLeft = this.p2.pokemon.length;
+			}
 
 			this.add('start');
 			for (var pos = 0; pos < this.p1.active.length; pos++) {
@@ -4124,17 +4156,13 @@ Battle = (function () {
 			return;
 		}
 
-		// It should be impossible for choice not to be a string. Choice comes
-		// from splitting the string sent by our forked process, not from the
-		// client. However, just in case, we maintain this check for now.
-		if (typeof choice === 'string') choice = choice.split(',');
-
 		if (side.decision && side.decision.finalDecision) {
 			this.debug("Can't override decision: the last pokemon could have been trapped or disabled");
 			return;
 		}
 
-		side.decision = this.parseChoice(choice, side);
+		side.decision = this.parseChoice(choice.split(','), side);
+		side.choice = choice;
 
 		if (this.p1.decision && this.p2.decision) {
 			this.commitDecisions();
@@ -4143,12 +4171,13 @@ Battle = (function () {
 	Battle.prototype.commitDecisions = function () {
 		var oldQueue = this.queue;
 		this.queue = [];
-		if (this.p1.decision !== true) {
-			this.addQueue(this.p1.resolveDecision());
+		for (var i = 0; i < this.sides.length; i++) {
+			this.sides[i].resolveDecision();
+			if (this.sides[i].decision === true) continue;
+			this.addQueue(this.sides[i].decision);
 		}
-		if (this.p2.decision !== true) {
-			this.addQueue(this.p2.resolveDecision());
-		}
+		this.add('choice', this.p1.getChoice, this.p2.getChoice);
+
 		this.sortQueue();
 		Array.prototype.push.apply(this.queue, oldQueue);
 
