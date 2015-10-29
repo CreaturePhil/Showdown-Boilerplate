@@ -743,29 +743,42 @@ exports.commands = {
 	},
 
 	roomlist: function (target, room, user) {
-		if(!this.can('hotpatch')) return;
-	
+		if(!this.can('pban')) return;
+		var totalUsers = 0; 
+		for (var u in Users.users) {
+			if (!Users.users[u].connected) continue; totalUsers++;
+		}
 		var rooms = Object.keys(Rooms.rooms),
 		len = rooms.length,
-		official = ['<b><font color="#1a5e00" size="2">Official chat rooms:</font></b><br>'],
-		nonOfficial = ['<hr><b><font color="#000b5e" size="2">Public chat rooms:</font></b><br>'],
-		privateRoom = ['<hr><b><font color="#5e0019" size="2">Private chat rooms:</font></b><br>'];
+		header = ['<b><font color="#DA9D01" size="2">Total users connected: ' + totalUsers + '</font></b><br />'],
+		official = ['<b><font color="#1a5e00" size="2">Official chat rooms:</font></b><br />'],
+		nonOfficial = ['<hr><b><font color="#000b5e" size="2">Public chat rooms:</font></b><br />'],
+		privateRoom = ['<hr><b><font color="#8BA41E" size="2">Private chat rooms:</font></b><br />'],
+		groupChats = ['<hr><b><font color="#740B53" size="2">Group Chats:</font></b><br />'],
+		battleRooms = ['<hr><b><font color="#8BA41E" size="2">Battle Rooms:</font></b><br />'];
 	 
 		while (len--) {
 			var _room = Rooms.rooms[rooms[(rooms.length - len) - 1]];
+			if (_room.type === 'battle') {
+				battleRooms.push('<a href="/ ' + _room.id + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')');
+			}
 			if (_room.type === 'chat') {
+				if (_room.isPersonal) {
+					groupChats.push('<a href="/' + _room.id + '" class="ilink">' + _room.id + '</a> (' + _room.userCount + ')');
+					continue;
+				}
 				if (_room.isOfficial) {
-					official.push(('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')'));
+					official.push('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')');
 					continue;
 				}
 				if (_room.isPrivate) {
-					privateRoom.push(('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')'));
+					privateRoom.push('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')');
 					continue;
 				}
-				nonOfficial.push(('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')'));
 			}
+			nonOfficial.push('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')');
 		}
-		this.sendReplyBox(official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' '));
+		this.sendReplyBox(header + official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' ') + (groupChats.length > 1 ? groupChats.join(' ') : '') + (battleRooms.length > 1 ? battleRooms.join(' ') : ''));
     },
 	
 	spop: 'sendpopup',
