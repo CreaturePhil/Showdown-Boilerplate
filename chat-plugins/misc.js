@@ -1002,57 +1002,6 @@ exports.commands = {
 			this.sendReply("This room's modlog can't be destroyed.");
 		}
 	},
-	tourelo: 'tourladder',
-	tourladder: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-		var self = this;
-		var tourLadder = Ladders('tournaments');
-		if (!target || !target.trim()) {
-			tourLadder.load().then(function (users) {
-				if (!users.length) return self.sendReplyBox('No rated tournaments have been played yet.');
-				users.sort(function (a, b) {
-					return b[1] - a[1];
-				});
-				var padding = self.broadcasting ? '5' : '8';
-				var table = '<center><b><u>Tournament Ladder</u></b><br>' +
-					'<table border = "1" cellspacing = "0" cellpadding = "' + padding + '"><tr><th>No.</th><th>User</th><th>Elo</th>';
-				for (var i = 0; i < 10; i++) {
-					if (!users[i] || users[i][1] <= 1000) break;
-					var user = (Users.getExact(users[i][0]) ? Users.getExact(users[i][0]).name : users[i][0]);
-					table += '<tr><td><center>' + (i + 1) + '</center></td><td style = "text-align: center">' + user + '</td><td style = "text-align: center">' + Math.round(users[i][1]) + '</td></tr>';
-				}
-				table += '</table></center>';
-				if (self.broadcasting && users.length > 10) table += '<center><button name = "send" value = "/tourladder"><small>Click to see the full ladder</small></button></center>';
-
-				display(table + '</table>', self);
-			});
-			return;
-		}
-
-		target = (Users.getExact(target) ? Users.getExact(target).name : target);
-		if (tourLadder.indexOfUser(target) === -1) return this.sendReplyBox(target + ' has not played any rated tournaments yet.');
-		tourLadder.load().then(function (users) {
-			var elo = users[tourLadder.indexOfUser(target)][1];
-			self.sendReplyBox(target + '\'s Tournament Elo is <b>' + Math.round(elo) + '</b>.');
-		});
-	},
-
-	deletetourladder: 'resettourladder',
-	resettourladder: function (target, room, user) {
-		if (!this.can('hotpatch')) return false;
-		var tourLadder = Ladders('tournaments');
-		tourLadder.load().then(function (users) {
-			if (!users.length) return this.sendReply('No rated tournaments have been played yet.');
-			if (!confirmDeleteElo) {
-				confirmDeleteElo = true;
-				return this.sendReply('WARNING: This will permanently delete all tournament ladder ratings. If you\'re sure you want to do this, use this command again.');
-			}
-			require('fs').unlinkSync('config/ladders/tournaments.csv');
-			Rooms.rooms.lobby.add('The Tournament Ladder has been reset.');
-			Rooms.rooms.lobby.update();
-			if (room.id !== 'lobby') this.sendReply('The Tournament Ladder has been reset.');
-		});
-	},
 	pbl: 'pbanlist',
 	permabanlist: 'pbanlist',
 	pbanlist: function(target, room, user, connection) {
