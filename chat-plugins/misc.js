@@ -753,7 +753,7 @@ exports.commands = {
 		header = ['<b><font color="#DA9D01" size="2">Total users connected: ' + totalUsers + '</font></b><br />'],
 		official = ['<b><font color="#1a5e00" size="2">Official chat rooms:</font></b><br />'],
 		nonOfficial = ['<hr><b><font color="#000b5e" size="2">Public chat rooms:</font></b><br />'],
-		privateRoom = ['<hr><b><font color="#8BA41E" size="2">Private chat rooms:</font></b><br />'],
+		privateRoom = ['<hr><b><font color="#ff5cb6" size="2">Private chat rooms:</font></b><br />'],
 		groupChats = ['<hr><b><font color="#740B53" size="2">Group Chats:</font></b><br />'],
 		battleRooms = ['<hr><b><font color="#0191C6" size="2">Battle Rooms:</font></b><br />'];
 	 
