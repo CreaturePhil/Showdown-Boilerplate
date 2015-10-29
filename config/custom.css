@@ -12,11 +12,6 @@ body {
 	opacity: 0;
 }
 
-.backdrop {
-    background-image: url("http://i.imgur.com/yrjk5CU.png";
-    ) !important;
-}
-
 .maintabbarbottom { 
 	background: #303B78; border-color: #303B78; 
 } 
