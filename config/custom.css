@@ -3,7 +3,7 @@
 **************/
   
 body {
-	background: url("http://www.thespectacleplace.com.au/wp-content/uploads/2015/06/White-Background-Wallpapers-HD.jpg") !important;
+	background: url("https://mamaa.files.wordpress.com/2012/10/pokemon-ghost-story-scary.jpg") !important;
 }
 
 .chat.mine {
@@ -19,7 +19,7 @@ body {
 }
 
 .header {
-	background: rgba(255, 255, 255, 0.3) url(http://i.imgur.com/uGKJfd2.png) no-repeat !important;
+	background: url(http://i.imgur.com/uGKJfd2.png) no-repeat !important;
 }
 
 .maintabbarbottom {
@@ -134,13 +134,13 @@ body {
 }
 
 .infobox {
-	border-color: #FFFFFF;
+	border-color: #000000;
 	box-shadow: 0px 0px 0px 3px rgba(0,0,0,0.3);
 }
 
 .chat-log {
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
-	background: rgba(236,169,244,0.3) url(http://i.imgur.com/71LkYM2.png) top right no-repeat !important;
+	background: url(http://i.imgur.com/PlZJbVg.png) !important;
 }
 
 .chat.highlighted {
@@ -257,14 +257,14 @@ body {
 
 .pm-window h3 {
     	border-color: #1e93ea;
-    	background: #f59ed9 url("http://pldh.net/media/pokexycons/698.png") bottom right no-repeat;
+    	background: #f59ed9 url("http://pldh.net/media/pokexycons/607.png") bottom right no-repeat;
     	background-position: 200px;
     	color: #FFFFFF;
     	text-shadow: 0px -1px 0px #000000;
 }
   
 .pm-window h3:hover {
-    	background: #f59ed9 url("http://pldh.net/media/pokexycons/698.png") bottom right no-repeat;
+    	background: #f59ed9 url("http://pldh.net/media/pokexycons/607.png") bottom right no-repeat;
     	background-position: 200px;
     	color: #FFFFFF;
 }
@@ -275,7 +275,7 @@ body {
   
 .pm-window.focused h3, .pm-window.focused h3:hover {
     	border-color: #1e93ea;
-    	background: #f59ed9 url("http://pldh.net/media/pokexycons/582.png") bottom right no-repeat;
+    	background: #f59ed9 url("http://pldh.net/media/pokexycons/479.png") bottom right no-repeat;
     	background-position: 200px;
     	color: #FFFFFF;
     	text-shadow: 0px -1px 0px #000000;
@@ -452,7 +452,7 @@ body {
 }
 
 .backdrop {
-    background-image: url("http://i.imgur.com/3kxw375.png") !important;
+    background-image: url("http://i.imgur.com/ZTf1k6x.png") !important;
 }
 
 .battle-log h2 {
