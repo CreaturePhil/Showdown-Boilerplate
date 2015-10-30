@@ -4,7 +4,6 @@
 const MAX_REASON_LENGTH = 300;
 var fs = require('fs');
 var moment = require('moment');
-var confirmDeleteElo = false;
 var request = require('request');
 
 var messages = [
