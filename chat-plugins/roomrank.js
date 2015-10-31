@@ -6,7 +6,7 @@ exports.commands = {
         target = this.splitTarget(target, true);
         var targetUser = this.targetUser;
         if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
-        if (!this.can('makeroom')) return false;
+        if (!this.can('declare')) return false;
         if (!room.auth) room.auth = room.chatRoomData.auth = {};
         if (!room.leagueauth) room.leagueauth = room.chatRoomData.leagueauth = {};
         var name = targetUser.name;
@@ -30,7 +30,7 @@ exports.commands = {
         if (!userid || userid === '') return this.sendReply("User '" + name + "' does not exist.");
 
         if (room.auth[userid] !== '#') return this.sendReply("User '" + name + "' is not a room founder.");
-        if (!this.can('makeroom', null, room)) return false;
+        if (!this.can('declare', null, room)) return false;
 
         delete room.auth[userid];
         delete room.founder;
@@ -52,7 +52,7 @@ exports.commands = {
         if (!targetUser.registered) return this.sendReply("User '" + name + "' is not registered.");
 
         if (!room.founder) return this.sendReply('The room needs a room founder before it can have a room owner.');
-        if (room.founder !== user.userid && !this.can('makeroom')) return this.sendReply('/roomowner - Access denied.');
+        if (room.founder !== user.userid && !this.can('declare')) return this.sendReply('/roomowner - Access denied.');
 
         if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
@@ -75,7 +75,7 @@ exports.commands = {
         if (!userid || userid === '') return this.sendReply("User '" + name + "' does not exist.");
 
         if (room.auth[userid] !== '#') return this.sendReply("User '"+name+"' is not a room owner.");
-        if (!room.founder || user.userid !== room.founder && !this.can('makeroom', null, room)) return false;
+        if (!room.founder || user.userid !== room.founder && !this.can('declare', null, room)) return false;
 
         delete room.auth[userid];
         this.sendReply("(" + name + " is no longer Room Owner.)");
@@ -95,7 +95,7 @@ exports.commands = {
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
 
 		if (!room.founder) return this.sendReply('The room needs a room founder before it can have a room owner.');
-		if (room.founder !== user.userid && !this.can('makeroom')) return this.sendReply('/roomowner - Access denied.');
+		if (room.founder !== user.userid && !this.can('declare')) return this.sendReply('/roomowner - Access denied.');
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
@@ -120,7 +120,7 @@ exports.commands = {
 		if (!userid || userid === '') return this.sendReply("User '" + name + "' does not exist.");
 
 		if (room.auth[userid] !== '&') return this.sendReply("User '"+name+"' is not a room leader.");
-		if (!room.founder || user.userid !== room.founder && !this.can('makeroom', null, room)) return false;
+		if (!room.founder || user.userid !== room.founder && !this.can('declare', null, room)) return false;
 
 		delete room.auth[userid];
 		this.sendReply("(" + name + " is no longer Room Leader.)");
