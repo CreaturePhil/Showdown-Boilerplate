@@ -645,36 +645,6 @@ exports.commands = {
 		this.logModCommand(user.name+' send a popup message to '+targetUser.name);
 	},
 	
-	namelock: 'nl',
-	nl: function(target, room, user) {
-		if (!this.can('ban')) return false;
-		target = this.splitTarget(target);
-		targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply('/namelock - Lock a user into a username.');
-		}
-		if (targetUser.namelock === true) {
-			return this.sendReply("The user "+targetUser+" is already namelocked.");
-		}
-		targetUser.namelock = true;
-		return this.sendReply("The user "+targetUser+" is now namelocked.");
-	},
-	
-	unnamelock: 'unl',
-	unl: function(target, room, user) {
-		if (!this.can('ban')) return false;
-		target = this.splitTarget(target);
-		targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply('/unnamelock - Unlock a user from a username.');
-		}
-		if (targetUser.namelock === false) {
-			return this.sendReply("The user "+targetUser+" is already un-namelocked.");
-		}
-		targetUser.namelock = false;
-		return this.sendReply("The user "+targetUser+" is now un-namelocked.");
-	},
-	
         rbysprite: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/rby/'+target+'.png">');
