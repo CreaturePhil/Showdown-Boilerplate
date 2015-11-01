@@ -31,13 +31,13 @@ function parseStatus(text, encoding) {
 
 exports.commands = {
 	away: function (target, room, user) {
-		if (!user.isAway && user.name.length > 19) return this.sendReply("Your username is too long for any kind of use of this command.");
+		if (!user.isAway && user.name.length > 15) return this.sendReply("Your username is too long for any kind of use of this command.");
 
 		target = target ? target.replace(/[^a-zA-Z0-9]/g, '') : 'AWAY';
 		var newName = user.name;
 		var status = parseStatus(target, true);
 		var statusLen = status.length;
-		if (statusLen > 14) return this.sendReply("Your away status should be short and to-the-point, not a dissertation on why you are away.");
+		if (statusLen > 19) return this.sendReply("Your away status should be short and to-the-point, not a dissertation on why you are away.");
 
 		if (user.isAway) {
 			var statusIdx = newName.search(/\s\-\s[\u24B6-\u24E9\u2460-\u2468\u24EA]+$/);
