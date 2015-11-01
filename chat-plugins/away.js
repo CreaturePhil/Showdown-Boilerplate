@@ -31,7 +31,7 @@ function parseStatus(text, encoding) {
 
 exports.commands = {
 	away: function (target, room, user) {
-		if (!user.isAway && user.name.length > 15) return this.sendReply("Your username is too long for any kind of use of this command.");
+		if (!user.isAway && user.name.length > 19) return this.sendReply("Your username is too long for any kind of use of this command.");
 
 		target = target ? target.replace(/[^a-zA-Z0-9]/g, '') : 'AWAY';
 		var newName = user.name;
