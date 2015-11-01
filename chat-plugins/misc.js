@@ -93,11 +93,53 @@ exports.commands = {
 		}
 	},
 
-	hide: function (target, room, user) {
-		if (!this.can('lock')) return false;
-		user.hiding = true;
+	hide: 'hideauth',
+	hideauth: function(target, room, user) {
+		if (!user.can('lock')) return this.sendReply("/hideauth - access denied.");
+		var tar = ' ';
+		if (target) {
+			target = target.trim();
+			if (Config.groupsranking.indexOf(target) > -1 && target != '#') {
+				if (Config.groupsranking.indexOf(target) <= Config.groupsranking.indexOf(user.group)) {
+					tar = target;
+				} else {
+					this.sendReply('The group symbol you have tried to use is of a higher authority than you have access to. Defaulting to \' \' instead.');
+				}
+			} else {
+				this.sendReply('You have tried to use an invalid character as your auth symbol. Defaulting to \' \' instead.');
+			}
+		}
+		user.getIdentity = function (roomid) {
+			if (this.locked) {
+				return '‽' + this.name;
+			}
+			if (roomid) {
+				var room = Rooms.rooms[roomid];
+				if (room.isMuted(this)) {
+					return '!' + this.name;
+				}
+				if (room && room.auth) {
+					if (room.auth[this.userid]) {
+						return room.auth[this.userid] + this.name;
+					}
+					if (room.isPrivate === true) return ' ' + this.name;
+				}
+			}
+			return tar + this.name;
+		}
 		user.updateIdentity();
-		this.sendReply("You have hidden your staff symbol.");
+		this.sendReply('You are now hiding your auth symbol as \'' + tar + '\'.');
+		this.logModCommand(user.name + ' is hiding auth symbol as \'' + tar + '\'');
+		user.isHiding = true;
+	},
+	show: 'showauth',
+	showauth: function(target, room, user) {
+		if (!user.can('lock')) return this.sendReply("/showauth - access denied.");
+		delete user.getIdentity;
+		user.updateIdentity();
+		user.isHiding = false;
+		this.sendReply("You have now revealed your auth symbol.");
+		return this.logModCommand(user.name + " has revealed their auth symbol.");
 	},
 
 	rk: 'kick',
@@ -204,13 +246,6 @@ exports.commands = {
 		}.bind(this));
 	},
 	regdatehelp: ["/regdate - Please specify a valid username."],
-
-	show: function (target, room, user) {
-		if (!this.can('lock')) return false;
-		user.hiding = false;
-		user.updateIdentity();
-		this.sendReply("You have revealed your staff symbol.");
-	},
 
 	sb: 'showdownboilerplate',
 	showdownboilerplate: function (target, room, user) {
