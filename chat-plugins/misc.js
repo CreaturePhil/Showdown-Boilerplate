@@ -93,11 +93,53 @@ exports.commands = {
 		}
 	},
 
-	hide: function (target, room, user) {
-		if (!this.can('lock')) return false;
-		user.hiding = true;
+	hide: 'hideauth',
+	hideauth: function(target, room, user) {
+		if (!user.can('lock')) return this.sendReply("/hideauth - access denied.");
+		var tar = ' ';
+		if (target) {
+			target = target.trim();
+			if (Config.groupsranking.indexOf(target) > -1 && target != '#') {
+				if (Config.groupsranking.indexOf(target) <= Config.groupsranking.indexOf(user.group)) {
+					tar = target;
+				} else {
+					this.sendReply('The group symbol you have tried to use is of a higher authority than you have access to. Defaulting to \' \' instead.');
+				}
+			} else {
+				this.sendReply('You have tried to use an invalid character as your auth symbol. Defaulting to \' \' instead.');
+			}
+		}
+		user.getIdentity = function (roomid) {
+			if (this.locked) {
+				return '‽' + this.name;
+			}
+			if (roomid) {
+				var room = Rooms.rooms[roomid];
+				if (room.isMuted(this)) {
+					return '!' + this.name;
+				}
+				if (room && room.auth) {
+					if (room.auth[this.userid]) {
+						return room.auth[this.userid] + this.name;
+					}
+					if (room.isPrivate === true) return ' ' + this.name;
+				}
+			}
+			return tar + this.name;
+		}
 		user.updateIdentity();
-		this.sendReply("You have hidden your staff symbol.");
+		this.sendReply('You are now hiding your auth symbol as \'' + tar + '\'.');
+		this.logModCommand(user.name + ' is hiding auth symbol as \'' + tar + '\'');
+		user.isHiding = true;
+	},
+	show: 'showauth',
+	showauth: function(target, room, user) {
+		if (!user.can('lock')) return this.sendReply("/showauth - access denied.");
+		delete user.getIdentity;
+		user.updateIdentity();
+		user.isHiding = false;
+		this.sendReply("You have now revealed your auth symbol.");
+		return this.logModCommand(user.name + " has revealed their auth symbol.");
 	},
 
 	rk: 'kick',
@@ -204,13 +246,6 @@ exports.commands = {
 		}.bind(this));
 	},
 	regdatehelp: ["/regdate - Please specify a valid username."],
-
-	show: function (target, room, user) {
-		if (!this.can('lock')) return false;
-		user.hiding = false;
-		user.updateIdentity();
-		this.sendReply("You have revealed your staff symbol.");
-	},
 
 	sb: 'showdownboilerplate',
 	showdownboilerplate: function (target, room, user) {
@@ -408,143 +443,6 @@ exports.commands = {
 				Users.users[u].send('|pm|~Upper Staff PM|' + Users.users[u].group + Users.users[u].name + '| ' + target + ' (PM from ' + user.name + ')');
 			}
 		}
-	},
-	helixfossil: 'm8b',
-	helix: 'm8b',
-	magic8ball: 'm8b',
-	m8b: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		var random = Math.floor(20 * Math.random()) + 1;
-		var results = '';
-		if (random == 1) {
-			results = 'Signs point to yes.';
-		}
-		if (random == 2) {
-			results = 'Yes.';
-		}
-		if (random == 3) {
-			results = 'Reply hazy, try again.';
-		}
-		if (random == 4) {
-			results = 'Without a doubt.';
-		}
-		if (random == 5) {
-			results = 'My sources say no.';
-		}
-		if (random == 6) {
-			results = 'As I see it, yes.';
-		}
-		if (random == 7) {
-			results = 'You may rely on it.';
-		}
-		if (random == 8) {
-			results = 'Concentrate and ask again.';
-		}
-		if (random == 9) {
-			results = 'Outlook not so good.';
-		}
-		if (random == 10) {
-			results = 'It is decidedly so.';
-		}
-		if (random == 11) {
-			results = 'Better not tell you now.';
-		}
-		if (random == 12) {
-			results = 'Very doubtful.';
-		}
-		if (random == 13) {
-			results = 'Yes - definitely.';
-		}
-		if (random == 14) {
-			results = 'It is certain.';
-		}
-		if (random == 15) {
-			results = 'Cannot predict now.';
-		}
-		if (random == 16) {
-			results = 'Most likely.';
-		}
-		if (random == 17) {
-			results = 'Ask again later.';
-		}
-		if (random == 18) {
-			results = 'My reply is no.';
-		}
-		if (random == 19) {
-			results = 'Outlook good.';
-		}
-		if (random == 20) {
-			results = 'Don\'t count on it.';
-		}
-		return this.sendReplyBox('' + results + '');
-	},
-	friendcodehelp: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<b>Friend Code Help:</b> <br><br />' +
-			'/friendcode (/fc) [friendcode] - Sets your Friend Code.<br />' +
-			'/getcode (gc) - Sends you a popup of all of the registered user\'s Friend Codes.<br />' +
-			'/deletecode [user] - Deletes this user\'s friend code from the server (Requires %, @, &, ~)<br>' +
-			'<i>--Any questions, PM papew!</i>');
-	},
-	friendcode: 'fc',
-	fc: function(target, room, user, connection) {
-		if (!target) {
-			return this.sendReply("Enter in your friend code. Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
-		}
-		var fc = target;
-		fc = fc.replace(/-/g, '');
-		fc = fc.replace(/ /g, '');
-		if (isNaN(fc)) return this.sendReply("The friend code you submitted contains non-numerical characters. Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
-		if (fc.length < 12) return this.sendReply("The friend code you have entered is not long enough! Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
-		fc = fc.slice(0, 4) + '-' + fc.slice(4, 8) + '-' + fc.slice(8, 12);
-		var codes = fs.readFileSync('config/friendcodes.txt', 'utf8');
-		if (codes.toLowerCase().indexOf(user.name) > -1) {
-			return this.sendReply("Your friend code is already here.");
-		}
-		code.write('\n' + user.name + ': ' + fc);
-		return this.sendReply("Your Friend Code: " + fc + " has been set.");
-	},
-	viewcode: 'gc',
-	getcodes: 'gc',
-	viewcodes: 'gc',
-	vc: 'gc',
-	getcode: 'gc',
-	gc: function(target, room, user, connection) {
-		var codes = fs.readFileSync('config/friendcodes.txt', 'utf8');
-		return user.send('|popup|' + codes);
-	},
-	deletecode: function(target, room, user) {
-		if (!target) {
-			return this.sendReply('/deletecode [user] - Deletes the Friend Code of the User.');
-		}
-		t = this;
-		if (!this.can('lock')) return false;
-		fs.readFile('config/friendcodes.txt', 'utf8', function(err, data) {
-			if (err) console.log(err);
-			hi = this;
-			var row = ('' + data).split('\n');
-			match = false;
-			line = '';
-			for (var i = row.length; i > -1; i--) {
-				if (!row[i]) continue;
-				var line = row[i].split(':');
-				if (target === line[0]) {
-					match = true;
-					line = row[i];
-				}
-				break;
-			}
-			if (match === true) {
-				var re = new RegExp(line, 'g');
-				var result = data.replace(re, '');
-				fs.writeFile('config/friendcodes.txt', result, 'utf8', function(err) {
-					if (err) t.sendReply(err);
-					t.sendReply('The Friendcode ' + line + ' has been deleted.');
-				});
-			} else {
-				t.sendReply('There is no match.');
-			}
-		});
 	},
 	sprite: function (target, room, user, connection, cmd) {
 		if (!this.canBroadcast()) return;
@@ -780,36 +678,6 @@ exports.commands = {
 		targetUser.send(user.name+' sent a popup message to you.');
 
 		this.logModCommand(user.name+' send a popup message to '+targetUser.name);
-	},
-	
-	namelock: 'nl',
-	nl: function(target, room, user) {
-		if (!this.can('ban')) return false;
-		target = this.splitTarget(target);
-		targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply('/namelock - Lock a user into a username.');
-		}
-		if (targetUser.namelock === true) {
-			return this.sendReply("The user "+targetUser+" is already namelocked.");
-		}
-		targetUser.namelock = true;
-		return this.sendReply("The user "+targetUser+" is now namelocked.");
-	},
-	
-	unnamelock: 'unl',
-	unl: function(target, room, user) {
-		if (!this.can('ban')) return false;
-		target = this.splitTarget(target);
-		targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply('/unnamelock - Unlock a user from a username.');
-		}
-		if (targetUser.namelock === false) {
-			return this.sendReply("The user "+targetUser+" is already un-namelocked.");
-		}
-		targetUser.namelock = false;
-		return this.sendReply("The user "+targetUser+" is now un-namelocked.");
 	},
 	
         rbysprite: function(target, room, user) {
