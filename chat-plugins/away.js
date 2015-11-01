@@ -37,7 +37,7 @@ exports.commands = {
 		var newName = user.name;
 		var status = parseStatus(target, true);
 		var statusLen = status.length;
-		if (statusLen > 19) return this.sendReply("Your away status should be short and to-the-point, not a dissertation on why you are away.");
+		if (statusLen > 14) return this.sendReply("Your away status should be short and to-the-point, not a dissertation on why you are away.");
 
 		if (user.isAway) {
 			var statusIdx = newName.search(/\s\-\s[\u24B6-\u24E9\u2460-\u2468\u24EA]+$/);
