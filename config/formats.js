@@ -27,7 +27,7 @@ exports.Formats = [
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3521201/\">OU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3536420/\">OU Viability Ranking</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3553516/\">OU Viability Ranking</a>"
 		],
 		section: "ORAS Singles",
 
@@ -141,37 +141,25 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		banlist: [],
-		onValidateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least three Pok\u00e9mon.'];
+		teamLength: {
+			validate: [3, 6],
+			battle: 3
 		},
-		onBegin: function () {
-			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: []
 	},
 	{
 		name: "Battle Spot Special 12",
 		section: "ORAS Singles",
 
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
-		requirePentagon: true,
-		onValidateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least three Pok\u00e9mon.'];
+		teamLength: {
+			validate: [3, 6],
+			battle: 3
 		},
-		onBegin: function () {
-			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
+		requirePentagon: true
 	},
 	{
 		name: "Custom Game",
@@ -219,7 +207,7 @@ exports.Formats = [
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Dark Void']
 	},
 	{
@@ -263,19 +251,13 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
-		requirePentagon: true,
-		onValidateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
+		teamLength: {
+			validate: [4, 6],
+			battle: 4
 		},
-		onBegin: function () {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
+		requirePentagon: true
 	},
 	{
 		name: "Battle Spot Doubles",
@@ -283,52 +265,34 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		banlist: [],
-		onValidateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
+		teamLength: {
+			validate: [4, 6],
+			battle: 4
 		},
-		onBegin: function () {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: []
 	},
 	{
-		name: "Spooky Cup",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3551484/\">Spooky Cup</a>"],
+		name: "Scrappy Skirmish",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3552712/\">Scrappy Skirmish</a>"],
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod', 'Team Preview VGC'],
-		banlist: ['Illegal', 'Unreleased'],
-		requirePentagon: true,
-		onValidateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
+		teamLength: {
+			validate: [4, 6],
+			battle: 4
 		},
-		onValidateSet: function (set) {
-			var allowedPokemon = {
-				"Rattata":1, "Raticate":1, "Ekans":1, "Arbok":1, "Pikachu":1, "Zubat":1, "Golbat":1, "Paras":1, "Parasect":1, "Grimer":1, "Muk":1, "Gastly":1, "Haunter":1, "Gengar":1, "Cubone":1, "Marowak":1, "Koffing":1, "Weezing":1, "Tangela":1, "Mr. Mime":1, "Ditto":1, "Kabuto":1, "Kabutops":1, "Hoothoot":1, "Noctowl":1, "Spinarak":1, "Ariados":1, "Crobat":1, "Umbreon":1, "Murkrow":1, "Misdreavus":1, "Unown":1, "Gligar":1, "Granbull":1, "Sneasel":1, "Houndour":1, "Houndoom":1, "Mightyena":1, "Dustox":1, "Shiftry":1, "Shedinja":1, "Whismur":1, "Loudred":1, "Exploud":1, "Sableye":1, "Mawile":1, "Gulpin":1, "Swalot":1, "Carvanha":1, "Sharpedo":1, "Cacnea":1, "Cacturne":1, "Seviper":1, "Lunatone":1, "Baltoy":1, "Claydol":1, "Shuppet":1, "Banette":1, "Duskull":1, "Dusclops":1, "Absol":1, "Snorunt":1, "Glalie":1, "Drifloon":1, "Drifblim":1, "Mismagius":1, "Honchkrow":1, "Stunky":1, "Skuntank":1, "Spiritomb":1, "Skorupi":1, "Drapion":1, "Croagunk":1, "Toxicroak":1, "Weavile":1, "Tangrowth":1, "Gliscor":1, "Dusknoir":1, "Froslass":1, "Rotom":1, "Purrloin":1, "Liepard":1, "Woobat":1, "Swoobat":1, "Venipede":1, "Whirlipede":1, "Scolipede":1, "Basculin":1, "Krokorok":1, "Krookodile":1, "Sigilyph":1, "Yamask":1, "Cofagrigus":1, "Garbodor":1, "Zorua":1, "Zoroark":1, "Gothita":1, "Gothorita":1, "Gothitelle":1, "Frillish":1, "Jellicent":1, "Joltik":1, "Galvantula":1, "Elgyem":1, "Beheeyem":1, "Litwick":1, "Lampent":1, "Chandelure":1, "Golurk":1, "Zweilous":1, "Hydreigon":1, "Volcarona":1, "Espurr":1, "Meowstic":1, "Honedge":1, "Doublade":1, "Aegislash":1, "Malamar":1, "Phantump":1, "Trevenant":1, "Pumpkaboo":1, "Gourgeist":1, "Noibat":1, "Noivern":1
-			};
-			var pokemon = Tools.getTemplate(set.species).baseSpecies;
-			if (!(pokemon in allowedPokemon)) {
-				return [pokemon + " is not usable in Spooky Cup."];
-			}
-			var item = Tools.getItem(set.item);
-			if (item.megaStone) {
-				return ["Mega Stones are not permitted in Spooky Cup."];
-			}
-		},
-		onBegin: function () {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		ruleset: ['VGC 2015'],
+		banlist: ['Venusaur', 'Charizard', 'Pikachu', 'Pikachu-Cosplay', 'Pikachu-Rock-Star', 'Pikachu-Belle', 'Pikachu-Pop-Star',
+			'Pikachu-PhD', 'Pikachu-Libre', 'Gengar', 'Kangaskhan', 'Jolteon', 'Lanturn', 'Ampharos',
+			'Suicune', 'Tyranitar', 'Ludicolo', 'Gardevoir', 'Mawile', 'Manectric', 'Salamence',
+			'Luxray', 'Garchomp', 'Electivire', 'Rotom', 'Rotom-Heat', 'Rotom-Wash', 'Rotom-Frost',
+			'Rotom-Fan', 'Rotom-Mow', 'Heatran', 'Cresselia', 'Emolga', 'Amoonguss', 'Galvantula',
+			'Eelektross', 'Stunfisk', 'Bisharp', 'Hydreigon', 'Terrakion', 'Thundurus', 'Thundurus-Therian',
+			'Landorus', 'Landorus-Therian', 'Greninja', 'Talonflame', 'Aegislash', 'Heliolisk', 'Sylveon'
+		],
+		requirePentagon: true
 	},
 	{
 		name: "Doubles Hackmons Cup",
@@ -389,11 +353,11 @@ exports.Formats = [
 
 		gameType: 'triples',
 		maxForcedLevel: 50,
+		teamLength: {
+			validate: [6, 6]
+		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: [],
-		onValidateTeam: function (team, format) {
-			if (team.length < 6) return ['You must have six Pok\u00e9mon.'];
-		}
+		banlist: []
 	},
 	{
 		name: "Triples Hackmons Cup",
@@ -605,14 +569,10 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		team: 'randomCC',
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
-		onBegin: function () {
-			this.debug('Cutting down to 1');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		teamLength: {
+			battle: 1
+		},
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
 	},
 	{
 		name: "Balanced Hackmons",
@@ -623,7 +583,7 @@ exports.Formats = [
 		],
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Groudon-Primal', 'Kyogre-Primal', 'Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter']
 	},
 	{
@@ -635,20 +595,15 @@ exports.Formats = [
 		],
 		section: 'Other Metagames',
 
-		ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
+		teamLength: {
+			validate: [1, 3],
+			battle: 1
+		},
+		ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Illegal', 'Unreleased', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky',
 			'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew', 'Perish Song'
-		],
-		onValidateTeam: function (team, format) {
-			if (team.length > 3) return ['You may only bring up to three Pok\u00e9mon.'];
-		},
-		onBegin: function () {
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		]
 	},
 	{
 		name: "Monotype",
@@ -800,17 +755,12 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Doubles OU'],
-		banlist: ['Perish Song'],
-		onValidateTeam: function (team, format) {
-			if (team.length > 4) return ['You may only bring up to four Pok\u00e9mon.'];
+		teamLength: {
+			validate: [2, 4],
+			battle: 2
 		},
-		onBegin: function () {
-			this.p1.pokemon = this.p1.pokemon.slice(0, 2);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 2);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		ruleset: ['Doubles OU'],
+		banlist: ['Perish Song']
 	},
 	{
 		name: "Averagemons",
@@ -951,15 +901,12 @@ exports.Formats = [
 		mod: 'gen5',
 		searchShow: false,
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		banlist: ['Dark Void', 'Sky Drop'],
-		onBegin: function () {
-			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		teamLength: {
+			validate: [3, 6],
+			battle: 3
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: ['Dark Void', 'Sky Drop']
 	},
 	{
 		name: "[Gen 5] Custom Game",
@@ -999,15 +946,12 @@ exports.Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		banlist: ['Dark Void', 'Sky Drop'],
-		onBegin: function () {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		teamLength: {
+			validate: [4, 6],
+			battle: 4
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: ['Dark Void', 'Sky Drop']
 	},
 	{
 		name: "[Gen 5] Doubles Custom Game",
