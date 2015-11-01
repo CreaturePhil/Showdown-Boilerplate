@@ -745,7 +745,7 @@ Tournament = (function () {
 		}));
 		this.isEnded = true;
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-		
+
 		//
 		// Tournament Winnings
 		//
