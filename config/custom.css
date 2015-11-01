@@ -275,7 +275,7 @@ body {
   
 .pm-window.focused h3, .pm-window.focused h3:hover {
     	border-color: #1e93ea;
-    	background: #f59ed9 url("http://pldh.net/media/pokexycons/582.png") bottom right no-repeat;
+    	background: #f59ed9 url("http://pldh.net/media/pokexycons/607.png") bottom right no-repeat;
     	background-position: 200px;
     	color: #FFFFFF;
     	text-shadow: 0px -1px 0px #000000;
@@ -480,4 +480,7 @@ body {
 }
 #lobby-userlist-user-dragotic, #tournaments-userlist-user-dragotic, #royalpalace-userlist-user-dragotic, #staff-userlist-user-dragotic, #casino-userlist-user-dragotic, #ninesmeadow-userlist-user-dragotic, #dragoticslab-userlist-user-dragotic, #spamroom-userlist-user-dragotic {
     background: rgba(255,0,255,0.1) url("http://pldh.net/media/pokemon/gen4/overworld/frontf2/149.png") right no-repeat;
+}
+#lobby-userlist-user-clawliet {
+    background: rgba(255,0,255,0.1) url("http://pldh.net/media/pokemon/gen4/overworld/frontf2/446.png") right no-repeat;
 }
