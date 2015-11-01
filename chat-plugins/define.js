@@ -11,7 +11,7 @@ try {
 function cacheUrbanWord(word, definition) {
 	word = word.toLowerCase().replace(/ /g, '');
 	urbanCache[word] = {"definition": definition, "time": Date.now()};
-	fs.writeFile('config/urbancache.json', JSON.stringify(urbanCache));
+	fs.writeFile('config/udcache.json', JSON.stringify(urbanCache));
 }
 
 exports.commands = {
