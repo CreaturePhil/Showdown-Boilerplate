@@ -386,161 +386,144 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Highest Stat Meta",
+		name: "Inheritance",
 		desc: [
-			"All Pok&eacute;mon on a team must share the same highest stat.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3509940/\">Highest Stat Meta</a>"
+			"Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3529252/\">Inheritance</a>"
 		],
 		section: "OM of the Month",
 		column: 2,
 
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew'],
-		onValidateTeam: function (team) {
-			var highest = [];
-			for (var i = 0; i < team.length; i++) {
-				var template = this.getTemplate(team[i].species);
-				var stats = template.baseStats;
-				var max = Math.max.apply(Math, Object.values(stats));
-				var h = [];
-				for (var j in stats) {
-					if (stats[j] === max) h.push(j);
+		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause',
+			'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'
+		],
+		banlist: ['Unreleased', 'Illegal', 'Arceus', 'Archeops', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Giratina', 'Giratina-Origin',
+			'Groudon', 'Ho-Oh', 'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza',
+			'Regigigas', 'Reshiram', 'Shaymin-Sky', 'Shedinja', 'Slaking', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Salamencite', 'Soul Dew',
+			'Assist'
+		],
+		customBans: {
+			donorPokemon: {'masquerain':1, 'sableye':1, 'smeargle':1},
+			inheritedAbilities: {'arenatrap':1, 'galewings':1, 'hugepower':1, 'imposter':1, 'parentalbond':1, 'purepower':1, 'shadowtag':1, 'wonderguard':1}
+		},
+		abilityMap: (function () {
+			var Pokedex = require('./../tools.js').data.Pokedex;
+			if (!Pokedex) return null; // Process is data-unaware
+
+			var abilityMap = Object.create(null);
+			for (var speciesid in Pokedex) {
+				var pokemon = Pokedex[speciesid];
+				if (pokemon.num < 1 || pokemon.num > 720) continue;
+				for (var key in pokemon.abilities) {
+					var abilityId = toId(pokemon.abilities[key]);
+					if (abilityMap[abilityId]) {
+						abilityMap[abilityId].push(speciesid);
+					} else {
+						abilityMap[abilityId] = [speciesid];
+					}
 				}
-				if (i === 0) {
-					highest = h;
+			}
+			return abilityMap;
+		})(),
+		getEvoFamily: function (species) {
+			var template = Tools.getTemplate(species);
+			while (template.prevo) {
+				template = Tools.getTemplate(template.prevo);
+			}
+			return template.speciesid;
+		},
+		getPokemonName: function (species) {
+			return Tools.getTemplate(species).name;
+		},
+		onValidateTeam: function (team, format, teamHas) {
+			// Donor Clause
+			var evoFamilies = [];
+			for (var i = 0; i < team.length; i++) {
+				var set = team[i];
+				evoFamilies.push(set.abilitySources.map(format.getEvoFamily).unique());
+			}
+
+			// Checking actual full incompatibility would require expensive algebra.
+			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
+			var requiredFamilies = Object.create(null);
+			for (var i = 0; i < evoFamilies.length; i++) {
+				var family = evoFamilies[i];
+				if (family.length > 1) continue;
+				if (requiredFamilies[family]) return ["You are limited to one inheritance from each family by the Donor Clause.", "(You inherit more than once from " + this.getTemplate(family[0]).species + "'s.)"];
+				requiredFamilies[family] = 1;
+			}
+		},
+		validateSet: function (set, teamHas) {
+			if (!this.format.abilityMap) return this.validateSet(set, teamHas); // shouldn't happen
+			var abilityId = toId(set.ability);
+			if (!abilityId) return ["" + (set.name || set.species) + " must have an ability."];
+			var pokemonWithAbility = this.format.abilityMap[abilityId];
+			if (!pokemonWithAbility) return ["" + set.ability + " is an invalid ability."];
+
+			var problems;
+			var legalPokemon = set.abilitySources = [];
+			for (var i = 0; i < pokemonWithAbility.length; i++) {
+				var donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
+				var setCopy = Object.clone(set);
+				if (setCopy.name === setCopy.species) delete setCopy.name;
+				if (donorTemplate.species !== set.species && toId(donorTemplate.species) in this.format.customBans.donorPokemon) {
+					problems = ["" + donorTemplate.species + " is banned from passing abilities down."];
+					continue;
+				} else if (donorTemplate.species !== set.species && abilityId in this.format.customBans.inheritedAbilities &&
+					Object.values(this.tools.getTemplate(set.species).abilities).map(toId).indexOf(abilityId) < 0) {
+					problems = ["The ability " + this.tools.getAbility(abilityId).name + " is banned from being passed down."];
 					continue;
 				}
-				highest = highest.intersect(h);
-				if (!highest.length) {
-					return ["Your team must share the same highest stat."];
+				setCopy.species = donorTemplate.species;
+				if (donorTemplate.isPrimal || donorTemplate.isMega) {
+					// Needed to pass validation of forme
+					setCopy.item = donorTemplate.requiredItem;
 				}
+				problems = this.validateSet(setCopy, teamHas);
+				if (!problems.length) legalPokemon.push(setCopy.species);
+				if (legalPokemon.length > 1) break; // Remove if the FIXME? above gets fixed.
+			}
+
+			if (!legalPokemon.length && pokemonWithAbility.length > 1) {
+				return ["" + (set.name || set.species) + " has an illegal set with an ability from any of " + pokemonWithAbility.map(this.format.getPokemonName).join(", ")];
+			}
+			if (!legalPokemon.length) {
+				problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.format.getPokemonName(pokemonWithAbility[0]));
+				return problems;
 			}
 		}
 	},
 	{
-		name: "No Guard Galaxy",
+		name: "Same Type Stealth Rock",
 		desc: [
-			"Every move will never miss.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3514582/\">No Guard Galaxy</a>"
+			"Stealth Rock inflicts damage calculated from the primary type of the user.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3511171/\">Same Type Stealth Rock</a>"
 		],
 		section: "OM of the Month",
 
-		ruleset: ['OU'],
-		banlist: ['Dynamic Punch'],
-		onAccuracy: function (accuracy, target, source, move) {
-			return true;
-		}
+		mod: 'stsr',
+		ruleset: ['OU']
 	},
 	{
-		name: "[Seasonal] Spoopy Party",
+		name: "[Seasonal] Super Squad Smackdown",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "OM of the Month",
-
-		team: 'randomSpoopy',
+		team: 'randomHero',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+		onEffectiveness: function (typeMod, target, move, type) {
+			if (this.activePokemon && this.activePokemon.name === 'Magneto' && move.id === 'flashcannon' && type === 'Steel') return 1;
+		},
+		onSwitchInPriority: 10,
 		onSwitchIn: function (pokemon) {
-			if (pokemon.species === 'Magikarp') {
-				this.boost({spe:4, spd:2, def:2}, pokemon, pokemon, 'the power of dank');
-			}
-		},
-		onModifyMove: function (move) {
-			if (move.id === 'aquaring') {
-				move.volatileStatus = 'wonderring';
-				move.onHit = function (pokemon) {
-					this.add('-start', pokemon, 'Aqua Ring');
-					this.add('-message', "7.8/10, too much water - IGN");
-				};
-			}
-			if (move.id === 'hyperbeam') {
-				move.type = 'Water';
-				move.accuracy = true;
-				delete move.self;
-				move.onTryHit = function (target, source) {
-					this.add('-message', target.name + "'s fuel cannot melt " + source.name + " beams!");
-				};
-			}
-			if (move.id === 'trickortreat') {
-				switch (this.random(7)) {
-				case 0:
-					move.category = 'Special';
-					move.type = 'Fire';
-					move.basePower = 200;
-					move.onTryHit = function () {
-						this.add('-message', "Pumpkin bomb!");
-					};
-					move.onHit = function () {};
-					break;
-				case 1:
-					move.category = 'Physical';
-					move.type = 'Poison';
-					move.basePower = 25;
-					move.multihit = 4;
-					move.onTryHit = function () {
-						this.add('-message', "Toilet paper missile attack!");
-					};
-					move.onHit = function () {};
-					break;
-				case 2:
-					move.onTryHit = function () {
-						this.add('-message', "Yum! Chocolate!");
-					};
-					move.onHit = function (target, source) {
-						this.heal(Math.ceil(target.maxhp * 0.5));
-					};
-					break;
-				case 3:
-					move.onTryHit = function () {
-						this.add('-message', "This is a rather bland candy.");
-					};
-					move.onHit = function (target, source) {
-						this.heal(Math.ceil(target.maxhp * 0.25));
-						target.setStatus('par');
-						target.addVolatile('confusion');
-					};
-					break;
-				case 4:
-					move.onTryHit = function () {
-						this.add('-message', "You are about to be rotten-egged on!");
-					};
-					move.onHit = function (target, source) {
-						target.setStatus('tox');
-						target.addVolatile('torment');
-					};
-					break;
-				case 5:
-					move.category = 'Special';
-					move.type = 'Dark';
-					move.basePower = 500;
-					move.self = {volatileStatus: 'mustrecharge'};
-					move.onTryHit = function () {
-						this.add('-message', "Ultimate Super Hiper Mega Awesome Beam destroyer of worlds!");
-					};
-					move.onHit = function (target, source) {
-						this.add('-message', source.name + " was caught in the explosion!");
-						source.setStatus('brn');
-						source.addVolatile('disabled');
-						source.addVolatile('confusion');
-					};
-					break;
-				case 6:
-					move.onTryHit = function () {
-						this.add('-message', "Have some refreshment, my fellow.");
-					};
-					move.onHit = function (target, source) {
-						target.addVolatile('aquaring');
-					};
-					break;
-				}
-			}
-		},
-		onResidual: function () {
-			var allpokes = this.p1.active.concat(this.p2.active);
-			var pokemon;
-			for (var i = 0; i < allpokes.length; i++) {
-				pokemon = allpokes[i];
-				if (pokemon.hp && pokemon.volatiles['wonderring']) {
-					this.heal(pokemon.maxhp / 8, pokemon, pokemon, 'dank memes');
-				}
+			switch (pokemon.name) {
+			case 'Iron Man':
+				pokemon.addType('Steel');
+				this.add('-start', pokemon, 'typechange', 'Fire/Steel');
+				break;
+			case 'Spiderman':
+				this.boost({atk: 1, spe: 2}, pokemon, pokemon, 'Spidey Sense');
+				break;
 			}
 		}
 	},
