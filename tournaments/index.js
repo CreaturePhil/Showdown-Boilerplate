@@ -304,11 +304,7 @@ Tournament = (function () {
 
 	Tournament.prototype.getBracketData = function () {
 		var data = this.generator.getBracketData();
-		if (data.type === 'tree') {
-			if (!data.rootNode) {
-				data.users = usersToNames(this.generator.getUsers()).sort();
-				return data;
-			}
+		if (data.type === 'tree' && data.rootNode) {
 			var queue = [data.rootNode];
 			while (queue.length > 0) {
 				var node = queue.shift();
@@ -372,7 +368,6 @@ Tournament = (function () {
 			return false;
 		}
 
-		if (this.generator.generateBracket) this.generator.generateBracket();
 		this.generator.freezeBracket();
 
 		this.availableMatches = new Map();
