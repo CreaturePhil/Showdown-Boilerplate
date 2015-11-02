@@ -3,11 +3,13 @@ var path = require('path');
 
 var shop = [
 	['Ticket', 'Lottery ticket for a chance to be a Millionaire.', 5],
+	['Royale', 'Do Blood Testing to have 0.5% chance to join the Royal Family!', 5],
 	['Symbol', 'Place a Custom Symbol in front of your name (Temporary until restart, auth symbols are blocked).', 5],
 	['Fix', 'Obtain the ability to alter your current custom avatar or trainer card or room name.', 10],
 	['Avatar', 'Tired of the standard avatars? Get a custom one! (You supply, preferably 80x80)', 20],
 	['Recipe', 'Official, edible, delicious dish for you to make at home!', 25],
 	['Chocolate', 'Seasonal Special! A cup of heart warming chocolate that warms you for the whole winter!', 30],
+	['Emoticon', 'Provide us a 50x50 image to add as an emote!', 35],
 	['Trainer', 'Shows Information through a command. (You supply)', 40],
 	['Room', 'Own a Chat Room! (Half Price for Art, Music, and Culinary)', 50],
 	['Art', 'Buys a majestic and beautiful piece of Digital Art drawn by Ice. (PM IceDragon_X for samples)', 80],
