@@ -102,7 +102,7 @@ function getMartDisplay(mart) {
 	var start = 0;
 	while (start < mart.length) {
 		display += "<tr>" +
-						"<td align='center'><button name='send' value='/buy " + mart[start][0] + "'><b>" + mart[start][0] + "</b></button>" + "</td>" +
+						"<td align='center'><button name='send' value='/buyy " + mart[start][0] + "'><b>" + mart[start][0] + "</b></button>" + "</td>" +
 						"<td align='center'>" + mart[start][1] + "</td>" +
 						"<td align='center'>" + mart[start][2] + "</td>" +
 					"</tr>";
@@ -137,7 +137,7 @@ function findItem(item, money) {
 	this.sendReply(item + " not found in shop.");
 }
 
-function findItem(item, money) {
+function findFood(item, money) {
 	var len = mart.length;
 	var price = 0;
 	var amount = 0;
@@ -363,6 +363,25 @@ exports.commands = {
 		});
 	},
 	buyhelp: ["/buy [command] - Buys an item from the shop."],
+	buyy: function (target, room, user) {
+		if (!target) return this.parse('/help buyy');
+		var _this = this;
+		Database.read('money', user.userid, function (err, amount) {
+			if (err) throw err;
+			if (!amount) amount = 0;
+			var cost = findFood.call(_this, target, amount);
+			if (!cost) return room.update();
+			Database.write('money', amount - cost, user.userid, function (err, total) {
+				if (err) throw err;
+				_this.sendReply("You have bought " + target + " for " + cost +  currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
+				room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
+				logMoney(user.name + " has bought " + target + " from the shop. This user now has " + total + currencyName(total) + ".");
+				handleBoughtItem.call(_this, target.toLowerCase(), user, cost);
+				room.update();
+			});
+		});
+	},
+	buyyhelp: ["/buyy [command] - Buys an item from the mart."],
 
 	customsymbol: function (target, room, user) {
 		if (!user.canCustomSymbol && user.id !== user.userid) return this.sendReply("You need to buy this item from the shop.");
