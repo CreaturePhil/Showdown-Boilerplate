@@ -96,6 +96,17 @@ exports.Formats = [
 		banlist: ['RU', 'BL3']
 	},
 	{
+		name: "PU",
+		desc: [
+			"The official tier below NU.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/forums/pu.327/\">PU</a>"
+		],
+		section: "ORAS Singles",
+
+		ruleset: ['NU'],
+		banlist: ['NU', 'BL4', 'Chatter', 'Shell Smash + Baton Pass']
+	},
+	{
 		name: "LC",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3505710/\">LC Metagame Discussion</a>",
@@ -397,7 +408,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause',
 			'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'
 		],
-		banlist: ['Unreleased', 'Illegal', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Salamencite', 'Soul Dew', 'Assist'],
+		banlist: ['Unreleased', 'Illegal', 'Assist'],
 		customBans: {
 			receiver: {
 				arceus:1, archeops:1, darkrai:1, deoxys:1, deoxysattack:1, deoxysspeed:1, dialga:1, giratina:1, giratinaorigin:1,
@@ -405,8 +416,11 @@ exports.Formats = [
 				regigigas:1, reshiram:1, shayminsky:1, shedinja:1, slaking:1, xerneas:1, yveltal:1, zekrom:1
 			},
 			donor: {masquerain:1, sableye:1, smeargle:1},
-			inheritedAbilities: {arenatrap:1, galewings:1, hugepower:1, imposter:1, parentalbond:1, purepower:1, shadowtag:1, wonderguard:1}
+			inheritedAbilities: {arenatrap:1, galewings:1, hugepower:1, imposter:1, parentalbond:1, purepower:1, shadowtag:1, wonderguard:1},
+			items: {blazikenite:1, gengarite:1, kangaskhanite:1, mawilite:1, salamencite:1, souldew:1}
 		},
+		noChangeForme: true,
+		noChangeAbility: true,
 		abilityMap: (function () {
 			var Pokedex = require('./../tools.js').data.Pokedex;
 			if (!Pokedex) return null; // Process is data-unaware
@@ -435,47 +449,72 @@ exports.Formats = [
 		},
 		onValidateTeam: function (team, format, teamHas) {
 			// Donor Clause
-			var evoFamilies = [];
+			var evoFamilyLists = [];
 			for (var i = 0; i < team.length; i++) {
 				var set = team[i];
 				if (!set.abilitySources) continue;
-				evoFamilies.push(set.abilitySources.map(format.getEvoFamily).unique());
+				evoFamilyLists.push(set.abilitySources.map(format.getEvoFamily).unique());
 			}
 
 			// Checking actual full incompatibility would require expensive algebra.
 			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
 			var requiredFamilies = Object.create(null);
-			for (var i = 0; i < evoFamilies.length; i++) {
-				var family = evoFamilies[i];
-				if (family.length !== 1) continue;
-				if (requiredFamilies[family]) return ["You are limited to one inheritance from each family by the Donor Clause.", "(You inherit more than once from " + this.getTemplate(family[0]).species + "'s.)"];
-				requiredFamilies[family] = 1;
+			for (var i = 0; i < evoFamilyLists.length; i++) {
+				var evoFamilies = evoFamilyLists[i];
+				if (evoFamilies.length !== 1) continue;
+				if (requiredFamilies[evoFamilies[0]]) return ["You are limited to one inheritance from each family by the Donor Clause.", "(You inherit more than once from " + this.getTemplate(evoFamilies[0]).species + "'s.)"];
+				requiredFamilies[evoFamilies[0]] = 1;
 			}
 		},
 		validateSet: function (set, teamHas) {
 			if (!this.format.abilityMap) return this.validateSet(set, teamHas); // shouldn't happen
 
-			if (!set.species) set.species = set.name;
+			this.format.noChangeForme = false;
+			var problems = this.tools.getFormat('Pokemon').onChangeSet.call(this.tools, set, this.format) || [];
+			this.format.noChangeForme = true;
+
+			if (problems.length) return problems;
+
 			var species = toId(set.species);
 			var template = this.tools.getTemplate(species);
 			if (!template.exists) return ["" + set.species + " is not a real Pok\u00E9mon."];
 			if (template.speciesid in this.format.customBans.receiver) {
 				return ["" + set.species + " is banned."];
+			} else if (!this.tools.data.FormatsData[species] || !this.tools.data.FormatsData[species].tier) {
+				if (toId(template.baseSpecies) in this.format.customBans.receiver) {
+					return ["" + template.baseSpecies + " is banned."];
+				}
 			}
+
+			var name = set.name;
 
 			var abilityId = toId(set.ability);
 			if (!abilityId) return ["" + (set.name || set.species) + " must have an ability."];
 			var pokemonWithAbility = this.format.abilityMap[abilityId];
 			if (!pokemonWithAbility) return ["" + set.ability + " is an invalid ability."];
-
 			var isBaseAbility = Object.values(template.abilities).map(toId).indexOf(abilityId) >= 0;
 
-			var problems = [];
-			var legalPokemon = set.abilitySources = [];
+			// Items must be fully validated here since we may pass a different item to the base set validator.
+			var item = this.tools.getItem(set.item);
+			if (item.id) {
+				if (!item.exists) return ["" + set.item + " is an invalid item."];
+				if (item.isUnreleased) return ["" + (set.name || set.species) + "'s item " + item.name + " is unreleased."];
+				if (item.id in this.format.customBans.items) return ["" + item.name + " is banned."];
+			}
+
+			var validSources = set.abilitySources = []; // evolutionary families
 			for (var i = 0; i < pokemonWithAbility.length; i++) {
 				var donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
-				var setCopy = Object.clone(set);
-				if (setCopy.name === setCopy.species) delete setCopy.name;
+				var evoFamily = this.format.getEvoFamily(donorTemplate);
+
+				if (validSources.indexOf(evoFamily) >= 0) {
+					// The existence of a legal set has already been established.
+					// We only keep iterating to find all legal donor families (Donor Clause).
+					// Skip this redundant iteration.
+					continue;
+				}
+
+				if (set.name === set.species) delete set.name;
 				if (donorTemplate.species !== set.species && toId(donorTemplate.species) in this.format.customBans.donor) {
 					problems = ["" + donorTemplate.species + " is banned from passing abilities down."];
 					continue;
@@ -483,22 +522,31 @@ exports.Formats = [
 					problems = ["The ability " + this.tools.getAbility(abilityId).name + " is banned from being passed down."];
 					continue;
 				}
-				setCopy.species = donorTemplate.species;
-				if (donorTemplate.species !== set.species && (donorTemplate.isPrimal || donorTemplate.isMega)) {
-					// Bypass forme validation
-					setCopy.item = donorTemplate.requiredItem;
+				set.species = donorTemplate.species;
+				if (donorTemplate.species !== template.species && donorTemplate.requiredItem) {
+					// Bypass forme validation. Relevant to inherit from Giratina-O, and Mega/Primal formes.
+					set.item = donorTemplate.requiredItem;
 				}
-				problems = this.validateSet(setCopy, teamHas);
-				if (!problems.length && (setCopy.species === donorTemplate.species || donorTemplate.species !== set.species)) {
-					legalPokemon.push(setCopy.species);
+				problems = this.validateSet(set, teamHas) || [];
+				if (!problems.length) {
+					validSources.push(evoFamily);
 				}
-				if (legalPokemon.length > 1) break; // Remove if the FIXME? above gets fixed.
+				if (validSources.length > 1) {
+					// This is an optimization only valid for the current basic implementation of Donor Clause.
+					// Remove if the FIXME? above actually gets fixed.
+					break;
+				}
 			}
 
-			if (!legalPokemon.length && pokemonWithAbility.length > 1) {
+			// Restore the intended species, name and item.
+			set.species = template.species;
+			set.name = (name === set.species ? "" : name);
+			set.item = item.name;
+
+			if (!validSources.length && pokemonWithAbility.length > 1) {
 				return ["" + (set.name || set.species) + " set is illegal."];
 			}
-			if (!legalPokemon.length) {
+			if (!validSources.length) {
 				problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.tools.getTemplate(pokemonWithAbility[0]).name);
 				return problems;
 			}
@@ -676,6 +724,7 @@ exports.Formats = [
 		]
 	},
 	{
+
 		name: "Inverse Battle",
 		desc: [
 			"Battle with an inverted type chart.",
