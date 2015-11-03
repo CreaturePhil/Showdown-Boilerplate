@@ -170,6 +170,18 @@ var commands = exports.commands = {
 
 		target = this.canTalk(target, null, targetUser);
 		if (!target) return false;
+		
+		var message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
+		user.send(message);
+		if (targetUser !== user) {
+			if (Spamroom.isSpamroomed(user)) {
+				Spamroom.room.add('|c|' + user.getIdentity() + "|__(Private to " + targetUser.getIdentity() + ")__ " + target);
+			} else {
+				targetUser.send(message);
+			}
+		}
+		targetUser.lastPM = user.userid;
+		user.lastPM = targetUser.userid;
 
 		if (target.charAt(0) === '/' && target.charAt(1) !== '/') {
 			// PM command
