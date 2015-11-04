@@ -700,17 +700,6 @@ exports.Formats = [
 		banlist: ['Shadow Tag', 'Swift Swim', 'Chatter']
 	},
 	{
-		name: "PU",
-		desc: [
-			"The unofficial tier below NU.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/forums/pu.327/\">PU</a>"
-		],
-		section: "Other Metagames",
-
-		ruleset: ['NU'],
-		banlist: ['NU', 'BL4', 'Chatter', 'Shell Smash + Baton Pass']
-	},
-	{
 		name: "FU",
 		section: "Other Metagames",
 
@@ -1392,12 +1381,6 @@ exports.Formats = [
 			if (!move.isMetagamiate) return;
 			return this.chainModify([0x14CD, 0x1000]);
 		}
-	},
-	{
-		name: "Same Type Stealth Rock",
-		section: "Local Metagames",
-		mod: 'stsr',
-		ruleset: ['OU']
 	},
 	{
 		name: "Startermons",
