@@ -867,17 +867,16 @@ exports.Formats = [
 		name: "Middle Cup",
 		section: "Other Metagames",
 
-		searchShow: false,
+		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
+		banlist: ['Illegal', 'Eviolite', 'Chansey', 'Frogadier'],
 		maxLevel: 50,
 		defaultLevel: 50,
-		validateSet: function (set) {
+		validateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (!template.evos || template.evos.length === 0 || !template.prevo) {
 				return [set.species + " is not the middle Pokémon in an evolution chain."];
 			}
-		},
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Chansey', 'Frogadier', 'Eviolite']
+		}
 	},
 	{
 		name: "Alphabet Cup",
