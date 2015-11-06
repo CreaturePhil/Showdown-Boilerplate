@@ -481,6 +481,7 @@ exports.Formats = [
 			var species = toId(set.species);
 			var template = this.tools.getTemplate(species);
 			if (!template.exists) return ["" + set.species + " is not a real Pok\u00E9mon."];
+			if (template.isUnreleased) return ["" + set.species + " is unreleased."];
 			if (template.speciesid in this.format.customBans.receiver) {
 				return ["" + set.species + " is banned."];
 			} else if (!this.tools.data.FormatsData[species] || !this.tools.data.FormatsData[species].tier) {
@@ -570,7 +571,7 @@ exports.Formats = [
 		name: "[Seasonal] Super Squad Smackdown",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "OM of the Month",
-		team: 'randomHero',
+		team: 'randomSeasonalHero',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onEffectiveness: function (typeMod, target, move, type) {
 			if (this.activePokemon && this.activePokemon.name === 'Magneto' && move.id === 'flashcannon' && type === 'Steel') return 1;
@@ -694,7 +695,7 @@ exports.Formats = [
 		desc: [
 			"Pok&eacute;mon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, and NU or lower get +15.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3532973/\">Tier Shift</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3536719/\">Tier Shift Viability Ranking</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554765/\">Tier Shift Viability Ranking</a>"
 		],
 		section: "Other Metagames",
 
@@ -805,7 +806,7 @@ exports.Formats = [
 		ruleset: ['LC'],
 		banlist: ['Abra', 'Aipom', 'Anorith', 'Archen', 'Bunnelby', 'Carvanha', 'Chinchou', 'Corphish', 'Cottonee',
 			'Croagunk', 'Diglett', 'Drifloon', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus',
-			'Gastly', 'Gothita', 'Larvesta', 'Magnemite', 'Mienfoo', 'Munchlax', 'Omanyte', 'Onix', 'Pancham',
+			'Gastly', 'Gothita', 'Houndour', 'Larvesta', 'Magnemite', 'Mienfoo', 'Munchlax', 'Omanyte', 'Onix', 'Pancham',
 			'Pawniard', 'Ponyta', 'Porygon', 'Pumpkaboo-Super', 'Scraggy', 'Shellder', 'Skrelp', 'Snivy', 'Snubbull',
 			'Spritzee', 'Staryu', 'Stunky', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby', 'Vulpix', 'Zigzagoon',
 			'Shell Smash'
