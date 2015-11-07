@@ -217,7 +217,7 @@ let commands = exports.commands = {
 		if ((!user.blockEmoticons && !targetUser.blockEmoticons) && emoteMsg) target = '/html ' + emoteMsg;
 
 		let message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
-		
+
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
 		targetUser.lastPM = user.userid;
