@@ -1,22 +1,22 @@
-var path = require('path');
-var util = require('util');
+const path = require('path');
+const util = require('util');
 
-var gulp = require('gulp');
-var lazypipe = require('lazypipe');
-var merge = require('merge-stream');
-var cache = require('gulp-cache');
-var jscs = require('gulp-jscs');
-var jshint = require('gulp-jshint');
-var replace = require('gulp-replace');
-var CacheSwap = require('cache-swap');
-var jshintStylish = require('jshint-stylish');
+const gulp = require('gulp');
+const lazypipe = require('lazypipe');
+const merge = require('merge-stream');
+const cache = require('gulp-cache');
+const jscs = require('gulp-jscs');
+const jshint = require('gulp-jshint');
+const replace = require('gulp-replace');
+const CacheSwap = require('cache-swap');
+const jshintStylish = require('jshint-stylish');
 
 var fileCache = new CacheSwap({tmpDir: '', cacheDirName: 'gulp-cache'});
 
-var globals = {};
-var globalList = [
-	'Config', 'ResourceMonitor', 'toId', 'Tools', 'LoginServer', 'Users', 'Rooms', 'Verifier',
-	'CommandParser', 'Simulator', 'Tournaments', 'Dnsbl', 'Cidr', 'Sockets', 'TeamValidator', 'Tells', 'Database', 'Seen'
+const fileCache = new CacheSwap({tmpDir: '', cacheDirName: 'gulp-cache'});
+
+let globals = {};
+let globalList = [
 	'Config', 'Monitor', 'toId', 'Tools', 'LoginServer', 'Users', 'Rooms', 'Verifier',
 	'CommandParser', 'Simulator', 'Tournaments', 'Dnsbl', 'Cidr', 'Sockets', 'TeamValidator',
 	'Ladders'
