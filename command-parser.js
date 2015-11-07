@@ -57,8 +57,6 @@ function getServersAds (text) {
 	}
 	return serversAds;
 }
-const fs = require('fs');
-const path = require('path');
 
 /*********************************************************
  * Load command files

@@ -17,25 +17,6 @@ var globals = {};
 var globalList = [
 	'Config', 'ResourceMonitor', 'toId', 'Tools', 'LoginServer', 'Users', 'Rooms', 'Verifier',
 	'CommandParser', 'Simulator', 'Tournaments', 'Dnsbl', 'Cidr', 'Sockets', 'TeamValidator', 'Tells', 'Database', 'Seen'
-'use strict';
-
-const path = require('path');
-const util = require('util');
-
-const gulp = require('gulp');
-const lazypipe = require('lazypipe');
-const merge = require('merge-stream');
-const cache = require('gulp-cache');
-const jscs = require('gulp-jscs');
-const jshint = require('gulp-jshint');
-const replace = require('gulp-replace');
-const CacheSwap = require('cache-swap');
-const jshintStylish = require('jshint-stylish');
-
-const fileCache = new CacheSwap({tmpDir: '', cacheDirName: 'gulp-cache'});
-
-let globals = {};
-let globalList = [
 	'Config', 'Monitor', 'toId', 'Tools', 'LoginServer', 'Users', 'Rooms', 'Verifier',
 	'CommandParser', 'Simulator', 'Tournaments', 'Dnsbl', 'Cidr', 'Sockets', 'TeamValidator',
 	'Ladders'

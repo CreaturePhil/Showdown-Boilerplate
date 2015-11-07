@@ -31,7 +31,6 @@ const THROTTLE_MULTILINE_WARN = 4;
 
 var fs = require('fs');
 var steno = require('steno');
-const fs = require('fs');
 
 /* global Users: true */
 let Users = module.exports = getUser;
