@@ -29,8 +29,8 @@ const THROTTLE_DELAY = 600;
 const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
 
-var fs = require('fs');
-var steno = require('steno');
+const fs = require('fs');
+const steno = require('steno');
 
 /* global Users: true */
 let Users = module.exports = getUser;
