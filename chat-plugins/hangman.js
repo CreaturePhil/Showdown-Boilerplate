@@ -53,7 +53,7 @@ exports.commands = {
 			room.hangman.guessWord = [];
 			room.hangman.guessedLetters = [];
 			room.hangman.guessedWords = [];
-			room.hangman.guesses = 8;
+			room.hangman.guesses = 12;
 
 			for (var i = 0; i < word.length; i++) {
 				room.hangman.guessWord.push('_');
