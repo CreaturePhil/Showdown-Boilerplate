@@ -13,8 +13,8 @@
  * @license MIT license
  */
 
-var crypto = require('crypto');
-var fs = require('fs');
+const crypto = require('crypto');
+const fs = require('fs');
 var parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 'use strict';
 
