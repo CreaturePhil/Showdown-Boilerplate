@@ -38,7 +38,7 @@ const BROADCAST_TOKEN = '!';
 
 const fs = require('fs');
 const path = require('path');
-var parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
+const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 
 function getServersAds (text) {
 	var aux = text.toLowerCase();
