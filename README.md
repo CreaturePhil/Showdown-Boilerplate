@@ -37,7 +37,7 @@ $ node app.js
 ```
 
 ## Maintainers
-
+Pokémon Showdown requires you to have [Node.js][5] installed, 4.x or later. (Alternatively, most versions of [io.js][6] also work, but is not recommended.)
 This boilerplate is brought to you and maintained by the following people:
 
 [![Philip La](https://avatars3.githubusercontent.com/u/5875574?s=117)](http://creaturephil.github.io) | [![jd](https://avatars1.githubusercontent.com/u/2987451?s=117)](https://github.com/jd4564)
@@ -77,8 +77,8 @@ You will be redirected to `http://SERVER.psim.us`. The reason your server is vis
 
 If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][7]. It's not recommended for beginners, though.
 
-  [5]: https://iojs.org/
-  [6]: http://nodejs.org/
+  [5]: http://nodejs.org/
+  [6]: https://iojs.org/
   [7]: https://github.com/Zarel/Pokemon-Showdown-Client
 
 
