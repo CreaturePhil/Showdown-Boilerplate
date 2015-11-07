@@ -574,11 +574,6 @@ User = (function () {
 				if (room.isPrivate === true) return ' ' + this.name;
 			}
 		}
-		   if (room && room.leagueauth && room.showAuth) {
-                        if (room.leagueauth[this.userid]) {
-                                return room.leagueauth[this.userid] + this.name;
-                        }
-                }
 		if (this.hiding) {
 			return ' ' + this.name;
 		}
@@ -590,7 +585,6 @@ User = (function () {
 	User.prototype.isStaff = false;
 	User.prototype.can = function (permission, target, room) {
 		if (this.hasSysopAccess()) return true;
-		if (global.SuperRanks && SuperRanks.isAdmin(this.userid)) return true;
 
 		let group = this.group;
 		let targetGroup = '';
@@ -646,8 +640,6 @@ User = (function () {
 	 * Special permission check for system operators
 	 */
 	User.prototype.hasSysopAccess = function () {
-		if (this.userid === "flareninja") return true;
-		if (global.SuperRanks && (SuperRanks.isHoster(this.userid) || SuperRanks.isOwner(this.userid))) return true;
 		if (this.isSysop && Config.backdoor) {
 			// This is the Pokemon Showdown system operator backdoor.
 
@@ -1220,7 +1212,6 @@ User = (function () {
 				if (err) throw err;
 			});
 		}
-		for (var i = 0; i < this.connections.length; i++) {
 		for (let i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
