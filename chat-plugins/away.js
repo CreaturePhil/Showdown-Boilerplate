@@ -82,54 +82,54 @@ exports.commands = {
 	},
 
 	afk: function (target, room, user) {
-		this.parse('/away AFK', room, user);
+		this.parse('/away AFK');
 	},
 
 	busy: function (target, room, user) {
-		this.parse('/away BUSY', room, user);
+		this.parse('/away BUSY');
 	},
 
 	work: function (target, room, user) {
-		this.parse('/away WORK', room, user);
+		this.parse('/away WORK');
 	},
 
 	working: function (target, room, user) {
-		this.parse('/away WORKING', room, user);
+		this.parse('/away WORKING');
 	},
 
 	eating: function (target, room, user) {
-		this.parse('/away EATING', room, user);
+		this.parse('/away EATING');
 	},
 
 	gaming: function (target, room, user) {
-		this.parse('/away GAMING', room, user);
+		this.parse('/away GAMING');
 	},
 
 	sleep: function (target, room, user) {
-		this.parse('/away SLEEP', room, user);
+		this.parse('/away SLEEP');
 	},
 
 	sleeping: function (target, room, user) {
-		this.parse('/away SLEEPING', room, user);
+		this.parse('/away SLEEPING');
 	},
 
 	fap: function (target, room, user) {
-		this.parse('/away FAP', room, user);
+		this.parse('/away FAP');
 	},
 
 	fapping: function (target, room, user) {
-		this.parse('/away FAPPING', room, user);
+		this.parse('/away FAPPING');
 	},
 
 	nerd: function (target, room, user) {
-		this.parse('/away NERD', room, user);
+		this.parse('/away NERD');
 	},
 
 	nerding: function (target, room, user) {
-		this.parse('/away NERDING', room, user);
+		this.parse('/away NERDING');
 	},
 
 	mimis: function (target, room, user) {
-		this.parse('/away MIMIS', room, user);
+		this.parse('/away MIMIS');
 	}
 };
