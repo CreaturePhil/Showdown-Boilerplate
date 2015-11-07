@@ -874,7 +874,7 @@ exports.Formats = [
 		banlist: ['Illegal', 'Eviolite', 'Chansey', 'Frogadier'],
 		maxLevel: 50,
 		defaultLevel: 50,
-		validateSet: function(set) {
+		onValidateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (!template.evos || template.evos.length === 0 || !template.prevo) {
 				return [set.species + " is not the middle Pokémon in an evolution chain."];
@@ -1274,7 +1274,7 @@ exports.Formats = [
 		
 		ruleset: ['Pokemon', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: [],
-		validateSet: function (set) {
+		onValidateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
 			if(!template.isMega || this.getItem(set.item).megaStone) template = this.getTemplate(this.getItem(set.item).megaStone);
 			var levelScale = {

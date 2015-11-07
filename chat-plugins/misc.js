@@ -598,7 +598,7 @@ exports.commands = {
         if (parts.length < 2) return this.parse('/help sudo');
         if (parts.length >= 3) parts.push(parts.splice(1, parts.length).join(','));
         var targetUser = parts[0],
-            cmd = parts[1].trim().toLowerCase(),
+            cmd = parts[1].trim(),
             commands = Object.keys(CommandParser.commands).join(' ').toString(),
             spaceIndex = cmd.indexOf(' '),
             targetCmd = cmd;
@@ -777,7 +777,7 @@ exports.commands = {
             res.on('end', function(chunk) {
                 var d = JSON.parse(data);
                 if (d.pageInfo.totalResults == 0) {
-                    room.add('Aucune vidéo trouvée :(. T\'as voulu me ruser ?');
+                    room.add('No videos found');
                     room.update();
                     return false;
                 } 
@@ -888,6 +888,25 @@ exports.commands = {
 		if (!this.canBroadcast() || !user.can('lock')) return this.sendReply('/pbanlist - Access Denied.');
 		var pban = fs.readFileSync('config/pbanlist.txt', 'utf8');
 		return user.send('|popup|' + pban);
+	},
+	pmlock: 'fakelock',
+	fl: 'fakelock',
+	fakelock: function(target, room, user){
+		if(!this.can('declare')) return false;
+		if(!target) return this.sendReply('No user specified.');
+		var targetUser = Users.get(target);
+		targetUser.fakelocked = true;
+		return this.sendReply(targetUser.name + ' is now unable to PM users.');
+	},
+
+	unpmlock: 'unfakelock',
+	pmunlock: 'unfakelock',
+	unfakelock: function(target, room, user){
+		if(!this.can('declare')) return false;
+		if(!target) return this.sendReply('No user specified.');
+		var targetUser = Users.get(target);
+		targetUser.fakelocked = false;
+		return this.sendReply(targetUser.name + ' is now able to PM users.');
 	},
 };
 	
