@@ -15,7 +15,7 @@
 
 const crypto = require('crypto');
 const fs = require('fs');
-var parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
+const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 'use strict';
 
 const MAX_REASON_LENGTH = 300;
@@ -212,14 +212,11 @@ let commands = exports.commands = {
 			}
 		}
 
-<<<<<<< HEAD
-		var emoteMsg = parseEmoticons(target, room, user, true);
+		let emoteMsg = parseEmoticons(target, room, user, true);
 		if ((!user.blockEmoticons && !targetUser.blockEmoticons) && emoteMsg) target = '/html ' + emoteMsg;
 
-		var message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
-=======
 		let message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
->>>>>>> 52dece0d098a046a7a68e3dc6a0d85bf0b4b3ebd
+
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
 		targetUser.lastPM = user.userid;
