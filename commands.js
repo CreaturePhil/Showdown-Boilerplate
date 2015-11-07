@@ -13,10 +13,11 @@
  * @license MIT license
  */
 
+'use strict';
+
 const crypto = require('crypto');
 const fs = require('fs');
 const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
-'use strict';
 
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
