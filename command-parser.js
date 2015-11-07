@@ -36,8 +36,8 @@ const VALID_COMMAND_TOKENS = '/!';
 
 const BROADCAST_TOKEN = '!';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 var parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 
 function getServersAds (text) {
