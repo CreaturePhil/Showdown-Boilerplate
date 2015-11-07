@@ -1212,7 +1212,6 @@ User = (function () {
 		}
 	};
 	User.prototype.onDisconnect = function (connection) {
-<<<<<<< HEAD
 		var name = 'Guest ' + this.guestNum;
 		var userid = toId(name);
 		if (this.registered && this.userid !== userid) {
@@ -1222,9 +1221,7 @@ User = (function () {
 			});
 		}
 		for (var i = 0; i < this.connections.length; i++) {
-=======
 		for (let i = 0; i < this.connections.length; i++) {
->>>>>>> 52dece0d098a046a7a68e3dc6a0d85bf0b4b3ebd
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
 				if (this.connections.length <= 1) {
