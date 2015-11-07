@@ -43,8 +43,6 @@
  * @license MIT license
  */
 
-'use strict';
-
 /*********************************************************
  * Make sure we have everything set up correctly
  *********************************************************/
@@ -61,10 +59,10 @@ function runNpm(command) {
 	process.exit(0);
 }
 
-const isLegacyEngine = !(''.includes);
+var isLegacyEngine = !(''.includes);
 
-const fs = require('fs');
-const path = require('path');
+var fs = require('fs');
+var path = require('path');
 try {
 	require('sugar');
 	if (isLegacyEngine) require('es6-shim');
@@ -106,7 +104,7 @@ if (Config.watchconfig) {
 
 // Autoconfigure the app when running in cloud hosting environments:
 try {
-	let cloudenv = require('cloud-env');
+	var cloudenv = require('cloud-env');
 	Config.bindaddress = cloudenv.get('IP', Config.bindaddress || '');
 	Config.port = cloudenv.get('PORT', Config.port);
 } catch (e) {}
@@ -183,14 +181,14 @@ global.Cidr = require('./cidr.js');
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
-	let lastCrash = 0;
+	var lastCrash = 0;
 	process.on('uncaughtException', function (err) {
-		let dateNow = Date.now();
-		let quietCrash = require('./crashlogger.js')(err, 'The main process', true);
+		var dateNow = Date.now();
+		var quietCrash = require('./crashlogger.js')(err, 'The main process', true);
 		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
 		lastCrash = Date.now();
 		if (quietCrash) return;
-		let stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+		var stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
 		if (Rooms.lobby) {
 			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
@@ -215,8 +213,8 @@ global.TeamValidator = require('./team-validator.js');
 fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), function (err, data) {
 	if (err) return;
 	data = ('' + data).split("\n");
-	let rangebans = [];
-	for (let i = 0; i < data.length; i++) {
+	var rangebans = [];
+	for (var i = 0; i < data.length; i++) {
 		data[i] = data[i].split('#')[0].trim();
 		if (!data[i]) continue;
 		if (data[i].includes('/')) {

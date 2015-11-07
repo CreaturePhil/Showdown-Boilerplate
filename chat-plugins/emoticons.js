@@ -114,9 +114,8 @@ function create_table() {
 	var emotes_list = [];
 	var emotes_group_list = [];
 	var len = emotes_name.length;
-	var i;
 
-	for (i = 0; i < len; i++) {
+	for (var i = 0; i < len; i++) {
 		emotes_list.push("<td>" +
 			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='50' width='50' />" +
 			emotes_name[i] + "</td>");
@@ -124,7 +123,7 @@ function create_table() {
 
 	var emotes_list_right = emotes_list.splice(len / 2, len / 2);
 
-	for (i = 0; i < len / 2; i++) {
+	for (var i = 0; i < len / 2; i++) {
 		var emote1 = emotes_list[i],
 			emote2 = emotes_list_right[i];
 		if (emote2) {
@@ -179,14 +178,6 @@ exports.commands = {
 			this.add("|raw|<div class=\"broadcast-blue\"><b>Emoticons are enabled!</b><br />Emoticons will work now.</div>");
 		}
 	},
-	toggleemoticonshelp: ["/toggleemoticons - Toggle emoticons on or off."],
-
-	rande: 'randemote',
-	randemote: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-		var rng = Math.floor(Math.random() * emotesKeys.length);
-		var randomEmote = emotesKeys[rng];
-		this.sendReplyBox("<img src='" + emotes[randomEmote] + "' title='" + randomEmote + "' height='50' width='50' />");
-	},
-	randemotehelp: ["/randemote - Get a random emote."]
+	toggleemoticonshelp: ["/toggleemoticons - Toggle emoticons on or off."]
+	
 };
