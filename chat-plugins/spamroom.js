@@ -1,3 +1,5 @@
+'use strict';
+
 var spamroom = Rooms.get("spamroom");
 
 if (!spamroom) {
