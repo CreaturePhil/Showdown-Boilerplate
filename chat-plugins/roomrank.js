@@ -1,3 +1,5 @@
+'use strict';
+
 exports.commands = {
     roomfounder: function (target, room, user) {
         if (!room.chatRoomData) {
