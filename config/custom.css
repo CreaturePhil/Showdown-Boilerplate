@@ -6,8 +6,12 @@ body {
 	background: url("http://orig15.deviantart.net/2a1f/f/2015/311/6/7/bgparadix_by_icedragon_x-d9ftsiz.png") !important;
 }
 
-.chat.mine {
-    	background: #DCF7FF;
+.astext {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
 }
 
 /*************
@@ -144,7 +148,11 @@ body {
 }
 
 .chat.highlighted {
-	background: #fdff00;
+	background: rgba(253, 255, 0, 0.4);
+}
+
+.chat.mine {
+    	background: rgba(220, 247, 255, 0.4);
 }
 
 .chat-log-add {
@@ -462,14 +470,6 @@ body {
 /********************
 * Miscellaneous CSS *
 ********************/
-
-.astext {
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-}
 
 /* User Icons section */
 #lobby-userlist-user-rankuro, #tournaments-userlist-user-rankuro, #royalpalace-userlist-user-rankuro, #staff-userlist-user-rankuro, #casino-userlist-user-rankuro, #ninesmeadow-userlist-user-rankuro, #dragoticslab-userlist-user-rankuro, #spamroom-userlist-user-rankuro {
