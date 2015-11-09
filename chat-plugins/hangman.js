@@ -1,3 +1,5 @@
+'use strict';
+
 var hangedMan =
 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_______&nbsp;<br />" +
 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br/>" +
@@ -103,7 +105,7 @@ exports.commands = {
 			var found = false;
 			room.hangman.guessedLetters.push(letter);
 
-			for (u in room.hangman.word) {
+			for (let u in room.hangman.word) {
 				if (room.hangman.word[u] === letter) {
 					room.hangman.guessWord[u] = room.hangman.word[u];
 					found = true;
