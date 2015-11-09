@@ -1,4 +1,6 @@
 //ranking is mostly arbitrary
+'use strict';
+
 var Groupsranking = [' ', 'τ', '£', 'ϝ', 'ß', 'α', 'ϸ', 'Θ', 'Σ', '©', ];
 var Groups = {
 
