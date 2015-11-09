@@ -6,26 +6,35 @@ var request = require('request');
 
 const AVATAR_PATH = path.join(__dirname, '../config/avatars/');
 
-function download_image(image_url, name, extension) {
-	request
-		.get(image_url)
-		.on('error', function (err) {
-			console.error(err);
-		})
-		.on('response', function (response) {
-			if (response.statusCode !== 200) return;
-			var type = response.headers['content-type'].split('/');
-			if (type[0] !== 'image') return;
+function download_image(image_url, name) {
+	return new Promise(function (resolve, reject) {
+		request
+			.get(image_url)
+			.on('error', function (err) {
+				console.error(err);
+				reject("Avatar unavailable. Try choosing a different one.");
+			})
+			.on('response', function (response) {
+				if (response.statusCode !== 200) reject("Avatar unavailable. Try choosing a different one.");
+				var type = response.headers['content-type'].split('/');
+				if (type[0] !== 'image') reject("Link is not an image link.");
+				var allowedFormats = ['jpg', 'jpeg', 'png', 'gif'];
+				if (!~allowedFormats.indexOf(type[1])) {
+					reject("Format not supported. The supported formats are " + allowedFormats.join(', '));
+				}
 
-			response.pipe(fs.createWriteStream(AVATAR_PATH + name + extension));
-		});
+				var file = toId(name) + '.' + type[1];
+				response.pipe(fs.createWriteStream(AVATAR_PATH + file));
+				resolve(file);
+			});
+	});
 }
 
 function load_custom_avatars() {
 	fs.readdir(AVATAR_PATH, function (err, files) {
 		files
 			.filter(function (file) {
-				return ['.jpg', '.png', '.gif'].indexOf(path.extname(file)) >= 0;
+				return ['.jpg', '.jpeg', '.png', '.gif'].indexOf(path.extname(file)) >= 0;
 			})
 			.forEach(function (file) {
 				var name = path.basename(file, path.extname(file));
@@ -45,20 +54,20 @@ exports.commands = {
 
 			if (parts.length < 2) return this.parse('/help customavatar');
 
-			var name = toId(parts[0]);
+			var name = parts[0];
 			var image_url = parts[1];
 			if (image_url.match(/^https?:\/\//i)) image_url = 'http://' + image_url;
-			var ext = path.extname(image_url);
 
 			if (!name || !image_url) return this.parse('/help customavatar');
-			if (['.jpg', '.png', '.gif'].indexOf(ext) < 0) {
-				return this.errorReply("Image url must have .jpg, .png, or .gif extension.");
-			}
 
-			Config.customavatars[name] = name + ext;
-
-			download_image(image_url, name, ext);
-			this.sendReply(parts[0] + "'s avatar has been set.");
+			download_image(image_url, name)
+				.then(function (file) {
+					Config.customavatars[toId(name)] = file;
+					this.sendReply(name + "'s avatar has been set.");
+				}.bind(this))
+				.catch(function (err) {
+					this.errorReply('Error setting ' + name + '\'s avatar: ' + err);
+				}.bind(this));
 		},
 
 		delete: function (target, room, user) {
