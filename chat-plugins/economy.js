@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 var path = require('path');
 
@@ -297,7 +299,7 @@ exports.commands = {
 				if (err) throw err;
 				_this.sendReply("You have bought " + target + " for " + cost +  currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
 				room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
-				logMoney(user.name + " has bought " + target + " from the shop. This user now have " + total + currencyName(total) + ".");
+				logMoney(user.name + " has bought " + target + " from the shop. This user now has " + total + currencyName(total) + ".");
 				handleBoughtItem.call(_this, target.toLowerCase(), user, cost);
 				room.update();
 			});
@@ -464,14 +466,14 @@ exports.commands = {
 	tickets: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		Database.read('tickets', user.userid, function (err, tickets) {
-				if (err) throw err;
-				if (!tickets || !tickets.length) {
-					this.sendReplyBox("You have no tickets.");
-				} else {
-					this.sendReplyBox("You have a total of " + tickets.length + " ticket(s). These are your ticket's ids: " + tickets.join(", ") + ".");
-				}
-				room.update();
-			}.bind(this));
+			if (err) throw err;
+			if (!tickets || !tickets.length) {
+				this.sendReplyBox("You have no tickets.");
+			} else {
+				this.sendReplyBox("You have a total of " + tickets.length + " ticket(s). These are your ticket's ids: " + tickets.join(", ") + ".");
+			}
+			room.update();
+		}.bind(this));
 	},
 
 	picklottery: function (target, room, user) {
