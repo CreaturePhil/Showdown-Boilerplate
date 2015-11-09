@@ -891,25 +891,6 @@ exports.commands = {
 		var pban = fs.readFileSync('config/pbanlist.txt', 'utf8');
 		return user.send('|popup|' + pban);
 	},
-	pmlock: 'fakelock',
-	fl: 'fakelock',
-	fakelock: function(target, room, user){
-		if(!this.can('declare')) return false;
-		if(!target) return this.sendReply('No user specified.');
-		var targetUser = Users.get(target);
-		targetUser.fakelocked = true;
-		return this.sendReply(targetUser.name + ' is now unable to PM users.');
-	},
-
-	unpmlock: 'unfakelock',
-	pmunlock: 'unfakelock',
-	unfakelock: function(target, room, user){
-		if(!this.can('declare')) return false;
-		if(!target) return this.sendReply('No user specified.');
-		var targetUser = Users.get(target);
-		targetUser.fakelocked = false;
-		return this.sendReply(targetUser.name + ' is now able to PM users.');
-	},
 };
 	
 	
