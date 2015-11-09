@@ -5,6 +5,7 @@
 
 const MAX_REASON_LENGTH = 300;
 var moment = require('moment');
+var fs = require('fs');
 var request = require('request');
 
 var messages = [
