@@ -1,3 +1,5 @@
+'use strict';
+
 var color = require('../config/color');
 
 var bubbleLetterMap = new Map([

@@ -30,9 +30,7 @@ const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
 
 const fs = require('fs');
-const steno = require('steno');
 
-/* global Users: true */
 let Users = module.exports = getUser;
 
 let User, Connection;
@@ -1522,7 +1520,7 @@ User = (function () {
 			} else {
 				Monitor.teamValidatorUnchanged++;
 			}
-			callback(true);
+			callback(this === users[this.userid]);
 		}
 	};
 	User.prototype.updateChallenges = function () {

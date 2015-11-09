@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 var request = require('request');
 
@@ -71,8 +73,6 @@ exports.commands = {
 				'term': target
 			}
 		};
-
-		var milliseconds = ((44640 * 60) * 1000);
 
 		if (urbanCache[target.toLowerCase().replace(/ /g, '')] && Math.round(Math.abs((urbanCache[target.toLowerCase().replace(/ /g, '')].time - Date.now()) / (24 * 60 * 60 * 1000))) < 31) {
 			return this.sendReplyBox("<b>" + Tools.escapeHTML(target) + ":</b> " + urbanCache[target.toLowerCase().replace(/ /g, '')].definition.substr(0, 400));

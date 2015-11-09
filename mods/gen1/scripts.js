@@ -181,7 +181,6 @@ exports.BattleScripts = {
 		if (!move) return false;
 
 		let attrs = '';
-		let missed = false;
 		if (pokemon.fainted) {
 			// Removing screens upon faint.
 			pokemon.side.removeSideCondition('reflect');
@@ -725,12 +724,14 @@ exports.BattleScripts = {
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
 		if (typeof move === 'string') move = this.getMove(move);
-		if (typeof move === 'number') move = {
-			basePower: move,
-			type: '???',
-			category: 'Physical',
-			flags: {}
-		};
+		if (typeof move === 'number') {
+			move = {
+				basePower: move,
+				type: '???',
+				category: 'Physical',
+				flags: {}
+			};
+		}
 
 		// Let's see if the target is immune to the move.
 		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
@@ -938,7 +939,6 @@ exports.BattleScripts = {
 	// This is random teams making for gen 1.
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam: function (side) {
-		let teamdexno = [];
 		let team = [];
 
 		let hasDexNumber = {};
@@ -1211,8 +1211,6 @@ exports.BattleScripts = {
 					let rejected = false;
 					if (hasMove[moveid]) rejected = true;
 					if (!template.essentialMove || moveid !== template.essentialMove) {
-						let isSetup = false;
-
 						switch (moveid) {
 						// bad after setup
 						case 'seismictoss': case 'nightshade':
@@ -1261,7 +1259,7 @@ exports.BattleScripts = {
 							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
 							break;
 						case 'growth':
-							if (counter['Special'] < counter['Physical'] || hasMove['swordsdance']) rejected = true;
+							if (counter['Special'] < counter['Physical'] || hasMove['swordsdance'] || hasMove['amnesia']) rejected = true;
 							break;
 						case 'doubleedge':
 							if (hasMove['bodyslam']) rejected = true;
@@ -1295,9 +1293,6 @@ exports.BattleScripts = {
 							break;
 						case 'triattack':
 							if (hasMove['doubleedge']) rejected = true;
-							break;
-						case 'growth':
-							if (hasMove['amnesia']) rejected = true;
 							break;
 						case 'fissure':
 							if (hasMove['horndrill']) rejected = true;
