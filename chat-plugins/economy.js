@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 var path = require('path');
 
@@ -544,14 +546,14 @@ exports.commands = {
 	tickets: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		Database.read('tickets', user.userid, function (err, tickets) {
-				if (err) throw err;
-				if (!tickets || !tickets.length) {
-					this.sendReplyBox("You have no tickets.");
-				} else {
-					this.sendReplyBox("You have a total of " + tickets.length + " ticket(s). These are your ticket's ids: " + tickets.join(", ") + ".");
-				}
-				room.update();
-			}.bind(this));
+			if (err) throw err;
+			if (!tickets || !tickets.length) {
+				this.sendReplyBox("You have no tickets.");
+			} else {
+				this.sendReplyBox("You have a total of " + tickets.length + " ticket(s). These are your ticket's ids: " + tickets.join(", ") + ".");
+			}
+			room.update();
+		}.bind(this));
 	},
 
 	picklottery: function (target, room, user) {

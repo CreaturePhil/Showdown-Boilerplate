@@ -2,7 +2,8 @@
  * Miscellaneous commands
  */
 
-var fs = require('fs');
+'use strict';
+
 var moment = require('moment');
 var request = require('request');
 
