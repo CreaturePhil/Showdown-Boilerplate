@@ -1493,10 +1493,28 @@ exports.commands = {
 
 		if (!this.canTalk()) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + Tools.escapeHTML(target) + '</b></div>');
+		this.add('|raw|<div style="background-color: #00ffc0; border: 1px solid #14ffc5; padding: 5px 5px 5px 5px; color: #320fff; font-family: Verdana;"><b><center>' + target + '</center></b></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
 	declarehelp: ["/declare [message] - Anonymously announces a message. Requires: # & ~"],
+	odeclare: function (target, room, user) {
+		if (!target) return this.parse('/help declare');
+		if (!this.can('declare', null, room)) return false;
+
+		if (!this.canTalk()) return;
+
+		this.add('|raw|<div style="background-color: orange; border: 1px solid red; padding: 5px 5px 5px 5px; color: white; font-family: Verdana;"><b><center>' + target + '</center></b></div>');
+		this.logModCommand(user.name + " declared " + target);
+	},
+	pdeclare: function (target, room, user) {
+		if (!target) return this.parse('/help declare');
+		if (!this.can('declare', null, room)) return false;
+
+		if (!this.canTalk()) return;
+
+		this.add('|raw|<div style="background-color: #ff9de6; border: 1px solid #ff00be; padding: 5px 5px 5px 5px; color: #320fff; font-family: Verdana;"><b><center>' + target + '</center></b></div>');
+		this.logModCommand(user.name + " declared " + target);
+	},
 
 	htmldeclare: function (target, room, user) {
 		if (!target) return this.parse('/help htmldeclare');
@@ -1504,7 +1522,7 @@ exports.commands = {
 
 		if (!this.canTalk()) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + target + '</b></div>');
+		this.add('|raw|<div style="background-color: #00ffc0; border: 1px solid #14ffc5; padding: 5px 5px 5px 5px; color: #320fff; font-family: Verdana;"><b><center>' + target + '</center></b></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
 	htmldeclarehelp: ["/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: ~"],
@@ -1515,7 +1533,7 @@ exports.commands = {
 		if (!this.can('gdeclare')) return false;
 
 		for (let id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>');
+			if (id !== 'global') Rooms.rooms[id].addRaw('<div style="background-color: #00ffc0; border: 1px solid #14ffc5; padding: 5px 5px 5px 5px; color: #320fff; font-family: Verdana;"><b><center>' + target + '</center></b></div>');
 		}
 		this.logModCommand(user.name + " globally declared " + target);
 	},
@@ -1527,7 +1545,7 @@ exports.commands = {
 		if (!this.can('gdeclare')) return false;
 
 		for (let id in Rooms.rooms) {
-			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>');
+			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div style="background-color: #00ffc0; border: 1px solid #14ffc5; padding: 5px 5px 5px 5px; color: #320fff; font-family: Verdana;"><b><center>' + target + '</center></b></div>');
 		}
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
