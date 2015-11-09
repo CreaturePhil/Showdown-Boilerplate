@@ -1,3 +1,5 @@
+'use strict';
+
 const ranksDataFile = 'superranks.json';
 
 var fs = require('fs');
