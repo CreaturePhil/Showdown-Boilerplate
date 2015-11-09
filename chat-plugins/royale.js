@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 
 var royale = JSON.parse(fs.readFileSync('config/royale.txt'));
