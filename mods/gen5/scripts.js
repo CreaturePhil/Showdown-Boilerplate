@@ -225,11 +225,15 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'knockoff': case 'perishsong': case 'magiccoat': case 'spikes':
+				case 'knockoff': case 'magiccoat': case 'spikes':
 					if (setupType) rejected = true;
 					break;
 				case 'uturn': case 'voltswitch':
 					if (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
+					break;
+				case 'perishsong':
+					if (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
+					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					break;
 				case 'relicsong':
 					if (setupType) rejected = true;
@@ -341,9 +345,6 @@ exports.BattleScripts = {
 					break;
 				case 'softboiled': case 'roost':
 					if (hasMove['wish'] || hasMove['recover']) rejected = true;
-					break;
-				case 'perishsong':
-					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					break;
 				case 'roar':
 					// Whirlwind outclasses Roar because Soundproof
