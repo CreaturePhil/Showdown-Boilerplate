@@ -1519,7 +1519,7 @@ User = (function () {
 			} else {
 				Monitor.teamValidatorUnchanged++;
 			}
-			callback(true);
+			callback(this === users[this.userid]);
 		}
 	};
 	User.prototype.updateChallenges = function () {

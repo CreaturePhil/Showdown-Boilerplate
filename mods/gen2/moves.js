@@ -431,7 +431,6 @@ exports.BattleMovedex = {
 			let move = '';
 			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) return false;
-			move.isSleepTalk = true;
 			this.useMove(move, pokemon);
 		},
 		noSketch: true
@@ -457,10 +456,9 @@ exports.BattleMovedex = {
 				}
 			},
 			onSwitchIn: function (pokemon) {
-				let side = pokemon.side;
 				if (!pokemon.runImmunity('Ground')) return;
 				let damageAmounts = [0, 3];
-				let damage = this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
+				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
 		}
 	},

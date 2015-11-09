@@ -24,6 +24,8 @@ sound: Has no effect on Pokemon with the Ability Soundproof.
 
 */
 
+'use strict';
+
 exports.BattleMovedex = {
 	"absorb": {
 		num: 71,
@@ -12981,7 +12983,6 @@ exports.BattleMovedex = {
 				this.effectData.layers++;
 			},
 			onSwitchIn: function (pokemon) {
-				var side = pokemon.side;
 				if (!pokemon.isGrounded()) return;
 				var damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);

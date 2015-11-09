@@ -80,7 +80,7 @@ Tournament = (function () {
 		this.format = toId(format);
 		this.generator = generator;
 		this.isRated = isRated;
-		this.playerCap = parseInt(playerCap) || Config.tournamentDefaultPlayerCap || 0;
+		this.playerCap = parseInt(playerCap, 10) || Config.tournamentDefaultPlayerCap || 0;
 		this.scouting = true;
 		if (Config.tournamentDefaultPlayerCap && this.playerCap > Config.tournamentDefaultPlayerCap) {
 			Monitor.log('[TourMonitor] Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')');
@@ -681,7 +681,6 @@ Tournament = (function () {
 	};
 	Tournament.prototype.onBattleJoin = function (room, user) {
 		if (this.scouting || this.isEnded || user.latestIp === room.p1.latestIp || user.latestIp === room.p2.latestIp) return;
-		let roomid = (room && room.id ? room.id : room);
 		let users = this.generator.getUsers(true);
 		for (let i = 0; i < users.length; i++) {
 			if (users[i].latestIp === user.latestIp) {
@@ -800,7 +799,7 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
 			}
-			let playerCap = parseInt(params.splice(1, 1));
+			let playerCap = parseInt(params.splice(1, 1), 10);
 			let generator = createTournamentGenerator(params.shift(), params, this);
 			if (generator && tournament.setGenerator(generator, this)) {
 				if (playerCap && playerCap >= 2) {
@@ -894,7 +893,7 @@ let commands = {
 			}
 
 			let option = params[0].toLowerCase();
-			if (option === 'on' || option === 'true' || option === 'allow' || option === 'allowed')  {
+			if (option === 'on' || option === 'true' || option === 'allow' || option === 'allowed') {
 				tournament.scouting = true;
 				this.room.add('|tournament|scouting|allow');
 				this.privateModCommand("(The tournament was set to allow scouting by " + user.name + ")");
@@ -975,7 +974,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
 			if (Config.tourannouncements && Config.tourannouncements.indexOf(room.id) >= 0) {
 				let tourRoom = Rooms.search(Config.tourroom || 'tournaments');
-				if (tourRoom) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><b>' + Tools.getFormat(tour.format).name + '</b> tournament created in <b>' + room.title + '</b>.</a></div>');
+				if (tourRoom) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + Tools.escapeHTML(Tools.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + Tools.escapeHTML(room.title) + '</strong>.</a></div>');
 			}
 		}
 	} else {

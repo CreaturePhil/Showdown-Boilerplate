@@ -61,18 +61,12 @@ function runNpm(command) {
 	process.exit(0);
 }
 
-const isLegacyEngine = !(''.includes);
-
 const fs = require('fs');
 const path = require('path');
 try {
 	require('sugar');
-	if (isLegacyEngine) require('es6-shim');
 } catch (e) {
 	runNpm('install --production');
-}
-if (isLegacyEngine && !(''.includes)) {
-	runNpm('update --production');
 }
 
 /*********************************************************
@@ -111,9 +105,12 @@ try {
 	Config.port = cloudenv.get('PORT', Config.port);
 } catch (e) {}
 
-if (require.main === module && process.argv[2] && parseInt(process.argv[2])) {
-	Config.port = parseInt(process.argv[2]);
-	Config.ssl = null;
+if (require.main === module && process.argv[2]) {
+	let port = parseInt(process.argv[2]); // eslint-disable-line radix
+	if (port) {
+		Config.port = port;
+		Config.ssl = null;
+	}
 }
 
 /*********************************************************
@@ -176,7 +173,7 @@ global.Tournaments = require('./tournaments');
 try {
 	global.Dnsbl = require('./dnsbl.js');
 } catch (e) {
-	global.Dnsbl = {query:function () {}, reverse: require('dns').reverse};
+	global.Dnsbl = {query: function () {}, reverse: require('dns').reverse};
 }
 
 global.Cidr = require('./cidr.js');

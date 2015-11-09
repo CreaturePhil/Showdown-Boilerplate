@@ -18,7 +18,6 @@ const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
 const fs = require('fs');
 
-/* global Rooms: true */
 let Rooms = module.exports = getRoom;
 
 let rooms = Rooms.rooms = Object.create(null);
@@ -293,7 +292,7 @@ let GlobalRoom = (function () {
 		// but this is okay to prevent race conditions as we start up PS
 		this.lastBattle = 0;
 		try {
-			this.lastBattle = parseInt(fs.readFileSync('logs/lastbattle.txt')) || 0;
+			this.lastBattle = parseInt(fs.readFileSync('logs/lastbattle.txt', 'utf8'), 10) || 0;
 		} catch (e) {} // file doesn't exist [yet]
 
 		this.chatRoomData = [];
@@ -956,7 +955,6 @@ let BattleRoom = (function () {
 			}
 		}
 		if (this.tour) {
-			let winnerid = toId(winner);
 			winner = Users.get(winner);
 			let tour = this.tour.tour;
 			tour.onBattleWin(this, winner);
@@ -995,7 +993,7 @@ let BattleRoom = (function () {
 
 		// empty rooms time out after ten minutes
 		let hasUsers = false;
-		for (let i in this.users) {
+		for (let i in this.users) { // eslint-disable-line no-unused-vars
 			hasUsers = true;
 			break;
 		}

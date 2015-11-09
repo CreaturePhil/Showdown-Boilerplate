@@ -82,7 +82,6 @@ exports.BattleScripts = {
 		if (!move) return false;
 
 		let attrs = '';
-		let missed = false;
 		if (pokemon.fainted) {
 			return false;
 		}
@@ -1243,11 +1242,15 @@ exports.BattleScripts = {
 				case 'fakeout':
 					if (counter.setupType || hasMove['substitute'] || hasMove['switcheroo'] || hasMove['trick']) rejected = true;
 					break;
-				case 'foulplay': case 'superfang':
+				case 'superfang':
 					if (counter.setupType) rejected = true;
 					break;
 				case 'haze': case 'healingwish': case 'pursuit': case 'spikes': case 'toxicspikes': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					break;
+				case 'foulplay':
+					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (hasMove['darkpulse'] || hasMove['knockoff']) rejected = true;
 					break;
 				case 'healbell':
 					if (!!counter['speedsetup']) rejected = true;
@@ -1290,9 +1293,6 @@ exports.BattleScripts = {
 					break;
 				case 'darkpulse':
 					if (hasMove['crunch'] && counter.setupType !== 'Special') rejected = true;
-					break;
-				case 'foulplay':
-					if (hasMove['darkpulse'] || hasMove['knockoff']) rejected = true;
 					break;
 				case 'suckerpunch':
 					if ((hasMove['crunch'] || hasMove['darkpulse']) && (hasMove['knockoff'] || hasMove['pursuit'])) rejected = true;
@@ -2500,10 +2500,14 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (counter.setupType) rejected = true;
 					break;
-				case 'rapidspin': case 'perishsong': case 'magiccoat': case 'spikes': case 'toxicspikes':
+				case 'rapidspin': case 'magiccoat': case 'spikes': case 'toxicspikes':
 					if (counter.setupType) rejected = true;
 					break;
 				case 'uturn': case 'voltswitch':
+					if (counter.setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
+					break;
+				case 'perishsong':
+					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					if (counter.setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
 					break;
 				case 'relicsong':
@@ -2648,9 +2652,6 @@ exports.BattleScripts = {
 				case 'softboiled': case 'roost':
 					if (hasMove['wish'] || hasMove['recover']) rejected = true;
 					break;
-				case 'perishsong':
-					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
-					break;
 				case 'roar':
 					// Whirlwind outclasses Roar because Soundproof
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['haze'] || hasMove['circlethrow']) rejected = true;
@@ -2659,7 +2660,7 @@ exports.BattleScripts = {
 					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit']) rejected = true;
 					break;
 				case 'fakeout':
-					if (hasMove['trick'] || hasMove['switcheroo'])  rejected = true;
+					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
 					break;
 				case 'feint':
 					if (hasMove['fakeout']) rejected = true;
@@ -3247,18 +3248,17 @@ exports.BattleScripts = {
 
 		let heroes = teams[side];
 		let pokemonTeam = [];
-		let hero, heroTemplate, template, pokemon;
 
 		for (let i = 0; i < 6; i++) {
-			hero = this.sampleNoReplace(heroes);
-			heroTemplate = mons[hero];
+			let hero = this.sampleNoReplace(heroes);
+			let heroTemplate = mons[hero];
 
 			let template = {};
 			if (heroTemplate.moves) template.randomBattleMoves = heroTemplate.moves;
 			if (heroTemplate.required) template.requiredMove = heroTemplate.required;
 			Object.merge(template, this.getTemplate(heroTemplate.species), false);
 
-			pokemon = this.randomSet(template, i, teamDetails);
+			let pokemon = this.randomSet(template, i, teamDetails);
 
 			if (heroTemplate.ability) pokemon.ability = heroTemplate.ability;
 			if (heroTemplate.gender) pokemon.gender = heroTemplate.gender;
