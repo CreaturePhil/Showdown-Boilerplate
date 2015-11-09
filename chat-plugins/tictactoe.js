@@ -1,4 +1,6 @@
 //Tic Tac Toe by SilverTactic (Siiilver)
+'use strict';
+
 if (!global.ttt) global.ttt = [{}, {}];
 var tttgames = global.ttt[0];
 var tttplayers = global.ttt[1];
