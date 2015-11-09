@@ -13,7 +13,6 @@
 'use strict';
 
 require('sugar');
-if (!''.includes) require('es6-shim');
 
 global.Config = require('./config/config.js');
 
@@ -3382,12 +3381,14 @@ Battle = (function () {
 	Battle.prototype.getDamage = function (pokemon, target, move, suppressMessages) {
 		if (typeof move === 'string') move = this.getMove(move);
 
-		if (typeof move === 'number') move = {
-			basePower: move,
-			type: '???',
-			category: 'Physical',
-			flags: {}
-		};
+		if (typeof move === 'number') {
+			move = {
+				basePower: move,
+				type: '???',
+				category: 'Physical',
+				flags: {}
+			};
+		}
 
 		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
 			if (!target.runImmunity(move.type, !suppressMessages)) {
@@ -4387,7 +4388,6 @@ Battle = (function () {
 						side.emitCallback('trapped', i);
 						return false;
 					} else if (side.pokemon[i].maybeTrapped) {
-						let finalDecision = true;
 						decisions.finalDecision = decisions.finalDecision || side.pokemon[i].isLastActive();
 					}
 				}
@@ -4687,6 +4687,7 @@ Battle = (function () {
 			break;
 
 		case 'eval': {
+			/* eslint-disable no-eval, no-unused-vars */
 			let battle = this;
 			let p1 = this.p1;
 			let p2 = this.p2;
@@ -4699,6 +4700,7 @@ Battle = (function () {
 			} catch (e) {
 				this.add('', '<<< error: ' + e.message);
 			}
+			/* eslint-enable no-eval, no-unused-vars */
 			break;
 		}
 

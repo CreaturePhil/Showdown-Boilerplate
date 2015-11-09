@@ -12,11 +12,12 @@
  * @license MIT license
  */
 
+'use strict';
+
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 let dns = require('dns');
 
-/* global Dnsbl: true */
 let Dnsbl = module.exports;
 
 let dnsblCache = exports.cache = {

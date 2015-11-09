@@ -23,7 +23,7 @@ const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
-let commands = exports.commands = {
+exports.commands = {
 
 	version: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -78,7 +78,7 @@ let commands = exports.commands = {
 	avatar: function (target, room, user) {
 		if (!target) return this.parse('/avatars');
 		let parts = target.split(',');
-		let avatar = parseInt(parts[0]);
+		let avatar = parseInt(parts[0], 10);
 		if (parts[0] === '#bw2elesa') {
 			avatar = parts[0];
 		}
@@ -895,7 +895,7 @@ let commands = exports.commands = {
 		if (room.bannedUsers[userid] && room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
 		if (targetUser in room.users) {
 			targetUser.popup(
-				"|html|<p>" + Tools.escapeHTML(user.name) + " has banned you from the room " + room.id + ".</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>"  : "") +
+				"|html|<p>" + Tools.escapeHTML(user.name) + " has banned you from the room " + room.id + ".</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>" : "") +
 				"<p>To appeal the ban, PM the staff member that banned you" + (room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
 			);
 		}
@@ -1344,7 +1344,7 @@ let commands = exports.commands = {
 		if (!target) return this.errorReply("Please specify a range to lock.");
 		if (!this.can('rangeban')) return false;
 
-		let isIp = (target.slice(-1) === '*' ? true : false);
+		let isIp = (target.slice(-1) === '*');
 		let range = (isIp ? target : Users.shortenHost(target));
 		if (Users.lockedRanges[range]) return this.errorReply("The range " + range + " has already been temporarily locked.");
 
@@ -1621,7 +1621,6 @@ let commands = exports.commands = {
 	hidetext: function (target, room, user) {
 		if (!target) return this.parse('/help hidetext');
 
-		let reason = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 		if (!targetUser) return this.errorReply("User '" + name + "' does not exist.");
@@ -2102,9 +2101,11 @@ let commands = exports.commands = {
 
 		if (!this.broadcasting) this.sendReply('||>> ' + target);
 		try {
+			/* eslint-disable no-unused-vars */
 			let battle = room.battle;
 			let me = user;
 			this.sendReply('||<< ' + eval(target));
+			/* eslint-enable no-unused-vars */
 		} catch (e) {
 			this.sendReply('||<< error: ' + e.message);
 			let stack = '||' + ('' + e.stack).replace(/\n/g, '\n||');
@@ -2152,25 +2153,25 @@ let commands = exports.commands = {
 		}
 		function getPokemon(input) {
 			if (/^[0-9]+$/.test(input)) {
-				return '.pokemon[' + (parseInt(input) - 1) + ']';
+				return '.pokemon[' + (parseInt(input, 10) - 1) + ']';
 			}
 			return ".pokemon.find(function(p){return p.speciesid==='" + toId(targets[1]) + "'})";
 		}
 		switch (cmd) {
 		case 'hp':
 		case 'h':
-			room.battle.send('eval', "let p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";p.sethp(" + parseInt(targets[2]) + ");if (p.isActive)battle.add('-damage',p,p.getHealth);");
+			room.battle.send('eval', "let p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";p.sethp(" + parseInt(targets[2], 10) + ");if (p.isActive)battle.add('-damage',p,p.getHealth);");
 			break;
 		case 'status':
 		case 's':
 			room.battle.send('eval', "let pl=" + getPlayer(targets[0]) + ";let p=pl" + getPokemon(targets[1]) + ";p.setStatus('" + toId(targets[2]) + "');if (!p.isActive){battle.add('','please ignore the above');battle.add('-status',pl.active[0],pl.active[0].status,'[silent]');}");
 			break;
 		case 'pp':
-			room.battle.send('eval', "let pl=" + getPlayer(targets[0]) + ";let p=pl" + getPokemon(targets[1]) + ";p.moveset[p.moves.indexOf('" + toId(targets[2]) + "')].pp = " + parseInt(targets[3]));
+			room.battle.send('eval', "let pl=" + getPlayer(targets[0]) + ";let p=pl" + getPokemon(targets[1]) + ";p.moveset[p.moves.indexOf('" + toId(targets[2]) + "')].pp = " + parseInt(targets[3], 10));
 			break;
 		case 'boost':
 		case 'b':
-			room.battle.send('eval', "let p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";battle.boost({" + toId(targets[2]) + ":" + parseInt(targets[3]) + "},p)");
+			room.battle.send('eval', "let p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";battle.boost({" + toId(targets[2]) + ":" + parseInt(targets[3], 10) + "},p)");
 			break;
 		case 'volatile':
 		case 'v':
@@ -2290,7 +2291,6 @@ let commands = exports.commands = {
 		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
 
 		target = this.splitTarget(target, true);
-		let userid = toId(this.targetUsername);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 
@@ -2301,7 +2301,7 @@ let commands = exports.commands = {
 		if (!this.can('joinbattle', null, room)) return;
 
 		room.auth[targetUser.userid] = '\u2605';
-		this.addModCommand("" + name  + " was promoted to Player by " + user.name + ".");
+		this.addModCommand("" + name + " was promoted to Player by " + user.name + ".");
 	},
 	addplayerhelp: ["/addplayer [username] - Allow the specified user to join the battle as a player."],
 
