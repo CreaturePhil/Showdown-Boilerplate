@@ -2,6 +2,7 @@
 * EZ-TC Plugin by jd            *
 * Makes adding trainer cards EZ *
 ********************************/
+'use strict';
 
 var fs = require('fs');
 var serialize = require('node-serialize');
