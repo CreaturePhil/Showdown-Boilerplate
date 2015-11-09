@@ -1,8 +1,9 @@
 /**
  * Miscellaneous commands
  */
+'use strict';
+
 const MAX_REASON_LENGTH = 300;
-var fs = require('fs');
 var moment = require('moment');
 var request = require('request');
 
