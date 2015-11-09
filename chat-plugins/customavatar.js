@@ -1,3 +1,5 @@
+'use strict';
+
 /*Custom Avatar script. ~SilverTactic (Siiilver)*/
 var fs = require('fs');
 var path = require('path');

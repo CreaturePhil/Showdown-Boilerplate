@@ -1,3 +1,5 @@
+'use strict';
+
 var elo = require('elo-rank')();
 
 function ratingToName(rating) {
