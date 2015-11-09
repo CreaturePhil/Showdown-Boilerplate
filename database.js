@@ -57,6 +57,8 @@
  * @license MIT license
  */
 
+'use strict';
+
 var low = require('lowdb');
 var mysql = require('mysql');
 var path = require('path');
