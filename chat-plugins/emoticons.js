@@ -40,7 +40,7 @@ var emotes = {
 	'medaglieuomo': 'http://i.imgur.com/0MGVlhT.jpg',
 	'happyface': 'http://i.imgur.com/krzCL3j.jpg',
 	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
-	'moonmoon': 'http://i.imgur.com/4daPYQ5.png';
+	'monmun': 'http://i.imgur.com/4daPYQ5.png';
 	'facepalm': 'http://i.imgur.com/E0oDNFB.gif'
 };
 
