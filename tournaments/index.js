@@ -691,12 +691,15 @@ Tournament = (function () {
 	Tournament.prototype.onBattleWin = function (room, winner) {
 		let from = Users.get(room.p1);
 		let to = Users.get(room.p2);
+		var tourSize = this.generator.getUsers().length;
 
 		let result = 'draw';
 		if (from === winner) {
 			result = 'win';
+			if (this.room.id === 'lobby' && tourSize >= 4  && room.battle.endType !== 'forced') Ladders('tournaments').updateRating(from.name, to.name, 1, room);
 		} else if (to === winner) {
 			result = 'loss';
+			if (this.room.id === 'lobby' && tourSize >= 4  && room.battle.endType !== 'forced') Ladders('tournaments').updateRating(from.name, to.name, 0, room);
 		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
