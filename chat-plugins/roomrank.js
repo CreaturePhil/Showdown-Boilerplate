@@ -106,7 +106,7 @@ exports.commands = {
         if (targetUser && !targetUser.registered) return this.sendReply("User '" + name + "' is not registered.");
 
         var currentGroup = ((room.auth && room.auth[userid]) || ' ')[0];
-        var nextGroup = target || Users.getNextGroupSymbol(currentGroup, cmd === 'roomdemote', true);
+        var nextGroup = target || Config.groupsranking[Config.groupsranking.indexOf(currentGroup) + 1];
         if (target === 'deauth') nextGroup = Config.groupsranking[0];
         if (!Config.groups[nextGroup]) {
             return this.sendReply("Group '" + nextGroup + "' does not exist.");
