@@ -3,7 +3,7 @@
 **************/
   
 body {
-	background: url("http://orig15.deviantart.net/2a1f/f/2015/311/6/7/bgparadix_by_icedragon_x-d9ftsiz.png") !important;
+	background: url("http://i.imgur.com/ITyOgK0.jpg") !important;
 }
 
 .astext {
@@ -23,7 +23,7 @@ body {
 }
 
 .header {
-	background: rgba(255, 255, 255, 0.3) url(http://i.imgur.com/gIOTqBp.png) no-repeat !important;
+	background: rgba(255, 255, 255, 0.3) url(http://i.imgur.com/5uSQ9eh.png) no-repeat !important;
 }
 
 .maintabbarbottom {
@@ -465,6 +465,26 @@ body {
 
 .battle-log h2 {
 	text-align: center;
+}
+
+.sunweather, .sunnydayweather {
+background: url(http://i.imgur.com/GCf4fyN.png) no-repeat scroll left top;
+}
+
+.rainweather, .raindanceweather {
+background: url(http://i.imgur.com/x7K1Zop.png) no-repeat scroll left top;
+  }
+  
+.hailweather {
+background: url(http://i.imgur.com/xCXcpE5.png) no-repeat scroll left top;
+  }
+
+.sandstormweather {
+background: url(http://i.imgur.com/CbsvtPl.png) no-repeat scroll left top;
+}
+
+.pseudoweather{
+background: url(http://i.imgur.com/rPMtZca.png) no-repeat scroll left top;
 }
 
 /********************
