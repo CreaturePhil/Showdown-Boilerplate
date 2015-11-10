@@ -951,6 +951,82 @@ exports.commands = {
 		var pban = fs.readFileSync('config/pbanlist.txt', 'utf8');
 		return user.send('|popup|' + pban);
 	},
+	
+	meme: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		var random = Math.floor(20 * Math.random()) + 1;
+		var results = '';
+		if (random == 1) {
+			results = 'ᕦ( ͡° ͜ʖ ͡°)ᕤ';
+		}
+		if (random == 2) {
+			results = 'ᕙ( ͡° ͜ʖ ͡°)ᕗ';
+		}
+		if (random == 3) {
+			results = '(ง ° ͜ ʖ °)ง';
+		}
+		if (random == 4) {
+			results = '( ͡° ͜ʖ ͡°)';
+		}
+		if (random == 5) {
+			results = 'ᕙ༼ຈل͜ຈ༽ᕗ';
+		}
+		if (random == 6) {
+			results = 'ᕦ( ͡°╭͜ʖ╮͡° )ᕤ';
+		}
+		if (random == 7) {
+			results = 'ヽ༼ຈل͜ຈ༽ﾉ raise your dongers. ヽ༼ຈل͜ຈ༽ﾉ';
+		}
+		if (random == 8) {
+			results = '┴┬┴┤( ͡° ͜ʖ├┬┴┬';
+		}
+		if (random == 9) {
+			results = '╰( ͡° ͜ʖ ͡° )つ──☆*:・ﾟ';
+		}
+		if (random == 10) {
+			results = '─=≡Σᕕ( ͡° ͜ʖ ͡°)ᕗ';
+		}
+		if (random == 11) {
+			results = '(つ ͡° ͜ʖ ͡°)つ';
+		}
+		if (random == 12) {
+			results = '༼ຈل͜ຈ༽ﾉ·︻̷┻̿═━一';
+		}
+		if (random == 13) {
+			results = '─=≡Σ(((༼つಠ益ಠ༽つ';
+		}
+		if (random == 14) {
+			results = '༼ ºل͟º༼ ºل͟º༼ ºل͟º ༽ºل͟º ༽ºل͟º ༽';
+		}
+		if (random == 15) {
+			results = 'ヽ༼ຈل͜ຈ༽ﾉ︵┻━┻';
+		}
+		if (random == 16) {
+			results = '┌∩┐༼ ºل͟º ༽┌∩┐';
+		}
+		if (random == 17) {
+			results = '[̲̅$̲̅(̲̅ ͡° ͜ʖ ͡°̲̅)̲̅$̲̅]';
+		}
+		if (random == 18) {
+			results = '( ͡ ͡° ͡° ʖ ͡° ͡°)';
+		}
+		if (random == 19) {
+			results = '(ง ͠° ͟ل͜ ͡°)ง';
+		}
+		if (random == 20) {
+			results = '....................../´¯/) 
+....................,/¯../ 
+.................../..../ 
+............./´¯/'...'/´¯¯`·¸ 
+........../'/.../..../......./¨¯\ 
+........('(...´...´.... ¯~/'...') 
+.........\.................'...../ 
+..........''...\.......... _.·´ 
+............\..............( 
+..............\.............\...';
+		}
+		return this.sendReplyBox('' + results + '');
+	},
 };
 	
 	
