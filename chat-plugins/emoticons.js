@@ -54,6 +54,7 @@ var emotes = {
 	'bordll': 'http://i.imgur.com/IfJIOtR.jpg',
 	'medaglieuomo': 'http://i.imgur.com/0MGVlhT.jpg',
 	'eczz': 'http://i.imgur.com/PAbaPDks.png',
+	'chbll': 'http://i.imgur.com/w3X0Gvgs.jpg',
 	'happyface': 'http://i.imgur.com/krzCL3j.jpg',
 	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
 	'monmun': 'http://i.imgur.com/4daPYQ5.png',
