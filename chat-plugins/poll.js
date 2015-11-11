@@ -38,7 +38,7 @@ exports.commands = {
 
 		var question = options.shift();
 
-		options = options.join(',').toLowerCase().split(',');
+		options = options.join(',').split(',');
 
 		Poll[room.id].question = question;
 		Poll[room.id].optionList = options;
@@ -138,10 +138,10 @@ exports.commands = {
 		if (!Poll[room.id]) Poll.reset(room.id);
 		if (!Poll[room.id].question) return this.sendReply("There is no poll currently going on in this room.");
 		if (!target) return this.parse('/help vote');
-		if (Poll[room.id].optionList.indexOf(target.toLowerCase()) === -1) return this.sendReply("'" + target + "' is not an option for the current poll.");
+		if (Poll[room.id].optionList.indexOf(target) === -1) return this.sendReply("'" + target + "' is not an option for the current poll.");
 
 		var ips = JSON.stringify(user.ips);
-		Poll[room.id].options[ips] = target.toLowerCase();
+		Poll[room.id].options[ips] = target;
 
 		return this.sendReply("You are now voting for " + target + ".");
 	},
