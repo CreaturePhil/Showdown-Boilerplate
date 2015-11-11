@@ -183,6 +183,10 @@ exports.commands = {
 			case 'mee':
 			case 'announce':
 				break;
+			case 'tictactoe':
+			case 'ttt':
+			     return this.parse('/ttt c ' + targetUser.userid);
+				break;
 			case 'invite':
 			case 'inv': {
 				let targetRoom = Rooms.search(innerTarget);
