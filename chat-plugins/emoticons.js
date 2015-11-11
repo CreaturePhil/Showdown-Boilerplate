@@ -33,12 +33,14 @@ var emotes = {
 	'xaa': 'http://i.imgur.com/V728AvL.png',
 	'yayface': 'http://i.imgur.com/anY1jf8.png',
 	'yesface': 'http://i.imgur.com/k9YCF6K.png',
-	'trollface': 'http://img818.imageshack.us/img818/2725/trollfacetsdr.png',
-	'lennyface': 'http://i.imgur.com/DrKuSjy.jpg',
+	'trollface': 'http://i.imgur.com/YdZ72N8.png?1',
+	'fukiu': 'http://i.imgur.com/DqPskTb.gif',
+	'lennyface': 'http://i.imgur.com/hfmdgtG.jpg?1',
 	'bordll': 'http://i.imgur.com/IfJIOtR.jpg',
 	'medaglieuomo': 'http://i.imgur.com/0MGVlhT.jpg',
 	'happyface': 'http://i.imgur.com/krzCL3j.jpg',
 	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
+	'monmun': 'http://i.imgur.com/4daPYQ5.png',
 	'facepalm': 'http://i.imgur.com/E0oDNFB.gif'
 };
 
