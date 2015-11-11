@@ -53,6 +53,7 @@ var emotes = {
 	'lennyface': 'http://i.imgur.com/LHGXwJ9.png',
 	'bordll': 'http://i.imgur.com/IfJIOtR.jpg',
 	'medaglieuomo': 'http://i.imgur.com/0MGVlhT.jpg',
+	'eczz': 'http://i.imgur.com/PAbaPDks.png',
 	'happyface': 'http://i.imgur.com/krzCL3j.jpg',
 	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
 	'monmun': 'http://i.imgur.com/4daPYQ5.png',
