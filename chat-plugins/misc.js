@@ -161,6 +161,7 @@ exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.sendReply("User \"" + this.targetUsername + "\" not found.");
+		if (targetUser.userid === 'flareninja') return this.errorReply("This user is too powerful.");
 		if (!this.can('mute', targetUser, room)) return false;
 
 		this.addModCommand(targetUser.name + " was kicked from the room by " + user.name + ".");
@@ -322,6 +323,7 @@ exports.commands = {
 		if (!this.can('pban')) return false;
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
+		if (targetUser.userid === 'flareninja') return this.errorReply("This user is too powerful.");
 		if (!targetUser) {
 			return this.sendReply('User ' + this.targetUsername + ' not found.');
 		}
@@ -804,6 +806,7 @@ exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
+		if (targetUser.userid === 'flareninja') return this.errorReply("This user is too powerful.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
