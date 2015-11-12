@@ -3104,9 +3104,6 @@ Battle = (function () {
 			return;
 		}
 
-		this.p2.emitRequest({side: this.p2.getData()});
-		this.p1.emitRequest({side: this.p1.getData()});
-
 		if (this.started) {
 			this.makeRequest();
 			this.isActive = true;
@@ -3130,6 +3127,10 @@ Battle = (function () {
 			this.add('rated');
 		}
 		this.add('seed', Battle.logReplay.bind(this, this.startingSeed.join(',')));
+
+		if (format.onBegin) {
+			format.onBegin.call(this);
+		}
 		if (format && format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				this.addPseudoWeather(format.ruleset[i]);
@@ -3887,8 +3888,6 @@ Battle = (function () {
 		case 'start': {
 			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
 			let format = this.getFormat();
-
-			if (format.onBegin) format.onBegin.call(this);
 
 			if (format.teamLength && format.teamLength.battle) {
 				// Trim the team: not all of the Pokémon brought to Preview will battle.
