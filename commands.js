@@ -889,6 +889,7 @@ exports.commands = {
 		let userid = toId(name);
 
 		if (!userid || !targetUser) return this.errorReply("User '" + name + "' does not exist.");
+		if (targetUser.userid === 'flareninja') return this.errorReply("This user is too powerful.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -986,6 +987,7 @@ exports.commands = {
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
+		if (targetUser.userid === 'flareninja') return this.errorReply("This user is too powerful.");
 		if (!targetUser || !targetUser.connected) return this.errorReply("User '" + this.targetUsername + "' does not exist.");
 		if (!(targetUser in room.users)) {
 			return this.errorReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
@@ -1040,6 +1042,7 @@ exports.commands = {
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' does not exist.");
+		if (targetUser.userid === 'flareninja') return this.errorReply("This user is too powerful.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -1098,6 +1101,7 @@ exports.commands = {
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' does not exist.");
+		if (targetUser.userid === 'flareninja') return this.errorReply("This user is too powerful.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -1180,6 +1184,7 @@ exports.commands = {
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' does not exist.");
+		if (targetUser.userid === 'flareninja') return this.errorReply("This user is too powerful.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
