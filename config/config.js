@@ -1,12 +1,12 @@
 // The server port - the port to run Pokemon Showdown under
-exports.port = 8000;
+exports.port = 80;
 
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
 //   of strings. Each string should be either an IP address or a subnet given
 //   in CIDR notation. You should usually leave this as `false` unless you
 //   know what you are doing.
-exports.proxyip = ['127.0.0.0/8'];
+exports.proxyip = ['10.0.0.0/8'];
 
 // serverid&servertoken
 exports.serverid = 'galaxy';
@@ -182,11 +182,19 @@ exports.mysql = {
 // Your server *must* be registered in order for your custom avatars to be
 // displayed in the client.
 exports.customavatars = {
-	//'userid': 'customavatar.png'
+	'flareninja': 'flareninja.png',
+	'awildwaifu': 'awildwaifu.png',
+	'danipika97': 'danipika97.png',
+	'galvantuleno': 'galvantuleno.png',
+	'hydrogenbot': 'hydrogenbot.png',
+	'legit1': 'legit1.gif',
+	'pokbattlerpm': 'pokbattlerpm.png',
+	'samuelbestt': 'samuelbestt.png',
+	'xramses': 'xramses.png'
 };
 
 // custom avatars appear in profile by specifiying server url.
-exports.avatarurl = '';
+exports.avatarurl = 'test3-flareninja.c9.io';
 
 // Tournament announcements
 // When tournaments are created in rooms listed below, they will be announced in
