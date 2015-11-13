@@ -59,15 +59,15 @@ var emotes = {
 	'fukiu': 'http://i.imgur.com/DqPskTb.gif',
 	'lennyface': 'http://i.imgur.com/LHGXwJ9.png',
 	'bordll': 'http://i.imgur.com/XBlL6vw.jpg?1',
-	'medaglieuomo': 'http://i.imgur.com/Z25jWSk.jpg?1',
+	'meDa': 'http://i.imgur.com/Z25jWSk.jpg?1',
 	'eczz': 'http://i.imgur.com/wA5VMv3.jpg?1',
 	'chbll': 'http://i.imgur.com/DQ6rTSF.jpg?1',
-	'uddio': 'http://i.imgur.com/OgZWzp8.jpg?1',
+	'uDio': 'http://i.imgur.com/OgZWzp8.jpg?1',
 	'happyface': 'http://i.imgur.com/krzCL3j.jpg',
-	'noncnfrega': 'http://i.imgur.com/7ujf8fL.jpg?1',
-	'monmun': 'http://i.imgur.com/4daPYQ5.png',
+	'freGA': 'http://i.imgur.com/7ujf8fL.jpg?1',
+	'mOn': 'http://i.imgur.com/4daPYQ5.png',
 	'piKa': 'http://i.imgur.com/viGgYqN.png',
-	'facepalm': 'http://i.imgur.com/E0oDNFB.gif'
+	'faCe': 'http://i.imgur.com/E0oDNFB.gif'
 };
 
 var emotesKeys = Object.keys(emotes);
