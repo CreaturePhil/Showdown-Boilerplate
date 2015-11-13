@@ -66,6 +66,7 @@ var emotes = {
 	'happyface': 'http://i.imgur.com/krzCL3j.jpg',
 	'noncnfrega': 'http://i.imgur.com/FrGhO20.jpg',
 	'monmun': 'http://i.imgur.com/4daPYQ5.png',
+	'piKa': 'http://i.imgur.com/viGgYqN.png',
 	'facepalm': 'http://i.imgur.com/E0oDNFB.gif'
 };
 
