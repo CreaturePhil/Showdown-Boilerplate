@@ -38,7 +38,7 @@ var emotes = {
 	'DansGame': 'https://static-cdn.jtvnw.net/emoticons/v1/33/1.0',
 	'EleGiggle': 'https://static-cdn.jtvnw.net/emoticons/v1/4339/1.0',
 	'FailFish': 'https://static-cdn.jtvnw.net/emoticons/v1/360/1.0',
-	'MingLee': 'https://static-cdn.jtvnw.net/emoticons/v1/68856/2.0',
+	'MingLee': 'https://static-cdn.jtvnw.net/emoticons/v1/68856/1.0',
 	'PogChamp': 'https://static-cdn.jtvnw.net/emoticons/v1/88/1.0',
 	'Kreygasm': 'https://static-cdn.jtvnw.net/emoticons/v1/41/1.0',
 	'NotLikeThis': 'https://static-cdn.jtvnw.net/emoticons/v1/58765/1.0',
