@@ -46,6 +46,7 @@ var emotes = {
 	'ThunBeast': 'https://static-cdn.jtvnw.net/emoticons/v1/1898/1.0',
 	'WutFace': 'https://static-cdn.jtvnw.net/emoticons/v1/28087/1.0',
 	'BabyRage': 'https://static-cdn.jtvnw.net/emoticons/v1/22639/1.0',
+	'TriHard': 'http://static-cdn.jtvnw.net/emoticons/v1/171/1.0',
 	'SwiftRage': 'https://static-cdn.jtvnw.net/emoticons/v1/34/1.0',
 	'Doge': 'http://fc01.deviantart.net/fs71/f/2014/279/4/5/doge__by_honeybunny135-d81wk54.png',
 	'noface': 'http://i.imgur.com/H744eRE.png',
