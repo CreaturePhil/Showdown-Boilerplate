@@ -992,12 +992,13 @@ exports.Formats = [
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
 	},
 	{
-		name: "Monotype LC Random Battle",
+		name: "Monotype Random LC",
 		section: "Monotype",
-		column: 2,
+		mod: 'randoms',
 
-		team: 'randomMonotype',
-		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Little Cup']
+		searchShow: true,
+		team: 'randomLC',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Same Type Clause']
 	},
 	{
 		name: "PU Monotype",
