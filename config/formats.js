@@ -913,7 +913,6 @@ exports.Formats = [
 		column: 2,
 
 		team: 'randomMonotype',
-		searchShow: false,
 		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
@@ -991,6 +990,14 @@ exports.Formats = [
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Little Cup', 'Same Type Clause'],
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
+	},
+	{
+		name: "Monotype LC Random Battle",
+		section: "Monotype",
+		column: 2,
+
+		team: 'randomMonotype',
+		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Little Cup']
 	},
 	{
 		name: "PU Monotype",
