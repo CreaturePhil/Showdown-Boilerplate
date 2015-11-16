@@ -57,7 +57,7 @@ exports.commands = {
 			targetUser.send("|nametaken||Your name conflicts with " + user.name + (user.name.substr(-1) === "s" ? "'" : "'s") + " new away status.");
 		}
 
-		if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + color(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is now " + target + ".");
+		if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + color(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is now " + target.toLowerCase() + ".");
 		user.forceRename(newName, user.registered);
 		user.updateIdentity();
 		user.isAway = true;
@@ -80,7 +80,7 @@ exports.commands = {
 		user.forceRename(newName, user.registered);
 		user.updateIdentity();
 		user.isAway = false;
-		if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + color(user.userid) + "'><strong>" + Tools.escapeHTML(newName) + "</strong></font> is no longer " + status + ".");
+		if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + color(user.userid) + "'><strong>" + Tools.escapeHTML(newName) + "</strong></font> is no longer " + status.toLowerCase() + ".");
 	},
 
 	afk: function (target, room, user) {
