@@ -3225,6 +3225,7 @@ Battle = (function () {
 				this.debug('illusion cleared');
 				target.illusion = null;
 				this.add('replace', target, target.getDetails);
+				this.add('-end', target, 'Illusion');
 			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
@@ -3717,9 +3718,13 @@ Battle = (function () {
 			// in gen 3 or earlier, fainting in singles skips to residuals
 			for (let i = 0; i < this.p1.active.length; i++) {
 				this.cancelMove(this.p1.active[i]);
+				// Stop Pursuit from running
+				this.p1.active[i].moveThisTurn = true;
 			}
 			for (let i = 0; i < this.p2.active.length; i++) {
 				this.cancelMove(this.p2.active[i]);
+				// Stop Pursuit from running
+				this.p2.active[i].moveThisTurn = true;
 			}
 		}
 
