@@ -9,6 +9,15 @@ var fs = require('fs');
 var confirmDeleteElo = false;
 var request = require('request');
 
+//rps
+var rockpaperscissors  = false;
+var numberofspots = 2;
+var gamestart = false;
+var rpsplayers = new Array();
+var rpsplayersid = new Array();
+var player1response = new Array();
+var player2response = new Array();
+
 var messages = [
 	"has vanished into nothingness!",
 	"used Explosion!",
@@ -472,138 +481,7 @@ exports.commands = {
 			}
 		}
 	},
-	sprite: function (target, room, user, connection, cmd) {
-		if (!this.canBroadcast()) return;
-		if (!toId(target)) return this.sendReply('/sprite [Pokémon] - Allows you to view the sprite of a Pokémon');
-		target = target.toLowerCase().split(',');
-		var alt = '';
-		var type = toId(target[1]);
-		var sprite = target[0].trim();
-		var url;
-		if (type === 'shiny') url = 'http://play.pokemonshowdown.com/sprites/xyani-shiny/';
-		else if (type === 'back') url = 'http://play.pokemonshowdown.com/sprites/xyani-back/';
-				else if (type === 'bw') url = 'http://play.pokemonshowdown.com/sprites/bwani/';
-		else if (type === 'bwshiny') url = 'http://play.pokemonshowdown.com/sprites/bwani-shiny/';
-		else if (type === 'bwback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back/';
-		else if (type === 'bwshinyback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back-shiny/';
-		else if (type === 'backshiny' || type === 'shinyback') url = 'http://play.pokemonshowdown.com/sprites/xyani-back-shiny/';
-		else url = 'http://play.pokemonshowdown.com/sprites/xyani/';
-
-		if (Number(sprite[sprite.length - 1]) && !toId(sprite[sprite.length - 2])) {
-			alt = '-' + sprite[sprite.length - 1];
-			sprite = sprite.substr(0, sprite.length - 1);
-			url = 'http://www.pkparaiso.com/imagenes/xy/sprites/animados/';
-		}
-		var main = target[0].split(',');
-		if (Tools.data.Pokedex[toId(sprite)]) {
-			sprite = Tools.data.Pokedex[toId(sprite)].species.toLowerCase();
-		} else {
-			var correction = Tools.dataSearch(toId(sprite));
-			if (correction && correction.length) {
-				for (var i = 0; i < correction.length; i++) {
-					if (correction[i].id !== toId(sprite) && !Tools.data.Aliases[toId(correction[i].id)] && !i) {
-						if (!Tools.data.Pokedex[toId(correction[i])]) continue;
-						if (!Tools.data.Aliases[toId(sprite)]) this.sendReply("There isn't any Pokémon called '" + sprite + "'... Did you mean '" + correction[0].name + "'?\n");
-						sprite = Tools.data.Pokedex[correction[0].id].species.toLowerCase();
-					}
-				}
-			} else {
-				return this.sendReply("There isn\'t any Pokémon called '" + sprite + "'...");
-			}
-		}
-		var self = this;
-		require('request').get(url + sprite + alt + '.gif').on('error', function () {
-			self.sendReply('The sprite for ' + sprite + alt + ' is unavailable.');
-		}).on('response', function (response) {
-			if (response.statusCode == 404) return self.sendReply('The sprite for ' + sprite + alt + ' is currently unavailable.');
-			self.sendReply('|html|<img src = "' + url + sprite + alt + '.gif">');
-		});
-	},
-	//Panagram
-	panagramhelp: 'panagramrules',
-    panagramrules: function(target, room, user) {
-        if (!this.canBroadcast()) return;
-        return this.sendReplyBox('<u><font size = 2><center>Pangram rules and commands</center></font></u><br />' +
-            '<b>/panagram</b> - Starts a game of Panagram in the room (Panagrams are just anagrams with Pokemon). Illegal and CAP Pokemon won\'t be selected. Must be ranked + or higher to use.<br />' +
-            '<b>/guessp [Pokemon]</b> - Guesses a Pokémon. After guessing incorrectly, you cannot guess again in the same game. There are a total of 3 tries per game. The answer is revealed after all 3 chances are over.<br />' +
-            '<b>/panagramend</b> OR <b>/endpanagram</b> OR <b>/endp</b> - Ends the current game of Panagram.');
-    },
-    //panagram commands.
-    panagram: function(target, room, user) {
-        if (!this.can('broadcast', null, room)) return false;
-        if (room.panagram) return this.sendReply('There is already a game of Panagram going on.');
-        var pokedex = [];
-        for (var i in Tools.data.Pokedex) {
-            if (Tools.data.Pokedex[i].num > 0 && !Tools.data.Pokedex[i].forme) {
-                pokedex.push(i);
-            }
-        }
-        var mixer = function(word) {
-            var array = [];
-            for (var k = 0; k < word.length; k++) {
-                array.push(word[k]);
-            }
-            var a;
-            var b;
-            var i = array.length;
-            while (i) {
-                a = Math.floor(Math.random() * i);
-                i--;
-                b = array[i];
-                array[i] = array[a];
-                array[a] = b;
-            }
-            return array.join('').toString();
-        }
-
-        var poke = pokedex[Math.floor(Math.random() * pokedex.length)];
-        var panagram = mixer(poke.toString());
-        while (panagram == poke) {
-            panagram = mixer(poke);
-        }
-        //var x = Math.floor(Math.random() * panagram.length);
-        this.add('|html|<div class = "infobox"><center><b>A game of Panagram has been started!</b><br/>' +
-            'The scrambled Pokémon is <b>' + panagram + '</b><br/>' +
-            '<font size = 1>Type in <b>/gp or /guesspoke [Pokémon]</b> to guess the Pokémon!');
-        room.panagram = {};
-        room.panagram.guessed = [];
-        room.panagram.chances = 2;
-        room.panagram.answer = toId(poke);
-    },
-
-	gp: 'guessp',
-    guesspoke: 'guessp',
-    guessp: function(target, room, user, cmd) {
-        if (!room.panagram) return this.sendReply('There is no game of Panagram going on in this room.');
-        if (room.panagram[user.userid]) return this.sendReply("You've already guessed once!");
-        if (!target) return this.sendReply("The proper syntax is /guessp [pokemon]");
-        if (!Tools.data.Pokedex[toId(target)]) return this.sendReply("'" + target + "' is not a valid Pokémon.");
-        if (Tools.data.Pokedex[toId(target)].num < 1) return this.sendReply(Tools.data.Pokedex[toId(target)].species + ' is either an illegal or a CAP Pokémon.');
-        if (Tools.data.Pokedex[toId(target)].baseSpecies) target = toId(Tools.data.Pokedex[toId(target)].baseSpecies);
-        if (room.panagram.guessed.indexOf(toId(target)) > -1) return this.sendReply("That Pokemon has already been guessed!");
-        if (room.panagram.answer == toId(target)) {
-            this.add('|html|<b>' + user.name + '</b> guessed <b>' + Tools.data.Pokedex[toId(target)].species + '</b>, which was the correct answer! Congratulations!');
-            delete room.panagram;
-        } else {
-            if (room.panagram.chances > 0) {
-                this.add('|html|<b>' + user.name + '</b> guessed <b>' + Tools.data.Pokedex[toId(target)].species + '</b>, but was not the correct answer...');
-                room.panagram[user.userid] = toId(target);
-                room.panagram.guessed.push(toId(target));
-                room.panagram.chances--;
-            } else {
-                this.add('|html|<b>' + user.name + '</b> guessed <b>' + Tools.data.Pokedex[toId(target)].species + '</b>, but was not the correct answer. You have failed to guess the Pokemon, which was <b>' + Tools.data.Pokedex[room.panagram.answer].species + '</b>');
-                delete room.panagram;
-            }
-        }
-    },
-    panagramoff: 'endpanagram',
-    endp: 'endpanagram',
-    panagramend: 'endpanagram',
-    endpanagram: function(target, room, user) {
-        if (!room.panagram) return this.sendReply('There is no panagram game going on in this room yet.');
-        this.add("|html|<b>The game of Panagram has been ended.</b>");
-        delete room.panagram;
-    },
+	
     sudo: function (target, room, user) {
         if (!user.can('sudo')) return;
         var parts = target.split(',');
@@ -708,27 +586,6 @@ exports.commands = {
 		this.logModCommand(user.name+' send a popup message to '+targetUser.name);
 	},
 	
-        rbysprite: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/rby/'+target+'.png">');
-        },
-     
-        gscsprite: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/gsc/'+target+'.png">');
-        },
-        rsesprite: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/rse/'+target+'.png">');
-        },
-        dppsprite: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/dpp/'+target+'.png">');
-        },
-        afdsprite: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/afd/'+target+'.png">');
-        },
         
         cc: 'customcolour',
 	customcolour: function (target, room) {
@@ -739,67 +596,6 @@ exports.commands = {
 		this.sendReply('|raw|<font color="' + targets[0].toLowerCase().replace(/[^#a-z0-9]+/g, '') + '">' + Tools.escapeHTML(targets.slice(1).join(",")) + '</font>');
 	},
         
-        cries: function (target) {
-		if (!this.canBroadcast()) return; 
-		if (!target || (isNaN(target) && toId(target) !== 'random')) return false;
-		target = toId(target);
-		if (target === 'random' || target === 'rand' || target === 'aleatoire') {
-			target = Math.floor(Math.random() * 718);
-		}
-		if (target < 1 || target > 718) { 
-			return this.sendReply('Le Pokémon indiqué doit avoir un numéro de Pokédex national entre 1 et 718.');
-		}	
-		if (target < 100 && target > 9) {
-			target = '0' + target; 
-		} 
-		if (target < 10) {
-			target = '00' + target;
-		}
-		this.sendReplyBox(
-			'<center><audio src="http://play.pokemonshowdown.com/audio/cries/'+ target +'.wav" controls="" style="padding: 5px 7px ; background: #8e44ad ; color: #ecf0f1 ; -webkit-border-radius: 4px ; -moz-border-radius: 4px ; border-radius: 4px ; border: solid 1px #20538d ; text-shadow: 0 -1px 0 rgba(0 , 0 , 0 , 0.4) ; -webkit-box-shadow: inset 0 1px 0 rgba(255 , 255 , 255 , 0.4) , 0 1px 1px rgba(0 , 0 , 0 , 0.2) ; -moz-box-shadow: inset 0 1px 0 rgba(255 , 255 , 255 , 0.4) , 0 1px 1px rgba(0 , 0 , 0 , 0.2) ; box-shadow: inset 0 1px 0 rgba(255 , 255 , 255 , 0.4) , 0 1px 1px rgba(0 , 0 , 0 , 0.2)" target="_blank"></audio>'
-		)
-	},
-
-        yt: function(target, room, user) {
-       	if (!this.canBroadcast()) return false;
-        if (!target) return false;
-        var params_spl = target.split(' ');
-        var g = '';
-
-        for (var i = 0; i < params_spl.length; i++) {
-            g += '+' + params_spl[i];
-        }
-        g = g.substr(1);
-
-        var reqOpts = {
-            hostname: "www.googleapis.com",
-            method: "GET",
-            path: '/youtube/v3/search?part=snippet&q=' + g + '&type=video&key=AIzaSyA4fgl5OuqrgLE1B7v8IWYr3rdpTGkTmns',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-
-        var self = this;
-        var data = '';
-        var req = require('https').request(reqOpts, function(res) {
-            res.on('data', function(chunk) {
-                data += chunk;
-            });
-            res.on('end', function(chunk) {
-                var d = JSON.parse(data);
-                if (d.pageInfo.totalResults == 0) {
-                    room.add('No videos found');
-                    room.update();
-                    return false;
-                } 
-                self.sendReplyBox('<a href="https://www.youtube.com/watch?v=' + d.items[0].id.videoId +'"><b> '+ d.items[0].snippet.title +'</b>');
-            	room.update();
-            });
-        });
-        req.end();
-        console.log('[YT] '+ user +': '+ target);
-    },
     dm: 'daymute',
 	daymute: function (target, room, user, connection, cmd) {
 		if (!target) return this.errorReply()
@@ -896,7 +692,408 @@ exports.commands = {
 		}
 	},
 	
-	tourelo: 'tourladder',
+	pbl: 'pbanlist',
+	permabanlist: 'pbanlist',
+	pbanlist: function(target, room, user, connection) {
+		if (!this.canBroadcast() || !user.can('lock')) return this.sendReply('/pbanlist - Access Denied.');
+		var pban = fs.readFileSync('config/pbanlist.txt', 'utf8');
+		return user.send('|popup|' + pban);
+	},
+	
+	/*********************************************************
+	 * Others
+	 *********************************************************/
+	
+	rps: "rockpaperscissors",
+	rockpaperscissors: function(target, room, user) {
+		if(rockpaperscissors === false) {
+			rockpaperscissors = true;
+			return this.parse('/jrps');
+		}
+	},
+
+	respond: 'shoot',
+	shoot: function(target, room, user) {
+		if(gamestart === false) {
+			return this.sendReply('There is currently no game of rock-paper-scissors going on.');
+		} else {
+			if(user.userid === rpsplayersid[0]) {
+				if(player1response[0]) {
+					return this.sendReply('You have already responded.');
+				}
+				if(target === 'rock') {
+					player1response.push('rock');
+					if(player2response[0]) {
+						return this.parse('/compare');
+					}
+					return this.sendReply('You responded with rock.');
+				}
+				if(target === 'paper') {
+					player1response.push('paper');
+					if(player2response[0]) {
+						return this.parse('/compare');
+					}
+					return this.sendReply('You responded with paper.');
+				}
+				if(target === 'scissors') {
+					player1response.push('scissors');
+					if(player2response[0]) {
+						return this.parse('/compare');
+					}
+					return this.sendReply('You responded with scissors.');
+				} else {
+					return this.sendReply('Please respond with one of the following: rock, paper, or scissors.');
+				}
+			}
+			if(user.userid === rpsplayersid[1]) {
+				if(player2response[0]) {
+					return this.sendReply('You have already responded.');
+				}
+				if(target === 'rock') {
+					player2response.push('rock');
+					if(player1response[0]) {
+						return this.parse('/compare');
+					}
+					return this.sendReply('You responded with rock.');
+				}
+				if(target === 'paper') {
+					player2response.push('paper');
+					if(player1response[0]) {
+						return this.parse('/compare');
+					}
+					return this.sendReply('You responded with paper.');
+				}
+				if(target === 'scissors') {
+					player2response.push('scissors');
+					if(player1response[0]) {
+						return this.parse('/compare');
+					}
+					return this.sendReply('You responded with scissors.');
+				}
+				else {
+				return this.sendReply('Please respond with one of the following: rock, paper, or scissors.');
+				}
+			} else {
+				return this.sendReply('You are not in this game of rock-paper-scissors.');
+			}
+		}
+	},
+
+	compare: function(target, room, user) {
+		if(gamestart === false) {
+			return this.sendReply('There is no rock-paper-scissors game going on right now.');
+		} else {
+			if(player1response[0] === undefined && player2response[0] === undefined) {
+				return this.sendReply('Neither ' + rpsplayers[0] + ' nor ' + rpsplayers[1] + ' has responded yet.');
+			}
+			if(player1response[0] === undefined) {
+				return this.sendReply(rpsplayers[0] + ' has not responded yet.');
+			}
+			if(player2response[0] === undefined) {
+				return this.sendReply(rpsplayers[1] + ' has not responded yet.');
+			} else {
+				if(player1response[0] === player2response[0]) {
+					this.add('Both players responded with \'' + player1response[0] + '\', so the game of rock-paper-scissors between ' + rpsplayers[0] + ' and ' + rpsplayers[1] + ' was a tie!');
+				}
+				if(player1response[0] === 'rock' && player2response[0] === 'paper') {
+					this.add('|html|' + rpsplayers[0] + ' responded with \'rock\' and ' + rpsplayers[1] + ' responded with \'paper\', so <b>' + rpsplayers[1] + '</b> won the game of rock-paper-scissors!');
+				}
+				if(player1response[0] === 'rock' && player2response[0] === 'scissors') {
+					this.add('|html|' + rpsplayers[0] + ' responded with \'rock\' and ' + rpsplayers[1] + ' responded with \'scissors\', so <b>' + rpsplayers[0] + '</b> won the game of rock-paper-scissors!');
+				}
+				if(player1response[0] === 'paper' && player2response[0] === 'rock') {
+					this.add('|html|' + rpsplayers[0] + ' responded with \'paper\' and ' + rpsplayers[1] + ' responded with \'rock\', so <b>' + rpsplayers[0] + '</b> won the game of rock-paper-scissors!');
+				}
+				if(player1response[0] === 'paper' && player2response[0] === 'scissors') {
+					this.add('|html|' + rpsplayers[0] + ' responded with \'paper\' and ' + rpsplayers[1] + ' responded with \'scissors\', so <b>' + rpsplayers[1] + '</b> won the game of rock-paper-scissors!');
+				}
+				if(player1response[0] === 'scissors' && player2response[0] === 'rock') {
+					this.add('|html|' + rpsplayers[0] + ' responded with \'scissors\' and ' + rpsplayers[1] + ' responded with \'rock\', so <b>' + rpsplayers[1] + '</b> won the game of rock-paper-scissors!');
+				}
+				if(player1response[0] === 'scissors' && player2response[0] === 'paper') {
+					this.add('|html|' + rpsplayers[0] + ' responded with \'scissors\' and ' + rpsplayers[1] + ' responded with \'paper\', so <b>' + rpsplayers[0] + '</b> won the game of rock-paper-scissors!');
+				}
+				rockpaperscissors = false;
+				numberofspots = 2;
+				gamestart = false;
+				rpsplayers = [];
+				rpsplayersid = [];
+				player1response = [];
+				player2response = [];
+			}
+		}
+	},
+
+	endrps: function(target, room, user) {
+		if(!user.can('broadcast')) {
+			return this.sendReply('You do not have enough authority to do this.');
+		}
+		if(rockpaperscissors === false) {
+			return this.sendReply('There is no game of rock-paper-scissors happening right now.');
+		}
+		if(user.can('broadcast') && rockpaperscissors === true) {
+			rockpaperscissors = false;
+			numberofspots = 2;
+			gamestart = false;
+			rpsplayers = [];
+			rpsplayersid = [];
+			player1response = [];
+			player2response = [];
+			return this.add('|html|<b>' + user.name + '</b> ended the game of rock-paper-scissors.');
+		}
+	},
+
+	jrps: 'joinrps',
+	joinrps: function(target, room, user) {
+		if(rockpaperscissors === false) {
+			return this.sendReply('There is no game going on right now.');
+		}
+		if(numberofspots === 0) {
+			return this.sendReply('There is no more space in the game.');
+		}
+		else {
+			if(rpsplayers[0] === undefined) {
+				numberofspots = numberofspots - 1;
+				this.add('|html|<b>' + user.name + '</b> has started a game of rock-paper-scissors! /jrps or /joinrps to play against them.');
+				rpsplayers.push(user.name);
+				rpsplayersid.push(user.userid);
+				return false;
+			}
+			if(rpsplayers[0] === user.name) {
+				return this.sendReply('You are already in the game.');
+			}
+			if(rpsplayers[0] && rpsplayers[1] === undefined) {
+				numberofspots = numberofspots - 1;
+				this.add('|html|<b>' + user.name + '</b> has joined the game of rock-paper-scissors!');
+				rpsplayers.push(user.name);
+				rpsplayersid.push(user.userid);
+			}
+			if(numberofspots === 0) {
+				this.add('|html|The game of rock-paper-scissors between <b>' + rpsplayers[0] + '</b> and <b>' + rpsplayers[1] + '</b> has begun! Use /shoot Rock/Paper/Scissors');
+				gamestart = true;
+			}
+		}
+	},
+	
+		//Panagram
+	panagramhelp: 'panagramrules',
+    panagramrules: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        return this.sendReplyBox('<u><font size = 2><center>Pangram rules and commands</center></font></u><br />' +
+            '<b>/panagram</b> - Starts a game of Panagram in the room (Panagrams are just anagrams with Pokemon). Illegal and CAP Pokemon won\'t be selected. Must be ranked + or higher to use.<br />' +
+            '<b>/guessp [Pokemon]</b> - Guesses a Pokémon. After guessing incorrectly, you cannot guess again in the same game. There are a total of 3 tries per game. The answer is revealed after all 3 chances are over.<br />' +
+            '<b>/panagramend</b> OR <b>/endpanagram</b> OR <b>/endp</b> - Ends the current game of Panagram.');
+    },
+    //panagram commands.
+    panagram: function(target, room, user) {
+        if (!this.can('broadcast', null, room)) return false;
+        if (room.panagram) return this.sendReply('There is already a game of Panagram going on.');
+        var pokedex = [];
+        for (var i in Tools.data.Pokedex) {
+            if (Tools.data.Pokedex[i].num > 0 && !Tools.data.Pokedex[i].forme) {
+                pokedex.push(i);
+            }
+        }
+        var mixer = function(word) {
+            var array = [];
+            for (var k = 0; k < word.length; k++) {
+                array.push(word[k]);
+            }
+            var a;
+            var b;
+            var i = array.length;
+            while (i) {
+                a = Math.floor(Math.random() * i);
+                i--;
+                b = array[i];
+                array[i] = array[a];
+                array[a] = b;
+            }
+            return array.join('').toString();
+        }
+
+        var poke = pokedex[Math.floor(Math.random() * pokedex.length)];
+        var panagram = mixer(poke.toString());
+        while (panagram == poke) {
+            panagram = mixer(poke);
+        }
+        //var x = Math.floor(Math.random() * panagram.length);
+        this.add('|html|<div class = "infobox"><center><b>A game of Panagram has been started!</b><br/>' +
+            'The scrambled Pokémon is <b>' + panagram + '</b><br/>' +
+            '<font size = 1>Type in <b>/gp or /guesspoke [Pokémon]</b> to guess the Pokémon!');
+        room.panagram = {};
+        room.panagram.guessed = [];
+        room.panagram.chances = 2;
+        room.panagram.answer = toId(poke);
+    },
+
+	gp: 'guessp',
+    guesspoke: 'guessp',
+    guessp: function(target, room, user, cmd) {
+        if (!room.panagram) return this.sendReply('There is no game of Panagram going on in this room.');
+        if (room.panagram[user.userid]) return this.sendReply("You've already guessed once!");
+        if (!target) return this.sendReply("The proper syntax is /guessp [pokemon]");
+        if (!Tools.data.Pokedex[toId(target)]) return this.sendReply("'" + target + "' is not a valid Pokémon.");
+        if (Tools.data.Pokedex[toId(target)].num < 1) return this.sendReply(Tools.data.Pokedex[toId(target)].species + ' is either an illegal or a CAP Pokémon.');
+        if (Tools.data.Pokedex[toId(target)].baseSpecies) target = toId(Tools.data.Pokedex[toId(target)].baseSpecies);
+        if (room.panagram.guessed.indexOf(toId(target)) > -1) return this.sendReply("That Pokemon has already been guessed!");
+        if (room.panagram.answer == toId(target)) {
+            this.add('|html|<b>' + user.name + '</b> guessed <b>' + Tools.data.Pokedex[toId(target)].species + '</b>, which was the correct answer! Congratulations!');
+            delete room.panagram;
+        } else {
+            if (room.panagram.chances > 0) {
+                this.add('|html|<b>' + user.name + '</b> guessed <b>' + Tools.data.Pokedex[toId(target)].species + '</b>, but was not the correct answer...');
+                room.panagram[user.userid] = toId(target);
+                room.panagram.guessed.push(toId(target));
+                room.panagram.chances--;
+            } else {
+                this.add('|html|<b>' + user.name + '</b> guessed <b>' + Tools.data.Pokedex[toId(target)].species + '</b>, but was not the correct answer. You have failed to guess the Pokemon, which was <b>' + Tools.data.Pokedex[room.panagram.answer].species + '</b>');
+                delete room.panagram;
+            }
+        }
+    },
+    panagramoff: 'endpanagram',
+    endp: 'endpanagram',
+    panagramend: 'endpanagram',
+    endpanagram: function(target, room, user) {
+        if (!room.panagram) return this.sendReply('There is no panagram game going on in this room yet.');
+        this.add("|html|<b>The game of Panagram has been ended.</b>");
+        delete room.panagram;
+    },
+    
+    sprite: function (target, room, user, connection, cmd) {
+		if (!this.canBroadcast()) return;
+		if (!toId(target)) return this.sendReply('/sprite [Pokémon] - Allows you to view the sprite of a Pokémon');
+		target = target.toLowerCase().split(',');
+		var alt = '';
+		var type = toId(target[1]);
+		var sprite = target[0].trim();
+		var url;
+		if (type === 'shiny') url = 'http://play.pokemonshowdown.com/sprites/xyani-shiny/';
+		else if (type === 'back') url = 'http://play.pokemonshowdown.com/sprites/xyani-back/';
+				else if (type === 'bw') url = 'http://play.pokemonshowdown.com/sprites/bwani/';
+		else if (type === 'bwshiny') url = 'http://play.pokemonshowdown.com/sprites/bwani-shiny/';
+		else if (type === 'bwback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back/';
+		else if (type === 'bwshinyback') url = 'http://play.pokemonshowdown.com/sprites/bwani-back-shiny/';
+		else if (type === 'backshiny' || type === 'shinyback') url = 'http://play.pokemonshowdown.com/sprites/xyani-back-shiny/';
+		else url = 'http://play.pokemonshowdown.com/sprites/xyani/';
+
+		if (Number(sprite[sprite.length - 1]) && !toId(sprite[sprite.length - 2])) {
+			alt = '-' + sprite[sprite.length - 1];
+			sprite = sprite.substr(0, sprite.length - 1);
+			url = 'http://www.pkparaiso.com/imagenes/xy/sprites/animados/';
+		}
+		var main = target[0].split(',');
+		if (Tools.data.Pokedex[toId(sprite)]) {
+			sprite = Tools.data.Pokedex[toId(sprite)].species.toLowerCase();
+		} else {
+			var correction = Tools.dataSearch(toId(sprite));
+			if (correction && correction.length) {
+				for (var i = 0; i < correction.length; i++) {
+					if (correction[i].id !== toId(sprite) && !Tools.data.Aliases[toId(correction[i].id)] && !i) {
+						if (!Tools.data.Pokedex[toId(correction[i])]) continue;
+						if (!Tools.data.Aliases[toId(sprite)]) this.sendReply("There isn't any Pokémon called '" + sprite + "'... Did you mean '" + correction[0].name + "'?\n");
+						sprite = Tools.data.Pokedex[correction[0].id].species.toLowerCase();
+					}
+				}
+			} else {
+				return this.sendReply("There isn\'t any Pokémon called '" + sprite + "'...");
+			}
+		}
+		var self = this;
+		require('request').get(url + sprite + alt + '.gif').on('error', function () {
+			self.sendReply('The sprite for ' + sprite + alt + ' is unavailable.');
+		}).on('response', function (response) {
+			if (response.statusCode == 404) return self.sendReply('The sprite for ' + sprite + alt + ' is currently unavailable.');
+			self.sendReply('|html|<img src = "' + url + sprite + alt + '.gif">');
+		});
+	},
+	
+	rbysprite: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/rby/'+target+'.png">');
+        },
+     
+        gscsprite: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/gsc/'+target+'.png">');
+        },
+        rsesprite: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/rse/'+target+'.png">');
+        },
+        dppsprite: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/dpp/'+target+'.png">');
+        },
+        afdsprite: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/afd/'+target+'.png">');
+        },
+        
+    cries: function (target) {
+		if (!this.canBroadcast()) return; 
+		if (!target || (isNaN(target) && toId(target) !== 'random')) return false;
+		target = toId(target);
+		if (target === 'random' || target === 'rand' || target === 'aleatoire') {
+			target = Math.floor(Math.random() * 718);
+		}
+		if (target < 1 || target > 718) { 
+			return this.sendReply('Le Pokémon indiqué doit avoir un numéro de Pokédex national entre 1 et 718.');
+		}	
+		if (target < 100 && target > 9) {
+			target = '0' + target; 
+		} 
+		if (target < 10) {
+			target = '00' + target;
+		}
+		this.sendReplyBox(
+			'<center><audio src="http://play.pokemonshowdown.com/audio/cries/'+ target +'.wav" controls="" style="padding: 5px 7px ; background: #8e44ad ; color: #ecf0f1 ; -webkit-border-radius: 4px ; -moz-border-radius: 4px ; border-radius: 4px ; border: solid 1px #20538d ; text-shadow: 0 -1px 0 rgba(0 , 0 , 0 , 0.4) ; -webkit-box-shadow: inset 0 1px 0 rgba(255 , 255 , 255 , 0.4) , 0 1px 1px rgba(0 , 0 , 0 , 0.2) ; -moz-box-shadow: inset 0 1px 0 rgba(255 , 255 , 255 , 0.4) , 0 1px 1px rgba(0 , 0 , 0 , 0.2) ; box-shadow: inset 0 1px 0 rgba(255 , 255 , 255 , 0.4) , 0 1px 1px rgba(0 , 0 , 0 , 0.2)" target="_blank"></audio>'
+		)
+	},
+
+        yt: function(target, room, user) {
+       	if (!this.canBroadcast()) return false;
+        if (!target) return false;
+        var params_spl = target.split(' ');
+        var g = '';
+
+        for (var i = 0; i < params_spl.length; i++) {
+            g += '+' + params_spl[i];
+        }
+        g = g.substr(1);
+
+        var reqOpts = {
+            hostname: "www.googleapis.com",
+            method: "GET",
+            path: '/youtube/v3/search?part=snippet&q=' + g + '&type=video&key=AIzaSyA4fgl5OuqrgLE1B7v8IWYr3rdpTGkTmns',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        var self = this;
+        var data = '';
+        var req = require('https').request(reqOpts, function(res) {
+            res.on('data', function(chunk) {
+                data += chunk;
+            });
+            res.on('end', function(chunk) {
+                var d = JSON.parse(data);
+                if (d.pageInfo.totalResults == 0) {
+                    room.add('No videos found');
+                    room.update();
+                    return false;
+                } 
+                self.sendReplyBox('<a href="https://www.youtube.com/watch?v=' + d.items[0].id.videoId +'"><b> '+ d.items[0].snippet.title +'</b>');
+            	room.update();
+            });
+        });
+        req.end();
+        console.log('[YT] '+ user +': '+ target);
+    },
+    
+    tourelo: 'tourladder',
 	tourladder: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		var self = this;
@@ -947,14 +1144,6 @@ exports.commands = {
 			Rooms('lobby').update();
 			if (room.id !== 'lobby') this.sendReply('The Tournament Ladder has been reset.');
 		}.bind(this));
-	},
-	
-	pbl: 'pbanlist',
-	permabanlist: 'pbanlist',
-	pbanlist: function(target, room, user, connection) {
-		if (!this.canBroadcast() || !user.can('lock')) return this.sendReply('/pbanlist - Access Denied.');
-		var pban = fs.readFileSync('config/pbanlist.txt', 'utf8');
-		return user.send('|popup|' + pban);
 	},
 	
 	meme: function(target, room, user) {
