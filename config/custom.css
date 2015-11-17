@@ -7,11 +7,11 @@ body {
 }
 
 .astext {
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
+    	background-color: Transparent;
+    	background-repeat:no-repeat;
+    	border: none;
+    	cursor:pointer;
+    	overflow: hidden;
 }
 
 /*************
@@ -460,7 +460,7 @@ body {
 }
 
 .backdrop {
-    background-image: url("http://i.imgur.com/ZTf1k6x.png") !important;
+    	background-image: url("http://i.imgur.com/ZTf1k6x.png") !important;
 }
 
 .battle-log h2 {
@@ -468,23 +468,23 @@ body {
 }
 
 .sunweather, .sunnydayweather {
-background: url(http://i.imgur.com/GCf4fyN.png) no-repeat scroll left top;
+	background: url(http://i.imgur.com/GCf4fyN.png) no-repeat scroll left top;
 }
 
 .rainweather, .raindanceweather {
-background: url(http://i.imgur.com/x7K1Zop.png) no-repeat scroll left top;
+	background: url(http://i.imgur.com/x7K1Zop.png) no-repeat scroll left top;
   }
   
 .hailweather {
-background: url(http://i.imgur.com/xCXcpE5.png) no-repeat scroll left top;
+	background: url(http://i.imgur.com/xCXcpE5.png) no-repeat scroll left top;
   }
 
 .sandstormweather {
-background: url(http://i.imgur.com/CbsvtPl.png) no-repeat scroll left top;
+	background: url(http://i.imgur.com/CbsvtPl.png) no-repeat scroll left top;
 }
 
 .pseudoweather{
-background: url(http://i.imgur.com/rPMtZca.png) no-repeat scroll left top;
+	background: url(http://i.imgur.com/rPMtZca.png) no-repeat scroll left top;
 }
 
 /********************
