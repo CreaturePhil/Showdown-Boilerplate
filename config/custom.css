@@ -492,13 +492,13 @@ background: url(http://i.imgur.com/rPMtZca.png) no-repeat scroll left top;
 ********************/
 
 /* User Icons section */
-#lobby-userlist-user-rankuro, #tournaments-userlist-user-rankuro, #royalpalace-userlist-user-rankuro, #staff-userlist-user-rankuro, #casino-userlist-user-rankuro, #ninesmeadow-userlist-user-rankuro, #dragoticslab-userlist-user-rankuro, #spamroom-userlist-user-rankuro {
+#lobby-userlist-user-rankuro, #tournaments-userlist-user-rankuro, #royalpalace-userlist-user-rankuro, #staff-userlist-user-rankuro, #casino-userlist-user-rankuro, #ninesmeadow-userlist-user-rankuro, #dragoticslab-userlist-user-rankuro, #tokuomart-userlist-user-rankuro, #spamroom-userlist-user-rankuro {
     background: rgba(255,0,255,0.1) url("http://pldh.net/media/pokemon/gen4/overworld/shiny_frontf2/491.png") right no-repeat;
 }
-#lobby-userlist-user-icedragonx, #tournaments-userlist-user-icedragonx, #royalpalace-userlist-user-icedragonx, #staff-userlist-user-icedragonx, #casino-userlist-user-icedragonx, #ninesmeadow-userlist-user-icedragonx, #dragoticslab-userlist-user-icedragonx, #spamroom-userlist-user-icedragonx {
+#lobby-userlist-user-icedragonx, #tournaments-userlist-user-icedragonx, #royalpalace-userlist-user-icedragonx, #staff-userlist-user-icedragonx, #casino-userlist-user-icedragonx, #ninesmeadow-userlist-user-icedragonx, #dragoticslab-userlist-user-icedragonx, #tokuomart-userlist-user-icedragonx, #spamroom-userlist-user-icedragonx {
     background: rgba(255,0,255,0.1) url("http://pldh.net/media/pokecons_action/418.gif") right no-repeat;
 }
-#lobby-userlist-user-dragotic, #tournaments-userlist-user-dragotic, #royalpalace-userlist-user-dragotic, #staff-userlist-user-dragotic, #casino-userlist-user-dragotic, #ninesmeadow-userlist-user-dragotic, #dragoticslab-userlist-user-dragotic, #spamroom-userlist-user-dragotic {
+#lobby-userlist-user-dragotic, #tournaments-userlist-user-dragotic, #royalpalace-userlist-user-dragotic, #staff-userlist-user-dragotic, #casino-userlist-user-dragotic, #ninesmeadow-userlist-user-dragotic, #dragoticslab-userlist-user-dragotic, #tokuomart-userlist-user-dragotic, #spamroom-userlist-user-dragotic {
     background: rgba(255,0,255,0.1) url("http://pldh.net/media/pokemon/gen4/overworld/frontf2/149.png") right no-repeat;
 }
 #lobby-userlist-user-clawliet {
