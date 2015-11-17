@@ -869,7 +869,7 @@ exports.commands = {
 				rpsplayersid.push(user.userid);
 			}
 			if(numberofspots === 0) {
-				this.add('|html|The game of rock-paper-scissors between <b>' + rpsplayers[0] + '</b> and <b>' + rpsplayers[1] + '</b> has begun! Use /shoot Rock/Paper/Scissors');
+				this.add('|html|The game of rock-paper-scissors between <b>' + rpsplayers[0] + '</b> and <b>' + rpsplayers[1] + '</b> has begun! Use /shoot rock/paper/scissors');
 				gamestart = true;
 			}
 		}
