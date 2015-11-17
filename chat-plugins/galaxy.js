@@ -1009,27 +1009,65 @@ exports.commands = {
 		});
 	},
 	
-	rbysprite: function(target, room, user) {
+		oldsprite: function (target, room, user, connection, cmd) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/rby/'+target+'.png">');
-        },
-     
-        gscsprite: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/gsc/'+target+'.png">');
-        },
-        rsesprite: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/rse/'+target+'.png">');
-        },
-        dppsprite: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/dpp/'+target+'.png">');
-        },
-        afdsprite: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<img src="https://play.pokemonshowdown.com/sprites/afd/'+target+'.png">');
-        },
+		if (!toId(target)) return this.sendReply('/oldsprite [Pokémon] - Allows you to view the sprite of a Pokémon');
+		target = target.toLowerCase().split(',');
+		var alt = '';
+		var type = toId(target[1]);
+		var sprite = target[0].trim();
+		var url;
+		if (type === 'shiny') url = 'http://play.pokemonshowdown.com/sprites/dpp-shiny/';
+		else if (type === 'back') url = 'http://play.pokemonshowdown.com/sprites/dpp-back/';
+		else if (type === 'rse') url = 'http://play.pokemonshowdown.com/sprites/rse/';
+		else if (type === 'rseshiny') url = 'http://play.pokemonshowdown.com/sprites/rse-shiny/';
+		else if (type === 'rseback') url = 'http://play.pokemonshowdown.com/sprites/rse-back/';
+		else if (type === 'rseshinyback') url = 'http://play.pokemonshowdown.com/sprites/rse-back-shiny/';
+		else if (type === 'gsc') url = 'http://play.pokemonshowdown.com/sprites/gsc/';
+		else if (type === 'gscshiny') url = 'http://play.pokemonshowdown.com/sprites/gsc-shiny/';
+		else if (type === 'gscback') url = 'http://play.pokemonshowdown.com/sprites/gsc-back/';
+		else if (type === 'gscshinyback') url = 'http://play.pokemonshowdown.com/sprites/gsc-back-shiny/';
+		else if (type === 'rby') url = 'http://play.pokemonshowdown.com/sprites/rby/';
+		else if (type === 'rbyshiny') url = 'http://play.pokemonshowdown.com/sprites/rby-shiny/';
+		else if (type === 'rbyback') url = 'http://play.pokemonshowdown.com/sprites/rby-back/';
+		else if (type === 'rbyshinyback') url = 'http://play.pokemonshowdown.com/sprites/rby-back-shiny/';
+		else if (type === 'afd') url = 'http://play.pokemonshowdown.com/sprites/afd/';
+		else if (type === 'afdshiny') url = 'http://play.pokemonshowdown.com/sprites/afd-shiny/';
+		else if (type === 'afdback') url = 'http://play.pokemonshowdown.com/sprites/afd-back/';
+		else if (type === 'afdshinyback') url = 'http://play.pokemonshowdown.com/sprites/afd-back-shiny/';
+		else if (type === 'backshiny' || type === 'shinyback') url = 'http://play.pokemonshowdown.com/sprites/xyani-back-shiny/';
+		else url = 'http://play.pokemonshowdown.com/sprites/dpp/';
+
+		if (Number(sprite[sprite.length - 1]) && !toId(sprite[sprite.length - 2])) {
+			alt = '-' + sprite[sprite.length - 1];
+			sprite = sprite.substr(0, sprite.length - 1);
+			url = 'http://www.pkparaiso.com/imagenes/xy/sprites/animados/';
+		}
+		var main = target[0].split(',');
+		if (Tools.data.Pokedex[toId(sprite)]) {
+			sprite = Tools.data.Pokedex[toId(sprite)].species.toLowerCase();
+		} else {
+			var correction = Tools.dataSearch(toId(sprite));
+			if (correction && correction.length) {
+				for (var i = 0; i < correction.length; i++) {
+					if (correction[i].id !== toId(sprite) && !Tools.data.Aliases[toId(correction[i].id)] && !i) {
+						if (!Tools.data.Pokedex[toId(correction[i])]) continue;
+						if (!Tools.data.Aliases[toId(sprite)]) this.sendReply("There isn't any Pokémon called '" + sprite + "'... Did you mean '" + correction[0].name + "'?\n");
+						sprite = Tools.data.Pokedex[correction[0].id].species.toLowerCase();
+					}
+				}
+			} else {
+				return this.sendReply("There isn\'t any Pokémon called '" + sprite + "'...");
+			}
+		}
+		var self = this;
+		require('request').get(url + sprite + alt + '.png').on('error', function () {
+			self.sendReply('The sprite for ' + sprite + alt + ' is unavailable.');
+		}).on('response', function (response) {
+			if (response.statusCode == 404) return self.sendReply('The sprite for ' + sprite + alt + ' is currently unavailable.');
+			self.sendReply('|html|<img src = "' + url + sprite + alt + '.png">');
+		});
+	},
         
     cries: function (target) {
 		if (!this.canBroadcast()) return; 
