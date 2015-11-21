@@ -750,6 +750,12 @@ exports.commands = {
 				return this.errorReply("/" + cmd + " - Access denied for promoting/demoting to " + Config.groups[nextGroup].name + ".");
 			}
 		}
+		if (targetUser && targetUser.locked && !room.isPrivate && !room.battle && !room.isPersonal && (nextGroup === '%' || nextGroup === '@')) {
+			Monitor.log("[CrisisMonitor] " + user.name + " was automatically demoted in " + room.id + " for trying to promote locked user: " + targetUser.name + ".");
+			room.auth[user.userid] = '@';
+			user.updateIdentity(room.id);
+			return this.errorReply("You have been automatically deauthed for trying to promote locked user: '" + name + "'.");
+		}
 
 		if (nextGroup === ' ') {
 			delete room.auth[userid];
@@ -897,7 +903,9 @@ exports.commands = {
 				this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 			}
 		}
-		this.add('|unlink|' + this.getLastIdOf(targetUser));
+		let lastid = this.getLastIdOf(targetUser);
+		this.add('|unlink|' + lastid);
+		if (lastid !== toId(this.inputUsername)) this.add('|unlink|' + toId(this.inputUsername));
 	},
 	roombanhelp: ["/roomban [username] - Bans the user from the room you are in. Requires: @ # & ~"],
 
@@ -978,7 +986,9 @@ exports.commands = {
 
 		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn ' + target);
-		this.add('|unlink|' + this.getLastIdOf(targetUser));
+		let userid = this.getLastIdOf(targetUser);
+		this.add('|unlink|' + userid);
+		if (userid !== toId(this.inputUsername)) this.add('|unlink|' + toId(this.inputUsername));
 	},
 	warnhelp: ["/warn OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. Requires: % @ # & ~"],
 
@@ -1039,7 +1049,9 @@ exports.commands = {
 		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + muteDuration.duration() + ". " + target);
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + muteDuration.duration() + "." + (target ? " (" + target + ")" : ""));
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
-		this.add('|unlink|' + this.getLastIdOf(targetUser));
+		let userid = this.getLastIdOf(targetUser);
+		this.add('|unlink|' + userid);
+		if (userid !== toId(this.inputUsername)) this.add('|unlink|' + toId(this.inputUsername));
 
 		room.mute(targetUser, muteDuration, false);
 	},
@@ -1272,6 +1284,7 @@ exports.commands = {
 		for (let userid in room.auth) {
 			if (room.auth[userid] === '+') {
 				delete room.auth[userid];
+				if (userid in room.users) room.users[userid].updateIdentity(room.id);
 				count++;
 			}
 		}
@@ -1441,6 +1454,10 @@ exports.commands = {
 		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > 1 && !user.can('modchatall', null, room)) {
 			return this.errorReply("/modchat - Access denied for removing a setting higher than " + Config.groupsranking[1] + ".");
 		}
+		if (room.requestModchat) {
+			let error = room.requestModchat(user);
+			if (error) return this.errorReply(error);
+		}
 
 		target = target.toLowerCase();
 		let currentModchat = room.modchat;
@@ -1478,6 +1495,7 @@ exports.commands = {
 			let modchat = Tools.escapeHTML(room.modchat);
 			this.add("|raw|<div class=\"broadcast-red\"><b>Moderated chat was set to " + modchat + "!</b><br />Only users of rank " + modchat + " and higher can talk.</div>");
 		}
+		if (room.battle && !room.modchat && !user.can('modchat')) room.requestModchat(null);
 		this.logModCommand(user.name + " set modchat to " + room.modchat);
 
 		if (room.chatRoomData) {
@@ -1573,6 +1591,7 @@ exports.commands = {
 	hidetext: function (target, room, user) {
 		if (!target) return this.parse('/help hidetext');
 
+		this.splitTarget(target);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 		if (!targetUser) return this.errorReply("User '" + name + "' does not exist.");
