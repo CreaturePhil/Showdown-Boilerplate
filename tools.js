@@ -198,6 +198,17 @@ module.exports = (function () {
 				name = this.data.Aliases[id];
 				id = toId(name);
 			}
+			if (!this.data.Pokedex[id]) {
+				if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
+					id = id.slice(4) + 'mega';
+				} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega'])  {
+					id = id.slice(1) + 'mega';
+				} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
+					id = id.slice(6) + 'primal';
+				} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
+					id = id.slice(1) + 'primal';
+				}
+			}
 			template = {};
 			if (id && this.data.Pokedex[id]) {
 				template = this.data.Pokedex[id];
@@ -629,7 +640,7 @@ module.exports = (function () {
 		return ('' + str).escapeHTML();
 	};
 
-	Tools.prototype.dataSearch = function (target, searchIn) {
+	Tools.prototype.dataSearch = function (target, searchIn, isInexact) {
 		if (!target) {
 			return false;
 		}
@@ -642,8 +653,11 @@ module.exports = (function () {
 		for (let i = 0; i < searchIn.length; i++) {
 			let res = this[searchFunctions[searchIn[i]]](target);
 			if (res.exists) {
-				res.searchType = searchTypes[searchIn[i]];
-				searchResults.push(res);
+				searchResults.push({
+					exactMatch: !isInexact,
+					searchType: searchTypes[searchIn[i]],
+					name: res.name
+				});
 			}
 		}
 		if (searchResults.length) {
@@ -693,7 +707,7 @@ module.exports = (function () {
 
 			// To make sure we aren't in an infinite loop...
 			if (cmpTarget !== newTarget.word) {
-				return this.dataSearch(newTarget.word);
+				return this.dataSearch(newTarget.word, null, true);
 			}
 		}
 

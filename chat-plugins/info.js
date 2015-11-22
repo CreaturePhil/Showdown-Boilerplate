@@ -233,14 +233,15 @@ exports.commands = {
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
-				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
+				if (!newTargets[i].exactMatch && !i) {
 					buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
 				}
 				if (newTargets[i].searchType === 'nature') {
-					buffer += "" + newTargets[i].name + " nature: ";
-					if (newTargets[i].plus) {
+					let nature = Tools.getNature(newTargets[i]);
+					buffer += "" + nature.name + " nature: ";
+					if (nature.plus) {
 						let statNames = {'atk': "Attack", 'def': "Defense", 'spa': "Special Attack", 'spd': "Special Defense", 'spe': "Speed"};
-						buffer += "+10% " + statNames[newTargets[i].plus] + ", -10% " + statNames[newTargets[i].minus] + ".";
+						buffer += "+10% " + statNames[nature.plus] + ", -10% " + statNames[nature.minus] + ".";
 					} else {
 						buffer += "No effect.";
 					}
@@ -388,6 +389,7 @@ exports.commands = {
 		let validParameter = function (cat, param, isNotSearch) {
 			for (let h = 0; h < searches.length; h++) {
 				let group = searches[h];
+				if (group[cat] === undefined) continue;
 				if (group[cat][param] === undefined) continue;
 				if (group[cat][param] === isNotSearch) {
 					self.sendReplyBox("A search cannot both include and exclude '" + param + "'.");
@@ -1111,6 +1113,7 @@ exports.commands = {
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from it's movepool.",
 		"The order of the parameters does not matter."],
 
+	isearch: 'itemsearch',
 	itemsearch: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help itemsearch');
 		if (!this.canBroadcast()) return;
@@ -1159,13 +1162,11 @@ exports.commands = {
 			case 'super':
 				if (rawSearch[i + 1] === 'effective') {
 					newWord = 'supereffective';
-					rawSearch.splice(i + 1, 1);
 				}
 				break;
 			case 'special': newWord = 'sp'; break;
 			case 'spa':
 				newWord = 'sp';
-				rawSearch.splice(i, 0, 'atk');
 				break;
 			case 'atk':
 			case 'attack':
@@ -1177,7 +1178,6 @@ exports.commands = {
 				break;
 			case 'spd':
 				newWord = 'sp';
-				rawSearch.splice(i, 0, 'def');
 				break;
 			case 'def':
 			case 'defense':
@@ -1199,7 +1199,6 @@ exports.commands = {
 		}
 
 		if (searchedWords.length === 0) return this.sendReplyBox("No distinguishing words were used. Try a more specific search.");
-
 		if (searchedWords.indexOf('fling') >= 0) {
 			let basePower = 0;
 			let effect;

@@ -30,9 +30,7 @@ exports.BattleScripts = {
 
 				// On Gen 2 we check modifications here from moves and items
 				let statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-				let statMod = 1;
-				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
-				stat = this.battle.modify(stat, statMod);
+				stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
 			}
 
 			if (!unmodified) {
@@ -44,6 +42,11 @@ exports.BattleScripts = {
 
 			// Gen 2 caps stats at 999 and min is 1.
 			stat = this.battle.clampIntRange(stat, 1, 999);
+
+			// Screens
+			if ((this.side.sideConditions['reflect'] && statName === 'def') || (this.side.sideConditions['lightscreen'] && statName === 'spd')) {
+				stat *= 2;
+			}
 
 			// Treat here the items.
 			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk') || (this.species === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
@@ -424,6 +427,13 @@ exports.BattleScripts = {
 		damage = Math.floor(damage / defense);
 		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
 		damage += 2;
+
+		// Weather modifiers
+		if ((this.isWeather('raindance') && type === 'Water') || (this.isWeather('sunnyday') && type === 'Fire')) {
+			damage = Math.floor(damage * 1.5);
+		} else if ((this.isWeather('raindance') && (type === 'Fire' || move.id === 'solarbeam')) || (this.isWeather('sunnyday') && type === 'Water')) {
+			damage = Math.floor(damage / 2);
+		}
 
 		// STAB damage bonus, the "???" type never gets STAB
 		if (type !== '???' && pokemon.hasType(type)) {
