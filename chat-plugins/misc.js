@@ -99,7 +99,7 @@ exports.commands = {
 	roomkick: 'kick',
 	kick: function (target, room, user) {
 		if (!target) return this.parse('/help kick');
-		if (user.locked && !user.can('bypassall')) {
+		if (!this.canTalk() && !user.can('bypassall')) {
 			return this.sendReply("You cannot do this while unable to talk.");
 		}
 
