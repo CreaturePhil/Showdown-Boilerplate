@@ -1,271 +1,120 @@
-Pokémon Showdown Command API
+Showdown-Boilerplate Commands 
 ========================================================================
 
-Defining a Command
+Commands
 ------------------------------------------------------------------------
 
-You can define the commands such as 'whois', then use them by typing
-`/whois` into Pokémon Showdown.
+`authority`
+*	Alias: stafflist, auth, authlist. Displays a list of the server's staff.
 
-A command can be in the form:
+`away`
+*	Adds a message to your username showing you are unavailble for a particular reason. Usage: /away [reason].
 
-	ip: 'whois',
+`back`
+*	Removes an away message from your username on the userlist.
 
-This is called an alias: it makes it so `/ip` does the same thing as
-`/whois`.
+`blockemoticons - unblockemoticons`
+*	Alias: blockemotes, blockemote, blockemoticon. Blocks emoticons from appearing for you in the chat and pms. 
 
-But to actually define a command, it's a function:
+`clearall`
+*	Clears all messages in a chatroom. 
 
-	avatars: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('You can <button name="avatars">change ' +
-			'your avatar</button> by clicking on it in the <button ' +
-			'name="openOptions"><i class="icon-cog"></i> Options' +
-			'</button> menu in the upper right. Custom avatars are ' +
-			'only obtainable by staff.');
-	}
+`customavatar`
+*	Sets a customavatar for a user. (A registered server is required for these to show.) 
+	Usage: /customavatar set, [user], [url] /customavatar delete, [user].
 
+`customsymbol`
+*	After purchasing customsymbol from the shop, this command is used to set a customsymbol. Usage: /customsymbol [symbol].
 
-Parameters
-------------------------------------------------------------------------
+`define`
+*	Alias: def. Gives the dictionary definition for a word. Usage: /define [word].
 
-Commands are actually passed five parameters:
+`economystats`  
+*	Alias: bucks. Provides information on the amount of money in circulation on the server. 
 
-	function (target, room, user, connection, cmd, message)
+`emoticons`
+*	Alias: emotes. Shows a list of the emoticons usable in the chat. 
+*	
+`enddice - startdice`
+*	Alias dicegame, dicestart: startdice: Starts a game of dice for a specified amount of bucks. Usage: /startdice [amount]
+	enddice: Ends a game of dice in progress. 
 
-Most of the time, you only need the first three, though.
+`globalclearall`
+*	Alias: gclearall. Clears all messages on the server in every chatroom. 
 
-- `target` = the part of the message after the command
-- `room` = the room object the message was sent to  
-  (The room name is `room.id`)
-- `user` = the user object that sent the message  
-  (The user's name is `user.name`)
-- `connection` = the connection that the message was sent from
-- `cmd` = the name of the command
-- `message` = the entire message sent by the user
+`givemoney`
+*	Alias: givebuck, givebucks. Give a specific amount of money to a user. Usage: /givebucks [user], [amount].
 
-For instance, if a user types in `/msg zarel, hello`,
+`hide - show`
+*	Hides and shows the auth symbol of the user respectively. 
 
-	`target` = `"zarel, hello"`
-	`cmd` = `"msg"`
-	`message` = `"/msg zarel, hello"`
+`moneylog`
+*	Shows the transaction history of a user or a list of the most recent transactions. Usage: /moneylog user or /moneylog
 
-Commands return the message the user should say. If they don't
-return anything or return something falsy, the user won't say
-anything.
+`picklottery`
+*	Picks a lottery winner from the pool of tickets that were purchased in shop. 
 
+`pmall - pmallstaff`
+*	Alias: masspm. Send a no reply private message to all users on the server. Pmallstaff sends the message only to global staff.
 
-Help Entries
-------------------------------------------------------------------------
+`poof`
+*	Disconnects the user from the server and sends a fun message when they leave. 
 
-A `/help` entry can be added for a command by adding a command in the
-form `<command>help: ["<help text>"],`, where `<command>` is the primary function
-name, followed by an array or function.
+`poofon - poofoff`
+*	Disables and enables the use of poof on the server. 
 
-If the help entry is an array, each element of the array will be sent as a
-new line. If the help entry is a function, the help command will execute
-that function.
+`pot`
+*	Shows the total amount of money in the current jackpot that will be awarded when /picklottery is used. 
 
-As an example:
+`randemote`
+*	Shows a random emoticon when the command is used. 
 
-	ip: 'whois',
-	rooms: 'whois',
-	whois: function (target, room, user, connection, cmd) {
-		<function body>
-	},
-	whoishelp:["/whois - Get details on yourself: alts, group, IP address,
-		and rooms.",
-		"/whois [username] - Get details on a username: group and rooms."],
+`regdate`
+*	Shows the date a particular username was registered on. Usage: /regdate [user].
 
-`/help whois` will send the information in `whoishelp`.
+`resetcustomsymbol`
+*	When a user has a customsymbol, this command can be used to reset the symbol to the default. 
 
+`resetmoney`
+*	Remove all the money a target user has. Usage: /resetmoney [user].
 
-Functions
-------------------------------------------------------------------------
+`richestuser`
+*	Shows a list of the top ten users with the most money on the server. 
 
-Commands have access to the following functions:
+`seen`
+*	Shows the time a username was last logged on to the server. Usage: /seen [user].
 
-`this.sendReply(message)`
-*	Sends a message back to the room the user typed the command into.
+`shop`
+*	Displays the server shop from which users can purchase items with bucks. Items can be added in economy.js and by default will            send an alert to the staffroom when an item is purchased. 
 
-`this.sendReplyBox(html)`
-*	Same as sendReply, but shows it in a box, and you can put HTML in it.
+`showdownboilerplate`
+*	Links to the Showdown-Boilerplate Repository. 
 
-`this.popupReply(message)`
-*	Shows a popup in the window the user typed the command into.
+`takemoney`
+*	Alias: takebuck, takebucks. Removes a specified amount of money from a user. Usage: /takemoney [user], [amount].
 
-`this.add(message)`
-*	Adds a message to the room so that everyone can see it.
-	This is like `this.sendReply`, except everyone in the room gets it,
-	instead of just the user that typed the command.
+`tell`
+*	Send a message to an offline user that will be received when they log in. Usage: /tell [user], [message].
 
-`this.send(message)`
-*	Sends a message to the room so that everyone can see it.
-	This is like `this.add`, except it's not logged, and users who join the
-	room later won't see it in the log, and if it's a battle, it won't show
-	up in saved replays.
-	You USUALLY want to use `this.add` instead.
-
-`this.logEntry(message)`
-*	Log a message to the room's log without sending it to anyone. This is
-	like `this.add`, except no one will see it.
-
-`this.addModCommand(message)`
-*	Like this.add, but also logs the message to the moderator log which can
-	be seen with `/modlog`.
-
-`this.logModCommand(message)`
-*	Like `this.addModCommand`, except users in the room won't see it.
-
-`this.can(permission)`  
-`this.can(permission, targetUser)`
-*	Checks if the user has the permission to do something, or if a
-	targetUser is passed, check if the user has permission to do it to that
-	user. Will automatically give the user an "Access denied" message if
-	the user doesn't have permission: use `user.can()` if you don't want that
-	message.
-
-	Should usually be near the top of the command, like:
-
-		if (!this.can('potd')) return false;
-
-`this.canBroadcast()`
-*	Signifies that a message can be broadcast, as long as the user has
-	permission to. This will check to see if the user used `!command`
-	instead of `/command`. If so, it will check to see if the user has
-	permission to broadcast (by default, voice+ can), and return `false` if
-	not. Otherwise, it will add the message to the room, and turn on the
-	flag `this.broadcasting`, so that `this.sendReply` and `this.sendReplyBox`
-	will broadcast to the room instead of just the user that used the
-	command.
-
-	Should usually be near the top of the command, like:
-
-		if (!this.canBroadcast()) return false;
-
-`this.canBroadcast(suppressMessage)`
-*	Functionally the same as `this.canBroadcast()`. However, it will look as
-	if the user had written the text `suppressMessage`.
-
-`this.canTalk()`
-*	Checks to see if the user can speak in the room. Returns false if the
-	user can't speak (is muted, the room has modchat on, etc), or true
-	otherwise.
-
-	Should usually be near the top of the command, like:
-
-		if (!this.canTalk()) return false;
-
-`this.canTalk(message, room)`
-*	Checks to see if the user can say the message in the room.
-	If a room is not specified, it will default to the current one.
-	If it has a falsy value, the check won't be attached to any room.
-	In addition to running the checks from `this.canTalk()`, it also checks
-	to see if the message has any banned words, is too long, or was just
-	sent by the user. Returns the filtered message, or a falsy value if the 
-	user can't speak.
-
-	Should usually be near the top of the command, like:
-
-		target = this.canTalk(target);
-		if (!target) return false;
-
-`this.parse(message, inNamespace)`
-*	Runs the message as if the user had typed it in.
-
-	Mostly useful for giving help messages, like for commands that require
-	a target:
-
-		if (!target) return this.parse('/help msg');
-
-	If `inNamespace` is true, then the message is parsed in that
-	corresponding namespace:
-
-		// command msg is in namespace test. (ie. /test msg)
-		this.parse('/help', true); // is parsed as if the user said
-								   // '/test help'
-
-	After 10 levels of recursion (calling `this.parse` from a command called
-	by `this.parse` from a command called by `this.parse` etc) we will assume
-	it's a bug in your command and error out.
-
-`this.targetUserOrSelf(target, exactName)`
-*	If `target` is blank, returns the user that sent the message.
-	Otherwise, returns the user with the username in target, or a falsy
-	value if no user with that username exists.
-	By default, this will track users across name changes. However, if
-	`exactName` is true, it will enforce exact matches.
-
-`this.getLastIdOf(user)`
-*	Returns a user's most recently used userid. If a user isn't a guest,
-	this works the same way as `user.userid`, but if the user is a guest
-	(i.e. has logged out), this returns the user's most recent non-guest
-	userid.
-
-`this.splitTarget(target, exactName)`
+`tickets`
 *	Splits a target in the form `<user>, <message>` into its constituent parts.
 	Returns `<message>`, and sets `this.targetUser` to the user, and
 	`this.targetUsername` to the username.
 
-	If a user doesn't exist (because they are offline or otherwise),
-	`this.targetUser` will be falsy but `this.targetUsername` will still exist.
-	If `this.targetUser` exists, this.targetUsername will have the same
-	capitalization as the user's username, otherwise the capitalization
-	will be however it was passed into the function.
+`toggleemoticons`
+*	Alias: toggleemote, toggleemotes. Toggles emoticons displaying or not in a particular chatroom. Usage: /toggleemoticons on 		        /toggleemoticons off.
 
-	By default, this will track users across name changes. However, if
-	`exactName` is true, it will enforce exact matches.
+`transfermoney`
+*	Alias: transfer, transferbuck, transferbucks. Transfers money from the user to another user. /usage transfer [user], [amount]
 
-	Remember to check if `this.targetUser` exists before going further.
+`ud`
+*	Alias: u, urbandefine. Displays the Urban Dictionary definition for a word. Usage: /ud [word].
 
-Unless otherwise specified, these functions will return undefined, so you
-can `return this.sendReply` or something to send a reply and stop the command
-there.
+`wallet`
+*	Alias: atm, purse. Shows the amount of money a user has. Usage: /wallet [user] /wallet.
 
 
-Namespace Commands
+Pokemon Showdown Commands API 
 ------------------------------------------------------------------------
-
-A command can also be an object, in which case is treated like
-a namespace:
-
-	game: {
-		play: function (target, room, user) {
-			user.isPlaying = true;
-			this.sendReply("Playing.");
-		},
-		stop: function (target, room, user) {
-			user.isPlaying = false;
-			this.sendReply("Stopped.");
-		}
-	}
-
-These commands can be called by `/game play` and `/game stop`.
-
-Namespaces help organise commands, and nest them under
-one main command.
-
-Note: Multiple namespaces can be nested, but the final (innermost)
-command must be a function.
-
-Namespace objects can have help entries and so can the internal
-commands:
-
-	game: {
-		play: function (target, room, user) {
-			user.isPlaying = true;
-			this.sendReply("Playing.");
-		},
-		playhelp: ["Tells you if the user is playing."],
-		stop: function (target, room, user) {
-			user.isPlaying = false;
-			this.sendReply("Stopped.");
-		},
-		stophelp: ["Tells you if the user has stopped playing."]
-	},
-	gamehelp: ["commands for /game are:",
-		"/game play - Tells you if the user is playing.",
-		"/game stop - Tells you if the user stopped playing."]
-
-The help entries are accessed with `/help game play` and `/help game`
-respectively.
+If you are looking for the PS Commands API refer to this page from the main PS repository. 
+[PS Commands API](https://github.com/Zarel/Pokemon-Showdown/blob/master/chat-plugins/COMMANDS.md)
