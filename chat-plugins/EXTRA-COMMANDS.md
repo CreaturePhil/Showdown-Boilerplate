@@ -34,7 +34,7 @@ Commands
 
 `emoticons`
 *	Alias: emotes. Shows a list of the emoticons usable in the chat. 
-*	
+
 `enddice - startdice`
 *	Alias dicegame, dicestart: startdice: Starts a game of dice for a specified amount of bucks. Usage: /startdice [amount]
 	enddice: Ends a game of dice in progress. 
