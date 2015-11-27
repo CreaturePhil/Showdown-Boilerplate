@@ -12,25 +12,17 @@ contexts or applications without being greatly changed from the original.
 
 This repository contains the files needed to set up your own Pokémon Showdown
 server with all the amazing stuff that private Pokémon Showdown servers like
-EOS, Frost, or Pandora has.
+Origin, EOS, Frost, or Pandora has.
 
 For more information on Pokémon Showdown, visit the main
 [Pokémon Showdown](https://github.com/Zarel/Pokemon-Showdown) repository.
 
-If you would like to use the old version of Showdown-Boilerplate, go to this
-[commit](https://github.com/CreaturePhil/Showdown-Boilerplate/tree/79ede733015af70047fef1f5ea53011f6d5368df).
-
-Check out the [EosDB](https://github.com/CreaturePhil/Showdown-Boilerplate/tree/eosdb)
-alternative that has all of the features below except it only uses `EosDB` instead of
-the other databases.
-
 ## Features
 
-- Numerous *cool* commands such as /urbandefine or /poof
+- Numerous *cool* [commands](chat-plugins/EXTRA_COMMANDS) such as /urbandefine or /poof
 - Emoticons in chat and private messages
 - Hangman, Profile, and Tells
 - Economy (bucks system, shop, tournament winnings, lottery)
-- Lowdb and MySql database support
 
 ## Quick Start
 
