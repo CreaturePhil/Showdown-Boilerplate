@@ -91,7 +91,7 @@ function currencyName(amount) {
 
 Profile.prototype.avatar = function () {
 	if (this.isOnline) {
-		if (typeof this.image === 'string') return img(this.url + '/avatars/' + this.image);
+		if (typeof this.image === 'string') return img(this.url + ':' + Config.port + '/avatars/' + this.image);
 		return img('http://play.pokemonshowdown.com/sprites/trainers/' + this.image + '.png');
 	}
 	for (var name in Config.customAvatars) {
