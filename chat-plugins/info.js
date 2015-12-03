@@ -237,7 +237,7 @@ exports.commands = {
 					buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
 				}
 				if (newTargets[i].searchType === 'nature') {
-					let nature = Tools.getNature(newTargets[i]);
+					let nature = Tools.getNature(newTargets[i].name);
 					buffer += "" + nature.name + " nature: ";
 					if (nature.plus) {
 						let statNames = {'atk': "Attack", 'def': "Defense", 'spa': "Special Attack", 'spd': "Special Defense", 'spe': "Speed"};
@@ -2097,8 +2097,8 @@ exports.commands = {
 		}
 
 		if (!target || target === 'all') {
-			buffer += "- <a href=\"https://www.smogon.com/tiers/om/\">Other Metagames Hub</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames.206/\">Other Metagames Forum</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames-analyses.310/\">Other Metagames Analyses</a><br />";
 			if (!target) return this.sendReplyBox(buffer);
 		}
 		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
@@ -2403,8 +2403,9 @@ exports.commands = {
 				formatName = formatId = '';
 			}
 			let speciesid = pokemon.speciesid;
-			// Special case for Meowstic-M
+			// Special case for Meowstic-M and Hoopa-Unbound
 			if (speciesid === 'meowstic') speciesid = 'meowsticm';
+			if (speciesid === 'hoopaunbound') speciesid = 'hoopa-alt';
 			if (pokemon.tier === 'CAP') {
 				this.sendReplyBox("<a href=\"https://www.smogon.com/cap/pokemon/strategies/" + speciesid + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " " + pokemon.name + " analysis preview</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a> <a href=\"https://smogon.com/cap/\">CAP Project</a>");
 			} else {
