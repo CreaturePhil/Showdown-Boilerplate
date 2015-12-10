@@ -98,12 +98,12 @@ function findItem(item, money) {
 		price = shop[len][2];
 		if (price > money) {
 			amount = price - money;
-			this.sendReply("You don't have you enough money for this. You need " + amount + currencyName(amount) + " more to buy " + item + ".");
+			this.errorReply("You don't have you enough money for this. You need " + amount + currencyName(amount) + " more to buy " + item + ".");
 			return false;
 		}
 		return price;
 	}
-	this.sendReply(item + " not found in shop.");
+	this.errorReply(item + " not found in shop.");
 }
 
 /**
@@ -185,7 +185,7 @@ exports.commands = {
 		var username = parts[0];
 		var amount = isMoney(parts[1]);
 
-		if (typeof amount === 'string') return this.sendReply(amount);
+		if (typeof amount === 'string') return this.errorReply(amount);
 
 		var _this = this;
 		Database.read('money', toId(username), function (err, initial) {
@@ -213,7 +213,7 @@ exports.commands = {
 		var username = parts[0];
 		var amount = isMoney(parts[1]);
 
-		if (typeof amount === 'string') return this.sendReply(amount);
+		if (typeof amount === 'string') return this.errorReply(amount);
 
 		var _this = this;
 		Database.read('money', toId(username), function (err, initial) {
@@ -253,15 +253,15 @@ exports.commands = {
 		var username = parts[0];
 		var amount = isMoney(parts[1]);
 
-		if (toId(username) === user.userid) return this.sendReply("You cannot transfer to yourself.");
-		if (username.length > 19) return this.sendReply("Username cannot be longer than 19 characters.");
-		if (typeof amount === 'string') return this.sendReply(amount);
+		if (toId(username) === user.userid) return this.errorReply("You cannot transfer to yourself.");
+		if (username.length > 19) return this.errorReply("Username cannot be longer than 19 characters.");
+		if (typeof amount === 'string') return this.errorReply(amount);
 
 		var _this = this;
 		Database.read('money', user.userid, function (err, userTotal) {
 			if (err) throw err;
 			if (!userTotal) userTotal = 0;
-			if (amount > userTotal) return _this.sendReply("You cannot transfer more money than what you have.");
+			if (amount > userTotal) return _this.errorReply("You cannot transfer more money than what you have.");
 			Database.read('money', toId(username), function (err, targetTotal) {
 				if (err) throw err;
 				if (!targetTotal) targetTotal = 0;
@@ -308,10 +308,10 @@ exports.commands = {
 	buyhelp: ["/buy [command] - Buys an item from the shop."],
 
 	customsymbol: function (target, room, user) {
-		if (!user.canCustomSymbol && user.id !== user.userid) return this.sendReply("You need to buy this item from the shop.");
+		if (!user.canCustomSymbol && user.id !== user.userid) return this.errorReply("You need to buy this item from the shop.");
 		if (!target || target.length > 1) return this.parse('/help customsymbol');
 		if (target.match(/[A-Za-z\d]+/g) || '|?!+$%@\u2605=&~#\u03c4\u00a3\u03dd\u03b2\u039e\u03a9\u0398\u03a3\u00a9'.indexOf(target) >= 0) {
-			return this.sendReply("Sorry, but you cannot change your symbol to this for safety/stability reasons.");
+			return this.errorReply("Sorry, but you cannot change your symbol to this for safety/stability reasons.");
 		}
 		user.customSymbol = target;
 		user.updateIdentity();
@@ -322,7 +322,7 @@ exports.commands = {
 
 	resetcustomsymbol: 'resetsymbol',
 	resetsymbol: function (target, room, user) {
-		if (!user.hasCustomSymbol) return this.sendReply("You don't have a custom symbol.");
+		if (!user.hasCustomSymbol) return this.errorReply("You don't have a custom symbol.");
 		user.customSymbol = null;
 		user.updateIdentity();
 		user.hasCustomSymbol = false;
@@ -385,7 +385,7 @@ exports.commands = {
 
 		var amount = isMoney(target);
 
-		if (typeof amount === 'string') return this.sendReply(amount);
+		if (typeof amount === 'string') return this.errorReply(amount);
 		if (!room.dice) room.dice = {};
 		if (room.dice.started) return this.errorReply("A dice game has already started in this room.");
 
@@ -508,7 +508,7 @@ exports.commands = {
 			Database.get('pot', function (err, pot) {
 				if (err) throw err;
 				var winnings = Math.floor(pot * 3 / 4);
-				if (!winner) return _this.sendReply("No one has bought tickets.");
+				if (!winner) return _this.errorReply("No one has bought tickets.");
 				Database.read('money', winner.username, function (err, amount) {
 					if (err) throw err;
 					if (!amount) amount = 0;
