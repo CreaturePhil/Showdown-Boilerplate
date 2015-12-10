@@ -4,10 +4,10 @@
 
 'use strict';
 
-var moment = require('moment');
-var request = require('request');
+let moment = require('moment');
+let request = require('request');
 
-var messages = [
+let messages = [
 	"has vanished into nothingness!",
 	"used Explosion!",
 	"fell into the void.",
@@ -23,12 +23,12 @@ var messages = [
 ];
 
 function clearRoom(room) {
-	var len = (room.log && room.log.length) || 0;
-	var users = [];
+	let len = (room.log && room.log.length) || 0;
+	let users = [];
 	while (len--) {
 		room.log[len] = '';
 	}
-	for (var u in room.users) {
+	for (let u in room.users) {
 		users.push(u);
 		Users.get(u).leaveRoom(room, Users.get(u).connections[0]);
 	}
@@ -45,19 +45,19 @@ exports.commands = {
 	auth: 'authority',
 	authlist: 'authority',
 	authority: function (target, room, user, connection) {
-		var rankLists = {};
-		var ranks = Object.keys(Config.groups);
-		for (var u in Users.usergroups) {
-			var rank = Users.usergroups[u].charAt(0);
+		let rankLists = {};
+		let ranks = Object.keys(Config.groups);
+		for (let u in Users.usergroups) {
+			let rank = Users.usergroups[u].charAt(0);
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
 			if (ranks.indexOf(rank) > -1) {
-				var name = Users.usergroups[u].substr(1);
+				let name = Users.usergroups[u].substr(1);
 				if (!rankLists[rank]) rankLists[rank] = [];
 				if (name) rankLists[rank].push(((Users.getExact(name) && Users.getExact(name).connected) ? '**' + name + '**' : name));
 			}
 		}
 
-		var buffer = [];
+		let buffer = [];
 		Object.keys(rankLists).sort(function (a, b) {
 			return (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank;
 		}).forEach(function (r) {
@@ -79,11 +79,11 @@ exports.commands = {
 	globalclearall: function (target, room, user) {
 		if (!this.can('gdeclare')) return false;
 
-		for (var u in Users.users) {
+		for (let u in Users.users) {
 			Users.users[u].popup("All rooms are being clear.");
 		}
 
-		for (var r in Rooms.rooms) {
+		for (let r in Rooms.rooms) {
 			clearRoom(Rooms.rooms[r]);
 		}
 	},
@@ -104,7 +104,7 @@ exports.commands = {
 		}
 
 		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
+		let targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.sendReply("User \"" + this.targetUsername + "\" not found.");
 		if (!this.can('mute', targetUser, room)) return false;
 
@@ -119,10 +119,10 @@ exports.commands = {
 		if (!this.can('pmall')) return false;
 		if (!target) return this.parse('/help pmall');
 
-		var pmName = ' Server PM [Do not reply]';
+		let pmName = ' Server PM [Do not reply]';
 
-		for (var i in Users.users) {
-			var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
+		for (let i in Users.users) {
+			let message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
 			Users.users[i].send(message);
 		}
 	},
@@ -134,9 +134,9 @@ exports.commands = {
 		if (!this.can('forcewin')) return false;
 		if (!target) return this.parse('/help pmallstaff');
 
-		var pmName = ' Staff PM [Do not reply]';
+		let pmName = ' Staff PM [Do not reply]';
 
-		for (var i in Users.users) {
+		for (let i in Users.users) {
 			if (Users.users[i].isStaff) {
 				Users.users[i].send('|pm|' + pmName + '|' + Users.users[i].group + Users.users[i].name + '|' + target);
 			}
@@ -150,13 +150,13 @@ exports.commands = {
 		if (Config.poofOff) return this.sendReply("Poof is currently disabled.");
 		if (target && !this.can('broadcast')) return false;
 		if (room.id !== 'lobby') return false;
-		var message = target || messages[Math.floor(Math.random() * messages.length)];
+		let message = target || messages[Math.floor(Math.random() * messages.length)];
 		if (message.indexOf('{{user}}') < 0) message = '{{user}} ' + message;
 		message = message.replace(/{{user}}/g, user.name);
 		if (!this.canTalk(message)) return false;
 
-		var colour = '#' + [1, 1, 1].map(function () {
-			var part = Math.floor(Math.random() * 0xaa);
+		let colour = '#' + [1, 1, 1].map(function () {
+			let part = Math.floor(Math.random() * 0xaa);
 			return (part < 0x10 ? '0' : '') + part.toString(16);
 		}).join('');
 
@@ -183,13 +183,13 @@ exports.commands = {
 	regdate: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		if (!target || !toId(target)) return this.parse('/help regdate');
-		var username = toId(target);
+		let username = toId(target);
 		request('http://pokemonshowdown.com/users/' + username, function (error, response, body) {
 			if (error && response.statusCode !== 200) {
 				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
 				return room.update();
 			}
-			var regdate = body.split('<small>')[1].split('</small>')[0].replace(/(<em>|<\/em>)/g, '');
+			let regdate = body.split('<small>')[1].split('</small>')[0].replace(/(<em>|<\/em>)/g, '');
 			if (regdate === '(Unregistered)') {
 				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
 			} else {
@@ -217,10 +217,10 @@ exports.commands = {
 	seen: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help seen');
-		var targetUser = Users.get(target);
+		let targetUser = Users.get(target);
 		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
 		target = Tools.escapeHTML(target);
-		var seen = Seen[toId(target)];
+		let seen = Seen[toId(target)];
 		if (!seen) return this.sendReplyBox(target + " has never been online on this server.");
 		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
 	},
@@ -229,7 +229,7 @@ exports.commands = {
 	tell: function (target, room, user, connection) {
 		if (!target) return this.parse('/help tell');
 		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
+		let targetUser = this.targetUser;
 		if (!target) {
 			this.sendReply("You forgot the comma.");
 			return this.parse('/help tell');
@@ -249,10 +249,10 @@ exports.commands = {
 				(!Config.tellrank ? "disabled" : "only available to users of rank " + Config.tellrank + " and above") + ".");
 		}
 
-		var userid = toId(this.targetUsername);
+		let userid = toId(this.targetUsername);
 		if (userid.length > 18) return this.popupReply("\"" + this.targetUsername + "\" is not a legal username.");
 
-		var sendSuccess = Tells.addTell(user, userid, target);
+		let sendSuccess = Tells.addTell(user, userid, target);
 		if (!sendSuccess) {
 			if (sendSuccess === false) {
 				return this.popupReply("User " + this.targetUsername + " has too many offline messages queued.");

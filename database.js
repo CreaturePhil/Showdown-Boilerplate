@@ -59,30 +59,30 @@
 
 'use strict';
 
-var low = require('lowdb');
-var mysql = require('mysql');
-var path = require('path');
+let low = require('lowdb');
+let mysql = require('mysql');
+let path = require('path');
 
-var lowFile = path.join(__dirname, 'config/db.json');
+let lowFile = path.join(__dirname, 'config/db.json');
 
-var databases = {};
+let databases = {};
 
 databases.lowdb = function () {
-	var db = low(lowFile);
-	var methods = {};
+	let db = low(lowFile);
+	let methods = {};
 
 	methods.read = function (key, username, callback) {
-		var user = db('users').find({username: username});
+		let user = db('users').find({username: username});
 		if (!user) return callback(null);
 		callback(null, user[key]);
 	};
 
 	methods.write = function (key, value, username, callback) {
-		var user = db('users').find({username: username});
+		let user = db('users').find({username: username});
 		if (!user) db('users').push({username: username});
-		var obj = {};
+		let obj = {};
 		obj[key] = value;
-		var val = db('users')
+		let val = db('users')
 					.chain()
 					.find({username: username})
 					.assign(obj)
@@ -92,7 +92,7 @@ databases.lowdb = function () {
 	};
 
 	methods.total = function (key, callback) {
-		var total = db('users').reduce(function (acc, user) {
+		let total = db('users').reduce(function (acc, user) {
 			if (!acc[key] || !user[key]) return {money: acc[key]};
 			return {money: acc[key] + user[key]};
 		});
@@ -104,7 +104,7 @@ databases.lowdb = function () {
 	};
 
 	methods.sortDesc = function (key, amount, callback) {
-		var value = db('users')
+		let value = db('users')
 						.chain()
 						.filter(function (user) {
 							return user[key] >= 0;
@@ -135,15 +135,15 @@ databases.lowdb = function () {
 };
 
 databases.mysql = function () {
-	var methods = {};
-	var connection = mysql.createConnection(Config.mysql);
+	let methods = {};
+	let connection = mysql.createConnection(Config.mysql);
 	connection.connect(function (err) {
 		if (err) return console.error('error connecting: ' + err.stack);
 		console.log('connected as id ' + connection.threadId);
 	});
 
-	var createUserTableStr = "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT," +
-							"username VARCHAR(20) UNIQUE," +
+	let createUserTableStr = "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+							"username letCHAR(20) UNIQUE," +
 							"money INTEGER," +
 							"tickets TEXT);";
 
@@ -151,7 +151,7 @@ databases.mysql = function () {
 		if (err) throw err;
 	});
 
-	var createSymbolTableStr = "CREATE TABLE IF NOT EXISTS symbols (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, k TEXT, v TEXT);";
+	let createSymbolTableStr = "CREATE TABLE IF NOT EXISTS symbols (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, k TEXT, v TEXT);";
 
 	connection.query(createSymbolTableStr, function (err) {
 		if (err) throw err;
@@ -161,7 +161,7 @@ databases.mysql = function () {
 		connection.query("SELECT ?? from users WHERE username = ?;", [key, username], function (err, rows) {
 			if (err) return callback(new Error(err));
 			if (!rows.length) return callback(null);
-			var value = rows[0][key];
+			let value = rows[0][key];
 			if (key === 'tickets' && value) return callback(null, value.split(','));
 			callback(null, value);
 		});

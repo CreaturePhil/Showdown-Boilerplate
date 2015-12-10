@@ -724,14 +724,14 @@ class Tournament {
 		// Tournament Winnings
 		//
 
-		var color = '#088cc7';
-		var sizeRequiredToEarn = 4;
-		var currencyName = function (amount) {
-			var name = " buck";
+		let color = '#088cc7';
+		let sizeRequiredToEarn = 4;
+		let currencyName = function (amount) {
+			let name = " buck";
 			return amount === 1 ? name : name + "s";
 		};
-		var data = this.generator.getResults().map(usersToNames).toString();
-		var winner, runnerUp;
+		let data = this.generator.getResults().map(usersToNames).toString();
+		let winner, runnerUp;
 
 		if (data.indexOf(',') >= 0) {
 			data = data.split(',');
@@ -741,13 +741,13 @@ class Tournament {
 			winner = data;
 		}
 
-		var wid = toId(winner);
-		var rid = toId(runnerUp);
-		var tourSize = this.generator.users.size;
+		let wid = toId(winner);
+		let rid = toId(runnerUp);
+		let tourSize = this.generator.users.size;
 
 		if (this.room.isOfficial && tourSize >= sizeRequiredToEarn) {
-			var firstMoney = Math.round(tourSize / 4);
-			var secondMoney = Math.round(firstMoney / 2);
+			let firstMoney = Math.round(tourSize / 4);
+			let secondMoney = Math.round(firstMoney / 2);
 
 			Database.read('money', wid, function (err, amount) {
 				if (err) throw err;

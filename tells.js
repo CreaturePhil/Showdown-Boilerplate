@@ -15,10 +15,10 @@
 
 'use strict';
 
-var fs = require('fs');
-var color = require('./config/color');
+let fs = require('fs');
+let color = require('./config/color');
 
-var tells = {inbox: {}, outbox: {}};
+let tells = {inbox: {}, outbox: {}};
 try {
 	tells = JSON.parse(fs.readFileSync('config/tells.json'));
 } catch (e) {} // file doesn't exist (yet)
@@ -27,14 +27,14 @@ try {
  * Purge expired messages from those stored
  * @param threshold	The age limit of an "old" tell, in ms
  */
-var pruneOld = exports.pruneOld = function (threshold) {
-	var now = Date.now();
-	var receivers = Object.keys(Tells.inbox);
-	for (var i = 0; i < receivers.length; i++) {
-		for (var n = 0; n < Tells.inbox[receivers[i]].length; n++) {
+let pruneOld = exports.pruneOld = function (threshold) {
+	let now = Date.now();
+	let receivers = Object.keys(Tells.inbox);
+	for (let i = 0; i < receivers.length; i++) {
+		for (let n = 0; n < Tells.inbox[receivers[i]].length; n++) {
 			if ((now - Tells.inbox[receivers[i]][n].time) >= threshold) {
-				var ips = Object.keys(Tells.inbox[receivers[i]][n].ips);
-				for (var ip = 0; ip < ips.length; ip++) {
+				let ips = Object.keys(Tells.inbox[receivers[i]][n].ips);
+				for (let ip = 0; ip < ips.length; ip++) {
 					if (Tells.outbox[ips[ip]]) Tells.outbox[ips[ip]]--;
 					if (Tells.outbox[ips[ip]] <= 0) delete Tells.outbox[ips[ip]];
 				}
@@ -54,9 +54,9 @@ exports.outbox = tells.outbox || {};
  * Write the inbox and outbox to file
  */
 exports.writeTells = (function () {
-	var writing = false;
-	var writePending = false; // whether or not a new write is pending
-	var finishWriting = function () {
+	let writing = false;
+	let writePending = false; // whether or not a new write is pending
+	let finishWriting = function () {
 		writing = false;
 		if (writePending) {
 			writePending = false;
@@ -69,7 +69,7 @@ exports.writeTells = (function () {
 			return;
 		}
 		writing = true;
-		var data = JSON.stringify({inbox: Tells.inbox, outbox: Tells.outbox});
+		let data = JSON.stringify({inbox: Tells.inbox, outbox: Tells.outbox});
 		fs.writeFile('config/tells.json.0', data, function () {
 			// rename is atomic on POSIX, but will throw an error on Windows
 			fs.rename('config/tells.json.0', 'config/tells.json', function (err) {
@@ -90,15 +90,15 @@ exports.writeTells = (function () {
  * @param user		The User object to send the tells to
  */
 exports.sendTell = function (userid, user) {
-	var buffer = '|raw|';
-	var tellsToSend = Tells.inbox[userid];
-	for (var i = 0; i < tellsToSend.length; i++) {
-		var ips = Object.keys(tellsToSend[i].ips);
-		for (var ip = 0; ip < ips.length; ip++) {
+	let buffer = '|raw|';
+	let tellsToSend = Tells.inbox[userid];
+	for (let i = 0; i < tellsToSend.length; i++) {
+		let ips = Object.keys(tellsToSend[i].ips);
+		for (let ip = 0; ip < ips.length; ip++) {
 			if (Tells.outbox[ips[ip]]) Tells.outbox[ips[ip]]--;
 			if (Tells.outbox[ips[ip]] <= 0) delete Tells.outbox[ips[ip]];
 		}
-		var timeStr = Tells.getTellTime(tellsToSend[i].time);
+		let timeStr = Tells.getTellTime(tellsToSend[i].time);
 		buffer += '<div class="chat"><font color="gray">[' + timeStr + ' ago]</font> <b><font color="' + color(toId(tellsToSend[i].sender)) + '">' + tellsToSend[i].sender + ':</font></b> ' + Tools.escapeHTML(tellsToSend[i].msg.replace(/\|/g, '&#124;')) + '</div>';
 	}
 	user.send(buffer);
@@ -117,8 +117,8 @@ exports.sendTell = function (userid, user) {
  */
 exports.addTell = function (sender, receiver, msg) {
 	if (Tells.inbox[receiver] && Tells.inbox[receiver].length >= 5) return false;
-	var ips = Object.keys(sender.ips);
-	for (var i = 0; i < ips.length; i++) {
+	let ips = Object.keys(sender.ips);
+	for (let i = 0; i < ips.length; i++) {
 		if (!Tells.outbox[ips[i]]) {
 			Tells.outbox[ips[i]] = 1;
 		} else {
@@ -127,7 +127,7 @@ exports.addTell = function (sender, receiver, msg) {
 		}
 	}
 	if (!Tells.inbox[receiver]) Tells.inbox[receiver] = [];
-	var newTell = {
+	let newTell = {
 		'sender': sender.name,
 		time: Date.now(),
 		'msg': msg,
@@ -146,10 +146,10 @@ exports.addTell = function (sender, receiver, msg) {
 exports.getTellTime = function (time) {
 	time = Date.now() - time;
 	time = Math.round(time / 1000); // rounds to nearest second
-	var seconds = time % 60;
-	var times = [];
+	let seconds = time % 60;
+	let times = [];
 	if (seconds) times.push(String(seconds) + (seconds === 1 ? ' second' : ' seconds'));
-	var minutes, hours, days;
+	let minutes, hours, days;
 	if (time >= 60) {
 		time = (time - seconds) / 60; // converts to minutes
 		minutes = time % 60;

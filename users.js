@@ -1210,8 +1210,8 @@ User = (function () {
 		}
 	};
 	User.prototype.onDisconnect = function (connection) {
-		var name = 'Guest ' + this.guestNum;
-		var userid = toId(name);
+		let name = 'Guest ' + this.guestNum;
+		let userid = toId(name);
 		if (this.registered && this.userid !== userid) {
 			Seen[this.userid] = Date.now();
 			steno.writeFile('config/seen.json', JSON.stringify(Seen, null, 2), function (err) {
