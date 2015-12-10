@@ -7,8 +7,8 @@
 
 const permission = 'announce';
 
-let Poll = (function () {
-	function Poll(room, question, options) {
+class Poll {
+	constructor(room, question, options) {
 		if (room.pollNumber) {
 			room.pollNumber++;
 		} else {
@@ -28,7 +28,7 @@ let Poll = (function () {
 		}
 	}
 
-	Poll.prototype.vote = function (user, option) {
+	vote(user, option) {
 		let ip = user.latestIp;
 		let userid = user.userid;
 
@@ -42,9 +42,9 @@ let Poll = (function () {
 		this.totalVotes++;
 
 		this.update();
-	};
+	}
 
-	Poll.prototype.blankvote = function (user, option) {
+	blankvote(user, option) {
 		let ip = user.latestIp;
 		let userid = user.userid;
 
@@ -56,19 +56,20 @@ let Poll = (function () {
 		}
 
 		this.update();
-	};
+	}
 
-	Poll.prototype.generateVotes = function () {
+	generateVotes() {
 		let output = '<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> Poll</span> <strong style="font-size:11pt">' + Tools.escapeHTML(this.question) + '</strong></p>';
 		this.options.forEach(function (option, number) {
-			output += '<div style="margin-top: 3px"><button value="/poll vote ' + number + '" name="send" title="Vote for ' + number + '. ' + Tools.escapeHTML(option.name) + '">' + number + '. <strong>' + Tools.escapeHTML(option.name) + '</strong></button></div>';
+			output += '<div style="margin-top: 5px"><button value="/poll vote ' + number + '" name="send" title="Vote for ' + number + '. ' + Tools.escapeHTML(option.name) + '">' + number + '. <strong>' + Tools.escapeHTML(option.name) + '</strong></button></div>';
 		});
+		output += '<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="View results - you will not be able to vote after viewing results"><small>(View results)</small></button></div>';
 		output += '</div>';
 
 		return output;
-	};
+	}
 
-	Poll.prototype.generateResults = function (ended, option) {
+	generateResults(ended, option) {
 		let icon = '<span style="border:1px solid #' + (ended ? '777;color:#555' : '6A6;color:#484') + ';border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> ' + (ended ? "Poll ended" : "Poll") + '</span>';
 		let output = '<div class="infobox"><p style="margin: 2px 0 5px 0">' + icon + ' <strong style="font-size:11pt">' + Tools.escapeHTML(this.question) + '</strong></p>';
 		let iter = this.options.entries();
@@ -85,9 +86,9 @@ let Poll = (function () {
 		output += '</div>';
 
 		return output;
-	};
+	}
 
-	Poll.prototype.update = function () {
+	update() {
 		let results = [];
 
 		for (let i = 0; i <= this.options.size; i++) {
@@ -103,9 +104,9 @@ let Poll = (function () {
 				user.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results[this.voterIps[user.latestIp]]);
 			}
 		}
-	};
+	}
 
-	Poll.prototype.display = function (user, broadcast) {
+	display(user, broadcast) {
 		let votes = this.generateVotes();
 
 		let results = [];
@@ -132,17 +133,15 @@ let Poll = (function () {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + votes);
 			}
 		}
-	};
+	}
 
-	Poll.prototype.end = function () {
+	end() {
 		let results = this.generateResults(true);
 
 		this.room.send('|uhtmlchange|poll' + this.room.pollNumber + '|<div class="infobox">(The poll has ended &ndash; scroll down to see the results)</div>');
-		this.room.send('|html|' + results);
-	};
-
-	return Poll;
-})();
+		this.room.add('|html|' + results);
+	}
+}
 
 exports.commands = {
 	poll: {

@@ -42,4 +42,9 @@ This boilerplate is brought to you and maintained by the following people:
 
 ## License
 
+<<<<<<< HEAD
 [MIT](LICENSE)
+
+Special thanks
+
+- See http://pokemonshowdown.com/credits

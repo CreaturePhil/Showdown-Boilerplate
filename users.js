@@ -37,8 +37,8 @@ let Users = module.exports = getUser;
 let User, Connection;
 
 // basic initialization
-let users = Users.users = Object.create(null);
-let prevUsers = Users.prevUsers = Object.create(null);
+let users = Users.users = new Map();
+let prevUsers = Users.prevUsers = new Map();
 let numUsers = 0;
 
 /**
@@ -61,11 +61,11 @@ function getUser(name, exactName) {
 	if (name && name.userid) return name;
 	let userid = toId(name);
 	let i = 0;
-	while (!exactName && userid && !users[userid] && i < 1000) {
-		userid = prevUsers[userid];
+	while (!exactName && userid && !users.has(userid) && i < 1000) {
+		userid = prevUsers.get(userid);
 		i++;
 	}
-	return users[userid];
+	return users.get(userid);
 }
 Users.get = getUser;
 
@@ -184,19 +184,18 @@ function lockRange(range, ip) {
 		lockedIps[range] = range;
 		ip = range.slice(0, -1);
 	}
-	for (let i in users) {
-		let curUser = users[i];
-		if (!curUser.named || curUser.locked || curUser.confirmed) continue;
+	users.forEach(function (curUser) {
+		if (!curUser.named || curUser.locked || curUser.confirmed) return;
 		if (ip) {
-			if (!curUser.latestIp.startsWith(ip)) continue;
+			if (!curUser.latestIp.startsWith(ip)) return;
 		} else {
-			if (range !== Users.shortenHost(curUser.latestHost)) continue;
+			if (range !== Users.shortenHost(curUser.latestHost)) return;
 		}
 		rangelockedUsers[range][curUser.userid] = 1;
 		curUser.locked = '#range';
 		curUser.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
 		curUser.updateIdentity();
-	}
+	});
 
 	let time = 90 * 60 * 1000;
 	lockedRanges[range] = setTimeout(function () {
@@ -226,7 +225,7 @@ Users.unlockRange = unlockRange;
  * Routing
  *********************************************************/
 
-let connections = Users.connections = Object.create(null);
+let connections = Users.connections = new Map();
 
 Users.shortenHost = function (host) {
 	if (host.slice(-7) === '-nohost') return host;
@@ -239,7 +238,8 @@ Users.shortenHost = function (host) {
 
 Users.socketConnect = function (worker, workerid, socketid, ip) {
 	let id = '' + workerid + '-' + socketid;
-	let connection = connections[id] = new Connection(id, worker, socketid, null, ip);
+	let connection = new Connection(id, worker, socketid, null, ip);
+	connections.set(id, connection);
 
 	if (Monitor.countConnection(ip)) {
 		connection.destroy();
@@ -322,7 +322,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 Users.socketDisconnect = function (worker, workerid, socketid) {
 	let id = '' + workerid + '-' + socketid;
 
-	let connection = connections[id];
+	let connection = connections.get(id);
 	if (!connection) return;
 	connection.onDisconnect();
 };
@@ -330,7 +330,7 @@ Users.socketDisconnect = function (worker, workerid, socketid) {
 Users.socketReceive = function (worker, workerid, socketid, message) {
 	let id = '' + workerid + '-' + socketid;
 
-	let connection = connections[id];
+	let connection = connections.get(id);
 	if (!connection) return;
 
 	// Due to a bug in SockJS or Faye, if an exception propagates out of
@@ -487,7 +487,7 @@ Users.cacheGroupData = cacheGroupData;
 User = (function () {
 	function User(connection) {
 		numUsers++;
-		this.mmrCache = {};
+		this.mmrCache = Object.create(null);
 		this.guestNum = numUsers;
 		this.name = 'Guest ' + numUsers;
 		this.named = false;
@@ -503,7 +503,7 @@ User = (function () {
 		if (connection.user) connection.user = this;
 		this.connections = [connection];
 		this.latestHost = '';
-		this.ips = {};
+		this.ips = Object.create(null);
 		this.ips[connection.ip] = 1;
 		// Note: Using the user's latest IP for anything will usually be
 		//       wrong. Most code should use all of the IPs contained in
@@ -511,9 +511,11 @@ User = (function () {
 		this.latestIp = connection.ip;
 
 		this.locked = Users.checkLocked(connection.ip);
-		this.prevNames = {};
-		this.battles = {};
-		this.roomCount = {};
+		this.prevNames = Object.create(null);
+		this.roomCount = Object.create(null);
+
+		// Table of roomid:game
+		this.games = Object.create(null);
 
 		// searches and challenges
 		this.searching = Object.create(null);
@@ -522,7 +524,7 @@ User = (function () {
 		this.lastChallenge = 0;
 
 		// initialize
-		users[this.userid] = this;
+		users.set(this.userid, this);
 	}
 
 	User.prototype.isSysop = false;
@@ -563,6 +565,9 @@ User = (function () {
 		}
 		if (roomid) {
 			let room = Rooms.rooms[roomid];
+			if (!room) {
+				throw new Error("Room doesn't exist: " + roomid);
+			}
 			if (room.isMuted(this)) {
 				return '!' + this.name;
 			}
@@ -691,7 +696,7 @@ User = (function () {
 		if (this.userid === userid) return;
 
 		let i = 0;
-		while (users[userid] && users[userid] !== this) {
+		while (users.has(userid) && users.get(userid) !== this) {
 			this.guestNum++;
 			name = 'Guest ' + this.guestNum;
 			userid = toId(name);
@@ -703,14 +708,14 @@ User = (function () {
 		Rooms.global.cancelSearch(this);
 
 		if (this.named) this.prevNames[this.userid] = this.name;
-		delete prevUsers[userid];
-		prevUsers[this.userid] = userid;
+		prevUsers.delete(userid);
+		prevUsers.set(this.userid, userid);
 
 		this.name = name;
 		let oldid = this.userid;
-		delete users[oldid];
+		users.delete(oldid);
 		this.userid = userid;
-		users[this.userid] = this;
+		users.set(this.userid, this);
 		this.registered = false;
 		this.group = Config.groupsranking[0];
 		this.isStaff = false;
@@ -790,8 +795,9 @@ User = (function () {
 				return this.forceRename(name, this.registered);
 			}
 		}
-		if (users[userid] && !users[userid].registered && users[userid].connected && !newlyRegistered) {
-			this.send('|nametaken|' + name + "|Someone is already using the name \"" + users[userid].name + "\".");
+		let conflictUser = users.get(userid);
+		if (conflictUser && !conflictUser.registered && conflictUser.connected && !newlyRegistered) {
+			this.send('|nametaken|' + name + "|Someone is already using the name \"" + conflictUser.name + "\".");
 			return false;
 		}
 
@@ -874,11 +880,12 @@ User = (function () {
 		this.handleRename(name, userid, newlyRegistered, tokenDataSplit[2]);
 	};
 	User.prototype.handleRename = function (name, userid, newlyRegistered, userType) {
-		if (users[userid] && !users[userid].registered && users[userid].connected) {
+		let conflictUser = users.get(userid);
+		if (conflictUser && !conflictUser.registered && conflictUser.connected) {
 			if (newlyRegistered) {
-				if (users[userid] !== this) users[userid].resetName();
+				if (conflictUser !== this) conflictUser.resetName();
 			} else {
-				this.send('|nametaken|' + name + "|Someone is already using the name \"" + users[userid].name + "\".");
+				this.send('|nametaken|' + name + "|Someone is already using the name \"" + conflictUser.name + "\".");
 				return this;
 			}
 		}
@@ -906,9 +913,9 @@ User = (function () {
 				this.ban(false, userid);
 			}
 		}
-		if (users[userid] && users[userid] !== this) {
+		let user = users.get(userid);
+		if (user && user !== this) {
 			// This user already exists; let's merge
-			let user = users[userid];
 			if (this === user) {
 				// !!!
 				return false;
@@ -919,8 +926,8 @@ User = (function () {
 
 			if (userid !== this.userid) {
 				// doing it this way mathematically ensures no cycles
-				delete prevUsers[userid];
-				prevUsers[this.userid] = userid;
+				prevUsers.delete(userid);
+				prevUsers.set(this.userid, userid);
 			}
 			for (let i in this.prevNames) {
 				if (!user.prevNames[i]) {
@@ -946,7 +953,7 @@ User = (function () {
 		// skip the login server
 		let userid = toId(name);
 
-		if (users[userid] && users[userid] !== this) {
+		if (users.has(userid) && users.get(userid) !== this) {
 			return false;
 		}
 
@@ -956,16 +963,16 @@ User = (function () {
 		let oldid = this.userid;
 		if (userid !== this.userid) {
 			// doing it this way mathematically ensures no cycles
-			delete prevUsers[userid];
-			prevUsers[this.userid] = userid;
+			prevUsers.delete(userid);
+			prevUsers.set(this.userid, userid);
 
 			// MMR is different for each userid
 			this.mmrCache = {};
 			Rooms.global.cancelSearch(this);
 
-			delete users[oldid];
+			users.delete(oldid);
 			this.userid = userid;
-			users[userid] = this;
+			users.set(userid, this);
 
 			this.updateGroup(registered);
 		} else if (registered) {
@@ -1049,6 +1056,8 @@ User = (function () {
 		oldUser.markInactive();
 	};
 	User.prototype.mergeConnection = function (connection) {
+		// the connection has changed name to this user's username, and so is
+		// being merged into this account
 		this.connected = true;
 		this.connections.push(connection);
 		//console.log('' + this.name + ' merging: connection ' + connection.socket.id);
@@ -1059,6 +1068,7 @@ User = (function () {
 			let room = connection.rooms[i];
 			if (!this.roomCount[i]) {
 				if (room.bannedUsers && (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers)) {
+					// the connection was in a room that this user is banned from
 					room.bannedIps[connection.ip] = room.bannedUsers[this.userid];
 					connection.sendTo(room.id, '|deinit');
 					connection.leaveRoom(room);
@@ -1068,11 +1078,8 @@ User = (function () {
 				this.roomCount[i] = 0;
 			}
 			this.roomCount[i]++;
-			if (room.battle) {
-				room.battle.resendRequest(connection);
-			}
-			if (global.Tournaments && Tournaments.get(room.id)) {
-				Tournaments.get(room.id).updateFor(this, connection);
+			if (room.game && room.game.onUpdateConnection) {
+				room.game.onUpdateConnection(this, connection);
 			}
 		}
 	};
@@ -1270,32 +1277,32 @@ User = (function () {
 	};
 	User.prototype.getAlts = function (getAll) {
 		let alts = [];
-		for (let i in users) {
-			if (users[i] === this) continue;
-			if (!users[i].named && !users[i].connected) continue;
-			if (!getAll && users[i].confirmed) continue;
+		users.forEach(function (user) {
+			if (user === this) return;
+			if (!user.named && !user.connected) return;
+			if (!getAll && user.confirmed) return;
 			for (let myIp in this.ips) {
-				if (myIp in users[i].ips) {
-					alts.push(users[i].name);
-					break;
+				if (myIp in user.ips) {
+					alts.push(user.name);
+					return;
 				}
 			}
-		}
+		}, this);
 		return alts;
 	};
 	User.prototype.ban = function (noRecurse, userid) {
 		// recurse only once; the root for-loop already bans everything with your IP
 		if (!userid) userid = this.userid;
 		if (!noRecurse) {
-			for (let i in users) {
-				if (users[i] === this || users[i].confirmed) continue;
+			users.forEach(function (user) {
+				if (user === this || user.confirmed) return;
 				for (let myIp in this.ips) {
-					if (myIp in users[i].ips) {
-						users[i].ban(true, userid);
-						break;
+					if (myIp in user.ips) {
+						user.ban(true, userid);
+						return;
 					}
 				}
-			}
+			}, this);
 			lockedUsers[userid] = userid;
 		}
 
@@ -1315,15 +1322,15 @@ User = (function () {
 		// recurse only once; the root for-loop already locks everything with your IP
 		if (!userid) userid = this.userid;
 		if (!noRecurse) {
-			for (let i in users) {
-				if (users[i] === this || users[i].confirmed) continue;
+			users.forEach(function (user) {
+				if (user === this || user.confirmed) return;
 				for (let myIp in this.ips) {
-					if (myIp in users[i].ips) {
-						users[i].lock(true, userid);
-						break;
+					if (myIp in user.ips) {
+						user.lock(true, userid);
+						return;
 					}
 				}
-			}
+			}, this);
 			lockedUsers[userid] = userid;
 		}
 
@@ -1415,14 +1422,14 @@ User = (function () {
 			return true;
 		}
 		if (!connection.rooms[room.id]) {
-			connection.joinRoom(room);
 			if (!this.roomCount[room.id]) {
 				this.roomCount[room.id] = 1;
 				room.onJoin(this, connection);
 			} else {
 				this.roomCount[room.id]++;
-				room.onJoinConnection(this, connection);
 			}
+			connection.joinRoom(room);
+			room.onConnect(this, connection);
 		}
 		return true;
 	};
@@ -1461,7 +1468,7 @@ User = (function () {
 				}
 			}
 		}
-		if (!connection && this.roomCount[room.id]) {
+		if (!connection && room.id in this.roomCount) {
 			// should also never happen
 			console.log('!! room miscount: ' + room.id + ' not left for ' + this.userid);
 			room.onLeave(this);
@@ -1512,7 +1519,7 @@ User = (function () {
 			} else {
 				Monitor.teamValidatorUnchanged++;
 			}
-			callback(this === users[this.userid]);
+			callback(this === users.get(this.userid));
 		}
 	};
 	User.prototype.updateChallenges = function () {
@@ -1663,7 +1670,8 @@ User = (function () {
 	User.prototype.destroy = function () {
 		// deallocate user
 		this.clearChatQueue();
-		delete users[this.userid];
+		users.delete(this.userid);
+		prevUsers.delete('guest' + this.guestNum);
 	};
 	User.prototype.toString = function () {
 		return this.userid;
@@ -1671,13 +1679,12 @@ User = (function () {
 	// "static" function
 	User.pruneInactive = function (threshold) {
 		let now = Date.now();
-		for (let i in users) {
-			let user = users[i];
-			if (user.connected) continue;
+		users.forEach(function (user) {
+			if (user.connected) return;
 			if ((now - user.lastConnected) > threshold) {
-				users[i].destroy();
+				user.destroy();
 			}
-		}
+		});
 	};
 	return User;
 })();
@@ -1712,7 +1719,7 @@ Connection = (function () {
 		this.onDisconnect();
 	};
 	Connection.prototype.onDisconnect = function () {
-		delete connections[this.id];
+		connections.delete(this.id);
 		if (this.user) this.user.onDisconnect(this);
 		this.user = null;
 	};
