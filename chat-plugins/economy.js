@@ -143,6 +143,7 @@ function handleBoughtItem(item, user, cost) {
 		Rooms.rooms.staff.add('|c|~Shop Alert|' + msg);
 		Rooms.rooms.staff.update();
 		for (let user of Users.users) {
+			user = user[1];
 			if (user.group === '~' || user.group === '&') {
 				user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
 			}
