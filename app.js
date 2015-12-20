@@ -74,7 +74,7 @@ try {
  *********************************************************/
 
 try {
-	global.Config = require('./config/config.js');
+	require.resolve('./config/config.js');
 } catch (err) {
 	if (err.code !== 'MODULE_NOT_FOUND') throw err;
 
@@ -83,6 +83,7 @@ try {
 	fs.writeFileSync(path.resolve(__dirname, 'config/config.js'),
 		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
 	);
+} finally {
 	global.Config = require('./config/config.js');
 }
 
