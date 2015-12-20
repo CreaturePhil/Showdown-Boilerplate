@@ -413,7 +413,7 @@ BattlePokemon = (function () {
 		}
 		this.battle.runEvent('ModifyPokemon', this);
 
-		this.speed = this.getStat('spe');
+		this.speed = this.getDecisionSpeed();
 	};
 	BattlePokemon.prototype.calculateStat = function (statName, boost, modifier) {
 		statName = toId(statName);
