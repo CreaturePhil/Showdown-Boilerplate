@@ -120,6 +120,7 @@ function handleBoughtItem(item, user, cost) {
 		this.sendReply("You will have this until you log off for more than an hour.");
 		this.sendReply("If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.");
 	} else if (item === 'ticket') {
+		// TODO!!
 		let _this = this;
 		Database.get('pot', function (err, pot) {
 			if (err) throw err;
@@ -167,12 +168,8 @@ exports.commands = {
 		if (!this.canBroadcast()) return;
 		if (!target) target = user.name;
 
-		Database.read('money', toId(target), function (err, amount) {
-			if (err) throw err;
-			if (!amount) amount = 0;
-			this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
-			room.update();
-		}.bind(this));
+		const amount = Db('money').get(toId(target), 0);
+		this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 
@@ -188,19 +185,12 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.errorReply(amount);
 
-		let _this = this;
-		Database.read('money', toId(username), function (err, initial) {
-			if (err) throw err;
-			if (!initial) initial = 0;
-			Database.write('money', initial + amount, toId(username), function (err, total) {
-				if (err) throw err;
-				amount = amount + currencyName(amount);
-				total = total + currencyName(total);
-				_this.sendReply(username + " was given " + amount + ". " + username + " now has " + total + ".");
-				if (Users.get(username)) Users.get(username).popup(user.name + " has given you " + amount + ". You now have " + total + ".");
-				logMoney(username + " was given " + amount + " by " + user.name + ".");
-			});
-		});
+		let total = Db('money').set(toId(username), Db('money').get(toId(username), 0) + amount).get(toId(username));
+		amount = amount + currencyName(amount);
+		total = total + currencyName(total);
+		this.sendReply(username + " was given " + amount + ". " + username + " now has " + total + ".");
+		if (Users.get(username)) Users(username).popup(user.name + " has given you " + amount + ". You now have " + total + ".");
+		logMoney(username + " was given " + amount + " by " + user.name + ". " + username + " now has " + total);
 	},
 	givemoneyhelp: ["/givemoney [user], [amount] - Give a user a certain amount of money."],
 
@@ -216,19 +206,12 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.errorReply(amount);
 
-		let _this = this;
-		Database.read('money', toId(username), function (err, initial) {
-			if (err) throw err;
-			if (!initial) initial = 0;
-			Database.write('money', initial - amount, toId(username), function (err, total) {
-				if (err) throw err;
-				amount = amount + currencyName(amount);
-				total = total + currencyName(total);
-				_this.sendReply(username + " losted " + amount + ". " + username + " now has " + total + ".");
-				if (Users.get(username)) Users.get(username).popup(user.name + " has taken " + amount + " from you. You now have " + total + ".");
-				logMoney(username + " had " + amount + " taken away by " + user.name + ".");
-			});
-		});
+		let total = Db('money').set(toId(username), Db('money').get(toId(username), 0) - amount).get(toId(username));
+		amount = amount + currencyName(amount);
+		total = total + currencyName(total);
+		this.sendReply(username + " losted " + amount + ". " + username + " now has " + total + ".");
+		if (Users.get(username)) Users(username).popup(user.name + " has taken " + amount + " from you. You now have " + total + ".");
+		logMoney(username + " had " + amount + " taken away by " + user.name + ". " + username + " now has " + total);
 	},
 	takemoneyhelp: ["/takemoney [user], [amount] - Take a certain amount of money from a user."],
 
@@ -236,11 +219,9 @@ exports.commands = {
 	resetbucks: 'resetmoney',
 	resetmoney: function (target, room, user) {
 		if (!this.can('forcewin')) return false;
-		Database.write('money', 0, toId(target), function (err, total) {
-			if (err) throw err;
-			this.sendReply(target + " now has " + total + currencyName(total) + ".");
-			logMoney(user.name + " reset the money of " + target + ".");
-		}.bind(this));
+		Db('money').set(toId(target), 0);
+		this.sendReply(target + " now has 0 bucks.");
+		logMoney(user.name + " reset the money of " + target + ".");
 	},
 	resetmoneyhelp: ["/resetmoney [user] - Reset user's money to zero."],
 
@@ -252,32 +233,25 @@ exports.commands = {
 
 		let parts = target.split(',');
 		let username = parts[0];
+		let uid = toId(username);
 		let amount = isMoney(parts[1]);
 
 		if (toId(username) === user.userid) return this.errorReply("You cannot transfer to yourself.");
 		if (username.length > 19) return this.errorReply("Username cannot be longer than 19 characters.");
 		if (typeof amount === 'string') return this.errorReply(amount);
+		if (amount > Db('money').get(user.userid, 0)) return this.errorReply("You cannot transfer more money than what you have.");
 
-		let _this = this;
-		Database.read('money', user.userid, function (err, userTotal) {
-			if (err) throw err;
-			if (!userTotal) userTotal = 0;
-			if (amount > userTotal) return _this.errorReply("You cannot transfer more money than what you have.");
-			Database.read('money', toId(username), function (err, targetTotal) {
-				if (err) throw err;
-				if (!targetTotal) targetTotal = 0;
-				Database.write('money', userTotal - amount, user.userid, function (err, userTotal) {
-					Database.write('money', targetTotal + amount, toId(username), function (err, targetTotal) {
-						amount = amount + currencyName(amount);
-						userTotal = userTotal + currencyName(userTotal);
-						targetTotal = targetTotal + currencyName(targetTotal);
-						_this.sendReply("You have successfully transferred " + amount + ". You now have " + userTotal + ".");
-						if (Users.get(username)) Users.get(username).popup(user.name + " has transferred " + amount + ". You now have " + targetTotal + ".");
-						logMoney(user.name + " transferred " + amount + " to " + username + ". " + user.name + " now has " + userTotal + " and " + username + " now has " + targetTotal + ".");
-					});
-				});
-			});
-		});
+		Db('money')
+			.set(user.userid, Db('money').get(user.userid) - amount)
+			.set(uid, Db('money').get(uid, 0) + amount);
+
+		let userTotal = Db('money').get(user.userid) + currencyName(Db('money').get(user.userid));
+		let targetTotal = Db('money').get(uid) + currencyname(Db('money').get(uid));
+		amount = amount + currencyName(amount);
+
+		this.sendReply("You have successfully transferred " + amount + ". You now have " + userTotal + ".");
+		if (Users.get(username)) Users(username).popup(user.name + " has transferred " + amount + ". You now have " + targetTotal + ".");
+		logMoney(user.name + " transferred " + amount + " to " + username + ". " + user.name + " now has " + userTotal + " and " + username + " now has " + targetTotal + ".");
 	},
 	transfermoneyhelp: ["/transfer [user], [amount] - Transfer a certain amount of money to a user."],
 
@@ -290,21 +264,14 @@ exports.commands = {
 
 	buy: function (target, room, user) {
 		if (!target) return this.parse('/help buy');
-		let _this = this;
-		Database.read('money', user.userid, function (err, amount) {
-			if (err) throw err;
-			if (!amount) amount = 0;
-			let cost = findItem.call(_this, target, amount);
-			if (!cost) return room.update();
-			Database.write('money', amount - cost, user.userid, function (err, total) {
-				if (err) throw err;
-				_this.sendReply("You have bought " + target + " for " + cost +  currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
-				room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
-				logMoney(user.name + " has bought " + target + " from the shop. This user now has " + total + currencyName(total) + ".");
-				handleBoughtItem.call(_this, target.toLowerCase(), user, cost);
-				room.update();
-			});
-		});
+		let amount = Db('money').get(user.userid, 0);
+		let cost = findItem.call(this, target, amount);
+		if (!cost) return;
+		let total = Db('money').set(user.userid, amount - cost).get(user.userid);
+		this.sendReply("You have bought " + target + " for " + cost +  currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
+		room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
+		logMoney(user.name + " has bought " + target + " from the shop. This user now has " + total + currencyName(total) + ".");
+		handleBoughtItem.call(this, target.toLowerCase(), user, cost);
 	},
 	buyhelp: ["/buy [command] - Buys an item from the shop."],
 
@@ -360,21 +327,28 @@ exports.commands = {
 	richestusers: 'richestuser',
 	richestuser: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		let _this = this;
 		let display = '<center><u><b>Richest Users</b></u></center><br><table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Rank</th><th>Username</th><th>Money</th></tr>';
-		Database.sortDesc('money', 10, function (err, users) {
-			if (err) throw err;
-			if (!users.length) {
-				_this.sendReplyBox("Money ladder is empty.");
-			} else {
-				users.forEach(function (user, index) {
-					display += "<tr><td>" + (index + 1) + "</td><td>" + user.username + "</td><td>" + user.money + "</td></tr>";
-				});
-				display += "</tbody></table>";
-				_this.sendReply("|raw|" + display);
-			}
-			room.update();
+		let users = Object.keys(Db('money').object())
+			.map(function(username) {
+				let obj = {};
+				obj[username] = Db('money').get(username);
+				return obj;
+			})
+			.sort(function(a, b) {
+				a = a[Object.keys(a)[0]]
+				b = b[Object.keys(b)[0]]
+				return a > b;
+			});
+
+		if (!users.length) return this.sendReplyBox("Money ladder is empty.");
+
+		let index = 1;
+		users.forEach(function(user, i) {
+			if (i > 10) return;
+			display += "<tr><td>" + (index++) + "</td><td>" + user.username + "</td><td>" + user.money + "</td></tr>";
 		});
+		display += "</tbody></table>";
+		this.sendReply("|raw|" + display);
 	},
 
 	dicegame: 'startdice',

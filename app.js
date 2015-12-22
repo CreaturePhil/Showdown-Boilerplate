@@ -156,6 +156,7 @@ Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.Tells = require('./tells.js');
 
+global.Db = require('../origindb')('config/db');
 global.Database = require('./database.js')(Config.database);
 
 try {
