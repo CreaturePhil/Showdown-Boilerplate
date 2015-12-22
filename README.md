@@ -22,7 +22,7 @@ For more information on Pokémon Showdown, visit the main
 - Numerous *cool* [commands](chat-plugins/EXTRA_COMMANDS) such as /urbandefine or /poof
 - Emoticons in chat and private messages
 - Hangman, Profile, and Tells
-- Economy (bucks system, shop, tournament winnings, lottery)
+- Economy (bucks system, shop, tournament winnings)
 
 ## Quick Start
 

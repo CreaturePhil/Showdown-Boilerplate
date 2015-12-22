@@ -156,16 +156,7 @@ Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.Tells = require('./tells.js');
 
-global.Db = require('../origindb')('config/db');
-global.Database = require('./database.js')(Config.database);
-
-try {
-	global.Seen = JSON.parse(fs.readFileSync('config/seen.json', 'utf8'));
-} catch (e) {
-	if (e instanceof SyntaxError) e.message = 'Malformed JSON in seen.json: \n' + e.message;
-	if (e.code !== 'ENOENT') throw e;
-	global.Seen = {};
-}
+global.Db = require('origindb')('config/db');
 
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier.js');

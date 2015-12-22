@@ -220,7 +220,7 @@ exports.commands = {
 		let targetUser = Users.get(target);
 		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
 		target = Tools.escapeHTML(target);
-		let seen = Seen[toId(target)];
+		let seen = Db('seen').get(toId(target));
 		if (!seen) return this.sendReplyBox(target + " has never been online on this server.");
 		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
 	},

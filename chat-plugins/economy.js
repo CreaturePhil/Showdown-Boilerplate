@@ -4,7 +4,6 @@ let fs = require('fs');
 let path = require('path');
 
 let shop = [
-	['Ticket', 'Buys a lottery ticket for a chance to win big money.', 5],
 	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
 	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
 	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
@@ -119,26 +118,6 @@ function handleBoughtItem(item, user, cost) {
 		this.sendReply("You have purchased a custom symbol. You can use /customsymbol to get your custom symbol.");
 		this.sendReply("You will have this until you log off for more than an hour.");
 		this.sendReply("If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.");
-	} else if (item === 'ticket') {
-		// TODO!!
-		let _this = this;
-		Database.get('pot', function (err, pot) {
-			if (err) throw err;
-			if (!pot) pot = 0;
-			Database.set('pot', pot + cost,  function (err, pot) {
-				if (err) throw err;
-				Database.read('tickets', user.userid, function (err, tickets) {
-					if (err) throw err;
-					if (!tickets) tickets = [];
-					let ticket = '' + rng() + rng() + rng();
-					tickets.push(ticket);
-					Database.write('tickets', tickets, user.userid, function (err) {
-						if (err) throw err;
-						_this.sendReply("Your ticket has this id: " + ticket + ". The jackpot is currently worth " + pot + currencyName(pot) + ". Use /tickets to view your ticket(s).");
-					});
-				});
-			});
-		});
 	} else {
 		let msg = '**' + user.name + " has bought " + item + ".**";
 		Rooms.rooms.staff.add('|c|~Shop Alert|' + msg);
@@ -150,15 +129,6 @@ function handleBoughtItem(item, user, cost) {
 			}
 		}
 	}
-}
-
-/**
- * Generates a random number between 0 and 1000.
- *
- * @return {Number}
- */
-function rng() {
-	return Math.floor(Math.random() * 1000);
 }
 
 exports.commands = {
@@ -246,7 +216,7 @@ exports.commands = {
 			.set(uid, Db('money').get(uid, 0) + amount);
 
 		let userTotal = Db('money').get(user.userid) + currencyName(Db('money').get(user.userid));
-		let targetTotal = Db('money').get(uid) + currencyname(Db('money').get(uid));
+		let targetTotal = Db('money').get(uid) + currencyName(Db('money').get(uid));
 		amount = amount + currencyName(amount);
 
 		this.sendReply("You have successfully transferred " + amount + ". You now have " + userTotal + ".");
@@ -328,24 +298,13 @@ exports.commands = {
 	richestuser: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		let display = '<center><u><b>Richest Users</b></u></center><br><table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Rank</th><th>Username</th><th>Money</th></tr>';
-		let users = Object.keys(Db('money').object())
-			.map(function(username) {
-				let obj = {};
-				obj[username] = Db('money').get(username);
-				return obj;
-			})
-			.sort(function(a, b) {
-				a = a[Object.keys(a)[0]]
-				b = b[Object.keys(b)[0]]
-				return a > b;
-			});
-
-		if (!users.length) return this.sendReplyBox("Money ladder is empty.");
-
-		let index = 1;
-		users.forEach(function(user, i) {
-			if (i > 10) return;
-			display += "<tr><td>" + (index++) + "</td><td>" + user.username + "</td><td>" + user.money + "</td></tr>";
+		let keys = Object.keys(Db('money').object()).map(function (name) {
+			return {name: name, money: Db('money').get(name)};
+		});
+		if (!keys.length) return this.sendReplyBox("Money ladder is empty.");
+		keys.sort(function (a, b) { return b.money > a.money; });
+		keys.slice(0, 10).forEach(function (user, index) {
+			display += "<tr><td>" + (index + 1) + "</td><td>" + user.name + "</td><td>" + user.money + "</td></tr>";
 		});
 		display += "</tbody></table>";
 		this.sendReply("|raw|" + display);
@@ -377,45 +336,28 @@ exports.commands = {
 		if (!room.dice || (room.dice.p1 && room.dice.p2)) return this.errorReply("There is no dice game in it's signup phase in this room.");
 		if (!this.canTalk()) return this.errorReply("You may not join dice games while unable to speak.");
 		if (room.dice.p1 === user.userid) return this.errorReply("You already entered this dice game.");
-		let _this = this;
-		Database.read('money', user.userid, function (err, userMoney) {
-			if (err) throw err;
-			if (!userMoney) userMoney = 0;
-			if (userMoney < room.dice.bet) return _this.errorReply("You don't have enough bucks to join this game.");
-			Database.write('money', userMoney - room.dice.bet, user.userid, function (err) {
-				if (err) throw err;
-				if (!room.dice.p1) {
-					room.dice.p1 = user.userid;
-					room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
-					return room.update();
-				}
-				room.dice.p2 = user.userid;
-				room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
-				let p1Number = Math.floor(6 * Math.random()) + 1;
-				let p2Number = Math.floor(6 * Math.random()) + 1;
-				let output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br>" + room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
-				while (p1Number === p2Number) {
-					output += "Tie... rolling again.<br>";
-					p1Number = Math.floor(6 * Math.random()) + 1;
-					p2Number = Math.floor(6 * Math.random()) + 1;
-					output += room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
-				}
-				let winner = room.dice[p1Number > p2Number ? 'p1' : 'p2'];
-				let loser = room.dice[p1Number < p2Number ? 'p1' : 'p2'];
-				let bet = room.dice.bet;
-				output += "<font color=#24678d><b>" + winner + "</b></font> has won <font color=#24678d><b>" + bet + "</b></font>" + currencyName(bet) + ".<br>Better luck next time " + loser + "!</div>";
-				room.addRaw(output);
-				room.update();
-				delete room.dice;
-				Database.read('money', winner, function (err, total) {
-					if (err) throw err;
-					if (!total) total = 0;
-					Database.write('money', total + bet * 2, winner, function (err) {
-						if (err) throw err;
-					});
-				});
-			});
-		});
+		if (Db('money').get(user.userid, 0) < room.dice.bet) return this.errorReply("You don't have enough bucks to join this game.");
+		Db('money').set(user.userid, Db('money').get(user.userid) - room.dice.bet);
+		if (!room.dice.p1) {
+			room.dice.p1 = user.userid;
+			return room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
+		}
+		room.dice.p2 = user.userid;
+		room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
+		let p1Number = Math.floor(6 * Math.random()) + 1;
+		let p2Number = Math.floor(6 * Math.random()) + 1;
+		let output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br>" + room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
+		while (p1Number === p2Number) {
+			output += "Tie... rolling again.<br>";
+			p1Number = Math.floor(6 * Math.random()) + 1;
+			p2Number = Math.floor(6 * Math.random()) + 1;
+			output += room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
+		}
+		let winner = room.dice[p1Number > p2Number ? 'p1' : 'p2'];
+		output += "<font color=#24678d><b>" + winner + "</b></font> has won <font color=#24678d><b>" + room.dice.bet + "</b></font>" + currencyName(room.dice.bet) + ".<br>Better luck next time " + room.dice[p1Number < p2Number ? 'p1' : 'p2'] + "!</div>";
+		room.addRaw(output);
+		Db('money').set(winner, Db('money').get(winner, 0) + room.dice.bet * 2);
+		delete room.dice;
 	},
 
 	enddice: function (target, room, user) {
@@ -423,113 +365,21 @@ exports.commands = {
 		if (!room.dice) return this.errorReply("There is no dice game in this room.");
 		if ((Date.now() - room.dice.startTime) < 15000 && !user.can('broadcast', null, room)) return this.errorReply("Regular users may not end a dice game within the first minute of it starting.");
 		if (room.dice.p2) return this.errorReply("Dice game has already started.");
-		let dice = room.dice;
-		if (dice.p1) {
-			Database.read('money', dice.p1, function (err, total) {
-				if (err) throw err;
-				if (!total) total = 0;
-				Database.write('money', total + dice.bet, dice.p1, function (err) {
-					if (err) throw err;
-				});
-			});
-		}
-		delete room.dice;
+		if (room.dice.p1) Db('money').set(room.dice.p1, Db('money').get(room.dice.p1, 0) + room.dice.bet);
 		room.addRaw("<b>" + user.name + " ended the dice game.</b>");
-	},
-
-	ticket: 'tickets',
-	tickets: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-		Database.read('tickets', user.userid, function (err, tickets) {
-			if (err) throw err;
-			if (!tickets || !tickets.length) {
-				this.sendReplyBox("You have no tickets.");
-			} else {
-				this.sendReplyBox("You have a total of " + tickets.length + " ticket(s). These are your ticket's ids: " + tickets.join(", ") + ".");
-			}
-			room.update();
-		}.bind(this));
-	},
-
-	picklottery: function (target, room, user) {
-		if (!this.can('picklottery')) return false;
-		let chance = Math.round(Math.random());
-		let _this = this;
-		Database.users(function (err, users) {
-			if (err) throw err;
-			users = users.filter(function (user) {
-				return user.tickets && user.tickets.length > 0;
-			});
-			if (!chance) {
-				let msg = "<center><h2>Lottery!</h2>Nobody has won the lottery. Good luck to everyone next time!</center>";
-				_this.parse('/gdeclare ' + msg);
-				_this.parse('/pmall /html ' + msg);
-				room.update();
-				return users.forEach(function (user) {
-					Database.write('tickets', null, user.username, function (err) {
-						if (err) throw err;
-					});
-				});
-			}
-			let tickets = [];
-			users.forEach(function (user) {
-				if (!Array.isArray(user.tickets)) user.tickets = user.tickets.split(', ');
-				user.tickets.forEach(function (ticket) {
-					tickets.push({username: user.username, ticket: ticket});
-				});
-			});
-			let winningIndex = Math.floor(Math.random() * tickets.length);
-			let winner = tickets[winningIndex];
-			Database.get('pot', function (err, pot) {
-				if (err) throw err;
-				let winnings = Math.floor(pot * 3 / 4);
-				if (!winner) return _this.errorReply("No one has bought tickets.");
-				Database.read('money', winner.username, function (err, amount) {
-					if (err) throw err;
-					if (!amount) amount = 0;
-					Database.write('money', amount + winnings, winner.username, function (err, total) {
-						if (err) throw err;
-						let msg = "<center><h2>Lottery!</h2><h4><font color='red'><b>" + winner.username + "</b></font> has won the lottery with the ticket id of " + winner.ticket + "! This user has gained " + winnings + currencyName(winnings) + " and now has a total of " + total + currencyName(total) + ".</h4></center>";
-						_this.parse('/gdeclare ' + msg);
-						_this.parse('/pmall /html ' + msg);
-						room.update();
-						Database.set('pot', 0, function (err) {
-							if (err) throw err;
-							users.forEach(function (user) {
-								Database.write('tickets', null, user.username, function (err) {
-									if (err) throw err;
-								});
-							});
-						});
-					});
-				});
-			});
-		});
-	},
-
-	jackpot: 'pot',
-	pot: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-		Database.get('pot', function (err, pot) {
-			if (err) throw err;
-			if (!pot) pot = 0;
-			this.sendReplyBox("The current jackpot is " + pot + currencyName(pot) + ".");
-		}.bind(this));
+		delete room.dice;
 	},
 
 	bucks: 'economystats',
 	economystats: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		let _this = this;
-		Database.total('money', function (err, total) {
-			Database.countUsers(function (err, numUsers) {
-				let average = Math.floor(total / numUsers);
-				let output = "There is " + total + currencyName(total) + " circulating in the economy. ";
-				output += "The average user has " + average + currencyName(average) + ".";
-				_this.sendReplyBox(output);
-			});
-			room.update();
-		});
+		const users = Object.keys(Db('money').object());
+		const total = users.reduce(function (acc, cur) {
+			return acc + Db('money').get(cur);
+		}, 0);
+		let average = Math.floor(total / users.length);
+		let output = "There is " + total + currencyName(total) + " circulating in the economy. ";
+		output += "The average user has " + average + currencyName(average) + ".";
 	}
 
 };

@@ -749,23 +749,11 @@ class Tournament {
 			let firstMoney = Math.round(tourSize / 4);
 			let secondMoney = Math.round(firstMoney / 2);
 
-			Database.read('money', wid, function (err, amount) {
-				if (err) throw err;
-				if (!amount) amount = 0;
-				Database.write('money', amount + firstMoney, wid, function (err) {
-					if (err) throw err;
-				});
-			});
+			Db('money').set(wid, Db('money').get(wid, 0) + firstMoney);
 			this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(winner) + "</font> has won " + "<font color='" + color + "'>" + firstMoney + "</font>" + currencyName(firstMoney) + " for winning the tournament!</b>");
 
 			if (runnerUp) {
-				Database.read('money', rid, function (err, amount) {
-					if (err) throw err;
-					if (!amount) amount = 0;
-					Database.write('money', amount + secondMoney, rid, function (err) {
-						if (err) throw err;
-					});
-				});
+				Db('money').set(rid, Db('money').get(rid, 0) + secondMoney);
 				this.room.addRaw("<b><font color='" + color + "'>" + Tools.escapeHTML(runnerUp) + "</font> has won " +  "<font color='" + color + "'>" + secondMoney + "</font>" + currencyName(secondMoney) + " for winning the tournament!</b>");
 			}
 		}

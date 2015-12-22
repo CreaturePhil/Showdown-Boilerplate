@@ -30,7 +30,6 @@ const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
 
 const fs = require('fs');
-const steno = require('steno');
 
 let Users = module.exports = getUser;
 
@@ -1210,14 +1209,8 @@ User = (function () {
 		}
 	};
 	User.prototype.onDisconnect = function (connection) {
-		let name = 'Guest ' + this.guestNum;
-		let userid = toId(name);
-		if (this.registered && this.userid !== userid) {
-			Seen[this.userid] = Date.now();
-			steno.writeFile('config/seen.json', JSON.stringify(Seen, null, 2), function (err) {
-				if (err) throw err;
-			});
-		}
+		if (this.named) Db('seen').set(this.userid, Date.now());
+
 		for (let i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
