@@ -343,12 +343,12 @@ Validator = (function () {
 		setHas[check] = true;
 		if (banlistTable[check]) {
 			clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
-			problems.push(set.species + ' is banned' + clause + '.');
+			return [set.species + " is banned" + clause + "."];
 		} else if (!tools.data.FormatsData[check] || !tools.data.FormatsData[check].tier) {
 			check = toId(template.baseSpecies);
 			if (banlistTable[check]) {
 				clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
-				problems.push(template.baseSpecies + ' is banned' + clause + '.');
+				return [template.baseSpecies + " is banned" + clause + "."];
 			}
 		}
 
@@ -480,9 +480,33 @@ Validator = (function () {
 						if (eventData.level && set.level < eventData.level) {
 							problems.push(name + " must be at least level " + eventData.level + " because it has a move only available from a specific event.");
 						}
+						// Legendary Pokemon must have at least 3 perfect IVs in gen 6
+						if (set.ivs && eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
+							// exceptions
+							template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
+							let perfectIVs = 0;
+							for (let i in set.ivs) {
+								if (set.ivs[i] >= 31) perfectIVs++;
+							}
+							if (perfectIVs < 3) problems.push(name + " has less than three perfect IVs.");
+						}
 					}
 					isHidden = false;
 				}
+			} else if (banlistTable['illegal'] && (template.eventOnly || template.eventOnlyHidden && isHidden)) {
+				let eventPokemon = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies).eventPokemon : template.eventPokemon;
+				let legal = false;
+				for (let i = 0; i < eventPokemon.length; i++) {
+					let eventData = eventPokemon[i];
+					if (format.requirePentagon && eventData.generation < 6) continue;
+					if (eventData.level && set.level < eventData.level) continue;
+					if ((eventData.shiny && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
+					if (eventData.nature && set.nature !== eventData.nature) continue;
+					if (eventData.isHidden !== undefined && isHidden !== eventData.isHidden) continue;
+					legal = true;
+					if (eventData.gender) set.gender = eventData.gender;
+				}
+				if (!legal) problems.push(template.species + (template.eventOnlyHidden ? "'s hidden ability" : "") + " is only obtainable via event - it needs to match one of its events.");
 			}
 			if (isHidden && lsetData.sourcesBefore) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
@@ -613,7 +637,7 @@ Validator = (function () {
 		do {
 			alreadyChecked[template.speciesid] = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			if (move !== 'chatter' && lsetData['ignorestabmoves'] && lsetData['ignorestabmoves'][this.tools.getMove(move).category]) {
+			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(move in {'bellydrum':1, 'chatter':1, 'darkvoid':1, 'geomancy':1, 'shellsmash':1})) {
 				let types = template.types;
 				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
@@ -713,8 +737,8 @@ Validator = (function () {
 							// unless it's supposed to be self-breedable, can't inherit from self, prevos, etc
 							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
 							if (!fromSelf && alreadyChecked[dexEntry.speciesid]) continue;
-							// father must be able to learn the move
-							if (!dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
+							// father must be able to learn the move, unless this is chainbreeding
+							if (!fromSelf && !dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
 
 							// must be able to breed with father
 							if (!dexEntry.eggGroups.intersect(eggGroups).length) continue;

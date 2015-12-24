@@ -10,6 +10,7 @@ exports.BattleAliases = {
 	"underused": "UU",
 	"rarelyused": "RU",
 	"neverused": "NU",
+	"pu": "PU (suspect test)",
 	"dubs": "Doubles OU",
 	"dou": "Doubles OU",
 	"doubles": "Doubles OU",

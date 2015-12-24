@@ -167,7 +167,7 @@ let commands = {
 				return 0;
 			});
 
-			buffer += "Current prenominations:";
+			buffer += "Current prenominations: (" + prenominations.length + ")";
 			for (let i = 0; i < prenominations.length; i++) {
 				buffer += "<br />" +
 					"- " + Tools.escapeHTML(prenominations[i][1]) + " (submitted by " + Tools.escapeHTML(prenominations[i][0].name) + ")";
@@ -178,11 +178,7 @@ let commands = {
 		if (!this.canBroadcast()) return false;
 		if (!artistOfTheDay.nominations.size) return this.sendReplyBox("No nominations have been submitted yet.");
 
-		let nominations = toArrayOfArrays(artistOfTheDay.nominations).sort(function (a, b) {
-			if (a[1] > b[1]) return 1;
-			if (a[1] < b[1]) return -1;
-			return 0;
-		});
+		let nominations = toArrayOfArrays(artistOfTheDay.nominations).sort(function (a, b) {return a[0].localeCompare(b[0]);});
 
 		buffer += "Current nominations (" + nominations.length + "):";
 		for (let i = 0; i < nominations.length; i++) {

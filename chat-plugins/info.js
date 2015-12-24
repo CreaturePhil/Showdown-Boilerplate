@@ -406,7 +406,7 @@ exports.commands = {
 		for (let i = 0; i < andGroups.length; i++) {
 			let orGroup = {abilities: {}, tiers: {}, colors: {}, gens: {}, moves: {}, types: {}, stats: {}, skip: false};
 			let parameters = andGroups[i].split("|");
-			if (parameters.length > 4) return this.sendReply("No more than 3 alternatives for each parameter may be used.");
+			if (parameters.length > 3) return this.sendReply("No more than 3 alternatives for each parameter may be used.");
 			for (let j = 0; j < parameters.length; j++) {
 				let isNotSearch = false;
 				target = parameters[j].trim().toLowerCase();
@@ -725,7 +725,7 @@ exports.commands = {
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
 		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/BL4/PU/NFE/LC/CAP.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
-		"Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP equal to or greater than 95.",
+		"Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.",
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
 		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.",
 		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.",
@@ -2250,6 +2250,9 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+	ruleshelp: ["/rules - Show links to room rules and global rules.",
+		"!rules - Show everyone links to room rules and global rules. Requires: + % @ # & ~",
+		"/rules [url] - Change the room rules URL. Requires: # & ~"],
 
 	faq: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -2650,7 +2653,9 @@ exports.commands = {
 
 		let image = targets[0].trim();
 		if (!image) return this.errorReply('No image URL was provided!');
-		if (!/^https?:\/\//.test(image)) image = '//' + image;
+		image = this.canEmbedURI(image);
+
+		if (!image) return false;
 
 		let width = targets[1].trim();
 		if (!width) return this.errorReply('No width for the image was provided!');
@@ -2676,7 +2681,8 @@ exports.commands = {
 
 	htmlbox: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help htmlbox');
-		if (!this.canHTML(target)) return;
+		target = this.canHTML(target);
+		if (!target) return;
 
 		if (user.userid === 'github') {
 			if (!this.can('announce', null, room)) return;
