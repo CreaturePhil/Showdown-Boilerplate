@@ -122,12 +122,11 @@ function handleBoughtItem(item, user, cost) {
 		let msg = '**' + user.name + " has bought " + item + ".**";
 		Rooms.rooms.staff.add('|c|~Shop Alert|' + msg);
 		Rooms.rooms.staff.update();
-		for (let user of Users.users) {
-			user = user[1];
+		Users.users.forEach(function (user) {
 			if (user.group === '~' || user.group === '&') {
 				user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
 			}
-		}
+		});
 	}
 }
 
