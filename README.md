@@ -40,10 +40,10 @@ This boilerplate is brought to you and maintained by the following people:
 :---:|:---:|:---:|:---:|:---:
 [Philip La](http://creaturephil.github.io) | [jd](https://github.com/jd4564) | [Fender](https://github.com/TheFenderStory)
 
+## Special thanks
+
+- See http://pokemonshowdown.com/credits
+
 ## License
 
 [MIT](LICENSE)
-
-Special thanks
-
-- See http://pokemonshowdown.com/credits
