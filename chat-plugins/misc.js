@@ -64,7 +64,10 @@ exports.commands = {
 			buffer.push((Config.groups[r] ? r + Config.groups[r].name + "s (" + rankLists[r].length + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
 		});
 
-		if (!buffer.length) buffer = "This server has no auth.";
+		if (!buffer.length) {
+			return connection.popup("This server has no auth.");
+		}
+		
 		connection.popup(buffer.join("\n\n"));
 	},
 
