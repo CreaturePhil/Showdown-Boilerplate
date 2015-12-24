@@ -23,6 +23,7 @@ function download_image(image_url, name, extension) {
 
 function load_custom_avatars() {
 	fs.readdir(AVATAR_PATH, function (err, files) {
+		if (!files) files = [];
 		files
 			.filter(function (file) {
 				return ['.jpg', '.png', '.gif'].indexOf(path.extname(file)) >= 0;
