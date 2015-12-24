@@ -67,7 +67,6 @@ exports.commands = {
 		if (!buffer.length) {
 			return connection.popup("This server has no auth.");
 		}
-		
 		connection.popup(buffer.join("\n\n"));
 	},
 
