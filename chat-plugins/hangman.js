@@ -135,22 +135,16 @@ class Hangman extends Rooms.RoomGame {
 		output += '<p style="text-align:left;font-weight:bold;font-size:10pt;margin:5px 0 0 15px">' + (result === 1 ? 'Too bad! The mon has been hanged.' : (result === 2 ? 'The word has been guessed. Congratulations!' : 'Hangman')) + '</p>';
 		output += '<table><tr><td style="text-align:center;">' + this.hangingMan() + '</td><td style="text-align:center;width:100%;word-wrap:break-word">';
 
-		let wordString = '';
+		let wordString = this.wordSoFar.join('');
 		if (result === 1) {
-			for (let i = 0; i < this.wordSoFar.length; i++) {
-				if (i) wordString += '<small>&nbsp;</small>';
-				if (this.wordSoFar[i] === '_') {
-					wordString += '<font color="#7af87a">' + this.word[i] + '</font>';
-				} else {
-					wordString += this.wordSoFar[i];
-				}
-			}
-		} else {
-			wordString = this.wordSoFar.join('<small>&nbsp;</small>');
+			let word = this.word;
+			wordString = wordString.replace(/_+/g, function (match, offset) {
+				return '<font color="#7af87a">' + word.substr(offset, match.length) + '</font>';
+			});
 		}
 
 		if (this.hint) output += '<div>(Hint: ' + Tools.escapeHTML(this.hint) + ')</div>';
-		output += '<p style="font-weight:bold;font-size:12pt">' + wordString + '</p>';
+		output += '<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">' + wordString + '</p>';
 		if (this.guesses.length) {
 			if (this.letterGuesses.length) {
 				output += 'Letters: ' + this.letterGuesses.map(function (g) {
@@ -289,7 +283,7 @@ exports.commands = {
 
 		'': function (target, room, user) {
 			return this.parse('/help hangman');
-		}
+		},
 	},
 
 	hangmanhelp: ["/hangman allows users to play the popular game hangman in PS rooms.",
@@ -309,5 +303,5 @@ exports.commands = {
 		room.game.guess(target, user);
 	},
 	guesshelp: ["/guess - Shortcut for /hangman guess.", "/hangman guess [letter] - Makes a guess for the letter entered.",
-					"/hangman guess [word] - Same as a letter, but guesses an entire word."]
+					"/hangman guess [word] - Same as a letter, but guesses an entire word."],
 };

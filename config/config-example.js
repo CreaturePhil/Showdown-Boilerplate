@@ -252,7 +252,7 @@ exports.grouplist = [
 		id: "admin",
 		name: "Administrator",
 		root: true,
-		globalonly: true
+		globalonly: true,
 	},
 	{
 		symbol: '&',
@@ -273,7 +273,7 @@ exports.grouplist = [
 		potd: true,
 		disableladder: true,
 		globalonly: true,
-		tournamentsmanagement: true
+		tournamentsmanagement: true,
 	},
 	{
 		symbol: '#',
@@ -287,7 +287,7 @@ exports.grouplist = [
 		declare: true,
 		modchatall: true,
 		roomonly: true,
-		tournamentsmanagement: true
+		tournamentsmanagement: true,
 	},
 	{
 		symbol: '\u2605',
@@ -298,7 +298,7 @@ exports.grouplist = [
 		modchat: true,
 		roomonly: true,
 		editroom: true,
-		joinbattle: true
+		joinbattle: true,
 	},
 	{
 		symbol: '@',
@@ -312,7 +312,7 @@ exports.grouplist = [
 		forcerename: true,
 		ip: true,
 		alts: '@u',
-		tournaments: true
+		tournaments: true,
 	},
 	{
 		symbol: '%',
@@ -333,7 +333,7 @@ exports.grouplist = [
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
 		jeopardy: true,
-		joinbattle: true
+		joinbattle: true,
 	},
 	{
 		symbol: '+',
@@ -341,10 +341,10 @@ exports.grouplist = [
 		name: "Voice",
 		inherit: ' ',
 		alts: 's',
-		broadcast: true
+		broadcast: true,
 	},
 	{
 		symbol: ' ',
-		ip: 's'
-	}
+		ip: 's',
+	},
 ];
