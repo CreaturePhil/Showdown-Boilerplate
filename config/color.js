@@ -1,6 +1,3 @@
-// jscs:disable
-/* jshint ignore:start */
-
 module.exports = hashColor;
 
 function MD5(e) {

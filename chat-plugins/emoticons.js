@@ -34,7 +34,7 @@ let emotes = {
 	'wtfman': 'http://i.imgur.com/kwR8Re9.png',
 	'xaa': 'http://i.imgur.com/V728AvL.png',
 	'yayface': 'http://i.imgur.com/anY1jf8.png',
-	'yesface': 'http://i.imgur.com/k9YCF6K.png'
+	'yesface': 'http://i.imgur.com/k9YCF6K.png',
 };
 
 let emotesKeys = Object.keys(emotes);
@@ -185,5 +185,5 @@ exports.commands = {
 		let randomEmote = emotesKeys[rng];
 		this.sendReplyBox("<img src='" + emotes[randomEmote] + "' title='" + randomEmote + "' height='50' width='50' />");
 	},
-	randemotehelp: ["/randemote - Get a random emote."]
+	randemotehelp: ["/randemote - Get a random emote."],
 };

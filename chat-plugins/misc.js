@@ -19,7 +19,7 @@ let messages = [
 	"is blasting off again!",
 	"(Quit: oh god how did this get here i am not good with computer)",
 	"was unfortunate and didn't get a cool message.",
-	"{{user}}'s mama accidently kicked {{user}} from the server!"
+	"{{user}}'s mama accidently kicked {{user}} from the server!",
 ];
 
 function clearRoom(room) {
@@ -266,5 +266,5 @@ exports.commands = {
 			(targetUser ? targetUser.getIdentity() : ' ' + this.targetUsername) +
 			"|/text This user is currently offline. Your message will be delivered when they are next online.");
 	},
-	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."]
+	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."],
 };

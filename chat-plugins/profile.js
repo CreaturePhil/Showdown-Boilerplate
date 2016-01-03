@@ -157,5 +157,5 @@ exports.commands = {
 		}
 		this.sendReplyBox(profile.show());
 	},
-	profilehelp: ["/profile -	Shows information regarding user's name, group, money, and when they were last seen."]
+	profilehelp: ["/profile -	Shows information regarding user's name, group, money, and when they were last seen."],
 };

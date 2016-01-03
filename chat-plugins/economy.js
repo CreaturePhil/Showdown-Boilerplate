@@ -10,7 +10,7 @@ let shop = [
 	['League Room', 'Purchases a room at a reduced rate for use with a league.  A roster must be supplied with at least 10 members for this room.', 25],
 	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 40],
 	['Staff Help', 'Staff member will help set up roomintros and anything else needed in a room. Response may not be immediate.', 50],
-	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100]
+	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100],
 ];
 
 let shopDisplay = getShopDisplay(shop);
@@ -379,6 +379,6 @@ exports.commands = {
 		let average = Math.floor(total / users.length);
 		let output = "There is " + total + currencyName(total) + " circulating in the economy. ";
 		output += "The average user has " + average + currencyName(average) + ".";
-	}
+	},
 
 };

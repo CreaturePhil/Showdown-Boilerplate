@@ -131,7 +131,7 @@ exports.addTell = function (sender, receiver, msg) {
 		'sender': sender.name,
 		time: Date.now(),
 		'msg': msg,
-		ips: sender.ips
+		ips: sender.ips,
 	};
 	Tells.inbox[receiver].push(newTell);
 	Tells.writeTells();

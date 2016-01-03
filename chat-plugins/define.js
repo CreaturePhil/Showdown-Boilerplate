@@ -27,7 +27,7 @@ exports.commands = {
 
 		let options = {
 			url: 'http://api.wordnik.com:80/v4/word.json/' + target + '/definitions?limit=3&sourceDictionaries=all' +
-			'&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5'
+			'&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5',
 		};
 
 		let self = this;
@@ -67,11 +67,11 @@ exports.commands = {
 			url: 'http://www.urbandictionary.com/iphone/search/define',
 			term: target,
 			headers: {
-				'Referer': 'http://m.urbandictionary.com'
+				'Referer': 'http://m.urbandictionary.com',
 			},
 			qs: {
-				'term': target
-			}
+				'term': target,
+			},
 		};
 
 		if (urbanCache[target.toLowerCase().replace(/ /g, '')] && Math.round(Math.abs((urbanCache[target.toLowerCase().replace(/ /g, '')].time - Date.now()) / (24 * 60 * 60 * 1000))) < 31) {
@@ -102,5 +102,5 @@ exports.commands = {
 		}
 		request(options, callback);
 	},
-	udhelp: ["/urbandefine [phrase] - Shows the urban definition of the phrase. If you don't put in a phrase, it will show you a random phrase from urbandefine."]
+	udhelp: ["/urbandefine [phrase] - Shows the urban definition of the phrase. If you don't put in a phrase, it will show you a random phrase from urbandefine."],
 };
