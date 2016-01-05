@@ -1048,7 +1048,7 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 150,
 		category: "Special",
-		desc: " ",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
 		id: "blastburn",
 		name: "Blast Burn",
@@ -2120,6 +2120,7 @@ exports.BattleMovedex = {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
+			onRedirectTargetPriority: -1,
 			onRedirectTarget: function (target, source, source2) {
 				if (source !== this.effectData.target) return;
 				return source.side.foe.active[this.effectData.position];
@@ -4653,6 +4654,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'followme',
 		effect: {
 			duration: 1,
+			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
 				if (this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Follow Me redirected target of move");
@@ -4814,7 +4816,7 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 150,
 		category: "Special",
-		desc: " ",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
 		id: "frenzyplant",
 		name: "Frenzy Plant",
@@ -5139,7 +5141,7 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 150,
 		category: "Physical",
-		desc: " ",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
 		id: "gigaimpact",
 		name: "Giga Impact",
@@ -6620,7 +6622,7 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 150,
 		category: "Special",
-		desc: " ",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
 		id: "hydrocannon",
 		name: "Hydro Cannon",
@@ -6656,7 +6658,7 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 150,
 		category: "Special",
-		desc: " ",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
 		id: "hyperbeam",
 		name: "Hyper Beam",
@@ -8362,6 +8364,7 @@ exports.BattleMovedex = {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
+			onRedirectTargetPriority: -1,
 			onRedirectTarget: function (target, source, source2) {
 				if (source !== this.effectData.target) return;
 				return source.side.foe.active[this.effectData.position];
@@ -8656,6 +8659,7 @@ exports.BattleMovedex = {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
+			onRedirectTargetPriority: -1,
 			onRedirectTarget: function (target, source, source2) {
 				if (source !== this.effectData.target) return;
 				return source.side.foe.active[this.effectData.position];
@@ -10633,6 +10637,7 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'move: Rage Powder');
 			},
+			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
 				if (source.runImmunity('powder') && this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Rage Powder redirected target of move");
@@ -11081,7 +11086,7 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 150,
 		category: "Special",
-		desc: " ",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
 		id: "roaroftime",
 		name: "Roar of Time",
@@ -11235,7 +11240,7 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 150,
 		category: "Physical",
-		desc: " ",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
 		id: "rockwrecker",
 		name: "Rock Wrecker",
@@ -12339,7 +12344,7 @@ exports.BattleMovedex = {
 					return null;
 				}
 			},
-			onRedirectTargetPriority: -99,
+			onRedirectTargetPriority: 99,
 			onRedirectTarget: function (target, source, source2) {
 				if (source !== this.effectData.target) return;
 				if (this.effectData.source.fainted) return;

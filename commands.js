@@ -982,7 +982,7 @@ exports.commands = {
 		Rooms.global.autojoinRooms(user, connection);
 		let targets = target.split(',');
 		let autojoins = [];
-		if (targets.length > 9 || Object.keys(connection.rooms).length > 1) return;
+		if (targets.length > 11 || Object.keys(connection.rooms).length > 1) return;
 		for (let i = 0; i < targets.length; i++) {
 			if (user.tryJoinRoom(targets[i], connection) === null) {
 				autojoins.push(targets[i]);
@@ -1507,7 +1507,7 @@ exports.commands = {
 			if (error) return this.errorReply(error);
 		}
 
-		target = target.toLowerCase();
+		target = target.toLowerCase().trim();
 		let currentModchat = room.modchat;
 		switch (target) {
 		case 'off':
@@ -1526,6 +1526,7 @@ exports.commands = {
 			/* falls through */
 		default: {
 			if (!Config.groups[target]) {
+				this.errorReply("The rank '" + target + '" was unrecognized as a modchat level.');
 				return this.parse('/help modchat');
 			}
 			if (Config.groupsranking.indexOf(target) > 1 && !user.can('modchatall', null, room)) {
