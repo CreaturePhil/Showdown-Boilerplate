@@ -379,6 +379,7 @@ exports.commands = {
 		let average = Math.floor(total / users.length);
 		let output = "There is " + total + currencyName(total) + " circulating in the economy. ";
 		output += "The average user has " + average + currencyName(average) + ".";
+		this.sendReplyBox(output);
 	},
 
 };
