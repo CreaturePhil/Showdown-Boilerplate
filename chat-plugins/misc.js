@@ -123,10 +123,10 @@ exports.commands = {
 
 		let pmName = ' Server PM [Do not reply]';
 
-		for (let i in Users.users) {
-			let message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
-			Users.users[i].send(message);
-		}
+		Users.users.forEach(function (user) {
+			let message = '|pm|' + pmName + '|' + user.getIdentity() + '|' + target;
+			user.send(message);
+		});
 	},
 	pmallhelp: ["/pmall [message] - PM all users in the server."],
 
@@ -138,11 +138,11 @@ exports.commands = {
 
 		let pmName = ' Staff PM [Do not reply]';
 
-		for (let i in Users.users) {
-			if (Users.users[i].isStaff) {
-				Users.users[i].send('|pm|' + pmName + '|' + Users.users[i].group + Users.users[i].name + '|' + target);
-			}
-		}
+		Users.users.forEach(function (user) {
+			if (!user.isStaff) return;
+			let message = '|pm|' + pmName + '|' + user.getIdentity() + '|' + target;
+			user.send(message);
+		});
 	},
 	pmallstaffhelp: ["/pmallstaff [message] - Sends a PM to every staff member online."],
 
