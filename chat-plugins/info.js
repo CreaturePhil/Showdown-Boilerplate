@@ -117,9 +117,10 @@ exports.commands = {
 			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 				let thisRoom = Rooms.global.chatRooms[i];
 				if (!thisRoom || thisRoom.isPrivate === true) continue;
-				if (thisRoom.bannedIps && (targetUser.latestIp in thisRoom.bannedIps || targetUser.userid in thisRoom.bannedUsers)) {
+				let roomBanned = ((thisRoom.bannedIps && thisRoom.bannedIps[targetUser.latestIp]) || (thisRoom.bannedUsers && thisRoom.bannedUsers[targetUser.userid]));
+				if (roomBanned) {
 					if (bannedFrom) bannedFrom += ", ";
-					bannedFrom += '<a href="/' + thisRoom + '">' + thisRoom + '</a>';
+					bannedFrom += '<a href="/' + thisRoom + '">' + thisRoom + '</a> (' + roomBanned + ')';
 				}
 			}
 			if (bannedFrom) buf += '<br />Banned from: ' + bannedFrom;
@@ -219,7 +220,7 @@ exports.commands = {
 		let buffer = '';
 		let targetId = toId(target);
 		if (!targetId) return this.parse('/help data');
-		let targetNum = parseInt(targetId, 10);
+		let targetNum = parseInt(targetId);
 		if (!isNaN(targetNum)) {
 			for (let p in Tools.data.Pokedex) {
 				let pokemon = Tools.getTemplate(p);
@@ -279,8 +280,8 @@ exports.commands = {
 					"Height": pokemon.heightm + " m",
 					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
 					"Dex Colour": pokemon.color,
-					"Egg Group(s)": pokemon.eggGroups.join(", "),
 				};
+				if (pokemon.eggGroups) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 				if (!pokemon.evos.length) {
 					details["<font color=#585858>Does Not Evolve</font>"] = "";
 				} else {
@@ -440,7 +441,7 @@ exports.commands = {
 				}
 
 				if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) target = target.substr(3).trim();
-				let targetInt = parseInt(target, 10);
+				let targetInt = parseInt(target);
 				if (0 < targetInt && targetInt < 7) {
 					if (!validParameter("gens", target, isNotSearch)) return;
 					orGroup.gens[target] = !isNotSearch;
@@ -457,7 +458,7 @@ exports.commands = {
 
 				if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
 					//validation for this is in the /randpoke command
-					randomOutput = parseInt(target.substr(6), 10);
+					randomOutput = parseInt(target.substr(6));
 					orGroup.skip = true;
 					continue;
 				}
@@ -585,6 +586,7 @@ exports.commands = {
 				dex[pokemon] = template;
 			}
 		}
+		dex = JSON.parse(JSON.stringify(dex)); // Don't modify the original template (when compiling learnsets)
 
 		let learnSetsCompiled = false;
 		//ensure searches with the least alternatives are run first
@@ -699,6 +701,29 @@ exports.commands = {
 		for (let mon in dex) {
 			if (dex[mon].baseSpecies && results.indexOf(dex[mon].baseSpecies) >= 0) continue;
 			results.push(dex[mon].species);
+		}
+
+		let moveGroups = searches
+			.filter(function (alts) {
+				return Object.any(alts.moves, function (move, isSearch) {
+					return isSearch;
+				});
+			})
+			.map(function (alts) {
+				return Object.keys(alts.moves);
+			});
+		if (moveGroups.length >= 2) {
+			results = results.filter(function (mon) {
+				let lsetData = {fastCheck: true, set: {}};
+				for (let group = 0; group < moveGroups.length; group++) {
+					for (let i = 0; i < moveGroups[group].length; i++) {
+						let problem = TeamValidator.checkLearnsetSync('anythinggoes', moveGroups[group][i], mon, lsetData);
+						if (!problem) break;
+						if (i === moveGroups[group].length - 1) return;
+					}
+				}
+				return true;
+			});
 		}
 
 		if (randomOutput && randomOutput < results.length) {
@@ -1227,7 +1252,7 @@ exports.commands = {
 					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
 					if (Number.isInteger(Number(searchedWords[k]))) {
 						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
-						basePower = parseInt(searchedWords[k], 10);
+						basePower = parseInt(searchedWords[k]);
 					}
 				}
 			}
@@ -1259,7 +1284,7 @@ exports.commands = {
 					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
 					if (Number.isInteger(Number(searchedWords[k]))) {
 						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
-						basePower = parseInt(searchedWords[k], 10);
+						basePower = parseInt(searchedWords[k]);
 					}
 				}
 			}
@@ -1757,7 +1782,7 @@ exports.commands = {
 					lvlSet = true;
 					continue;
 				} else if (lowercase.startsWith('lv') || lowercase.startsWith('level')) {
-					level = parseInt(targets[i].replace(/\D/g, ''), 10);
+					level = parseInt(targets[i].replace(/\D/g, ''));
 					lvlSet = true;
 					if (level < 1 || level > 9999) {
 						return this.sendReplyBox('Invalid value for level: ' + level);
@@ -1811,7 +1836,7 @@ exports.commands = {
 
 			if (!ivSet) {
 				if (lowercase.endsWith('iv') || lowercase.endsWith('ivs')) {
-					iv = parseInt(targets[i], 10);
+					iv = parseInt(targets[i]);
 					ivSet = true;
 
 					if (isNaN(iv)) {
@@ -1828,8 +1853,8 @@ exports.commands = {
 				} else if (lowercase === 'uninvested') {
 					ev = 0;
 					evSet = true;
-				} else if (lowercase.endsWith('ev') || lowercase.endsWith('evs')) {
-					ev = parseInt(targets[i], 10);
+				} else if (lowercase.endsWith('ev') || lowercase.endsWith('evs') || lowercase.endsWith('+') || lowercase.endsWith('-')) {
+					ev = parseInt(targets[i]);
 					evSet = true;
 
 					if (isNaN(ev)) {
@@ -1858,11 +1883,11 @@ exports.commands = {
 					modifier = 1;
 					modSet = true;
 				} else if (targets[i].charAt(0) === '+') {
-					modifier = parseInt(targets[i].charAt(1), 10);
+					modifier = parseInt(targets[i].charAt(1));
 					modSet = true;
 				} else if (targets[i].charAt(0) === '-') {
 					positiveMod = false;
-					modifier = parseInt(targets[i].charAt(1), 10);
+					modifier = parseInt(targets[i].charAt(1));
 					modSet = true;
 				}
 				if (isNaN(modifier)) {
@@ -1882,7 +1907,7 @@ exports.commands = {
 				}
 			}
 
-			let tempStat = parseInt(targets[i], 10);
+			let tempStat = parseInt(targets[i]);
 
 			if (!isNaN(tempStat) && !baseSet && tempStat > 0 && tempStat < 256) {
 				statValue = tempStat;
@@ -1907,7 +1932,7 @@ exports.commands = {
 		if (calcHP) {
 			output = (((iv + (2 * statValue) + (ev / 4) + 100) * level) / 100) + 10;
 		} else {
-			output = Math.floor((((iv + (2 * statValue) + (ev / 4)) * level) / 100) + 5) * nature;
+			output = Math.floor(nature * Math.floor((((iv + (2 * statValue) + (ev / 4)) * level) / 100) + 5));
 			if (positiveMod) {
 				output *= (2 + modifier) / 2;
 			} else {
@@ -1917,9 +1942,9 @@ exports.commands = {
 		return this.sendReplyBox('Base ' + statValue + (calcHP ? ' HP ' : ' ') + 'at level ' + level + ' with ' + iv + ' IVs, ' + ev + (nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')) + ' EVs' + (modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : '') + ': <b>' + Math.floor(output) + '</b>.');
 	},
 
-	statcalchelp: ["/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252 scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.",
+	statcalchelp: ["/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.",
 		"!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.",
-		"Inputing 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount to signify a boosting or inihibting nature."],
+		"Inputing 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature."],
 
 	/*********************************************************
 	 * Informational commands
@@ -2389,7 +2414,6 @@ exports.commands = {
 			let speciesid = pokemon.speciesid;
 			// Special case for Meowstic-M and Hoopa-Unbound
 			if (speciesid === 'meowstic') speciesid = 'meowsticm';
-			if (speciesid === 'hoopaunbound') speciesid = 'hoopa-alt';
 			if (pokemon.tier === 'CAP') {
 				this.sendReplyBox("<a href=\"https://www.smogon.com/cap/pokemon/strategies/" + speciesid + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " " + pokemon.name + " analysis preview</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a> <a href=\"https://smogon.com/cap/\">CAP Project</a>");
 			} else {

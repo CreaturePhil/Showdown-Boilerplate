@@ -26,7 +26,7 @@ class Tournament {
 		this.allowRenames = false;
 		this.players = Object.create(null);
 		this.playerCount = 0;
-		this.playerCap = parseInt(playerCap, 10) || Config.tournamentDefaultPlayerCap || 0;
+		this.playerCap = parseInt(playerCap) || Config.tournamentDefaultPlayerCap || 0;
 
 		this.format = format;
 		this.generator = generator;
@@ -448,7 +448,7 @@ class Tournament {
 			this.generator.setUserBusy(matchFrom.to, false);
 			this.inProgressMatches.set(user, null);
 			delete matchFrom.room.tour;
-			matchFrom.room.forfeit(user);
+			matchFrom.room.battle.forfeit(user);
 		}
 
 		let matchTo = null;
@@ -459,7 +459,7 @@ class Tournament {
 			this.generator.setUserBusy(matchTo, false);
 			let matchRoom = this.inProgressMatches.get(matchTo).room;
 			delete matchRoom.tour;
-			matchRoom.forfeit(user);
+			matchRoom.battle.forfeit(user);
 			this.inProgressMatches.set(matchTo, null);
 		}
 
@@ -874,7 +874,7 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
 			}
-			let playerCap = parseInt(params.splice(1, 1), 10);
+			let playerCap = parseInt(params.splice(1, 1));
 			let generator = createTournamentGenerator(params.shift(), params, this);
 			if (generator && tournament.setGenerator(generator, this)) {
 				if (playerCap && playerCap >= 2) {

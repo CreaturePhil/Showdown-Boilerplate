@@ -107,6 +107,19 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 58,
 	},
+	"naturalcure": {
+		inherit: true,
+		onCheckShow: function (pokemon) {},
+		onSwitchOut: function (pokemon) {
+			if (!pokemon.status || pokemon.status === 'fnt') return;
+
+			// Because statused/unstatused pokemon are shown after every switch
+			// in gen 3-4, Natural Cure's curing is always known to both players
+
+			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
+			pokemon.setStatus('');
+		},
+	},
 	"normalize": {
 		inherit: true,
 		onModifyMovePriority: -1,
@@ -188,6 +201,16 @@ exports.BattleAbilities = {
 		name: "Stench",
 		rating: 0,
 		num: 1,
+	},
+	"stickyhold": {
+		inherit: true,
+		onTakeItem: function (item, pokemon, source) {
+			if (this.suppressingAttackEvents() && pokemon !== this.activePokemon) return;
+			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
+				this.add('-activate', pokemon, 'ability: Sticky Hold');
+				return false;
+			}
+		},
 	},
 	"stormdrain": {
 		inherit: true,

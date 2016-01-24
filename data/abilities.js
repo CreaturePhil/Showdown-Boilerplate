@@ -1382,6 +1382,9 @@ exports.BattleAbilities = {
 		onAnyRedirectTarget: function (target, source, source2, move) {
 			if (move.type !== 'Electric' || move.id in {firepledge:1, grasspledge:1, waterpledge:1}) return;
 			if (this.validTarget(this.effectData.target, source, move.target)) {
+				if (this.effectData.target !== target) {
+					this.add('-activate', this.effectData.target, 'ability: Lightning Rod');
+				}
 				return this.effectData.target;
 			}
 		},
@@ -1679,8 +1682,86 @@ exports.BattleAbilities = {
 	},
 	"naturalcure": {
 		shortDesc: "This Pokemon has its major status condition cured when it switches out.",
+		onCheckShow: function (pokemon) {
+			// This is complicated
+			// For the most part, in-game, it's obvious whether or not Natural Cure activated,
+			// since you can see how many of your opponent's pokemon are statused.
+			// The only ambiguous situation happens in Doubles/Triples, where multiple pokemon
+			// that could have Natural Cure switch out, but only some of them get cured.
+			if (pokemon.side.active.length === 1) return;
+			if (pokemon.showCure === true || pokemon.showCure === false) return;
+
+			let active = pokemon.side.active;
+			let cureList = [];
+			let noCureCount = 0;
+			for (let i = 0; i < active.length; i++) {
+				let curPoke = active[i];
+				// pokemon not statused
+				if (!curPoke || !curPoke.status) {
+					// this.add('-message', "" + curPoke + " skipped: not statused or doesn't exist");
+					continue;
+				}
+				if (curPoke.showCure) {
+					// this.add('-message', "" + curPoke + " skipped: Natural Cure already known");
+					continue;
+				}
+				let template = Tools.getTemplate(curPoke.species);
+				// pokemon can't get Natural Cure
+				if (template.abilities['0'] !== 'Natural Cure' &&
+					template.abilities['1'] !== 'Natural Cure' &&
+					template.abilities['H'] !== 'Natural Cure') {
+					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
+					continue;
+				}
+				// pokemon's ability is known to be Natural Cure
+				if (!template.abilities['1'] && !template.abilities['H']) {
+					// this.add('-message', "" + curPoke + " skipped: only one ability");
+					continue;
+				}
+				// pokemon isn't switching this turn
+				if (curPoke !== pokemon && !this.willSwitch(curPoke)) {
+					// this.add('-message', "" + curPoke + " skipped: not switching");
+					continue;
+				}
+
+				if (curPoke.hasAbility('naturalcure')) {
+					// this.add('-message', "" + curPoke + " confirmed: could be Natural Cure (and is)");
+					cureList.push(curPoke);
+				} else {
+					// this.add('-message', "" + curPoke + " confirmed: could be Natural Cure (but isn't)");
+					noCureCount++;
+				}
+			}
+
+			if (!cureList.length || !noCureCount) {
+				// It's possible to know what pokemon were cured
+				for (let i = 0; i < cureList.length; i++) {
+					cureList[i].showCure = true;
+				}
+			} else {
+				// It's not possible to know what pokemon were cured
+
+				// Unlike a -hint, this is real information that battlers need, so we use a -message
+				this.add('-message', "(" + cureList.length + " of " + pokemon.side.name + "'s pokemon " + (cureList.length === 1 ? "was" : "were") + " cured by Natural Cure.)");
+
+				for (let i = 0; i < cureList.length; i++) {
+					cureList[i].showCure = false;
+				}
+			}
+		},
 		onSwitchOut: function (pokemon) {
+			if (!pokemon.status) return;
+
+			// if pokemon.showCure is undefined, it was skipped because its ability
+			// is known
+			if (pokemon.showCure === undefined) pokemon.showCure = true;
+
+			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
 			pokemon.setStatus('');
+
+			// only reset .showCure if it's false
+			// (once you know a Pokemon has Natural Cure, its cures are always known)
+			if (!pokemon.showCure) delete pokemon.showCure;
 		},
 		id: "naturalcure",
 		name: "Natural Cure",
@@ -2412,7 +2493,7 @@ exports.BattleAbilities = {
 		effect: {
 			duration: 5,
 			onStart: function (target) {
-				this.add('-start', target, 'Slow Start');
+				this.add('-start', target, 'ability: Slow Start');
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk: function (atk, pokemon) {
@@ -2610,7 +2691,7 @@ exports.BattleAbilities = {
 	"stickyhold": {
 		shortDesc: "This Pokemon cannot lose its held item due to another Pokemon's attack.",
 		onTakeItem: function (item, pokemon, source) {
-			if (this.suppressingAttackEvents() && pokemon !== this.activePokemon) return;
+			if (this.suppressingAttackEvents() && pokemon !== this.activePokemon || !pokemon.hp) return;
 			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
@@ -2635,7 +2716,9 @@ exports.BattleAbilities = {
 		onAnyRedirectTarget: function (target, source, source2, move) {
 			if (move.type !== 'Water' || move.id in {firepledge:1, grasspledge:1, waterpledge:1}) return;
 			if (this.validTarget(this.effectData.target, source, move.target)) {
-				move.accuracy = true;
+				if (this.effectData.target !== target) {
+					this.add('-activate', this.effectData.target, 'ability: Storm Drain');
+				}
 				return this.effectData.target;
 			}
 		},
