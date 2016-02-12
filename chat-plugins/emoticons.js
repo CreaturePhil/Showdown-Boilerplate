@@ -4,15 +4,36 @@ let color = require('../config/color');
 
 exports.parseEmoticons = parseEmoticons;
 
-let emotes = {
+var emotes = {
 	'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
+	'#murica': 'http://i.imgur.com/d4XueEr.jpg',
+	'#applejuice': 'http://i.imgur.com/s3TJfOB.jpg',
+	'urmom': 'https://static-cdn.jtvnw.net/emoticons/v1/35218/1.0',
+	'facepalm': 'http://i.imgur.com/lv3GmpM.png',
+	'facepalm2': 'http://i.imgur.com/ylrqFwJ.png',
+	'feelsemo': 'http://i.imgur.com/FPolh5d.jpg',
+	'feelsfdra': 'http://i.imgur.com/ZIcl9Zy.jpg',
 	'feelsbd': 'http://i.imgur.com/YyEdmwX.png',
 	'feelsbm': 'http://i.imgur.com/xwfJb2z.png',
+	'feelswtf': 'http://i.imgur.com/BzZJedC.jpg',
+	'feelsgro': 'http://i.imgur.com/jLhP0bZ.png',
+	'feelsky': 'http://i.imgur.com/BtATPId.png',
+	'udonsay': 'http://r32.imgfast.net/users/3215/23/26/64/smiles/280467785.jpg',
+	'feelslot': 'http://i.imgur.com/tl88F7i.png',
+	'feelsfuku': 'http://i.imgur.com/m018Q4S.jpg',
+	'feelsarbk': 'http://i.imgur.com/HqyjN7G.png',
 	'feelsbn': 'http://i.imgur.com/wp51rIg.png',
 	'feelsdd': 'http://i.imgur.com/fXtdLtV.png',
 	'feelsdoge': 'http://i.imgur.com/GklYWvi.png',
 	'feelsgd': 'http://i.imgur.com/Jf0n4BL.png',
 	'feelsgn': 'http://i.imgur.com/juJQh0J.png',
+	'feelsjig': 'http://i.imgur.com/hSzqy5z.png',
+	'feelsbulba': 'http://i.imgur.com/PShsRD2.png',
+	'feelsshrk': 'http://i.imgur.com/amTG3jF.jpg',
+	'kappa': 'http://i.imgur.com/ZxRU4z3.png',
+	'feelsHigh': 'http://i.imgur.com/s9I2bxp.jpg',
+	'feelshax': 'http://i.imgur.com/9Be3dEf.png',
+	'meGusta': 'http://cdn.overclock.net/3/36/50x50px-ZC-369517fd_me-gusta-me-gusta-s.png',
 	'feelshp': 'http://i.imgur.com/1W19BDG.png',
 	'feelsmd': 'http://i.imgur.com/DJHMdSw.png',
 	'feelsnv': 'http://i.imgur.com/XF6kIdJ.png',
@@ -25,16 +46,20 @@ let emotes = {
 	'feelsrs': 'http://i.imgur.com/qGEot0R.png',
 	'feelssc': 'http://i.imgur.com/cm6oTZ1.png',
 	'fukya': 'http://i.imgur.com/ampqCZi.gif',
+	'fukno': 'http://i.imgur.com/QjQTx9W.png',
 	'funnylol': 'http://i.imgur.com/SlzCghq.png',
 	'hmmface': 'http://i.imgur.com/Z5lOwfZ.png',
 	'noface': 'http://i.imgur.com/H744eRE.png',
+	'durp': 'http://i.imgur.com/2BloGXG.jpg',
 	'Obama': 'http://i.imgur.com/rBA9M7A.png',
 	'oshet': 'http://i.imgur.com/yr5DjuZ.png',
 	'Sanic': 'http://i.imgur.com/Y6etmna.png',
 	'wtfman': 'http://i.imgur.com/kwR8Re9.png',
+	'waitwat': 'http://i.imgur.com/FpxTQxU.jpg',
 	'xaa': 'http://i.imgur.com/V728AvL.png',
 	'yayface': 'http://i.imgur.com/anY1jf8.png',
 	'yesface': 'http://i.imgur.com/k9YCF6K.png',
+	'feelslk': 'http://i.imgur.com/LnRUfls.gif'
 };
 
 let emotesKeys = Object.keys(emotes);
