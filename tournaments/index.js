@@ -222,15 +222,6 @@ class Tournament {
 			return;
 		}
 
-		if (!isAllowAlts) {
-			for (let i = 0; i < users.length; i++) {
-				if (users[i].latestIp === user.latestIp) {
-					output.sendReply('|tournament|error|AltUserAlreadyAdded');
-					return;
-				}
-			}
-		}
-
 		let error = this.generator.addUser(user);
 		if (typeof error === 'string') {
 			output.sendReply('|tournament|error|' + error);
