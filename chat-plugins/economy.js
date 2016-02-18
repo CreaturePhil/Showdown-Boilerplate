@@ -341,7 +341,8 @@ exports.commands = {
 		Db('money').set(user.userid, Db('money').get(user.userid) - room.dice.bet);
 		if (!room.dice.p1) {
 			room.dice.p1 = user.userid;
-			return room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
+			room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
+			return;
 		}
 		room.dice.p2 = user.userid;
 		room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
