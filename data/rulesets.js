@@ -156,15 +156,27 @@ exports.BattleFormats = {
 				problems.push((set.name || set.species) + " has more than 510 total EVs.");
 			}
 
+			if (template.gender) {
+				if (set.gender !== template.gender) {
+					set.gender = template.gender;
+				}
+			} else {
+				if (set.gender !== 'M' && set.gender !== 'F') {
+					set.gender = undefined;
+				}
+			}
+
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
-			if (set.ivs && this.gen >= 6 && (template.gen >= 6 || format.requirePentagon) && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
+			let baseTemplate = this.getTemplate(template.baseSpecies);
+			if (set.ivs && this.gen >= 6 && (baseTemplate.gen >= 6 || format.requirePentagon) && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
 				// exceptions
 				template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
 				let perfectIVs = 0;
 				for (let i in set.ivs) {
 					if (set.ivs[i] >= 31) perfectIVs++;
 				}
-				if (perfectIVs < 3) problems.push((set.name || set.species) + " has less than three perfect IVs.");
+				let reason = (format.requirePentagon ? " and this format requires gen 6 Pokémon" : " in gen 6");
+				if (perfectIVs < 3) problems.push((set.name || set.species) + " must have at least three perfect IVs because it's a legendary" + reason + ".");
 			}
 
 			// limit one of each move
@@ -282,10 +294,14 @@ exports.BattleFormats = {
 		onStart: function () {
 			this.add('clearpoke');
 			for (let i = 0; i < this.sides[0].pokemon.length; i++) {
-				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*'));
+				let pokemon = this.sides[0].pokemon[i];
+				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*');
+				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 			for (let i = 0; i < this.sides[1].pokemon.length; i++) {
-				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*'));
+				let pokemon = this.sides[1].pokemon[i];
+				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*');
+				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 		},
 		onTeamPreview: function () {

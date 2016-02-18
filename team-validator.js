@@ -9,172 +9,19 @@
 
 'use strict';
 
-let Validator;
-
-if (!process.send) {
-	let validationCount = 0;
-	let pendingValidations = {};
-
-	let ValidatorProcess = (function () {
-		function ValidatorProcess() {
-			this.process = require('child_process').fork('team-validator.js', {cwd: __dirname});
-			let self = this;
-			this.process.on('message', function (message) {
-				// Protocol:
-				// success: "[id]|1[details]"
-				// failure: "[id]|0[details]"
-				let pipeIndex = message.indexOf('|');
-				let id = message.substr(0, pipeIndex);
-				let success = (message.charAt(pipeIndex + 1) === '1');
-
-				if (pendingValidations[id]) {
-					ValidatorProcess.release(self);
-					pendingValidations[id](success, message.substr(pipeIndex + 2));
-					delete pendingValidations[id];
-				}
-			});
-		}
-		ValidatorProcess.prototype.load = 0;
-		ValidatorProcess.prototype.active = true;
-		ValidatorProcess.processes = [];
-		ValidatorProcess.spawn = function () {
-			let num = Config.validatorprocesses || 1;
-			for (let i = 0; i < num; ++i) {
-				this.processes.push(new ValidatorProcess());
-			}
-		};
-		ValidatorProcess.respawn = function () {
-			this.processes.splice(0).forEach(function (process) {
-				process.active = false;
-				if (!process.load) process.process.disconnect();
-			});
-			this.spawn();
-		};
-		ValidatorProcess.acquire = function () {
-			let process = this.processes[0];
-			for (let i = 1; i < this.processes.length; ++i) {
-				if (this.processes[i].load < process.load) {
-					process = this.processes[i];
-				}
-			}
-			++process.load;
-			return process;
-		};
-		ValidatorProcess.release = function (process) {
-			--process.load;
-			if (!process.load && !process.active) {
-				process.process.disconnect();
-			}
-		};
-		ValidatorProcess.send = function (format, team, callback) {
-			let process = this.acquire();
-			pendingValidations[validationCount] = callback;
-			try {
-				process.process.send('' + validationCount + '|' + format + '|' + team);
-			} catch (e) {}
-			++validationCount;
-		};
-		return ValidatorProcess;
-	})();
-
-	// Create the initial set of validator processes.
-	ValidatorProcess.spawn();
-
-	exports.ValidatorProcess = ValidatorProcess;
-	exports.pendingValidations = pendingValidations;
-
-	exports.validateTeam = function (format, team, callback) {
-		ValidatorProcess.send(format, team, callback);
-	};
-
-	let synchronousValidators = {};
-	exports.validateTeamSync = function (format, team) {
-		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
-		return synchronousValidators[format].validateTeam(team);
-	};
-	exports.validateSetSync = function (format, set, teamHas) {
-		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
-		return synchronousValidators[format].validateSet(set, teamHas);
-	};
-	exports.checkLearnsetSync = function (format, move, template, lsetData) {
-		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
-		return synchronousValidators[format].checkLearnset(move, template, lsetData);
-	};
-} else {
-	require('sugar');
-	global.Config = require('./config/config.js');
-
-	if (Config.crashguard) {
-		process.on('uncaughtException', function (err) {
-			require('./crashlogger.js')(err, 'A team validator process', true);
-		});
-	}
-
-	global.Tools = require('./tools.js').includeMods();
-	global.toId = Tools.getId;
-
-	require('./repl.js').start('team-validator-', process.pid, function (cmd) { return eval(cmd); });
-
-	let validators = {};
-
-	let respond = function respond(id, success, details) {
-		process.send(id + (success ? '|1' : '|0') + details);
-	};
-
-	process.on('message', function (message) {
-		// protocol:
-		// "[id]|[format]|[team]"
-		let pipeIndex = message.indexOf('|');
-		let pipeIndex2 = message.indexOf('|', pipeIndex + 1);
-		let id = message.substr(0, pipeIndex);
-		let format = message.substr(pipeIndex + 1, pipeIndex2 - pipeIndex - 1);
-
-		if (!validators[format]) validators[format] = new Validator(format);
-		let parsedTeam = [];
-		parsedTeam = Tools.fastUnpackTeam(message.substr(pipeIndex2 + 1));
-
-		let problems;
-		try {
-			problems = validators[format].validateTeam(parsedTeam);
-		} catch (err) {
-			let stack = err.stack + '\n\n' +
-					'Additional information:\n' +
-					'format = ' + format + '\n' +
-					'team = ' + message.substr(pipeIndex2 + 1) + '\n';
-			let fakeErr = {stack: stack};
-
-			require('./crashlogger.js')(fakeErr, 'A team validation');
-			problems = ["Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now."];
-		}
-
-		if (problems && problems.length) {
-			respond(id, false, problems.join('\n'));
-		} else {
-			let packedTeam = Tools.packTeam(parsedTeam);
-			// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
-			// console.log('TO: ' + packedTeam);
-			respond(id, true, packedTeam);
-		}
-	});
-
-	process.on('disconnect', function () {
-		process.exit();
-	});
-}
-
-Validator = (function () {
-	function Validator(format) {
+class Validator {
+	constructor(format) {
 		this.format = Tools.getFormat(format);
 		this.tools = Tools.mod(this.format);
 	}
 
-	Validator.prototype.validateTeam = function (team) {
+	validateTeam(team) {
 		let format = Tools.getFormat(this.format);
 		if (format.validateTeam) return format.validateTeam.call(this, team);
 		return this.baseValidateTeam(team);
-	};
+	}
 
-	Validator.prototype.baseValidateTeam = function (team) {
+	baseValidateTeam(team) {
 		let format = this.format;
 		let tools = this.tools;
 
@@ -236,9 +83,9 @@ Validator = (function () {
 
 		if (!problems.length) return false;
 		return problems;
-	};
+	}
 
-	Validator.prototype.validateSet = function (set, teamHas, flags) {
+	validateSet(set, teamHas, flags) {
 		let format = this.format;
 		let tools = this.tools;
 
@@ -385,7 +232,7 @@ Validator = (function () {
 			}
 		}
 		if (set.moves && Array.isArray(set.moves)) {
-			set.moves = set.moves.filter(function (val) { return val; });
+			set.moves = set.moves.filter(val => val);
 		}
 		if (!set.moves || !set.moves.length) {
 			problems.push(name + " has no moves.");
@@ -435,6 +282,80 @@ Validator = (function () {
 				}
 			}
 
+			if (lsetData.limitedEgg && lsetData.limitedEgg.length > 1 && !lsetData.sourcesBefore && lsetData.sources) {
+				// console.log("limitedEgg 1: " + lsetData.limitedEgg);
+				// Multiple gen 2-5 egg moves
+				// This code hasn't been closely audited for multi-gen interaction, but
+				// since egg moves don't get removed between gens, it's unlikely to have
+				// any serious problems.
+				let limitedEgg = lsetData.limitedEgg.unique();
+				if (limitedEgg.length <= 1) {
+					// Only one source, can't conflict with anything else
+				} else if (limitedEgg.indexOf('self') >= 0) {
+					// Self-moves are always incompatible with anything else
+					problems.push(name + "'s egg moves are incompatible.");
+				} else {
+					// Doing a full validation of the possible egg parents takes way too much
+					// CPU power (and is in NP), so we're just gonna use a heuristic:
+					// They're probably incompatible if all potential fathers learn more than
+					// one limitedEgg move from another egg.
+					let validFatherExists = false;
+					for (let i = 0; i < lsetData.sources.length; i++) {
+						if (lsetData.sources[i].charAt(1) === 'S' || lsetData.sources[i].charAt(1) === 'D') continue;
+						let eggGen = parseInt(lsetData.sources[i].charAt(0));
+						if (lsetData.sources[i].charAt(1) !== 'E' || eggGen === 6) {
+							// (There is a way to obtain this pokemon without past-gen breeding.)
+							// In theory, limitedEgg should not exist in this case.
+							throw new Error("invalid limitedEgg on " + name + ": " + limitedEgg + " with " + lsetData.sources[i]);
+						}
+						let potentialFather = tools.getTemplate(lsetData.sources[i].slice(lsetData.sources[i].charAt(2) === 'T' ? 3 : 2));
+						let restrictedSources = 0;
+						for (let j = 0; j < limitedEgg.length; j++) {
+							let moveid = limitedEgg[j];
+							let fatherSources = potentialFather.learnset[moveid] || potentialFather.learnset['sketch'];
+							if (!fatherSources) throw new Error("Egg move father " + potentialFather.id + " can't learn " + moveid);
+							let hasUnrestrictedSource = false;
+							let hasSource = false;
+							for (let k = 0; k < fatherSources.length; k++) {
+								// Triply nested loop! Fortunately, all the loops are designed
+								// to be as short as possible.
+								if (fatherSources[k].charAt(0) > eggGen) continue;
+								hasSource = true;
+								if (fatherSources[k].charAt(1) !== 'E' && fatherSources[k].charAt(1) !== 'S') {
+									hasUnrestrictedSource = true;
+									break;
+								}
+							}
+							if (!hasSource) {
+								// no match for the current gen; early escape
+								restrictedSources = 10;
+								break;
+							}
+							if (!hasUnrestrictedSource) restrictedSources++;
+							if (restrictedSources > 1) break;
+						}
+						if (restrictedSources <= 1) {
+							validFatherExists = true;
+							// console.log("valid father: " + potentialFather.id);
+							break;
+						}
+					}
+					if (!validFatherExists) {
+						// Could not find a valid father using our heuristic.
+						// TODO: hardcode false positives for our heuristic
+						// in theory, this heuristic doesn't have false negatives
+						let newSources = [];
+						for (let i = 0; i < lsetData.sources.length; i++) {
+							if (lsetData.sources[i].charAt(1) === 'S') {
+								newSources.push(lsetData.sources[i]);
+							}
+						}
+						lsetData.sources = newSources;
+						if (!newSources.length) problems.push(name + "'s past gen egg moves " + limitedEgg.map(id => tools.getMove(id).name).join(', ') + " do not have a valid father. (Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)");
+					}
+				}
+			}
+
 			if (lsetData.sources && lsetData.sources.length === 1 && !lsetData.sourcesBefore) {
 				// we're restricted to a single source
 				let source = lsetData.sources[0];
@@ -472,14 +393,31 @@ Validator = (function () {
 							for (let i in set.ivs) {
 								if (set.ivs[i] >= 31) perfectIVs++;
 							}
-							if (perfectIVs < 3) problems.push(name + " has less than three perfect IVs.");
+							if (perfectIVs < 3) problems.push(name + " must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.");
 						}
 						if (eventData.generation < 5) eventData.isHidden = false;
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
-							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific event.");
+							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific " + eventTemplate.species + " event.");
 						}
-						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0 && (template.species === eventTemplate.species || tools.getAbility(set.ability).gen <= eventData.generation)) {
-							problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it has a move only available from a specific event.");
+						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
+							if (template.species === eventTemplate.species) {
+								// has not evolved, abilities must match
+								if (ability.id !== eventData.abilities[0]) {
+									problems.push(name + " must have " + tools.getAbility(eventData.abilities[0]).name + " because it has a move only available from a specific event.");
+								}
+							} else {
+								// has evolved
+								let ability1 = tools.getAbility(eventTemplate.abilities['1']);
+								if (ability1.gen && eventData.generation >= ability1.gen) {
+									// pokemon had 2 available abilities in the gen the event happened
+									// ability is restricted to a single ability slot
+									let requiredAbilitySlot = (toId(eventData.abilities[0]) === ability1.id ? 1 : 0);
+									let requiredAbility = toId(template.abilities[requiredAbilitySlot] || template.abilities['0']);
+									if (ability.id !== requiredAbility) {
+										problems.push(name + " must have " + tools.getAbility(requiredAbility).name + " because it has a move only available from a specific " + tools.getAbility(eventData.abilities[0]).name + " " + eventTemplate.species + " event.");
+									}
+								}
+							}
 						}
 					}
 					isHidden = false;
@@ -529,7 +467,7 @@ Validator = (function () {
 			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && tools.getAbility(set.ability).gen === 4 && !template.prevo && tools.gen <= 5) {
 				problems.push(name + " has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");
 			}
-			if (!lsetData.sources && lsetData.sourcesBefore >= 3 && (isHidden || tools.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
+			if (!lsetData.sources && lsetData.sourcesBefore < 6 && lsetData.sourcesBefore >= 3 && (isHidden || tools.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
 				let oldAbilities = tools.mod('gen' + lsetData.sourcesBefore).getTemplate(set.species).abilities;
 				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
 					problems.push(name + " has moves incompatible with its ability.");
@@ -585,16 +523,16 @@ Validator = (function () {
 		}
 
 		return problems;
-	};
+	}
 
-	Validator.prototype.checkLearnset = function (move, template, lsetData) {
+	checkLearnset(move, template, lsetData) {
 		let tools = this.tools;
 
-		move = toId(move);
+		let moveid = toId(move);
+		move = tools.getMove(moveid);
 		template = tools.getTemplate(template);
 
 		lsetData = lsetData || {};
-		lsetData.eggParents = lsetData.eggParents || [];
 		let set = (lsetData.set || (lsetData.set = {}));
 		let format = (lsetData.format || (lsetData.format = {}));
 		let alreadyChecked = {};
@@ -628,18 +566,24 @@ Validator = (function () {
 		let sources = [];
 		// the equivalent of adding "every source at or before this gen" to sources
 		let sourcesBefore = 0;
+		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = 6;
 		let noPastGen = !!format.requirePentagon;
-		// since Gen 3, Pokemon cannot be traded to past generations
-		let noFutureGen = tools.gen >= 3 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
+		// Pokemon cannot be traded to past generations except in Gen 1 Tradeback
+		let noFutureGen = !(format.banlistTable && format.banlistTable['tradeback']);
+		// if a move can only be learned from a gen 2-5 egg, we have to check chainbreeding validity
+		// limitedEgg is false if there are any legal non-egg sources for the move, and true otherwise
+		let limitedEgg = null;
 
+		let tradebackEligible = false;
 		do {
 			alreadyChecked[template.speciesid] = true;
+			if (tools.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(move in {'bellydrum':1, 'chatter':1, 'darkvoid':1, 'geomancy':1, 'shellsmash':1})) {
+			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(moveid in {'bellydrum':1, 'chatter':1, 'darkvoid':1, 'geomancy':1, 'shellsmash':1})) {
 				let types = template.types;
 				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
-				if (types.indexOf(tools.getMove(move).type) >= 0) return false;
+				if (types.indexOf(move.type) >= 0) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {
@@ -653,11 +597,11 @@ Validator = (function () {
 				break;
 			}
 
-			if (template.learnset[move] || template.learnset['sketch']) {
+			if (template.learnset[moveid] || template.learnset['sketch']) {
 				sometimesPossible = true;
-				let lset = template.learnset[move];
+				let lset = template.learnset[moveid];
 				if (!lset || template.speciesid === 'smeargle') {
-					if (tools.getMove(move).noSketch) return true;
+					if (move.noSketch) return true;
 					lset = template.learnset['sketch'];
 					sketch = true;
 				}
@@ -665,19 +609,24 @@ Validator = (function () {
 
 				for (let i = 0, len = lset.length; i < len; i++) {
 					let learned = lset[i];
-					if (noPastGen && learned.charAt(0) !== '6') continue;
-					if (noFutureGen && parseInt(learned.charAt(0)) > tools.gen) continue;
-					if (learned.charAt(0) !== '6' && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
+					let learnedGen = learned.charAt(0);
+					if (noPastGen && learnedGen !== '6') continue;
+					if (noFutureGen && parseInt(learnedGen) > tools.gen) continue;
+
+					// redundant
+					if (learnedGen <= sourcesBefore) continue;
+
+					if (learnedGen !== '6' && isHidden && !tools.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']) {
 						// check if the Pokemon's hidden ability was available
 						incompatibleHidden = true;
 						continue;
 					}
 					if (!template.isNonstandard) {
 						// HMs can't be transferred
-						if (tools.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
-						if (tools.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+						if (tools.gen >= 4 && learnedGen <= 3 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
+						if (tools.gen >= 5 && learnedGen <= 4 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
 						// Defog and Whirlpool can't be transferred together
-						if (tools.gen >= 5 && move in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
+						if (tools.gen >= 5 && moveid in {'defog':1, 'whirlpool':1} && learnedGen <= 4) blockedHM = true;
 					}
 					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
 						// gen 4-6 level-up moves
@@ -687,14 +636,15 @@ Validator = (function () {
 						}
 						if (!template.gender || template.gender === 'F') {
 							// available as egg move
-							learned = learned.charAt(0) + 'Eany';
+							learned = learnedGen + 'Eany';
+							limitedEgg = false;
 						} else {
 							// this move is unavailable, skip it
 							continue;
 						}
 					}
 					if (learned.charAt(1) in {L:1, M:1, T:1}) {
-						if (learned.charAt(0) === '6') {
+						if (parseInt(learnedGen) === tools.gen) {
 							// current-gen TM or tutor moves:
 							//   always available
 							return false;
@@ -702,15 +652,16 @@ Validator = (function () {
 						// past-gen level-up, TM, or tutor moves:
 						//   available as long as the source gen was or was before this gen
 						limit1 = false;
-						sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0)));
-						if (tools.gen === 2 && lsetData.hasGen2Move && parseInt(learned.charAt(0)) === 1) lsetData.blockedGen2Move = true;
+						sourcesBefore = Math.max(sourcesBefore, parseInt(learnedGen));
+						limitedEgg = false;
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						if (learned.charAt(0) === '6' || lsetData.fastCheck) {
+						if (learnedGen === '6' || lsetData.fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
-							learned = learned.charAt(0) + 'E' + (template.prevo ? template.id : '');
+							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
+							limitedEgg = false;
 							continue;
 						}
 						// it's a past gen; egg moves can only be inherited from the father
@@ -727,7 +678,7 @@ Validator = (function () {
 							// can't inherit from CAP pokemon
 							if (dexEntry.isNonstandard) continue;
 							// can't breed mons from future gens
-							if (dexEntry.gen > parseInt(learned.charAt(0))) continue;
+							if (dexEntry.gen > parseInt(learnedGen)) continue;
 							// father must be male
 							if (dexEntry.gender === 'N' || dexEntry.gender === 'F') continue;
 							// can't inherit from dex entries with no learnsets
@@ -735,68 +686,37 @@ Validator = (function () {
 							// unless it's supposed to be self-breedable, can't inherit from self, prevos, etc
 							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
 							if (!fromSelf && alreadyChecked[dexEntry.speciesid]) continue;
-							// father must be able to learn the move, unless this is chainbreeding
-							if (!fromSelf && !dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
+							// father must be able to learn the move
+							if (!fromSelf && !dexEntry.learnset[moveid] && !dexEntry.learnset['sketch']) continue;
 
 							// must be able to breed with father
 							if (!dexEntry.eggGroups.intersect(eggGroups).length) continue;
 
-							if (tools.gen === 2 && dexEntry.gen <= 2 && lsetData.hasEggMove && lsetData.hasEggMove !== move) {
-								// If the mon already has an egg move by a father, other different father can't give it another egg move.
-								if (lsetData.eggParents.indexOf(dexEntry.species) >= 0) {
-									// We have to test here that the father of both moves doesn't get both by egg breeding
-									let learnsFrom = false;
-									let lsetToCheck = (dexEntry.learnset[lsetData.hasEggMove]) ? dexEntry.learnset[lsetData.hasEggMove] : dexEntry.learnset['sketch'];
-									if (!lsetToCheck || !lsetToCheck.length) continue;
-									for (let ltype = 0; ltype < lsetToCheck.length; ltype++) {
-										// Save first learning type. After that, only save it if we have egg and it's not egg.
-										learnsFrom = !learnsFrom || learnsFrom === 'E' ? lsetToCheck[ltype].charAt(1) : learnsFrom;
-									}
-									// If the previous egg move was learnt by the father through an egg as well:
-									if (learnsFrom === 'E') {
-										let secondLearnsFrom = false;
-										let lsetToCheck = (dexEntry.learnset[move]) ? dexEntry.learnset[move] : dexEntry.learnset['sketch'];
-										// Have here either the move learnset or sketch learnset for Smeargle.
-										if (lsetToCheck) {
-											for (let ltype = 0; ltype < lsetToCheck.length; ltype++) {
-												// Save first learning type. After that, only save it if we have egg and it's not egg.
-												secondLearnsFrom = !secondLearnsFrom || secondLearnsFrom === 'E' ? dexEntry.learnset[move][ltype].charAt(1) : secondLearnsFrom;
-											}
-											// Ok, both moves are learnt by father through an egg, therefor, it's impossible.
-											if (secondLearnsFrom === 'E') {
-												lsetData.blockedGen2Move = true;
-												continue;
-											}
-										}
-									}
-								} else {
-									lsetData.blockedGen2Move = true;
-									continue;
-								}
-							}
-							lsetData.hasEggMove = move;
-							lsetData.eggParents.push(dexEntry.species);
-							// Check if it has a move that needs to come from a prior gen to this egg move.
-							lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
-							lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0));
 							// we can breed with it
 							atLeastOne = true;
+							if (tradebackEligible && learnedGen === '2' && move.gen <= 1) {
+								// can tradeback
+								sources.push('1ET' + dexEntry.id);
+							}
 							sources.push(learned + dexEntry.id);
+							if (limitedEgg !== false) limitedEgg = true;
 						}
-						// chainbreeding with itself from earlier gen
-						if (!atLeastOne) sources.push(learned + template.id);
-						// Egg move tradeback for gens 1 and 2.
-						if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0)));
+						// chainbreeding with itself
+						// e.g. ExtremeSpeed Dragonite
+						if (!atLeastOne) {
+							sources.push(learned + template.id);
+							limitedEgg = 'self';
+						}
 					} else if (learned.charAt(1) === 'S') {
 						// event moves:
 						//   only if that was the source
 						// Event Pokémon:
 						//	Available as long as the past gen can get the Pokémon and then trade it back.
+						if (tradebackEligible && learnedGen === '2' && move.gen <= 1) {
+							// can tradeback
+							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
+						}
 						sources.push(learned + ' ' + template.id);
-						if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0)));
-						// Check if it has a move that needs to come from a prior gen to this event move.
-						lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
-						lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0));
 					} else if (learned.charAt(1) === 'D') {
 						// DW moves:
 						//   only if that was the source
@@ -821,7 +741,7 @@ Validator = (function () {
 				}
 				if (getGlitch) {
 					sourcesBefore = Math.max(sourcesBefore, 4);
-					if (tools.getMove(move).gen < 5) {
+					if (move.gen < 5) {
 						limit1 = false;
 					}
 				}
@@ -844,18 +764,13 @@ Validator = (function () {
 			if (lsetData.sketchMove) {
 				return {type:'oversketched', maxSketches: 1};
 			}
-			lsetData.sketchMove = move;
+			lsetData.sketchMove = moveid;
 		}
 
 		if (blockedHM) {
 			// Limit one of Defog/Whirlpool to be transferred
 			if (lsetData.hm) return {type:'incompatible'};
-			lsetData.hm = move;
-		}
-
-		if (lsetData.blockedGen2Move) {
-			// Limit Gen 2 egg moves on gen 1 when move doesn't exist
-			return {type:'incompatible'};
+			lsetData.hm = moveid;
 		}
 
 		// Now that we have our list of possible sources, intersect it with the current list
@@ -868,11 +783,10 @@ Validator = (function () {
 		if (sourcesBefore || lsetData.sourcesBefore) {
 			// having sourcesBefore is the equivalent of having everything before that gen
 			// in sources, so we fill the other array in preparation for intersection
-			let learned;
 			if (sourcesBefore && lsetData.sources) {
 				if (!sources) sources = [];
 				for (let i = 0, len = lsetData.sources.length; i < len; i++) {
-					learned = lsetData.sources[i];
+					let learned = lsetData.sources[i];
 					if (parseInt(learned.charAt(0)) <= sourcesBefore) {
 						sources.push(learned);
 					}
@@ -882,12 +796,13 @@ Validator = (function () {
 			if (lsetData.sourcesBefore && sources) {
 				if (!lsetData.sources) lsetData.sources = [];
 				for (let i = 0, len = sources.length; i < len; i++) {
-					learned = sources[i];
-					if (parseInt(learned.charAt(0)) <= lsetData.sourcesBefore) {
+					let learned = sources[i];
+					let sourceGen = parseInt(learned.charAt(0));
+					if (sourceGen <= lsetData.sourcesBefore && sourceGen > sourcesBefore) {
 						lsetData.sources.push(learned);
 					}
 				}
-				if (!sourcesBefore) delete lsetData.sourcesBefore;
+				if (!sourcesBefore) lsetData.sourcesBefore = 0;
 			}
 		}
 		if (sources) {
@@ -903,11 +818,164 @@ Validator = (function () {
 		}
 
 		if (sourcesBefore) {
-			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore || 6);
+			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore);
+		}
+
+		if (limitedEgg) {
+			// lsetData.limitedEgg = [moveid] of egg moves with potential breeding incompatibilities
+			// 'self' is a possible entry (namely, ExtremeSpeed on Dragonite) meaning it's always
+			// incompatible with any other egg move
+			if (!lsetData.limitedEgg) lsetData.limitedEgg = [];
+			lsetData.limitedEgg.push(limitedEgg === true ? moveid : limitedEgg);
 		}
 
 		return false;
+	}
+}
+
+if (!process.send) {
+	let validationCount = 0;
+	let pendingValidations = {};
+
+	let ValidatorProcess = (() => {
+		function ValidatorProcess() {
+			this.process = require('child_process').fork('team-validator.js', {cwd: __dirname});
+			this.process.on('message', message => {
+				// Protocol:
+				// success: "[id]|1[details]"
+				// failure: "[id]|0[details]"
+				let pipeIndex = message.indexOf('|');
+				let id = message.substr(0, pipeIndex);
+				let success = (message.charAt(pipeIndex + 1) === '1');
+
+				if (pendingValidations[id]) {
+					ValidatorProcess.release(this);
+					pendingValidations[id](success, message.substr(pipeIndex + 2));
+					delete pendingValidations[id];
+				}
+			});
+		}
+		ValidatorProcess.prototype.load = 0;
+		ValidatorProcess.prototype.active = true;
+		ValidatorProcess.processes = [];
+		ValidatorProcess.spawn = function () {
+			let num = Config.validatorprocesses || 1;
+			for (let i = 0; i < num; ++i) {
+				this.processes.push(new ValidatorProcess());
+			}
+		};
+		ValidatorProcess.respawn = function () {
+			for (let process of this.processes.splice(0)) {
+				process.active = false;
+				if (!process.load) process.process.disconnect();
+			}
+			this.spawn();
+		};
+		ValidatorProcess.acquire = function () {
+			let process = this.processes[0];
+			for (let i = 1; i < this.processes.length; ++i) {
+				if (this.processes[i].load < process.load) {
+					process = this.processes[i];
+				}
+			}
+			++process.load;
+			return process;
+		};
+		ValidatorProcess.release = function (process) {
+			--process.load;
+			if (!process.load && !process.active) {
+				process.process.disconnect();
+			}
+		};
+		ValidatorProcess.send = function (format, team, callback) {
+			let process = this.acquire();
+			pendingValidations[validationCount] = callback;
+			try {
+				process.process.send('' + validationCount + '|' + format + '|' + team);
+			} catch (e) {}
+			++validationCount;
+		};
+		return ValidatorProcess;
+	})();
+
+	// Create the initial set of validator processes.
+	ValidatorProcess.spawn();
+
+	exports.ValidatorProcess = ValidatorProcess;
+	exports.pendingValidations = pendingValidations;
+
+	exports.validateTeam = function (format, team, callback) {
+		ValidatorProcess.send(format, team, callback);
 	};
 
-	return Validator;
-})();
+	let synchronousValidators = {};
+	exports.validateTeamSync = function (format, team) {
+		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
+		return synchronousValidators[format].validateTeam(team);
+	};
+	exports.validateSetSync = function (format, set, teamHas) {
+		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
+		return synchronousValidators[format].validateSet(set, teamHas);
+	};
+	exports.checkLearnsetSync = function (format, move, template, lsetData) {
+		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
+		return synchronousValidators[format].checkLearnset(move, template, lsetData);
+	};
+} else {
+	require('sugar');
+	global.Config = require('./config/config.js');
+
+	if (Config.crashguard) {
+		process.on('uncaughtException', err => {
+			require('./crashlogger.js')(err, 'A team validator process', true);
+		});
+	}
+
+	global.Tools = require('./tools.js').includeMods();
+	global.toId = Tools.getId;
+
+	require('./repl.js').start('team-validator-', process.pid, cmd => eval(cmd));
+
+	let validators = {};
+
+	let respond = (id, success, details) => {
+		process.send(id + (success ? '|1' : '|0') + details);
+	};
+
+	process.on('message', message => {
+		// protocol:
+		// "[id]|[format]|[team]"
+		let pipeIndex = message.indexOf('|');
+		let pipeIndex2 = message.indexOf('|', pipeIndex + 1);
+		let id = message.substr(0, pipeIndex);
+		let format = message.substr(pipeIndex + 1, pipeIndex2 - pipeIndex - 1);
+
+		if (!validators[format]) validators[format] = new Validator(format);
+		let parsedTeam = [];
+		parsedTeam = Tools.fastUnpackTeam(message.substr(pipeIndex2 + 1));
+
+		let problems;
+		try {
+			problems = validators[format].validateTeam(parsedTeam);
+		} catch (err) {
+			require('./crashlogger.js')(err, 'A team validation', {
+				format: format,
+				team: message.substr(pipeIndex2 + 1),
+			});
+			problems = ["Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now."];
+		}
+
+		if (problems && problems.length) {
+			respond(id, false, problems.join('\n'));
+		} else {
+			let packedTeam = Tools.packTeam(parsedTeam);
+			// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
+			// console.log('TO: ' + packedTeam);
+			respond(id, true, packedTeam);
+		}
+	});
+
+	process.on('disconnect', () => {
+		process.exit();
+	});
+}

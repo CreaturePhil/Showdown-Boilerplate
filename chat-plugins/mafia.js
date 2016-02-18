@@ -10,7 +10,7 @@ const permission = 'ban';
 const deadImage = '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-dead.png" />';
 const meetingMsg = {town: 'The town has lynched a suspect!', mafia: 'The mafia strikes again!'};
 
-const defaultSettings = {anonVotes: false, allowWills: false};
+const defaultSettings = {anonVotes: false, allowWills: false, autoModchat: false};
 
 class MafiaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
@@ -22,6 +22,11 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 
 	event(event) {
 		if (this.class[event].target) {
+			if (this.class[event].oneshot) {
+				if (!this.used) this.used = {};
+				if (this.used[event]) return;
+				this.using = event;
+			}
 			this.targeting = true;
 			this.toExecute = this.class[event].callback;
 			if (this.class[event].target.count === 'single') {
@@ -123,6 +128,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		if (target in this.validTargets || target === 'none') {
 			this.targeting = false;
 			if (target === 'none') {
+				if (this.using) delete this.using;
 				this.toExecute = null;
 			} else {
 				this.target = this.game.players[target];
@@ -148,12 +154,17 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 			return;
 		}
 
+		let numVotes = 1;
+
+		if (this.class.numVotes) numVotes = this.class.numVotes;
+
 		if (target in this.validVotes || target === 'none') {
 			if (target !== 'none') {
 				if (this.game.currentVote[target]) {
-					this.game.currentVote[target].push(this.name);
+					this.game.currentVote[target].voters.push(this.name);
+					this.game.currentVote[target].votes += numVotes;
 				} else {
-					this.game.currentVote[target] = [this.name];
+					this.game.currentVote[target] = {votes: numVotes, voters: [this.name]};
 				}
 			}
 
@@ -199,13 +210,13 @@ class Mafia extends Rooms.RoomGame {
 			this[i] = settings[i];
 		}
 
-		this.roleString = this.roles.reduce((function (prev, cur, index, array) {
+		this.roleString = this.roles.reduce((prev, cur, index, array) => {
 			if (index === array.length - 1) {
 				return prev + MafiaData.MafiaClasses[cur].name;
 			} else {
 				return prev + MafiaData.MafiaClasses[cur].name + ', ';
 			}
-		}), '');
+		}, '');
 
 		this.room.send('|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(false));
 	}
@@ -324,6 +335,7 @@ class Mafia extends Rooms.RoomGame {
 
 		if (this.allowWills) output += 'Wills are allowed. ';
 		if (this.anonVotes) output += 'Votes are anonymous. ';
+		if (this.autoModchat) output += 'Modchat is automatically set to + at night. ';
 
 		if (joined) {
 			output += '<br/><button value="/leavegame" name="send">Leave</button>';
@@ -368,9 +380,9 @@ class Mafia extends Rooms.RoomGame {
 		for (let i in this.currentVote) {
 			text += Tools.escapeHTML(this.players[i].name) + ': ';
 			if (this.anonVotes) {
-				text += this.currentVote[i] + ' votes.';
+				text += this.currentVote[i].votes + ' votes.';
 			} else {
-				text += this.currentVote[i].join(',');
+				text += this.currentVote[i].voters.join(',');
 			}
 			text += '<br/>';
 		}
@@ -389,9 +401,9 @@ class Mafia extends Rooms.RoomGame {
 		let max = 0;
 		let toKill = null;
 		for (let i in this.currentVote) {
-			if (this.currentVote[i].length > max) {
+			if (this.currentVote[i].votes > max) {
 				toKill = i;
-			} else if (this.currentVote[i].length === max) {
+			} else if (this.currentVote[i].votes === max) {
 				toKill = null;
 			}
 		}
@@ -430,6 +442,9 @@ class Mafia extends Rooms.RoomGame {
 		clearTimeout(this.timer);
 		this.timer = null;
 		this.room.game = null;
+		if (this.autoModchat && this.oldModchat && this.room.modchat === '+') {
+			this.room.modchat = this.oldModchat;
+		}
 		this.destroy();
 	}
 
@@ -439,6 +454,9 @@ class Mafia extends Rooms.RoomGame {
 		clearTimeout(this.timer);
 		this.timer = null;
 		this.room.game = null;
+		if (this.autoModchat && this.oldModchat && this.room.modchat === '+') {
+			this.room.modchat = this.oldModchat;
+		}
 		this.destroy();
 	}
 
@@ -456,6 +474,10 @@ class Mafia extends Rooms.RoomGame {
 					player.roleBlocked = false;
 					player.toExecute = null;
 				} else {
+					if (player.using) {
+						player.used[player.using] = 1;
+						delete player.using;
+					}
 					let output;
 					if (player.target) {
 						output = Tools.escapeHTML(player.toExecute(player.target));
@@ -478,6 +500,10 @@ class Mafia extends Rooms.RoomGame {
 
 			if (toKill) {
 				toKill.kill(meetingMsg[this.meeting]);
+			}
+
+			if (this.meeting === 'town' && toKill.class.onLynch) {
+				toKill.class.onLynch();
 			}
 
 			this.meeting = null;
@@ -521,37 +547,43 @@ class Mafia extends Rooms.RoomGame {
 		}
 
 		switch (this.gamestate) {
-		case 'initial':
-			this.gamestate = 'night';
-			this.mafiaMeeting();
-			this.gameEvent('onNight', 2);
-			break;
 		case 'night':
+			if (this.autoModchat) {
+				if (this.room.modchat === '+') {
+					this.room.modchat = this.oldModchat;
+				}
+				delete this.oldModchat;
+			}
 			this.gamestate = 'day';
-			this.gameEvent('onDay', 0.5);
 			break;
 		case 'day':
 			this.gamestate = 'lynch';
 			this.townMeeting();
-			this.gameEvent('onLynch', 2);
+			this.gameEvent('onDay', 2);
 			break;
 		case 'lynch':
 			this.day++;
+			// falls through
+		case 'initial':
 			this.gamestate = 'night';
+			if (this.autoModchat) {
+				this.oldModchat = this.room.modchat;
+				this.room.modchat = '+';
+			}
 			this.mafiaMeeting();
 			this.gameEvent('onNight', 2);
 		}
 	}
 
 	setTimer(mins) {
-		this.timer = setTimeout((function () {
+		this.timer = setTimeout(() => {
 			for (let i in this.players) {
 				this.players[i].sendRoom("10 seconds left!");
 			}
-			this.timer = setTimeout((function () {
+			this.timer = setTimeout(() => {
 				this.progress();
-			}).bind(this), 10000);
-		}).bind(this), ((mins -  0.167) * 60000));
+			}, 10000);
+		}, ((mins -  0.167) * 60000));
 	}
 
 	// Meetings:
@@ -625,9 +657,9 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
-		this.executionOrder.sort(function (a, b) {
-			return (b.class[event].priority - a.class[event].priority);
-		});
+		this.executionOrder.sort((a, b) =>
+			b.class[event].priority - a.class[event].priority
+		);
 
 		if (this.executionOrder.length || this.currentVote) {
 			this.setTimer(timer);
@@ -644,7 +676,7 @@ exports.commands = {
 			if (!this.can(permission, null, room)) return false;
 			if (!room.mafiaEnabled) return this.errorReply("Mafia is disabled for this room.");
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-			if (room.game) return this.errorReply("There is already a game in progress in this room.");
+			if (room.game) return this.errorReply("There is already a game of " + room.game.title + " in progress in this room.");
 
 			// Check if input is a JSON object. If it is, use the parser for json input.
 			let targetObj;
@@ -686,7 +718,7 @@ exports.commands = {
 
 				room.game = new Mafia(room, roleList.length, roleList, settings);
 			} else {
-				let params = target.split(',').map(function (param) { return param.toLowerCase().trim(); });
+				let params = target.split(',').map(param => param.toLowerCase().trim());
 
 				// TODO: make a generator for a default setup.
 				if (!params) return this.errorReply("No roles entered.");
@@ -775,6 +807,29 @@ exports.commands = {
 					this.errorReply("Anonymous votes are already disabled.");
 				} else {
 					room.game.anonVotes = false;
+					room.game.updatePregame();
+				}
+			}
+		},
+
+		automodchat: function (target, room, user) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
+			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.can(permission, null, room)) return false;
+			if (room.game.gamestate !== 'pregame') return this.errorReply("The game has started already.");
+
+			if (target === 'on' || target === 'enable') {
+				if (room.game.autoModchat) {
+					this.errorReply("Automatic modchat is already enabled.");
+				} else {
+					room.game.autoModchat = true;
+					room.game.updatePregame();
+				}
+			} else if (target === 'off' || target === 'disable') {
+				if (!room.game.autoModchat) {
+					this.errorReply("Automatic modchat is already disabled.");
+				} else {
+					room.game.autoModchat = false;
 					room.game.updatePregame();
 				}
 			}

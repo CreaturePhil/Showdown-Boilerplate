@@ -17,7 +17,7 @@ require('sugar');
 const fs = require('fs');
 const path = require('path');
 
-module.exports = (function () {
+module.exports = (() => {
 	let moddedTools = {};
 
 	let dataTypes = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
@@ -189,6 +189,11 @@ module.exports = (function () {
 		if (typeof name !== 'string' && typeof name !== 'number') return '';
 		name = ('' + name).replace(/[\|\s\[\]\,\u202e]+/g, ' ').trim();
 		if (name.length > 18) name = name.substr(0, 18).trim();
+
+		// remove zalgo
+		name = name.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		name = name.replace(/[\u239b-\u23b9]/g, '');
+
 		return name;
 	};
 
@@ -972,11 +977,14 @@ module.exports = (function () {
 			basePath = './mods/' + this.currentMod + '/';
 		}
 
-		dataTypes.forEach(function (dataType) {
-			if (typeof dataFiles[dataType] !== 'string') return (data[dataType] = dataFiles[dataType]);
+		for (let dataType of dataTypes) {
+			if (typeof dataFiles[dataType] !== 'string') {
+				data[dataType] = dataFiles[dataType];
+				continue;
+			}
 			if (dataType === 'Natures') {
-				if (data.mod === 'base') return (data[dataType] = BattleNatures);
-				return;
+				if (data.mod === 'base') data[dataType] = BattleNatures;
+				continue;
 			}
 			let maybeData = tryRequire(basePath + dataFiles[dataType]);
 			if (maybeData instanceof Error) {
@@ -986,12 +994,12 @@ module.exports = (function () {
 			let BattleData = maybeData['Battle' + dataType];
 			if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + dataFiles[dataType] + "` must be an object except `null`.");
 			if (BattleData !== data[dataType]) data[dataType] = Object.merge(BattleData, data[dataType]);
-		});
+		}
 		if (this.isBase) {
 			// Formats are inherited by mods
 			this.includeFormats();
 		} else {
-			dataTypes.forEach(function (dataType) {
+			for (let dataType of dataTypes) {
 				let parentTypedData = parentTools.data[dataType];
 				if (!data[dataType]) data[dataType] = {};
 				for (let key in parentTypedData) {
@@ -1013,7 +1021,7 @@ module.exports = (function () {
 						Object.merge(data[dataType][key], parentTypedData[key], false, false);
 					}
 				}
-			});
+			}
 		}
 
 		// Flag the generation. Required for team validator.

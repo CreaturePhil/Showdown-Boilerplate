@@ -128,12 +128,12 @@ exports.BattleMovedex = {
 		desc: "The user's type changes to match the original type of one of its four moves besides this move, at random, but not either of its current types. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types.",
 		shortDesc: "Changes user's type to match a known move.",
 		onHit: function (target) {
-			let possibleTypes = target.moveset.map(function (val) {
+			let possibleTypes = target.moveset.map(val => {
 				let move = this.getMove(val.id);
 				if (move.id !== 'conversion' && !target.hasType(move.type)) {
 					return move.type;
 				}
-			}, this).compact();
+			}).compact();
 			if (!possibleTypes.length) {
 				return false;
 			}
@@ -734,11 +734,13 @@ exports.BattleMovedex = {
 	},
 	secretpower: {
 		inherit: true,
-		onHit: function () {},
-		secondary: {
-			chance: 30,
-			boosts: {
-				accuracy: -1,
+		effect: {
+			duration: 1,
+			onAfterMoveSecondarySelf: function (source, target, move) {
+				if (this.random(10) < 3) {
+					this.boost({accuracy: -1}, target, source);
+				}
+				source.removeVolatile('secretpower');
 			},
 		},
 	},

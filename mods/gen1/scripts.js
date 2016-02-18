@@ -63,7 +63,6 @@ exports.BattleScripts = {
 					}
 				}
 			}
-			this.update();
 			return changed;
 		},
 	},
@@ -104,7 +103,7 @@ exports.BattleScripts = {
 			pokemon.side.lastMove = move.id;
 			pokemon.lastMove = move.id;
 		} else {
-			if (lockedMove) sourceEffect = move;
+			sourceEffect = move;
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
@@ -475,7 +474,6 @@ exports.BattleScripts = {
 					if (pokemon.side.foe.active[0].status === 'brn') {
 						pokemon.side.foe.active[0].modifyStat('atk', 0.5);
 					}
-					pokemon.side.foe.active[0].update();
 				}
 			}
 			if (moveData.heal && !target.fainted) {

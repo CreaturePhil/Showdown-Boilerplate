@@ -10,9 +10,8 @@ exports.BattleScripts = {
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			template = this.getTemplate('unown');
 
-			let stack = 'Template incompatible with random battles: ' + name;
-			let fakeErr = {stack: stack};
-			require('./../../crashlogger.js')(fakeErr, 'The randbat set generator');
+			let err = new Error('Template incompatible with random battles: ' + name);
+			require('./../../crashlogger.js')(err, 'The randbat set generator');
 		}
 
 		if (template.battleOnly) name = template.baseSpecies;
@@ -371,9 +370,8 @@ exports.BattleScripts = {
 			};
 		}
 
-		let abilities = Object.values(baseTemplate.abilities).sort(function (a, b) {
-			return this.getAbility(b).rating - this.getAbility(a).rating;
-		}.bind(this));
+		let abilities = Object.values(baseTemplate.abilities);
+		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
 		let ability0 = this.getAbility(abilities[0]);
 		let ability1 = this.getAbility(abilities[1]);
 		let ability2 = this.getAbility(abilities[2]);

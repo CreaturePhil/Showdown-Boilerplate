@@ -24,7 +24,7 @@ let rooms = Rooms.rooms = Object.create(null);
 
 let aliases = Object.create(null);
 
-let Room = (function () {
+let Room = (() => {
 	function Room(roomid, title) {
 		this.id = roomid;
 		this.title = (title || roomid);
@@ -134,7 +134,7 @@ let Room = (function () {
 		let alts;
 		if (!noRecurse) {
 			alts = [];
-			Users.users.forEach(function (otherUser) {
+			Users.users.forEach(otherUser => {
 				if (otherUser === user) return;
 				for (let myIp in user.ips) {
 					if (myIp in otherUser.ips) {
@@ -143,7 +143,7 @@ let Room = (function () {
 						return;
 					}
 				}
-			}, this);
+			});
 		}
 		this.bannedUsers[userid] = userid;
 		if (user.autoconfirmed) this.bannedUsers[user.autoconfirmed] = userid;
@@ -199,10 +199,9 @@ let Room = (function () {
 			//runMuteTimer() is called again in unmute() so this function instance should be closed
 			return;
 		}
-		let self = this;
-		this.muteTimer = setTimeout(function () {
-			self.muteTimer = null;
-			self.runMuteTimer(true);
+		this.muteTimer = setTimeout(() => {
+			this.muteTimer = null;
+			this.runMuteTimer(true);
 		}, timeUntilExpire);
 	};
 	Room.prototype.isMuted = function (user) {
@@ -298,7 +297,7 @@ let Room = (function () {
 	return Room;
 })();
 
-let GlobalRoom = (function () {
+let GlobalRoom = (() => {
 	function GlobalRoom(roomid) {
 		this.id = roomid;
 
@@ -355,27 +354,26 @@ let GlobalRoom = (function () {
 		}
 
 		// this function is complex in order to avoid several race conditions
-		let self = this;
-		this.writeNumRooms = (function () {
+		this.writeNumRooms = (() => {
 			let writing = false;
 			let lastBattle;	// last lastBattle to be written to file
-			let finishWriting = function () {
+			let finishWriting = () => {
 				writing = false;
-				if (lastBattle < self.lastBattle) {
-					self.writeNumRooms();
+				if (lastBattle < this.lastBattle) {
+					this.writeNumRooms();
 				}
 			};
-			return function () {
+			return () => {
 				if (writing) return;
 
 				// batch writing lastbattle.txt for every 10 battles
-				if (lastBattle >= self.lastBattle) return;
-				lastBattle = self.lastBattle + 10;
+				if (lastBattle >= this.lastBattle) return;
+				lastBattle = this.lastBattle + 10;
 
 				writing = true;
-				fs.writeFile('logs/lastbattle.txt.0', '' + lastBattle, function () {
+				fs.writeFile('logs/lastbattle.txt.0', '' + lastBattle, () => {
 					// rename is atomic on POSIX, but will throw an error on Windows
-					fs.rename('logs/lastbattle.txt.0', 'logs/lastbattle.txt', function (err) {
+					fs.rename('logs/lastbattle.txt.0', 'logs/lastbattle.txt', err => {
 						if (err) {
 							// This should only happen on Windows.
 							fs.writeFile('logs/lastbattle.txt', '' + lastBattle, finishWriting);
@@ -387,26 +385,26 @@ let GlobalRoom = (function () {
 			};
 		})();
 
-		this.writeChatRoomData = (function () {
+		this.writeChatRoomData = (() => {
 			let writing = false;
 			let writePending = false; // whether or not a new write is pending
-			let finishWriting = function () {
+			let finishWriting = () => {
 				writing = false;
 				if (writePending) {
 					writePending = false;
-					self.writeChatRoomData();
+					this.writeChatRoomData();
 				}
 			};
-			return function () {
+			return () => {
 				if (writing) {
 					writePending = true;
 					return;
 				}
 				writing = true;
-				let data = JSON.stringify(self.chatRoomData).replace(/\{"title"\:/g, '\n{"title":').replace(/\]$/, '\n]');
-				fs.writeFile('config/chatrooms.json.0', data, function () {
+				let data = JSON.stringify(this.chatRoomData).replace(/\{"title"\:/g, '\n{"title":').replace(/\]$/, '\n]');
+				fs.writeFile('config/chatrooms.json.0', data, () => {
 					// rename is atomic on POSIX, but will throw an error on Windows
-					fs.rename('config/chatrooms.json.0', 'config/chatrooms.json', function (err) {
+					fs.rename('config/chatrooms.json.0', 'config/chatrooms.json', err => {
 						if (err) {
 							// This should only happen on Windows.
 							fs.writeFile('config/chatrooms.json', data, finishWriting);
@@ -425,12 +423,12 @@ let GlobalRoom = (function () {
 		this.maxUsersDate = 0;
 
 		this.reportUserStatsInterval = setInterval(
-			this.reportUserStats.bind(this),
+			() => this.reportUserStats(),
 			REPORT_USER_STATS_INTERVAL
 		);
 
 		this.periodicMatchInterval = setInterval(
-			this.periodicMatch.bind(this),
+			() => this.periodicMatch(),
 			PERIODIC_MATCH_INTERVAL
 		);
 	}
@@ -443,13 +441,13 @@ let GlobalRoom = (function () {
 			LoginServer.request('updateuserstats', {
 				date: this.maxUsersDate,
 				users: this.maxUsers,
-			}, function () {});
+			}, () => {});
 			this.maxUsersDate = 0;
 		}
 		LoginServer.request('updateuserstats', {
 			date: Date.now(),
 			users: this.userCount,
-		}, function () {});
+		}, () => {});
 	};
 
 	GlobalRoom.prototype.getFormatListText = function () {
@@ -478,10 +476,9 @@ let GlobalRoom = (function () {
 	};
 
 	GlobalRoom.prototype.getRoomList = function (filter) {
-		let roomList = {};
-		let total = 0;
+		let rooms = [];
 		let skipCount = 0;
-		if (this.battleCount > 150) {
+		if (this.battleCount > 150 && !filter) {
 			skipCount = this.battleCount - 150;
 		}
 		for (let i in Rooms.rooms) {
@@ -489,18 +486,22 @@ let GlobalRoom = (function () {
 			if (!room || !room.active || room.isPrivate) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
 			if (skipCount && skipCount--) continue;
+
+			rooms.push(room);
+		}
+
+		let roomTable = {};
+		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
+			let room = rooms[i];
 			let roomData = {};
 			if (room.active && room.battle) {
 				if (room.battle.p1) roomData.p1 = room.battle.p1.name;
 				if (room.battle.p2) roomData.p2 = room.battle.p2.name;
 			}
 			if (!roomData.p1 || !roomData.p2) continue;
-			roomList[room.id] = roomData;
-
-			total++;
-			if (total >= 100) break;
+			roomTable[room.id] = roomData;
 		}
-		return roomList;
+		return roomTable;
 	};
 	GlobalRoom.prototype.getRooms = function (user) {
 		let roomsData = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
@@ -542,7 +543,7 @@ let GlobalRoom = (function () {
 
 		formatid = Tools.getFormat(formatid).id;
 
-		user.prepBattle(formatid, 'search', null, this.finishSearchBattle.bind(this, user, formatid));
+		user.prepBattle(formatid, 'search', null, result => this.finishSearchBattle(user, formatid, result));
 	};
 	GlobalRoom.prototype.finishSearchBattle = function (user, formatid, result) {
 		if (!result) return;
@@ -553,14 +554,13 @@ let GlobalRoom = (function () {
 			rating: 1000,
 			time: new Date().getTime(),
 		};
-		let self = this;
 
 		// Get the user's rating before actually starting to search.
-		Ladders(formatid).getRating(user.userid).then(function (rating) {
+		Ladders(formatid).getRating(user.userid).then(rating => {
 			newSearch.rating = rating;
 			newSearch.userid = user.userid;
-			self.addSearch(newSearch, user, formatid);
-		}, function (error) {
+			this.addSearch(newSearch, user, formatid);
+		}, error => {
 			// Rejects iff we retrieved the rating but the user had changed their name;
 			// the search simply doesn't happen in this case.
 		});
@@ -661,6 +661,7 @@ let GlobalRoom = (function () {
 	};
 	GlobalRoom.prototype.addChatRoom = function (title) {
 		let id = toId(title);
+		if (id === 'battles' || id === 'rooms' || id === 'ladder' || id === 'teambuilder') return false;
 		if (rooms[id]) return false;
 
 		let chatRoomData = {
@@ -835,7 +836,7 @@ let GlobalRoom = (function () {
 	return GlobalRoom;
 })();
 
-let BattleRoom = (function () {
+let BattleRoom = (() => {
 	function BattleRoom(roomid, format, p1, p2, options) {
 		Room.call(this, roomid, "" + p1.name + " vs. " + p2.name);
 		this.modchat = (Config.battlemodchat || false);
@@ -962,9 +963,9 @@ let BattleRoom = (function () {
 		}
 		this.update();
 	};
-	// logNum = 0    : spectator log
-	// logNum = 1, 2 : player log
-	// logNum = 3    : replay log
+	// logNum = 0    : spectator log (no exact HP)
+	// logNum = 1, 2 : player log (exact HP for that player)
+	// logNum = 3    : debug log (exact HP for all players)
 	BattleRoom.prototype.getLog = function (logNum) {
 		let log = [];
 		for (let i = 0; i < this.log.length; ++i) {
@@ -979,7 +980,6 @@ let BattleRoom = (function () {
 		return log;
 	};
 	BattleRoom.prototype.getLogForUser = function (user) {
-		if (this.game.ended) return this.getLog(3);
 		if (!(user in this.game.players)) return this.getLog(0);
 		return this.getLog(this.game.players[user].slotNum + 1);
 	};
@@ -998,10 +998,10 @@ let BattleRoom = (function () {
 		}
 		if (!hasUsers) {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
-			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
+			this.expireTimer = setTimeout(() => this.tryExpire(), TIMEOUT_EMPTY_DEALLOCATE);
 		} else {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
-			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_INACTIVE_DEALLOCATE);
+			this.expireTimer = setTimeout(() => this.tryExpire(), TIMEOUT_INACTIVE_DEALLOCATE);
 		}
 	};
 	BattleRoom.prototype.logBattle = function (p1score, p1rating, p2rating) {
@@ -1015,14 +1015,13 @@ let BattleRoom = (function () {
 		let logfolder = date.format('{yyyy}-{MM}');
 		let logsubfolder = date.format('{yyyy}-{MM}-{dd}');
 		let curpath = 'logs/' + logfolder;
-		let self = this;
-		fs.mkdir(curpath, '0755', function () {
-			let tier = self.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
+		fs.mkdir(curpath, '0755', () => {
+			let tier = this.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
 			curpath += '/' + tier;
-			fs.mkdir(curpath, '0755', function () {
+			fs.mkdir(curpath, '0755', () => {
 				curpath += '/' + logsubfolder;
-				fs.mkdir(curpath, '0755', function () {
-					fs.writeFile(curpath + '/' + self.id + '.log.json', JSON.stringify(logData));
+				fs.mkdir(curpath, '0755', () => {
+					fs.writeFile(curpath + '/' + this.id + '.log.json', JSON.stringify(logData));
 				});
 			});
 		}); // asychronicity
@@ -1088,7 +1087,7 @@ let BattleRoom = (function () {
 					inactiveUser1.sendRoom('|inactive|' + inactiveUser1.name + ' has ' + (ticksLeft[1] * 10) + ' seconds left.');
 				}
 			}
-			this.resetTimer = setTimeout(this.kickInactive.bind(this), 10 * 1000);
+			this.resetTimer = setTimeout(() => this.kickInactive(), 10 * 1000);
 			return;
 		}
 
@@ -1147,7 +1146,7 @@ let BattleRoom = (function () {
 			this.sendPlayer(1, '|inactive|You have ' + (ticksLeft1 * 10) + ' seconds to make your decision.');
 		}
 
-		this.resetTimer = setTimeout(this.kickInactive.bind(this), 10 * 1000);
+		this.resetTimer = setTimeout(() => this.kickInactive(), 10 * 1000);
 		return true;
 	};
 	BattleRoom.prototype.nextInactive = function () {
@@ -1323,7 +1322,7 @@ let BattleRoom = (function () {
 	return BattleRoom;
 })();
 
-let ChatRoom = (function () {
+let ChatRoom = (() => {
 	function ChatRoom(roomid, title, options) {
 		Room.call(this, roomid, title);
 		if (options) {
@@ -1346,7 +1345,7 @@ let ChatRoom = (function () {
 			};
 			this.logEntry('NEW CHATROOM: ' + this.id);
 			if (Config.loguserstats) {
-				this.logUserStatsInterval = setInterval(this.logUserStats.bind(this), Config.loguserstats);
+				this.logUserStatsInterval = setInterval(() => this.logUserStats(), Config.loguserstats);
 			}
 		}
 
@@ -1370,7 +1369,7 @@ let ChatRoom = (function () {
 	};
 
 	ChatRoom.prototype.rollLogFile = function (sync) {
-		let mkdir = sync ? function (path, mode, callback) {
+		let mkdir = sync ? (path, mode, callback) => {
 			try {
 				fs.mkdirSync(path, mode);
 			} catch (e) {}	// directory already exists
@@ -1378,16 +1377,15 @@ let ChatRoom = (function () {
 		} : fs.mkdir;
 		let date = new Date();
 		let basepath = 'logs/chat/' + this.id + '/';
-		let self = this;
-		mkdir(basepath, '0755', function () {
+		mkdir(basepath, '0755', () => {
 			let path = date.format('{yyyy}-{MM}');
-			mkdir(basepath + path, '0755', function () {
-				if (self.destroyingLog) return;
+			mkdir(basepath + path, '0755', () => {
+				if (this.destroyingLog) return;
 				path += '/' + date.format('{yyyy}-{MM}-{dd}') + '.txt';
-				if (path !== self.logFilename) {
-					self.logFilename = path;
-					if (self.logFile) self.logFile.destroySoon();
-					self.logFile = fs.createWriteStream(basepath + path, {flags: 'a'});
+				if (path !== this.logFilename) {
+					this.logFilename = path;
+					if (this.logFile) this.logFile.destroySoon();
+					this.logFile = fs.createWriteStream(basepath + path, {flags: 'a'});
 					// Create a symlink to today's lobby log.
 					// These operations need to be synchronous, but it's okay
 					// because this code is only executed once every 24 hours.
@@ -1404,7 +1402,7 @@ let ChatRoom = (function () {
 				}
 				let timestamp = +date;
 				date.advance('1 hour').reset('minutes').advance('1 second');
-				setTimeout(self.rollLogFile.bind(self), +date - timestamp);
+				setTimeout(() => this.rollLogFile(), +date - timestamp);
 			});
 		});
 	};
@@ -1423,9 +1421,9 @@ let ChatRoom = (function () {
 		let total = 0;
 		let guests = 0;
 		let groups = {};
-		Config.groupsranking.forEach(function (group) {
+		for (let group of Config.groupsranking) {
 			groups[group] = 0;
-		});
+		}
 		for (let i in this.users) {
 			let user = this.users[i];
 			++total;
@@ -1467,7 +1465,7 @@ let ChatRoom = (function () {
 		if (this.reportJoinsQueue) {
 			if (!this.reportJoinsInterval) {
 				this.reportJoinsInterval = setTimeout(
-					this.reportRecentJoins.bind(this), Config.reportjoinsperiod
+					() => this.reportRecentJoins(), Config.reportjoinsperiod
 				);
 			}
 
@@ -1496,7 +1494,7 @@ let ChatRoom = (function () {
 		// Set up expire timer to clean up inactive personal rooms.
 		if (this.isPersonal) {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
-			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_INACTIVE_DEALLOCATE);
+			this.expireTimer = setTimeout(() => this.tryExpire(), TIMEOUT_INACTIVE_DEALLOCATE);
 		}
 
 		this.send(update);
@@ -1550,6 +1548,7 @@ let ChatRoom = (function () {
 		if (!this.checkBanned(user, oldid)) {
 			return;
 		}
+		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
 		if (this.game && this.game.onRename) this.game.onRename(user, oldid, joining);
 		return user;
 	};

@@ -741,7 +741,7 @@ exports.BattleScripts = {
 			let moves;
 			let pool = ['struggle'];
 			if (poke === 'Smeargle') {
-				pool = Object.keys(this.data.Movedex).exclude('chatter', 'struggle', 'magikarpsrevenge');
+				pool = Object.keys(this.data.Movedex).exclude('chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge');
 			} else if (template.learnset) {
 				pool = Object.keys(template.learnset);
 				if (template.species.substr(0, 6) === 'Rotom-' || template.species.substr(0, 10) === 'Pumpkaboo-') {
@@ -1098,9 +1098,8 @@ exports.BattleScripts = {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
 			template = this.getTemplate('unown');
 
-			let stack = 'Template incompatible with random battles: ' + species;
-			let fakeErr = {stack: stack};
-			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
+			let err = new Error('Template incompatible with random battles: ' + species);
+			require('../crashlogger.js')(err, 'The randbat set generator');
 		}
 
 		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};
@@ -1292,7 +1291,7 @@ exports.BattleScripts = {
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
-					if (counter.Physical + counter.Special < 3) rejected = true;
+					if (counter.Physical + counter.Special < 3 || counter.setupType) rejected = true;
 					if (hasMove['acrobatics'] || hasMove['lightscreen'] || hasMove['reflect'] || hasMove['suckerpunch'] || hasMove['trickroom']) rejected = true;
 					break;
 				case 'toxicspikes':
@@ -1436,6 +1435,9 @@ exports.BattleScripts = {
 					break;
 				case 'explosion':
 					if (counter.setupType || (hasAbility['Refrigerate'] && hasMove['freezedry']) || hasMove['wish']) rejected = true;
+					break;
+				case 'extremespeed':
+					if (counter.setupType !== 'Physical' && hasMove['vacuumwave']) rejected = true;
 					break;
 				case 'hiddenpower':
 					if ((counter.damagingMoves.length < 2 && !counter.stab) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
@@ -1643,9 +1645,8 @@ exports.BattleScripts = {
 			};
 		}
 
-		let abilities = Object.values(baseTemplate.abilities).sort(function (a, b) {
-			return this.getAbility(b).rating - this.getAbility(a).rating;
-		}.bind(this));
+		let abilities = Object.values(baseTemplate.abilities);
+		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
 		let ability0 = this.getAbility(abilities[0]);
 		let ability1 = this.getAbility(abilities[1]);
 		let ability2 = this.getAbility(abilities[2]);
@@ -1896,7 +1897,7 @@ exports.BattleScripts = {
 			item = 'Light Clay';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
-		} else if (counter.Physical + counter.Special >= 4 && (template.baseStats.def + template.baseStats.spd > 189 || hasMove['rapidspin'])) {
+		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.spd >= 65 && (template.baseStats.def + template.baseStats.spd >= 190 || hasMove['rapidspin'])) {
 			item = 'Assault Vest';
 		} else if (counter.damagingMoves.length >= 4) {
 			item = (!!counter['Normal'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
@@ -2346,9 +2347,8 @@ exports.BattleScripts = {
 		if (!template.exists || (!template.randomDoubleBattleMoves && !template.randomBattleMoves && !template.learnset)) {
 			template = this.getTemplate('unown');
 
-			let stack = 'Template incompatible with random battles: ' + species;
-			let fakeErr = {stack: stack};
-			require('../crashlogger.js')(fakeErr, 'The doubles randbat set generator');
+			let err = new Error('Template incompatible with random battles: ' + species);
+			require('../crashlogger.js')(err, 'The doubles randbat set generator');
 		}
 
 		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};
@@ -2448,7 +2448,6 @@ exports.BattleScripts = {
 				let moveid = moves[k];
 				let move = this.getMove(moveid);
 				let rejected = false;
-				let isSetup = false;
 
 				switch (moveid) {
 				// not very useful without their supporting moves
@@ -2472,17 +2471,14 @@ exports.BattleScripts = {
 				case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup': case 'bellydrum':
 					if (counter.Physical < 2 && !hasMove['batonpass']) rejected = true;
 					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
-					isSetup = true;
 					break;
 				case 'nastyplot': case 'tailglow': case 'quiverdance': case 'calmmind': case 'geomancy':
 					if (counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (counter.setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
-					isSetup = true;
 					break;
 				case 'shellsmash': case 'growth': case 'workup':
 					if (counter.Physical + counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (counter.setupType !== 'Mixed' || counter['mixedsetup'] > 1) rejected = true;
-					isSetup = true;
 					break;
 
 				// bad after setup
@@ -2840,9 +2836,8 @@ exports.BattleScripts = {
 			};
 		}
 
-		let abilities = Object.values(baseTemplate.abilities).sort(function (a, b) {
-			return this.getAbility(b).rating - this.getAbility(a).rating;
-		}.bind(this));
+		let abilities = Object.values(baseTemplate.abilities);
+		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
 		let ability0 = this.getAbility(abilities[0]);
 		let ability1 = this.getAbility(abilities[1]);
 		let ability2 = this.getAbility(abilities[2]);
