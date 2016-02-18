@@ -1,12 +1,22 @@
 /* 
 * Created by: Master Float.
+* Edited by: Kevinxzllz
 */
 
 var fs = require('fs');
+var path = require('path');
 var selectors;
 
 function writeIconCSS() {
         fs.appendFile('config/custom.css', selectors);
+}
+ 
+function logMoney(message) {
+        if (!message) return;
+        var file = path.join(__dirname, '../logs/money.txt');
+        var date = "[" + new Date().toUTCString() + "] ";
+        var msg = message + "\n";
+        fs.appendFile(file, date + msg);
 }
  
 exports.commands = {
@@ -23,7 +33,9 @@ exports.commands = {
                 });
                 selectors += ' { \n' + '    ' + image +  '\n  }';
  
+                logMoney(user.name + " has set an icon to " + username + ".");
                 this.privateModCommand("(" + user.name + " has set an icon to  " + username + ")");
+                Rooms('staff').add('|raw|' + user.name + " has set an icon to " + username +  ".").update();
                 writeIconCSS();
         },
         seticonhelp: ["/seticon [username], [image], [room 1], [room 2], etc. - Sets an icon to a user in chosen rooms."]
