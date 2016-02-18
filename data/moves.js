@@ -1,4 +1,4 @@
-g/*
+/*
 
 List of flags and their descriptions:
 
