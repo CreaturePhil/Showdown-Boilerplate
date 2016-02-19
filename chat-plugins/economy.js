@@ -10,7 +10,7 @@ let shop = [
 	['League Room', 'Purchases a room at a reduced rate for use with a league.  A roster must be supplied with at least 10 members for this room.', 25],
 	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 40],
 	['Staff Help', 'Staff member will help set up roomintros and anything else needed in a room. Response may not be immediate.', 50],
-	['Icon','Buy a custom icon that can be applied to the rooms you want. You must take into account that the provided image should be 32 x 32',75],
+	['Icon', 'Buy a custom icon that can be applied to the rooms you want. You must take into account that the provided image should be 32 x 32', 75],
 	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100],
 ];
 
@@ -120,8 +120,8 @@ function handleBoughtItem(item, user, cost) {
 		this.sendReply("You will have this until you log off for more than an hour.");
 		this.sendReply("If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.");
 	} else if (item === 'icon') {
-        this.sendReply('You purchased an icon, contact an administrator to obtain the article.');
-   } else {
+		this.sendReply('You purchased an icon, contact an administrator to obtain the article.');
+	} else {
 		let msg = '**' + user.name + " has bought " + item + ".**";
 		Rooms.rooms.staff.add('|c|~Shop Alert|' + msg);
 		Rooms.rooms.staff.update();
