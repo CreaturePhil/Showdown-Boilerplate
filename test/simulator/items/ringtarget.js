@@ -36,9 +36,16 @@ describe('Ring Target', function () {
 	it('should not affect ability-based immunities', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Hariyama", ability: 'guts', moves: ['earthquake']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mismagius", ability: 'levitate', item: 'ringtarget', moves: ['shadowsneak']}]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: "Mismagius", ability: 'levitate', item: 'ringtarget', moves: ['shadowsneak']},
+			{species: "Rotom-Fan", ability: 'levitate', item: 'ringtarget', moves: ['snore']},
+		]);
 		battle.commitDecisions();
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
+		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+
+		// even if Rotom-Fan
+		battle.choose('p2', 'switch 2');
+		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 });

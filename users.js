@@ -682,7 +682,7 @@ User = (() => {
 	User.prototype.rename = function (name, token, newlyRegistered, connection) {
 		for (let i in this.roomCount) {
 			let room = Rooms(i);
-			if (room && room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
+			if (room && room.rated && (this.userid in room.game.players)) {
 				this.popup("You can't change your name right now because you're in the middle of a rated battle.");
 				return false;
 			}
@@ -1275,8 +1275,7 @@ User = (() => {
 		}
 		let makeRoom = this.can('makeroom');
 		if (room.tour && !makeRoom) {
-			let tour = room.tour.tour;
-			let errorMessage = tour.onBattleJoin(room, this);
+			let errorMessage = room.tour.onBattleJoin(room, this);
 			if (errorMessage) {
 				connection.sendTo(roomid, "|noinit|joinfailed|" + errorMessage);
 				return false;
