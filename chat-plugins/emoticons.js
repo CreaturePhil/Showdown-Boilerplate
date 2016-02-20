@@ -1,7 +1,12 @@
 'use strict';
 
-const demFeels = require('dem-feels');
 const color = require('../config/color');
+let demFeels;
+try {
+	demFeels = require('dem-feels');
+} catch (e) {
+	console.error(e);
+}
 
 exports.parseEmoticons = parseEmoticons;
 
