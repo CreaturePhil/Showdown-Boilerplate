@@ -2,7 +2,9 @@
 
 const color = require('../config/color');
 let demFeels = function () {};
-demFeels.getEmotes = function () {};
+demFeels.getEmotes = function () {
+	return {};
+};
 try {
 	demFeels = require('dem-feels');
 } catch (e) {
