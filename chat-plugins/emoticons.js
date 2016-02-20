@@ -1,7 +1,8 @@
 'use strict';
 
 const color = require('../config/color');
-let demFeels;
+let demFeels = function () {};
+demFeels.getEmotes = function () {};
 try {
 	demFeels = require('dem-feels');
 } catch (e) {
