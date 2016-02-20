@@ -1,32 +1,23 @@
 'use strict';
 
-const demFeels = require('dem-feels'); 
+const demFeels = require('dem-feels');
 const color = require('../config/color');
 
 exports.parseEmoticons = parseEmoticons;
 
 const emotes = demFeels.getEmotes();
 
-let emotesKeys = Object.keys(emotes);
-let patterns = [];
-let metachars = /[[\]{}()*+?.\\|^$\-,&#\s]/g;
-
-for (let i in emotes) {
-	if (emotes.hasOwnProperty(i)) {
-		patterns.push('(' + i.replace(metachars, '\\$&') + ')');
-	}
-}
-let patternRegex = new RegExp(patterns.join('|'), 'g');
+const emotesKeys = Object.keys(emotes);
 
 /**
- * Parse emoticons in message.
- *
- * @param {String} message
- * @param {Object} room
- * @param {Object} user
- * @param {Boolean} pm - returns a string if it is in private messages
- * @returns {Boolean|String}
- */
+* Parse emoticons in message.
+*
+* @param {String} message
+* @param {Object} room
+* @param {Object} user
+* @param {Boolean} pm - returns a string if it is in private messages
+* @returns {Boolean|String}
+*/
 function parseEmoticons(message, room, user, pm) {
 	if (typeof message !== 'string' || (!pm && room.disableEmoticons)) return false;
 
@@ -68,18 +59,17 @@ function parseEmoticons(message, room, user, pm) {
 }
 
 /**
- * Create a two column table listing emoticons.
- *
- * @return {String} emotes table
- */
+* Create a two column table listing emoticons.
+*
+* @return {String} emotes table
+*/
 function create_table() {
 	let emotes_name = Object.keys(emotes);
 	let emotes_list = [];
 	let emotes_group_list = [];
 	let len = emotes_name.length;
-	let i;
 
-	for (i = 0; i < len; i++) {
+	for (let i = 0; i < len; i++) {
 		emotes_list.push("<td>" +
 			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='50' width='50' />" +
 			emotes_name[i] + "</td>");
@@ -87,9 +77,9 @@ function create_table() {
 
 	let emotes_list_right = emotes_list.splice(len / 2, len / 2);
 
-	for (i = 0; i < len / 2; i++) {
-		let emote1 = emotes_list[i],
-			emote2 = emotes_list_right[i];
+	for (let i = 0; i < len / 2; i++) {
+		let emote1 = emotes_list[i];
+		let emote2 = emotes_list_right[i];
 		if (emote2) {
 			emotes_group_list.push("<tr>" + emote1 + emote2 + "</tr>");
 		} else {
