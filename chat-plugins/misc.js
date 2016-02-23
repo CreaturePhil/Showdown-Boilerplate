@@ -42,7 +42,7 @@ function clearRoom(room) {
 
 exports.commands = {
 	roomlist: function (target, room, user) {
-		if(!this.can('pban')) return;
+		if (!this.can('pban')) return;
 		let totalUsers = 0;
 		for (let u of Users.users) {
 			u = u[1];
