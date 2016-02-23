@@ -41,6 +41,46 @@ function clearRoom(room) {
 }
 
 exports.commands = {
+	roomlist: function (target, room, user) {
+		if(!this.can('pban')) return;
+		let totalUsers = 0;
+		for (let u of Users.users) {
+			u = u[1];
+			if (Users(u).connected) {
+				totalUsers++;
+			}
+		}
+		let rooms = Object.keys(Rooms.rooms),
+			len = rooms.length,
+			header = ['<b><font color="#777777" size="2">Total users connected: ' + totalUsers + '</font></b><br />'],
+			official = ['<b><font color="#777777" size="2"><u>Official chat rooms:</u></font></b><br />'],
+			nonOfficial = ['<hr><b><u><font color="#777777" size="2">Public chat rooms:</font></u></b><br />'],
+			privateRoom = ['<hr><b><u><font color="#777777" size="2">Private chat rooms:</font></u></b><br />'],
+			groupChats = ['<hr><b><u><font color="#777777" size="2">Group Chats:</font></u></b><br />'],
+			battleRooms = ['<hr><b><u><font color="#777777" size="2">Battle Rooms:</font></u></b><br />'];
+		while (len--) {
+			let _room = Rooms.rooms[rooms[(rooms.length - len) - 1]];
+			if (_room.type === 'battle') {
+				battleRooms.push('<a href="/' + _room.id + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')');
+			}
+			if (_room.type === 'chat') {
+				if (_room.isPersonal) {
+					groupChats.push('<a href="/' + _room.id + '" class="ilink">' + _room.id + '</a> (' + _room.userCount + ')');
+					continue;
+				}
+				if (_room.isOfficial) {
+					official.push('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')');
+					continue;
+				}
+				if (_room.isPrivate) {
+					privateRoom.push('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')');
+					continue;
+				}
+			}
+			if (_room.type !== 'battle' && _room.id !== 'global') nonOfficial.push('<a href="/' + toId(_room.title) + '" class="ilink">' + _room.title + '</a> (' + _room.userCount + ')');
+		}
+		this.sendReplyBox(header + official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' ') + (groupChats.length > 1 ? groupChats.join(' ') : '') + (battleRooms.length > 1 ? battleRooms.join(' ') : ''));
+	},
 	stafflist: 'authority',
 	auth: 'authority',
 	authlist: 'authority',
