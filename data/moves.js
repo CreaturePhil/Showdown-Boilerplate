@@ -2150,7 +2150,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onHit: function (target, source) {
-			if (source.item) {
+			if (source.item || source.volatiles['gem']) {
 				return;
 			}
 			let yourItem = target.takeItem(source);
@@ -4659,7 +4659,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
-				this.add('-start', pokemon, 'move: Follow Me');
+				this.add('-singleturn', pokemon, 'move: Follow Me');
 			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
@@ -8189,7 +8189,7 @@ exports.BattleMovedex = {
 				let noMeFirst = {
 					chatter:1, counter:1, covet:1, focuspunch:1, mefirst:1, metalburst:1, mirrorcoat:1, struggle:1, thief:1,
 				};
-				let move = this.getMove(decision.move);
+				let move = this.getMoveCopy(decision.move.id);
 				if (move.category !== 'Status' && !noMeFirst[move]) {
 					pokemon.addVolatile('mefirst');
 					this.useMove(move, pokemon, target);
@@ -10639,7 +10639,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
-				this.add('-start', pokemon, 'move: Rage Powder');
+				this.add('-singleturn', pokemon, 'move: Rage Powder');
 			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
@@ -14106,7 +14106,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onHit: function (target, source) {
-			if (source.item) {
+			if (source.item || source.volatiles['gem']) {
 				return;
 			}
 			let yourItem = target.takeItem(source);

@@ -69,15 +69,6 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		searchShow: false,
-		ruleset: ['UU'],
-		banlist: ['UU', 'BL2'],
-	},
-	{
-		name: "RU (suspect test)",
-		section: "ORAS Singles",
-
-		challengeShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2'],
 	},
@@ -95,12 +86,11 @@ exports.Formats = [
 		banlist: ['RU', 'BL3'],
 	},
 	{
-		name: "NU (current)",
+		name: "NU (suspect test)",
 		section: "ORAS Singles",
 
-		challengeShow: false,
-		ruleset: ['RU'],
-		banlist: ['RU', 'BL3'],
+		ruleset: ['NU'],
+		banlist: ['Sawk'],
 	},
 	{
 		name: "PU",
@@ -401,174 +391,237 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Mix and Mega",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3540979/\">Mix and Mega</a>"],
+		name: "Metagamiate",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3502303/\">Metagamiate</a>"],
 		section: "OM of the Month",
 		column: 2,
 
-		mod: 'mixandmega',
-		ruleset: ['Ubers', 'Baton Pass Clause'],
-		banlist: ['Gengarite', 'Shadow Tag', 'Dynamic Punch', 'Electrify', 'Zap Cannon'],
-		onValidateTeam: function (team, format) {
-			let itemTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let item = this.getItem(team[i].item);
-				if (!item) continue;
-				if (itemTable[item] && item.megaStone) return ["You are limited to one of each Mega Stone.", "(You have more than one " + this.getItem(item).name + ")"];
-				if (itemTable[item] && (item.id === 'redorb' || item.id === 'blueorb')) return ["You are limited to one of each Primal Orb.", "(You have more than one " + this.getItem(item).name + ")"];
-				itemTable[item] = true;
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Dragonite',
+			'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
+			'Landorus', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew', 'Shadow Tag',
+		],
+		onModifyMove: function (move, pokemon) {
+			if (move.type === 'Normal' && move.id !== 'hiddenpower' && !pokemon.hasAbility(['aerilate', 'pixilate', 'refrigerate'])) {
+				let types = pokemon.getTypes();
+				let type = types.length < 2 || !pokemon.set.shiny ? types[0] : types[1];
+				move.type = type;
+				move.isMetagamiate = true;
 			}
 		},
-		onValidateSet: function (set) {
-			let template = this.getTemplate(set.species || set.name);
-			let item = this.getItem(set.item);
-			if (!item.megaEvolves && item.id !== 'blueorb' && item.id !== 'redorb') return;
-			if (template.baseSpecies === item.megaEvolves || (item.id === 'redorb' && template.baseSpecies === 'Groudon') || (item.id === 'blueorb' && template.baseSpecies === 'Kyogre')) return;
-			if (template.evos.length) return ["" + template.species + " is not allowed to hold " + item.name + " because it's not fully evolved."];
-			if (template.tier === 'Uber' || template.species in {'Cresselia':1, 'Dragonite':1, 'Kyurem-Black':1, 'Lucario':1, 'Slaking':1, 'Smeargle':1, 'Regigigas':1}) {
-				return ["" + template.species + " is not allowed to hold " + item.name + "."];
-			}
-			if (template.species === 'Shuckle' && ['aggronite', 'audinite', 'charizarditex', 'charizarditey', 'galladite', 'gyaradosite', 'houndoominite', 'latiasite', 'salamencite', 'scizorite', 'sharpedonite', 'steelixite', 'tyranitarite', 'venusaurite'].indexOf(item.id) >= 0) {
-				return ["" + template.species + " is not allowed to hold " + item.name + "."];
-			}
-			let powerAbilities = {'Huge Power':1, 'Pure Power':1};
-			let allowedPower = false;
-			switch (item.id) {
-			case 'beedrillite': case 'kangaskhanite':
-				return ["" + item.name + " can only allowed be held by " + item.megaEvolves + "."];
-			case 'blazikenite':
-				if (set.ability !== 'Speed Boost') return ["" + template.species + " is not allowed to hold " + item.name + "."];
-				break;
-			case 'mawilite': case 'medichamite':
-				if (powerAbilities.hasOwnProperty(set.ability)) break;
-				if (!template.otherFormes) return ["" + template.species + " is not allowed to hold " + item.name + "."];
-				for (let i = 0; i < template.otherFormes.length; i++) {
-					let altTemplate = this.getTemplate(template.otherFormes[i]);
-					if ((altTemplate.isMega || altTemplate.isPrimal) && powerAbilities.hasOwnProperty(altTemplate.abilities['0'])) {
-						allowedPower = true;
-						break;
-					}
-				}
-				if (!allowedPower) return ["" + template.species + " is not allowed to hold " + item.name + "."];
-				break;
-			case 'mewtwonitey':
-				if (template.baseStats.def <= 20) return ["" + template.species + " does not have enough Defense to hold " + item.name + "."];
-				break;
-			case 'diancite':
-				if (template.baseStats.def <= 40 || template.baseStats.spd <= 40) return ["" + template.species + " does not have enough Def. or Sp. Def. to hold " + item.name + "."];
-				break;
-			case 'slowbronite':
-				if (template.baseStats.def > 185) return ["" + template.species + " is not allowed to hold " + item.name + "."];
-				break;
-			case 'ampharosite': case 'garchompite': case 'heracronite':
-				if (template.baseStats.spe <= 10) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
-				break;
-			case 'cameruptite':
-				if (template.baseStats.spe <= 20) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
-				break;
-			case 'abomasite': case 'sablenite':
-				if (template.baseStats.spe <= 30) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
-				break;
-			}
-		},
-		onBegin: function () {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-				pokemon.originalSpecies = pokemon.baseTemplate.species;
-			}
-		},
-		onSwitchInPriority: -6,
-		onSwitchIn: function (pokemon) {
-			let item = pokemon.getItem();
-			if (pokemon.isActive && !pokemon.template.isMega && !pokemon.template.isPrimal && (item.id === 'redorb' || item.id === 'blueorb') && pokemon.baseTemplate.tier !== 'Uber' && !pokemon.template.evos.length) {
-				// Primal Reversion
-				let bannedMons = {'Cresselia':1, 'Dragonite':1, 'Kyurem-Black':1, 'Lucario':1, 'Regigigas':1, 'Slaking':1, 'Smeargle':1};
-				if (!(pokemon.baseTemplate.baseSpecies in bannedMons)) {
-					let template = this.getMixedTemplate(pokemon.originalSpecies, item.id === 'redorb' ? 'Groudon-Primal' : 'Kyogre-Primal');
-					pokemon.formeChange(template);
-					pokemon.baseTemplate = template;
-
-					// Do we have a proper sprite for it?
-					if (pokemon.originalSpecies === (item.id === 'redorb' ? 'Groudon' : 'Kyogre')) {
-						pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-						this.add('detailschange', pokemon, pokemon.details);
-					} else {
-						let oTemplate = this.getTemplate(pokemon.originalSpecies);
-						this.add('-formechange', pokemon, oTemplate.species, template.requiredItem);
-						this.add('-start', pokemon, this.getTemplate(template.originalMega).requiredItem, '[silent]');
-						if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
-							this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
-						}
-					}
-					this.add('message', pokemon.name + "'s " + pokemon.getItem().name + " activated!");
-					this.add('message', pokemon.name + "'s Primal Reversion! It reverted to its primal form!");
-					pokemon.setAbility(template.abilities['0']);
-					pokemon.baseAbility = pokemon.ability;
-					pokemon.canMegaEvo = false;
-				}
-			} else {
-				let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
-				if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
-					// Place volatiles on the Pokémon to show its mega-evolved condition and details
-					this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
-					let oTemplate = this.getTemplate(pokemon.originalSpecies);
-					if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
-						this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
-					}
-				}
-			}
-		},
-		onSwitchOut: function (pokemon) {
-			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
-			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
-				this.add('-end', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
-			}
+		onBasePowerPriority: 9,
+		onBasePower: function (basePower, attacker, defender, move) {
+			if (!move.isMetagamiate) return;
+			return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
 	{
-		name: "VoltTurn Mayhem",
+		name: "Unreleased OU",
 		desc: [
-			"All Pok&eacute;mon automatically switch out upon using a move that affects the opponent.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3527847/\">VoltTurn Mayhem</a>",
+			"Standard OU including unreleased Pokémon, abilities and items, and moves obtained from RBY.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3566186/\">Unreleased OU</a>",
 		],
 		section: "OM of the Month",
 
-		ruleset: ['OU'],
-		banlist: [],
-		onValidateTeam: function (team, format) {
-			let fakeCount = 0;
-			let move = {};
-			for (let i = 0; i < team.length; i++) {
-				if (team[i].moves) {
-					for (let j = 0; j < team[i].moves.length; j++) {
-						move = this.getMove(team[i].moves[j]);
-						if (move.id === "fakeout" && fakeCount > 0) return ["You are limited to one user of Fake Out per team.", "(" + (team[i].name || team[i].species) + " has Fake Out)"];
-						if (move.id === "fakeout") fakeCount += 1;
+		mod: 'unreleased',
+		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Baton Pass Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: ['Illegal', 'Uber', 'Shadow Tag', 'Soul Dew'],
+	},
+	{
+		name: "[Seasonal] Dimension Doom",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
+		section: "OM of the Month",
+
+		team: 'randomSeasonalDimensional',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+		onBegin: function () {
+			this.add('-message', "The world is about to end!");
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				if (pokemon.set.signatureMove) {
+					let last = pokemon.moves.length - 1;
+					if (pokemon.moves[last]) {
+						pokemon.moves[last] = toId(pokemon.set.signatureMove);
+						pokemon.moveset[last].move = pokemon.set.signatureMove;
+						pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
 					}
 				}
 			}
 		},
-		onModifyMove: function (move) {
-			let validTargets = {"normal":1, "any":1, "randomNormal":1, "allAdjacent":1, "allAdjacentFoes":1, "scripted":1};
-			if (move.target && !move.nonGhostTarget && (move.target in validTargets)) move.selfSwitch = true;
+		onSwitchIn: function (pokemon) {
+			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+			if (name === 'rick') {
+				this.add('-message', 'WUBBA LUBBA DUB DUB!!');
+			}
+			if (name === 'morty') {
+				this.add('-message', "I-I'm not sure t-this is a good idea, Rick!");
+			}
+			if (name === 'mrmeeseks') {
+				this.add('-message', "Hi! I'm Mr. Meeseks! Look at me!");
+			}
+			if (name === 'birdperson') {
+				this.add('-message', "It's been a tough mating season for birdperson.");
+			}
+			if (name === 'squanch') {
+				this.add('-message', "You're getting squanched, squanch!");
+			}
+			if (name === 'mortyjr') {
+				this.add('-message', 'The government is lame!');
+			}
+			if (name === 'dipper') {
+				this.add('-message', 'A mystery to solve!');
+			}
+			if (name === 'mabel') {
+				this.add('-message', 'Yay! Splinters!');
+			}
+			if (name === 'stanley') {
+				this.add('-message', 'Discount punches! No refunds!');
+			}
+			if (name === 'stanford') {
+				this.add('-message', 'Being a hero means fighting back even when it seems impossible.');
+			}
+			if (name === 'snowball') {
+				this.add('-message', 'You may call me snowball, because my fur is white and pretty.');
+			}
+			if (name === 'billcipher') {
+				this.add('-message', 'Let the weirdmaggedon start! HAHAHA!');
+			}
+			if (name === 'lilgideon') {
+				this.add('-message', 'I can buy and sell you, old man!');
+			}
 		},
-	},
-	{
-		name: "[Seasonal] Polar Opposites",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
-		section: "OM of the Month",
-		team: 'randomSeasonalPolar',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
-			this.add('-message', "NOTE: This is an Inverse Battle! Type effectivenesses are reversed!");
-		},
-		onNegateImmunity: false,
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
+		onModifyMove: function (move, pokemon) {
+			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+			if (move.id === 'watergun' && name in {'rick':1, 'evilrick':1}) {
+				move.name = 'Portal Gun';
+				move.type = 'Psychic';
+				move.basePower = 66;
+				move.accuracy = true;
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Hyper Beam", target);
+				};
+				switch (this.random(6)) {
+				case 0:
+					move.volatileStatus = 'confusion';
+					move.onHit = function () {
+						this.add('-message', "This weird dimension confuses you!");
+					};
+					break;
+				case 1:
+					move.category = 'embargo';
+					move.onHit = function () {
+						this.add('-message', "Your item got sucked by the dimension hole!");
+					};
+					break;
+				case 2:
+					move.forceSwitch = true;
+					move.onHit = function () {
+						this.add('-message', "You got sucked into the portal!");
+					};
+					break;
+				case 3:
+					move.basePower = 150;
+					move.type = 'Fire';
+					move.onHit = function () {
+						this.add('-message', "Flames came out of the portal gun!");
+					};
+					break;
+				case 4:
+					move.basePower = 130;
+					move.type = 'Poison';
+					move.status = 'tox';
+					move.onHit = function () {
+						this.add('-message', "Toxic air came out of the portal gun!");
+					};
+					break;
+				case 5:
+					move.basePower = 45;
+					move.multihit = 3;
+					move.type = 'Bug';
+					move.onHit = function () {
+						this.add('-message', "Tentacles came out of the portal gun!");
+					};
+					break;
+				}
+			}
+			if (move.id === 'outrage' && name === 'morty') {
+				move.name = 'Morty Rage';
+				move.type = 'Fighting';
+				move.basePower = 200;
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Outrage", target);
+					this.add('-message', 'Morty grew tired of your shennanigans!');
+				};
+			}
+			if (move.id === 'kinesis' && name === 'evilmorty') {
+				move.name = 'Mind Control';
+				move.volatileStatus = 'confusion';
+				move.category = 'Special';
+				move.type = 'Fire';
+				move.basePower = 50;
+				move.boosts = {accuracy: -1};
+			}
+			if (move.id === 'dreameater' && name === 'scaryterry') {
+				move.name = 'Super Dream Eater';
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Hyper Beam", target);
+				};
+				move.onBasePower = function (basePower, attacker, defender) {
+					if (defender.status && defender.status === 'slp') {
+						return this.chainModify(2);
+					}
+				};
+			}
+			if (move.id === 'bulkup' && name === 'squanchy') {
+				move.name = 'Squanch Up';
+				move.boosts = {atk: 2, def: 2};
+			}
+			if (move.id === 'recycle') {
+				move.name = 'Pines Recycle';
+				move.heal = [2, 3];
+			}
+			if (move.id === 'psychic' && name === 'mabel') {
+				move.name = 'Grappling Hook';
+				move.basePower = 110;
+				move.drain = [2, 3];
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Hyper Beam", target);
+					this.add('-message', 'GRAPPLING HOOK!');
+				};
+			}
+			if (move.id === 'thunder' && name === 'billcipher') {
+				move.name = 'Bill Thunder';
+				move.basePower = 200;
+			}
+			if (move.id === 'tackle' && name === 'stanley') {
+				move.name = 'Baseball Bat';
+				move.basePower = 135;
+				move.volatileStatus = 'confusion';
+			}
+			if (move.id === 'hyperbeam' && name === 'stanford') {
+				move.name = 'Dimensional Sniper';
+				move.category = 'Physical';
+				move.basePower = 300;
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Origin Pulse", target);
+				};
+			}
+			if (move.id === 'chatter' && name === 'summer') {
+				move.name = 'Teen Problems';
+				move.basePower = 90;
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Meteor Mash", target);
+					this.add('-message', 'This is so embarrasing!');
+				};
+			}
 		},
 	},
 	{
@@ -779,7 +832,7 @@ exports.Formats = [
 			battle: 2,
 		},
 		ruleset: ['Doubles OU'],
-		banlist: ['Perish Song'],
+		banlist: ['Kangaskhanite', 'Perish Song'],
 	},
 	{
 		name: "Averagemons",

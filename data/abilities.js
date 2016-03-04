@@ -1468,7 +1468,7 @@ exports.BattleAbilities = {
 		onSourceHit: function (target, source, move) {
 			if (!move || !target) return;
 			if (target !== source && move.category !== 'Status') {
-				if (source.item) return;
+				if (source.item || source.volatiles['gem'] || source.volatiles['fling']) return;
 				let yourItem = target.takeItem(source);
 				if (!yourItem) return;
 				if (!source.setItem(yourItem)) {
@@ -3316,9 +3316,10 @@ exports.BattleAbilities = {
 				return false;
 			}
 		},
-		onImmunity: function (type, target) {
-			if (type === 'Rock' && !target.activeTurns) {
-				return false;
+		onTryHit: function (target, source, move) {
+			if (move.type === 'Rock' && !target.activeTurns) {
+				this.add('-immune', target, '[msg]', '[from] ability: Mountaineer');
+				return null;
 			}
 		},
 		id: "mountaineer",
