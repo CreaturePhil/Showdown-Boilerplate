@@ -194,6 +194,8 @@ exports.commands = {
 			let regdate = body.split('<small>')[1].split('</small>')[0].replace(/(<em>|<\/em>)/g, '');
 			if (regdate === '(Unregistered)') {
 				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
+			} else if (regdate === '(Account disabled)') {
+				this.sendReplyBox(Tools.escapeHTML(target) + "'s account is disabled.");
 			} else {
 				this.sendReplyBox(Tools.escapeHTML(target) + " was registered on " + regdate.slice(7) + ".");
 			}
