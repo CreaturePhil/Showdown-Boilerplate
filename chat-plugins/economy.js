@@ -272,9 +272,7 @@ exports.commands = {
 
 	moneylog: function (target, room, user, connection) {
 		if (!this.can('modlog')) return;
-		
 		target = toId(target);
-		
 		let numLines = 15;
 		let matching = true;
 		if (target.match(/\d/g) && !isNaN(target)) {
