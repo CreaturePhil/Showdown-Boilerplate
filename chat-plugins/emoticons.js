@@ -53,7 +53,7 @@ function parseEmoticons(message, room, user, pm) {
 	// **bold**
 	message = message.replace(/\*\*([^< ](?:[^<]*?[^< ])?)\*\*/g, '<b>$1</b>');
 
-	const group = user.getIdentity().charAt(0);
+	let group = user.getIdentity().charAt(0);
 	if (room.auth) group = room.auth[user.userid] || group;
 
 	let style = "background:none;border:0;padding:0 5px 0 0;font-family:Verdana,Helvetica,Arial,sans-serif;font-size:9pt;cursor:pointer";
