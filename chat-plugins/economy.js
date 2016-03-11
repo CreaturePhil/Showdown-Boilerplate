@@ -27,7 +27,7 @@ let shopDisplay = getShopDisplay(shop);
  * @param {Number} amount
  * @returns {String}
  */
-function currencyName(amount) {
+global.currencyName = function (amount) {
 	let name = " buck";
 	return amount === 1 ? name : name + "s";
 }
