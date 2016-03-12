@@ -1,8 +1,8 @@
 /**
- *
- * Original Room Ranks by (Bandi & Naten ? idk), updated by Dragotic.
- *
- */
+*
+* Original Room Ranks by (Bandi & Naten ? idk), updated by Dragotic.
+*
+*/
 
 'use strict';
 
@@ -13,8 +13,8 @@ exports.commands = {
 
         let targetUser = this.targetUser;
 
-        if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
-        if (!this.can('makeroom')) return false;
+        if (!targetUser)    return this.errorReply("User '" + this.targetUsername + "' is not online.");
+        if (!this.can('makeroom'))  return false;
         if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
         let name = targetUser.name;
@@ -29,7 +29,7 @@ exports.commands = {
         room.onUpdateIdentity(targetUser);
         room.chatRoomData.founder = room.founder;
         Rooms.global.writeChatRoomData();
-    },
+        },
     roomdefounder: 'deroomfounder',
     deroomfounder: function (target, room, user) {
         if (!room.auth) return this.sendReply("/roomdeowner - This room isn't designed for per-room moderation");
