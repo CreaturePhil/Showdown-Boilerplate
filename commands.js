@@ -816,7 +816,10 @@ exports.commands = {
 
 		let currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && targetUser.group) || ' ');
 		let nextGroup = target;
-		if (target === 'deauth') nextGroup = Config.groupsranking[0];
+		if (target === 'deauth') {
+			nextGroup = Config.groupsranking[0];
+			if (room.chatRoomData.founder && room.chatRoomData.founder === targetUser.userid) delete room.founder;
+		}
 		if (!nextGroup) {
 			return this.errorReply("Please specify a group such as /roomvoice or /roomdeauth");
 		}
@@ -895,12 +898,18 @@ exports.commands = {
 			rankLists[targetRoom.auth[u]].push(u);
 		}
 
-		let buffer = Object.keys(rankLists).sort((a, b) =>
+		let buffer = [];
+
+		if (targetRoom.founder) {
+			buffer.push("Room Founder (#): " + (targetRoom.founder in targetRoom.users ? ("**" + targetRoom.users[targetRoom.founder].name + "**") : targetRoom.founder));
+		}
+
+		Object.keys(rankLists).sort((a, b) =>
 			(Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank
 		).map(r => {
 			let roomRankList = rankLists[r].sort();
 			roomRankList = roomRankList.map(s => s in targetRoom.users ? "**" + s + "**" : s);
-			return (Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + roomRankList.join(", ");
+			buffer.push((Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + roomRankList.join(", "));
 		});
 
 		if (!buffer.length) {

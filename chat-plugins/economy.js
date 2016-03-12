@@ -30,7 +30,7 @@ let shopDisplay = getShopDisplay(shop);
 global.currencyName = function (amount) {
 	let name = " buck";
 	return amount === 1 ? name : name + "s";
-}
+};
 
 /**
  * Checks if the money input is actually money.
