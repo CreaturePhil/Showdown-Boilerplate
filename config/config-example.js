@@ -358,7 +358,7 @@ exports.grouplist = [
 		broadcast: true,
 		warn: '\u2605u',
 		kick: true,
-		tournamentsmanagement: true
+		tournamentsmanagement: true,
 	},
 	{
 		symbol: '+',
@@ -367,7 +367,7 @@ exports.grouplist = [
 		inherit: ' ',
 		alts: 's',
 		broadcast: true,
-		tournamentsmanagement: true
+		tournamentsmanagement: true,
 	},
 	{
 		symbol: ' ',
