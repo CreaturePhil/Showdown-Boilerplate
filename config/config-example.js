@@ -86,7 +86,7 @@ exports.reportjoinsperiod = 0;
 // report battles - shows messages like "OU battle started" in the lobby
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 160 or so users.
-exports.reportbattles = true;
+exports.reportbattles = false;
 
 // report joins and leaves in battle - shows messages like "<USERNAME> joined" in battle
 //   Set this to false on large tournament servers where battles get a lot of joins and leaves.
@@ -191,8 +191,8 @@ exports.avatarurl = '';
 // When tournaments are created in rooms listed below, they will be announced in
 // the server's main tournament room (either the specified tourroom or by default
 // the room 'tournaments')
-exports.tourroom = '';
-exports.tourannouncements = [/* roomids */];
+exports.tourroom = 'lobby';
+exports.tourannouncements = ['tournaments', 'monotype', '1v1'];
 
 // appealurl - specify a URL containing information on how users can appeal
 // disciplinary actions on your section. You can also leave this blank, in
@@ -269,7 +269,7 @@ exports.grouplist = [
 		id: "leader",
 		name: "Leader",
 		inherit: '@',
-		jurisdiction: '@u',
+		jurisdiction: 'u',
 		promote: 'u',
 		roomowner: true,
 		roommod: true,
@@ -282,7 +282,6 @@ exports.grouplist = [
 		editroom: true,
 		potd: true,
 		disableladder: true,
-		globalonly: true,
 		tournamentsmanagement: true,
 		gamemanagement: true,
 	},
@@ -324,7 +323,7 @@ exports.grouplist = [
 		forcerename: true,
 		ip: true,
 		alts: '@u',
-		tournaments: true,
+		tournamentsmanagement: true,
 		game: true,
 	},
 	{
@@ -344,10 +343,22 @@ exports.grouplist = [
 		alts: '%u',
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
-		tournamentsmoderation: true,
+		tournamentsmanagement: true,
 		jeopardy: true,
 		joinbattle: true,
 		minigame: true,
+	},
+	{
+		symbol: '$',
+		id: "operator",
+		name: "Operator",
+		inherit: '+',
+		jurisdiction: 'u',
+		announce: true,
+		broadcast: true,
+		warn: '\u2605u',
+		kick: true,
+		tournamentsmanagement: true
 	},
 	{
 		symbol: '+',
@@ -356,6 +367,7 @@ exports.grouplist = [
 		inherit: ' ',
 		alts: 's',
 		broadcast: true,
+		tournamentsmanagement: true
 	},
 	{
 		symbol: ' ',
