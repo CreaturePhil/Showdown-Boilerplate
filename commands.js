@@ -218,7 +218,7 @@ exports.commands = {
 						return this.errorReply('The user "' + targetUser.name + '" does not have permission to join "' + innerTarget + '".');
 					}
 				}
-				if (targetRoom.isPrivate && !(user.userid in targetRoom.auth) && !user.can('makeroom')) {
+				if (targetRoom.auth && targetRoom.isPrivate && !(user.userid in targetRoom.auth) && !user.can('makeroom')) {
 					return this.errorReply('You do not have permission to invite people to this room.');
 				}
 
@@ -634,7 +634,7 @@ exports.commands = {
 		if (!target) {
 			if (!this.canBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
-			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage + '</div>');
+			this.sendReply('|raw|<div class="infobox">' + room.introMessage + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room)) {
 				this.sendReply('Source:');
 				this.sendReplyBox('<code>/roomintro ' + Tools.escapeHTML(room.introMessage) + '</code>');
@@ -653,7 +653,7 @@ exports.commands = {
 
 		room.introMessage = target;
 		this.sendReply("(The room introduction has been changed to:)");
-		this.sendReply('|raw|<div class="infobox infobox-limited">' + target + '</div>');
+		this.sendReply('|raw|<div class="infobox">' + target + '</div>');
 
 		this.privateModCommand("(" + user.name + " changed the roomintro.)");
 		this.logEntry(target);
@@ -749,7 +749,8 @@ exports.commands = {
 
 		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
 
-		if (!this.can('makeroom')) return false;
+        if (room.founder !== user.userid && !this.can('makeroom')) return this.errorReply('/roomowner - Access denied.');
+        if (!room.founder) return this.errorReply('The room needs to have a room founder before it can have a room owner.');
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
@@ -776,7 +777,7 @@ exports.commands = {
 		if (!userid || userid === '') return this.errorReply("User '" + name + "' not found.");
 
 		if (room.auth[userid] !== '#') return this.errorReply("User '" + name + "' is not a room owner.");
-		if (!this.can('makeroom')) return false;
+        if (room.founder !== user.userid && !this.can('makeroom')) return this.errorReply('/roomowner - Access denied.');
 
 		delete room.auth[userid];
 		this.sendReply("(" + name + " is no longer Room Owner.)");
@@ -815,7 +816,10 @@ exports.commands = {
 
 		let currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && targetUser.group) || ' ');
 		let nextGroup = target;
-		if (target === 'deauth') nextGroup = Config.groupsranking[0];
+		if (target === 'deauth') {
+			nextGroup = Config.groupsranking[0];
+			if (room.chatRoomData.founder && room.chatRoomData.founder === targetUser.userid) delete room.founder;
+		}
 		if (!nextGroup) {
 			return this.errorReply("Please specify a group such as /roomvoice or /roomdeauth");
 		}
@@ -831,7 +835,7 @@ exports.commands = {
 		if ((room.auth[userid] || Config.groupsranking[0]) === nextGroup) {
 			return this.errorReply("User '" + name + "' is already a " + groupName + " in this room.");
 		}
-		if (!user.can('makeroom')) {
+		if (room.founder !== user.userid && !user.can('makeroom')) {
 			if (currentGroup !== ' ' && !user.can('room' + (Config.groups[currentGroup] ? Config.groups[currentGroup].id : 'voice'), null, room)) {
 				return this.errorReply("/" + cmd + " - Access denied for promoting/demoting from " + (Config.groups[currentGroup] ? Config.groups[currentGroup].name : "an undefined group") + ".");
 			}
@@ -894,12 +898,18 @@ exports.commands = {
 			rankLists[targetRoom.auth[u]].push(u);
 		}
 
-		let buffer = Object.keys(rankLists).sort((a, b) =>
+		let buffer = [];
+
+		if (targetRoom.founder) {
+			buffer.push("Room Founder (#): " + (targetRoom.founder in targetRoom.users ? ("**" + targetRoom.users[targetRoom.founder].name + "**") : targetRoom.founder));
+		}
+
+		Object.keys(rankLists).sort((a, b) =>
 			(Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank
 		).map(r => {
 			let roomRankList = rankLists[r].sort();
 			roomRankList = roomRankList.map(s => s in targetRoom.users ? "**" + s + "**" : s);
-			return (Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + roomRankList.join(", ");
+			buffer.push((Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + roomRankList.join(", "));
 		});
 
 		if (!buffer.length) {

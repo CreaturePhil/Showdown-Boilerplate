@@ -1,0 +1,460 @@
+body {
+  background: url("http://i.imgur.com/JHaiSv9.jpg?3") bottom left !important;
+}
+
+/* Header */
+
+.header {
+  background: rgba(255, 199, 24, 0.6) url("http://i.imgur.com/eZBtvKy.png") no-repeat;
+}
+
+.header .logo {
+  opacity: 0;
+}
+
+.maintabbarbottom {
+  background:  #FFC04D;
+  border-color: #b26735;
+}
+
+.tabbar a.button.notifying {
+  background: #4d8cff;
+  border-color: #2e5499;
+  text-shadow: none;
+}
+
+.tabbar a.button.notifying:hover {
+  background: #FFC04D;
+  border-color: #b26735;
+}
+
+.tabbar a.button.cur,
+.tabbar a.button.cur:hover {
+  background: #FFC04D;
+  border-color: #b26735;
+  color: #5e080d;
+  text-shadow: none;
+}
+
+.tabbar a.button {
+  background: #94efff;
+  border-color: #35a0b2;
+  color: #000066;
+  text-shadow: none;
+}
+
+.tabbar a.button:hover {
+  background: #99ccff;
+}
+
+.tabbar .closebutton {
+  color: black;
+}
+
+.tabbar .closebutton:hover {
+  color: black;
+}
+
+.userbar .username {
+  text-shadow: none;
+}
+
+.userbar button.icon {
+  background: #94efff;
+  border: 1px solid #3d70cc;
+  padding: 0 4px;
+  color: #2e5499;
+  text-shadow: 0px -1px 0px #0F1D46;
+}
+
+.userbar button.icon:hover {
+  background: #99ccff;
+  border: 1px solid #3d70cc;
+}
+
+/* Roomlist */
+
+.roomlist h2 {
+  color: #00CCCC;
+  text-shadow: none;
+}
+
+.roomlist a.ilink {
+  background: rgba(255, 153, 51, 0.85);
+  color: #000066;
+  text-shadow: none;
+  border-color: #000066;
+}
+
+.roomlist a.ilink:hover {
+  background: rgba(255, 183, 112, 0.85);
+  color: #000066;
+  text-shadow: none;
+  border-color: #800000;
+}
+
+.roomcounters button {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: #303B78;
+  color: #242B58;
+  text-shadow: none;
+}
+
+.roomcounters button:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: #303B78;
+  color: #242B58;
+  text-shadow: none;
+}
+
+.ps-room.ps-room-light {
+  background: rgba(0, 0, 0, 0.50);
+  border-color: black;
+}
+ 
+.ps-room.ps-room-light.scrollable {
+  background: rgba(0, 0, 0, 0.50);
+  border-color: black;
+}
+ 
+.ps-room.ps-room-opaque {
+  background: rgba(178, 223, 247, 0.7);
+}
+
+
+/* Userlist */
+
+.userlist {
+  background: rgba(178, 223, 247, 0.45);
+  border-right: 1px solid #252F3F;
+}
+
+.userlist li {
+  background-color: rgba(244, 244, 244, 0.8);
+  border-bottom-color: #AAA;
+}
+
+.userlist li button:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.userlist li em.group {
+  color: #252F3F;
+}
+
+.userlist li button:hover {
+    background:rgba(244, 244, 244, 0.5)
+}
+
+/* Chat-Log */
+ 
+.chat-log {
+  background: url("") top right no-repeat rgba(235, 235, 235, 0.785);
+}
+
+.chat-log-add {
+  background: rgba(178, 223, 247, 0.45);
+  border-top: 1px solid #252F3F;
+}
+
+.chat-log a, .pm-log a {
+  color: #0500A5;
+}
+
+.chat-log a:visited, .pm-log a:visited {
+  color: #162055;
+}
+
+/* Menu-Group */
+
+.menugroup {
+  background: rgba(225, 225, 225, 0.5);
+  color: #000000;
+  text-shadow: 2px 2px 5px #3c3c3c;
+  border: 1px solid black;
+}
+
+.menugroup .button {
+  background: #FFC04D !important;
+  border-color: #b26735 !important;
+  color: #000000 !important; 
+  text-shadow: none;
+}
+
+.menugroup .button:hover {
+  background: #94efff !important;
+  border-color: #35a0b2 !important;
+  color: #000000 !important;
+  text-shadow: none;
+}
+
+.menugroup .select {
+  background: rgba(225, 225, 225, 0.6);
+  border-color: #000000 !important;
+  color: #000000 !important;
+  text-shadow: none;
+  box-shadow: none !important;
+}
+
+.menugroup .select:hover {
+  background: rgba(225, 225, 225, 0.5);
+}
+
+.menugroup .select:disabled {
+  background: rgba(220, 249, 255, 0.35);
+}
+ 
+/* Battle */
+
+.ps-room .battle-controls {
+  background: rgba(0, 0, 0, 0);
+}
+ 
+.battle-log {
+  background: url("http://i.imgur.com/vIYclIh.png");
+  border-color: #413B45;
+}
+
+.message-error {
+  border: 1px solid #413B45;
+  background: #ECB3B4;
+  color: #413B45;
+  margin-bottom: 1px;
+}
+
+.battle-log .chat {
+  padding: 3px 1px;
+}
+
+.battle-log h2 {
+  text-align: right;
+  font-style: italic;
+  border-color: #413B45;
+  background: #FABCBC;
+  color: #413B45;
+}
+
+.battle-log-add {
+  background: #FABCBC;
+  border: 1px solid #413B45;
+  color: #413B45;
+}
+
+.battle {
+  border-color: #413B45;
+}
+
+.battle-log .rated strong {
+  background: #2D3459;
+}
+
+.battle-log .chat strong {
+  color: #2D3459;
+}
+
+.rightbar, .leftbar {
+  border-color: #ff6600;    
+  background: rgba(255, 102, 0, 0.5);
+}
+
+.trainer strong {
+  color: #413B45;
+}
+
+.trainer div {
+  opacity: 1;
+}
+
+.turnstatus-protect {
+  background:url(http://i.imgur.com/RVxCoHz.png);
+  opacity:1!important;
+  height:103px!important;
+  width:150px!important;
+  border-radius:0;
+  border-width:0;
+  box-shadow:none;
+}
+
+.sidecondition-safeguard {
+  background:url(http://i.imgur.com/FrCoWCW.png);
+  opacity:0.6!important;
+  height:90px!important;
+  width:130px!important;
+  border-radius:0;
+  border-width:0;
+  box-shadow:none;
+}
+
+.sidecondition-reflect {
+  background:url(http://i.imgur.com/X1XDxVB.png);
+  opacity:0.7!important;
+  height:90px!important;
+  width:130px!important;
+  border-radius:0;
+  border-width:0;
+  box-shadow:none;
+}
+
+.sidecondition-lightscreen {
+  background:url(http://i.imgur.com/8eLftNA.png);
+  opacity:0.6!important;
+  height:90px!important;
+  width:130px!important;
+  border-radius:0;
+  border-width:0;
+  box-shadow:none;
+}
+
+/* PM-Window */
+
+.pm-window h3 small {
+  color: #000000;
+}
+
+.pm-window.focused h3, .pm-window.focused h3:hover {
+  border-color:  #000000;
+  background:  rgb(0, 51, 153) bottom right no-repeat;
+  background-position: 200px;
+  color:  #000000;
+  text-shadow: 0px -1px 0px  #000000;
+}
+
+.pm-window h3:hover .minimizebutton, .pm-window h3 .closebutton, .pm-window h3 .minimizebutton {
+  color:  #000000;
+}
+
+.pm-window h3 .closebutton:hover {
+  color:#000000;
+}
+
+.pm-window h3 .minimizebutton:hover {
+  color: #000000;
+}
+
+.pm-window h3 .closebutton:hover + .minimizebutton {
+  color: #000000 !important;
+}
+
+.message-pm {
+  color:  #000000;
+}
+
+.pm-window h3.pm-notifying:hover {
+  background: #75FFBC;
+  border-color: #75FFBC;
+  text-shadow: none;
+  color: #202C46;
+}
+
+.pm-window h3 {
+  background: rgba(255, 102, 0, 0.5) url("http://www.pokestadium.com/assets/img/sprites/misc/icons/amaura.png") bottom right no-repeat;
+  background-position: 225px;
+  color: #000000;
+  text-shadow: none;
+}
+
+.pm-window h3:hover {
+  background: rgba(255, 80, 80, 0.6) url("http://www.pokestadium.com/assets/img/sprites/misc/icons/aurorus.png") bottom right no-repeat;
+  background-position: 225px;
+  color: #4d0000;
+  text-shadow: none;
+}
+
+.pm-window.focused h3,
+.pm-window.focused h3:hover {
+  background: rgba(255, 0, 0, 0.6) url("http://pldh.net/media/pokecons_action/478.gif") bottom right no-repeat;
+  background-position: 225px;
+  border-color: rgba(69,245,160,0.6);
+  color: #EEFCFD;
+  text-shadow: none;
+}
+
+.pm-window h3 .closebutton:hover {
+  color: #FF7683;
+}
+
+.pm-window h3 .minimizebutton:hover {
+  color: #FFE076;
+
+}
+
+.pm-window h3.pm-notifying .closebutton:hover + .minimizebutton {
+  color: #000000 !important;
+}
+
+.pm-log, .pm-window.focused .pm-log {
+  border-color: #000000;
+}
+
+/* Misc */
+
+.astext{
+  border: none;
+  background: none;
+  font-family: Verdana,sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+}
+  
+.closebutton, .minimizebutton {
+  color: #413B45;
+}
+
+.closebutton:hover, .minimizebutton:hover {
+  color: #000;
+}
+
+.ps-popup {
+  background: #94efff;
+  border: 1px solid #48e4ff;
+}
+
+.credits h2 {
+  color: #2D3459;
+}
+
+a.subtle, .credits ul li p, .credits ul {
+  color: #37348E;
+}
+
+.popupmenu h3 {
+  color: #329fb2;
+}
+
+.ps-popup a, .ps-popup a.ilink {
+  color: #37348E;
+}
+
+.ps-popup a.ilink:hover {
+  color: #66ccff;
+}
+
+.avatarlist button {
+  border: 1px solid #99ffcc;
+}
+
+.avatarlist button:hover {
+  border: 1px solid #444;
+  background-color: #99ffcc;
+}
+
+.ps-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.ps-popup .buttonbar button {
+  background: #EEE;
+  border: 1px solid #AAA;
+  padding: 2px 4px;
+}
+
+.ps-popup .buttonbar button:hover {
+  background: #EEE;
+  border: 1px solid #777;
+}
+
+/* User Icons */
+
+#lobby-userlist-user-emggldragotic { 
+  background: rgba(244, 244, 244, 0.8) url("http://media.pldh.net/pokexycons/006.png") right no-repeat;
+}
