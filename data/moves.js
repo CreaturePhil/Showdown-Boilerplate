@@ -5984,7 +5984,7 @@ exports.BattleMovedex = {
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 					this.effectData.positions[target.position] = false;
 				}
-				if (!this.effectData.positions.any(true)) {
+				if (!this.effectData.positions.some(affected => affected === true)) {
 					target.side.removeSideCondition('healingwish');
 				}
 			},
@@ -7846,7 +7846,7 @@ exports.BattleMovedex = {
 					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
 					this.effectData.positions[target.position] = false;
 				}
-				if (!this.effectData.positions.any(true)) {
+				if (!this.effectData.positions.some(affected => affected === true)) {
 					target.side.removeSideCondition('lunardance');
 				}
 			},
@@ -9929,7 +9929,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function (target) {
-				this.add('-start', target, 'Powder');
+				this.add('-singleturn', target, 'Powder');
 			},
 			onTryMove: function (pokemon, target, move) {
 				if (move.type === 'Fire') {
@@ -13525,6 +13525,7 @@ exports.BattleMovedex = {
 		onTry: function (source, target) {
 			let decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst') || target.volatiles.mustrecharge) {
+				this.attrLastMove('[still]');
 				this.add('-fail', source);
 				return null;
 			}
@@ -14140,6 +14141,7 @@ exports.BattleMovedex = {
 		onEffectiveness: function (typeMod, type, move) {
 			if (move.type !== 'Ground') return;
 			let target = this.activeTarget;
+			if (!target) return; // avoid crashing when called from a chat plugin
 			// ignore effectiveness if the target is Flying type and immune to Ground
 			if (!target.runImmunity('Ground')) {
 				if (target.hasType('Flying')) return 0;

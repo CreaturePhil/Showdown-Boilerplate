@@ -45,16 +45,16 @@ const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
  *********************************************************/
 
 let baseCommands = exports.baseCommands = require('./commands.js').commands;
-let commands = exports.commands = Object.clone(baseCommands);
+let commands = exports.commands = Object.assign({}, baseCommands);
 
 // Install plug-in commands
 
 // info always goes first so other plugins can shadow it
-Object.merge(commands, require('./chat-plugins/info.js').commands);
+Object.assign(commands, require('./chat-plugins/info.js').commands);
 
 for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
 	if (file.substr(-3) !== '.js' || file === 'info.js') continue;
-	Object.merge(commands, require('./chat-plugins/' + file).commands);
+	Object.assign(commands, require('./chat-plugins/' + file).commands);
 }
 
 /*********************************************************
@@ -77,90 +77,8 @@ let writeModlog = exports.writeModlog = function (roomid, text) {
  * Parser
  *********************************************************/
 
-/**
- * Can this user talk?
- * Shows an error message if not.
- */
-function canTalk(user, room, connection, message, targetUser) {
-	if (!user.named) {
-		connection.popup("You must choose a name before you can talk.");
-		return false;
-	}
-	if (!user.can('bypassall')) {
-		if (room && user.locked) {
-			this.errorReply("You are locked from talking in chat.");
-			return false;
-		}
-		if (room && room.isMuted(user)) {
-			this.errorReply("You are muted and cannot talk in this room.");
-			return false;
-		}
-		if (room && room.modchat) {
-			let userGroup = user.group;
-			if (room.auth) {
-				if (room.auth[user.userid]) {
-					userGroup = room.auth[user.userid];
-				} else if (room.isPrivate === true) {
-					userGroup = ' ';
-				}
-			}
-			if (room.modchat === 'autoconfirmed') {
-				if (!user.autoconfirmed && userGroup === ' ') {
-					this.errorReply("Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
-					return false;
-				}
-			} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat) && !user.can('makeroom')) {
-				let groupName = Config.groups[room.modchat].name || room.modchat;
-				this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
-				return false;
-			}
-		}
-		if (room && !(user.userid in room.users)) {
-			connection.popup("You can't send a message to this room without being in it.");
-			return false;
-		}
-	}
-
-	if (typeof message === 'string') {
-		if (!message) {
-			connection.popup("Your message can't be blank.");
-			return false;
-		}
-		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			this.errorReply("Your message is too long: " + message);
-			return false;
-		}
-
-		// remove zalgo
-		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
-		if (/[\u239b-\u23b9]/.test(message)) {
-			this.errorReply("Your message contains banned characters.");
-			return false;
-		}
-
-		if (room && room.id === 'lobby') {
-			let normalized = message.trim();
-			if ((normalized === user.lastMessage) &&
-					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-				this.errorReply("You can't send the same message again so soon.");
-				return false;
-			}
-			user.lastMessage = message;
-			user.lastMessageTime = Date.now();
-		}
-
-		if (Config.chatfilter) {
-			/*jshint validthis:true */
-			return Config.chatfilter.call(this, message, user, room, connection, targetUser);
-		}
-		return message;
-	}
-
-	return true;
-}
-
-let Context = exports.Context = (() => {
-	function Context(options) {
+class CommandContext {
+	constructor(options) {
 		this.cmd = options.cmd || '';
 		this.cmdToken = options.cmdToken || '';
 
@@ -178,38 +96,38 @@ let Context = exports.Context = (() => {
 		this.targetUser = null;
 	}
 
-	Context.prototype.sendReply = function (data) {
+	sendReply(data) {
 		if (this.broadcasting) {
 			this.room.add(data);
 		} else {
 			this.connection.sendTo(this.room, data);
 		}
-	};
-	Context.prototype.errorReply = function (message) {
+	}
+	errorReply(message) {
 		if (this.pmTarget) {
 			this.connection.send('|pm|' + this.user.getIdentity() + '|' + (this.pmTarget.getIdentity ? this.pmTarget.getIdentity() : ' ' + this.pmTarget) + '|/error ' + message);
 		} else {
 			this.sendReply('|html|<div class="message-error">' + Tools.escapeHTML(message) + '</div>');
 		}
-	};
-	Context.prototype.sendReplyBox = function (html) {
+	}
+	sendReplyBox(html) {
 		this.sendReply('|raw|<div class="infobox">' + html + '</div>');
-	};
-	Context.prototype.popupReply = function (message) {
+	}
+	popupReply(message) {
 		this.connection.popup(message);
-	};
-	Context.prototype.add = function (data) {
+	}
+	add(data) {
 		this.room.add(data);
-	};
-	Context.prototype.send = function (data) {
+	}
+	send(data) {
 		this.room.send(data);
-	};
-	Context.prototype.privateModCommand = function (data, noLog) {
+	}
+	privateModCommand(data, noLog) {
 		this.sendModCommand(data);
 		this.logEntry(data);
 		this.logModCommand(data);
-	};
-	Context.prototype.sendModCommand = function (data) {
+	}
+	sendModCommand(data) {
 		let users = this.room.users;
 		let auth = this.room.auth;
 
@@ -220,20 +138,20 @@ let Context = exports.Context = (() => {
 				user.sendTo(this.room, data);
 			}
 		}
-	};
-	Context.prototype.logEntry = function (data) {
+	}
+	logEntry(data) {
 		this.room.logEntry(data);
-	};
-	Context.prototype.addModCommand = function (text, logOnlyText) {
+	}
+	addModCommand(text, logOnlyText) {
 		this.add(text);
 		this.logModCommand(text + (logOnlyText || ""));
-	};
-	Context.prototype.logModCommand = function (text) {
+	}
+	logModCommand(text) {
 		let roomid = (this.room.battle ? 'battle' : this.room.id);
 		if (this.room.isPersonal) roomid = 'groupchat';
 		writeModlog(roomid, '(' + this.room.id + ') ' + text);
-	};
-	Context.prototype.globalModlog = function (action, user, text) {
+	}
+	globalModlog(action, user, text) {
 		let buf = "(" + this.room.id + ") " + action + ": ";
 		if (typeof user === 'string') {
 			buf += "[" + toId(user) + "]";
@@ -244,15 +162,15 @@ let Context = exports.Context = (() => {
 		}
 		buf += text;
 		writeModlog('global', buf);
-	};
-	Context.prototype.can = function (permission, target, room) {
+	}
+	can(permission, target, room) {
 		if (!this.user.can(permission, target, room)) {
 			this.errorReply(this.cmdToken + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
 			return false;
 		}
 		return true;
-	};
-	Context.prototype.canBroadcast = function (suppressMessage) {
+	}
+	canBroadcast(suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			let message = this.canTalk(this.message);
 			if (!message) return false;
@@ -276,14 +194,14 @@ let Context = exports.Context = (() => {
 			this.broadcasting = true;
 		}
 		return true;
-	};
-	Context.prototype.parse = function (message, inNamespace, room) {
+	}
+	parse(message, inNamespace, room) {
 		if (inNamespace && this.cmdToken) {
 			message = this.cmdToken + this.namespaces.concat(message.slice(1)).join(" ");
 		}
 		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.levelsDeep + 1);
-	};
-	Context.prototype.run = function (targetCmd, inNamespace) {
+	}
+	run(targetCmd, inNamespace) {
 		if (targetCmd === 'constructor') return this.sendReply("Access denied.");
 		let commandHandler;
 		if (typeof targetCmd === 'function') {
@@ -307,7 +225,7 @@ let Context = exports.Context = (() => {
 				room: this.room.id,
 				message: this.message,
 			}) === 'lockdown') {
-				let ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+				let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
 			} else {
 				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
@@ -316,12 +234,88 @@ let Context = exports.Context = (() => {
 		if (result === undefined) result = false;
 
 		return result;
-	};
-	Context.prototype.canTalk = function (message, relevantRoom, targetUser) {
-		let innerRoom = (relevantRoom !== undefined) ? relevantRoom : this.room;
-		return canTalk.call(this, this.user, innerRoom, this.connection, message, targetUser);
-	};
-	Context.prototype.canEmbedURI = function (uri, isRelative) {
+	}
+	canTalk(message, room, targetUser) {
+		if (room === undefined) room = this.room;
+		let user = this.user;
+		let connection = this.connection;
+
+		if (!user.named) {
+			connection.popup("You must choose a name before you can talk.");
+			return false;
+		}
+		if (!user.can('bypassall')) {
+			if (room && user.locked) {
+				this.errorReply("You are locked from talking in chat.");
+				return false;
+			}
+			if (room && room.isMuted(user)) {
+				this.errorReply("You are muted and cannot talk in this room.");
+				return false;
+			}
+			if (room && room.modchat) {
+				let userGroup = user.group;
+				if (room.auth) {
+					if (room.auth[user.userid]) {
+						userGroup = room.auth[user.userid];
+					} else if (room.isPrivate === true) {
+						userGroup = ' ';
+					}
+				}
+				if (room.modchat === 'autoconfirmed') {
+					if (!user.autoconfirmed && userGroup === ' ') {
+						this.errorReply("Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
+						return false;
+					}
+				} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat) && !user.can('makeroom')) {
+					let groupName = Config.groups[room.modchat].name || room.modchat;
+					this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
+					return false;
+				}
+			}
+			if (room && !(user.userid in room.users)) {
+				connection.popup("You can't send a message to this room without being in it.");
+				return false;
+			}
+		}
+
+		if (typeof message === 'string') {
+			if (!message) {
+				connection.popup("Your message can't be blank.");
+				return false;
+			}
+			if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
+				this.errorReply("Your message is too long: " + message);
+				return false;
+			}
+
+			// remove zalgo
+			message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+			if (/[\u239b-\u23b9]/.test(message)) {
+				this.errorReply("Your message contains banned characters.");
+				return false;
+			}
+
+			if (room && room.id === 'lobby') {
+				let normalized = message.trim();
+				if ((normalized === user.lastMessage) &&
+						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
+					this.errorReply("You can't send the same message again so soon.");
+					return false;
+				}
+				user.lastMessage = message;
+				user.lastMessageTime = Date.now();
+			}
+
+			if (Config.chatfilter) {
+				return Config.chatfilter.call(this, message, user, room, connection, targetUser);
+			}
+			return message;
+		}
+
+		return true;
+	}
+	canEmbedURI(uri, isRelative) {
 		if (uri.startsWith('https://')) return uri;
 		if (uri.startsWith('//')) return uri;
 		if (uri.startsWith('data:')) return uri;
@@ -360,8 +354,8 @@ let Context = exports.Context = (() => {
 		}
 		// unknown URI, allow HTTP to be safe
 		return 'http://' + uri;
-	};
-	Context.prototype.canHTML = function (html) {
+	}
+	canHTML(html) {
 		html = ('' + (html || '')).trim();
 		if (!html) return '';
 		let images = /<img\b[^<>]*/ig;
@@ -424,8 +418,8 @@ let Context = exports.Context = (() => {
 		}
 
 		return html;
-	};
-	Context.prototype.targetUserOrSelf = function (target, exactName) {
+	}
+	targetUserOrSelf(target, exactName) {
 		if (!target) {
 			this.targetUsername = this.user.name;
 			this.inputUsername = this.user.name;
@@ -433,8 +427,8 @@ let Context = exports.Context = (() => {
 		}
 		this.splitTarget(target, exactName);
 		return this.targetUser;
-	};
-	Context.prototype.splitTarget = function (target, exactName) {
+	}
+	splitTarget(target, exactName) {
 		let commaIndex = target.indexOf(',');
 		if (commaIndex < 0) {
 			let targetUser = Users.get(target, exactName);
@@ -453,10 +447,8 @@ let Context = exports.Context = (() => {
 			this.targetUsername = this.inputUsername;
 		}
 		return target.substr(commaIndex + 1).trim();
-	};
-
-	return Context;
-})();
+	}
+}
 
 /**
  * Command parser
@@ -550,7 +542,7 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 	}
 	let fullCmd = namespaces.concat(cmd).join(' ');
 
-	let context = new Context({
+	let context = new CommandContext({
 		target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
 		namespaces: namespaces, cmdToken: cmdToken, levelsDeep: levelsDeep,
 	});
@@ -589,7 +581,7 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 		}
 	}
 
-	message = canTalk.call(context, user, room, connection, message);
+	message = context.canTalk(message);
 
 	if (parseEmoticons(message, room, user)) return;
 
@@ -609,7 +601,7 @@ exports.uncacheTree = function (root) {
 		for (let i = 0; i < uncache.length; ++i) {
 			if (require.cache[uncache[i]]) {
 				newuncache.push.apply(newuncache,
-					require.cache[uncache[i]].children.map('id')
+					require.cache[uncache[i]].children.map(toId)
 				);
 				delete require.cache[uncache[i]];
 			}

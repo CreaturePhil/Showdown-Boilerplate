@@ -140,16 +140,18 @@ exports.BattleScripts = {
 				this.add('-notarget');
 				return true;
 			}
-			if (targets.length > 1) {
-				this.attrLastMove('[spread]');
-				move.spreadHit = true;
-			}
+			if (targets.length > 1) move.spreadHit = true;
 			damage = 0;
+			let hitTargets = [];
 			for (let i = 0; i < targets.length; i++) {
 				let hitResult = this.tryMoveHit(targets[i], pokemon, move, true);
-				if (hitResult || hitResult === 0 || hitResult === undefined) moveResult = true;
+				if (hitResult || hitResult === 0 || hitResult === undefined) {
+					moveResult = true;
+					hitTargets.push(targets[i].toString().substr(0, 3));
+				}
 				damage += hitResult || 0;
 			}
+			if (move.spreadHit) this.attrLastMove('[spread] ' + hitTargets.join(','));
 			if (!pokemon.hp) pokemon.faint();
 		} else {
 			target = targets[0];
@@ -238,7 +240,7 @@ exports.BattleScripts = {
 		let boosts, boost;
 		if (accuracy !== true) {
 			if (!move.ignoreAccuracy) {
-				boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.clone(pokemon.boosts));
+				boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
 				boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 				if (boost > 0) {
 					accuracy *= boostTable[boost];
@@ -247,7 +249,7 @@ exports.BattleScripts = {
 				}
 			}
 			if (!move.ignoreEvasion) {
-				boosts = this.runEvent('ModifyBoost', target, null, null, Object.clone(target.boosts));
+				boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
 				boost = this.clampIntRange(boosts['evasion'], -6, 6);
 				if (boost > 0) {
 					accuracy /= boostTable[boost];
@@ -669,14 +671,15 @@ exports.BattleScripts = {
 		return !!firstForme.isMega;
 	},
 	getTeam: function (side, team) {
-		let format = side.battle.getFormat();
-		if (typeof format.team === 'string' && format.team.substr(0, 6) === 'random') {
-			return this[format.team + 'Team'](side);
-		} else if (team) {
-			return team;
-		} else {
-			return this.randomTeam(side);
-		}
+		const format = side.battle.getFormat();
+		const teamGenerator = typeof format.team === 'string' && format.team.startsWith('random') ? format.team + 'Team' : '';
+		if (!teamGenerator && team) return team;
+		// Reinitialize the RNG seed to create random teams.
+		this.startingSeed = this.startingSeed.concat(this.generateSeed());
+		team = this[teamGenerator || 'randomTeam'](side);
+		// Restore the default seed
+		this.seed = this.startingSeed.slice(0, 4);
+		return team;
 	},
 	randomCCTeam: function (side) {
 		let team = [];
@@ -744,11 +747,11 @@ exports.BattleScripts = {
 			let moves;
 			let pool = ['struggle'];
 			if (poke === 'Smeargle') {
-				pool = Object.keys(this.data.Movedex).exclude('chatter', 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge');
+				pool = Object.keys(this.data.Movedex).filter(moveid => !(moveid in {'chatter':1, 'struggle':1, 'paleowave':1, 'shadowstrike':1, 'magikarpsrevenge':1}));
 			} else if (template.learnset) {
 				pool = Object.keys(template.learnset);
 				if (template.species.substr(0, 6) === 'Rotom-' || template.species.substr(0, 10) === 'Pumpkaboo-') {
-					pool = pool.union(Object.keys(this.getTemplate(template.baseSpecies).learnset));
+					pool = Array.from(new Set(pool.concat(Object.keys(this.getTemplate(template.baseSpecies).learnset))));
 				}
 			} else {
 				pool = Object.keys(this.getTemplate(template.baseSpecies).learnset);
@@ -3199,14 +3202,14 @@ exports.BattleScripts = {
 		let pokemon = '';
 		let set = {};
 		let sides = {
-			good: [
+			good: this.shuffle([
 				'Rick', 'Morty', 'Summer', 'Mr. Meeseks', 'Scary Terry', 'Dr. Xenon Bloom', 'Bird Person', 'Squanchy', 'Krombopulos Michael', 'Unity',
 				'Morty Jr.', 'Dipper', 'Mabel', 'Stanley', 'Stanford', 'Wendy', 'Soos', 'Fiddleford McGucket', 'Time Baby', 'Blendin',
-			].randomize(),
-			bad: [
+			]),
+			bad: this.shuffle([
 				'Evil Rick', 'Evil Morty', 'King Flippy Nips', 'Mr. Lucius Needful', 'Snowball', 'Mr. Jellybean', 'Poncho',
 				'Galactic Fed Soldier', 'Tammy', 'Bill Cipher', "Lil' Gideon", '8-Ball', 'Keyhole', 'Pacifier',
-			].randomize(),
+			]),
 		};
 		let mons = {
 			'Rick': {species: 'alakazam', ability: 'regenerator', item: 'lifeorb', gender: 'M', moves: ['psystrike', 'recover', 'aurasphere', 'watergun'], signatureMove: 'Portal Gun'},
@@ -3350,12 +3353,10 @@ exports.BattleScripts = {
 		let forceResult = (depth >= 4);
 
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
-		let chosenTier;
-
-		let currentSeed = this.seed.slice();
-		this.seed = this.startingSeed.slice();
-		chosenTier = availableTiers[this.random(availableTiers.length)];
-		this.seed = currentSeed;
+		const prevSeed = this.seed;
+		this.seed = this.startingSeed.slice(0, 4);
+		const chosenTier = availableTiers[this.random(availableTiers.length)];
+		this.seed = prevSeed;
 
 		let pokemonLeft = 0;
 		let pokemon = [];
