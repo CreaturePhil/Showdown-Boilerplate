@@ -1,5 +1,6 @@
 'use strict';
 
+let color = require('../config/color');
 let fs = require('fs');
 let path = require('path');
 
@@ -333,7 +334,8 @@ exports.commands = {
 		// Prevent ending a dice game too early.
 		room.dice.startTime = Date.now();
 
-		room.addRaw("<div class='infobox'><h2><center><font color=#24678d>" + user.name + " has started a dice game for </font><font color=red>" + amount + "</font><font color=#24678d>" + currencyName(amount) + ".</font><br><button name='send' value='/joindice'>Click to join.</button></center></h2></div>");
+		room.addRaw('<div class="infobox"><h2><center><font color="' + color(user.userid) + '">' + Tools.escapeHTML(user.name) + '</font> <font color=#24678d>has started a dice game for </font><font color=red>' + target + 
+	 			' </font><font color=#24678d>' + ((target === 1) ? " buck." : " bucks.") + '</font><br /> <button name="send" value="/joindice">Click to join.</button></center></h2></div>');
 	},
 	startdicehelp: ["/startdice [bet] - Start a dice game to gamble for money."],
 
