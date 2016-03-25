@@ -17,7 +17,9 @@
 
 const crypto = require('crypto');
 const fs = require('fs');
+const path = require('path');
 const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
+const dir = fs.readdirSync(path.resolve(__dirname, 'chat-plugins'));
 
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
@@ -1895,6 +1897,10 @@ exports.commands = {
 				CommandParser.uncacheTree('./command-parser.js');
 				delete require.cache[require.resolve('./commands.js')];
 				delete require.cache[require.resolve('./chat-plugins/info.js')];
+				for (let file of dir) {
+					if (file.substr(-3) !== '.js' || file === 'info.js') continue;
+					delete require.cache[require.resolve('./chat-plugins/' + file)];
+				}
 				global.CommandParser = require('./command-parser.js');
 
 				let runningTournaments = Tournaments.tournaments;
