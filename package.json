@@ -9,7 +9,7 @@
     "es6-shim": "0.27.1",
     "moment": "2.11.2",
     "node-static": "0.7.6",
-    "origindb": "2.4.1",
+    "origindb": "2.5.2",
     "request": "2.67.0",
     "sockjs": "0.3.15",
     "sugar-deprecated": "0.0.1",
