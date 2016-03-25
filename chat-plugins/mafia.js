@@ -209,10 +209,11 @@ class Mafia extends Rooms.RoomGame {
 		}
 
 		this.roleString = this.roles.reduce((prev, cur, index, array) => {
+			let roleName = MafiaData.MafiaClasses[cur].pregameName || MafiaData.MafiaClasses[cur].name;
 			if (index === array.length - 1) {
-				return prev + MafiaData.MafiaClasses[cur].name;
+				return prev + roleName;
 			} else {
-				return prev + MafiaData.MafiaClasses[cur].name + ', ';
+				return prev + roleName + ', ';
 			}
 		}, '');
 
@@ -718,7 +719,8 @@ exports.commands = {
 			} else {
 				let params = target.split(',').map(param => param.toLowerCase().trim());
 
-				// TODO: make a generator for a default setup.
+				if (params[0] === 'dethy') params = ['goon', 'cop', 'insanecop', 'paranoidcop', 'naivecop'];
+
 				if (!params) return this.errorReply("No roles entered.");
 
 				for (let i = 0; i < params.length; i++) {

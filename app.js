@@ -60,7 +60,7 @@ const path = require('path');
 // aren't
 
 try {
-	require.resolve('sugar-deprecated');
+	require.resolve('sockjs');
 } catch (e) {
 	if (require.main !== module) throw new Error("Dependencies unmet");
 
@@ -182,6 +182,7 @@ Tools.includeFormats();
 Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.TeamValidator = require('./team-validator.js');
+TeamValidator.PM.spawn();
 
 // load ipbans at our leisure
 fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), (err, data) => {

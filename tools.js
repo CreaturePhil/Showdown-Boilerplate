@@ -13,11 +13,17 @@
 
 'use strict';
 
-require('sugar-deprecated')(require('./crashlogger.js'));
-Object.defineProperty(Object, 'values', {writable: true, configurable: true, value: require('object.values')});
-
 const fs = require('fs');
 const path = require('path');
+
+// shim Object.values
+if (!Object.values) {
+	Object.values = function (object) {
+		let values = [];
+		for (let k in object) values.push(object[k]);
+		return values;
+	};
+}
 
 module.exports = (() => {
 	let moddedTools = {};

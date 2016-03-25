@@ -63,12 +63,21 @@ exports.Formats = [
 	{
 		name: "RU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3564252/\">np: RU Stage 14</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3568052/\">np: RU Stage 15</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558546/\">RU Viability Ranking</a>",
 		],
 		section: "ORAS Singles",
 
+		searchShow: false,
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2'],
+	},
+	{
+		name: "RU (suspect test)",
+		section: "ORAS Singles",
+
+		challengeShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2'],
 	},
@@ -113,19 +122,9 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
-	},
-	{
-		name: "LC (suspect test)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3566865/\">LC Suspect</a>"],
-		section: "ORAS Singles",
-
-		maxLevel: 5,
-		ruleset: ['LC'],
-		banlist: ['Diglett'],
 	},
 	{
 		name: "Anything Goes",
@@ -163,24 +162,6 @@ exports.Formats = [
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
 		requirePentagon: true,
-	},
-	{
-		name: "Kanto Classic",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3563162/\">Kanto Classic</a>"],
-		section: "ORAS Singles",
-
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [6, 6],
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		onValidateSet: function (set) {
-			let template = this.getTemplate(set.species || set.name);
-			if (template.num > 149) {
-				return [set.species + " is banned by Kanto Classic."];
-			}
-			set.item = '';
-		},
 	},
 	{
 		name: "Custom Game",
@@ -704,8 +685,8 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
-		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh',
-			'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
+		banlist: ['Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon',
+			'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Altarianite', 'Charizardite X', 'Damp Rock', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Metagrossite', 'Salamencite', 'Slowbronite', 'Smooth Rock', 'Soul Dew',
 		],
 	},

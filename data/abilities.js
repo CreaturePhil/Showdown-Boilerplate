@@ -115,7 +115,7 @@ exports.BattleAbilities = {
 	"angerpoint": {
 		desc: "If this Pokemon, but not its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
 		shortDesc: "If this Pokemon (not its substitute) takes a critical hit, its Attack is raised 12 stages.",
-		onAfterDamage: function (damage, target, source, move) {
+		onHit: function (target, source, move) {
 			if (!target.hp) return;
 			if (move && move.effectType === 'Move' && move.crit) {
 				target.setBoost({atk: 6});
@@ -1379,6 +1379,7 @@ exports.BattleAbilities = {
 			if (this.validTarget(this.effectData.target, source, move.target)) {
 				if (this.effectData.target !== target) {
 					this.add('-activate', this.effectData.target, 'ability: Lightning Rod');
+					this.retargetLastMove(this.effectData.target);
 				}
 				return this.effectData.target;
 			}
@@ -1781,7 +1782,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's moves are changed to be Normal type.",
 		onModifyMovePriority: 1,
 		onModifyMove: function (move) {
-			if (move.id !== 'struggle') {
+			if (move.id !== 'struggle' && this.getMove(move.id).type !== 'Normal') {
 				move.type = 'Normal';
 			}
 		},
@@ -2717,6 +2718,7 @@ exports.BattleAbilities = {
 			if (this.validTarget(this.effectData.target, source, move.target)) {
 				if (this.effectData.target !== target) {
 					this.add('-activate', this.effectData.target, 'ability: Storm Drain');
+					this.retargetLastMove(this.effectData.target);
 				}
 				return this.effectData.target;
 			}
@@ -3045,7 +3047,7 @@ exports.BattleAbilities = {
 		onBeforeMovePriority: 9,
 		onBeforeMove: function (pokemon, target, move) {
 			if (pokemon.removeVolatile('truant')) {
-				this.add('cant', pokemon, 'ability: Truant', move);
+				this.add('cant', pokemon, 'ability: Truant');
 				return false;
 			}
 			pokemon.addVolatile('truant');

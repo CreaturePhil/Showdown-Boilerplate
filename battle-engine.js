@@ -12,9 +12,6 @@
 
 'use strict';
 
-require('sugar-deprecated')(require('./crashlogger.js'));
-Object.defineProperty(Object, 'values', {writable: true, configurable: true, value: require('object.values')});
-
 global.Config = require('./config/config.js');
 
 if (Config.crashguard) {
@@ -2330,7 +2327,6 @@ Battle = (() => {
 					TryHit: 1,
 					TryHitSide: 1,
 					TryMove: 1,
-					Hit: 1,
 					Boost: 1,
 					DragOut: 1,
 				};
@@ -4054,7 +4050,7 @@ Battle = (() => {
 			delete decision.pokemon.draggedIn;
 			break;
 		case 'runPrimal':
-			this.singleEvent('Primal', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			if (!decision.pokemon.transformed) this.singleEvent('Primal', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			break;
 		case 'shift': {
 			if (!decision.pokemon.isActive) return false;
@@ -4606,6 +4602,11 @@ Battle = (() => {
 	};
 	Battle.prototype.attrLastMove = function () {
 		this.log[this.lastMoveLine] += '|' + Array.prototype.slice.call(arguments).join('|');
+	};
+	Battle.prototype.retargetLastMove = function (newTarget) {
+		let parts = this.log[this.lastMoveLine].split('|');
+		parts[4] = newTarget;
+		this.log[this.lastMoveLine] = parts.join('|');
 	};
 	Battle.prototype.debug = function (activity) {
 		if (this.getFormat().debug) {

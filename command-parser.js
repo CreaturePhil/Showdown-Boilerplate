@@ -170,7 +170,7 @@ class CommandContext {
 		}
 		return true;
 	}
-	canBroadcast(suppressMessage) {
+	canBroadcast(checkOnly, suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			let message = this.canTalk(this.message);
 			if (!message) return false;
@@ -187,11 +187,13 @@ class CommandContext {
 				this.errorReply("You can't broadcast this because it was just broadcast.");
 				return false;
 			}
-			this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || message));
-			this.room.lastBroadcast = normalized;
-			this.room.lastBroadcastTime = Date.now();
+			if (!checkOnly) {
+				this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || message));
+				this.room.lastBroadcast = normalized;
+				this.room.lastBroadcastTime = Date.now();
 
-			this.broadcasting = true;
+				this.broadcasting = true;
+			}
 		}
 		return true;
 	}
@@ -449,6 +451,7 @@ class CommandContext {
 		return target.substr(commaIndex + 1).trim();
 	}
 }
+exports.CommandContext = CommandContext;
 
 /**
  * Command parser
@@ -601,7 +604,7 @@ exports.uncacheTree = function (root) {
 		for (let i = 0; i < uncache.length; ++i) {
 			if (require.cache[uncache[i]]) {
 				newuncache.push.apply(newuncache,
-					require.cache[uncache[i]].children.map(toId)
+					require.cache[uncache[i]].children.map(cachedModule => cachedModule.id)
 				);
 				delete require.cache[uncache[i]];
 			}

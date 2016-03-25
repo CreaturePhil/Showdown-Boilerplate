@@ -44,6 +44,9 @@ let MafiaFunctions = {
 	killTarget: function (target) {
 		target.kill('The werewolf has eaten a tasty snack!');
 	},
+	goonKill: function (target) {
+		target.kill('The goon has killed someone!');
+	},
 	foolWin: function () {
 		this.game.end('<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-fool.png" />', "The fool has been lynched and is victorious!");
 	},
@@ -107,6 +110,7 @@ exports.MafiaClasses = {
 
 	paranoidcop: {
 		name: "Cop",
+		pregameName: "Paranoid Cop",
 		side: 'town',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
 		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
@@ -120,6 +124,7 @@ exports.MafiaClasses = {
 
 	insanecop: {
 		name: "Cop",
+		pregameName: "Insane Cop",
 		side: 'town',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
 		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
@@ -133,6 +138,7 @@ exports.MafiaClasses = {
 
 	naivecop: {
 		name: "Cop",
+		pregameName: "Naive Cop",
 		side: 'town',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
 		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
@@ -172,6 +178,7 @@ exports.MafiaClasses = {
 		side: 'mafia',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-godfather.png" />',
 		flavorText: 'You are the godfather. You\'re sided with the mafia, but appear as a villager on cop reports.',
+		appearAs: 'town',
 	},
 
 	mayor: {
@@ -179,5 +186,21 @@ exports.MafiaClasses = {
 		side: 'town',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-mayor.png" />',
 		flavorText: 'You are the mayor. You\'re sided with the town, but your votes count twice during town meetings.',
+	},
+
+	goon: {
+		name: "Goon",
+		side: 'solo',
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-goon.png" />',
+		flavorText: 'You are the goon. You appear as mafia on cop reports, and can kill someone once in the game. You win if you\'re the only person left alive.',
+		appearAs: 'mafia',
+		victoryText: 'The goon is victorious!',
+
+		onNight: {
+			target: {side: 'any', count: 'single'},
+			priority: 1,
+			oneshot: true,
+			callback: MafiaFunctions.goonKill,
+		},
 	},
 };
