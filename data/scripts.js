@@ -327,6 +327,35 @@ exports.BattleScripts = {
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
 
+				if (move.multiaccuracy && i > 0) {
+					accuracy = move.accuracy;
+					if (accuracy !== true) {
+						if (!move.ignoreAccuracy) {
+							boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+							boost = this.clampIntRange(boosts['accuracy'], -6, 6);
+							if (boost > 0) {
+								accuracy *= boostTable[boost];
+							} else {
+								accuracy /= boostTable[-boost];
+							}
+						}
+						if (!move.ignoreEvasion) {
+							boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+							boost = this.clampIntRange(boosts['evasion'], -6, 6);
+							if (boost > 0) {
+								accuracy /= boostTable[boost];
+							} else if (boost < 0) {
+								accuracy *= boostTable[-boost];
+							}
+						}
+					}
+					accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					if (!move.alwaysHit) {
+						accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+						if (accuracy !== true && this.random(100) >= accuracy) break;
+					}
+				}
+
 				moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
 				if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
@@ -1434,7 +1463,7 @@ exports.BattleScripts = {
 					if (hasMove['freezedry']) rejected = true;
 					break;
 				case 'bodyslam':
-					if (hasMove['glare']) rejected = true;
+					if (hasMove['glare'] || hasMove['headbutt']) rejected = true;
 					break;
 				case 'endeavor':
 					if (slot > 0) rejected = true;
@@ -3201,76 +3230,6 @@ exports.BattleScripts = {
 			level: level,
 			shiny: !this.random(template.id === 'missingno' ? 4 : 1024),
 		};
-	},
-	randomSeasonalDimensionalTeam: function () {
-		let side = 'good';
-		let team = [];
-		let pokemon = '';
-		let set = {};
-		let sides = {
-			good: this.shuffle([
-				'Rick', 'Morty', 'Summer', 'Mr. Meeseks', 'Scary Terry', 'Dr. Xenon Bloom', 'Bird Person', 'Squanchy', 'Krombopulos Michael', 'Unity',
-				'Morty Jr.', 'Dipper', 'Mabel', 'Stanley', 'Stanford', 'Wendy', 'Soos', 'Fiddleford McGucket', 'Time Baby', 'Blendin',
-			]),
-			bad: this.shuffle([
-				'Evil Rick', 'Evil Morty', 'King Flippy Nips', 'Mr. Lucius Needful', 'Snowball', 'Mr. Jellybean', 'Poncho',
-				'Galactic Fed Soldier', 'Tammy', 'Bill Cipher', "Lil' Gideon", '8-Ball', 'Keyhole', 'Pacifier',
-			]),
-		};
-		let mons = {
-			'Rick': {species: 'alakazam', ability: 'regenerator', item: 'lifeorb', gender: 'M', moves: ['psystrike', 'recover', 'aurasphere', 'watergun'], signatureMove: 'Portal Gun'},
-			'Morty': {species: 'machop', ability: 'furcoat', item: 'leftovers', gender: 'M', moves: ['bodyslam', 'highjumpkick', 'stockpile', 'outrage'], signatureMove: 'Morty Rage'},
-			'Summer': {species: 'kirlia', ability: 'drought', item: 'brightpowder', gender: 'F', moves: ['moonblast', 'psystrike', 'moonlight', 'chatter'], signatureMove: 'Teen Problems'},
-			'Mr. Meeseks': {species: 'deoxys', ability: 'wonderguard', item: 'blacksludge', gender: 'N', moves: ['copycat', 'assist', 'partingshot', 'thunderwave']},
-			'Scary Terry': {species: 'excadrill', ability: 'baddreams', item: 'earthplate', gender: 'M', moves: ['spore', 'precipiceblades', 'slash', 'dreameater'], signatureMove: 'Super Dream Eater'},
-			'Dr. Xenon Bloom': {species: 'reuniclus', ability: 'waterabsorb', item: 'choicespecs', gender: 'M', moves: ['psyshock', 'aurasphere', 'sludgebomb', 'shadowball']},
-			'Bird Person': {species: 'hawlucha', ability: 'intimidate', item: 'expertbelt', gender: 'M', moves: ['dragonascent', 'superpower', 'substitute', 'swordsdance']},
-			'Squanchy': {species: 'persian', ability: 'hugepower', item: 'lifeorb', gender: 'M', moves: ['return', 'superpower', 'recover', 'bulkup'], signatureMove: 'Squanch Up'},
-			'Krombopulos Michael': {species: 'kricketune', ability: 'speedboost', item: 'chartiberry', gender: 'M', moves: ['megahorn', 'waterfall', 'iciclecrash', 'protect']},
-			'Unity': {species: 'blissey', ability: 'imposter', item: 'leftovers', gender: 'F', moves: ['transform', 'return']},
-			'Morty Jr.': {species: 'machamp', ability: 'moxie', item: 'leftovers', gender: 'M', moves: ['drainpunch', 'machpunch', 'shadowclaw', 'bulkup']},
-			'Dipper': {species: 'spinda', ability: 'oblivious', item: 'sitrusberry', gender: 'M', moves: ['machpunch', 'suckerpunch', 'quickattack', 'recycle'], signatureMove: 'Pines Recycle'},
-			'Mabel': {species: 'ralts', ability: 'moody', item: 'brightpowder', gender: 'F', moves: ['protect', 'doubleteam', 'moonblast', 'psychic'], signatureMove: 'Grappling Hook'},
-			'Stanley': {species: 'hitmonchan', ability: 'hugepower', item: 'muscleband', gender: 'M', moves: ['drainpunch', 'bulletpunch', 'closecombat', 'tackle'], signatureMove: 'Baseball Bat'},
-			'Stanford': {species: 'hitmonchan', ability: 'furcoat', item: 'sitrusberry', gender: 'M', moves: ['machpunch', 'suckerpunch', 'dynamicpunch', 'hyperbeam'], signatureMove: 'Dimensional Sniper'},
-			'Wendy': {species: 'gallade', ability: 'sniper', item: 'scopelens', gender: 'F', moves: ['focusenergy', 'psychocut', 'stoneedge', 'aurasphere']},
-			'Soos': {species: 'snorlax', ability: 'thickfat', item: 'leftovers', gender: 'M', moves: ['defensecurl', 'return', 'shiftgear', 'recover']},
-			'Fiddleford McGucket': {species: 'scrafty', ability: 'regenerator', item: 'choiceband', gender: 'M', moves: ['crunch', 'closecombat', 'iciclecrash', 'playrough']},
-			'Time Baby': {species: 'chansey', ability: 'filter', item: 'eviolite', gender: 'N', moves: ['softboiled', 'cottonguard', 'hypervoice', 'leechseed']},
-			'Blendin': {species: 'beheeyem', ability: 'magicguard', item: 'lifeorb', gender: 'M', moves: ['psychic', 'sludgebomb', 'aurasphere', 'partingshot']},
-			'Evil Rick': {species: 'alakazam', ability: 'regenerator', item: 'lifeorb', gender: 'M', moves: ['psystrike', 'recover', 'aurasphere', 'watergun'], shiny: true, signatureMove: 'Portal Gun'},
-			'Evil Morty': {species: 'machoke', ability: 'furcoat', item: 'leftovers', gender: 'M', moves: ['bodyslam', 'highjumpkick', 'stockpile', 'kinesis'], shiny: true, signatureMove: 'Mind Control'},
-			'King Flippy Nips': {species: 'palpitoad', ability: 'swiftswim', item: 'leftovers', gender: 'M', moves: ['raindance', 'freezedry', 'recover', 'thunderbolt']},
-			'Mr. Lucius Needful': {species: 'banette', ability: 'magicguard', item: 'blacksludge', gender: 'M', moves: ['trick', 'shadowball', 'disable', 'destinybond']},
-			'Snowball': {species: 'furfrou', ability: 'hugepower', item: 'lumberry', gender: 'M', moves: ['shiftgear', 'frustration', 'geargrind', 'drainpunch'], happiness: 0},
-			'Mr. Jellybean': {species: 'ditto', ability: 'prankster', item: 'powerherb', gender: 'M', moves: ['geomancy', 'hyperbeam', 'shadowball', 'psystrike']},
-			'Poncho': {species: 'golurk', ability: 'skilllink', item: 'kingsrock', gender: 'M', moves: ['iciclecrash', 'rockblast', 'iceshard', 'bulletseed']},
-			'Galactic Fed Soldier': {species: 'pinsir', ability: 'aerilate', item: 'chartiberry', gender: 'M', moves: ['return', 'quickattack', 'megahorn', 'shadowclaw']},
-			'Tammy': {species: 'jynx', ability: 'illusion', item: 'choicespecs', gender: 'F', moves: ['shadowball', 'psystrike', 'thunderbolt', 'surf']},
-			'Bill Cipher': {species: 'zapdos', ability: 'magicbounce', item: 'brightpowder', gender: 'N', moves: ['thunderbolt', 'nastyplot', 'recover', 'thunder'], signatureMove: 'Bill Thunder'},
-			"Lil' Gideon": {species: 'Snubbull', ability: 'hugepower', item: 'leftovers', gender: 'M', moves: ['playrough', 'stockpile', 'quickattack', 'earthquake']},
-			'8-Ball': {species: 'rayquaza', ability: 'filter', item: 'lifeorb', gender: 'N', moves: ['dragonclaw', 'fly', 'return', 'superpower']},
-			'Keyhole': {species: 'klefki', ability: 'levitate', item: 'leftovers', gender: 'N', moves: ['playrough', 'recover', 'bulkup', 'geargrind']},
-			'Pacifier': {species: 'tauros', ability: 'flamebody', item: 'lifeorb', gender: 'N', moves: ['extremespeed', 'swordsdance', 'machpunch', 'suckerpunch']},
-		};
-
-		// Choose the proper side.
-		if (this.seasonal && this.seasonal.side) {
-			side = (this.seasonal.side === 'good' ? 'bad' : 'good');
-		} else {
-			side = (Math.random() > 0.5 ? 'good' : 'bad');
-			this.seasonal = {'side': side};
-		}
-
-		// Shake the Pookémon pool. We want a mixed team, don't we?
-		for (let i = 0; i < 6; i++) {
-			pokemon = sides[side][i];
-			set = mons[pokemon];
-			set.name = pokemon;
-			team.push(set);
-		}
-
-		return team;
 	},
 	randomFactorySets: require('./factory-sets.json'),
 	randomFactorySet: function (template, slot, teamData, tier) {

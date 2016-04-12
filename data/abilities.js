@@ -1189,6 +1189,7 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it. If there is no Pokemon at that position, this Pokemon does not Transform.",
 		shortDesc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it.",
 		onStart: function (pokemon) {
+			if (this.activeMove && this.activeMove.id === 'skillswap') return;
 			let target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
 				pokemon.transformInto(target, pokemon, this.getAbility('imposter'));
@@ -1925,7 +1926,7 @@ exports.BattleAbilities = {
 			pokemon.setItem(randomTarget.lastItem);
 			randomTarget.lastItem = '';
 			let item = pokemon.getItem();
-			this.add('-item', pokemon, item, '[from] Pickup');
+			this.add('-item', pokemon, item, '[from] ability: Pickup');
 		},
 		id: "pickup",
 		name: "Pickup",
@@ -2475,6 +2476,9 @@ exports.BattleAbilities = {
 			if (move.multihit && move.multihit.length) {
 				move.multihit = move.multihit[1];
 			}
+			if (move.multiaccuracy) {
+				delete move.multiaccuracy;
+			}
 		},
 		id: "skilllink",
 		name: "Skill Link",
@@ -2691,7 +2695,7 @@ exports.BattleAbilities = {
 	"stickyhold": {
 		shortDesc: "This Pokemon cannot lose its held item due to another Pokemon's attack.",
 		onTakeItem: function (item, pokemon, source) {
-			if (this.suppressingAttackEvents() && pokemon !== this.activePokemon || !pokemon.hp) return;
+			if (this.suppressingAttackEvents() && pokemon !== this.activePokemon || !pokemon.hp || pokemon.item === 'stickybarb') return;
 			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
@@ -2777,8 +2781,8 @@ exports.BattleAbilities = {
 	},
 	"superluck": {
 		shortDesc: "This Pokemon's critical hit ratio is raised by 1 stage.",
-		onModifyMove: function (move) {
-			move.critRatio++;
+		onModifyCritRatio: function (critRatio) {
+			return critRatio + 1;
 		},
 		id: "superluck",
 		name: "Super Luck",
@@ -3123,7 +3127,7 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
 		},
-		onFoeEatItem: false,
+		onFoeTryEatItem: false,
 		id: "unnerve",
 		name: "Unnerve",
 		rating: 1.5,

@@ -28,7 +28,7 @@ const HOURMUTE_LENGTH = 60 * 60 * 1000;
 exports.commands = {
 
 	version: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox("Server version: <b>" + CommandParser.package.version + "</b>");
 	},
 
@@ -62,7 +62,7 @@ exports.commands = {
 			(Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort((a, b) => toId(a).localeCompare(toId(b))).join(", ")
 		);
 
-		if (!buffer.length) buffer = "This server has no global authority.";
+		if (!buffer.length) return connection.popup("This server has no global authority.");
 		connection.popup(buffer.join("\n\n"));
 	},
 	authhelp: ["/auth - Show global staff for the server.",
@@ -149,15 +149,12 @@ exports.commands = {
 			return this.parse('/help msg');
 		}
 		this.pmTarget = (targetUser || this.targetUsername);
-		if (!targetUser || !targetUser.connected) {
-			if (targetUser && !targetUser.connected) {
-				this.errorReply("User " + this.targetUsername + " is offline. Try using /tell to send them an offline message.");
-				return;
-			} else {
-				this.errorReply("User "  + this.targetUsername + " not found. Did you misspell their name? If they are offline, try using /tell to send them an offline message.");
-				return this.parse('/help tell');
-			}
-			return;
+		if (!targetUser) {
+			this.errorReply("User "  + this.targetUsername + " not found. Did you misspell their name? If they are offline, try using /tell to send them an offline message.");
+			return this.parse('/help msg');
+		}
+		if (!targetUser.connected) {
+			return this.errorReply("User " + this.targetUsername + " is offline. Try using /tell to send them an offline message.");
 		}
 
 		if (Config.pmmodchat) {
@@ -450,7 +447,11 @@ exports.commands = {
 	deletechatroom: 'deleteroom',
 	deletegroupchat: 'deleteroom',
 	deleteroom: function (target, room, user) {
-		if (!this.can('makeroom')) return;
+		if (room.isPersonal) {
+			if (!this.can('editroom', null, room)) return;
+		} else {
+			if (!this.can('makeroom')) return;
+		}
 		let roomid = target.trim();
 		if (!roomid) return this.parse('/help deleteroom');
 		let targetRoom = Rooms.search(roomid);
@@ -601,7 +602,7 @@ exports.commands = {
 
 	roomdesc: function (target, room, user) {
 		if (!target) {
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			if (!room.desc) return this.sendReply("This room does not have a description set.");
 			this.sendReplyBox("The room description is: " + Tools.escapeHTML(room.desc));
 			return;
@@ -634,7 +635,7 @@ exports.commands = {
 	topic: 'roomintro',
 	roomintro: function (target, room, user) {
 		if (!target) {
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room)) {
@@ -662,6 +663,20 @@ exports.commands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.introMessage = room.introMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	deletetopic: 'deleteroomintro',
+	deleteroomintro: function (target, room, user) {
+		if (!this.can('declare', null, room)) return false;
+		if (!room.introMessage) return this.errorReply("This room does not have a introduction set.");
+
+		this.privateModCommand("(" + user.name + " deleted the roomintro.)");
+		this.logEntry(target);
+
+		delete room.introMessage;
+		if (room.chatRoomData) {
+			delete room.chatRoomData.introMessage;
 			Rooms.global.writeChatRoomData();
 		}
 	},
@@ -700,10 +715,24 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+	deletestafftopic: 'deletestaffintro',
+	deletestaffintro: function (target, room, user) {
+		if (!this.can('ban', null, room)) return false;
+		if (!room.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
+
+		this.privateModCommand("(" + user.name + " deleted the staffintro.)");
+		this.logEntry(target);
+
+		delete room.staffMessage;
+		if (room.chatRoomData) {
+			delete room.chatRoomData.staffMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
 
 	roomalias: function (target, room, user) {
 		if (!target) {
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			if (!room.aliases || !room.aliases.length) return this.sendReplyBox("This room does not have any aliases.");
 			return this.sendReplyBox("This room has the following aliases: " + room.aliases.join(", ") + "");
 		}
@@ -748,49 +777,26 @@ exports.commands = {
 		if (!target) return this.parse('/help roomowner');
 		target = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
+		let name = this.targetUsername;
+		let userid = toId(name);
 
-		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
+		if (!Users.isUsernameKnown(userid)) {
+			return this.errorReply("User '" + this.targetUsername + "' is offline and unrecognized, and so can't be promoted.");
+		}
 
 		if (!this.can('makeroom')) return false;
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
-		let name = targetUser.name;
-
-		room.auth[targetUser.userid] = '#';
+		room.auth[userid] = '#';
 		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
-		targetUser.popup("You were appointed Room Owner by " + user.name + " in " + room.id + ".");
-		room.onUpdateIdentity(targetUser);
+		if (targetUser) {
+			targetUser.popup("You were appointed Room Owner by " + user.name + " in " + room.id + ".");
+			room.onUpdateIdentity(targetUser);
+		}
 		Rooms.global.writeChatRoomData();
 	},
-	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: & ~"],
-
-	roomdeowner: 'deroomowner',
-	deroomowner: function (target, room, user) {
-		if (!room.auth) {
-			return this.sendReply("/roomdeowner - This room isn't designed for per-room moderation");
-		}
-		if (!target) return this.parse('/help roomdeowner');
-		target = this.splitTarget(target, true);
-		let targetUser = this.targetUser;
-		let name = this.targetUsername;
-		let userid = toId(name);
-		if (!userid || userid === '') return this.errorReply("User '" + name + "' not found.");
-
-		if (room.auth[userid] !== '#') return this.errorReply("User '" + name + "' is not a room owner.");
-		if (!this.can('makeroom')) return false;
-
-		delete room.auth[userid];
-		this.sendReply("(" + name + " is no longer Room Owner.)");
-		if (targetUser) {
-			targetUser.popup("You are no longer a Room Owner of " + room.id + ". (Demoted by " + user.name + ".)");
-			targetUser.updateIdentity();
-		}
-		if (room.chatRoomData) {
-			Rooms.global.writeChatRoomData();
-		}
-	},
-	deroomownerhelp: ["/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: & ~"],
+	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Requires: & ~"],
 
 	roomdemote: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {
@@ -806,16 +812,14 @@ exports.commands = {
 		let name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) return this.parse('/help roompromote');
-		if (!room.auth || !room.auth[userid]) {
-			if (!targetUser) {
-				return this.errorReply("User '" + name + "' is offline and unauthed, and so can't be promoted.");
-			}
-			if (!targetUser.registered) {
-				return this.errorReply("User '" + name + "' is unregistered, and so can't be promoted.");
-			}
+		if (!targetUser && !Users.isUsernameKnown(userid)) {
+			return this.errorReply("User '" + name + "' is offline and unrecognized, and so can't be promoted.");
+		}
+		if (targetUser && !targetUser.registered) {
+			return this.errorReply("User '" + name + "' is unregistered, and so can't be promoted.");
 		}
 
-		let currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && targetUser.group) || ' ');
+		let currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && Users.usergroups[userid]) || ' ');
 		let nextGroup = target;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {
@@ -1492,6 +1496,11 @@ exports.commands = {
 		if (!Config.groups[nextGroup]) {
 			return this.errorReply("Group '" + nextGroup + "' does not exist.");
 		}
+		if (!cmd.startsWith('global')) {
+			let groupid = Config.groups[nextGroup].id;
+			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth';
+			return this.errorReply('Did you mean "/room' + groupid + '" or "/global' + groupid + '"?');
+		}
 		if (Config.groups[nextGroup].roomonly) {
 			return this.errorReply("Group '" + nextGroup + "' does not exist as a global rank.");
 		}
@@ -1504,9 +1513,13 @@ exports.commands = {
 			return this.errorReply("/" + cmd + " - Access denied.");
 		}
 
-		if (!Users.setOfflineGroup(name, nextGroup)) {
-			return this.sendReply("/promote - WARNING: This user is offline and could be unregistered. Use /forcepromote if you're sure you want to risk it.");
+		if (!Users.isUsernameKnown(userid)) {
+			return this.errorReply("/globalpromote - WARNING: '" + name + "' is offline and unrecognized. The username might be misspelled (either by you or the person or told you) or unregistered. Use /forcepromote if you're sure you want to risk it.");
 		}
+		if (targetUser && !targetUser.registered) {
+			return this.errorReply("User '" + name + "' is unregistered, and so can't be promoted.");
+		}
+		Users.setOfflineGroup(name, nextGroup);
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
@@ -1553,9 +1566,10 @@ exports.commands = {
 		let nextGroup = target;
 		if (!Config.groups[nextGroup]) return this.errorReply("Group '" + nextGroup + "' does not exist.");
 
-		if (!Users.setOfflineGroup(name, nextGroup, true)) {
+		if (Users.isUsernameKnown(name)) {
 			return this.errorReply("/forcepromote - Don't forcepromote unless you have to.");
 		}
+		Users.setOfflineGroup(name, nextGroup);
 
 		this.addModCommand("" + name + " was promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + ".");
 	},
@@ -1563,6 +1577,13 @@ exports.commands = {
 	devoice: 'deauth',
 	deauth: function (target, room, user) {
 		return this.parse('/demote ' + target + ', deauth');
+	},
+
+	deglobalvoice: 'globaldeauth',
+	deglobalauth: 'globaldeauth',
+	globaldevoice: 'globaldeauth',
+	globaldeauth: function (target, room, user) {
+		return this.parse('/globaldemote ' + target + ', deauth');
 	},
 
 	deroomvoice: 'roomdeauth',
@@ -1809,6 +1830,8 @@ exports.commands = {
 
 			if (searchString.match(/^["'].+["']$/)) {
 				searchString = searchString.substring(1, searchString.length - 1);
+			} else if (searchString.includes('_')) {
+				// do an exact search, the approximate search fails for underscores
 			} else if (isWin) {  // ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd)
 				target = '"' + target + '"';  // add quotes to target so the caller knows they are getting a strict match
 			} else {
@@ -1894,6 +1917,14 @@ exports.commands = {
 		if (target === 'chat' || target === 'commands') {
 			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
 			try {
+				const ProcessManagers = require('./process-manager').cache;
+				for (let PM of ProcessManagers.keys()) {
+					if (PM.isChatBased) {
+						PM.unspawn();
+						ProcessManagers.delete(PM);
+					}
+				}
+
 				CommandParser.uncacheTree('./command-parser.js');
 				delete require.cache[require.resolve('./commands.js')];
 				delete require.cache[require.resolve('./chat-plugins/info.js')];
@@ -1930,7 +1961,7 @@ exports.commands = {
 			}
 		} else if (target === 'battles') {
 			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
-			Simulator.SimulatorProcess.reinit();
+			Simulator.SimulatorProcess.respawn();
 			return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
 		} else if (target === 'formats') {
 			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
@@ -1945,7 +1976,7 @@ exports.commands = {
 				// respawn validator processes
 				TeamValidator.PM.respawn();
 				// respawn simulator processes
-				Simulator.SimulatorProcess.reinit();
+				Simulator.SimulatorProcess.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.send(Rooms.global.formatListText);
 
@@ -2249,7 +2280,7 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/eval - Access denied.");
 		}
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		if (!this.broadcasting) this.sendReply('||>> ' + target);
 		try {
@@ -2267,7 +2298,7 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/evalbattle - Access denied.");
 		}
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (!room.battle) {
 			return this.errorReply("/evalbattle - This isn't a battle room.");
 		}

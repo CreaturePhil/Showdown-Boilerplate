@@ -111,11 +111,9 @@ function ipSearch(ip, table) {
 	return false;
 }
 function checkBanned(ip) {
-	if (!ip) return false;
 	return ipSearch(ip, bannedIps);
 }
 function checkLocked(ip) {
-	if (!ip) return false;
 	return ipSearch(ip, lockedIps);
 }
 Users.checkBanned = checkBanned;
@@ -300,24 +298,35 @@ function cacheGroupData() {
 }
 cacheGroupData();
 
-Users.setOfflineGroup = function (name, group, force) {
+Users.setOfflineGroup = function (name, group, forceConfirmed) {
+	if (!group) throw new Error("Falsy value passed to setOfflineGroup");
 	let userid = toId(name);
 	let user = getExactUser(userid);
-	if (force && (user || usergroups[userid])) return false;
 	if (user) {
-		user.setGroup(group);
+		user.setGroup(group, forceConfirmed);
 		return true;
 	}
-	if (!group || group === Config.groupsranking[0]) {
+	if (group === Config.groupsranking[0] && !forceConfirmed) {
 		delete usergroups[userid];
 	} else {
 		let usergroup = usergroups[userid];
-		if (!usergroup && !force) return false;
 		name = usergroup ? usergroup.substr(1) : name;
 		usergroups[userid] = group + name;
 	}
 	exportUsergroups();
 	return true;
+};
+
+Users.isUsernameKnown = function (name) {
+	let userid = toId(name);
+	if (Users(userid)) return true;
+	if (userid in usergroups) return true;
+	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
+		let curRoom = Rooms.global.chatRooms[i];
+		if (!curRoom.auth) continue;
+		if (userid in curRoom.auth) return true;
+	}
+	return false;
 };
 
 Users.importUsergroups = importUsergroups;
@@ -433,6 +442,7 @@ class User {
 		this.chatQueue = null;
 		this.chatQueueTimeout = null;
 		this.lastChatMessage = 0;
+		this.broadcasting = false;
 
 		// for the anti-spamming mechanism
 		this.lastMessage = '';
@@ -1085,6 +1095,7 @@ class User {
 	 * status without giving the user a group.
 	 */
 	setGroup(group, forceConfirmed) {
+		if (!group) throw new Error("Falsy value passed to setGroup");
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 		if (!this.isStaff) {
@@ -1420,6 +1431,14 @@ class User {
 			}
 			connection.popup(message);
 			return Promise.resolve(false);
+		}
+		let gameCount = 0;
+		for (let i in this.games) { // eslint-disable-line no-unused-vars
+			gameCount++;
+			if (gameCount > 4) {
+				connection.popup("Due to high load, you are limited to 4 games at the same time.");
+				return Promise.resolve(false);
+			}
 		}
 		if (Monitor.countPrepBattle(connection.ip || connection.latestIp, this.name)) {
 			connection.popup("Due to high load, you are limited to 6 battles every 3 minutes.");

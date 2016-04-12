@@ -95,7 +95,9 @@ if (Config.watchconfig) {
 			global.Config = require('./config/config.js');
 			if (global.Users) Users.cacheGroupData();
 			console.log('Reloaded config/config.js');
-		} catch (e) {}
+		} catch (e) {
+			console.log('Error reloading config/config.js: ' + e.stack);
+		}
 	});
 }
 
@@ -122,6 +124,7 @@ global.Db = require('origindb')('config/db');
 
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier.js');
+Verifier.PM.spawn();
 
 global.CommandParser = require('./command-parser.js');
 

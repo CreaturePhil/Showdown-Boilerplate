@@ -12,6 +12,8 @@
 
 'use strict';
 
+const path = require('path');
+
 exports.commands = {
 
 	ip: 'whois',
@@ -20,7 +22,7 @@ exports.commands = {
 	alts: 'whois',
 	whoare: 'whois',
 	whois: function (target, room, user, connection, cmd) {
-		if (room.id === 'staff' && !this.canBroadcast()) return;
+		if (room.id === 'staff' && !this.runBroadcast()) return;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.errorReply("User " + this.targetUsername + " not found.");
@@ -212,7 +214,7 @@ exports.commands = {
 	dex: 'data',
 	pokedex: 'data',
 	data: function (target, room, user, connection, cmd) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		let buffer = '';
 		let targetId = toId(target);
@@ -350,7 +352,7 @@ exports.commands = {
 			}
 
 			buffer += '|raw|<font size="1">' + Object.keys(details).map(detail => {
-				if (!details[detail]) return detail;
+				if (details[detail] === '') return detail;
 				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
 			}).join("&nbsp;|&ThickSpace;") + '</font>';
 
@@ -370,103 +372,12 @@ exports.commands = {
 	detailshelp: ["/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.",
 		"!details [pokemon] - Show everyone these details. Requires: + % @ # & ~"],
 
-	learnset: 'learn',
-	learnall: 'learn',
-	learn5: 'learn',
-	g6learn: 'learn',
-	rbylearn: 'learn',
-	gsclearn: 'learn',
-	advlearn: 'learn',
-	dpplearn: 'learn',
-	bw2learn: 'learn',
-	learn: function (target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help learn');
-
-		if (!this.canBroadcast()) return;
-
-		let lsetData = {set:{}};
-		let targets = target.split(',');
-		let template = Tools.getTemplate(targets[0]);
-		let move = {};
-		let problem;
-		let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5}[cmd.substring(0, 3)] || 6);
-		let format = 'gen' + gen + 'ou';
-		let all = (cmd === 'learnall');
-		if (cmd === 'learn5') lsetData.set.level = 5;
-		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
-
-		if (!template.exists) {
-			return this.errorReply("Pok\u00e9mon '" + template.id + "' not found.");
-		}
-
-		if (targets.length < 2) {
-			return this.errorReply("You must specify at least one move.");
-		}
-
-		for (let i = 1, len = targets.length; i < len; i++) {
-			move = Tools.getMove(targets[i]);
-			if (!move.exists) {
-				return this.errorReply("Move '" + move.id + "' not found.");
-			}
-			problem = TeamValidator(format).checkLearnset(move, template.species, lsetData);
-			if (problem) break;
-		}
-		let buffer = "";
-		if (format) buffer += "In Gen " + gen + ", ";
-		buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
-		if (!problem) {
-			let sourceNames = {E:"egg", S:"event", D:"dream world", X:"egg, traded back", Y: "event, traded back"};
-			let sourcesBefore = lsetData.sourcesBefore;
-			if (lsetData.sources || sourcesBefore < gen) buffer += " only when obtained";
-			buffer += " from:<ul class=\"message-learn-list\">";
-			if (lsetData.sources) {
-				let sources = lsetData.sources.map(source => {
-					if (source.slice(0, 3) === '1ET') {
-						return '2X' + source.slice(3);
-					}
-					if (source.slice(0, 3) === '1ST') {
-						return '2Y' + source.slice(3);
-					}
-					return source;
-				}).sort();
-				let prevSourceType;
-				let prevSourceCount = 0;
-				for (let i = 0, len = sources.length; i < len; ++i) {
-					let source = sources[i];
-					if (source.substr(0, 2) === prevSourceType) {
-						if (prevSourceCount < 0) {
-							buffer += ": " + source.substr(2);
-						} else if (all || prevSourceCount < 3) {
-							buffer += ", " + source.substr(2);
-						} else if (prevSourceCount === 3) {
-							buffer += ", ...";
-						}
-						++prevSourceCount;
-						continue;
-					}
-					prevSourceType = source.substr(0, 2);
-					prevSourceCount = source.substr(2) ? 0 : -1;
-					buffer += "<li>gen " + source.charAt(0) + " " + sourceNames[source.charAt(1)];
-					if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
-					if (source.substr(2)) buffer += ": " + source.substr(2);
-				}
-			}
-			if (sourcesBefore) {
-				buffer += "<li>" + (sourcesBefore < gen ? "gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "") + ")";
-			}
-			buffer += "</ul>";
-		}
-		this.sendReplyBox(buffer);
-	},
-	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pok\u00e9mon can learn the given moves, if it can at all.",
-		"!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # & ~"],
-
 	weaknesses: 'weakness',
 	weak: 'weakness',
 	resist: 'weakness',
 	weakness: function (target, room, user) {
 		if (!target) return this.parse('/help weakness');
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		target = target.trim();
 		let targets = target.split(/ ?[,\/ ] ?/);
 
@@ -564,7 +475,7 @@ exports.commands = {
 			}
 		}
 
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		let factor = 0;
 		if (Tools.getImmunity(source, defender) || source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[source.type])) {
@@ -589,7 +500,7 @@ exports.commands = {
 
 	cover: 'coverage',
 	coverage: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (!target) return this.parse("/help coverage");
 
 		let targets = target.split(/[,+]/);
@@ -768,7 +679,7 @@ exports.commands = {
 
 	statcalc: function (target, room, user) {
 		if (!target) return this.parse("/help statcalc");
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		let targets = target.split(' ');
 
@@ -968,7 +879,7 @@ exports.commands = {
 	 *********************************************************/
 
 	uptime: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		let uptime = process.uptime();
 		let uptimeText;
 		if (uptime > 24 * 60 * 60) {
@@ -983,7 +894,7 @@ exports.commands = {
 	},
 
 	groups: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
 			"% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />" +
@@ -1000,10 +911,10 @@ exports.commands = {
 	repository: 'opensource',
 	git: 'opensource',
 	opensource: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"Pok&eacute;mon Showdown is open source:<br />" +
-			"- Language: JavaScript (Node.js or io.js)<br />" +
+			"- Language: JavaScript (Node.js)<br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source code</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a>"
@@ -1013,23 +924,23 @@ exports.commands = {
 		"!opensource - Show everyone that information. Requires: + % @ # & ~"],
 
 	staff: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pok&eacute;mon Showdown Staff List</a>");
 	},
 
 	forums: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox("<a href=\"https://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209\">Pok&eacute;mon Showdown Forums</a>");
 	},
 
 	suggestions: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox("<a href=\"https://www.smogon.com/forums/threads/3534365/\">Make a suggestion for Pok&eacute;mon Showdown</a>");
 	},
 
 	bugreport: 'bugs',
 	bugs: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (room.battle) {
 			this.sendReplyBox("<center><button name=\"saveReplay\"><i class=\"fa fa-upload\"></i> Save Replay</button> &mdash; <a href=\"https://www.smogon.com/forums/threads/3520646/\">Questions</a> &mdash; <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a></center>");
 		} else {
@@ -1042,7 +953,7 @@ exports.commands = {
 	},
 
 	avatars: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox("You can <button name=\"avatars\">change your avatar</button> by clicking on it in the <button name=\"openOptions\"><i class=\"fa fa-cog\"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.");
 	},
 	avatarshelp: ["/avatars - Explains how to change avatars.",
@@ -1050,7 +961,7 @@ exports.commands = {
 
 	introduction: 'intro',
 	intro: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"New to competitive Pok&eacute;mon?<br />" +
 			"- <a href=\"https://www.smogon.com/sim/ps_guide\">Beginner's Guide to Pok&eacute;mon Showdown</a><br />" +
@@ -1065,7 +976,7 @@ exports.commands = {
 	mentoring: 'smogintro',
 	smogonintro: 'smogintro',
 	smogintro: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"Welcome to Smogon's official simulator! The <a href=\"https://www.smogon.com/forums/forums/264\">Smogon Info / Intro Hub</a> can help you get integrated into the community.<br />" +
 			"- <a href=\"https://www.smogon.com/forums/threads/3526346\">Useful Smogon Info</a><br />" +
@@ -1075,7 +986,7 @@ exports.commands = {
 
 	calculator: 'calc',
 	calc: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />" +
 			"- <a href=\"https://pokemonshowdown.com/damagecalc/\">Damage Calculator</a>"
@@ -1086,7 +997,7 @@ exports.commands = {
 
 	capintro: 'cap',
 	cap: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"An introduction to the Create-A-Pok&eacute;mon project:<br />" +
 			"- <a href=\"https://www.smogon.com/cap/\">CAP project website and description</a><br />" +
@@ -1099,7 +1010,7 @@ exports.commands = {
 		"!cap - Show everyone that information. Requires: + % @ # & ~"],
 
 	gennext: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/blob/master/mods/gennext/README.md\">README: overview of NEXT</a><br />" +
@@ -1111,7 +1022,7 @@ exports.commands = {
 
 	om: 'othermetas',
 	othermetas: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		target = toId(target);
 		let buffer = "";
 
@@ -1154,7 +1065,7 @@ exports.commands = {
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
 	formathelp: function (target, room, user, connection, cmd) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (!target) {
 			return this.sendReplyBox(
 				"- <a href=\"https://www.smogon.com/tiers/\">Smogon Tiers</a><br />" +
@@ -1217,7 +1128,7 @@ exports.commands = {
 
 	roomhelp: function (target, room, user) {
 		if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"Room drivers (%) can use:<br />" +
 			"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules<br />" +
@@ -1262,7 +1173,7 @@ exports.commands = {
 
 	restarthelp: function (target, room, user) {
 		if (room.id === 'lobby' && !this.can('lockdown')) return false;
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"The server is restarting. Things to know:<br />" +
 			"- We wait a few minutes before restarting so people can finish up their battles<br />" +
@@ -1279,20 +1190,14 @@ exports.commands = {
 			let worker = Sockets.workers[i];
 			buf += "<strong>" + (worker.pid || worker.process.pid) + "</strong> - Sockets " + i + "<br />";
 		}
-		{
+
+		const ProcessManager = require('./../process-manager');
+		for (let managerData of ProcessManager.cache) {
 			let i = 0;
-			for (let process of Simulator.SimulatorProcess.processes) {
-				buf += "<strong>" + process.process.pid + "</strong> - Simulator " + (i++) + "<br />";
+			let processType = path.basename(managerData[1]);
+			for (let process of managerData[0].processes) {
+				buf += "<strong>" + process.process.pid + "</strong> - " + processType + " " + (i++) + "<br />";
 			}
-		}
-		{
-			let i = 0;
-			for (let process of TeamValidator.PM.processes) {
-				buf += "<strong>" + process.process.pid + "</strong> - Validator " + (i++) + "<br />";
-			}
-		}
-		if (Tools.dexsearchProcess) {
-			buf += "<strong>" + Tools.dexsearchProcess.pid + "</strong> - Dexsearch<br />";
 		}
 		this.sendReplyBox(buf);
 	},
@@ -1300,7 +1205,7 @@ exports.commands = {
 	rule: 'rules',
 	rules: function (target, room, user) {
 		if (!target) {
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			this.sendReplyBox("Please follow the rules:<br />" +
 				(room.rulesLink ? "- <a href=\"" + Tools.escapeHTML(room.rulesLink) + "\">" + Tools.escapeHTML(room.title) + " room rules</a><br />" : "") +
 				"- <a href=\"https://pokemonshowdown.com/rules\">" + (room.rulesLink ? "Global rules" : "Rules") + "</a>");
@@ -1324,7 +1229,7 @@ exports.commands = {
 		"/rules [url] - Change the room rules URL. Requires: # & ~"],
 
 	faq: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		target = target.toLowerCase();
 		let buffer = "";
 		let matched = false;
@@ -1396,7 +1301,7 @@ exports.commands = {
 	analysis: 'smogdex',
 	strategy: 'smogdex',
 	smogdex: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		let targets = target.split(',');
 		let pokemon = Tools.getTemplate(targets[0]);
@@ -1449,6 +1354,8 @@ exports.commands = {
 			let formatId = extraFormat.id;
 			if (formatId === 'doublesou') {
 				formatId = 'doubles';
+			} else if (formatId === 'battlespotsingles') {
+				formatId = 'battle_spot_singles';
 			} else if (formatId.includes('vgc')) {
 				formatId = 'vgc' + formatId.slice(-2);
 				formatName = 'VGC20' + formatId.slice(-2);
@@ -1505,11 +1412,11 @@ exports.commands = {
 			return this.sendReplyBox("Pok&eacute;mon, item, move, ability, or format not found for generation " + generation.toUpperCase() + ".");
 		}
 	},
-	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
-		"!analysis [pokemon], [generation] - Shows everyone this link. Requires: + % @ # & ~"],
+	smogdexhelp: ["/analysis [pokemon], [generation], [format] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
+		"!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # & ~"],
 
 	veekun: function (target, broadcast, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		let baseLink = 'http://veekun.com/dex/';
 
@@ -1579,7 +1486,7 @@ exports.commands = {
 		"!veekun [pokemon] - Shows everyone this link. Requires: + % @ # & ~"],
 
 	register: function () {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right.');
 	},
 
@@ -1604,7 +1511,7 @@ exports.commands = {
 	roll: 'dice',
 	dice: function (target, room, user) {
 		if (!target || target.match(/[^d\d\s\-\+HL]/i)) return this.parse('/help dice');
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		// ~30 is widely regarded as the sample size required for sum to be a Gaussian distribution.
 		// This also sets a computation time constraint for safety.
@@ -1697,7 +1604,7 @@ exports.commands = {
 	pickrandom: function (target, room, user) {
 		let options = target.split(',');
 		if (options.length < 2) return this.parse('/help pick');
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		const pickedOption = options[Math.floor(Math.random() * options.length)];
 		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(pickedOption).trim());
 	},
@@ -1706,7 +1613,7 @@ exports.commands = {
 	showimage: function (target, room, user) {
 		if (!target) return this.parse('/help showimage');
 		if (!this.can('declare', null, room)) return false;
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (this.room.isPersonal && !this.user.can('announce')) {
 			return this.errorReply("Images are not allowed in personal rooms.");
 		}
@@ -1758,7 +1665,7 @@ exports.commands = {
 			if (message.charAt(0) === '!') this.broadcasting = true;
 		} else {
 			if (!this.can('declare', null, room)) return;
-			if (!this.canBroadcast(false, '!htmlbox')) return;
+			if (!this.runBroadcast('!htmlbox')) return;
 		}
 
 		this.sendReplyBox(target);
@@ -1766,11 +1673,4 @@ exports.commands = {
 	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority"],
 };
 
-process.nextTick(() => {
-	// This slow operation is done *after* we start listening for connections
-	// to the server. Anybody who connects while data is loading will
-	// have to wait a couple seconds before they are able to join the server, but
-	// at least they probably won't receive a connection error message.
-
-	Tools.includeMods();
-});
+process.nextTick(() => Tools.includeData());

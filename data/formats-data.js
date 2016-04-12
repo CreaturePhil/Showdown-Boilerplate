@@ -2175,7 +2175,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 50, "isHidden": false, "moves":["leafstorm", "dragonpulse", "focusblast", "rockslide"], "pokeball": "cherishball"},
 		],
-		tier: "NU",
+		tier: "BL3",
 	},
 	sceptilemega: {
 		randomBattleMoves: ["substitute", "gigadrain", "dragonpulse", "focusblast", "swordsdance", "outrage", "leafblade", "earthquake", "hiddenpowerfire"],
@@ -2597,7 +2597,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 44, "moves":["refresh", "thunder", "raindance", "bite"]},
 			{"generation": 6, "level": 50, "nature": "Timid", "isHidden": false, "abilities":["lightningrod"], "moves":["overheat", "thunderbolt", "voltswitch", "protect"], "pokeball": "cherishball"},
 		],
-		tier: "RU",
+		tier: "NU",
 	},
 	manectricmega: {
 		randomBattleMoves: ["voltswitch", "thunderbolt", "hiddenpowerice", "hiddenpowergrass", "overheat"],
@@ -3279,6 +3279,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 15, "shiny": true, "moves":["wish", "confusion", "helpinghand", "return"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 100, "moves":["heartstamp", "playrough", "wish", "cosmicpower"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 25, "shiny": true, "moves":["wish", "confusion", "swift", "happyhour"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 100, "moves":["wish", "confusion", "rest"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
 		tier: "OU",
@@ -4349,7 +4350,7 @@ exports.BattleFormatsData = {
 	crustle: {
 		randomBattleMoves: ["stealthrock", "spikes", "shellsmash", "earthquake", "rockblast", "xscissor", "stoneedge"],
 		randomDoubleBattleMoves: ["protect", "shellsmash", "earthquake", "rockslide", "xscissor", "stoneedge"],
-		tier: "NU",
+		tier: "PU",
 	},
 	scraggy: {
 		randomBattleMoves: ["dragondance", "icepunch", "highjumpkick", "drainpunch", "rest", "bulkup", "crunch", "knockoff"],
@@ -4746,7 +4747,7 @@ exports.BattleFormatsData = {
 	durant: {
 		randomBattleMoves: ["honeclaws", "ironhead", "xscissor", "stoneedge", "batonpass", "superpower"],
 		randomDoubleBattleMoves: ["honeclaws", "ironhead", "xscissor", "rockslide", "protect", "superpower"],
-		tier: "RU",
+		tier: "BL2",
 	},
 	deino: {
 		randomBattleMoves: ["outrage", "crunch", "firefang", "dragontail", "thunderwave", "superpower"],
