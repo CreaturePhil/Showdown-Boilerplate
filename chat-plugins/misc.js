@@ -183,7 +183,7 @@ exports.commands = {
 	poofoffhelp: ["/poofoff - Disable the use of the /poof command."],
 
 	regdate: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (!target || !toId(target)) return this.parse('/help regdate');
 		let username = toId(target);
 		request('http://pokemonshowdown.com/users/' + username, function (error, response, body) {
@@ -213,13 +213,13 @@ exports.commands = {
 
 	sb: 'showdownboilerplate',
 	showdownboilerplate: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReply("|raw|This server uses <a href='https://github.com/CreaturePhil/Showdown-Boilerplate'>Showdown-Boilerplate</a>.");
 	},
 	showdownboilerplatehelp: ["/showdownboilerplate - Links to the Showdown-Boilerplate repository on Github."],
 
 	seen: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (!target) return this.parse('/help seen');
 		let targetUser = Users.get(target);
 		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");

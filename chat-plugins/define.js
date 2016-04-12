@@ -22,7 +22,7 @@ exports.commands = {
 		if (!target) return this.parse('/help define');
 		target = toId(target);
 		if (target > 50) return this.errorReply("Word can not be longer than 50 characters.");
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to speak.");
 
 		let options = {
@@ -60,7 +60,7 @@ exports.commands = {
 	ud: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ud');
 		if (target.toString().length > 50) return this.errorReply("Phrase cannot be longer than 50 characters.");
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to speak.");
 
 		let options = {
