@@ -1928,15 +1928,6 @@ exports.commands = {
 				CommandParser.uncacheTree('./command-parser.js');
 				delete require.cache[require.resolve('./commands.js')];
 				delete require.cache[require.resolve('./chat-plugins/info.js')];
-				for (let file of dir) {
-					if (file.substr(-3) !== '.js' || file === 'info.js') continue;
-					delete require.cache[require.resolve('./chat-plugins/' + file)];
-				}
-				if (Tools.dexsearchProcess) {
-					Tools.dexsearchProcess.kill();
-					Tools.dexsearchProcess = null;
-				}
-				delete require.cache[require.resolve('./chat-plugins/dexsearch.js')];
 				global.CommandParser = require('./command-parser.js');
 
 				let runningTournaments = Tournaments.tournaments;
