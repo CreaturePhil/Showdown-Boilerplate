@@ -13,11 +13,15 @@ try {
 
 exports.parseEmoticons = parseEmoticons;
 
-demFeels.extendEmotes({
-	'(ditto)': 'https://cdn.betterttv.net/emote/554da1a289d53f2d12781907/2x',
-	'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
-	'feelsbn': 'http://i.imgur.com/wp51rIg.png',
-});
+// for travis build
+if (typeof demFeels.extendEmotes === 'function') {
+	// example extending emotes
+	demFeels.extendEmotes({
+		'(ditto)': 'https://cdn.betterttv.net/emote/554da1a289d53f2d12781907/2x',
+		'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
+		'feelsbn': 'http://i.imgur.com/wp51rIg.png',
+	});
+}
 
 const emotes = demFeels.getEmotes();
 
