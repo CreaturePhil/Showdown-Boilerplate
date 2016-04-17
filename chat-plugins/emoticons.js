@@ -13,9 +13,15 @@ try {
 
 exports.parseEmoticons = parseEmoticons;
 
+demFeels.extendEmotes({
+	'(ditto)': 'https://cdn.betterttv.net/emote/554da1a289d53f2d12781907/2x',
+	'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
+	'feelsbn': 'http://i.imgur.com/wp51rIg.png'
+});
+
 const emotes = demFeels.getEmotes();
 
-const emotesKeys = Object.keys(emotes);
+const emotesKeys = Object.keys(emotes).sort();
 
 /**
 * Parse emoticons in message.
@@ -72,7 +78,7 @@ function parseEmoticons(message, room, user, pm) {
 * @return {String} emotes table
 */
 function create_table() {
-	let emotes_name = Object.keys(emotes);
+	let emotes_name = Object.keys(emotes).sort();
 	let emotes_list = [];
 	let emotes_group_list = [];
 	let len = emotes_name.length;

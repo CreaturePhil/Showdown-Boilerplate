@@ -4,7 +4,7 @@
   "description": "The server for the Pokémon Showdown battle simulator",
   "version": "0.10.2",
   "dependencies": {
-    "dem-feels": "^1.3.0",
+    "dem-feels": "^1.6.0",
     "moment": "2.11.2",
     "origindb": "2.5.2",
     "request": "2.67.0",
