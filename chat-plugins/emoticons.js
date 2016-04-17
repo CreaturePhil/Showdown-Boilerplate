@@ -16,7 +16,7 @@ exports.parseEmoticons = parseEmoticons;
 demFeels.extendEmotes({
 	'(ditto)': 'https://cdn.betterttv.net/emote/554da1a289d53f2d12781907/2x',
 	'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
-	'feelsbn': 'http://i.imgur.com/wp51rIg.png'
+	'feelsbn': 'http://i.imgur.com/wp51rIg.png',
 });
 
 const emotes = demFeels.getEmotes();
