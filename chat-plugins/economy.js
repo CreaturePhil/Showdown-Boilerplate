@@ -137,7 +137,7 @@ exports.commands = {
 	atm: 'wallet',
 	purse: 'wallet',
 	wallet: function (target, room, user) {
-		if (!this.runBroadcast()) return;
+		if (!this.canBroadcast()) return;
 		if (!target) target = user.name;
 
 		const amount = Db('money').get(toId(target), 0);
@@ -229,7 +229,7 @@ exports.commands = {
 
 	store: 'shop',
 	shop: function (target, room, user) {
-		if (!this.runBroadcast()) return;
+		if (!this.canBroadcast()) return;
 		return this.sendReply("|raw|" + shopDisplay);
 	},
 	shophelp: ["/shop - Display items you can buy with money."],
@@ -299,7 +299,7 @@ exports.commands = {
 	richladder: 'richestuser',
 	richestusers: 'richestuser',
 	richestuser: function (target, room, user) {
-		if (!this.runBroadcast()) return;
+		if (!this.canBroadcast()) return;
 		let display = '<center><u><b>Richest Users</b></u></center><br><table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Rank</th><th>Username</th><th>Money</th></tr>';
 		let keys = Object.keys(Db('money').object()).map(function (name) {
 			return {name: name, money: Db('money').get(name)};
@@ -378,7 +378,7 @@ exports.commands = {
 
 	bucks: 'economystats',
 	economystats: function (target, room, user) {
-		if (!this.runBroadcast()) return;
+		if (!this.canBroadcast()) return;
 		const users = Object.keys(Db('money').object());
 		const total = users.reduce(function (acc, cur) {
 			return acc + Db('money').get(cur);
