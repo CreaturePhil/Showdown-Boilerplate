@@ -375,7 +375,7 @@ exports.BattleScripts = {
 		}
 
 		if (move.recoil && totalDamage) {
-			this.damage(this.clampIntRange(Math.round(totalDamage * move.recoil[0] / move.recoil[1]), 1), pokemon, target, 'recoil');
+			this.damage(this.calcRecoilDamage(totalDamage, move), pokemon, target, 'recoil');
 		}
 
 		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
@@ -615,6 +615,10 @@ exports.BattleScripts = {
 		return damage;
 	},
 
+	calcRecoilDamage: function (damageDealt, move) {
+		return this.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+	},
+
 	canMegaEvo: function (pokemon) {
 		let altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.moves.indexOf(toId(altForme.requiredMove)) >= 0) return altForme.species;
@@ -672,6 +676,16 @@ exports.BattleScripts = {
 		if (!isValid) selectedAbilities.push(selectedAbility);
 		return isValid;
 	},
+	fastPop: function (list, index) {
+		// If an array doesn't need to be in order, replacing the
+		// element at the given index with the removed element
+		// is much, much faster than using list.splice(index, 1).
+		let length = list.length;
+		let element = list[index];
+		list[index] = list[length - 1];
+		list.pop();
+		return element;
+	},
 	sampleNoReplace: function (list) {
 		// The cute code to sample no replace is:
 		//   return list.splice(this.random(length), 1)[0];
@@ -680,10 +694,7 @@ exports.BattleScripts = {
 		// we just replace the removed element with the last element.
 		let length = list.length;
 		let index = this.random(length);
-		let element = list[index];
-		list[index] = list[length - 1];
-		list.pop();
-		return element;
+		return this.fastPop(list, index);
 	},
 	checkBattleForme: function (template) {
 		// If the Pokémon has a Mega or Primal alt forme, that's its preferred battle forme.
@@ -756,10 +767,15 @@ exports.BattleScripts = {
 			}
 
 			// Make sure forme/item combo is correct
-			while ((poke === 'Giratina' && item === 'griseousorb') ||
-					(poke === 'Arceus' && item.substr(-5) === 'plate') ||
-					(poke === 'Genesect' && item.substr(-5) === 'drive')) {
-				item = items[this.random(items.length)];
+			switch (poke) {
+			case 'Giratina':
+				while (item === 'griseousorb') item = items[this.random(items.length)];
+				break;
+			case 'Arceus':
+				while (item.substr(-5) === 'plate') item = items[this.random(items.length)];
+				break;
+			case 'Genesect':
+				while (item.substr(-5) === 'drive') item = items[this.random(items.length)];
 			}
 
 			// Random ability
@@ -913,12 +929,12 @@ exports.BattleScripts = {
 
 			// Random unique moves
 			let m = [];
-			while (true) {
+			do {
 				let moveid = this.sampleNoReplace(movePool);
 				if (!this.data.Movedex[moveid].isNonstandard && (moveid === 'hiddenpower' || moveid.substr(0, 11) !== 'hiddenpower')) {
-					if (m.push(moveid) >= 4) break;
+					m.push(moveid);
 				}
-			}
+			} while (m.length < 4);
 
 			// Random EVs
 			let evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
@@ -1027,7 +1043,7 @@ exports.BattleScripts = {
 		};
 		// Moves that shouldn't be the only STAB moves:
 		let NoStab = {
-			aquajet:1, bounce:1, fakeout:1, flamecharge:1, iceshard:1, pursuit:1, quickattack:1, skyattack:1,
+			aquajet:1, bounce:1, explosion:1, fakeout:1, flamecharge:1, iceshard:1, pursuit:1, quickattack:1, skyattack:1,
 			chargebeam:1, clearsmog:1, eruption:1, vacuumwave:1, waterspout:1,
 		};
 
@@ -1255,7 +1271,7 @@ exports.BattleScripts = {
 					if (!hasMove['rest']) rejected = true;
 					if (movePool.length > 1) {
 						let rest = movePool.indexOf('rest');
-						if (rest >= 0) movePool.splice(rest, 1);
+						if (rest >= 0) this.fastPop(movePool, rest);
 					}
 					break;
 				case 'storedpower':
@@ -1264,7 +1280,9 @@ exports.BattleScripts = {
 
 				// Set up once and only if we have the moves for it
 				case 'bellydrum': case 'bulkup': case 'coil': case 'curse': case 'dragondance': case 'honeclaws': case 'swordsdance':
-					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
+					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) {
+						if (!hasMove['growth'] || hasMove['sunnyday']) rejected = true;
+					}
 					if (counter.Physical + counter['physicalpool'] < 2 && !hasMove['batonpass'] && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
 					isSetup = true;
 					break;
@@ -1307,7 +1325,7 @@ exports.BattleScripts = {
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'healbell':
-					if (!!counter['speedsetup']) rejected = true;
+					if (counter['speedsetup']) rejected = true;
 					break;
 				case 'healingwish': case 'memento':
 					if (counter.setupType || !!counter['recovery'] || hasMove['substitute']) rejected = true;
@@ -1504,7 +1522,7 @@ exports.BattleScripts = {
 				case 'psyshock':
 					if (movePool.length > 1) {
 						let psychic = movePool.indexOf('psychic');
-						if (psychic >= 0) movePool.splice(psychic, 1);
+						if (psychic >= 0) this.fastPop(movePool, psychic);
 					}
 					break;
 				case 'zenheadbutt':
@@ -1540,6 +1558,10 @@ exports.BattleScripts = {
 				case 'sunnyday':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!hasAbility['Chlorophyll'] && !hasAbility['Flower Gift'] && !hasMove['solarbeam']) rejected = true;
+					if (rejected && movePool.length > 1) {
+						let weatherball = movePool.indexOf('weatherball');
+						if (weatherball >= 0) this.fastPop(movePool, weatherball);
+					}
 					break;
 				case 'stunspore': case 'thunderwave':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
@@ -1620,7 +1642,7 @@ exports.BattleScripts = {
 						if (movePool.length < 2) {
 							rejected = false;
 						} else {
-							movePool.splice(sleeptalk, 1);
+							this.fastPop(movePool, sleeptalk);
 						}
 					}
 				}

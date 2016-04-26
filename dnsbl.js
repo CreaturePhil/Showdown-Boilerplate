@@ -35,11 +35,10 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 		if (!err) {
 			// blocked
 			dnsblCache.set(ip, blocklist);
-			callback(blocklist);
-		} else {
-			// not blocked, try next blocklist
-			queryDnsblLoop(ip, callback, reversedIpDot, index + 1);
+			return callback(blocklist);
 		}
+		// not blocked, try next blocklist
+		queryDnsblLoop(ip, callback, reversedIpDot, index + 1);
 	});
 }
 
@@ -109,6 +108,10 @@ Dnsbl.reverse = function reverseDns(ip, callback) {
 		}
 		if (ip.startsWith('179.43.147.')) {
 			callback(null, ['privatelayer.proxy-nohost']);
+			return;
+		}
+		if (ip.startsWith('185.86.148.') || ip.startsWith('185.86.149.')) {
+			callback(null, ['yourserver.se.proxy-nohost']);
 			return;
 		}
 		if (rangeLeaseweb(ip) || rangeLeaseweb2(ip) || rangeLeaseweb3(ip) || rangeVoxility(ip)) {

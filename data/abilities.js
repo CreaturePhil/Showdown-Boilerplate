@@ -1380,7 +1380,6 @@ exports.BattleAbilities = {
 			if (this.validTarget(this.effectData.target, source, move.target)) {
 				if (this.effectData.target !== target) {
 					this.add('-activate', this.effectData.target, 'ability: Lightning Rod');
-					this.retargetLastMove(this.effectData.target);
 				}
 				return this.effectData.target;
 			}
@@ -1442,7 +1441,7 @@ exports.BattleAbilities = {
 			}
 			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
-			this.useMove(newMove, target, source);
+			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
 		effect: {
@@ -2722,7 +2721,6 @@ exports.BattleAbilities = {
 			if (this.validTarget(this.effectData.target, source, move.target)) {
 				if (this.effectData.target !== target) {
 					this.add('-activate', this.effectData.target, 'ability: Storm Drain');
-					this.retargetLastMove(this.effectData.target);
 				}
 				return this.effectData.target;
 			}
@@ -3360,7 +3358,7 @@ exports.BattleAbilities = {
 			}
 			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
-			this.useMove(newMove, target, source);
+			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
 		effect: {

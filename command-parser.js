@@ -96,6 +96,13 @@ class CommandContext {
 		this.targetUser = null;
 	}
 
+	updateBanwords() {
+		if (this.room.banwords && this.room.banwords.length) {
+			this.room.banwordRegex = new RegExp('(?:\\b|(?!\\w))(?:' + this.room.banwords.join('|') + ')(?:\\b|\\B(?!\\w))', 'i');
+		} else {
+			this.room.banwordRegex = true;
+		}
+	}
 	sendReply(data) {
 		if (this.broadcasting) {
 			this.room.add(data);
@@ -171,14 +178,14 @@ class CommandContext {
 		}
 		return true;
 	}
-	canBroadcast() {
+	canBroadcast(suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			if (this.user.broadcasting) {
 				this.errorReply("You can't broadcast another command too soon.");
 				return false;
 			}
 
-			let message = this.canTalk(this.message);
+			let message = this.canTalk(suppressMessage || this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
@@ -209,7 +216,7 @@ class CommandContext {
 
 		if (!this.broadcastMessage) {
 			// Permission hasn't been checked yet. Do it now.
-			if (!this.canBroadcast()) return false;
+			if (!this.canBroadcast(suppressMessage)) return false;
 		}
 
 		this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
@@ -310,7 +317,9 @@ class CommandContext {
 				connection.popup("Your message can't be blank.");
 				return false;
 			}
-			if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
+			let length = message.length;
+			length += 10 * message.replace(/[^\ufdfd]*/g, '').length;
+			if (length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 				this.errorReply("Your message is too long: " + message);
 				return false;
 			}
@@ -319,6 +328,12 @@ class CommandContext {
 			message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 			if (/[\u239b-\u23b9]/.test(message)) {
 				this.errorReply("Your message contains banned characters.");
+				return false;
+			}
+
+			if (!this.room.banwordRegex) this.updateBanwords();
+			if (this.room.banwordRegex !== true && this.room.banwordRegex.test(message) && !user.can('mute', null, this.room)) {
+				this.errorReply("Your message contained banned words.");
 				return false;
 			}
 

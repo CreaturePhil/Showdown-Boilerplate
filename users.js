@@ -59,9 +59,11 @@ function getUser(name, exactName) {
 	if (name && name.userid) return name;
 	let userid = toId(name);
 	let i = 0;
-	while (!exactName && userid && !users.has(userid) && i < 1000) {
-		userid = prevUsers.get(userid);
-		i++;
+	if (!exactName) {
+		while (userid && !users.has(userid) && i < 1000) {
+			userid = prevUsers.get(userid);
+			i++;
+		}
 	}
 	return users.get(userid);
 }
@@ -637,7 +639,7 @@ class User {
 
 		for (let i = 0; i < this.connections.length; i++) {
 			// console.log('' + name + ' renaming: connection ' + i + ' of ' + this.connections.length);
-			let initdata = '|updateuser|' + this.name + '|' + (false ? '1' : '0') + '|' + this.avatar;
+			let initdata = '|updateuser|' + this.name + '|' + ('0' /* not named */) + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
 		this.named = false;
@@ -790,23 +792,6 @@ class User {
 			return;
 		}
 
-		if (Config.tokenhosts) {
-			let host = tokenDataSplit[4];
-			if (Config.tokenhosts.length === 0) {
-				Config.tokenhosts.push(host);
-				console.log('Added ' + host + ' to valid tokenhosts');
-				require('dns').lookup(host, (err, address) => {
-					if (err || (address === host)) return;
-					Config.tokenhosts.push(address);
-					console.log('Added ' + address + ' to valid tokenhosts');
-				});
-			} else if (Config.tokenhosts.indexOf(host) < 0) {
-				console.log('invalid hostname in token: ' + tokenData);
-				this.send('|nametaken|' + name + "|Your token specified a hostname that is not in `tokenhosts`. If this is your server, please read the documentation in config/config.js for help. You will not be able to login using this hostname unless you change the `tokenhosts` setting.");
-				return;
-			}
-		}
-
 		// future-proofing
 		this.s1 = tokenDataSplit[5];
 		this.s2 = tokenDataSplit[6];
@@ -940,7 +925,7 @@ class User {
 
 		for (let i = 0; i < this.connections.length; i++) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
-			let initdata = '|updateuser|' + this.name + '|' + (true ? '1' : '0') + '|' + this.avatar;
+			let initdata = '|updateuser|' + this.name + '|' + ('1' /* named */) + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
 		let joining = !this.named;
@@ -996,7 +981,7 @@ class User {
 		this.connected = true;
 		this.connections.push(connection);
 		//console.log('' + this.name + ' merging: connection ' + connection.socket.id);
-		let initdata = '|updateuser|' + this.name + '|' + (true ? '1' : '0') + '|' + this.avatar;
+		let initdata = '|updateuser|' + this.name + '|' + ('1' /* named */) + '|' + this.avatar;
 		connection.send(initdata);
 		connection.user = this;
 		for (let i in connection.rooms) {

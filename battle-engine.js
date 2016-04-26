@@ -18,12 +18,6 @@ if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', err => {
 		require('./crashlogger.js')(err, 'A simulator process');
-		/* let stack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-		if (Rooms.lobby) {
-			Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
-			Rooms.lobby.addRaw('<div>You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
-		}
-		Rooms.global.lockdown = true; */
 	});
 }
 
@@ -464,12 +458,16 @@ BattlePokemon = (() => {
 			}
 			break;
 		default:
+			let selectedTarget = target;
 			if (!target || (target.fainted && target.side !== this.side)) {
 				// If a targeted foe faints, the move is retargeted
 				target = this.battle.resolveTarget(this, move);
 			}
 			if (target.side.active.length > 1) {
 				target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
+			}
+			if (selectedTarget !== target) {
+				this.battle.retargetLastMove(target);
 			}
 			targets = [target];
 
@@ -1081,7 +1079,10 @@ BattlePokemon = (() => {
 	BattlePokemon.prototype.setItem = function (item, source, effect) {
 		if (!this.hp || !this.isActive) return false;
 		item = this.battle.getItem(item);
-		if (item.id === 'leppaberry') {
+
+		let effectid;
+		if (effect) effectid = effect.id;
+		if (item.id === 'leppaberry' && effectid !== 'trick' && effectid !== 'switcheroo') {
 			this.isStale = 2;
 			this.isStaleSource = 'getleppa';
 		}
@@ -1239,11 +1240,17 @@ BattlePokemon = (() => {
 		if (this.status) hpstring += ' ' + this.status;
 		return hpstring;
 	};
+	/**
+	 * Sets a type (except on Arceus, who resists type changes)
+	 * newType can be an array, but this is for OMs only. The game in
+	 * reality doesn't support setting a type to more than one type.
+	 */
 	BattlePokemon.prototype.setType = function (newType, enforce) {
 		// Arceus first type cannot be normally changed
 		if (!enforce && this.template.num === 493) return false;
 
-		this.types = [newType];
+		if (!newType) throw new Error("Must pass type to setType");
+		this.types = (typeof newType === 'string' ? [newType] : newType);
 		this.addedType = '';
 
 		return true;

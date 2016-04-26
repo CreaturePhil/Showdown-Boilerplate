@@ -40,7 +40,7 @@ exports.BattleStatuses = {
 	ascriptinnate: {
 		effectType: 'Ability',
 		onStart: function (target, source) {
-			source.setType('Electric');
+			source.types = ['Electric'];
 			this.add('-start', source, 'typechange', 'Electric');
 			this.useMove('magnetrise', source);
 		},
@@ -152,14 +152,15 @@ exports.BattleStatuses = {
 	cuteness: {
 		effectType: 'Ability',
 		onStart: function (target, source) {
+			if (!source.side.foe.active[0].hp) return;
 			this.add('-ability', source, 'Cuteness');
-			this.boost({atk:1, def:1, spa:1, spd:1, spe:1, evasion:1}, source, source, source);
+			this.boost({atk:-1, def:-1, spa:-1, spd:-1, spe:-1, evasion: -1}, source.side.foe.active[0], source, source.side.foe.active[0]);
 		},
 		onModifyAtk: function () {
-			return this.chainModify(1.7);
+			return this.chainModify(1.8);
 		},
-		onModifySpA: function () {
-			return this.chainModify(1.7);
+		onModifyDef: function () {
+			return this.chainModify(1.8);
 		},
 	},
 	// Giagantic
@@ -338,11 +339,18 @@ exports.BattleStatuses = {
 	// sparktrain
 	refrigerateinnate: {
 		effectType: 'Ability',
+		onSwitchIn: function (pokemon) {
+			if (!pokemon.addType('Ice')) return false;
+			this.add('-start', pokemon, 'typeadd', 'Ice');
+		},
 		onModifyMove: function (move, pokemon) {
 			if (move.type === 'Normal' && move.id !== 'naturalgift') {
 				move.type = 'Ice';
 				if (move.category !== 'Status') pokemon.addVolatile('refrigerate');
 			}
+		},
+		onModifySpD: function () {
+			return this.chainModify(1.6);
 		},
 		name: "Refrigerate",
 	},
@@ -351,6 +359,18 @@ exports.BattleStatuses = {
 		effectType: 'Ability',
 		onModifySpe: function () {
 			return this.chainModify(1.1);
+		},
+	},
+	// Anttya
+	serenegraceinnate: {
+		effectType: 'Ability',
+		onModifyMovePriority: -2,
+		onModifyMove: function (move) {
+			if (move.secondaries) {
+				for (let i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance *= 2;
+				}
+			}
 		},
 	},
 	// bludz

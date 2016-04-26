@@ -67,7 +67,7 @@ exports.BattleMovedex = {
 	// awu
 	ancestorsrage: {
 		accuracy: 100,
-		basePower: 100,
+		basePower: 115,
 		category: "Physical",
 		id: "ancestorsrage",
 		isNonstandard: true,
@@ -446,9 +446,12 @@ exports.BattleMovedex = {
 				this.damage(source.maxhp / 2, source, source, 'brokenwand');
 				return false;
 			}
-			this.useMove('thunderbolt', source);
-			this.heal(source.maxhp * 0.10, source, source);
-			this.useMove('icebeam', source);
+			if (source.side.foe.active[0].hp) this.useMove('thunderbolt', source);
+			if (!source.hp) return;
+			if (source.side.foe.active[0].hp) {
+				this.useMove('icebeam', source);
+				if (!source.hp) return;
+			}
 			this.useMove('calmmind', source);
 			this.useMove('spikes', source);
 		},
@@ -479,10 +482,10 @@ exports.BattleMovedex = {
 		onAfterMoveSecondarySelf: function (source) {
 			if (source.types[1]) {
 				if (source.types[1] === 'Flying') {
-					source.types = [source.types[0], 'Electric'];
+					source.setType([source.types[0], 'Electric']);
 					this.add('-start', source, 'typechange', source.types[0] + '/Electric');
 				} else if (source.types[1] === 'Electric') {
-					source.types = [source.types[0], 'Flying'];
+					source.setType([source.types[0], 'Flying']);
 					this.add('-start', source, 'typechange', source.types[0] + '/Flying');
 				}
 			}
@@ -958,7 +961,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		recoil: [1, 3],
+		recoil: [1, 4],
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Brave Bird", target);
@@ -969,7 +972,7 @@ exports.BattleMovedex = {
 	},
 	// Mizuhime
 	doublelaser: {
-		accuracy: 95,
+		accuracy: 90,
 		basePower: 75,
 		category: "Special",
 		id: "doublelaser",
@@ -979,6 +982,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {pulse: 1, protect: 1, mirror: 1},
 		multihit: 2,
+		multiaccuracy: true,
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Water Pulse", target);
@@ -1142,14 +1146,15 @@ exports.BattleMovedex = {
 	},
 	// Marshmallon
 	excuse: {
-		accuracy: 100,
+		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		id: "excuse",
 		isNonstandard: true,
 		isViable: true,
 		name: "Excuse",
-		pp: 10,
+		pp: 5,
+		noPPBoosts: true,
 		priority: 2,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit: function (pokemon) {
@@ -1414,7 +1419,7 @@ exports.BattleMovedex = {
 	// flying kebab
 	frozenkebabskewers: {
 		accuracy: 100,
-		basePower: 20,
+		basePower: 25,
 		category: "Physical",
 		id: "frozenkebabskewers",
 		isViable: true,
@@ -1430,7 +1435,7 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Icicle Spear", target);
 		},
-		onTryHit: function (target, source) {
+		onAfterMoveSecondarySelf: function (source) {
 			if (source.boosts['atk'] < 2) this.boost({atk: 1}, source, source);
 			this.boost({spe: 1}, source, source);
 		},
@@ -1447,13 +1452,14 @@ exports.BattleMovedex = {
 	// biggie
 	foodrush: {
 		accuracy: 90,
-		basePower: 100,
+		basePower: 75,
 		category: "Physical",
 		id: "foodrush",
 		isNonstandard: true,
 		isViable: true,
 		name: "Food Rush",
-		pp: 10,
+		pp: 5,
+		noPPBoosts: true,
 		priority: -6,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		forceSwitch: true,
@@ -1698,8 +1704,8 @@ exports.BattleMovedex = {
 	},
 	// Hashtag
 	gottagostrats: {
-		accuracy: 85,
-		basePower: 130,
+		accuracy: 90,
+		basePower: 100,
 		category: "Physical",
 		id: "gottagostrats",
 		isNonstandard: true,
@@ -1842,7 +1848,7 @@ exports.BattleMovedex = {
 			target.addVolatile('confusion', source);
 			let reset = false;
 			for (let boost in target.boosts) {
-				if (target.boosts[boost] !== 0) {
+				if (target.boosts[boost] > 0) {
 					target.boosts[boost] = 0;
 					this.add('-setboost', target, boost, 0);
 					reset = true;
@@ -1880,7 +1886,7 @@ exports.BattleMovedex = {
 						type: '???',
 					});
 				};
-			} else if (rand < 3) {
+			} else if (rand < 5) {
 				move.boosts = {
 					spa: 2,
 					spd: 2,
@@ -1888,7 +1894,7 @@ exports.BattleMovedex = {
 				};
 			} else {
 				move.target = "normal";
-				if (rand < 5) {
+				if (rand < 6) {
 					move.onPrepareHit = function (target, source) {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Fairy Lock", target);
@@ -1901,7 +1907,7 @@ exports.BattleMovedex = {
 					};
 				} else {
 					move.accuracy = 90;
-					move.basePower = 80;
+					move.basePower = 60;
 					move.category = "Special";
 					move.flags = {protect: 1};
 					move.willCrit = true;
@@ -1909,6 +1915,7 @@ exports.BattleMovedex = {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Mist Ball", target);
 					};
+					move.secondary = {chance: 30, volatileStatus: 'flinch'};
 				}
 			}
 		},
@@ -2546,7 +2553,7 @@ exports.BattleMovedex = {
 					for (let p in thisSide.active) {
 						const pokemon = thisSide.active[p];
 						if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) continue;
-						pokemon.setType('Flying', true);
+						pokemon.setType('Flying');
 						this.add('-start', pokemon, 'typechange', 'Flying');
 					}
 				}
@@ -2554,12 +2561,12 @@ exports.BattleMovedex = {
 			onResidualOrder: 90,
 			onUpdate: function (pokemon) {
 				if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) return;
-				pokemon.setType('Flying', true);
+				pokemon.setType('Flying');
 				this.add('-start', pokemon, 'typechange', 'Flying');
 			},
 			onSwitchIn: function (pokemon) {
 				if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) return;
-				pokemon.setType('Flying', true);
+				pokemon.setType('Flying');
 				this.add('-start', pokemon, 'typechange', 'Flying');
 			},
 			onEnd: function () {
@@ -2568,8 +2575,8 @@ exports.BattleMovedex = {
 					const thisSide = this.sides[s];
 					for (let p in thisSide.active) {
 						const pokemon = thisSide.active[p];
-						if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) continue;
-						pokemon.setType(pokemon.template.types, true);
+						if ((pokemon.template.types[0] === 'Flying' && !pokemon.template.types[1]) || !pokemon.hp) continue;
+						pokemon.setType(pokemon.template.types);
 						this.add('-end', pokemon, 'typechange');
 					}
 				}
@@ -2650,8 +2657,8 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			source.side.addSideCondition('reflect', source);
-			source.side.addSideCondition('lightscreen', source);
-			source.side.addSideCondition('safeguard', source);
+			if (this.random(2) === 1) source.side.addSideCondition('lightscreen', source);
+			if (this.random(2) === 1) source.side.addSideCondition('safeguard', source);
 		},
 		secondary: false,
 		target: "self",
@@ -2792,15 +2799,17 @@ exports.BattleMovedex = {
 	// starry
 	oh: {
 		accuracy: 100,
-		category: "Status",
+		basePower: 0,
+		damage: 'level',
+		category: "Physical",
 		id: "oh",
 		isNonstandard: true,
 		name: "oh",
-		pp: 30,
+		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		boosts: {atk: -1, spa: -1},
-		self: {boosts: {spe: 1}},
+		self: {boosts: {spe: 2}},
 		secondary: false,
 		target: "normal",
 		type: "Dark",
@@ -2883,7 +2892,7 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Spike Cannon", target);
 		},
-		multihit: [2, 5],
+		multihit: [3, 5],
 		secondary: {
 			chance: 100,
 			self: {
@@ -3119,7 +3128,7 @@ exports.BattleMovedex = {
 	// Haund
 	psychokinesis: {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 120,
 		category: "Special",
 		id: "psychokinesis",
 		isNonstandard: true,
@@ -3192,11 +3201,11 @@ exports.BattleMovedex = {
 		onModifyMove: function (move) {
 			move.type = "???";
 			const rand = this.random(20);
-			if (rand < 9) {
+			if (rand < 10) {
 				move.damageCallback = function (source, target) {
 					return Math.max(target.hp / 2, target.maxhp / 4);
 				};
-			} else if (rand < 11) {
+			} else if (rand < 12) {
 				move.onHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Explosion", target);
@@ -3227,7 +3236,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		heal: [1, 2],
+		heal: [1, 3],
 		boosts: {spa:1, spd:1},
 		secondary: false,
 		onPrepareHit: function (target, source) {
@@ -3354,7 +3363,7 @@ exports.BattleMovedex = {
 	// Quite Quiet
 	retreat: {
 		accuracy: 100,
-		basePower: 60,
+		basePower: 55,
 		category: "Special",
 		id: "retreat",
 		isNonstandard: true,
@@ -3539,37 +3548,37 @@ exports.BattleMovedex = {
 			if (foes.length && foes[0].hp) {
 				const opponent = foes[0];
 				if (opponent.types[0] === source.types[1]) {
-					source.setType(source.types[0], true);
+					source.setType(source.types[0]);
 					this.add('-start', source, 'typechange', source.types[0]);
 				} else if (opponent.types[0] === source.types[0]) {
 					if (opponent.types[1]) {
 						if (opponent.types[1] === source.types[1]) {
-							opponent.setType(source.types[1], true);
+							opponent.setType(source.types[1]);
 							this.add('-start', opponent, 'typechange', opponent.types[0]);
 						} else {
-							opponent.types = [source.types[1], opponent.types[1]];
+							opponent.setType([source.types[1], opponent.types[1]]);
 							this.add('-start', opponent, 'typechange', opponent.types[0] + '/' + opponent.types[1]);
 						}
 					} else {
-						opponent.setType(source.types[1], true);
+						opponent.setType(source.types[1]);
 						this.add('-start', opponent, 'typechange', opponent.types[0]);
 					}
-					source.setType(source.types[0], true);
+					source.setType(source.types[0]);
 					this.add('-start', source, 'typechange', source.types[0]);
 				} else {
 					const mytype = source.types[1];
-					source.types = [source.types[0], opponent.types[0]];
+					source.setType([source.types[0], opponent.types[0]]);
 					this.add('-start', source, 'typechange', source.types[0] + '/' + source.types[1]);
 					if (opponent.types[1]) {
 						if (opponent.types[1] === mytype) {
-							opponent.setType(mytype, true);
+							opponent.setType(mytype);
 							this.add('-start', opponent, 'typechange', opponent.types[0]);
 						} else {
-							opponent.types = [mytype, opponent.types[1]];
+							source.setType([mytype, opponent.types[1]]);
 							this.add('-start', opponent, 'typechange', opponent.types[0] + '/' + opponent.types[1]);
 						}
 					} else {
-						opponent.setType(mytype, true);
+						opponent.setType(mytype);
 						this.add('-start', opponent, 'typechange', opponent.types[0]);
 					}
 				}
@@ -3832,7 +3841,10 @@ exports.BattleMovedex = {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
-		secondary: false,
+		secondary: {
+			chance: 15,
+			status: 'brn',
+		},
 		target: "randomNormal",
 		type: "Fire",
 	},
@@ -3941,7 +3953,7 @@ exports.BattleMovedex = {
 		isNonstandard: true,
 		name: "SPIKEY RAIN",
 		pp: 10,
-		priority: 0,
+		priority: 1,
 		terrain: 'spikeyrain',
 		flags: {},
 		onPrepareHit: function (target, source) {
@@ -4024,7 +4036,7 @@ exports.BattleMovedex = {
 	// Jack Higgins
 	splinters: {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 80,
 		category: "Physical",
 		id: "splinters",
 		isViable: true,
@@ -4460,6 +4472,7 @@ exports.BattleMovedex = {
 			return 0;
 		},
 		secondary: false,
+		ignoreImmunity: {'Psychic': true},
 		target: "normal",
 		type: "Psychic",
 	},
@@ -4560,29 +4573,34 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Bonemerang", target);
 		},
+		onHit: function (target, source, move) {
+			if (move.crit) {
+				this.add('c|+xJoelituh|That didn\'t mattered, I had everything calc\'d');
+				this.add('c|+xJoelituh|!calc');
+				this.add('raw|<div class="infobox">Pokémon Showdown! damage calculator. (Courtesy of Honko) <br> - <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a></br></div>');
+			}
+		},
 		secondary: {
-			chance: 100,
+			chance: 5,
 			onHit: function (target, source) {
-				if (this.random(20) === 10) {
-					const status = ['par', 'brn', 'frz', 'psn', 'tox', 'slp'][this.random(6)];
-					let prompt = false;
-					if (status === 'frz') {
-						let freeze = true;
-						for (let i = 0; i < target.side.pokemon.length; i++) {
-							const pokemon = target.side.pokemon[i];
-							if (pokemon.status === 'frz') freeze = false;
-						}
-						if (freeze && target.trySetStatus('frz') && toId(source.name) === 'xjoelituh') {
-							prompt = true;
-						}
-					} else if (target.trySetStatus(status) && toId(source.name) === 'xjoelituh') {
+				const status = ['par', 'brn', 'frz', 'psn', 'tox', 'slp'][this.random(6)];
+				let prompt = false;
+				if (status === 'frz') {
+					let freeze = true;
+					for (let i = 0; i < target.side.pokemon.length; i++) {
+						const pokemon = target.side.pokemon[i];
+						if (pokemon.status === 'frz') freeze = false;
+					}
+					if (freeze && target.trySetStatus('frz') && toId(source.name) === 'xjoelituh') {
 						prompt = true;
 					}
-					if (prompt) {
-						this.add('c|+xJoelituh|That didn\'t mattered, I had everything calc\'d');
-						this.add('c|+xJoelituh|!calc');
-						this.add('raw|<div class="infobox">Pokémon Showdown! damage calculator. (Courtesy of Honko) <br> - <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a></br></div>');
-					}
+				} else if (target.trySetStatus(status) && toId(source.name) === 'xjoelituh') {
+					prompt = true;
+				}
+				if (prompt) {
+					this.add('c|+xJoelituh|That didn\'t mattered, I had everything calc\'d');
+					this.add('c|+xJoelituh|!calc');
+					this.add('raw|<div class="infobox">Pokémon Showdown! damage calculator. (Courtesy of Honko) <br> - <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a></br></div>');
 				}
 			},
 		},
