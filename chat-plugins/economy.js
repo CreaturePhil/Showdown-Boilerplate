@@ -240,7 +240,7 @@ exports.commands = {
 		let cost = findItem.call(this, target, amount);
 		if (!cost) return;
 		let total = Db('money').set(user.userid, amount - cost).get(user.userid);
-		this.sendReply("You have bought " + target + " for " + cost +  currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
+		this.sendReply("You have bought " + target + " for " + cost + currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
 		room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
 		logMoney(user.name + " has bought " + target + " from the shop. This user now has " + total + currencyName(total) + ".");
 		handleBoughtItem.call(this, target.toLowerCase(), user, cost);

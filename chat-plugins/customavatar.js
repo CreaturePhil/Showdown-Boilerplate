@@ -1,4 +1,5 @@
 'use strict';
+/*eslint no-restricted-modules: [0]*/
 
 const fs = require('fs');
 const path = require('path');
@@ -47,7 +48,7 @@ exports.commands = {
 			if (parts.length < 2) return this.parse('/help customavatar');
 
 			const name = toId(parts[0]);
-			const image_url = parts[1];
+			let image_url = parts[1];
 			if (image_url.match(/^https?:\/\//i)) image_url = 'http://' + image_url;
 			const ext = path.extname(image_url);
 

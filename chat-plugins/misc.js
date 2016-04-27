@@ -3,6 +3,7 @@
  */
 
 'use strict';
+/*eslint no-restricted-modules: [0]*/
 
 let moment = require('moment');
 let request = require('request');

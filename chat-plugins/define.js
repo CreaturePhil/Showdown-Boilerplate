@@ -1,4 +1,5 @@
 'use strict';
+/*eslint no-restricted-modules: [0]*/
 
 let fs = require('fs');
 let request = require('request');

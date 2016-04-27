@@ -1,4 +1,5 @@
 'use strict';
+/*eslint no-restricted-modules: [0]*/
 
 let color = require('../config/color');
 let moment = require('moment');
