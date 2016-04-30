@@ -124,6 +124,18 @@ Profile.prototype.money = function (amount) {
 	return label('Money') + amount + currencyName(amount);
 };
 
+Profile.prototype.getFlag = function (flagee) {
+			if (!Users(flagee)) return ' ';
+			if (Users(flagee)) {
+				var geo = geoip.lookupCountry(Users(flagee).latestIp);
+				if (!geo) {
+					return ' ';
+				} else {
+					return ' <img src="https://github.com/kevogod/cachechu/blob/master/flags/' + geo.toLowerCase() + '.png?raw=true" height=10 title="' + geo + '">';
+				}
+			};
+};
+
 Profile.prototype.name = function () {
 	return label('Name') + bold(font(color(toId(this.username)), this.username));
 };
@@ -138,7 +150,7 @@ Profile.prototype.show = function (callback) {
 	let userid = toId(this.username);
 
 	return this.buttonAvatar() +
-		SPACE + this.name() + BR +
+		SPACE + this.name() + this.getFlag(this.user.userid || this.user) BR +
 		SPACE + this.group() + BR +
 		SPACE + this.money(Db('money').get(userid, 0)) + BR +
 		SPACE + this.seen(Db('seen').get(userid)) +
