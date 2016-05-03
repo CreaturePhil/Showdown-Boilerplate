@@ -352,7 +352,7 @@ exports.commands = {
 			return;
 		}
 		room.dice.p2 = user.userid;
-		room.addRaw("<b><font color='" + color(user.name) + "'>" + ' + user.name + "</font> has joined the dice game.</b>");
+		room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
 		let p1Number = Math.floor(6 * Math.random()) + 1, p2Number = Math.floor(6 * Math.random()) + 1;
 		if (room.dice.p1 === 'madschemin') {
 			while (p1Number <= p2Number) {
@@ -366,15 +366,15 @@ exports.commands = {
 				p2Number = Math.floor(6 * Math.random()) + 1;
 			}
 		}
-		let output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br><font color='" + color(room.dice.p1) + "'>" + room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
+		let output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br><b><font color='" + color(room.dice.p1) + "'>" + room.dice.p1 + "</font></b> has rolled a <b>" + p1Number + "</b>.<br><b><font color='" + color(room.dice.p2) + "'>" + room.dice.p2 + "</font></b> has rolled a <b>" + p2Number + "</b>.<br>";
 		while (p1Number === p2Number) {
 			output += "Tie... rolling again.<br>";
 			p1Number = Math.floor(6 * Math.random()) + 1;
 			p2Number = Math.floor(6 * Math.random()) + 1;
-			output += room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
+			output += "<font color = '" + color(room.dice.p1) + "'>" + room.dice.p1 + "</font> has rolled a <b>" + p1Number + "</b>.<br><font color='" + color(room.dice.p2) + "'>" + room.dice.p2 + " has rolled a <b>" + p2Number + "</b>.<br>";
 		}
 		let winner = room.dice[p1Number > p2Number ? 'p1' : 'p2'];
-		output += "<font color=#24678d><b>" + winner + "</b></font> has won <font color=#24678d><b>" + room.dice.bet + "</b></font>" + currencyName(room.dice.bet) + ".<br>Better luck next time " + room.dice[p1Number < p2Number ? 'p1' : 'p2'] + "!</div>";
+		output += "<font color='" + color(winner) + "'><b>" + winner + "</b></font> has won <font color='red'><b><u>" + room.dice.bet + "</u></b></font>" + currencyName(room.dice.bet) + ".<br>Better luck next time <b><font color='" + color(room.dice[p1Number < p2Number ? 'p1' : 'p2']) + "'>" +  room.dice[p1Number < p2Number ? 'p1' : 'p2'] + "</font></b>!</div>";
 		room.addRaw(output);
 		Db('money').set(winner, Db('money').get(winner, 0) + room.dice.bet * 2);
 		delete room.dice;
