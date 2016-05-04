@@ -19,9 +19,6 @@
 
 const crypto = require('crypto');
 const fs = require('fs');
-const path = require('path');
-const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
-const dir = fs.readdirSync(path.resolve(__dirname, 'chat-plugins'));
 
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
@@ -51,7 +48,7 @@ exports.commands = {
 			let rank = Users.usergroups[u].charAt(0);
 			if (rank === ' ' || rank === '+') continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
-			if (ranks.indexOf(rank) >= 0) {
+			if (ranks.includes(rank)) {
 				let name = Users.usergroups[u].substr(1);
 				if (!rankLists[rank]) rankLists[rank] = [];
 				if (name) rankLists[rank].push(name);
@@ -152,11 +149,11 @@ exports.commands = {
 		}
 		this.pmTarget = (targetUser || this.targetUsername);
 		if (!targetUser) {
-			this.errorReply("User "  + this.targetUsername + " not found. Did you misspell their name? If they are offline, try using /tell to send them an offline message.");
+			this.errorReply("User " + this.targetUsername + " not found. Did you misspell their name?");
 			return this.parse('/help msg');
 		}
 		if (!targetUser.connected) {
-			return this.errorReply("User " + this.targetUsername + " is offline. Try using /tell to send them an offline message.");
+			return this.errorReply("User " + this.targetUsername + " is offline.");
 		}
 
 		if (Config.pmmodchat) {
@@ -188,6 +185,7 @@ exports.commands = {
 		target = this.canTalk(target, null, targetUser);
 		if (!target) return false;
 
+		let message;
 		if (target.charAt(0) === '/' && target.charAt(1) !== '/') {
 			// PM command
 			let innerCmdIndex = target.indexOf(' ');
@@ -197,6 +195,10 @@ exports.commands = {
 			case 'me':
 			case 'mee':
 			case 'announce':
+				break;
+			case 'ME':
+			case 'MEE':
+				message = '|pm|' + user.getIdentity().toUpperCase() + '|' + targetUser.getIdentity() + '|/' + innerCmd.toLowerCase() + ' ' + innerTarget;
 				break;
 			case 'invite':
 			case 'inv': {
@@ -231,11 +233,7 @@ exports.commands = {
 			}
 		}
 
-		let emoteMsg = parseEmoticons(target, room, user, true);
-		if ((!user.blockEmoticons && !targetUser.blockEmoticons) && emoteMsg) target = '/html ' + emoteMsg;
-
-		let message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
-
+		if (!message) message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
 		targetUser.lastPM = user.userid;
@@ -1208,7 +1206,7 @@ exports.commands = {
 		let name = targetUser.getLastName();
 		let userid = targetUser.getLastId();
 
-		if ((targetUser.locked || Users.checkBanned(targetUser.latestIp)) && !target) {
+		if ((targetUser.locked || Punishments.checkBanned(targetUser.latestIp)) && !target) {
 			let problem = " but was already " + (targetUser.locked ? "locked" : "banned");
 			return this.privateModCommand("(" + name + " would be locked by " + user.name + problem + ".)");
 		}
@@ -1247,7 +1245,7 @@ exports.commands = {
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
-		targetUser.lock(false, userid);
+		Punishments.lock(targetUser, false, userid);
 		return true;
 	},
 	lockhelp: ["/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~"],
@@ -1262,7 +1260,7 @@ exports.commands = {
 			reason = ' (' + targetUser.locked + ')';
 		}
 
-		let unlocked = Users.unlock(target);
+		let unlocked = Punishments.unlock(target);
 
 		if (unlocked) {
 			let names = Object.keys(unlocked);
@@ -1291,7 +1289,7 @@ exports.commands = {
 		let name = targetUser.getLastName();
 		let userid = targetUser.getLastId();
 
-		if (Users.checkBanned(targetUser.latestIp) && !target && !targetUser.connected) {
+		if (Punishments.checkBanned(targetUser.latestIp) && !target && !targetUser.connected) {
 			let problem = " but was already banned";
 			return this.privateModCommand("(" + name + " would be banned by " + user.name + problem + ".)");
 		}
@@ -1335,7 +1333,7 @@ exports.commands = {
 
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
-		targetUser.ban(false, userid);
+		Punishments.ban(targetUser, false, userid);
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
 	},
@@ -1345,7 +1343,7 @@ exports.commands = {
 		if (!target) return this.parse('/help unban');
 		if (!this.can('ban')) return false;
 
-		let name = Users.unban(target);
+		let name = Punishments.unban(target);
 
 		if (name) {
 			this.addModCommand("" + name + " was unbanned by " + user.name + ".");
@@ -1370,7 +1368,7 @@ exports.commands = {
 		// we have to do this the hard way since it's no longer a global
 		let punishKeys = ['bannedIps', 'bannedUsers', 'lockedIps', 'lockedUsers', 'lockedRanges', 'rangeLockedUsers'];
 		for (let i = 0; i < punishKeys.length; i++) {
-			let dict = Users[punishKeys[i]];
+			let dict = Punishments[punishKeys[i]];
 			for (let entry in dict) delete dict[entry];
 		}
 		this.addModCommand("All bans and locks have been lifted by " + user.name + ".");
@@ -1413,9 +1411,9 @@ exports.commands = {
 			return this.parse('/help banip');
 		}
 		if (!this.can('rangeban')) return false;
-		if (Users.bannedIps[target] === '#ipban') return this.sendReply("The IP " + (target.charAt(target.length - 1) === '*' ? "range " : "") + target + " has already been temporarily banned.");
+		if (Punishments.bannedIps[target] === '#ipban') return this.sendReply("The IP " + (target.charAt(target.length - 1) === '*' ? "range " : "") + target + " has already been temporarily banned.");
 
-		Users.bannedIps[target] = '#ipban';
+		Punishments.bannedIps[target] = '#ipban';
 		this.addModCommand("" + user.name + " temporarily banned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 	baniphelp: ["/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~"],
@@ -1426,10 +1424,10 @@ exports.commands = {
 			return this.parse('/help unbanip');
 		}
 		if (!this.can('rangeban')) return false;
-		if (!Users.bannedIps[target]) {
+		if (!Punishments.bannedIps[target]) {
 			return this.errorReply("" + target + " is not a banned IP or IP range.");
 		}
-		delete Users.bannedIps[target];
+		delete Punishments.bannedIps[target];
 		this.addModCommand("" + user.name + " unbanned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 	unbaniphelp: ["/unbanip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~"],
@@ -1440,9 +1438,9 @@ exports.commands = {
 
 		let isIp = (target.slice(-1) === '*');
 		let range = (isIp ? target : Users.shortenHost(target));
-		if (Users.lockedRanges[range]) return this.errorReply("The range " + range + " has already been temporarily locked.");
+		if (Punishments.lockedRanges[range]) return this.errorReply("The range " + range + " has already been temporarily locked.");
 
-		Users.lockRange(range, isIp);
+		Punishments.lockRange(range, isIp);
 		this.addModCommand("" + user.name + " temporarily locked the range: " + range);
 	},
 
@@ -1452,9 +1450,9 @@ exports.commands = {
 		if (!this.can('rangeban')) return false;
 
 		let range = (target.slice(-1) === '*' ? target : Users.shortenHost(target));
-		if (!Users.lockedRanges[range]) return this.errorReply("The range " + range + " is not locked.");
+		if (!Punishments.lockedRanges[range]) return this.errorReply("The range " + range + " is not locked.");
 
-		Users.unlockRange(range);
+		Punishments.unlockRange(range);
 		this.addModCommand("" + user.name + " unlocked the range " + range + ".");
 	},
 
@@ -1744,6 +1742,50 @@ exports.commands = {
 	},
 	forcerenamehelp: ["/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ & ~"],
 
+	nl: 'namelock',
+	namelock: function (target, room, user) {
+		if (!target) return this.parse('/help namelock');
+
+		let reason = this.splitTarget(target, true);
+		let targetUser = this.targetUser;
+
+		if (!targetUser) {
+			return this.errorReply("User '" + this.targetUsername + "' not found.");
+		}
+		if (!this.can('forcerename', targetUser)) return false;
+
+		this.addModCommand("" + targetUser.name + " was namelocked by " + user.name + "." + (reason ? ": " + reason : ""));
+		this.globalModlog("NAMELOCK", targetUser, " by " + user.name + (reason ? ": " + reason : ""));
+		Rooms.global.cancelSearch(targetUser);
+		Punishments.lockName(targetUser);
+		targetUser.popup("|modal|" + user.name + " has locked your name and you can't change names anymore" + (reason ? ": " + reason : "."));
+		return true;
+	},
+	namelockhelp: ["/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. Requires: % @ & ~"],
+
+	unl: 'unnamelock',
+	unnamelock: function (target, room, user) {
+		if (!target) return this.parse('/help unnamelock');
+		if (!this.can('forcerename')) return false;
+
+		let targetUser = Users.get(target);
+		let reason = '';
+		if (targetUser && targetUser.namelocked) {
+			reason = ' (' + targetUser.namelocked + ')';
+		}
+
+		let unlocked = Punishments.unnamelock(target);
+
+		if (unlocked) {
+			this.addModCommand(unlocked + " was unnamelocked by " + user.name + "." + reason);
+			if (!reason) this.globalModlog("UNNAMELOCK", target, " by " + user.name);
+			if (targetUser) targetUser.popup("" + user.name + " has unnamelocked you.");
+		} else {
+			this.errorReply("User '" + target + "' is not namelocked.");
+		}
+	},
+	unnamelockhelp: ["/unnamelock [username] - Unnamelocks the user. Requires: % @ & ~"],
+
 	hidetext: function (target, room, user) {
 		if (!target) return this.parse('/help hidetext');
 
@@ -1758,7 +1800,7 @@ exports.commands = {
 			return false;
 		}
 
-		if (targetUser.locked || Users.checkBanned(targetUser.latestIp)) {
+		if (targetUser.locked || Punishments.checkBanned(targetUser.latestIp)) {
 			hidetype = 'hide|';
 		} else if ((room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('rangeban')) {
 			hidetype = 'roomhide|';
@@ -1799,7 +1841,7 @@ exports.commands = {
 			}
 
 			room.banwords = room.banwords.concat(words);
-			this.updateBanwords();
+			room.banwordRegex = null;
 			if (words.length > 1) {
 				this.privateModCommand("(The banwords '" + words.join(', ') + "' were added by " + user.name + ".)");
 				this.sendReply("Banned phrases succesfully added. The list is currently: " + room.banwords.join(', '));
@@ -1830,7 +1872,7 @@ exports.commands = {
 				room.banwords.splice(index, 1);
 			}
 
-			this.updateBanwords();
+			room.banwordRegex = null;
 			if (words.length > 1) {
 				this.privateModCommand("(The banwords '" + words.join(', ') + "' were removed by " + user.name + ".)");
 				this.sendReply("Banned phrases succesfully deleted. The list is currently: " + room.banwords.join(', '));
@@ -2239,22 +2281,10 @@ exports.commands = {
 		if (!this.can('hotpatch')) return false;
 
 		connection.sendTo(room, "Loading ipbans.txt...");
-		fs.readFile('config/ipbans.txt', (err, data) => {
-			if (err) return;
-			data = ('' + data).split('\n');
-			let rangebans = [];
-			for (let i = 0; i < data.length; ++i) {
-				let line = data[i].split('#')[0].trim();
-				if (!line) continue;
-				if (line.includes('/')) {
-					rangebans.push(line);
-				} else if (line && !Users.bannedIps[line]) {
-					Users.bannedIps[line] = '#ipban';
-				}
-			}
-			Users.checkRangeBanned = Cidr.checker(rangebans);
-			connection.sendTo(room, "ipbans.txt has been reloaded.");
-		});
+		Punishments.loadBanlist().then(
+			() => connection.sendTo(room, "ipbans.txt has been reloaded."),
+			error => connection.sendTo(room, "Something went wrong while loading ipbans.txt: " + error)
+		);
 	},
 	loadbanlisthelp: ["/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~"],
 

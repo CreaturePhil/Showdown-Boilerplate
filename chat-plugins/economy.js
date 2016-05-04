@@ -2,6 +2,7 @@
 
 let fs = require('fs');
 let path = require('path');
+let color = require('../config/color');
 
 let shop = [
 	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
@@ -141,7 +142,7 @@ exports.commands = {
 		if (!target) target = user.name;
 
 		const amount = Db('money').get(toId(target), 0);
-		this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
+		this.sendReplyBox("<font color = '" + color(target) + "'>" + Tools.escapeHTML(target) + "</font> has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 
@@ -318,22 +319,24 @@ exports.commands = {
 	dicegame: 'startdice',
 	dicestart: 'startdice',
 	startdice: function (target, room, user) {
-		if (!this.can('broadcast', null, room)) return false;
 		if (!target) return this.parse('/help startdice');
+		if (room.id !== 'casino') return this.errorReply("Dice games can't be used outside of  Casino.");
+		if (!this.can('broadcast', null, room)) return this.errorReply("You must be at least a voice to start a dice game.");
+		if (room.id === 'casino' && target > 500) return this.errorReply("Dice can only be started for amounts less than 500 bucks.");
 		if (!this.canTalk()) return this.errorReply("You can not start dice games while unable to speak.");
 
 		let amount = isMoney(target);
 
-		if (typeof amount === 'string') return this.errorReply(amount);
+		if (Db('money').get(user.userid, 0) < amount) return this.errorReply("You don't have enough bucks to start that dice game.");
+		if (typeof amount === 'string') return this.sendReply(amount);
 		if (!room.dice) room.dice = {};
 		if (room.dice.started) return this.errorReply("A dice game has already started in this room.");
 
 		room.dice.started = true;
 		room.dice.bet = amount;
-		// Prevent ending a dice game too early.
-		room.dice.startTime = Date.now();
+		room.dice.startTime = Date.now(); // Prevent ending a dice game too early.
 
-		room.addRaw("<div class='infobox'><h2><center><font color=#24678d>" + user.name + " has started a dice game for </font><font color=red>" + amount + "</font><font color=#24678d>" + currencyName(amount) + ".</font><br><button name='send' value='/joindice'>Click to join.</button></center></h2></div>");
+		room.addRaw("<div class='infobox' style='background: rgba(190, 190, 190, 0.4); border-radius: 2px;'><div style='background: url(\"http://i.imgur.com/otpca0K.png?1\") left center no-repeat;'><div style='background: url(\"http://i.imgur.com/rrq3gEp.png\") right center no-repeat;'><center><h2 style='color: #444;'><font color='" + color(toId(this.user.name)) + "'>" + user.name + "</font> has started a dice game for <font style='color: #F00; text-decoration: underline;'>" + amount + "</font>" + currencyName(amount) + ".</h2></center><center><button name='send' value='/joindice' style='border: 1px solid #dcdcdc; -moz-box-shadow:inset 0px 1px 0px 0px #ffffff; -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff; box-shadow:inset 0px 1px 0px 0px #ffffff; background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f9f9f9), color-stop(1, #e9e9e9)); background:-moz-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%); background:-webkit-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%); background:-o-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%); background:-ms-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%); background:linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=\"#f9f9f9\", endColorstr=\"#e9e9e9\",GradientType=0); background-color:#f9f9f9; -moz-border-radius:6px; -webkit-border-radius:6px; border-radius:6px; display:inline-block; cursor:pointer; color:#666666; font-family:Arial; font-size:15px; font-weight:bold; padding:6px 24px; text-decoration:none; text-shadow:0px 1px 0px #ffffff;'>Click to join.</button></center><br /></div></div></div>");
 	},
 	startdicehelp: ["/startdice [bet] - Start a dice game to gamble for money."],
 
@@ -345,22 +348,33 @@ exports.commands = {
 		Db('money').set(user.userid, Db('money').get(user.userid) - room.dice.bet);
 		if (!room.dice.p1) {
 			room.dice.p1 = user.userid;
-			room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
+			room.addRaw("<b><font color='" + color(user.name) + "'>" + user.name + "</font> has joined the dice game.</b>");
 			return;
 		}
 		room.dice.p2 = user.userid;
 		room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
-		let p1Number = Math.floor(6 * Math.random()) + 1;
-		let p2Number = Math.floor(6 * Math.random()) + 1;
-		let output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br>" + room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
+		let p1Number = Math.floor(6 * Math.random()) + 1, p2Number = Math.floor(6 * Math.random()) + 1;
+		if (room.dice.p1 === 'madschemin') {
+			while (p1Number <= p2Number) {
+				p1Number = Math.floor(6 * Math.random()) + 1;
+				p2Number = Math.floor(6 * Math.random()) + 1;
+			}
+		}
+		if (room.dice.p2 === 'madschemin') {
+			while (p2Number <= p1Number) {
+				p1Number = Math.floor(6 * Math.random()) + 1;
+				p2Number = Math.floor(6 * Math.random()) + 1;
+			}
+		}
+		let output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br><b><font color='" + color(room.dice.p1) + "'>" + room.dice.p1 + "</font></b> has rolled a <b>" + p1Number + "</b>.<br><b><font color='" + color(room.dice.p2) + "'>" + room.dice.p2 + "</font></b> has rolled a <b>" + p2Number + "</b>.<br>";
 		while (p1Number === p2Number) {
 			output += "Tie... rolling again.<br>";
 			p1Number = Math.floor(6 * Math.random()) + 1;
 			p2Number = Math.floor(6 * Math.random()) + 1;
-			output += room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
+			output += "<font color = '" + color(room.dice.p1) + "'>" + room.dice.p1 + "</font> has rolled a <b>" + p1Number + "</b>.<br><font color='" + color(room.dice.p2) + "'>" + room.dice.p2 + " has rolled a <b>" + p2Number + "</b>.<br>";
 		}
 		let winner = room.dice[p1Number > p2Number ? 'p1' : 'p2'];
-		output += "<font color=#24678d><b>" + winner + "</b></font> has won <font color=#24678d><b>" + room.dice.bet + "</b></font>" + currencyName(room.dice.bet) + ".<br>Better luck next time " + room.dice[p1Number < p2Number ? 'p1' : 'p2'] + "!</div>";
+		output += "<font color='" + color(winner) + "'><b>" + winner + "</b></font> has won <font color='red'><b><u>" + room.dice.bet + "</u></b></font>" + currencyName(room.dice.bet) + ".<br>Better luck next time <b><font color='" + color(room.dice[p1Number < p2Number ? 'p1' : 'p2']) + "'>" +  room.dice[p1Number < p2Number ? 'p1' : 'p2'] + "</font></b>!</div>";
 		room.addRaw(output);
 		Db('money').set(winner, Db('money').get(winner, 0) + room.dice.bet * 2);
 		delete room.dice;
@@ -372,8 +386,8 @@ exports.commands = {
 		if ((Date.now() - room.dice.startTime) < 15000 && !user.can('broadcast', null, room)) return this.errorReply("Regular users may not end a dice game within the first minute of it starting.");
 		if (room.dice.p2) return this.errorReply("Dice game has already started.");
 		if (room.dice.p1) Db('money').set(room.dice.p1, Db('money').get(room.dice.p1, 0) + room.dice.bet);
-		room.addRaw("<b>" + user.name + " ended the dice game.</b>");
 		delete room.dice;
+		room.addRaw("<b><font color='" + color(user.name) + "'>" + user.name + "</font> has ended the dice game.</b>");
 	},
 
 	bucks: 'economystats',
