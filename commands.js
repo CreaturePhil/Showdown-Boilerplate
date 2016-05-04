@@ -48,7 +48,7 @@ exports.commands = {
 			let rank = Users.usergroups[u].charAt(0);
 			if (rank === ' ' || rank === '+') continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
-			if (ranks.indexOf(rank) >= 0) {
+			if (ranks.includes(rank)) {
 				let name = Users.usergroups[u].substr(1);
 				if (!rankLists[rank]) rankLists[rank] = [];
 				if (name) rankLists[rank].push(name);
@@ -2281,22 +2281,10 @@ exports.commands = {
 		if (!this.can('hotpatch')) return false;
 
 		connection.sendTo(room, "Loading ipbans.txt...");
-		fs.readFile('config/ipbans.txt', (err, data) => {
-			if (err) return;
-			data = ('' + data).split('\n');
-			let rangebans = [];
-			for (let i = 0; i < data.length; ++i) {
-				let line = data[i].split('#')[0].trim();
-				if (!line) continue;
-				if (line.includes('/')) {
-					rangebans.push(line);
-				} else if (line && !Punishments.bannedIps[line]) {
-					Punishments.bannedIps[line] = '#ipban';
-				}
-			}
-			Punishments.checkRangeBanned = Cidr.checker(rangebans);
-			connection.sendTo(room, "ipbans.txt has been reloaded.");
-		});
+		Punishments.loadBanlist().then(
+			() => connection.sendTo(room, "ipbans.txt has been reloaded."),
+			error => connection.sendTo(room, "Something went wrong while loading ipbans.txt: " + error)
+		);
 	},
 	loadbanlisthelp: ["/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~"],
 
