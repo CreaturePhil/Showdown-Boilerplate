@@ -651,6 +651,8 @@ exports.BattleScripts = {
 		for (let i = 0; i < side.pokemon.length; i++) {
 			side.pokemon[i].canMegaEvo = false;
 		}
+
+		this.runEvent('AfterMega', pokemon);
 		return true;
 	},
 
@@ -779,13 +781,7 @@ exports.BattleScripts = {
 			}
 
 			// Random ability
-			let abilities = [template.abilities['0']];
-			if (template.abilities['1']) {
-				abilities.push(template.abilities['1']);
-			}
-			if (template.abilities['H']) {
-				abilities.push(template.abilities['H']);
-			}
+			let abilities = Object.values(template.abilities);
 			let ability = abilities[this.random(abilities.length)];
 
 			// Four random unique moves from the movepool
@@ -1559,8 +1555,12 @@ exports.BattleScripts = {
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!hasAbility['Chlorophyll'] && !hasAbility['Flower Gift'] && !hasMove['solarbeam']) rejected = true;
 					if (rejected && movePool.length > 1) {
-						let weatherball = movePool.indexOf('weatherball');
-						if (weatherball >= 0) this.fastPop(movePool, weatherball);
+						let solarbeam = movePool.indexOf('solarbeam');
+						if (solarbeam >= 0) this.fastPop(movePool, solarbeam);
+						if (movePool.length > 1) {
+							let weatherball = movePool.indexOf('weatherball');
+							if (weatherball >= 0) this.fastPop(movePool, weatherball);
+						}
 					}
 					break;
 				case 'stunspore': case 'thunderwave':
@@ -2171,6 +2171,9 @@ exports.BattleScripts = {
 			case 'Meloetta':
 				if (this.random(2) >= 1) continue;
 				break;
+			case 'Meowstic':
+				if (this.random(2) >= 1) continue;
+				break;
 			case 'Pikachu':
 				// Pikachu is not a viable NFE Pokemon
 				continue;
@@ -2289,6 +2292,9 @@ exports.BattleScripts = {
 
 			// Only certain NFE Pokemon are allowed
 			if (template.evos.length && !allowedNFE[template.species]) continue;
+
+			// Slaking, without ability swap or a similar gimmick, makes the battle 5v6 at best
+			if (template.species === 'Slaking') continue;
 
 			let tier = template.tier;
 			switch (tier) {

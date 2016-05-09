@@ -14,16 +14,16 @@ exports.BattleScripts = {
 
 			if (!dontRecalculateStats) {
 				let boosts = {
-					'UU': 5,
-					'BL2': 5,
-					'RU': 10,
-					'BL3': 10,
-					'NU': 15,
-					'BL4': 15,
-					'PU': 20,
-					'NFE': 20,
-					'LC Uber': 20,
-					'LC': 20,
+					'UU': 10,
+					'BL2': 10,
+					'RU': 20,
+					'BL3': 20,
+					'NU': 30,
+					'BL4': 30,
+					'PU': 40,
+					'NFE': 40,
+					'LC Uber': 40,
+					'LC': 40,
 				};
 				let tier = template.tier;
 				if (this.set.item) {
@@ -32,10 +32,10 @@ exports.BattleScripts = {
 				}
 				if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
 				let boost = (tier in boosts) ? boosts[tier] : 0;
-				if (this.set.ability in {'Drizzle': 1, 'Drought': 1}) {
+				if (this.set.ability in {'Drizzle': 1, 'Drought': 1, 'Shadow Tag': 1}) {
 					boost = 0;
 				} else if (this.set.moves.indexOf('chatter') >= 0) {
-					boost = 15;
+					boost = 30;
 				}
 
 				let hp = this.battle.clampIntRange(this.template.baseStats['hp'] + boost, 1, 255);

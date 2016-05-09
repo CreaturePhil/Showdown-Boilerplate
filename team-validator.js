@@ -92,7 +92,7 @@ class Validator {
 		return problems;
 	}
 
-	validateSet(set, teamHas, flags) {
+	validateSet(set, teamHas, template) {
 		let format = this.format;
 		let tools = this.tools;
 
@@ -101,11 +101,13 @@ class Validator {
 			return ["This is not a Pokemon."];
 		}
 
-		let template = tools.getTemplate(Tools.getString(set.species));
-		if (!template.exists) {
-			return ["The Pokemon '" + set.species + "' does not exist."];
+		if (!template) {
+			template = tools.getTemplate(Tools.getString(set.species));
+			if (!template.exists) {
+				return ["The Pokemon '" + set.species + "' does not exist."];
+			}
 		}
-		set.species = template.species;
+		set.species = Tools.getSpecies(set.species);
 
 		set.name = tools.getName(set.name);
 		let item = tools.getItem(Tools.getString(set.item));
@@ -132,13 +134,11 @@ class Validator {
 		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
 			set.name = null;
 		}
-		set.species = set.species;
 		set.name = set.name || set.baseSpecies;
 		let name = set.species;
 		if (set.species !== set.name && set.baseSpecies !== set.name) name = set.name + " (" + set.species + ")";
 		let isHidden = false;
 		let lsetData = {set:set, format:format};
-		if (flags) Object.assign(lsetData, flags);
 
 		let setHas = {};
 
@@ -158,7 +158,7 @@ class Validator {
 		if (format.onChangeSet) {
 			problems = problems.concat(format.onChangeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
-		template = tools.getTemplate(set.species);
+		if (toId(set.species) !== template.speciesid) template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
 		if (item.id && !item.exists) {
 			return ['"' + set.item + "' is an invalid item."];
@@ -218,9 +218,7 @@ class Validator {
 			} else if (!banlistTable['ignoreillegalabilities']) {
 				if (!ability.name) {
 					problems.push(name + " needs to have an ability.");
-				} else if (ability.name !== template.abilities['0'] &&
-					ability.name !== template.abilities['1'] &&
-					ability.name !== template.abilities['H']) {
+				} else if (!Object.values(template.abilities).includes(ability.name)) {
 					problems.push(name + " can't have " + set.ability + ".");
 				}
 				if (ability.name === template.abilities['H']) {
@@ -298,7 +296,7 @@ class Validator {
 				let limitedEgg = Array.from(new Set(lsetData.limitedEgg));
 				if (limitedEgg.length <= 1) {
 					// Only one source, can't conflict with anything else
-				} else if (limitedEgg.indexOf('self') >= 0) {
+				} else if (limitedEgg.includes('self')) {
 					// Self-moves are always incompatible with anything else
 					problems.push(name + "'s egg moves are incompatible.");
 				} else {
@@ -376,7 +374,7 @@ class Validator {
 						if (eventData.level && set.level < eventData.level) {
 							problems.push(name + " must be at least level " + eventData.level + " because it has a move only available from a specific event.");
 						}
-						if ((eventData.shiny && !set.shiny) || (!eventData.shiny && set.shiny)) {
+						if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) {
 							problems.push(name + " must " + (eventData.shiny ? "" : "not ") + "be shiny because it has a move only available from a specific event.");
 						}
 						if (eventData.gender) {
@@ -437,7 +435,7 @@ class Validator {
 					let eventData = eventPokemon[i];
 					if (format.requirePentagon && eventData.generation < 6) continue;
 					if (eventData.level && set.level < eventData.level) continue;
-					if ((eventData.shiny && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
+					if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
 					if (eventData.nature && set.nature !== eventData.nature) continue;
 					if (eventData.ivs) {
 						if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
@@ -590,7 +588,7 @@ class Validator {
 				let types = template.types;
 				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
-				if (types.indexOf(move.type) >= 0) return false;
+				if (types.includes(move.type)) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {

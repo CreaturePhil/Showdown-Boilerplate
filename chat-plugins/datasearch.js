@@ -42,22 +42,27 @@ const PM = exports.PM = new ProcessManager({
 	},
 	receive: function (data) {
 		let result;
-		switch (data.cmd) {
-		case 'randpoke':
-		case 'dexsearch':
-			result = runDexsearch(data.target, data.cmd, data.canAll, data.message);
-			break;
-		case 'movesearch':
-			result = runMovesearch(data.target, data.cmd, data.canAll, data.message);
-			break;
-		case 'itemsearch':
-			result = runItemsearch(data.target, data.cmd, data.canAll, data.message);
-			break;
-		case 'learn':
-			result = runLearn(data.target, data.message);
-			break;
-		default:
-			result = null;
+		try {
+			switch (data.cmd) {
+			case 'randpoke':
+			case 'dexsearch':
+				result = runDexsearch(data.target, data.cmd, data.canAll, data.message);
+				break;
+			case 'movesearch':
+				result = runMovesearch(data.target, data.cmd, data.canAll, data.message);
+				break;
+			case 'itemsearch':
+				result = runItemsearch(data.target, data.cmd, data.canAll, data.message);
+				break;
+			case 'learn':
+				result = runLearn(data.target, data.message);
+				break;
+			default:
+				result = null;
+			}
+		} catch (err) {
+			require('./../crashlogger.js')(err, 'A search query', data);
+			result = {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
 		}
 		return result;
 	},
@@ -78,6 +83,7 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -126,8 +132,9 @@ exports.commands = {
 			canAll: (!this.broadcastMessage || room.isPersonal),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
+			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
-				if (!this.runBroadcast()) return;
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
@@ -152,6 +159,7 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -166,8 +174,8 @@ exports.commands = {
 		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
-		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, sound",
-		"If a Pok\u00e9mon is included as a parameter, moves will be searched from it's movepool.",
+		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, and sound.",
+		"If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.",
 		"The order of the parameters does not matter."],
 
 	isearch: 'itemsearch',
@@ -182,6 +190,7 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -214,10 +223,9 @@ exports.commands = {
 			message: cmd,
 		}).then(response => {
 			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
-			} else if (response.error) {
-				this.errorReply(response.error);
 			}
 			room.update();
 		});
@@ -506,23 +514,23 @@ function runDexsearch(target, cmd, canAll, message) {
 			let matched = false;
 			if (alts.gens && Object.keys(alts.gens).length) {
 				if (alts.gens[dex[mon].gen]) continue;
-				if (Object.values(alts.gens).indexOf(false) >= 0 && alts.gens[dex[mon].gen] !== false) continue;
+				if (Object.values(alts.gens).includes(false) && alts.gens[dex[mon].gen] !== false) continue;
 			}
 
 			if (alts.colors && Object.keys(alts.colors).length) {
 				if (alts.colors[dex[mon].color]) continue;
-				if (Object.values(alts.colors).indexOf(false) >= 0 && alts.colors[dex[mon].color] !== false) continue;
+				if (Object.values(alts.colors).includes(false) && alts.colors[dex[mon].color] !== false) continue;
 			}
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				if (alts.tiers[dex[mon].tier]) continue;
-				if (Object.values(alts.tiers).indexOf(false) >= 0 && alts.tiers[dex[mon].tier] !== false) continue;
+				if (Object.values(alts.tiers).includes(false) && alts.tiers[dex[mon].tier] !== false) continue;
 				// some LC Pokemon are also in other tiers and need to be handled separately
-				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && dex[mon].tier !== 'LC Uber' && Tools.data.Formats.lc.banlist.indexOf(dex[mon].species) < 0) continue;
+				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && dex[mon].tier !== 'LC Uber' && !Tools.data.Formats.lc.banlist.includes(dex[mon].species)) continue;
 			}
 
 			for (let type in alts.types) {
-				if (dex[mon].types.indexOf(type) >= 0 === alts.types[type]) {
+				if (dex[mon].types.includes(type) === alts.types[type]) {
 					matched = true;
 					break;
 				}
@@ -542,7 +550,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (matched) continue;
 
 			for (let ability in alts.abilities) {
-				if (Object.values(dex[mon].abilities).indexOf(ability) >= 0 === alts.abilities[ability]) {
+				if (Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability]) {
 					matched = true;
 					break;
 				}
@@ -597,7 +605,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 
 			for (let move in alts.moves) {
-				let canLearn = (dex[mon].learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) < 0) || dex[mon].learnset[move];
+				let canLearn = (dex[mon].learnset.sketch && !['chatter', 'struggle', 'magikarpsrevenge'].includes(move)) || dex[mon].learnset[move];
 				if ((canLearn && alts.moves[move]) || (alts.moves[move] === false && !canLearn)) {
 					matched = true;
 					break;
@@ -611,7 +619,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 	let results = [];
 	for (let mon in dex) {
-		if (dex[mon].baseSpecies && results.indexOf(dex[mon].baseSpecies) >= 0) continue;
+		if (dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
 		results.push(dex[mon].species);
 	}
 
@@ -881,7 +889,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		case 'contestType':
 			for (let move in dex) {
 				if (searches[search][String(dex[move][search])] === false ||
-					Object.values(searches[search]).indexOf(true) >= 0 && !searches[search][String(dex[move][search])]) {
+					Object.values(searches[search]).includes(true) && !searches[search][String(dex[move][search])]) {
 					delete dex[move];
 				}
 			}
@@ -1084,12 +1092,12 @@ function runItemsearch(target, cmd, canAll, message) {
 				newWord = newWord.substr(1) + 'x';
 			}
 		}
-		if (!newWord || searchedWords.indexOf(newWord) >= 0) continue;
+		if (!newWord || searchedWords.includes(newWord)) continue;
 		searchedWords.push(newWord);
 	}
 
 	if (searchedWords.length === 0) return {reply: "No distinguishing words were used. Try a more specific search."};
-	if (searchedWords.indexOf('fling') >= 0) {
+	if (searchedWords.includes('fling')) {
 		let basePower = 0;
 		let effect;
 
@@ -1180,7 +1188,7 @@ function runItemsearch(target, cmd, canAll, message) {
 			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
 
 			for (let k = 0; k < searchedWords.length; k++) {
-				if (descWords.indexOf(searchedWords[k]) >= 0) matched++;
+				if (descWords.includes(searchedWords[k])) matched++;
 			}
 
 			if (matched >= bestMatched && matched >= (searchedWords.length * 3 / 5)) foundItems.push(item.name);
@@ -1198,7 +1206,7 @@ function runItemsearch(target, cmd, canAll, message) {
 			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
 
 			for (let k = 0; k < searchedWords.length; k++) {
-				if (descWords.indexOf(searchedWords[k]) >= 0) matched++;
+				if (descWords.includes(searchedWords[k])) matched++;
 			}
 
 			if (matched !== bestMatched) {

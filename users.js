@@ -86,140 +86,6 @@ let getExactUser = Users.getExact = function (name) {
 };
 
 /*********************************************************
- * Locks and bans
- *********************************************************/
-
-let bannedIps = Users.bannedIps = Object.create(null);
-let bannedUsers = Users.bannedUsers = Object.create(null);
-let lockedIps = Users.lockedIps = Object.create(null);
-let lockedUsers = Users.lockedUsers = Object.create(null);
-let lockedRanges = Users.lockedRanges = Object.create(null);
-let rangelockedUsers = Users.rangeLockedUsers = Object.create(null);
-
-/**
- * Searches for IP in table.
- *
- * For instance, if IP is '1.2.3.4', will return the value corresponding
- * to any of the keys in table match '1.2.3.4', '1.2.3.*', '1.2.*', or '1.*'
- */
-function ipSearch(ip, table) {
-	if (table[ip]) return table[ip];
-	let dotIndex = ip.lastIndexOf('.');
-	for (let i = 0; i < 4 && dotIndex > 0; i++) {
-		ip = ip.substr(0, dotIndex);
-		if (table[ip + '.*']) return table[ip + '.*'];
-		dotIndex = ip.lastIndexOf('.');
-	}
-	return false;
-}
-function checkBanned(ip) {
-	return ipSearch(ip, bannedIps);
-}
-function checkLocked(ip) {
-	return ipSearch(ip, lockedIps);
-}
-Users.checkBanned = checkBanned;
-Users.checkLocked = checkLocked;
-
-// Defined in commands.js
-Users.checkRangeBanned = function () {};
-
-function unban(name) {
-	let success;
-	let userid = toId(name);
-	for (let ip in bannedIps) {
-		if (bannedIps[ip] === userid) {
-			delete bannedIps[ip];
-			success = true;
-		}
-	}
-	for (let id in bannedUsers) {
-		if (bannedUsers[id] === userid || id === userid) {
-			delete bannedUsers[id];
-			success = true;
-		}
-	}
-	if (success) return name;
-	return false;
-}
-function unlock(name, unlocked, noRecurse) {
-	let userid = toId(name);
-	let user = getUser(userid);
-	let userips = null;
-	if (user) {
-		if (user.userid === userid) name = user.name;
-		if (user.locked) {
-			user.locked = false;
-			user.updateIdentity();
-			unlocked = unlocked || {};
-			unlocked[name] = 1;
-		}
-		if (!noRecurse) userips = user.ips;
-	}
-	for (let ip in lockedIps) {
-		if (userips && (ip in user.ips) && Users.lockedIps[ip] !== userid) {
-			unlocked = unlock(Users.lockedIps[ip], unlocked, true); // avoid infinite recursion
-		}
-		if (Users.lockedIps[ip] === userid) {
-			delete Users.lockedIps[ip];
-			unlocked = unlocked || {};
-			unlocked[name] = 1;
-		}
-	}
-	for (let id in lockedUsers) {
-		if (lockedUsers[id] === userid || id === userid) {
-			delete lockedUsers[id];
-			unlocked = unlocked || {};
-			unlocked[name] = 1;
-		}
-	}
-	return unlocked;
-}
-function lockRange(range, ip) {
-	if (lockedRanges[range]) return;
-	rangelockedUsers[range] = {};
-	if (ip) {
-		lockedIps[range] = range;
-		ip = range.slice(0, -1);
-	}
-	users.forEach(curUser => {
-		if (!curUser.named || curUser.locked || curUser.confirmed) return;
-		if (ip) {
-			if (!curUser.latestIp.startsWith(ip)) return;
-		} else {
-			if (range !== Users.shortenHost(curUser.latestHost)) return;
-		}
-		rangelockedUsers[range][curUser.userid] = 1;
-		curUser.locked = '#range';
-		curUser.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
-		curUser.updateIdentity();
-	});
-
-	let time = 90 * 60 * 1000;
-	lockedRanges[range] = setTimeout(() => {
-		unlockRange(range);
-	}, time);
-}
-function unlockRange(range) {
-	if (!lockedRanges[range]) return;
-	clearTimeout(lockedRanges[range]);
-	for (let i in rangelockedUsers[range]) {
-		let user = getUser(i);
-		if (user) {
-			user.locked = false;
-			user.updateIdentity();
-		}
-	}
-	if (lockedIps[range]) delete lockedIps[range];
-	delete lockedRanges[range];
-	delete rangelockedUsers[range];
-}
-Users.unban = unban;
-Users.unlock = unlock;
-Users.lockRange = lockRange;
-Users.unlockRange = unlockRange;
-
-/*********************************************************
  * User groups
  *********************************************************/
 
@@ -400,7 +266,8 @@ class User {
 		this.mmrCache = Object.create(null);
 		this.guestNum = numUsers;
 		this.name = 'Guest ' + numUsers;
-		this.named = false;
+		this.namelocked = Punishments.checkNameLocked(connection.ip);
+		this.named = !!this.namelocked;
 		this.registered = false;
 		this.userid = toId(this.name);
 		this.group = Config.groupsranking[0];
@@ -419,8 +286,8 @@ class User {
 		//       wrong. Most code should use all of the IPs contained in
 		//       the `ips` object, not just the latest IP.
 		this.latestIp = connection.ip;
-
-		this.locked = Users.checkLocked(connection.ip);
+		this.locked = Punishments.checkLocked(connection.ip);
+		this.namelocked = Punishments.checkNameLocked(connection.ip);
 		this.prevNames = Object.create(null);
 		this.roomCount = Object.create(null);
 
@@ -479,6 +346,9 @@ class User {
 	getIdentity(roomid) {
 		if (this.locked) {
 			return '‽' + this.name;
+		}
+		if (this.namelocked) {
+			return '✖' + this.name;
 		}
 		if (roomid) {
 			let room = Rooms.rooms[roomid];
@@ -544,13 +414,13 @@ class User {
 			if (typeof jurisdiction !== 'string') {
 				return !!jurisdiction;
 			}
-			if (jurisdiction.indexOf(targetGroup) >= 0) {
+			if (jurisdiction.includes(targetGroup)) {
 				return true;
 			}
-			if (jurisdiction.indexOf('s') >= 0 && target === this) {
+			if (jurisdiction.includes('s') && target === this) {
 				return true;
 			}
-			if (jurisdiction.indexOf('u') >= 0 && Config.groupsranking.indexOf(group) > Config.groupsranking.indexOf(targetGroup)) {
+			if (jurisdiction.includes('u') && Config.groupsranking.indexOf(group) > Config.groupsranking.indexOf(targetGroup)) {
 				return true;
 			}
 		}
@@ -591,10 +461,10 @@ class User {
 		if (!this.can('console')) return false; // normal permission check
 
 		let whitelist = Config.consoleips || ['127.0.0.1'];
-		if (whitelist.indexOf(connection.ip) >= 0) {
+		if (whitelist.includes(connection.ip)) {
 			return true; // on the IP whitelist
 		}
-		if (whitelist.indexOf(this.userid) >= 0) {
+		if (whitelist.includes(this.userid)) {
 			return true; // on the userid whitelist
 		}
 
@@ -636,6 +506,7 @@ class User {
 		this.group = Config.groupsranking[0];
 		this.isStaff = false;
 		this.isSysop = false;
+		this.namelocked = false;
 
 		for (let i = 0; i < this.connections.length; i++) {
 			// console.log('' + name + ' renaming: connection ' + i + ' of ' + this.connections.length);
@@ -643,6 +514,9 @@ class User {
 			this.connections[i].send(initdata);
 		}
 		this.named = false;
+		for (let i in this.games) {
+			this.games[i].onRename(this, oldid, false);
+		}
 		for (let i in this.roomCount) {
 			Rooms(i).onRename(this, oldid, false);
 		}
@@ -695,6 +569,12 @@ class User {
 	 * @param connection       The connection asking for the rename
 	 */
 	rename(name, token, newlyRegistered, connection) {
+		if (this.namelocked) {
+			this.popup("You can't change your name because you're namelocked.");
+			this.forceRename('Guest ' + this.guestNum, false);
+			this.named = true;
+			return false;
+		}
 		for (let i in this.roomCount) {
 			let room = Rooms(i);
 			if (room && room.rated && (this.userid in room.game.players)) {
@@ -828,9 +708,9 @@ class User {
 			} else if (userType === '4') {
 				this.autoconfirmed = userid;
 			} else if (userType === '5') {
-				this.lock(false, userid + '#permalock');
+				Punishments.lock(this, false, userid + '#permalock');
 			} else if (userType === '6') {
-				this.ban(false, userid);
+				Punishments.ban(this, false);
 			}
 		}
 		let user = users.get(userid);
@@ -899,27 +779,33 @@ class User {
 			this.updateGroup(registered);
 		}
 
-		if (registered && userid in bannedUsers) {
+		if (registered && userid in Punishments.bannedUsers) {
 			let bannedUnder = '';
-			if (bannedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + bannedUsers[userid];
+			if (Punishments.bannedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + Punishments.bannedUsers[userid];
 			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			this.ban(true, userid);
+			Punishments.ban(this, true);
 			return;
 		}
-		if (registered && userid in lockedUsers) {
+		if (registered && userid in Punishments.lockedUsers) {
 			let bannedUnder = '';
-			if (lockedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + lockedUsers[userid];
+			if (Punishments.lockedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + Punishments.lockedUsers[userid];
 			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			this.lock(true, userid);
+			Punishments.lock(this, true);
+		}
+		if (registered && userid in Punishments.nameLockedUsers) {
+			let bannedUnder = '';
+			if (Punishments.nameLockedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + Punishments.nameLockedUsers[userid];
+			this.send("|popup|Your are namelocked" + bannedUnder + "'. Your namelock will expire in a few days.");
+			Punishments.lockName(this);
 		}
 		if (this.group === Config.groupsranking[0]) {
 			let range = this.locked || Users.shortenHost(this.latestHost);
-			if (lockedRanges[range]) {
+			if (Punishments.lockedRanges[range]) {
 				this.send("|popup|You are in a range that has been temporarily locked from talking in chats and PMing regular users.");
-				rangelockedUsers[range][this.userid] = 1;
+				Punishments.rangeLockedUsers[range][this.userid] = 1;
 				this.locked = '#range';
 			}
-		} else if (this.locked && (this.locked === '#range' || lockedRanges[this.locked])) {
+		} else if (this.locked && (this.locked === '#range' || Punishments.lockedRanges[this.locked])) {
 			this.locked = false;
 		}
 
@@ -930,6 +816,9 @@ class User {
 		}
 		let joining = !this.named;
 		this.named = (this.userid.substr(0, 5) !== 'guest');
+		for (let i in this.games) {
+			this.games[i].onRename(this, oldid, joining);
+		}
 		for (let i in this.roomCount) {
 			Rooms(i).onRename(this, oldid, joining);
 		}
@@ -1219,59 +1108,6 @@ class User {
 		if (this.named) return this.userid;
 		const prevNames = Object.keys(this.prevNames);
 		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid);
-	}
-	ban(noRecurse, userid) {
-		// recurse only once; the root for-loop already bans everything with your IP
-		if (!userid) userid = this.userid;
-		if (!noRecurse) {
-			users.forEach(user => {
-				if (user === this || user.confirmed) return;
-				for (let myIp in this.ips) {
-					if (myIp in user.ips) {
-						user.ban(true, userid);
-						return;
-					}
-				}
-			});
-			lockedUsers[userid] = userid;
-		}
-
-		for (let ip in this.ips) {
-			bannedIps[ip] = userid;
-		}
-		if (this.autoconfirmed) bannedUsers[this.autoconfirmed] = userid;
-		if (this.registered) {
-			bannedUsers[this.userid] = userid;
-			this.autoconfirmed = '';
-		}
-		this.locked = userid; // in case of merging into a recently banned account
-		lockedUsers[this.userid] = userid;
-		this.disconnectAll();
-	}
-	lock(noRecurse, userid) {
-		// recurse only once; the root for-loop already locks everything with your IP
-		if (!userid) userid = this.userid;
-		if (!noRecurse) {
-			users.forEach(user => {
-				if (user === this || user.confirmed) return;
-				for (let myIp in this.ips) {
-					if (myIp in user.ips) {
-						user.lock(true, userid);
-						return;
-					}
-				}
-			});
-			lockedUsers[userid] = userid;
-		}
-
-		for (let ip in this.ips) {
-			lockedIps[ip] = userid;
-		}
-		if (this.autoconfirmed) lockedUsers[this.autoconfirmed] = userid;
-		lockedUsers[this.userid] = userid;
-		this.locked = userid;
-		this.autoconfirmed = '';
-		this.updateIdentity();
 	}
 	tryJoinRoom(room, connection) {
 		let roomid = (room && room.id ? room.id : room);
@@ -1681,11 +1517,11 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 
 	if (Monitor.countConnection(ip)) {
 		connection.destroy();
-		bannedIps[ip] = '#cflood';
+		Punishments.bannedIps[ip] = '#cflood';
 		return;
 	}
-	let checkResult = Users.checkBanned(ip);
-	if (!checkResult && Users.checkRangeBanned(ip)) {
+	let checkResult = Punishments.checkBanned(ip);
+	if (!checkResult && Punishments.checkRangeBanned(ip)) {
 		checkResult = '#ipban';
 	}
 	if (checkResult) {
@@ -1734,9 +1570,9 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 			if (Config.hostfilter) Config.hostfilter(hosts[0], user, connection);
 			if (user.named && !user.locked && user.group === Config.groupsranking[0]) {
 				let shortHost = Users.shortenHost(hosts[0]);
-				if (lockedRanges[shortHost]) {
+				if (Punishments.lockedRanges[shortHost]) {
 					user.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
-					rangelockedUsers[shortHost][user.userid] = 1;
+					Punishments.rangeLockedUsers[shortHost][user.userid] = 1;
 					user.locked = '#range';
 					user.updateIdentity();
 				}

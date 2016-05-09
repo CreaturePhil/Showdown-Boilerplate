@@ -731,7 +731,7 @@ let GlobalRoom = (() => {
 				continue;
 			}
 			if (room.staffAutojoin === true && user.isStaff ||
-					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0 ||
+					typeof room.staffAutojoin === 'string' && room.staffAutojoin.includes(user.group) ||
 					room.auth && user.userid in room.auth) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
@@ -1254,7 +1254,6 @@ let BattleRoom = (() => {
 		}
 		delete this.users[oldid];
 		this.users[user.userid] = user;
-		if (this.game && this.game.onRename) this.game.onRename(user, oldid, joining);
 		this.update();
 		return user;
 	};
@@ -1546,7 +1545,6 @@ let ChatRoom = (() => {
 			return;
 		}
 		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
-		if (this.game && this.game.onRename) this.game.onRename(user, oldid, joining);
 		return user;
 	};
 	/**

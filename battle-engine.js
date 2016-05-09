@@ -125,7 +125,7 @@ BattlePokemon = (() => {
 			this.battle.debug('Unidentified species: ' + this.species);
 			this.baseTemplate = this.battle.getTemplate('Unown');
 		}
-		this.species = this.baseTemplate.species;
+		this.species = Tools.getSpecies(set.species);
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseTemplate.baseSpecies;
 		}
@@ -574,6 +574,10 @@ BattlePokemon = (() => {
 			if (moveEntry.id === 'hiddenpower') {
 				moveName = 'Hidden Power ' + this.hpType;
 				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
+			} else if (moveEntry.id === 'return') {
+				moveName = 'Return ' + this.battle.getMove('return').basePowerCallback(this);
+			} else if (moveEntry.id === 'frustration') {
+				moveName = 'Frustration ' + this.battle.getMove('frustration').basePowerCallback(this);
 			}
 			let target = moveEntry.target;
 			if (moveEntry.id === 'curse') {
@@ -801,7 +805,7 @@ BattlePokemon = (() => {
 			evasion: 0,
 		};
 
-		if (this.battle.gen === 1 && this.baseMoves.indexOf('mimic') >= 0 && !this.transformed) {
+		if (this.battle.gen === 1 && this.baseMoves.includes('mimic') && !this.transformed) {
 			let moveslot = this.baseMoves.indexOf('mimic');
 			let mimicPP = this.moveset[moveslot] ? this.moveset[moveslot].pp : 16;
 			this.moveset = this.baseMoveset.slice();
@@ -841,7 +845,7 @@ BattlePokemon = (() => {
 				if (this.hasType(type[i])) return true;
 			}
 		} else {
-			if (this.getTypes().indexOf(type) >= 0) return true;
+			if (this.getTypes().includes(type)) return true;
 		}
 		return false;
 	};
@@ -1081,7 +1085,7 @@ BattlePokemon = (() => {
 		item = this.battle.getItem(item);
 
 		let effectid;
-		if (effect) effectid = effect.id;
+		if (this.battle.effect) effectid = this.battle.effect.id;
 		if (item.id === 'leppaberry' && effectid !== 'trick' && effectid !== 'switcheroo') {
 			this.isStale = 2;
 			this.isStaleSource = 'getleppa';
@@ -1104,7 +1108,7 @@ BattlePokemon = (() => {
 		if (!Array.isArray(item)) {
 			return ownItem === toId(item);
 		}
-		return (item.map(toId).indexOf(ownItem) >= 0);
+		return item.map(toId).includes(ownItem);
 	};
 	BattlePokemon.prototype.clearItem = function () {
 		return this.setItem('');
@@ -1136,7 +1140,7 @@ BattlePokemon = (() => {
 		if (!Array.isArray(ability)) {
 			return ownAbility === toId(ability);
 		}
-		return (ability.map(toId).indexOf(ownAbility) >= 0);
+		return ability.map(toId).includes(ownAbility);
 	};
 	BattlePokemon.prototype.clearAbility = function () {
 		return this.setAbility('');
@@ -1876,7 +1880,7 @@ Battle = (() => {
 		if (!Array.isArray(weather)) {
 			return ourWeather === toId(weather);
 		}
-		return (weather.map(toId).indexOf(ourWeather) >= 0);
+		return weather.map(toId).includes(ourWeather);
 	};
 	Battle.prototype.getWeather = function () {
 		return this.getEffect(this.weather);
@@ -1928,7 +1932,7 @@ Battle = (() => {
 		if (!Array.isArray(terrain)) {
 			return ourTerrain === toId(terrain);
 		}
-		return (terrain.map(toId).indexOf(ourTerrain) >= 0);
+		return terrain.map(toId).includes(ourTerrain);
 	};
 	Battle.prototype.getTerrain = function () {
 		return this.getEffect(this.terrain);
@@ -3411,6 +3415,7 @@ Battle = (() => {
 				basePower: move,
 				type: '???',
 				category: 'Physical',
+				willCrit: false,
 				flags: {},
 			};
 		}
