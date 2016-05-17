@@ -3,7 +3,7 @@
 
 let color = require('../config/color');
 let moment = require('moment');
-
+let geoip = require('geoip-ultralight');
 let BR = '<br>';
 let SPACE = '&nbsp;';
 let profileColor = '#24678d';
@@ -120,6 +120,20 @@ Profile.prototype.group = function () {
 	return label('Group') + 'Regular User';
 };
 
+Profile.prototype.getFlag = function (flagee) {
+			if (!Users(flagee)) return '';
+			if (Users(flagee)) {
+				var geo = geoip.lookupCountry(Users(flagee).latestIp);
+				if (!geo) {
+				return ''; 
+				}
+				else {
+					
+				return ' <img src="https://github.com/kevogod/cachechu/blob/master/flags/' + geo.toLowerCase() + '.png?raw=true" height=10 title="' + geo + '">';
+			}
+			}
+};
+
 Profile.prototype.money = function (amount) {
 	return label('Money') + amount + currencyName(amount);
 };
@@ -138,7 +152,7 @@ Profile.prototype.show = function (callback) {
 	let userid = toId(this.username);
 
 	return this.buttonAvatar() +
-		SPACE + this.name() + BR +
+		SPACE + this.name() + this.getFlag(this.user || this.userid) BR +
 		SPACE + this.group() + BR +
 		SPACE + this.money(Db('money').get(userid, 0)) + BR +
 		SPACE + this.seen(Db('seen').get(userid)) +
