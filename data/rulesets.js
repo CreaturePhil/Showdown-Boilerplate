@@ -252,14 +252,6 @@ exports.BattleFormats = {
 				}
 			}
 
-			if (set.shiny) {
-				if (template.unobtainableShiny) {
-					problems.push("It's currently not possible to get a shiny " + template.species + ".");
-				} else if (template.unobtainableShinyPentagon && format.requirePentagon) {
-					problems.push("It's currently not possible to get a shiny " + template.species + " in gen 6 and this format requires gen 6 Pokémon.");
-				}
-			}
-
 			return problems;
 		},
 	},
@@ -496,7 +488,7 @@ exports.BattleFormats = {
 					BPcount++;
 				}
 				if (BPcount > 1) {
-					return [team[i].name + " has Baton Pass, but you are limited to one Baton Pass user by Baton Pass Clause."];
+					return [(team[i].name || team[i].species) + " has Baton Pass, but you are limited to one Baton Pass user by Baton Pass Clause."];
 				}
 			}
 		},

@@ -30,6 +30,8 @@ const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 3;
 const THROTTLE_MULTILINE_WARN_STAFF = 6;
 
+const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000;
+
 const fs = require('fs');
 
 let Users = module.exports = getUser;
@@ -266,7 +268,6 @@ class User {
 		this.mmrCache = Object.create(null);
 		this.guestNum = numUsers;
 		this.name = 'Guest ' + numUsers;
-		this.namelocked = Punishments.checkNameLocked(connection.ip);
 		this.named = !!this.namelocked;
 		this.registered = false;
 		this.userid = toId(this.name);
@@ -286,8 +287,8 @@ class User {
 		//       wrong. Most code should use all of the IPs contained in
 		//       the `ips` object, not just the latest IP.
 		this.latestIp = connection.ip;
-		this.locked = Punishments.checkLocked(connection.ip);
-		this.namelocked = Punishments.checkNameLocked(connection.ip);
+		this.locked = false;
+		this.namelocked = false;
 		this.prevNames = Object.create(null);
 		this.roomCount = Object.create(null);
 
@@ -479,7 +480,7 @@ class User {
 	resetName() {
 		let name = 'Guest ' + this.guestNum;
 		let userid = toId(name);
-		if (this.userid === userid) return;
+		if (this.userid === userid && !(this.named && !this.namelocked)) return;
 
 		let i = 0;
 		while (users.has(userid) && users.get(userid) !== this) {
@@ -506,14 +507,13 @@ class User {
 		this.group = Config.groupsranking[0];
 		this.isStaff = false;
 		this.isSysop = false;
-		this.namelocked = false;
 
+		this.named = !!this.namelocked;
 		for (let i = 0; i < this.connections.length; i++) {
 			// console.log('' + name + ' renaming: connection ' + i + ' of ' + this.connections.length);
-			let initdata = '|updateuser|' + this.name + '|' + ('0' /* not named */) + '|' + this.avatar;
+			let initdata = '|updateuser|' + this.name + '|' + (this.named ? '1' : '0') + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
-		this.named = false;
 		for (let i in this.games) {
 			this.games[i].onRename(this, oldid, false);
 		}
@@ -542,7 +542,7 @@ class User {
 			// \u2E80-\u32FF              CJK symbols
 			// \u3400-\u9FFF              CJK
 			// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
-			name = name.replace(/[^a-zA-Z0-9 \/\\.~()&=+$@#_'!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
+			name = name.replace(/[^a-zA-Z0-9 \/\\.~()<>^*%&=+$@#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
 
 			// blacklist
 			// \u00a1 upside-down exclamation mark (i)
@@ -569,12 +569,6 @@ class User {
 	 * @param connection       The connection asking for the rename
 	 */
 	rename(name, token, newlyRegistered, connection) {
-		if (this.namelocked) {
-			this.popup("You can't change your name because you're namelocked.");
-			this.forceRename('Guest ' + this.guestNum, false);
-			this.named = true;
-			return false;
-		}
 		for (let i in this.roomCount) {
 			let room = Rooms(i);
 			if (room && room.rated && (this.userid in room.game.players)) {
@@ -708,9 +702,9 @@ class User {
 			} else if (userType === '4') {
 				this.autoconfirmed = userid;
 			} else if (userType === '5') {
-				Punishments.lock(this, false, userid + '#permalock');
+				Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, "Permalock", userid);
 			} else if (userType === '6') {
-				Punishments.ban(this, false);
+				Punishments.ban(this, Date.now() + PERMALOCK_CACHE_TIME, "Permaban", userid);
 			}
 		}
 		let user = users.get(userid);
@@ -779,35 +773,7 @@ class User {
 			this.updateGroup(registered);
 		}
 
-		if (registered && userid in Punishments.bannedUsers) {
-			let bannedUnder = '';
-			if (Punishments.bannedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + Punishments.bannedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			Punishments.ban(this, true);
-			return;
-		}
-		if (registered && userid in Punishments.lockedUsers) {
-			let bannedUnder = '';
-			if (Punishments.lockedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + Punishments.lockedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			Punishments.lock(this, true);
-		}
-		if (registered && userid in Punishments.nameLockedUsers) {
-			let bannedUnder = '';
-			if (Punishments.nameLockedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + Punishments.nameLockedUsers[userid];
-			this.send("|popup|Your are namelocked" + bannedUnder + "'. Your namelock will expire in a few days.");
-			Punishments.lockName(this);
-		}
-		if (this.group === Config.groupsranking[0]) {
-			let range = this.locked || Users.shortenHost(this.latestHost);
-			if (Punishments.lockedRanges[range]) {
-				this.send("|popup|You are in a range that has been temporarily locked from talking in chats and PMing regular users.");
-				Punishments.rangeLockedUsers[range][this.userid] = 1;
-				this.locked = '#range';
-			}
-		} else if (this.locked && (this.locked === '#range' || Punishments.lockedRanges[this.locked])) {
-			this.locked = false;
-		}
+		Punishments.checkName(this, registered);
 
 		for (let i = 0; i < this.connections.length; i++) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
@@ -955,6 +921,7 @@ class User {
 		if (this.confirmed) {
 			this.autoconfirmed = this.confirmed;
 			this.locked = false;
+			this.namelocked = false;
 		}
 		if (this.autoconfirmed && this.semilocked) {
 			if (this.semilocked === '#dnsbl') {
@@ -1084,15 +1051,19 @@ class User {
 		}
 		this.roomCount = {};
 	}
-	getAlts(getAll) {
+	getAlts(includeConfirmed, forPunishment) {
+		return this.getAltUsers(includeConfirmed, forPunishment).map(user => user.getLastName());
+	}
+	getAltUsers(includeConfirmed, forPunishment) {
 		let alts = [];
+		if (forPunishment) alts.push(this);
 		users.forEach(user => {
 			if (user === this) return;
-			if (!user.named && !user.connected) return;
-			if (!getAll && user.confirmed) return;
+			if (!forPunishment && !user.named && !user.connected) return;
+			if (!includeConfirmed && user.confirmed) return;
 			for (let myIp in this.ips) {
 				if (myIp in user.ips) {
-					alts.push(user.name);
+					alts.push(user);
 					return;
 				}
 			}
@@ -1501,38 +1472,13 @@ Users.pruneInactiveTimer = setInterval(
  * Routing
  *********************************************************/
 
-Users.shortenHost = function (host) {
-	if (host.slice(-7) === '-nohost') return host;
-	let dotLoc = host.lastIndexOf('.');
-	let tld = host.substr(dotLoc);
-	if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
-	dotLoc = host.lastIndexOf('.', dotLoc - 1);
-	return host.substr(dotLoc + 1);
-};
-
 Users.socketConnect = function (worker, workerid, socketid, ip) {
 	let id = '' + workerid + '-' + socketid;
 	let connection = new Connection(id, worker, socketid, null, ip);
 	connections.set(id, connection);
 
-	if (Monitor.countConnection(ip)) {
-		connection.destroy();
-		Punishments.bannedIps[ip] = '#cflood';
-		return;
-	}
-	let checkResult = Punishments.checkBanned(ip);
-	if (!checkResult && Punishments.checkRangeBanned(ip)) {
-		checkResult = '#ipban';
-	}
-	if (checkResult) {
-		if (!Config.quietconsole) console.log('CONNECT BLOCKED - IP BANNED: ' + ip + ' (' + checkResult + ')');
-		if (checkResult === '#ipban') {
-			connection.send("|popup||modal|Your IP (" + ip + ") is not allowed to connect to PS, because it has been used to spam, hack, or otherwise attack our server.||Make sure you are not using any proxies to connect to PS.");
-		} else if (checkResult === '#cflood') {
-			connection.send("|popup||modal|PS is under heavy load and cannot accommodate your connection right now.");
-		} else {
-			connection.send("|popup||modal|Your IP (" + ip + ") was banned while using the username '" + checkResult + "'. Your ban will expire in a few days.||" + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-		}
+	let banned = Punishments.checkIpBanned(connection);
+	if (banned) {
 		return connection.destroy();
 	}
 	// Emergency mode connections logging
@@ -1547,6 +1493,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 
 	let user = new User(connection);
 	connection.user = user;
+	Punishments.checkIp(user, connection);
 	// Generate 1024-bit challenge string.
 	require('crypto').randomBytes(128, (ex, buffer) => {
 		if (ex) {
@@ -1561,32 +1508,6 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 			// console.log('JOIN: ' + connection.user.name + ' [' + connection.challenge.substr(0, 15) + '] [' + socket.id + ']');
 			let keyid = Config.loginserverpublickeyid || 0;
 			connection.sendTo(null, '|challstr|' + keyid + '|' + connection.challenge);
-		}
-	});
-
-	Dnsbl.reverse(ip, (err, hosts) => {
-		if (hosts && hosts[0]) {
-			user.latestHost = hosts[0];
-			if (Config.hostfilter) Config.hostfilter(hosts[0], user, connection);
-			if (user.named && !user.locked && user.group === Config.groupsranking[0]) {
-				let shortHost = Users.shortenHost(hosts[0]);
-				if (Punishments.lockedRanges[shortHost]) {
-					user.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
-					Punishments.rangeLockedUsers[shortHost][user.userid] = 1;
-					user.locked = '#range';
-					user.updateIdentity();
-				}
-			}
-		} else {
-			if (Config.hostfilter) Config.hostfilter('', user, connection);
-		}
-	});
-
-	Dnsbl.query(connection.ip, isBlocked => {
-		if (isBlocked) {
-			if (connection.user && !connection.user.locked && !connection.user.autoconfirmed) {
-				connection.user.semilocked = '#dnsbl';
-			}
 		}
 	});
 

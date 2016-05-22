@@ -391,14 +391,19 @@ class Validator {
 									problems.push(name + " must have " + eventData.ivs[i] + " " + statTable[i] + " IVs because it has a move only available from a specific event.");
 								}
 							}
-						} else if (set.ivs && eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
-							template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
+						} else if (set.ivs && eventData.perfectIVs || (eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
+							template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny))) {
 							// Legendary Pokemon must have at least 3 perfect IVs in gen 6
+							// Events can also have a certain amount of guaranteed perfect IVs
 							let perfectIVs = 0;
 							for (let i in set.ivs) {
 								if (set.ivs[i] >= 31) perfectIVs++;
 							}
-							if (perfectIVs < 3) problems.push(name + " must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.");
+							if (eventData.perfectIVs) {
+								if (perfectIVs < eventData.perfectIVs) problems.push(name + " must have at least " + eventData.perfectIVs + " perfect IVs because it has a move only available from a specific event.");
+							} else if (perfectIVs < 3) {
+								problems.push(name + " must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.");
+							}
 						}
 						if (eventData.generation < 5) eventData.isHidden = false;
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
@@ -427,7 +432,7 @@ class Validator {
 					}
 					isHidden = false;
 				}
-			} else if (banlistTable['illegal'] && (template.eventOnly || template.eventOnlyHidden && isHidden)) {
+			} else if (banlistTable['illegal'] && template.eventOnly) {
 				let eventPokemon = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies).eventPokemon : template.eventPokemon;
 				let legal = false;
 				events:
@@ -447,7 +452,7 @@ class Validator {
 					legal = true;
 					if (eventData.gender) set.gender = eventData.gender;
 				}
-				if (!legal) problems.push(template.species + (template.eventOnlyHidden ? "'s hidden ability" : "") + " is only obtainable via event - it needs to match one of its events.");
+				if (!legal) problems.push(template.species + " is only obtainable via event - it needs to match one of its events.");
 			}
 			if (isHidden && lsetData.sourcesBefore) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
@@ -534,6 +539,7 @@ class Validator {
 		let tools = this.tools;
 
 		let moveid = toId(move);
+		if (moveid === 'constructor') return true;
 		move = tools.getMove(moveid);
 		template = tools.getTemplate(template);
 
@@ -758,7 +764,7 @@ class Validator {
 				template = tools.getTemplate(template.prevo);
 				if (template.gen > Math.max(2, tools.gen)) template = null;
 				if (template && !template.abilities['H']) isHidden = false;
-			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem' && template.baseSpecies !== 'Pikachu') {
+			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem' && template.baseSpecies !== 'Pikachu' && template.baseSpecies !== 'Vivillon') {
 				template = tools.getTemplate(template.baseSpecies);
 			} else {
 				template = null;

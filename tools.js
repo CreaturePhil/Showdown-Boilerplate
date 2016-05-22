@@ -27,6 +27,7 @@ if (!Object.values) {
 // shim Array.prototype.includes
 if (!Array.prototype.includes) {
 	Object.defineProperty(Array.prototype, 'includes', { // eslint-disable-line no-extend-native
+		writable: true, configurable: true,
 		value: function (object) {
 			return this.indexOf(object) !== -1;
 		},
@@ -244,6 +245,18 @@ module.exports = (() => {
 	};
 	let toId = Tools.prototype.getId;
 
+	Tools.prototype.getSpecies = function (species) {
+		let id = toId(species || '');
+		let template = this.getTemplate(id);
+		if (template.otherForms && template.otherForms.indexOf(id) >= 0) {
+			let form = id.slice(template.species.length);
+			species = template.species + '-' + form[0].toUpperCase() + form.slice(1);
+		} else {
+			species = template.species;
+		}
+		return species;
+	};
+
 	Tools.prototype.getTemplate = function (template) {
 		if (!template || typeof template === 'string') {
 			let name = (template || '').trim();
@@ -322,19 +335,6 @@ module.exports = (() => {
 			}
 		}
 		return template;
-	};
-	Tools.prototype.getSpecies = function (species) {
-		if (!species || typeof species === 'string') {
-			let id = toId(species || '');
-			let template = this.getTemplate(id);
-			if (template.otherForms && template.otherForms.indexOf(id) >= 0) {
-				let form = id.slice(template.species.length);
-				species = template.species + '-' + form[0].toUpperCase() + form.slice(1);
-			} else {
-				species = template.species;
-			}
-		}
-		return species;
 	};
 	Tools.prototype.getMove = function (move) {
 		if (!move || typeof move === 'string') {

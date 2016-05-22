@@ -155,14 +155,16 @@ if (Config.crashguard) {
 		}
 		Rooms.global.lockdown = true;
 	});
+	process.on('unhandledRejection', function (err) {
+		throw err;
+	});
 }
 
 /*********************************************************
  * Start networking processes to be connected to
  *********************************************************/
 
-// global.Sockets = require('./sockets.js');
-global.Sockets = require('./sockets-nocluster.js');
+global.Sockets = require('./sockets.js');
 
 exports.listen = function (port, bindAddress, workerCount) {
 	Sockets.listen(port, bindAddress, workerCount);

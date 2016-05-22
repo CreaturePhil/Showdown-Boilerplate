@@ -30,7 +30,7 @@ exports.Formats = [
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3546114/\">OU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3553516/\">OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571990/\">OU Viability Ranking</a>",
 		],
 		section: "ORAS Singles",
 
@@ -63,19 +63,28 @@ exports.Formats = [
 	{
 		name: "RU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3568052/\">np: RU Stage 15</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3572877/\">np: RU Stage 17</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558546/\">RU Viability Ranking</a>",
 		],
 		section: "ORAS Singles",
 
+		searchShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2'],
 	},
 	{
+		name: "RU (current)",
+		section: "ORAS Singles",
+
+		challengeShow: false,
+		ruleset: ['RU'],
+		banlist: [],
+	},
+	{
 		name: "NU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3567055/\">np: NU Stage 12</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571975/\">np: NU Stage 13</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555650/\">NU Viability Ranking</a>",
 		],
@@ -226,11 +235,11 @@ exports.Formats = [
 		gameType: 'doubles',
 		ruleset: ['Doubles OU'],
 		banlist: ['Aegislash', 'Amoonguss', 'Azumarill', 'Bisharp', 'Breloom', 'Camerupt-Mega', 'Cameruptite', 'Chandelure',
-			'Charizard-Mega-Y', 'Charizardite Y', 'Conkeldurr', 'Cresselia', 'Diancie-Mega', 'Diancite', 'Dragonite', 'Ferrothorn', 'Garchomp',
-			'Gardevoir-Mega', 'Gardevoirite', 'Gengar', 'Greninja', 'Gyarados', 'Heatran', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi',
-			'Kangaskhan-Mega', 'Kangaskhanite', 'Keldeo', 'Kyurem-Black', 'Landorus-Therian', 'Latios', 'Ludicolo', 'Mawile-Mega', 'Mawilite',
-			'Mew', 'Milotic', 'Ninetales', 'Politoed', 'Rotom-Wash', 'Scrafty', 'Shaymin-Sky', 'Suicune', 'Sylveon', 'Talonflame',
-			'Terrakion', 'Thundurus', 'Togekiss', 'Tyranitar', 'Venusaur', 'Victini', 'Volcanion', 'Weavile', 'Whimsicott', 'Zapdos',
+			'Charizard-Mega-Y', 'Charizardite Y', 'Conkeldurr', 'Cresselia', 'Diancie-Mega', 'Diancite', 'Dragonite', 'Ferrothorn',
+			'Garchomp', 'Gardevoir-Mega', 'Gardevoirite', 'Gengar', 'Greninja', 'Gyarados', 'Heatran', 'Hoopa-Unbound', 'Hydreigon',
+			'Jirachi', 'Kangaskhan-Mega', 'Kangaskhanite', 'Keldeo', 'Kyurem-Black', 'Landorus', 'Landorus-Therian', 'Latios', 'Ludicolo',
+			'Mawile-Mega', 'Mawilite', 'Milotic', 'Politoed', 'Porygon2', 'Rotom-Wash', 'Scizor', 'Scrafty', 'Shaymin-Sky', 'Suicune', 'Sylveon',
+			'Talonflame', 'Terrakion', 'Thundurus', 'Togekiss', 'Tyranitar', 'Venusaur', 'Volcanion', 'Weavile', 'Whimsicott', 'Zapdos',
 		],
 	},
 	{
@@ -240,14 +249,13 @@ exports.Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Doubles UU'],
-		banlist: ['Abomasnow-Mega', 'Abomasite', 'Aerodactyl-Mega', 'Aerodactylite', 'Altaria-Mega', 'Altarianite',
-			'Ambipom', 'Arcanine', 'Aromatisse', 'Aurorus', 'Blastoise-Mega', 'Blastoisinite', 'Bronzong', 'Clawitzer',
-			'Cofagrigus', 'Cradily', 'Crawdaunt', 'Crobat', 'Deoxys-Attack', 'Doublade', 'Dusclops', 'Eelektross',
-			'Entei', 'Escavalier', 'Espeon', 'Excadrill', 'Gastrodon', 'Genesect', 'Hariyama', 'Hitmontop', 'Infernape',
-			'Jellicent', 'Jolteon', 'Klefki', 'Krookodile', 'Kyurem', 'Landorus', 'Liepard', 'Lopunny-Mega', 'Lopunnite',
-			'Lucario-Mega', 'Lucarionite', 'Machamp', 'Mamoswine', 'Manaphy', 'Meowstic', 'Metagross-Mega', 'Metagrossite',
-			'Murkrow', 'Nidoking', 'Porygon2', 'Reuniclus', 'Rhyperior', 'Rotom-Heat', 'Sableye', 'Salamence',
-			'Sceptile-Mega', 'Sceptilite', 'Scizor', 'Slowking', 'Snorlax', 'Togetic', 'Tornadus', 'Vaporeon', 'Volcarona',
+		banlist: ['Abomasnow-Mega', 'Abomasite', 'Aerodactyl-Mega', 'Aerodactylite', 'Altaria-Mega', 'Altarianite', 'Ambipom',
+			'Arcanine', 'Aromatisse', 'Aurorus', 'Blastoise-Mega', 'Blastoisinite', 'Bronzong', 'Clawitzer', 'Cofagrigus',
+			'Cradily', 'Crawdaunt', 'Crobat', 'Deoxys-Attack', 'Dusclops', 'Eelektross', 'Entei', 'Escavalier', 'Espeon',
+			'Excadrill', 'Gastrodon', 'Genesect', 'Hariyama', 'Hitmontop', 'Infernape', 'Jellicent', 'Jolteon', 'Klefki',
+			'Krookodile', 'Latias', 'Liepard', 'Lopunny-Mega', 'Lopunnite', 'Machamp', 'Malamar', 'Manaphy', 'Meowstic',
+			'Metagross-Mega', 'Metagrossite', 'Mew', 'Murkrow', 'Ninetales', 'Reuniclus', 'Rhyperior', 'Rotom-Heat', 'Sableye',
+			'Salamence', 'Sceptile-Mega', 'Sceptilite', 'Snorlax', 'Togetic', 'Tornadus', 'Vaporeon', 'Victini', 'Volcarona',
 		],
 	},
 	{
@@ -744,7 +752,7 @@ exports.Formats = [
 				this.add('c|+AM|Lucky and Bad');
 			}
 			if (name === 'andy') {
-				this.add('c|%AndrewGoncel|:I');
+				this.add('c|%Andy|:I');
 			}
 			if (name === 'antemortem') {
 				this.add('c|&antemortem|I Am Here To Oppress Users');
@@ -1293,7 +1301,7 @@ exports.Formats = [
 				this.add('c|+AM|RIP');
 			}
 			if (name === 'andy') {
-				this.add('c|%AndrewGoncel|wow r00d! :c');
+				this.add('c|%Andy|wow r00d! :c');
 			}
 			if (name === 'antemortem') {
 				this.add('c|&antemortem|FUCKING CAMPAIGNERS');
@@ -1871,7 +1879,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Groudon-Primal', 'Kyogre-Primal', 'Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter'],
+		banlist: ['Groudon-Primal', 'Kyogre-Primal', 'Arena Trap', 'Huge Power', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter'],
 	},
 	{
 		name: "1v1",
@@ -1918,7 +1926,7 @@ exports.Formats = [
 
 		mod: 'tiershift',
 		ruleset: ['OU'],
-		banlist: ['Swift Swim'],
+		banlist: [],
 	},
 	{
 		name: "OU (no Mega)",
@@ -1995,7 +2003,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['OU'],
-		banlist: ['Ignore STAB Moves', 'Diggersby', 'Aerodactylite', 'Altarianite', "King's Rock", 'Metagrossite', 'Razor Fang'],
+		banlist: ['Ignore STAB Moves', 'Diggersby', 'Kyurem-Black', 'Porygon-Z', 'Aerodactylite', 'Altarianite', "King's Rock", 'Metagrossite', 'Razor Fang'],
 	},
 	{
 		name: "LC UU",
@@ -2007,11 +2015,11 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['LC'],
-		banlist: ['Abra', 'Aipom', 'Archen', 'Bunnelby', 'Carvanha', 'Chinchou', 'Corphish', 'Cottonee', 'Cranidos',
+		banlist: ['Abra', 'Aipom', 'Anorith', 'Archen', 'Bunnelby', 'Carvanha', 'Chinchou', 'Corphish', 'Cottonee',
 			'Croagunk', 'Diglett', 'Drifloon', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus',
-			'Gastly', 'Honedge', 'Houndour', 'Larvesta', 'Magnemite', 'Mienfoo', 'Munchlax', 'Omanyte', 'Onix',
-			'Pancham', 'Pawniard', 'Ponyta', 'Porygon', 'Scraggy', 'Shellder', 'Skrelp', 'Snivy', 'Snubbull',
-			'Spritzee', 'Staryu', 'Stunky', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby', 'Vulpix', 'Zigzagoon',
+			'Gastly', 'Gothita', 'Hippopotas', 'Honedge', 'Larvesta', 'Magnemite', 'Mienfoo', 'Munchlax', 'Omanyte',
+			'Onix', 'Pawniard', 'Ponyta', 'Porygon', 'Scraggy', 'Shellder', 'Snivy', 'Snubbull', 'Spritzee',
+			'Staryu', 'Stunky', 'Surskit', 'Timburr', 'Tirtouga', 'Torchic', 'Vullaby', 'Vulpix', 'Zigzagoon',
 			'Shell Smash', 'Sticky Web',
 		],
 	},
@@ -2089,7 +2097,7 @@ exports.Formats = [
 		name: "Monotype Random Battle",
 		section: "Other Metagames",
 
-		team: 'randomMonotype',
+		team: 'random',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
