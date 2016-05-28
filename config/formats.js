@@ -2048,26 +2048,6 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "350 Cup",
-		desc: [
-			"Pok&eacute;mon with a base stat total of 350 or lower get their stats doubled.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3512945/\">350 Cup</a>",
-		],
-		section: "Other Metagames",
-		column: 2,
-
-		mod: '350cup',
-		ruleset: ['Ubers', 'Evasion Moves Clause'],
-		banlist: ['Abra', 'Cranidos', 'Darumaka', 'Gastly', 'Pawniard', 'Rufflet', 'Smeargle', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
-		onValidateSet: function (set) {
-			const template = Tools.getTemplate(set.species);
-			const item = this.getItem(set.item);
-			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
-				return ['Eviolite is banned on Pok\u00E9mon with 350 or lower BST.'];
-			}
-		},
-	},
-	{
         name: "Metagamiate",
         desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3502303/\">Metagamiate</a>"],
         section: "Other Metagames",
