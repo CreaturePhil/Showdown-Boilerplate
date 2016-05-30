@@ -619,11 +619,7 @@
  .chat.chatmessage-lordhaji  strong {
     color:#39FF14 !important;
   
- 
-.chat.chatmessage-charizard8888  strong {
-    color:black !important;
-  }
-  
+ }
 .chat.chatmessage-pieddychomp  strong {
     color:blue !important;
   }
@@ -645,6 +641,10 @@
   }
     
 .chat.chatmessage-paul71  strong {
+    color:orange !important;
+  }
+  
+  .chat.chatmessage-charizard8888  strong {
     color:orange !important;
   }
 
