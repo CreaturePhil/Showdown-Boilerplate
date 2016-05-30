@@ -82,30 +82,26 @@ function parseEmoticons(message, room, user, pm) {
 * @return {String} emotes table
 */
 function create_table() {
-	let emotes_name = Object.keys(emotes).sort();
+	let emotes_name = Object.keys(emotes);
 	let emotes_list = [];
 	let emotes_group_list = [];
 	let len = emotes_name.length;
 
 	for (let i = 0; i < len; i++) {
-		emotes_list.push("<td>" +
-			"<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='50' width='50' />" +
-			emotes_name[i] + "</td>");
+		emotes_list.push("<td style='padding: 5px; box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5) inset; border-radius: 5px;'>" + "<img src='" + emotes[emotes_name[i]] + "'' title='" + emotes_name[i] + "' height='50' width='50' style='vertical-align: middle;  padding-right: 5px;' />" + emotes_name[i] + "</td>");
 	}
 
-	let emotes_list_right = emotes_list.splice(len / 2, len / 2);
-
-	for (let i = 0; i < len / 2; i++) {
-		let emote1 = emotes_list[i];
-		let emote2 = emotes_list_right[i];
-		if (emote2) {
-			emotes_group_list.push("<tr>" + emote1 + emote2 + "</tr>");
-		} else {
-			emotes_group_list.push("<tr>" + emote1 + "</tr>");
-		}
+	for (let i = 0; i < len; i += 4) {
+		let emoteOutput = [emotes_list[i], emotes_list[i + 1], emotes_list[i + 2], emotes_list[i + 3]];
+		if (i < len) emotes_group_list.push("<tr>" + emoteOutput.join('') + "</tr>");
 	}
 
-	return "<div class='infobox'><center><b><u>List of Emoticons</u></b></center>" + "<div class='infobox-limited'><table border='1' cellspacing='0' cellpadding='5' width='100%'>" + "<tbody>" + emotes_group_list.join("") + "</tbody>" + "</table></div></div>";
+	return (
+		"<div class='infobox'><center><font style='font-weight: bold; text-decoration: underline; color: #555;'>List of Emoticons</font></center>" +
+		"<div style='max-height: 300px; overflow-y: scroll; padding: 5px 0px;'><table style='background: rgba(245, 245, 245, 0.4); border: 1px solid #BBB;' width='100%'>" +
+		emotes_group_list.join("") +
+		"</table></div></div>"
+	);
 }
 
 let emotes_table = create_table();
