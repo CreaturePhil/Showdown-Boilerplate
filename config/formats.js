@@ -2054,6 +2054,21 @@ exports.Formats = [
 			}
 		},
 	},
+	 {
+        name: "Type Omelette",
+        section: "Other Metagames",
+      
+
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+        banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Landorus', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'],
+        mod: 'mileseggsworth', //This is a pun, and was the most popular in name submissions.
+        //Since this metagame uses custom types, let's make the types known to the players.
+        onSwitchIn: function (pokemon) {
+            var typeStr = pokemon.types[0];
+            if (pokemon.types[1]) typeStr += '/' + pokemon.types[1]
+            this.add('-start', pokemon, 'typechange', typeStr);
+        }
+    	},
 	{
         name: "Metagamiate",
         desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3502303/\">Metagamiate</a>"],
