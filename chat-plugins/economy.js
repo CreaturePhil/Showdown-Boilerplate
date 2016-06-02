@@ -2,6 +2,7 @@
 
 let fs = require('fs');
 let path = require('path');
+let rankLadder = require('../rank-ladder.js');
 
 let shop = [
 	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
@@ -308,12 +309,9 @@ exports.commands = {
 		keys.sort(function (a, b) {
 			return b.money - a.money;
 		});
-		keys.slice(0, 10).forEach(function (user, index) {
-			display += "<tr><td>" + (index + 1) + "</td><td>" + user.name + "</td><td>" + user.money + "</td></tr>";
-		});
-		display += "</tbody></table>";
-		this.sendReply("|raw|" + display);
+			this.sendReplyBox(rankLadder('Richest Users', 'Money', keys.slice(0, 100), 'money'));
 	},
+/*
 
 	dicegame: 'startdice',
 	dicestart: 'startdice',
@@ -374,7 +372,7 @@ exports.commands = {
 		if (room.dice.p1) Db('money').set(room.dice.p1, Db('money').get(room.dice.p1, 0) + room.dice.bet);
 		room.addRaw("<b>" + user.name + " ended the dice game.</b>");
 		delete room.dice;
-	},
+	},*/
 
 	bucks: 'economystats',
 	economystats: function (target, room, user) {
