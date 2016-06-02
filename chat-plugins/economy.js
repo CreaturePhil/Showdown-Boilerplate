@@ -311,6 +311,7 @@ exports.commands = {
 		});
 			this.sendReplyBox(rankLadder('Richest Users', 'Money', keys.slice(0, 100), 'money'));
 	},
+/*
 
 	dicegame: 'startdice',
 	dicestart: 'startdice',
@@ -371,7 +372,7 @@ exports.commands = {
 		if (room.dice.p1) Db('money').set(room.dice.p1, Db('money').get(room.dice.p1, 0) + room.dice.bet);
 		room.addRaw("<b>" + user.name + " ended the dice game.</b>");
 		delete room.dice;
-	},
+	},*/
 
 	bucks: 'economystats',
 	economystats: function (target, room, user) {
