@@ -2054,6 +2054,21 @@ exports.Formats = [
 			}
 		},
 	},
+	 {
+        name: "Type Omelette",
+        section: "Other Metagames",
+      
+
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+        banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Landorus', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'],
+        mod: 'mileseggsworth', //This is a pun, and was the most popular in name submissions.
+        //Since this metagame uses custom types, let's make the types known to the players.
+        onSwitchIn: function (pokemon) {
+            var typeStr = pokemon.types[0];
+            if (pokemon.types[1]) typeStr += '/' + pokemon.types[1]
+            this.add('-start', pokemon, 'typechange', typeStr);
+        }
+    	},
 	{
         name: "Metagamiate",
         desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3502303/\">Metagamiate</a>"],
@@ -2139,6 +2154,65 @@ exports.Formats = [
 	       if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
 	   }
    	},
+   	{
+        name: "Offensification",
+        section: "Other Metagames",
+       
+        ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Flatter', 'Kyurem-Black'],
+        onModifyMove: function (move, pokemon) {
+            if (pokemon.stats.atk > pokemon.stats.spa) {
+                move.category = (move.category === "Status") ? "Status" : "Physical";
+            } else if (pokemon.stats.spa > pokemon.stats.atk) {
+                move.category = (move.category === "Status") ? "Status" : "Special";
+            }
+           
+            if (move.id === 'bellydrum') {
+                move.onHit = function (target) {
+                    if (target.hp <= target.maxhp / 2 || target.boosts.atk >= 6 || target.maxhp === 1) { // Shedinja clause
+                        return false;
+                    }
+                    this.directDamage(target.maxhp / 2);
+                    if (target.stats.atk >= target.stats.spa) {
+                        target.setBoost({atk: 6});
+                        this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
+                    } else {
+                        target.setBoost({spa: 6});
+                        this.add('-setboost', target, 'spa', '6', '[from] move: Belly Drum');
+                    }   
+                }
+            }
+        },
+        onBoost: function (boost, target, source, effect) {
+            var boostee = target;
+            if (source && target === source) boostee = source;
+            var phys = false;
+            if (boostee.stats.atk > boostee.stats.spa) phys = true;
+            var spec = false;
+            if (boostee.stats.atk < boostee.stats.spa) spec = true;
+            if (phys || spec) {
+                for (var i in boost) {
+                    if (phys && i === 'spa') {
+                        if (boost['atk']) boost['atk'] += boost[i];
+                        else boost['atk'] = boost[i];
+                        boost[i] = 0;
+                    } else if (phys && i === 'spd') {
+                        if (boost['def']) boost['def'] += boost[i];
+                        else boost['def'] = boost[i];
+                        boost[i] = 0;
+                    } else if (spec && i === 'atk') {
+                        if (boost['spa']) boost['spa'] += boost[i];
+                        else boost['spa'] = boost[i];
+                        boost[i] = 0;
+                    } else if (spec && i === 'def') {
+                        if (boost['spd']) boost['spd'] += boost[i];
+                        else boost['spd'] = boost[i];
+                        boost[i] = 0;
+                    }
+                }
+            }
+        }
+    },
    	{
         name: "Balanced Hackmons Plus",
         section: "Other Metagames",
