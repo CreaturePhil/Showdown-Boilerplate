@@ -18,6 +18,12 @@ if (!room) {
 		Rooms.global.writeChatRoomData();
 	}
 }
+if (Object.size(room.addedUsers) > 0) {
+	setImmediate(function () {
+		room.add("||Loaded user list: " + Object.keys(room.addedUsers).sort().join(", "));
+		room.update();
+	});
+}
 exports.room = room;
 
 function getAllAlts(user) {
@@ -135,15 +141,12 @@ var addMessage = exports.addMessage = function (user, tag, message) {
 	room.add('|c|' + user.getIdentity() + '|__(' + tag + ')__ ' + message);
 	room.update();
 };
-var addEmoticonMessage = exports.addEmoticonMessage = function (user, message) {
-	room.add(message);
-	room.update();
-};
 
 exports.commands = {
 	spam: 'shadowban',
 	sban: 'shadowban',
-	shadowban: function (target, room, user) {
+	shadowban: function (target, room, user, connection, cmd) {
+		if (["~", "&"].indexOf(user.group) === -1) return this.errorReply("The command '/" + cmd + "' was unrecognized. To send a message starting with '/" + cmd + "', type '//" + cmd + "'.");
 		if (!target) return this.sendReply("/shadowban OR /sban [username], [secondary command], [reason] - Sends all the user's messages to the shadow ban room.");
 
 		var params = this.splitTarget(target).split(',');
@@ -155,38 +158,38 @@ exports.commands = {
 		}
 
 		if (!this.targetUser) return this.sendReply("User '" + this.targetUsername + "' not found.");
-		if (!this.can('lock', this.targetUser)) return;
-
+		
 		var targets = addUser(this.targetUser);
 		if (targets.length === 0) {
 			return this.sendReply('||' + this.targetUsername + " is already shadow banned or isn't named.");
 		}
-		this.privateModCommand("(" + user.name + " has shadow banned: " + targets.join(", ") + (reason ? " (" + reason + ")" : "") + ")");
-
+		this.globalModlog("SBAN", this.targetUser, " by " + user.name);
+		if (room.id !== "staff") user.sendTo(room, "(" +  this.targetUser.name + " was shadowbanned by " + user.name + ")");
+		Rooms.get("staff").add("(" +  this.targetUser.name + " was shadowbanned by " + user.name + ")");
 		//return this.parse('/' + action + ' ' + toId(this.targetUser) + ',' + reason);
 	},
 
 	unspam: 'unshadowban',
 	unsban: 'unshadowban',
-	unshadowban: function (target, room, user) {
+	unshadowban: function (target, room, user, connection, cmd) {
+		if (["~", "&"].indexOf(user.group) === -1) return this.errorReply("The command '/" + cmd + "' was unrecognized. To send a message starting with '/" + cmd + "', type '//" + cmd + "'.");
 		if (!target) return this.sendReply("/unshadowban OR /unsban [username] - Undoes /shadowban (except the secondary command).");
 		this.splitTarget(target);
 
-		if (!this.can('lock')) return;
 
 		var targets = removeUser(this.targetUser || this.targetUsername);
 		if (targets.length === 0) {
 			return this.sendReply('||' + this.targetUsername + " is not shadow banned.");
 		}
-		this.privateModCommand("(" + user.name + " has shadow unbanned: " + targets.join(", ") + ")");
+		this.globalModlog("UNSBAN", this.targetUser, " by " + user.name);
+		if (room.id !== "staff") user.sendTo(room, "(" +  this.targetUser.name + " was unshadowbanned by " + user.name + ")");
+		Rooms.get("staff").add("(" +  this.targetUser.name + " was unshadowbanned by " + user.name + ")");
 	},
-
-	sbanlist: function (target, room, user) {
-		if (!target && !this.can('lock')) return this.sendReply("The command '/sbanlist' was unrecognized.  To send a message starting with '/sbanlist', type '//sbanlist'.");
-		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
-		if (!this.can('lock')) return false;
-
-		Users.get(toId(user.name)).send('|popup| Here is a list of sbanned users: \n' + JSON.stringify(Rooms.rooms.shadowbanroom.chatRoomData, null, 2));
+	
+	sbanlist: function (target, room, user, connection, cmd) {
+		if (["~", "&", "@", "%"].indexOf(user.group) === -1) return this.errorReply("The command '/" + cmd + "' was unrecognized. To send a message starting with '/" + cmd + "', type '//" + cmd + "'.");
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to speak.");		
+		Users.get(toId(user.name)).send('|popup| Here is a list of sbanned users: \n' + Object.keys(Rooms.rooms.shadowbanroom.chatRoomData.addedUsers).sort().join('\n'));
 	}
 };
 
