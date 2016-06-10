@@ -1,5 +1,6 @@
 'use strict';
 
+let color = require('../config/color');
 let fs = require('fs');
 let path = require('path');
 
