@@ -161,8 +161,8 @@ exports.commands = {
 		amount = amount + currencyName(amount);
 		total = total + currencyName(total);
 		this.sendReply(username + " was given " + amount + ". " + username + " now has " + total + ".");
-		if (Users.get(username)) Users(username).popup(user.name + " has given you " + amount + ". You now have " + total + ".");
-		logMoney(username + " was given " + amount + " by " + user.name + ". " + username + " now has " + total);
+	        Users.get(username).popup('|modal||html|<font color="red"><strong>ATTENTION!</strong></font><br /> You have received '+ amount +' from <b><font color="' + color(user.userid) + '">' + Tools.escapeHTML(user.name) + '</font></b> ' + 'you now have<font color=green> <b>' + total+ '</b></font>');
+                logMoney(username + " was given " + amount + " by " + user.name + ". " + username + " now has " + total);
 	},
 	givemoneyhelp: ["/givemoney [user], [amount] - Give a user a certain amount of money."],
 
@@ -182,8 +182,8 @@ exports.commands = {
 		amount = amount + currencyName(amount);
 		total = total + currencyName(total);
 		this.sendReply(username + " losted " + amount + ". " + username + " now has " + total + ".");
-		if (Users.get(username)) Users(username).popup(user.name + " has taken " + amount + " from you. You now have " + total + ".");
-		logMoney(username + " had " + amount + " taken away by " + user.name + ". " + username + " now has " + total);
+		Users.get(username).popup('|modal||html|<font color="red"><strong>ATTENTION!</strong></font><br /> <b><font color="' + color(user.userid) + '">' + Tools.escapeHTML(user.name) + '</font></b> has taken '+ amount + ' ' + 'from you .You now have<font color=green> <b>' + total+ '</b></font>');
+	        logMoney(username + " had " + amount + " taken away by " + user.name + ". " + username + " now has " + total);
 	},
 	takemoneyhelp: ["/takemoney [user], [amount] - Take a certain amount of money from a user."],
 
