@@ -383,8 +383,8 @@ exports.commands = {
 		const total = users.reduce(function (acc, cur) {
 			return acc + Db('money').get(cur);
 		}, 0);
-		let average = Math.floor(total / users.length);
-		let output = "There is " + total + currencyName(total) + " circulating in the economy. ";
+		let average = Math.floor(total / users.length) || '0';
+		let output = "There " + (total > 1 ? "are " : "is ") + total + currencyName(total) + " circulating in the economy. ";
 		output += "The average user has " + average + currencyName(average) + ".";
 		this.sendReplyBox(output);
 	},

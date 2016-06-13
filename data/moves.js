@@ -974,7 +974,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			if (!target.setItem(yourItem)) {
-				source.item = yourItem;
+				source.item = yourItem.id;
 				return false;
 			}
 			this.add('-item', target, yourItem.name, '[from] move: Bestow', '[of] ' + source);
@@ -14317,8 +14317,8 @@ exports.BattleMovedex = {
 			let myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem) ||
 					(myItem.onTakeItem && myItem.onTakeItem(myItem, target) === false)) {
-				if (yourItem) target.item = yourItem;
-				if (myItem) source.item = myItem;
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
 				return false;
 			}
 			this.add('-activate', source, 'move: Trick', '[of] ' + target);
@@ -15138,8 +15138,8 @@ exports.BattleMovedex = {
 			let myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem) ||
 					(myItem.onTakeItem && myItem.onTakeItem(myItem, target) === false)) {
-				if (yourItem) target.item = yourItem;
-				if (myItem) source.item = myItem;
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
 				return false;
 			}
 			this.add('-activate', source, 'move: Trick', '[of] ' + target);
@@ -16230,7 +16230,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target to fall asleep at the end of the next turn. If the target is still on the field and does not have a major status condition at that time, it falls asleep, and this effect cannot be prevented by Safeguard or a substitute. Fails if the target cannot fall asleep or if it already has a major status condition.",
+		desc: "Causes the target to fall asleep at the end of the next turn. Fails when used if the target cannot fall asleep or if it already has a major status condition. At the end of the next turn, if the target is still on the field, does not have a major status condition, and can fall asleep, it falls asleep. If the target becomes affected, this effect cannot be prevented by Safeguard or a substitute, or by falling asleep and waking up during the effect.",
 		shortDesc: "Puts the target to sleep after 1 turn.",
 		id: "yawn",
 		name: "Yawn",

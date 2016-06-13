@@ -40,6 +40,23 @@ const fs = require('fs');
 const path = require('path');
 const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 
+exports.multiLinePattern = {
+	elements: [],
+	regexp: null,
+	register: function (elem) {
+		if (Array.isArray(elem)) {
+			elem.forEach(elem => this.elements.push(elem));
+		} else {
+			this.elements.push(elem);
+		}
+		this.regexp = new RegExp('^(' + this.elements.map(elem => '(?:' + elem + ')').join('|') + ')', 'i');
+	},
+	test: function (text) {
+		if (!this.regexp) return false;
+		return this.regexp.test(text);
+	},
+};
+
 /*********************************************************
  * Load command files
  *********************************************************/
@@ -212,7 +229,7 @@ class CommandContext {
 
 			this.message = message;
 			this.broadcastMessage = broadcastMessage;
-			this.user.broadcasting = true;
+			this.user.broadcasting = this.cmd;
 		}
 		return true;
 	}
@@ -303,7 +320,7 @@ class CommandContext {
 			}
 			if (room && room.modchat) {
 				let userGroup = user.group;
-				if (room.auth) {
+				if (room.auth && !user.can('makeroom')) {
 					if (room.auth[user.userid]) {
 						userGroup = room.auth[user.userid];
 					} else if (room.isPrivate === true) {
@@ -315,7 +332,7 @@ class CommandContext {
 						this.errorReply("Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
 						return false;
 					}
-				} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat) && !user.can('makeroom')) {
+				} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat)) {
 					let groupName = Config.groups[room.modchat].name || room.modchat;
 					this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
 					return false;
