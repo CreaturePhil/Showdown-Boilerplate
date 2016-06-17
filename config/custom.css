@@ -659,3 +659,450 @@
 .chat.chatmessage-dracobottt  strong { 
     color:blue !important;
   }
+ 	.movemenu button.type-Electric {
+		background: transparent;
+		border-color: #FFFB95;
+		color: #FFFB95;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Electric:hover {
+		background: transparent;
+		border-color: #F9F348;
+		color: #F9F348;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Grass {
+		background: transparent;
+		border-color: #91F29B;
+		color: #91F29B;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Grass:hover {
+		background: transparent;
+		border-color: #55F365;
+		color: #55F365;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Dragon {
+		background: transparent;
+		border-color: #A594D0;
+		color: #A594D0;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Dragon:hover {
+		background: transparent;
+		border-color: #8E73CB;
+		color: #8E73CB;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Water {
+		background: transparent;
+		border-color: #86CDD0;
+		color: #86CDD0;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Water:hover {
+		background: transparent;
+		border-color: #4DCACE;
+		color: #4DCACE;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Normal {
+		background: transparent;
+		border-color: #DBDBDB;
+		color: #DBDBDB;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Normal:hover {
+		background: transparent;
+		border-color: #F5F5F5;
+		color: #F5F5F5;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Ghost {
+		background: transparent;
+		border-color: #C0ABDF;
+		color: #C0ABDF;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Ghost:hover {
+		background: transparent;
+		border-color: #AE8BE4;
+		color: #AE8BE4;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Steel {
+		background: transparent;
+		border-color: #ACACAC;
+		color: #ACACAC;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Steel:hover {
+		background: transparent;
+		border-color: #7A7A7A;
+		color: #7A7A7A;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Fairy {
+		background: transparent;
+		border-color: #FCB3F0;
+		color: #FCB3F0;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Fairy:hover {
+		background: transparent;
+		border-color: #FA7FE6;
+		color: #FA7FE6;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Dark {
+		background: transparent;
+		border-color: #626262;
+		color: #626262;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Dark:hover {
+		background: transparent;
+		border-color: #393939;
+		color: #393939;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Fire {
+		background: transparent;
+		border-color: #FFD089;
+		color: #FFD089;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Fire:hover {
+		background: transparent;
+		border-color: #FFBC55;
+		color: #FFBC55;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Fighting {
+		background: transparent;
+		border-color: #DFA39F;
+		color: #DFA39F;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Fighting:hover {
+		background: transparent;
+		border-color: #DA7B74;
+		color: #DA7B74;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Poison {
+		background: transparent;
+		border-color: #DCB4DC;
+		color: #DCB4DC;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Poison:hover {
+		background: transparent;
+		border-color: #D085D0;
+		color: #D085D0;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Rock {
+		background: transparent;
+		border-color: #DBCC90;
+		color: #DBCC90;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Rock:hover {
+		background: transparent;
+		border-color: #C4B475;
+		color: #C4B475;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Ground {
+		background: transparent;
+		border-color: #DED2B0;
+		color: #DED2B0;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Ground:hover {
+		background: transparent;
+		border-color: #E5CE8E;
+		color: #E5CE8E;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Ice {
+		background: transparent;
+		border-color: #A7E8E8;
+		color: #A7E8E8;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Ice:hover {
+		background: transparent;
+		border-color: #79CDCD;
+		color: #79CDCD;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Flying {
+		background: transparent;
+		border-color: #BFB5DF;
+		color: #BFB5DF;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Flying:hover {
+		background: transparent;
+		border-color: #A597D5;
+		color: #A597D5;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Psychic {
+		background: transparent;
+		border-color: #E9B8C7;
+		color: #E9B8C7;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Psychic:hover {
+		background: transparent;
+		border-color: #E595AD;
+		color: #E595AD;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Bug {
+		background: transparent;
+		border-color: #E0E6A8;
+		color: #E0E6A8;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Bug:hover {
+		background: transparent;
+		border-color: #B9C16B;
+		color: #B9C16B;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+	
+	.movemenu button.type-Bug small {
+    color: #E0E6A8;
+	}
+	
+	.movemenu button.type-Psychic small {
+		color: #E9B8C7;
+	}
+	
+	.movemenu button.type-Flying small {
+		color: #BFB5DF;
+	}
+	
+	.movemenu button.type-Ice small {
+		color: #A7E8E8;
+	}
+	
+	.movemenu button.type-Ground small {
+		color: #DED2B0;
+	}
+	
+	.movemenu button.type-Rock small {
+		color: #DBCC90;
+	}
+	
+	.movemenu button.type-Poison small {
+		color: #DCB4DC;
+	}
+	
+	.movemenu button.type-Fighting small {
+		color: #DFA39F;
+	}
+	
+	.movemenu button.type-Fire small {
+		color: #FFD089;
+	}
+	
+	.movemenu button.type-Dark small {
+		color: #413E41;
+	}
+	
+	.movemenu button.type-Fairy small {
+		color: #FCB3F0;
+	}
+	
+	.movemenu button.type-Steel small {
+		color: #ACACAC;
+	}
+	
+	.movemenu button.type-Ghost small {
+		color: #C0ABDF;
+	}
+	
+	.movemenu button.type-Grass small {
+		color: #91F29B;
+	}
+	
+	.movemenu button.type-Normal small {
+		color: #DBDBDB;
+	}
+	
+	.movemenu button.type-Electric small {
+		color: #FFFB95;
+	}
+	
+	.movemenu button.type-Water small {
+		color: #86CDD0;
+	}
+	
+	.movemenu button.type-Dragon small {
+		color: #A594D0;
+	}
+	
+	.movemenu button:disabled {
+		background: #201E1E;
+		border-color: #171616;
+		color: #DDD;
+		text-shadow: 0px 0px 2px #000;
+		box-shadow: 0px 0px 2px #000;
+	}
+  
+  .switchmenu button {
+    background: transparent;
+    box-shadow: none;
+    color: #DDD;
+    text-shadow: 1px 1px #000;
+    border-color: #DDD;
+    border-radius: 4px;
+  }
+  
+  .switchmenu button:hover {
+    background: transparent;
+    color: #E44D44;
+    border-color: #DDD;
+  }
+  
+  .switchmenu button .hpbar {
+    border: 1px solid #DDD;
+    opacity: 0.85;
+  }
+  
+  .switchmenu button.disabled, .switchmenu button:disabled {
+    color: #E44D44 !important;
+    border-color: #E44D44 !important;
+    background: transparent !important;
+  }
+  
+  .moveselect button, .switchselect button, .battle-controls .whatdo {
+    color: #DDD;
+    text-shadow: 1px 1px #000;
+  }
+  
+  .moveselect button, .switchselect button, .shiftselect button {
+    background: transparent;
+  }
+  
+  .switch-controls .switchselect button, .move-controls .moveselect button {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  
+  /******************
+  * Battle CSS ~end *
+  ******************/
+
+  /******************
+  * Battle CSS ~end *
+  ******************/
+  
+  .ladder table, .ladder td, .ladder th {
+    border: 1px solid #DDD;
+  }
+  
+  .ladder th {
+    background: #000;
+  }
+  
+  .closebutton, .minimizebutton {
+    color: #EEE;
+  }
+  
+  .closebutton:hover {
+    color: #E04942;
+  }
+  
+  .minimizebutton:hover {
+    color: #F9CA6C;
+  }
+
+  .ps-room .battle-controls {
+    background: transparent !important;
+  }
+  
+
+
+ 
+ .lobby-userlist-users {
+    background: url("http://pldh.net/media/pokecons_action/484.gif") right no-repeat;
+    background: url("http://www.pokestadium.com/assets/img/sprites/misc/icons/old/reshiram.png") left no-repeat;
+    }
+    
