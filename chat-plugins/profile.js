@@ -124,7 +124,7 @@ Profile.prototype.money = function (amount) {
 };
 
 Profile.prototype.name = function () {
-	return label('Name') + (font(hashColor(toId(this.username)), this.username));
+        return label('Name') + bold(font(hashColor(toId(this.username)), this.username));
 };
 
 Profile.prototype.seen = function (timeAgo) {
