@@ -888,7 +888,7 @@ exports.commands = {
 			return;
 		}
 		if (targetRoom.founder) {
-			buffer.unshift((targetRoom.founder ? "Room Founder:\n" + ((Users(targetRoom.founder) && Users(targetRoom.founder).connected) ? Wisp.nameColor(targetRoom.founder, true) : Wisp.nameColor(targetRoom.founder)) : ''));
+			buffer.unshift((targetRoom.founder ? "Room Founder:\n" + ((Users(targetRoom.founder) && Users(targetRoom.founder).connected) ? nameColor(targetRoom.founder, true) : nameColor(targetRoom.founder)) : ''));
 		}
 		if (targetRoom !== room) buffer.unshift("" + targetRoom.title + " room auth:");
 		connection.send("|popup||html|" + buffer.join("\n\n") + userLookup);
