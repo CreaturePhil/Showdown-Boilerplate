@@ -766,7 +766,7 @@ exports.commands = {
 		room.auth[userid] = '#';
 		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
 		if (targetUser) {
-			targetUser.popup("You were appointed Room Owner by " + user.name + " in " + room.id + ".");
+			targetUser.popup("|modal||html|You were appointed Room Owner by " + nameColor(user.name, true) + " in " + room.id + ".");
 			room.onUpdateIdentity(targetUser);
 		}
 		Rooms.global.writeChatRoomData();
@@ -839,16 +839,16 @@ exports.commands = {
 		if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			if (targetUser && room.users[targetUser.userid] && !Config.groups[nextGroup].modlog) {
 				// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
-				targetUser.send(">" + room.id + "\n(You were demoted to Room " + groupName + " by " + user.name + ".)");
+				targetUser.send(">" + room.id + "\n(You were demoted to Room " + groupName + " by " + nameColor(user.name) + ".)");
 			}
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
-			if (needsPopup) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + " in " + room.id + ".");
+			if (needsPopup) targetUser.popup("|modal||html|You were demoted to Room " + groupName + " by " + nameColor(user.name, true) + " in " + room.id + ".");
 		} else if (nextGroup === '#') {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
-			if (needsPopup) targetUser.popup("You were promoted to " + groupName + " by " + user.name + " in " + room.id + ".");
+			if (needsPopup) targetUser.popup("|modal||html|You were promoted to " + groupName + " by " + nameColor(user.name, true) + " in " + room.id + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
-			if (needsPopup) targetUser.popup("You were promoted to Room " + groupName + " by " + user.name + " in " + room.id + ".");
+			if (needsPopup) targetUser.popup("|modal||html|You were promoted to Room " + groupName + " by " + nameColor(user.name, true) + " in " + room.id + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity(room.id);
@@ -969,10 +969,10 @@ exports.commands = {
 		if (!room.bannedUsers || !room.bannedIps) {
 			return this.errorReply("Room bans are not meant to be used in room " + room.id + ".");
 		}
-		if (room.bannedUsers[userid] && room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
+		if (room.bannedUsers[userid] && room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + nameColor(targetUser.name, true) + " is already banned from room " + room.id + ".");
 		if (targetUser in room.users || user.can('lock')) {
 			targetUser.popup(
-				"|html|<p>" + Tools.escapeHTML(user.name) + " has banned you from the room " + room.id + ".</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>" : "") +
+				"|html|<p>" + nameColor(user.name) + " has banned you from the room " + room.id + ".</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>" : "") +
 				"<p>To appeal the ban, PM the staff member that banned you" + (room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
 			);
 		}
@@ -1055,8 +1055,7 @@ exports.commands = {
 	 * Moderating: Punishments
 	 *********************************************************/
 
-	kick: 'warn',
-	k: 'warn',
+	w: 'warn',
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
@@ -1135,7 +1134,7 @@ exports.commands = {
 			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + Tools.toDurationString(muteDuration) + ". " + target);
+		if (targetUser in room.users) targetUser.popup("|modal||html|" + nameColor(user.name) + " has muted you in " + room.id + " for " + Tools.toDurationString(muteDuration) + ". " + target);
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + Tools.toDurationString(muteDuration) + "." + (target ? " (" + target + ")" : ""));
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		let userid = targetUser.getLastId();
@@ -1558,10 +1557,10 @@ exports.commands = {
 		Users.setOfflineGroup(name, nextGroup);
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to " + groupName + " by " + user.name + ".)");
-			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
+			if (targetUser) targetUser.popup("|modal||html|You were demoted to " + groupName + " by " + nameColor(user.name, true) + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
-			if (targetUser) targetUser.popup("You were promoted to " + groupName + " by " + user.name + ".");
+			if (targetUser) targetUser.popup("|modal||html|You were promoted to " + groupName + " by " + nameColor(user.name, true) + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity();
@@ -2405,7 +2404,7 @@ exports.commands = {
 	},
 	crashfixedhelp: ["/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~"],
 
-	'memusage': 'memoryusage',
+        'memusage': 'memoryusage',
 	memoryusage: function (target) {
 		if (!this.can('hotpatch')) return false;
 		let memUsage = process.memoryUsage();
