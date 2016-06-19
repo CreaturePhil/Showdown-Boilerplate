@@ -141,7 +141,7 @@ exports.commands = {
 		if (!target) target = user.name;
 
 		const amount = Db('money').get(toId(target), 0);
-		this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
+		this.sendReplyBox(nameColor(target, true) + " has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 
