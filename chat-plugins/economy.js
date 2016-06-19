@@ -309,7 +309,7 @@ exports.commands = {
 			return b.money - a.money;
 		});
 		keys.slice(0, 10).forEach(function (user, index) {
-			display += "<tr><td>" + (index + 1) + "</td><td>" + user.name + "</td><td>" + user.money + "</td></tr>";
+			display += "<tr><td>" + (index + 1) + "</td><td>" + nameColor(user.name) + "</td><td>" + user.money + "</td></tr>";
 		});
 		display += "</tbody></table>";
 		this.sendReply("|raw|" + display);
