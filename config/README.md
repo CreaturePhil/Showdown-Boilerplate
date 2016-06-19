@@ -15,7 +15,7 @@ This username must be registered. If you do not have a registered account, you c
 
 Once you're an administrator, you can promote/demote others easily with the `/admin`, `/leader`, `/mod`, etc commands.
 
-START A SERVER
+Setting The Server
 ------------------------------------------------------------------------
 
 Copy `config/config-example.js` into `config/config.js`, and edit as you please.
