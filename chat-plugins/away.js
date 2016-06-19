@@ -57,7 +57,7 @@ exports.commands = {
 			targetUser.send("|nametaken||Your name conflicts with " + user.name + (user.name.substr(-1) === "s" ? "'" : "'s") + " new away status.");
 		}
 
-		if (user.can('lock', null, room)) this.add("|raw|--" + nameColor(target) + " is now " + target.toLowerCase() + ".");
+		if (user.can('lock', null, room)) this.add("|raw|--" + nameColor(target, true) + " is now " + target.toLowerCase() + ".");
 		user.forceRename(newName, user.registered);
 		user.updateIdentity();
 		user.isAway = true;
