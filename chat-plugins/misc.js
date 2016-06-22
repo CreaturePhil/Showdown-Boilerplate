@@ -42,34 +42,43 @@ function clearRoom(room) {
 }
 
 exports.commands = {
-	stafflist: 'authority',
 	auth: 'authority',
+	stafflist: 'authority',
+	globalauth: 'authority',
 	authlist: 'authority',
 	authority: function (target, room, user, connection) {
+		if (target) {
+			let targetRoom = Rooms.search(target);
+			let unavailableRoom = targetRoom && (targetRoom !== room && (targetRoom.modjoin || targetRoom.staffRoom) && !user.can('makeroom'));
+			if (targetRoom && !unavailableRoom) return this.parse('/roomauth1 ' + target);
+			return this.parse('/userauth ' + target);
+		}
 		let rankLists = {};
 		let ranks = Object.keys(Config.groups);
 		for (let u in Users.usergroups) {
 			let rank = Users.usergroups[u].charAt(0);
+			if (rank === ' ') continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
-			if (ranks.indexOf(rank) > -1) {
+			if (ranks.includes(rank)) {
 				let name = Users.usergroups[u].substr(1);
 				if (!rankLists[rank]) rankLists[rank] = [];
-				if (name) rankLists[rank].push(((Users.getExact(name) && Users.getExact(name).connected) ? '**' + name + '**' : name));
+				if (name) rankLists[rank].push(nameColor(name, (Users(name) && Users(name).connected)));
 			}
 		}
 
-		let buffer = [];
-		Object.keys(rankLists).sort(function (a, b) {
-			return (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank;
-		}).forEach(function (r) {
-			buffer.push((Config.groups[r] ? r + Config.groups[r].name + "s (" + rankLists[r].length + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
-		});
+		let buffer = Object.keys(rankLists).sort((a, b) =>
+			(Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
+		).map(r =>
+			(Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort((a, b) => toId(a).localeCompare(toId(b))).join(", ")
+		);
 
-		if (!buffer.length) {
-			return connection.popup("This server has no auth.");
-		}
-		connection.popup(buffer.join("\n\n"));
+		if (!buffer.length) return connection.popup("This server has no global authority.");
+		connection.send("|popup||html|" + buffer.join("\n\n"));
 	},
+	authhelp: ["/auth - Show global staff for the server.",
+		"/auth [room] - Show what roomauth a room has.",
+		"/auth [user] - Show what global and roomauth a user has."],
+		
 
 	clearall: function (target, room, user) {
 		if (!this.can('declare')) return false;
@@ -83,7 +92,7 @@ exports.commands = {
 		if (!this.can('gdeclare')) return false;
 
 		for (let u in Users.users) {
-			Users.users[u].popup("All rooms are being clear.");
+			Users.users[u].popup("All rooms are being cleared.");
 		}
 
 		for (let r in Rooms.rooms) {
@@ -189,16 +198,16 @@ exports.commands = {
 		let username = toId(target);
 		request('http://pokemonshowdown.com/users/' + username, function (error, response, body) {
 			if (error && response.statusCode !== 200) {
-				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
+				this.sendReplyBox(nameColor(target, true) + " is <font color='red'>not registered.</font>");
 				return room.update();
 			}
 			let regdate = body.split('<small>')[1].split('</small>')[0].replace(/(<em>|<\/em>)/g, '');
 			if (regdate === '(Unregistered)') {
-				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
+				this.sendReplyBox(nameColor(target, true) + " is <font color='red'>not registered.</font>");
 			} else if (regdate === '(Account disabled)') {
-				this.sendReplyBox(Tools.escapeHTML(target) + "'s account is disabled.");
+				this.sendReplyBox(nameColor(target, true) + "'s <font color='red'> account is disabled.</font>");
 			} else {
-				this.sendReplyBox(Tools.escapeHTML(target) + " was registered on " + regdate.slice(7) + ".");
+				this.sendReplyBox(nameColor(target, true) + " was registered on " + regdate.slice(7) + ".");
 			}
 			room.update();
 		}.bind(this));
@@ -223,11 +232,11 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse('/help seen');
 		let targetUser = Users.get(target);
-		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
+		if (targetUser && targetUser.connected) return this.sendReplyBox(nameColor(targetUser.name, true) + " is <b><font color='limegreen'>currently online</font></b>.");
 		target = Tools.escapeHTML(target);
 		let seen = Db('seen').get(toId(target));
-		if (!seen) return this.sendReplyBox(target + " has never been online on this server.");
-		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
+		if (!seen) return this.sendReplyBox(nameColor(target, true) + " has <font color='red'>never been online on this server.</font>");
+		this.sendReplyBox(namecolor(target, true) + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
 	},
 	seenhelp: ["/seen - Shows when the user last connected on the server."],
 

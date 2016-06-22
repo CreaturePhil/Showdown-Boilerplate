@@ -141,7 +141,7 @@ exports.commands = {
 		if (!target) target = user.name;
 
 		const amount = Db('money').get(toId(target), 0);
-		this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
+		this.sendReplyBox(nameColor(target, true) + " has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 
@@ -309,7 +309,7 @@ exports.commands = {
 			return b.money - a.money;
 		});
 		keys.slice(0, 10).forEach(function (user, index) {
-			display += "<tr><td>" + (index + 1) + "</td><td>" + user.name + "</td><td>" + user.money + "</td></tr>";
+			display += "<tr><td>" + (index + 1) + "</td><td>" + nameColor(user.name) + "</td><td>" + user.money + "</td></tr>";
 		});
 		display += "</tbody></table>";
 		this.sendReply("|raw|" + display);
