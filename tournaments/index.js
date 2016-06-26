@@ -881,7 +881,8 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 		output.errorReply("You cannot have a player cap that is less than 2.");
 		return;
 	}
-	return (room.game = exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), playerCap, isRated));
+	room.game = exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), playerCap, isRated);
+	return room.game;
 }
 function deleteTournament(id, output) {
 	let tournament = exports.tournaments[id];
@@ -912,7 +913,11 @@ let commands = {
 		out: 'leave',
 		leave: function (tournament, user) {
 			if (tournament.isTournamentStarted) {
-				tournament.disqualifyUser(user.userid, this);
+				if (tournament.generator.getUsers(true).some(player => player.userid === user.userid)) {
+					tournament.disqualifyUser(user.userid, this);
+				} else {
+					this.errorReply("You have already been eliminated from this tournament.");
+				}
 			} else {
 				tournament.removeUser(user, this);
 			}
