@@ -1,5 +1,6 @@
 'use strict';
 
+let color = require('../config/color');
 let fs = require('fs');
 let path = require('path');
 
@@ -141,7 +142,8 @@ exports.commands = {
 		if (!target) target = user.name;
 
 		const amount = Db('money').get(toId(target), 0);
-		this.sendReplyBox(Tools.escapeHTML(target) + " has " + amount + currencyName(amount) + ".");
+		let group = user.getIdentity().charAt(0);
+		this.sendReply("|raw|<font color=#948A88>" + group +  "</font><font color=" + color(user.userid) + "><b>" + Tools.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 

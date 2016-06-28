@@ -215,7 +215,7 @@ exports.BattleStatuses = {
 		},
 		onResidualOrder: 11,
 		onResidual: function (pokemon) {
-			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0)) {
+			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0 || !this.effectData.source.activeTurns)) {
 				delete pokemon.volatiles['partiallytrapped'];
 				return;
 			}
@@ -347,15 +347,6 @@ exports.BattleStatuses = {
 				this.add('-end', target, 'move: ' + move.name);
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
-
-				if (target.hasAbility('wonderguard') && this.gen >= 5) {
-					this.debug('Wonder Guard immunity: ' + move.id);
-					if (target.runEffectiveness(move) <= 0) {
-						this.add('-activate', target, 'ability: Wonder Guard');
-						this.effectData.positions[i] = null;
-						return null;
-					}
-				}
 
 				if (posData.source.hasAbility('infiltrator') && this.gen >= 6) {
 					posData.moveData.infiltrates = true;

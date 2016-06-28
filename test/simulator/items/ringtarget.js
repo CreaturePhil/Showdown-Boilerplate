@@ -1,7 +1,9 @@
 'use strict';
 
+const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
-const assert = require('assert');
 
 describe('Ring Target', function () {
 	afterEach(function () {
@@ -9,7 +11,7 @@ describe('Ring Target', function () {
 	});
 
 	it('should negate natural immunities and deal normal type effectiveness with the other type(s)', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['earthquake', 'vitalthrow', 'shadowball', 'psychic']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Thundurus", ability: 'prankster', item: 'ringtarget', moves: ['rest']},
@@ -19,33 +21,32 @@ describe('Ring Target', function () {
 		]);
 		battle.commitDecisions();
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'switch 2');
+		assert.false.fullHP(battle.p2.active[0]);
+
+		battle.p1.chooseMove('vitalthrow').foe.chooseSwitch(2); // Drifblim
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
-		battle.choose('p1', 'move 3');
-		battle.choose('p2', 'switch 3');
+		assert.false.fullHP(battle.p2.active[0]);
+
+		battle.p1.chooseMove('shadowball').foe.chooseSwitch(3); // Girafarig
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
-		battle.choose('p1', 'move 4');
-		battle.choose('p2', 'switch 4');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.false.fullHP(battle.p2.active[0]);
+
+		battle.p1.chooseMove('psychic').foe.chooseSwitch(4); // Absol
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	it('should not affect ability-based immunities', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Hariyama", ability: 'guts', moves: ['earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Mismagius", ability: 'levitate', item: 'ringtarget', moves: ['shadowsneak']},
 			{species: "Rotom-Fan", ability: 'levitate', item: 'ringtarget', moves: ['snore']},
 		]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.fullHP(battle.p2.active[0]);
 
 		// even if Rotom-Fan
-		battle.choose('p2', 'switch 2');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		battle.p2.chooseSwitch(2).foe.chooseDefault();
+		assert.fullHP(battle.p2.active[0]);
 	});
 });

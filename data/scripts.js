@@ -1,5 +1,7 @@
 'use strict';
 
+const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
+
 exports.BattleScripts = {
 	gen: 6,
 	runMove: function (move, pokemon, target, sourceEffect) {
@@ -224,6 +226,12 @@ exports.BattleScripts = {
 		}
 
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+			return false;
+		}
+
+		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
+			this.debug('natural powder immunity');
+			this.add('-immune', target, '[msg]');
 			return false;
 		}
 
@@ -649,6 +657,11 @@ exports.BattleScripts = {
 		if (pokemon1.side === pokemon2.side) return Math.abs(pokemon1.position - pokemon2.position) === 1;
 		return Math.abs(pokemon1.position + pokemon2.position + 1 - pokemon1.side.active.length) <= 1;
 	},
+
+	targetTypeChoices: function (targetType) {
+		return CHOOSABLE_TARGETS.has(targetType);
+	},
+
 	checkAbilities: function (selectedAbilities, defaultAbilities) {
 		if (!selectedAbilities.length) return true;
 		let selectedAbility = selectedAbilities.pop();
@@ -701,12 +714,12 @@ exports.BattleScripts = {
 		return !!firstForme.isMega;
 	},
 	getTeam: function (side, team) {
-		const format = side.battle.getFormat();
+		const format = this.getFormat();
 		const teamGenerator = typeof format.team === 'string' && format.team.startsWith('random') ? format.team + 'Team' : '';
 		if (!teamGenerator && team) return team;
 		// Reinitialize the RNG seed to create random teams.
 		this.startingSeed = this.startingSeed.concat(this.generateSeed());
-		team = this[teamGenerator || 'randomTeam'](side, format.id);
+		team = this[teamGenerator || 'randomTeam'](side);
 		// Restore the default seed
 		this.seed = this.startingSeed.slice(0, 4);
 		return team;
@@ -1362,7 +1375,7 @@ exports.BattleScripts = {
 					if (hasMove['outrage'] || hasMove['dragontail']) rejected = true;
 					break;
 				case 'dragonpulse': case 'spacialrend':
-					if (hasMove['dracometeor']) rejected = true;
+					if (hasMove['dracometeor'] || hasMove['outrage']) rejected = true;
 					break;
 				case 'outrage':
 					if (hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
@@ -1375,6 +1388,7 @@ exports.BattleScripts = {
 					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || (hasMove['raindance'] || hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
+					if (hasMove['voltswitch'] && template.types.length > 1 && !counter[template.types.find(type => type !== 'Electric')]) rejected = true;
 					break;
 				case 'dazzlinggleam':
 					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
@@ -1475,7 +1489,7 @@ exports.BattleScripts = {
 					if (counter.setupType !== 'Physical' && hasMove['vacuumwave']) rejected = true;
 					break;
 				case 'hiddenpower':
-					if ((counter.damagingMoves.length < 2 && !counter.stab) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (hasMove['rest'] || !counter.stab && counter.damagingMoves.length < 2) rejected = true;
 					break;
 				case 'hypervoice':
 					if (hasMove['naturepower'] || hasMove['return']) rejected = true;
@@ -1617,7 +1631,7 @@ exports.BattleScripts = {
 					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'])) ||
 					(hasType['Ice'] && !counter['Ice']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
-					(hasMove['raindance'] && hasType['Water'] && !counter['Water']) ||
+					(hasType['Water'] && !counter['Water'] && (!hasType['Ice'] || !counter['Ice']) && !hasAbility['Protean']) ||
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
@@ -2070,7 +2084,7 @@ exports.BattleScripts = {
 			shiny: !this.random(1024),
 		};
 	},
-	randomTeam: function (side, format) {
+	randomTeam: function (side) {
 		let pokemonLeft = 0;
 		let pokemon = [];
 
@@ -2084,7 +2098,7 @@ exports.BattleScripts = {
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (format === 'monotyperandombattle') {
+			if (this.format === 'monotyperandombattle') {
 				let types = template.types;
 				if (template.battleOnly) types = this.getTemplate(template.baseSpecies).types;
 				if (types.indexOf(type) < 0) continue;
@@ -2189,7 +2203,7 @@ exports.BattleScripts = {
 
 			let types = template.types;
 
-			if (format !== 'monotyperandombattle') {
+			if (this.format !== 'monotyperandombattle') {
 				// Limit 2 of any type
 				let skip = false;
 				for (let t = 0; t < types.length; t++) {
@@ -3335,7 +3349,7 @@ exports.BattleScripts = {
 			moves: moves,
 		};
 	},
-	randomFactoryTeam: function (side, format, depth) {
+	randomFactoryTeam: function (side, depth) {
 		if (!depth) depth = 0;
 		let forceResult = (depth >= 4);
 
@@ -3456,15 +3470,15 @@ exports.BattleScripts = {
 				}
 			}
 		}
-		if (pokemon.length < 6) return this.randomFactoryTeam(side, format, ++depth);
+		if (pokemon.length < 6) return this.randomFactoryTeam(side, ++depth);
 
 		// Quality control
 		if (!teamData.forceResult) {
 			for (let requiredFamily in requiredMoveFamilies) {
-				if (!teamData.has[requiredFamily]) return this.randomFactoryTeam(side, format, ++depth);
+				if (!teamData.has[requiredFamily]) return this.randomFactoryTeam(side, ++depth);
 			}
 			for (let type in teamData.weaknesses) {
-				if (teamData.weaknesses[type] >= 3) return this.randomFactoryTeam(side, format, ++depth);
+				if (teamData.weaknesses[type] >= 3) return this.randomFactoryTeam(side, ++depth);
 			}
 		}
 
@@ -3488,26 +3502,29 @@ exports.BattleScripts = {
 
 		for (let i = 1; i < 6; i++) {
 			let pokemon = this.sampleNoReplace(seasonalPokemonList);
-			let template = this.getTemplate(pokemon);
-			let set = this.randomSet(template, i);
+			let template = Object.assign({}, this.getTemplate(pokemon));
+
 			if (template.id in {'vanilluxe':1, 'vanillite':1, 'vanillish':1}) {
-				set.moves = ['icebeam', 'weatherball', 'autotomize', 'flashcannon'];
+				template.randomBattleMoves = ['icebeam', 'weatherball', 'autotomize', 'flashcannon'];
 			}
 			if (template.id in {'pikachu':1, 'raichu':1}) {
-				set.moves = ['thunderbolt', 'surf', 'substitute', 'nastyplot'];
+				template.randomBattleMoves = ['thunderbolt', 'surf', 'substitute', 'nastyplot'];
 			}
 			if (template.id in {'rhydon':1, 'rhyperior':1}) {
-				set.moves = ['surf', 'megahorn', 'earthquake', 'rockblast'];
+				template.randomBattleMoves = ['surf', 'megahorn', 'earthquake', 'rockblast'];
 			}
 			if (template.id === 'reshiram') {
-				set.moves = ['tailwhip', 'dragontail', 'irontail', 'aquatail'];
+				template.randomBattleMoves = ['tailwhip', 'dragontail', 'irontail', 'aquatail'];
 			}
 			if (template.id === 'aggron') {
-				set.moves = ['surf', 'earthquake', 'bodyslam', 'rockslide'];
+				template.randomBattleMoves = ['surf', 'earthquake', 'bodyslam', 'rockslide'];
 			}
 			if (template.id === 'hariyama') {
-				set.moves = ['surf', 'closecombat', 'facade', 'fakeout'];
+				template.randomBattleMoves = ['surf', 'closecombat', 'facade', 'fakeout'];
 			}
+
+			let set = this.randomSet(template, i);
+
 			if (template.id === 'pelipper') {
 				set.ability = 'raindish';
 			}
