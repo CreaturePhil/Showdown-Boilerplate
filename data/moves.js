@@ -3557,6 +3557,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		volatileStatus: 'electrify',
+		onTryHit: function (target) {
+			if (!this.willMove(target) && target.activeTurns) return false;
+		},
 		effect: {
 			duration: 1,
 			onStart: function (target) {
@@ -4856,6 +4859,9 @@ exports.BattleMovedex = {
 		priority: 2,
 		flags: {},
 		volatileStatus: 'followme',
+		onTryHit: function (target) {
+			if (target.side.active.length < 2) return false;
+		},
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
@@ -5661,9 +5667,10 @@ exports.BattleMovedex = {
 				return accuracy * 5 / 3;
 			},
 			onDisableMove: function (pokemon) {
-				let disabledMoves = {bounce:1, fly:1, flyingpress:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
-				for (let m in disabledMoves) {
-					pokemon.disableMove(m);
+				for (let i = 0; i < pokemon.moveset.length; i++) {
+					if (this.getMove(pokemon.moveset[i].id).flags['gravity']) {
+						pokemon.disableMove(pokemon.moveset[i].id);
+					}
 				}
 			},
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
@@ -6123,18 +6130,15 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'move: Heal Block');
 			},
 			onDisableMove: function (pokemon) {
-				let disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
-				let move;
 				for (let i = 0; i < pokemon.moveset.length; i++) {
-					if (disabledMoves[pokemon.moveset[i].id] || (move = this.getMove(pokemon.moveset[i].id)).heal || move.drain) {
+					if (this.getMove(pokemon.moveset[i].id).flags['heal']) {
 						pokemon.disableMove(pokemon.moveset[i].id);
 					}
 				}
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
-				let disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
-				if (disabledMoves[move.id] || move.heal || move.drain) {
+				if (move.flags['heal']) {
 					this.add('cant', pokemon, 'move: Heal Block', move);
 					return false;
 				}
@@ -10655,11 +10659,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {authentic: 1},
 		onHit: function (target, source) {
-			let targetBoosts = {};
 			for (let i in target.boosts) {
-				targetBoosts[i] = target.boosts[i];
+				source.boosts[i] = target.boosts[i];
 			}
-			source.setBoost(targetBoosts);
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
 		secondary: false,
@@ -11068,6 +11070,9 @@ exports.BattleMovedex = {
 		priority: 2,
 		flags: {powder: 1},
 		volatileStatus: 'ragepowder',
+		onTryHit: function (target) {
+			if (target.side.active.length < 2) return false;
+		},
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
@@ -11895,7 +11900,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		onTryHit: function (target, source) {
+		onTry: function () {
 			for (let i = 0; i < this.queue.length; i++) {
 				let decision = this.queue[i];
 				if (!decision.pokemon || !decision.move) continue;
@@ -14942,15 +14947,14 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit: function (target) {
-			let targetBoosts = {};
-
+			let success = false;
 			for (let i in target.boosts) {
+				if (target.boosts[i] === 0) continue;
 				target.boosts[i] = -target.boosts[i];
+				success = true;
 			}
-
-			target.setBoost(targetBoosts);
-
-			this.add('-invertboost', target, '[from] move: Topsy-turvy');
+			if (!success) return false;
+			this.add('-invertboost', target, '[from] move: Topsy-Turvy');
 		},
 		secondary: false,
 		target: "normal",

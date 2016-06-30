@@ -94,9 +94,9 @@ exports.Formats = [
 		banlist: [],
 	},
 	{
-		name: "PU",
+		name: "PU (suspect test)",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571964/\">np: PU Stage 7</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3575837/\">np: PU Stage 8</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>",
 		],
 		section: "ORAS Singles",
@@ -113,9 +113,19 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
+		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
+	},
+	{
+		name: "LC (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3575912/\">LC Suspect</a>"],
+		section: "ORAS Singles",
+
+		challengeShow: false,
+		maxLevel: 5,
+		ruleset: ['LC'],
 	},
 	{
 		name: "CAP",
@@ -257,6 +267,32 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "Sinnoh Classic",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3575910/\">Sinnoh Classic</a>"],
+		section: "ORAS Doubles",
+
+		gameType: 'doubles',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: ['Dragonite', 'Tyranitar', 'Heatran'],
+		onValidateSet: function (set) {
+			let problems = [];
+			let template = this.getTemplate(set.species || set.name);
+			if (template.num > 493) {
+				problems.push(template.species + " is banned by Sinnoh Classic.");
+			}
+			let item = this.getItem(set.item);
+			if (item.megaStone) {
+				problems.push(item.name + " is banned by Sinnoh Classic.");
+			}
+			return problems;
+		},
+	},
+	{
 		name: "Doubles Custom Game",
 		section: "ORAS Doubles",
 
@@ -337,8 +373,8 @@ exports.Formats = [
 
 		mod: 'gottalent',
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Baton Pass Clause', 'Team Preview'],
-		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Genesect',
-			'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kyogre', 'Kyurem-White', 'Landorus',
+		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga',
+			'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Landorus',
 			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Shuckle', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Shadow Tag', 'Speed Boost', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew',
 		],
