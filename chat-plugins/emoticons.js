@@ -65,14 +65,14 @@ function parseEmoticons(message, room, user, pm) {
 
 	let group = user.getIdentity().charAt(0);
 	if (room.auth) group = room.auth[user.userid] || group;
+	if (pm && !user.hiding) group = user.group;
+
+	if (pm) return "<div class='chat' style='display:inline'>" + "<em class='mine'>" + message + "</em></div>";
 
 	let style = "background:none;border:0;padding:0 5px 0 0;font-family:Verdana,Helvetica,Arial,sans-serif;font-size:9pt;cursor:pointer";
-
 	message = "<div class='chat'>" + "<small>" + group + "</small>" + "<button name='parseCommand' value='/user " + user.name + "' style='" + style + "'>" + "<b><font color='" + color(user.userid) + "'>" + user.name + ":</font></b>" + "</button><em class='mine'>" + message + "</em></div>";
-	if (pm) return message;
 
 	room.addRaw(message);
-
 	return true;
 }
 
