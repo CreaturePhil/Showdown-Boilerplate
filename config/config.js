@@ -386,9 +386,9 @@ exports.grouplist = [
 		joinbattle: true
 	},
 	{
-		symbol: 'Ω',
-		id: "youtuber",
-		name: "YouTuber",
+		symbol: '>',
+		id: "meme",
+		name: "meme",
 		inherit: '+',
 		joinbattle: true
 	},
