@@ -1252,7 +1252,7 @@ exports.Formats = [
 	{
 		name: "[Seasonal] Super Staff Bros. Melee",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
-		section: "Randomised Metas",
+		section: "Randomized Metas",
 		column: 2,
 		mod: 'seasonal',
 		team: 'randomSeasonalMelee',
