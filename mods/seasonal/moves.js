@@ -377,6 +377,38 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Psychic",
 	},
+	"blehflame": {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
+		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
+		id: "blehflame",
+		isViable: true,
+		name: "Bleh fLame",
+		pp: 10,
+		priority: 0,
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Blue Flare", source);
+		},
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 10,
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "fire",
+		contestType: "Tough",
+	},
 	// HeaLnDeaL
 	boobersoblivion: {
 		accuracy: 100,
