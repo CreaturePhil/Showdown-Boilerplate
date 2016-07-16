@@ -867,6 +867,12 @@ exports.BattleScripts = {
 				signatureMove: "xHaxlituh",
 				evs: {atk:252, spd:4, spe:252}, nature: 'Adamant',
 			},
+			'XpRienzo': {
+ 				species: 'Reshiram', ability: 'Adaptability', item: 'Charcoal', gender: 'M',
+ 				moves: ['fusionflare', 'spacialrend', 'voltswitch'],
+ 				signatureMove: "blehflame",
+ 				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
+ 			},
 			'xShiba': {
 				species: 'Fletchinder', ability: 'Gale Wings', item: 'Eviolite', gender: 'F',
 				moves: ['dragonascent', 'sacredfire', 'roost'],
