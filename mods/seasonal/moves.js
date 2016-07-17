@@ -406,7 +406,7 @@ exports.BattleMovedex = {
 			},
 		},
 		target: "normal",
-		type: "fire",
+		type: "Fire",
 		contestType: "Tough",
 	},
 	// HeaLnDeaL
