@@ -390,7 +390,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Blue Flare", source);
+			this.add('-anim', source, "Blue Flare", target);
 		},
 		flags: {protect: 1, mirror: 1},
 		secondary: {
@@ -2839,6 +2839,26 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fighting",
+	},
+	//spandan
+	"yomammajoke": {
+		num: 613,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		shortDesc: "User recovers 75% of the damage dealt.",
+		id: "yomammajoke",
+		isViable: true,
+		name: "Yo MaMMa Joke",
+		pp: 10,
+		priority: 1,
+		flags: {protect: 1, mirror: 1, distance: 1, heal: 1},
+		drain: [3, 4],
+		secondary: false,
+		target: "any",
+		type: "Flying",
+		contestType: "Cool",
 	},
 	// uselesstrainer
 	ofcurse: {
