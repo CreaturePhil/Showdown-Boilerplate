@@ -721,9 +721,9 @@ exports.BattleScripts = {
 			},
 			'Spandan': {
 			    species: 'Salamence', ability: 'Multiscale', item: 'Salamencite', gender: 'M',
-				moves: ['extremespeed', 'shiftgear', 'boomburst', 'fireblast'],
-				//signatureMove: "Army of Mushrooms",
-				evs: {hp:6, atk:128, spe:128}, nature: 'Jolly',
+				moves: ['extremespeed', 'shiftgear', 'boomburst'],
+				signatureMove: "Yo MaMMa Joke",
+				evs: {atk:128, spa:128, spe:252}, nature: 'Naive',
 			},
 			'sparktrain': {
 				species: 'Seel', ability: 'Regenerator', item: 'Life Orb', gender: 'M',
