@@ -417,6 +417,17 @@ exports.Formats = [
 		banlist: ['Groudon-Primal', 'Kyogre-Primal', 'Arena Trap', 'Huge Power', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter'],
 	},
 	{
+		name: "Trademarked",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>"],
+		section: "Other Metagames",
+		column: 1,
+
+		mod: 'trademarked',
+		ruleset: ['OU'],
+		banlist: ['Ignore Illegal Abilities','Roar','Whirlwind','Slaking','Regigigas'],
+		
+	},
+	{
 		name: "Gods and Followers",
 		desc: [
 			"The Pok&eacute;mon in the first slot is the God; the Followers must share a type with the God. If the God Pok&eacute;mon faints, the Followers are inflicted with Curse.",
