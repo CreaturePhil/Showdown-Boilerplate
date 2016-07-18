@@ -1285,7 +1285,7 @@ exports.Formats = [
 			if (ability.item && ability.item === item.id) {
 				return ["You are not allowed to have " + ability.name + " and " + item.name + " on the same Pokémon."];
 			}*/
-		},
+		//},
 		/*onValidateTeam: function (team) {
 			let abilityTable = {};
 			for (let i = 0; i < team.length; i++) {
