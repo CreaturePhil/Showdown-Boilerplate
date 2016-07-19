@@ -262,12 +262,6 @@ exports.replsocketmode = 0o600;
 //     - game: make games.
 //     - gamemanagement: enable/disable games and minigames.
 exports.grouplist = [
-	{   symbol: '♚',
-	    id: "dragonking",
-	    name: "Dragon King",
-	    inherit: '⚔',
-	    globalonly: true
-	},
 	{
 		symbol: '⚔',
 		id: "dragonowner",

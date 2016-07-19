@@ -1267,7 +1267,7 @@ exports.Formats = [
 		column: 4,
 
 		mod: 'enchanteditems',
-		ruleset: [],
+		ruleset: ['HP Percentage Mod'],
 		banlist: ['Ignore Illegal Abilities','Ignore Illegal Moves'],
 		/*onValidateSet: function (set) {
 			
