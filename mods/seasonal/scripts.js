@@ -611,6 +611,12 @@ exports.BattleScripts = {
 				signatureMove: "Retreat",
 				evs: {def:4, spa:252, spe:252}, nature: 'Timid',
 			},
+			'Ransei': {
+				species: 'Rayquaza', ability: 'Wonder Breaker', item: 'Life Orb', gender: ['M'],
+				moves: ['dragonascent', 'tailglow', 'dracometeor'],
+				signatureMove: "Legend's Ambition",
+				evs: {hp:248, atk:252, spa:252, spe:252}, nature: 'Mild',
+			},
 			'Raseri': {
 				species: 'Musharna', ability: 'Synchronize', item: 'Leftovers', gender: ['M', 'F', 'N'][this.random(3)],
 				moves: ['barrier', 'storedpower', 'moonblast'],

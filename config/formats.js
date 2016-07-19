@@ -1644,6 +1644,9 @@ exports.Formats = [
 			if(name === 'spandan') {
 				this.add('c|~Spandan|pepis');
 			}
+			if(name === 'ransei') {
+				this.add('c|~Ransei|yo');
+			}
 			if(name === 'xprienzo') {
  				this.add('c|⚔XpRienzo|Wait, was I supposed to do something?');
  			}
@@ -2202,6 +2205,9 @@ exports.Formats = [
 			}
 			if (name === 'xprienzo') {
  				this.add('c|⚔XpRienzo|Bleh');
+ 			}
+ 			if (name === 'ransei') {
+ 				this.add('c|~Ransei|ripsei');
  			}
 			if (name === 'atomicllamas') {
 				this.add('c|&atomicllamas|(puke)');

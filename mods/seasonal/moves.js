@@ -4738,6 +4738,27 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying",
 	},
+	legendsambition: {
+		id:"legendsambition",
+		name:"Legend's Ambition",
+		basepower:180,
+		pp:8,
+		category:'Special',
+		accuracy:100,
+		isViable:true,
+		isNonstandard: true,
+		priority:1,
+		self: {
+			boosts: {
+				spe: -1,
+			},
+		},
+		contestType:"Cool",
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Judgment", target);
+		},
+	},
 	// Frysinger
 	zapconfirmed: {
 		accuracy: 100,
