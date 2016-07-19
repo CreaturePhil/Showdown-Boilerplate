@@ -4748,6 +4748,8 @@ exports.BattleMovedex = {
 		isViable:true,
 		isNonstandard: true,
 		priority:1,
+		type:"Dragon",
+		target:"normal",
 		self: {
 			boosts: {
 				spe: -1,
