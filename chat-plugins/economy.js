@@ -29,7 +29,7 @@ let shopDisplay = getShopDisplay(shop);
  * @returns {String}
  */
 function currencyName(amount) {
-	let name = " buck";
+	let name = " Dragon Dollar";
 	return amount === 1 ? name : name + "s";
 }
 
