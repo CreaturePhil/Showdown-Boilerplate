@@ -2,6 +2,39 @@
 
 exports.BattleAbilities = {
 	// Asty
+	wonderbreaker: {
+		onBoost: function (boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			for (let i in boost) {
+				if (boost[i] < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Wonder Breaker", "[of] " + target);
+		},
+		onStart: function (pokemon) {
+			this.add('-ability', pokemon, 'Wonder Breaker');
+		},
+		stopAttackEvents: true,
+		onAnyModifyBoost: function (boosts, target) {
+			let source = this.effectData.target;
+			if (source === target) return;
+			if (source === this.activePokemon && target === this.activeTarget) {
+				boosts['def'] = 0;
+				boosts['spd'] = 0;
+				boosts['evasion'] = 0;
+			}
+			if (target === this.activePokemon && source === this.activeTarget) {
+				boosts['atk'] = 0;
+				boosts['spa'] = 0;
+				boosts['accuracy'] = 0;
+			}
+		},
+		id: "wonderbreaker",
+		name: "Wonder Breaker",
+	},
 	astyabsorb: {
 		onTryHit: function (target, source, move) {
 			if (target !== source && move.type === 'Water') {
