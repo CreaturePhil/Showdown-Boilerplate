@@ -185,6 +185,12 @@ exports.BattleScripts = {
 				signatureMove: "Forcewin",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Adamant',
 			},
+			'charizard8888': {
+				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
+				moves: ['fakeout', 'extremespeed', 'earthquake'],
+				signatureMove: "ggm8",
+				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
+			},
 			'Ciran': {
 				species: 'Rapidash', ability: 'Defiant', item: 'Life Orb', gender: 'N',
 				moves: ['vcreate', 'zenheadbutt', 'knockoff'],
@@ -806,6 +812,12 @@ exports.BattleScripts = {
 				moves: ['encore', 'foulplay', 'batonpass'],
 				signatureMove: "Broken Mirror",
 				evs: {hp:252, spa:4, spe:252}, ivs: {atk:0}, nature: 'Timid',
+			},
+			'The God of Haxorus': {
+				species: 'Haxorus', ability: 'Blessed Hax', item: 'Life Orb', gender: 'M',
+				moves: ['ironhead', 'diamondstorm', 'sacredfire'],
+				signatureMove: "Haxing Rage",
+				evs: {atk:252, spe:252, spd:4}, nature: 'Adamant',
 			},
 			'The Immortal': {
 				species: 'Blastoise', ability: 'Magic Bounce', item: 'Blastoisinite', gender: 'M',
