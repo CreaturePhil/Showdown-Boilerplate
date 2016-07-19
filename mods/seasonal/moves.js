@@ -2014,6 +2014,60 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal",
 	},
+	haxingrage: {
+		accuracy:100,
+		pp:10,
+		id: "haxingrage",
+		name: "Haxing Rage",
+		isNonstandard: true,
+		isViable: true,
+		basePower:130,
+		category:"Physical",
+		type:"Dragon",
+		target:"normal",
+		secondary: {
+			chance: 40,
+			self: {
+				boosts: {
+					atk: 1,
+				},
+			},
+			volatileStatus: 'confusion',
+		},
+		drain: [1, 2],
+		flags: {protect: 1, mirror: 1, heal: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Outrage", target);
+		},
+	},
+	ggm8: {
+		accuracy:100,
+		pp:15,
+		id: "ggm8",
+		name: "ggm8",
+		isNonstandard: true,
+		isViable: true,
+		basePower:150,
+		category:"Physical",
+		type:"Dragon",
+		target:"normal",
+		secondary:{
+			chance:80,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		}
+		onHit: function (target, source) {
+			if (this.random(2) === 1) target.trySetStatus('brn', source);
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "V-Create", target);
+		},
+	},
 	// Hippopotas
 	hazardpass: {
 		accuracy: 100,
@@ -4743,6 +4797,7 @@ exports.BattleMovedex = {
 		name:"Legend's Ambition",
 		basepower:180,
 		pp:8,
+		flags: {protect: 1, mirror: 1},
 		category:'Special',
 		accuracy:100,
 		isViable:true,
