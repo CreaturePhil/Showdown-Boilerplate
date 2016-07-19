@@ -1,7 +1,27 @@
 'use strict';
 
 exports.BattleAbilities = {
-	// Asty
+	blessedhax: {
+		onStart: function (pokemon) {
+			this.boost({def:1,spd:1});
+		},
+		onResidual: function (pokemon) {
+			if (pokemon.activeTurns) {
+				this.boost({spe:1});
+			}
+		},
+		onModifyMovePriority: -2,
+		onModifyMove: function (move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (let i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance *= 2;
+				}
+			}
+		},
+		id:'blessedhax',
+		name:'Blessed Hax',
+	},
 	wonderbreaker: {
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
