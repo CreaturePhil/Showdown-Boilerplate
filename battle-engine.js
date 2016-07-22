@@ -642,9 +642,9 @@ BattlePokemon = (() => {
 		return boosts;
 	};
 	BattlePokemon.prototype.boostBy = function (boost) {
-		let changed = false;
+		let delta = 0;
 		for (let i in boost) {
-			let delta = boost[i];
+			delta = boost[i];
 			this.boosts[i] += delta;
 			if (this.boosts[i] > 6) {
 				delta -= this.boosts[i] - 6;
@@ -654,9 +654,8 @@ BattlePokemon = (() => {
 				delta -= this.boosts[i] - (-6);
 				this.boosts[i] = -6;
 			}
-			if (delta) changed = true;
 		}
-		return changed;
+		return delta;
 	};
 	BattlePokemon.prototype.clearBoosts = function () {
 		for (let i in this.boosts) {
@@ -2700,6 +2699,7 @@ Battle = (() => {
 					ModifyDamage: 1,
 					ModifySecondaries: 1,
 					ModifyWeight: 1,
+					TryAddVolatile: 1,
 					TryHit: 1,
 					TryHitSide: 1,
 					TryMove: 1,
@@ -3470,17 +3470,18 @@ Battle = (() => {
 
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
-			let center = false;
+			let actives = [];
 			for (let i = 0; i < this.sides.length; i++) {
 				for (let j = 0; j < this.sides[i].active.length; j++) {
 					if (!this.sides[i].active[j] || this.sides[i].active[j].fainted) continue;
-					if (this.sides[i].active[j].position === 1) break;
-					this.swapPosition(this.sides[i].active[j], 1, '[silent]');
-					center = true;
-					break;
+					actives.push(this.sides[i].active[j]);
 				}
 			}
-			if (center) this.add('-center');
+			if (!this.isAdjacent(actives[0], actives[1])) {
+				this.swapPosition(actives[0], 1, '[silent]');
+				this.swapPosition(actives[1], 1, '[silent]');
+				this.add('-center');
+			}
 		}
 
 		this.add('turn', this.turn);
@@ -3539,7 +3540,7 @@ Battle = (() => {
 		this.midTurn = true;
 		if (!this.currentRequest) this.go();
 	};
-	Battle.prototype.boost = function (boost, target, source, effect) {
+	Battle.prototype.boost = function (boost, target, source, effect, isSecondary, isSelf) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -3549,42 +3550,47 @@ Battle = (() => {
 		if (!target.isActive) return false;
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
-		let success = false;
+		let success = null;
 		let boosted = false;
 		for (let i in boost) {
 			let currentBoost = {};
 			currentBoost[i] = boost[i];
-			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
+			let boostBy = target.boostBy(currentBoost);
+			let msg = '-boost';
+			if (boost[i] < 0) {
+				msg = '-unboost';
+				boostBy = -boostBy;
+			}
+			if (boostBy) {
 				success = true;
-				let msg = '-boost';
-				if (boost[i] < 0) {
-					msg = '-unboost';
-					boost[i] = -boost[i];
-				}
 				switch (effect.id) {
 				case 'bellydrum':
 					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
 					break;
 				case 'bellydrum2':
-					this.add(msg, target, i, boost[i], '[silent]');
+					this.add(msg, target, i, boostBy, '[silent]');
 					this.add('-hint', "In Gen 2, Belly Drum boosts by 2 when it fails.");
 					break;
 				case 'intimidate': case 'gooey':
-					this.add(msg, target, i, boost[i]);
+					this.add(msg, target, i, boostBy);
 					break;
 				default:
 					if (effect.effectType === 'Move') {
-						this.add(msg, target, i, boost[i]);
+						this.add(msg, target, i, boostBy);
 					} else {
 						if (effect.effectType === 'Ability' && !boosted) {
 							this.add('-ability', target, effect.name, 'boost');
 							boosted = true;
 						}
-						this.add(msg, target, i, boost[i]);
+						this.add(msg, target, i, boostBy);
 					}
 					break;
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
+			} else if (effect.effectType === 'Ability') {
+				if (isSecondary) this.add(msg, target, i, boostBy);
+			} else if (!isSecondary && !isSelf) {
+				this.add(msg, target, i, boostBy);
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);

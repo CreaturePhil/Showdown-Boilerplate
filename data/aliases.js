@@ -19,7 +19,7 @@ exports.BattleAliases = {
 	"vgc": "VGC 2016",
 	"bsdoubles": "Battle Spot Doubles",
 	"bstriples": "Battle Spot Triples",
-	"seasonal": "[Seasonal] June Jubilee: Revenge",
+	"seasonal": "[Seasonal] Fireworks Frenzy",
 	"createapokemon": "CAP",
 	"2v2": "2v2 Doubles",
 	"cc1v1": "Challenge Cup 1v1",
@@ -189,6 +189,8 @@ exports.BattleAliases = {
 	"meowsticmale": "Meowstic",
 
 	// cosmetic formes
+	"burmysandy": "Burmy",
+	"burmytrash": "Burmy",
 	"shelloseast": "Shellos",
 	"shelloswest": "Shellos",
 	"gastrodone": "Gastrodon",
@@ -265,6 +267,7 @@ exports.BattleAliases = {
 	"aegiblade": "Aegislash-Blade",
 	"aegis": "Aegislash",
 	"aero": "Aerodactyl",
+	"amph": "Ampharos",
 	"azu": "Azumarill",
 	"bliss": "Blissey",
 	"bee": "Beedrill",
@@ -286,6 +289,7 @@ exports.BattleAliases = {
 	"gar": "Gengar",
 	"garde": "Gardevoir",
 	"gatr": "Feraligatr",
+	"gyara": "Gyarados",
 	"hera": "Heracross",
 	"hippo": "Hippowdon",
 	"honch": "Honchkrow",

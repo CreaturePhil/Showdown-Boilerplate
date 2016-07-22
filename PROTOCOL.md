@@ -186,15 +186,20 @@ represented by a space), and the rest of the string being their username.
 > is rated.
 
     |clearpoke
-    |poke|PLAYER|SPECIES
-    |poke|PLAYER|SPECIES
+    |poke|PLAYER|DETAILS|ITEM
+    |poke|PLAYER|DETAILS|ITEM
     ...
     |teampreview
 
 > These messages appear if you're playing a format that uses team previews.
-> `PLAYER` is the player ID (see `|player|`) and `SPECIES` is the
-> species of the Pokémon. `teampreview` commonly appears after `rule`
-> tags instead of after the Pokémon in the team preview.
+> `PLAYER` is the player ID (see `|player|`) and `DETAILS` describes the
+> pokemon. `|teampreview` commonly appears after `|rule` tags instead of
+> immediately after the pokemon list.
+>
+> The format for `DETAILS` is described in `|switch|`, although not
+> everything may be revealed. In particular, forme is sometimes not
+> specified (so Arceus would appear as `Arceus-*` since it's impossible
+> to identify Arceus forme in Team Preview).
 
 `|request|REQUEST`
 
@@ -255,16 +260,30 @@ tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
 > `|[anim] MOVE2` tells the client to use the animation of `MOVE2` instead
 > of `MOVE` when displaying to the client.
 
-`|switch|POKEMON|SPECIES|HP STATUS` or `|drag|POKEMON|SPECIES|HP STATUS`
+`|switch|POKEMON|DETAILS|HP STATUS` or `|drag|POKEMON|DETAILS|HP STATUS`
 
 > A Pokémon identified by `POKEMON` has switched in (the old Pokémon, if
 > still there, is switched out).
 >
-> The new Pokémon has species `SPECIES`, HP `HP`, and status `STATUS`. `HP`
-> is specified as a fraction; if it is your own Pokémon then it will be
-> `CURRENT/MAX`, if not, it will be `/100` if HP Percentage Mod is in effect
-> and `/48` otherwise. `STATUS` can be left blank, or it can be `slp`,
-> `par`, etc.
+> `DETAILS` is a comma-separated list of all information about a pokemon
+> visible on the battle screen: species, shininess, gender, and level. So it
+> starts with `SPECIES`, adding `, shiny` if it's shiny, `, M` if it's male,
+> `, F` if it's female, `, L##` if it's not level 100.
+>
+> So, for instance, `Deoxys-Speed` is a level 100 non-shiny genderless
+> Deoxys (Speed forme). `Sawsbuck, shiny, F, L50` is a level 50 shiny female
+> Sawsbuck (Spring form).
+>
+> `POKEMON|DETAILS` represents all the information that can reliably identify
+> a pokemon in a game. If two pokemon have the same `POKEMON|DETAILS` (which
+> will never happen in any format with Species Clause), you usually won't be
+> able to tell if the same pokemon switched in or a different pokemon switched
+> in.
+>
+> The switched Pokémon has HP `HP`, and status `STATUS`. `HP` is specified as
+> a fraction; if it is your own Pokémon then it will be `CURRENT/MAX`, if not,
+> it will be `/100` if HP Percentage Mod is in effect and `/48` otherwise.
+> `STATUS` can be left blank, or it can be `slp`, `par`, etc.
 >
 > `switch` means it was intentional, while `drag` means it was unintentional
 > (forced by Whirlwind, Roar, etc).
@@ -274,16 +293,15 @@ tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
 > Moves already active `POKEMON` to active field `POSITION` where the
 > leftmost position is 0 and each position to the right counts up by 1.
 
-`|detailschange|POKEMON|FORME|HP STATUS` or 
-`|detailschange|POKEMON|FORME, GENDER|HP STATUS` or 
-`|-formechange|POKEMON|FORME|HP STATUS`
+`|detailschange|POKEMON|DETAILS|HP STATUS` or 
+`|-formechange|POKEMON|SPECIES|HP STATUS`
 
 > The specified Pokémon has changed formes (via Mega Evolution, ability, etc.) 
-> to `FORME`. If the forme change cannot be reverted (Mega Evolution or a 
+> to `SPECIES`. If the forme change cannot be reverted (Mega Evolution or a 
 > Shaymin-Sky that is frozen), then `detailschange` will appear; otherwise, 
-> the client will send `-formechange`. `GENDER` can appear in `detailschange` 
-> if the transforming Pokémon has a gender, displayed as `M` or `F`
-> for male and female, respectively.
+> the client will send `-formechange`.
+>
+> For the `DETAILS` format, see the documentation for `|switch|`.
 
 `|cant|POKEMON|REASON` or `|cant|POKEMON|REASON|MOVE`
 
@@ -357,7 +375,8 @@ stat boosts are minor actions.
 `|-fieldstart|CONDITION`
 
 > The field condition `CONDITION` has started. Field conditions are all effects that
-> affect the entire field and aren't a weather.
+> affect the entire field and aren't a weather. (For example: Trick Room, Grassy
+> Terrain)
 
 `|-fieldend|CONDITION`
 
@@ -366,7 +385,7 @@ stat boosts are minor actions.
 `|-sidestart|SIDE|CONDITION`
 
 > A side condition `CONDITION` has started on `SIDE`. Side conditions are all effects
-> that affect one side of the field.
+> that affect one side of the field. (For example: Tailwind, Stealth Rock, Reflect)
 
 `|-sideend|SIDE|CONDITION`
 

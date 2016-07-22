@@ -3514,14 +3514,17 @@ exports.BattleMovedex = {
 			duration: 5,
 			onSetStatus: function (status, target, source, effect) {
 				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
-					this.debug('Interrupting sleep from Electric Terrain');
+					if (effect.effectType === 'Move' && !effect.secondaries) {
+						this.add('-activate', target, 'move: Electric Terrain');
+					}
 					return false;
 				}
 			},
-			onTryHit: function (target, source, move) {
+			onTryAddVolatile: function (status, target) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				if (move && move.id === 'yawn') {
-					return false;
+				if (status.id === 'yawn') {
+					this.add('-activate', target, 'move: Electric Terrain');
+					return null;
 				}
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
@@ -3530,8 +3533,12 @@ exports.BattleMovedex = {
 					return this.chainModify(1.5);
 				}
 			},
-			onStart: function () {
-				this.add('-fieldstart', 'move: Electric Terrain');
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Electric Terrain');
+				}
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
@@ -5583,8 +5590,12 @@ exports.BattleMovedex = {
 					return this.chainModify(1.5);
 				}
 			},
-			onStart: function (target, source) {
-				this.add('-fieldstart', 'move: Grassy Terrain');
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Grassy Terrain');
+				}
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 2,
@@ -7980,7 +7991,7 @@ exports.BattleMovedex = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 					if (!move.crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xA8F, 0x1000]);
+						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -9177,7 +9188,9 @@ exports.BattleMovedex = {
 			duration: 5,
 			onSetStatus: function (status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				this.debug('misty terrain preventing status');
+				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+					this.add('-activate', target, 'move: Misty Terrain');
+				}
 				return false;
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
@@ -9186,8 +9199,12 @@ exports.BattleMovedex = {
 					return this.chainModify(0.5);
 				}
 			},
-			onStart: function (side) {
-				this.add('-fieldstart', 'Misty Terrain');
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Misty Terrain');
+				}
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
@@ -11287,7 +11304,7 @@ exports.BattleMovedex = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 					if (!move.crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xA8F, 0x1000]);
+						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -11980,19 +11997,24 @@ exports.BattleMovedex = {
 			onSetStatus: function (status, target, source, effect) {
 				if (source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
 					this.debug('interrupting setStatus');
-					return false;
+					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+						this.add('-activate', target, 'move: Safeguard');
+					}
+					return null;
 				}
 			},
 			onTryConfusion: function (target, source, effect) {
 				if (source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
 					this.debug('interrupting addVolatile');
-					return false;
+					if (!effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+					return null;
 				}
 			},
-			onTryHit: function (target, source, move) {
-				if (move && move.id === 'yawn' && target !== source && (!move.infiltrates || target.side === source.side)) {
+			onTryAddVolatile: function (status, target, source, move) {
+				if (status.id === 'yawn' && target !== source && (!move.infiltrates || target.side === source.side)) {
 					this.debug('blocking yawn');
-					return false;
+					this.add('-activate', target, 'move: Safeguard');
+					return null;
 				}
 			},
 			onStart: function (side) {
@@ -15401,11 +15423,6 @@ exports.BattleMovedex = {
 						this.add('-fail', pokemon, 'slp', '[from] Uproar');
 					}
 					return null;
-				}
-			},
-			onAnyTryHit: function (target, source, move) {
-				if (move && move.id === 'yawn') {
-					return false;
 				}
 			},
 		},

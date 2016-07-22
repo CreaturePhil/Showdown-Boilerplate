@@ -231,6 +231,9 @@ let Room = (() => {
 			if (user.userid in this.auth) {
 				return this.auth[user.userid];
 			}
+			if (this.tour && this.tour.room) {
+				return this.tour.room.getAuth(user);
+			}
 			if (this.isPrivate === true) {
 				return ' ';
 			}
@@ -966,6 +969,7 @@ let BattleRoom = (() => {
 		}
 		if (this.tour) {
 			this.tour.onBattleWin(this, winnerid);
+			this.tour = null;
 		}
 		this.update();
 	};
@@ -1291,6 +1295,12 @@ let BattleRoom = (() => {
 	};
 	BattleRoom.prototype.destroy = function () {
 		// deallocate ourself
+
+		if (this.tour) {
+			// resolve state of the tournament;
+			this.tour.onBattleWin(this, '');
+			this.tour = null;
+		}
 
 		// remove references to ourself
 		for (let i in this.users) {
