@@ -865,6 +865,10 @@ let BattleRoom = (() => {
 	function BattleRoom(roomid, format, p1, p2, options) {
 		Room.call(this, roomid, "" + p1.name + " vs. " + p2.name);
 		this.modchat = (Config.battlemodchat || false);
+		this.modjoin = false;
+		this.slowchat = false;
+		this.filterStretching = false;
+		this.filterCaps = false;
 		this.reportJoins = Config.reportbattlejoins;
 
 		format = '' + (format || '');
@@ -1351,6 +1355,9 @@ let ChatRoom = (() => {
 		this.logFilename = '';
 		this.destroyingLog = false;
 		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
+		if (!this.modjoin) this.modjoin = false;
+		if (!this.filterStretching) this.filterStretching = false;
+		if (!this.filterCaps) this.filterCaps = false;
 
 		if (Config.logchat) {
 			this.rollLogFile(true);

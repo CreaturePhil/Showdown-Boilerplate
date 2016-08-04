@@ -2771,7 +2771,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 4,
 			noCopy: true, // doesn't get copied by Baton Pass
-			onStart: function (pokemon) {
+			onStart: function (pokemon, source, effect) {
 				if (!this.willMove(pokemon)) {
 					this.effectData.duration++;
 				}
@@ -2786,7 +2786,11 @@ exports.BattleMovedex = {
 							this.debug('Move out of PP');
 							return false;
 						} else {
-							this.add('-start', pokemon, 'Disable', moves[i].move);
+							if (effect.id === 'cursedbody') {
+								this.add('-start', pokemon, 'Disable', moves[i].move, '[from] ability: Cursed Body', '[of] ' + source);
+							} else {
+								this.add('-start', pokemon, 'Disable', moves[i].move);
+							}
 							this.effectData.move = pokemon.lastMove;
 							return;
 						}
@@ -5612,7 +5616,18 @@ exports.BattleMovedex = {
 					}
 				}
 			},
-			onEnd: function () {
+			onEnd: function (battle) {
+				this.debug('onResidual battle');
+				let pokemon;
+				for (let s in battle.sides) {
+					for (let p in battle.sides[s].active) {
+						pokemon = battle.sides[s].active[p];
+						if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+							this.debug('Pokemon is grounded, healing through Grassy Terrain.');
+							this.heal(pokemon.maxhp / 16, pokemon, pokemon);
+						}
+					}
+				}
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
 		},
@@ -10996,8 +11011,8 @@ exports.BattleMovedex = {
 			onTryHitPriority: 4,
 			onTryHit: function (target, source, effect) {
 				// Quick Guard blocks moves with positive priority, even those given increased priority by Prankster or Gale Wings.
-				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings)
-				if (effect && (effect.id === 'feint' || effect.priority <= 0 || effect.target === 'self')) {
+				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings; Quick Claw/Custap Berry do not count)
+				if (effect && (effect.id === 'feint' || effect.priority <= 0.1 || effect.target === 'self')) {
 					return;
 				}
 				this.add('-activate', target, 'Quick Guard');
@@ -11385,7 +11400,7 @@ exports.BattleMovedex = {
 			status: 'slp',
 		},
 		onHit: function (target, pokemon) {
-			if (pokemon.baseTemplate.species === 'Meloetta' && !pokemon.transformed) {
+			if (pokemon.baseTemplate.baseSpecies === 'Meloetta' && !pokemon.transformed) {
 				pokemon.addVolatile('relicsong');
 			}
 		},

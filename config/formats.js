@@ -81,17 +81,8 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		searchShow: false,
 		ruleset: ['RU'],
 		banlist: ['RU', 'BL3'],
-	},
-	{
-		name: "NU (suspect test)",
-		section: "ORAS Singles",
-
-		challengeShow: false,
-		ruleset: ['NU'],
-		banlist: [],
 	},
 	{
 		name: "PU",
@@ -277,32 +268,6 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "Sinnoh Classic",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3575910/\">Sinnoh Classic</a>"],
-		section: "ORAS Doubles",
-
-		gameType: 'doubles',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: ['Dragonite', 'Tyranitar', 'Heatran'],
-		onValidateSet: function (set) {
-			let problems = [];
-			let template = this.getTemplate(set.species || set.name);
-			if (template.num > 493) {
-				problems.push(template.species + " is banned by Sinnoh Classic.");
-			}
-			let item = this.getItem(set.item);
-			if (item.megaStone) {
-				problems.push(item.name + " is banned by Sinnoh Classic.");
-			}
-			return problems;
-		},
-	},
-	{
 		name: "Doubles Custom Game",
 		section: "ORAS Doubles",
 
@@ -359,6 +324,31 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "Unova Classic",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3577932/\">Unova Classic</a>"],
+		section: "ORAS Triples",
+
+		gameType: 'triples',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [6, 6],
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: [],
+		onValidateSet: function (set) {
+			let problems = [];
+			let template = this.getTemplate(set.species || set.name);
+			if (template.num > 649) {
+				problems.push(template.species + " is banned by Unova Classic.");
+			}
+			let item = this.getItem(set.item);
+			if (item.megaStone) {
+				problems.push(item.name + " is banned by Unova Classic.");
+			}
+			return problems;
+		},
+	},
+	{
 		name: "Triples Custom Game",
 		section: "ORAS Triples",
 
@@ -376,66 +366,62 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Enchanted Items",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
+		name: "Follow The Leader",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3565685/\">Follow The Leader</a>"],
 		section: "OM of the Month",
 		column: 2,
 
-		mod: 'enchanteditems',
-		ruleset: ['OU'],
-		banlist: ['Kyurem-Black', 'Manaphy', 'Shedinja', 'Togekiss', 'Chatter',
-			'Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fire Gem',
-			'Ice Gem', 'Poison Gem', 'Poke Ball', 'Psychic Gem', 'Steel Gem', 'Wave Incense',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew',
+			'Arena Trap', 'Huge Power', 'Imposter', 'Pure Power', 'Shadow Tag', 'Chatter',
 		],
-		onValidateSet: function (set) {
-			let ability = this.getAbility(set.ability);
-			let item = this.getItem(set.item);
-			if (ability.item && ability.item === item.id) {
-				return ["You are not allowed to have " + ability.name + " and " + item.name + " on the same Pokémon."];
+		validateSet: function (set, teamHas) {
+			let species = toId(set.species);
+			let template = this.tools.getTemplate(species);
+			if (!template.exists) return ["" + set.species + " is not a real Pok\u00E9mon."];
+			if (template.battleOnly) template = this.tools.getTemplate(template.baseSpecies);
+			if (this.tools.getBanlistTable(this.format)[template.id] || template.tier in {'Uber': 1, 'Unreleased': 1} && template.species !== 'Aegislash') {
+				return ["" + template.species + " is banned by Follow The Leader."];
 			}
-		},
-		onValidateTeam: function (team) {
-			let abilityTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let ability = this.getAbility(team[i].ability);
-				if (!abilityTable[ability.id]) abilityTable[ability.id] = 0;
-				if (++abilityTable[ability.id] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getItem(ability.item).name + ")"];
-				}
-				let item = toId(team[i].item);
-				if (!item) continue;
-				item = this.getItem(item);
-				ability = item.ability;
-				if (!ability) continue;
-				if (!abilityTable[ability]) abilityTable[ability] = 0;
-				if (++abilityTable[ability] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item.name + ")"];
-				}
-			}
-		},
-		onFaint: function (pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
-		},
-		onSwitchOut: function (pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+
+			if (!teamHas.donorTemplate) teamHas.donorTemplate = template;
+			let name = set.name;
+			if (name === set.species) delete set.name;
+			set.species = teamHas.donorTemplate.species;
+			let problems = this.validateSet(set, teamHas, teamHas.donorTemplate);
+
+			set.species = template.species;
+			set.name = (name === set.species ? "" : name);
+
+			return problems;
 		},
 	},
 	{
-		name: "AAA Ubers",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/posts/6007526/\">AAA Ubers</a>"],
+		name: "Nature Swap",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3577739/\">Nature Swap</a>"],
 		section: "OM of the Month",
 
-		ruleset: ['Ubers'],
-		banlist: ['Ignore Illegal Abilities', 'Shedinja'],
-		onValidateSet: function (set) {
-			let bannedAbilities = {'Arena Trap': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple': 1, 'Wonder Guard': 1};
-			if (set.ability in bannedAbilities) {
-				let template = this.getTemplate(set.species || set.name);
-				let legalAbility = false;
-				for (let i in template.abilities) {
-					if (set.ability === template.abilities[i]) legalAbility = true;
+		ruleset: ['OU'],
+		banlist: ['Talonflame'],
+		onBegin: function () {
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				let nature = pokemon.battle.getNature(pokemon.set.nature);
+				if (nature.plus !== nature.minus) {
+					["baseTemplate", "canMegaEvo"].forEach(key => {
+						if (pokemon[key]) {
+							let template = Object.assign({}, this.getTemplate(pokemon[key]));
+							template.baseStats = Object.assign({}, template.baseStats);
+							let plus = template.baseStats[nature.plus];
+							let minus = template.baseStats[nature.minus];
+							template.baseStats[nature.plus] = minus;
+							template.baseStats[nature.minus] = plus;
+							pokemon[key] = template;
+						}
+					});
+					pokemon.formeChange(pokemon.baseTemplate);
 				}
-				if (!legalAbility) return ["The ability " + set.ability + " is banned on Pok\u00e9mon that do not naturally have it."];
 			}
 		},
 	},
@@ -730,14 +716,14 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 1] UU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3573896/\">RBY UU</a>"],
+		name: "[Gen 2] UU",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3576710/\">GSC UU</a>"],
 		section: "RoA Spotlight",
 		column: 3,
 
-		mod: 'gen1',
-		ruleset: ['[Gen 1] OU'],
-		banlist: ['OU'],
+		mod: 'gen2',
+		ruleset: ['[Gen 2] OU'],
+		banlist: ['OU', 'BL'],
 	},
 
 	// BW2 Singles

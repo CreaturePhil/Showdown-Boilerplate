@@ -172,9 +172,11 @@ exports.BattleAbilities = {
 	"aromaveil": {
 		desc: "This Pokemon and its allies cannot be affected by Attract, Disable, Encore, Heal Block, Taunt, or Torment.",
 		shortDesc: "Protects user/allies from Attract, Disable, Encore, Heal Block, Taunt, and Torment.",
-		onAllyTryHit: function (target, source, move) {
-			if (move && move.id in {attract:1, disable:1, encore:1, healblock:1, taunt:1, torment:1}) {
-				this.add('-activate', this.effectData.target, 'ability: Aroma Veil', '[of] ' + target);
+		onAllyTryAddVolatile: function (status, target, source, effect) {
+			if (status.id in {attract:1, disable:1, encore:1, healblock:1, taunt:1, torment:1}) {
+				if (effect.effectType === 'Move') {
+					this.add('-activate', this.effectData.target, 'ability: Aroma Veil', '[of] ' + target);
+				}
 				return null;
 			}
 		},
@@ -234,7 +236,7 @@ exports.BattleAbilities = {
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost['def'] && boost['def'] < 0) {
-				boost['def'] = 0;
+				delete boost['def'];
 				if (!effect.secondaries) this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", "[of] " + target);
 			}
 		},
@@ -409,7 +411,7 @@ exports.BattleAbilities = {
 			if (!source || source.volatiles['disable']) return;
 			if (source !== target && move && move.effectType === 'Move') {
 				if (this.random(10) < 3) {
-					source.addVolatile('disable');
+					source.addVolatile('disable', this.effectData.target);
 				}
 			}
 		},
@@ -424,7 +426,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				if (this.random(10) < 3) {
-					source.addVolatile('attract', target);
+					source.addVolatile('attract', this.effectData.target);
 				}
 			}
 		},
@@ -831,8 +833,9 @@ exports.BattleAbilities = {
 			}
 			if (showMsg && !effect.secondaries) this.add('-fail', this.effectData.target, 'unboost', '[from] ability: Flower Veil', '[of] ' + target);
 		},
-		onAllySetStatus: function (status, target) {
+		onAllySetStatus: function (status, target, source, effect) {
 			if (target.hasType('Grass')) {
+				if (!effect || !effect.status) return false;
 				this.add('-activate', this.effectData.target, 'ability: Flower Veil', '[of] ' + target);
 				return null;
 			}
@@ -1128,7 +1131,7 @@ exports.BattleAbilities = {
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost['atk'] && boost['atk'] < 0) {
-				boost['atk'] = 0;
+				delete boost['atk'];
 				if (!effect.secondaries) this.add("-fail", target, "unboost", "Attack", "[from] ability: Hyper Cutter", "[of] " + target);
 			}
 		},
@@ -1323,7 +1326,7 @@ exports.BattleAbilities = {
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost['accuracy'] && boost['accuracy'] < 0) {
-				boost['accuracy'] = 0;
+				delete boost['accuracy'];
 				if (!effect.secondaries) this.add("-fail", target, "unboost", "accuracy", "[from] ability: Keen Eye", "[of] " + target);
 			}
 		},
@@ -2064,6 +2067,7 @@ exports.BattleAbilities = {
 			move.secondaries.push({
 				chance: 30,
 				status: 'psn',
+				ability: this.getAbility('poisontouch'),
 			});
 		},
 		id: "poisontouch",

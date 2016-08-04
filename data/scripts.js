@@ -523,7 +523,7 @@ exports.BattleScripts = {
 				didSomething = true;
 			}
 			if (moveData.status) {
-				hitResult = target.trySetStatus(moveData.status, pokemon, move);
+				hitResult = target.trySetStatus(moveData.status, pokemon, moveData.ability ? moveData.ability : move);
 				if (!hitResult && move.status) return hitResult;
 				didSomething = didSomething || hitResult;
 			}
@@ -2225,7 +2225,7 @@ exports.BattleScripts = {
 			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
 
 			// Limit 1 of any type combination, 2 in monotype
-			let typeCombo = types.sort().join();
+			let typeCombo = types.slice().sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
 				typeCombo = set.ability;
@@ -2295,8 +2295,6 @@ exports.BattleScripts = {
 		let typeCount = {};
 		let typeComboCount = {};
 		let baseFormes = {};
-		let uberCount = 0;
-		let puCount = 0;
 		let teamDetails = {megaCount: 0, stealthRock: 0, hazardClear: 0};
 
 		while (pokemonPool.length && pokemon.length < 6) {
@@ -2380,7 +2378,7 @@ exports.BattleScripts = {
 			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
 
 			// Limit 1 of any type combination
-			let typeCombo = types.join();
+			let typeCombo = types.slice().sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
@@ -2405,13 +2403,6 @@ exports.BattleScripts = {
 				}
 			}
 			typeComboCount[typeCombo] = 1;
-
-			// Increment Uber/NU counters
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'PU') {
-				puCount++;
-			}
 
 			// Increment mega, stealthrock, weather, and base species counters
 			if (isMegaSet) teamDetails.megaCount++;
@@ -3582,7 +3573,7 @@ exports.BattleScripts = {
 			if (skip) continue;
 
 			// Limit 1 of any type combination
-			let typeCombo = types.join();
+			let typeCombo = types.slice().sort().join();
 			if (typeCombo in typeComboCount) continue;
 
 			// Okay, the set passes, add it to our team

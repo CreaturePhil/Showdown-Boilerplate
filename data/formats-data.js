@@ -3173,7 +3173,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 50, "gender": "M", "nature": "Naughty", "moves":["hydropump", "stoneedge", "fireblast", "dragonclaw"], "pokeball": "cherishball"},
 			{"generation": 5, "level": 50, "shiny": 1, "isHidden": false, "moves":["dragondance", "dragonclaw", "outrage", "aerialace"], "pokeball": "cherishball"},
 		],
-		tier: "UU",
+		tier: "BL",
 	},
 	salamencemega: {
 		randomBattleMoves: ["doubleedge", "return", "fireblast", "earthquake", "dracometeor", "roost", "dragondance"],
@@ -3725,6 +3725,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 48, "gender": "M", "isHidden": true, "moves":["dragonclaw", "dig", "crunch", "outrage"]},
 			{"generation": 6, "level": 48, "gender": "M", "isHidden": false, "moves":["dracometeor", "dragonclaw", "dig", "crunch"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "gender": "M", "isHidden": false, "moves":["slash", "dragonclaw", "dig", "crunch"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 66, "gender": "F", "perfectIVs": 3, "isHidden": false, "moves":["dragonrush", "earthquake", "brickbreak", "gigaimpact"], "pokeball": "cherishball"},
 		],
 		tier: "OU",
 	},
