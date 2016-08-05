@@ -266,7 +266,7 @@ exports.grouplist = [
 		symbol: '⚔',
 		id: "dragonknight",
 		name: "Dragon Knight",
-		inherit: '¿',
+		inherit: '~',
 		globalonly: true
 	},
 	{
