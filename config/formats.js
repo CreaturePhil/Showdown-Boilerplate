@@ -507,7 +507,7 @@ exports.Formats = [
                 this.add('-start', source, 'typechange', type);
             }
         }
-    }
+    },
 	{
 		name: "Trademarked",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>"],
