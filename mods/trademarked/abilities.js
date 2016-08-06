@@ -1059,13 +1059,13 @@ exports.BattleAbilities = {
 		id: "rest",
 		name: "Rest",
 	},
-	'roar': {
+	/*'roar': {
 		onStart: function (source) {
 			this.useMove('Roar', source);
 		},
 		id: "roar",
 		name: "Roar",
-	},
+	},*/
 	'rockpolish': {
 		onStart: function (source) {
 			this.useMove('Rock Polish', source);
@@ -1507,13 +1507,13 @@ exports.BattleAbilities = {
 		id: "watersport",
 		name: "Water Sport",
 	},
-	'whirlwind': {
+/*	'whirlwind': {
 		onStart: function (source) {
 			this.useMove('Whirlwind', source);
 		},
 		id: "whirlwind",
 		name: "Whirlwind",
-	},
+	}, */
 	'wideguard': {
 		onStart: function (source) {
 			this.useMove('Wide Guard', source);
