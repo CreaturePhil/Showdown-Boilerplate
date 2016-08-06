@@ -29,6 +29,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'feelslatios': 'http://i.imgur.com/QCoBmpe.gif',
 		'feelsvpn':  'http://i.imgur.com/ODTZISl.gif',
 		'feelsabsol':  'http://i.imgur.com/v4l4e0o.gif',
+		'zaa':'http://i.imgur.com/j4c4T0p.png',
 	});
 }
 
