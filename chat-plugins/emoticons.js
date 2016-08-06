@@ -30,6 +30,21 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'feelsvpn':  'http://i.imgur.com/ODTZISl.gif',
 		'feelsabsol':  'http://i.imgur.com/v4l4e0o.gif',
 		'zaa':'http://i.imgur.com/j4c4T0p.png',
+		'feelsamph':'http://i.imgur.com/7VWktCg.gif',
+		'feelsquirt':'http://i.imgur.com/kXqInoX.gif',
+		'feelslitten': 'http://i.imgur.com/mXIxRKl.gif',
+		'feelsumb': 'http://i.imgur.com/O7cudpK.gif',
+		'feelswhim': 'http://i.imgur.com/ddJVotF.gif',
+		'feelsfen':'http://i.imgur.com/9f39HYb.gif',
+		'feelsshinx': 'http://i.imgur.com/HmGbocn.gif',
+		'feelstini': 'http://i.imgur.com/mmUMAVI.gif',
+		'feelscune': 'http://i.imgur.com/QOBU55D.gif',
+		'feelssylv': 'http://i.imgur.com/o0CQTQw.gif',
+		'feelszor': 'http://i.imgur.com/dZR0cF9.gif',
+		'feelsrachi': 'http://i.imgur.com/go0Br3Z.gif',
+		'feelsshumb': 'http://i.imgur.com/myIkCJd.gif',
+		'feelstyph': 'http://i.imgur.com/2oL9Vcv.gif',
+		'feelssab': 'http://i.imgur.com/SrUxt0o.gif',
 	});
 }
 
