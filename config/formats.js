@@ -157,6 +157,20 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
+        name: "RU Theorymon",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3568052/\">np: RU Stage 15</a>",
+            "&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3558546/\">RU Viability Ranking</a>",
+        ],
+        section: "ORAS Singles",
+        searchShow: false,
+        mod: 'rutheorymon',
+
+        ruleset: ['UU'],
+        banlist: ['UU', 'BL2'],
+  },
+	{
 		name: "Custom Game",
 		section: "ORAS Singles",
 
@@ -449,6 +463,14 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Groudon-Primal', 'Kyogre-Primal', 'Arena Trap', 'Huge Power', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter'],
 	},
+	{
+			 name: "Bad \'n Boosted",
+			 section: "Other Metagames",
+
+			 mod: 'bad',
+			 ruleset: ['Ubers'],
+			 banlist: ['Eviolite', 'Huge Power', 'Pure Power']
+	 },
 	{
 		name: "Enchanted Items",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
@@ -3273,6 +3295,437 @@ exports.Formats = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
+	{
+        name: "[Gen 1] OU + Heal Bell",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
+        ],
+        section: "What If",
+        column: 4,
+
+        mod: 'gen1healbell',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 1] OU + Sleep Talk",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen1sleeptalk',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 1] OU + Hidden Power",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen1hiddenpower',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 1] OU + Substitute",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen1substitute',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 1] OU + Rapid Spin & Spikes",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen1rapidspin',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 1] OU + Shadow Ball",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen1shadowball',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 1] OU + Toxic",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen1toxic',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 1] OU + Jellicent",
+        section: "What If",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>",
+        ],
+
+        mod: 'gen1jellicent',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },/*
+    {
+        name: "[Gen 2] OU + No Special Split",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen2specialsplit',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },*/
+    {
+        name: "[Gen 2] OU + Abilities",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen2abilities',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 2] OU + No Steel-Types",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen2steeltypes',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 2] OU + Hyper Beam Glitch",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen2hyperbeam',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 2] OU + Calm Mind",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen2calmmind',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 2] OU + DPP Evolutions",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen2dpp',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },/*
+    {
+        name: "[Gen 2] OU + Predictable Phazing",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen2phazing',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber'],
+    },*/
+    {
+        name: "[Gen 3] OU + Gastrodon",
+        section: "What If",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>",
+        ],
+
+        mod: 'gen3gastrodon',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber', 'Smeargle + Ingrain'],
+    },
+    {
+        name: "[Gen 3] OU + Sand Sp. Def Boost",
+        section: "What If",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>",
+        ],
+
+        mod: 'gen3sand',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber', 'Smeargle + Ingrain'],
+    },
+    {
+        name: "[Gen 3] OU + U-turn",
+        section: "What If",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>",
+        ],
+
+        mod: 'gen3uturn',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber', 'Smeargle + Ingrain'],
+    },
+    {
+        name: "[Gen 3] OU + Trick Room",
+        section: "What If",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>",
+        ],
+
+        mod: 'gen3trickroom',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber', 'Smeargle + Ingrain'],
+    },/*
+    {
+        name: "[Gen 3] OU + Gen 2 Moves",
+        section: "What If",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>",
+        ],
+
+        mod: 'gen3gen2',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber', 'Smeargle + Ingrain'],
+    },*/
+    {
+        name: "[Gen 3] OU + Choice Scarf",
+        section: "What If",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>",
+        ],
+
+        mod: 'gen3choicescarf',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber', 'Smeargle + Ingrain'],
+    },
+    {
+        name: "[Gen 3] OU + Gyro Ball",
+        section: "What If",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>",
+        ],
+
+        mod: 'gen3gyroball',
+        ruleset: ['Pokemon', 'Standard'],
+        banlist: ['Uber', 'Smeargle + Ingrain'],
+    },
+    {
+        name: "[Gen 4] OU + No Stealth Rock",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen4',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
+        banlist: ['Uber', 'Stealth Rock'],
+    },
+    {
+        name: "[Gen 4] OU + Team Preview",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
+        ],
+        section: "What If",
+
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 4] OU + No Type Split",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen4split',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 4] OU + Air Balloon",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen4balloon',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 4] OU + No Choice Items",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
+        ],
+        section: "What If",
+
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
+        banlist: ['Uber', 'Choice Scarf', 'Choice Specs', 'Choice Band'],
+    },
+    {
+        name: "[Gen 4] OU + Weather",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen4weather',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 4] OU + Knock Off",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen4knockoff',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
+        banlist: ['Uber'],
+    },
+    {
+        name: "[Gen 5] OU + Fairy & Mega",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen5fairy',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
+        banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
+    },
+    {
+        name: "[Gen 5] OU + Explosion Buff",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen5explosion',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
+        banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
+    },/*
+    {
+        name: "[Gen 5] OU + No EVs & IVs",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen5evs',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
+        banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
+    },*/
+    {
+        name: "[Gen 5] OU + Gen 6 Steel-Types",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen5gen6',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
+        banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
+    },
+    {
+        name: "[Gen 5] OU + Dream World",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen5dreamworld',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
+        banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
+    },
+    {
+        name: "[Gen 5] OU + Defog",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen5defog',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
+        banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
+    },
+    /*{
+        name: "[Gen 5] OU + Spikes",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
+        ],
+        section: "What If",
+
+        mod: 'gen5spikes',
+        ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
+        banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
+    },*/
 
 	// DPP Singles
 	///////////////////////////////////////////////////////////////////
