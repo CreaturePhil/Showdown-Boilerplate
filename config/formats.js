@@ -1461,10 +1461,10 @@ exports.Formats = [
 				this.add('c|%SnakeXZero5|A project on Friday and its Monday, YAY!');
 			}
 			if(name === 'classyz') {
-				this.add('c|%ClassyZ|pro tip: if u kill me go straight to hell do not pass go do not collect $200');
+				this.add('c|@ClassyZ|pro tip: if u kill me go straight to hell do not pass go do not collect $200');
 			}
 			if(name === 'flygonerz') {
-				this.add('c|@Flygonerz|The Sand Dweller has arrived');
+				this.add('c|&Flygonerz|The Sand Dweller has arrived');
 			}
 			if(name === 'pieddychomp') {
 				this.add('c|&PI★EddyChomp|Hey guys, watch me KO this guy lmao xaa :)');
@@ -1477,6 +1477,9 @@ exports.Formats = [
 			}
 			if(name === 'charizard8888') {
 				this.add('c|&charizard8888|It\'s **Outragin\' Time !!**');
+			}
+			if(name === 'theswordbreaker') {
+				this.add('c|@Theswordbreaker|It\'s time to break some blades >:)');
 			}
 			if(name === 'ransei') {
 				this.add('c|~Ransei|yo');
@@ -1497,10 +1500,10 @@ exports.Formats = [
 				this.add('c|%SnakeXZero5|I JUST FORGOT THERES A SUDDEN PROJECT TOMMOROW');
 			}
 			if(name === 'classyz') {
-				this.add('c|%ClassyZ|go straight to hell do not pass go do not collect $200');
+				this.add('c|@ClassyZ|go straight to hell do not pass go do not collect $200');
 			}
 			if(name === 'flygonerz') {
-				this.add('c|@Flygonerz|Plox nerf, Ninten__doh__!');
+				this.add('c|&Flygonerz|Plox nerf, Ninten__doh__!');
 			}
 			if(name === 'pieddychomp') {
 				this.add("c|&PI★EddyChomp|Fuck this shit, I got rekt. I\'ll get MY REVENGE! RAWR!!!!");
@@ -1513,6 +1516,9 @@ exports.Formats = [
 			}
 			if (name === 'charizard8888') {
 				this.add('c|&charizard8888|I\'m Outta here!');
+			}
+			if(name === 'theswordbreaker') {
+				this.add('c|@Theswordbreaker|Feh....I.....resign from this farce....ehh');
 			}
 			if (name === 'xprienzo') {
  				this.add('c|⚔XpRienzo ☑-☑|Bleh');

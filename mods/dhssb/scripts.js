@@ -53,6 +53,12 @@ exports.BattleScripts = {
 				signatureMove: "Logic Power",
 				evs: {atk:252, spd:6, spe:252}, nature: 'Adamant',
 			},
+			'Theswordbreaker': {
+			    species: 'Arceus-Dragon', ability: 'Breaking Point', item: 'Draco Plate', gender: 'M',
+				moves: ['spacialrend', 'focusblast', 'blizzard'],
+				signatureMove: "Wait and hope",
+				evs: {spa:252, spd:4, spe:252}, nature: 'Modest',
+			},
 			'The God of Haxorus': {
 				species: 'Haxorus', ability: 'Blessed Hax', item: 'Life Orb', gender: 'M',
 				moves: ['ironhead', 'diamondstorm', 'sacredfire'],
@@ -63,7 +69,7 @@ exports.BattleScripts = {
  				species: 'Reshiram', ability: 'Adaptability', item: 'Charcoal', gender: 'M',
  				moves: ['fusionflare', 'spacialrend', 'voltswitch'],
  				signatureMove: "blehflame",
- 				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
+ 				evs: {spa:254, spd:4, spe:252}, nature: 'Timid',
  			},
 		};
 

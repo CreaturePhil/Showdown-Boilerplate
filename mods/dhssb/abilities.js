@@ -1,6 +1,28 @@
 'use strict';
 
 exports.BattleAbilities = {
+	breakingpoint: {
+		onFoeTrapPokemon: function (pokemon) {
+			if ((!pokemon.hasAbility('shadowtag')&&!pokemon.hasAbility('breakingpoint')) && this.isAdjacent(pokemon, this.effectData.target)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if ((!pokemon.hasAbility('shadowtag')&&!pokemon.hasAbility('breakingpoint')) && this.isAdjacent(pokemon, source)) {
+				pokemon.maybeTrapped = true;
+			}
+		},
+		onAnyAccuracy: function (accuracy, target, source, move) {
+			if (move && (source === this.effectData.target || target === this.effectData.target)) {
+				return true;
+			}
+			return accuracy;
+		},
+		id: "breakingpoint",
+		name: "Breaking Point",
+		rating: 2,
+	},
 	epicclaws: {
 		onModifyAtkPriority: 5,
 		onModifyAtk: function (atk) {

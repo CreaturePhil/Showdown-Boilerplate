@@ -156,6 +156,55 @@ evalchomp: {
 			this.add('-anim', source, "Outrage", target);
 		},
 	},
+	"waitandhope": {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		id: "waitandhope",
+		name: "Wait and hope",
+		pp: 20,
+		priority: 0,
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
+		onTry: function (source, target, move) {
+			if (source.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', source, "skyattack", target);
+			if (!this.runEvent('ChargeMove', source, target, move)) {
+				this.add('-anim', source, "skyattack", target);
+				return;
+			}
+			source.addVolatile('twoturnmove', target);
+			return null;
+		},
+		effect: {
+			duration: 2,
+			onAccuracy: function (accuracy, target, source, move) {
+				if (move.id === 'gust' || move.id === 'twister') {
+					return;
+				}
+				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
+					return;
+				}
+				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
+					return;
+				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				return 0;
+			},
+			onSourceModifyDamage: function (damage, source, target, move) {
+				if (move.id === 'gust' || move.id === 'twister') {
+					return this.chainModify(2);
+				}
+			},
+		},
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
+		target: "any",
+		type: "Flying",
+	},
 	"yomammajoke": {
 		accuracy: 100,
 		basePower: 100,
