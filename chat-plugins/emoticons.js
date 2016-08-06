@@ -20,6 +20,15 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'(ditto)': 'https://cdn.betterttv.net/emote/554da1a289d53f2d12781907/2x',
 		'#freewolf': 'http://i.imgur.com/ybxWXiG.png',
 		'feelsbn': 'http://i.imgur.com/wp51rIg.png',
+		'feelslugia': 'http://orig12.deviantart.net/3fa8/f/2011/211/9/8/98d68bd55eda5dd504b543cd35079dd5-d424a9r.gif',
+		'feelscx':  'http://i.imgur.com/ZsTZ6WD.gif',
+		'feelschar':  'http://i.imgur.com/TRnvzq0.gif',
+		'feelslk':  'https://raw.githubusercontent.com/thearkguy/DHserver/master/config/avatars/thegodofhaxorus.gif',
+		'feelslux':  'http://i.imgur.com/hDKCZMt.gif',
+		'feelslatias':  'http://i.imgur.com/OPZuG3f.gif',
+		'feelslatios': 'http://i.imgur.com/QCoBmpe.gif',
+		'feelsvpn':  'http://i.imgur.com/ODTZISl.gif',
+		'feelsabsol':  'http://i.imgur.com/v4l4e0o.gif',
 	});
 }
 
