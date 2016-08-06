@@ -467,7 +467,7 @@ exports.Formats = [
 			 name: "Bad \'n Boosted",
 			 section: "Other Metagames",
 
-			 mod: 'bad',
+			 mod: 'bnb',
 			 ruleset: ['Ubers'],
 			 banlist: ['Eviolite', 'Huge Power', 'Pure Power']
 	 },
