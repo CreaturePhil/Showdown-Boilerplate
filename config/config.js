@@ -301,6 +301,15 @@ exports.grouplist = [
 	},
 	{
 		symbol: '#',
+		id: "founder",
+		name: "Room Founder",
+		inherit: '#',
+		jurisdiction: 'u',
+		roomowner: true,
+		roomonly: true,
+	},
+	{
+		symbol: '#',
 		id: "owner",
 		name: "Room Owner",
 		inherit: '@',
