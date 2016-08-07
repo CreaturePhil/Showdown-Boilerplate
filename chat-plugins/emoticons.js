@@ -45,6 +45,8 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'feelsshumb': 'http://i.imgur.com/myIkCJd.gif',
 		'feelstyph': 'http://i.imgur.com/2oL9Vcv.gif',
 		'feelssab': 'http://i.imgur.com/SrUxt0o.gif',
+		'lelelol': 'http://i.imgur.com/R2g0RHT.gif',
+		'oshaswag': 'http://orig08.deviantart.net/a30d/f/2015/010/5/8/oshawott_swag_by_whatiget4beinganerd-d82v3br.gif',
 	});
 }
 
