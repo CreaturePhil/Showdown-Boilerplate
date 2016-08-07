@@ -847,8 +847,6 @@ exports.commands = {
 		}
 	},
 
-},
-
 roomowner: function (target, room, user) {
 if (!room.chatRoomData) {
 	return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
