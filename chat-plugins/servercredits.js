@@ -13,12 +13,13 @@ exports.commands = {
 		this.popupReply("|html|" + "<font size=4><center><u><b>Dragon Heaven Credits!</b></u></center></font><br />" +
 					"<u>Owners:</u><br />" +
 					"- " + hashColor('XpRienzo', true) + " (Founder, Host, Sysadmin)<br />" +
-                    "- " + hashColor('Paul☯71◕‿◕', true) + " (Sysadmin, Developer, Lead Policy)<br />" +
+                    "- " + hashColor('Paul☯71◕‿◕', true) + " (Developer, Lead Policy)<br />" +
                     "- " + hashColor('Snaq', true) + " (Major Contributor, Formats)<br />" +
-                    "- " + hashColor('Spandan', true) + " (Sysadmin, Format Developer)<br />" +
+                    "- " + hashColor('Spandan', true) + " (Format Developer)<br />" +
 					"<br />" +
 					"<u>Development:</u><br />" +
 					"- " + hashColor('charizard8888', true) + " (Intro's)<br />" +
+                    "- " + hashColor('Eternal Mayhem', true) + " (Intro's)<br />" +
 					"<br />" +
 					"<u>Special Thanks:</u><br />" +
 					"- Current staff team<br />" +
