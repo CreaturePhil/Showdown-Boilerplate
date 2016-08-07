@@ -53,26 +53,26 @@ exports.BattleMovedex = {
 		},
 	},
 	hyperspeedpunch: {
-		accuracy: 100,
-		basePower: 35,
-		category: "Physical",
-		id: "hyperspeedpunch",
-		isViable: true,
-		isNonstandard: true,
-		name: "Hyperspeed Punch",
-		pp: 10,
-		priority: 2,
-		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Mach Punch", target);
-		},
-		secondary: {
-			chance: 20,
-			volatileStatus: 'flinch',
-		},
-		target: "normal",
-		type: "Bug",
+	accuracy: 100,
+	basePower: 45,
+	category: "Physical",
+	id: "hyperspeedpunch",
+	isViable: true,
+	isNonstandard: true,
+	name: "Hyperspeed Punch",
+	pp: 10,
+	priority: 2,
+	flags: {protect: 1, mirror: 1},
+	onPrepareHit: function (target, source) {
+		this.attrLastMove('[still]');
+		this.add('-anim', source, "Mach Punch", target);
+	},
+	secondary: {
+		chance: 20,
+		volatileStatus: 'flinch',
+	},
+	target: "normal",
+	type: "Bug",
 	},
 evalchomp: {
 		accuracy: 100,

@@ -12,10 +12,10 @@ exports.BattleScripts = {
 				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
 			},
 			'ClassyZ': {
-				species: 'Scizor', ability: 'Technician', item: 'Scizorite', gender: 'F', shiny: true,
-				moves: ['machpunch', 'bulletpunch', 'swordsdance'], name: 'classy',
+				species: 'Scizor-Mega', ability: 'Technician', item: 'Scizorite', gender: 'F', shiny: true,
+				moves: ['machpunch', 'bulletpunch', 'swordsdance'],
 				signatureMove: 'Hyperspeed Punch',
-				evs: {atk:252, spd:4, spe:252}, nature: 'Adamant',
+				evs: {atk:252, spd:4, hp:252}, nature: 'Adamant',
 			},
 			'PI EddyChomp': {
 				species: 'Garchomp-Mega', ability: 'Epic Claws', item: 'Leftovers',
