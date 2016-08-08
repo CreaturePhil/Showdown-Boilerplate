@@ -2635,7 +2635,7 @@ exports.Formats = [
 	{
         name: "Protean Palace",
 				desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/protean-palace.3496299/\">Protean Palace</a>"],
-				section: Old OMotMs",
+				section: "Old OMotMs",
 				column: 2,
 
         ruleset: ['Pokemon', 'Standard', 'Team Preview'],
