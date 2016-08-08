@@ -1,3 +1,4 @@
+'use strict';
 exports.BattleStatuses = {
 // ClassyZ
 	simpleinnate: {
