@@ -368,7 +368,7 @@ exports.Formats = [
 	{
 		name: "Random Battle",
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
-		section: "ORAS Singles",
+		section: "Randomized Metas",
 		column: 2,
 
 		team: 'random',
@@ -2635,7 +2635,7 @@ exports.Formats = [
 	{
         name: "Protean Palace",
 				desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/protean-palace.3496299/\">Protean Palace</a>"],
-				section: "Past OMotMs",
+				section: Old OMotMs",
 				column: 2,
 
         ruleset: ['Pokemon', 'Standard', 'Team Preview'],
@@ -2741,7 +2741,7 @@ exports.Formats = [
 		desc: [
 	     		"&bullet; <a href=\"http://www.smogon.com/forums/threads/cross-evolution-playable-on-rom.3569577\">Cross Evolution</a>",
 	     ],
-		section: "Other Metagames",
+		section: "New Other Metagames",
 
 		mod: 'crossevolution',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
