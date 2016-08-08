@@ -16,7 +16,7 @@ let trainersprites = [1, 2, 101, 102, 169, 170, 265, 266, 168];
  * @param {Object|String} user - if isOnline then Object else String
  * @param {String} image
  */
-funcustomavatartion Profile(isOnline, user, image) {
+function Profile(isOnline, user, image) {
 	this.isOnline = isOnline || false;
 	this.user = user || null;
 	this.image = image;
