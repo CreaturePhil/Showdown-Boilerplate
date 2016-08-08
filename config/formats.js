@@ -2632,30 +2632,6 @@ exports.Formats = [
 		},
 	},
 	{
-        name: "Metagamiate",
-        desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3502303/\">Metagamiate</a>"],
-        section: "Other Metagames",
-        column: 2,
-
-        ruleset: ['OU'],
-        banlist: ['Dragonite', 'Kyurem-Black'],
-        onModifyMovePriority: -1,
-        onModifyMove: function (move, pokemon) {
-            if (move.type === 'Normal' && move.id !== 'hiddenpower' && !pokemon.hasAbility(['aerilate', 'pixilate', 'refrigerate'])) {
-                let types = pokemon.getTypes();
-                let type = types.length < 2 || !pokemon.set.shiny ? types[0] : types[1];
-                move.type = type;
-                move.isMetagamiate = true;
-            }
-        },
-        onBasePowerPriority: 8,
-        onBasePower: function (basePower, attacker, defender, move) {
-            if (!move.isMetagamiate) return;
-            return this.chainModify([0x14CD, 0x1000]);
-        },
-    },
-
-	{
         name: "Protean Palace",
 				desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/protean-palace.3496299/\">Protean Palace</a>"],
 				section: "Past OMotMs",
