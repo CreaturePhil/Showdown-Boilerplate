@@ -58,13 +58,13 @@ exports.BattleAbilities = {
 		id: "aromaticmist",
 		name: "Aromatic Mist",
 	},
-	'assist': {
+	/*'assist': {
 		onStart: function (source) {
 			this.useMove('Assist', source);
 		},
 		id: "assist",
 		name: "Assist",
-	},
+	},*/
 	'attract': {
 		onStart: function (source) {
 			this.useMove('Attract', source);
@@ -114,13 +114,13 @@ exports.BattleAbilities = {
 		id: "bestow",
 		name: "Bestow",
 	},
-	'block': {
+/*	'block': {
 		onStart: function (source) {
 			this.useMove('Block', source);
 		},
 		id: "block",
 		name: "Block",
-	},
+	},*/
 	'bulkup': {
 		onStart: function (source) {
 			this.useMove('Bulk Up', source);
@@ -744,13 +744,13 @@ exports.BattleAbilities = {
 		id: "mefirst",
 		name: "Me First",
 	},
-	'meanlook': {
+/*	'meanlook': {
 		onStart: function (source) {
 			this.useMove('Mean Look', source);
 		},
 		id: "meanlook",
 		name: "Mean Look",
-	},
+	}, */
 	'meditate': {
 		onStart: function (source) {
 			this.useMove('Meditate', source);
