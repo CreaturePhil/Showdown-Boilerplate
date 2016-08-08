@@ -16,7 +16,7 @@ let trainersprites = [1, 2, 101, 102, 169, 170, 265, 266, 168];
  * @param {Object|String} user - if isOnline then Object else String
  * @param {String} image
  */
-function Profile(isOnline, user, image) {
+funcustomavatartion Profile(isOnline, user, image) {
 	this.isOnline = isOnline || false;
 	this.user = user || null;
 	this.image = image;
@@ -95,9 +95,9 @@ Profile.prototype.avatar = function () {
 		if (typeof this.image === 'string') return img(this.url + ':' + Config.port + '/avatars/' + this.image);
 		return img('http://play.pokemonshowdown.com/sprites/trainers/' + this.image + '.png');
 	}
-	for (let name in Config.customAvatars) {
+	for (let name in Config.customavatars) {
 		if (this.username === name) {
-			return img(this.url + ':' + Config.port + '/avatars/' + Config.customAvatars[name]);
+			return img(this.url + ':' + Config.port + '/avatars/' + Config.customavatars[name]);
 		}
 	}
 	let selectedSprite = trainersprites[Math.floor(Math.random() * trainersprites.length)];
