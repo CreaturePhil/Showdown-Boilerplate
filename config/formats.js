@@ -2400,7 +2400,8 @@ exports.Formats = [
 	{
 		name: "Enchanted Items",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
-		section: "New Other Metagames",
+		section: "Old OMotMs",
+		column: 2,
 
 		mod: 'enchanteditems',
 		ruleset: ['OU'],
@@ -2447,8 +2448,7 @@ exports.Formats = [
 			"The Pok&eacute;mon in the first slot is the God; the Followers must share a type with the God. If the God Pok&eacute;mon faints, the Followers are inflicted with Curse.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545230/\">Gods and Followers</a>",
 		],
-		section: "Other Metagames",
-		column: 2,
+		section: "Old OMotMs",
 
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Baton Pass Clause', 'Team Preview', 'Mega Rayquaza Clause'],
 		banlist: ['Geomancy'],
@@ -2485,7 +2485,8 @@ exports.Formats = [
 	{
         name: "Metagamiate",
         desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3502303/\">Metagamiate</a>"],
-        section: "Other Metagames",
+
+		section: "Old OMotMs",
         column: 2,
 
         ruleset: ['OU'],
@@ -2508,8 +2509,7 @@ exports.Formats = [
 	{
 		name: "Mix and Mega",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3540979/\">Mix and Mega</a>"],
-		section: "Other Metagames",
-		column: 2,
+		section: "Old OMotMs",
 
 		mod: 'mixandmega',
 		ruleset: ['Ubers', 'Baton Pass Clause'],
@@ -2631,6 +2631,7 @@ exports.Formats = [
 			}
 		},
 	},
+
 	{
         name: "Protean Palace",
 				desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/protean-palace.3496299/\">Protean Palace</a>"],
