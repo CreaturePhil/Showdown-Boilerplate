@@ -122,11 +122,6 @@
   .infobox {
     border: 1px solid #0B1361;
     padding: 6px 6px;
-    background: rgb(255, 204, 153);
-  }
-  .dark.infobox {
-    border: 1px solid #0B1361;
-    padding: 6px 6px;
     background: rgba(255, 204, 153, 0.4);
   }
 
