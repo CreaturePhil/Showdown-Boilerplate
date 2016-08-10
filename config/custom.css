@@ -162,12 +162,11 @@
 
 
   #header {
-    background: rgba(255, 255, 255, 0.5) url("http://i.imgur.com/XC6TtER.png") no-repeat 0 0;
+    background: rgba(255, 187, 153, 0.45) url("http://i.imgur.com/QbFNFD9.png") no-repeat 0 0;
 }
-  .header {
-    height: 50px;
-    background: rgba(255, 187, 153, 0.45) url("http://prntscr.com/9yvyh7") no-repeat top left;
-    }
+.dark #header {
+  background: rgba(240, 140, 100, 0.4) url("http://i.imgur.com/QbFNFD9.png") no-repeat 0 0;
+}
 
   .header .logo {
     opacity: 0;
