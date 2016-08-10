@@ -2967,7 +2967,7 @@ exports.Formats = [
 		column: 1,
 
 		mod: 'trademarked',
-		ruleset: ['OU'],
+		ruleset: ['OU','trademarkclause'],
 		banlist: ['Slaking','Regigigas'],
 		validateSet: function (set, teamHas) {
 			if (!this.validateSet(set, teamHas).length) return [];
