@@ -10,13 +10,12 @@ trademarkclause: {
 			let count=0;
 			for (let i = 0; i < team.length; i++) {
 				let ability = toId(team[i].ability);
-				if(ability=="partingshot"||ability=="batonpass")
+				if(ability==="partingshot"||ability==="batonpass")
 				{
 					count++;
-				if (!ability) continue;
-				if (count > 1) {
-						return ["You are limited to only one "+(ability=="partingshot"?"Parting Shot":"Baton Pass")+" by the Trademark Clause.", "(You have more than one " + this.getAbility(ability).name + ")"];
 					}
+					if (count > 1) {
+							return ["You are limited to only one "+(ability=="partingshot"?"Parting Shot":"Baton Pass")+" by the Trademark Clause.", "(You have more than one " + this.getAbility(ability).name + ")"];
 				}
 				}
 			}
