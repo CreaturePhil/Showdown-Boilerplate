@@ -15,7 +15,7 @@ trademarkclause: {
 					count++;
 					}
 					if (count > 1) {
-							return ["You are limited to only one "+(ability=="partingshot"?"Parting Shot":"Baton Pass")+" by the Trademark Clause.", "(You have more than one " + this.getAbility(ability).name + ")"];
+							return ["You are limited to only one of Baton Pass or Parting Shot by the Trademark Clause."];
 				}
 				}
 			}
