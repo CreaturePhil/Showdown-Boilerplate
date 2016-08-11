@@ -2132,7 +2132,24 @@ exports.Formats = [
 
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
+	{
+		name: "Random Haxmons",
+		section: "Randomized Metas",
 
+		team: 'random',
+		ruleset: ['OU', 'Freeze Clause'],
+		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
+		onModifyMovePriority: -100,
+		onModifyMove: function (move) {
+			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
+			move.willCrit = true;
+			if (move.secondaries) {
+				for (var i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance = 100;
+				}
+			}
+		}
+	},
 	{
 		name: "Follow The Leader",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3565685/\">Follow The Leader</a>"],
@@ -2401,7 +2418,7 @@ exports.Formats = [
 		name: "Enchanted Items",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
 		section: "Old OMotMs",
-		column: 2,
+		column: 3,
 
 		mod: 'enchanteditems',
 		ruleset: ['OU'],
