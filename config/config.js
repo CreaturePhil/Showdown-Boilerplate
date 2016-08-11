@@ -187,7 +187,7 @@ exports.customavatars = {
 };
 
 // custom avatars appear in profile by specifiying server url.
-exports.avatarurl = '';
+exports.avatarurl = '138.68.26.217:8000';
 
 // Tournament announcements
 // When tournaments are created in rooms listed below, they will be announced in
