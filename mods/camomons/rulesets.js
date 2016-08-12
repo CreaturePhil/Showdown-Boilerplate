@@ -1,3 +1,6 @@
+'use strict';
+
+exports.BattleFormats = {
 cleannicknameclause: {
         effectType: 'Rule',
         onStart: function () {
@@ -8,3 +11,4 @@ cleannicknameclause: {
             pokemon.name = pokemon.name.replace(/[^\u0000-\u007F]/g, '');
         }
     }
+};
