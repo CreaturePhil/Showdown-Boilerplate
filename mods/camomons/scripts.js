@@ -1,3 +1,4 @@
+'use strict';
 exports.BattleScripts = {
     pokemon: {
         formeChange: function (template, dontRecalculateStats) {

@@ -1,3 +1,4 @@
+'use strict';
 exports.BattleMovedex = {
     sketch: {
         inherit: true,
