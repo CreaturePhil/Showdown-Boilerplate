@@ -2154,7 +2154,7 @@ exports.Formats = [
         name: "Random Camomons",
         section: "Randomized Metas",
         mod: 'camomons',
-        team: random,
+        team: 'random',
         ruleset: ['OU', 'Clean Nickname Clause']
     },
 	{
