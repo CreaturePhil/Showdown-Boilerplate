@@ -2151,6 +2151,13 @@ exports.Formats = [
 		}
 	},
 	{
+        name: "Random Camomons",
+        section: "Randomized Metas",
+        mod: 'camomons',
+        team: random,
+        ruleset: ['OU', 'Clean Nickname Clause']
+    },
+	{
 		name: "Follow The Leader",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3565685/\">Follow The Leader</a>"],
 		section: "OM of the Month",
@@ -2918,6 +2925,13 @@ exports.Formats = [
     	      pokemon.clearVolatile();
     	 }
 	},
+
+		{
+        name: "Camomons",
+        section: "New Other Metagames",
+        mod: 'camomons',
+        ruleset: ['OU', 'Clean Nickname Clause']
+    },
 
     	{
 		name: "Cross Evolution",
