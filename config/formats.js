@@ -2152,10 +2152,30 @@ exports.Formats = [
 	},
 	{
         name: "Random Camomons",
+        desc: [
+            "Pok&eacute;mon change type to match their first two moves.",
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
+        ],
         section: "Randomized Metas",
-        mod: 'camomons',
         team: 'random',
-        ruleset: ['OU', 'Clean Nickname Clause']
+
+        ruleset: ['OU'],
+        onBegin: function () {
+            let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+            for (let i = 0, len = allPokemon.length; i < len; i++) {
+                let pokemon = allPokemon[i];
+                let types = [this.getMove(pokemon.move[0]).type];
+                if (pokemon.move[1] && this.getMove(pokemon.move[1]).type !== types[0]) types.push(this.getMove(pokemon.move[1]).type);
+                pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
+                pokemon.types = pokemon.template.types = types;
+            }
+        },
+        onAfterMega: function (pokemon) {
+            let types = [this.getMove(pokemon.move[0]).type];
+            if (pokemon.move[1] && this.getMove(pokemon.move[1]).type !== types[0]) types.push(this.getMove(pokemon.move[1]).type);
+            pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
+            pokemon.types = pokemon.template.types = types;
+        },
     },
 	{
 		name: "Follow The Leader",
@@ -2926,12 +2946,32 @@ exports.Formats = [
     	 }
 	},
 
-		{
-        name: "Camomons",
-        section: "New Other Metagames",
-        mod: 'camomons',
-        ruleset: ['OU', 'Clean Nickname Clause']
-    },
+	{
+		 name: "Camomons",
+		 desc: [
+				 "Pok&eacute;mon change type to match their first two moves.",
+				 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
+		 ],
+		 section: "New Other Metagames",
+
+		 ruleset: ['OU'],
+		 onBegin: function () {
+				 let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+				 for (let i = 0, len = allPokemon.length; i < len; i++) {
+						 let pokemon = allPokemon[i];
+						 let types = [this.getMove(pokemon.move[0]).type];
+						 if (pokemon.move[1] && this.getMove(pokemon.move[1]).type !== types[0]) types.push(this.getMove(pokemon.move[1]).type);
+						 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
+						 pokemon.types = pokemon.template.types = types;
+				 }
+		 },
+		 onAfterMega: function (pokemon) {
+				 let types = [this.getMove(pokemon.move[0]).type];
+				 if (pokemon.move[1] && this.getMove(pokemon.move[1]).type !== types[0]) types.push(this.getMove(pokemon.move[1]).type);
+				 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
+				 pokemon.types = pokemon.template.types = types;
+		 },
+ },
 
     	{
 		name: "Cross Evolution",
