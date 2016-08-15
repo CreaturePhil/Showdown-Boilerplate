@@ -3264,7 +3264,7 @@ exports.Formats = [
     	},
 	{
 		name: "Enchanted Items Plus",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/enchanted-items-enchanted-items-plus-announced.3570431/page-20#post-6939744\">Enchanted Items Plus</a>"],
 		section: "Experimental Metas",
 		column: 2,
 
@@ -3272,7 +3272,7 @@ exports.Formats = [
 		ruleset: ['Ubers'],
 		banlist: ['Ignore Illegal Abilities', 'Shedinja','Imposter',
 			'Bug Gem', 'Electric Gem', 'Fire Gem',
-			'Ice Gem', 'Persim Berry', 'Poison Gem', 'Poke Ball', 'Steel Gem', 'Wave Incense','Dark Gem','Psychic Gem',
+			'Ice Gem', 'Poison Gem', 'Poke Ball', 'Steel Gem', 'Dark Gem','Psychic Gem',
 		],
 		onValidateSet: function (set) {
 			
