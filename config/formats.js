@@ -1,6 +1,6 @@
 'use strict';
 
-// Note: This is the list of formats
+// Note: This is the list of formatsenc
 // The rules that formats use are stored in data/rulesets.js
 
 exports.Formats = [
@@ -3262,7 +3262,61 @@ exports.Formats = [
         	    }
         	}
     	},
+	{
+		name: "Enchanted Items Plus",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
+		section: "Experimental Metas",
+		column: 2,
 
+		mod: 'enchanteditems',
+		ruleset: ['Ubers'],
+		banlist: ['Ignore Illegal Abilities', 'Shedinja','Imposter',
+			'Bug Gem', 'Electric Gem', 'Fire Gem',
+			'Ice Gem', 'Persim Berry', 'Poison Gem', 'Poke Ball', 'Steel Gem', 'Wave Incense','Dark Gem','Psychic Gem',
+		],
+		onValidateSet: function (set) {
+			
+			let bannedAbilities = {'Arena Trap': 1, 'Huge Power': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Wonder Guard': 1,'Contrary': 1,'Simple': 1,};
+			if (set.ability in bannedAbilities) {
+				let template = this.getTemplate(set.species || set.name);
+				let legalAbility = false;
+				for (let i in template.abilities) {
+					if (set.ability === template.abilities[i]) legalAbility = true;
+				}
+				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
+			}
+			/*let ability = this.getAbility(set.ability);
+			let item = this.getItem(set.item);
+			if (ability.item && ability.item === item.id) {
+				return ["You are not allowed to have " + ability.name + " and " + item.name + " on the same Pokémon."];
+			}*/
+		},
+		onValidateTeam: function (team) {
+			let abilityTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let ability = this.getAbility(team[i].ability);
+				if (!abilityTable[ability.id]) abilityTable[ability.id] = 0;
+				if (++abilityTable[ability.id] > 2) {
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getItem(ability.item).name + ")"];
+				}
+				let item = toId(team[i].item);
+				if (!item) continue;
+				item = this.getItem(item);
+				ability = item.ability;
+				if (!ability) continue;
+				if (!abilityTable[ability]) abilityTable[ability] = 0;
+				if (++abilityTable[ability] > 2) {
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item.name + ")"];
+				}
+			}
+		},
+		onFaint: function (pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+		},
+		onSwitchOut: function (pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+		},
+	},
 	{
 		name: "Enchanted Items Balanced Hackmons",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
