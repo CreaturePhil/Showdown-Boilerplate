@@ -95,9 +95,9 @@ Profile.prototype.avatar = function () {
 		if (typeof this.image === 'string') return img(this.url + ':' + Config.port + '/avatars/' + this.image);
 		return img('http://play.pokemonshowdown.com/sprites/trainers/' + this.image + '.png');
 	}
-	for (let name in Config.customavatars) {
+	for (let name in Config.customAvatars) {
 		if (this.username === name) {
-			return img('http://138.68.26.217:8000/avatars/' + Config.customavatars[name]);
+			return img('http://138.68.26.217:8000/avatars/' + Config.customAvatars[name]);
 		}
 	}
 	let selectedSprite = trainersprites[Math.floor(Math.random() * trainersprites.length)];
