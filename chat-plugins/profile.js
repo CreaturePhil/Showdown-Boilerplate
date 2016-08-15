@@ -97,7 +97,7 @@ Profile.prototype.avatar = function () {
 	}
 	for (let name in Config.customavatars) {
 		if (this.username === name) {
-			return img(this.url + ':' + Config.port + '/avatars/' + Config.customavatars[name]);
+			return img('http://138.68.26.217:8000/avatars/' + Config.customavatars[name]);
 		}
 	}
 	let selectedSprite = trainersprites[Math.floor(Math.random() * trainersprites.length)];
