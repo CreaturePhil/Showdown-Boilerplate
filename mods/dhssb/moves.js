@@ -3,13 +3,13 @@
 exports.BattleMovedex = {
 	kickmyass: {
 		num: 63,
-		accuracy: 90,
-		basePower: 200,
+		accuracy: 100,
+		basePower: 0,
 		category: "Physical",
 		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
-		id: "hyperbeam",
-		name: "Hyper Beam",
+		id: "kickmyass",
+		name: "Kick My Ass",
 		pp: 5,
 		priority: 0,
 		ohko: true,
