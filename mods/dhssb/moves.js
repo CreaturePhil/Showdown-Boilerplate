@@ -1,7 +1,31 @@
 "use strict";
 
 exports.BattleMovedex = {
-	//Flygonerz
+	kickmyass: {
+		num: 63,
+		accuracy: 90,
+		basePower: 200,
+		category: "Physical",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
+		shortDesc: "User cannot move next turn.",
+		id: "hyperbeam",
+		name: "Hyper Beam",
+		pp: 5,
+		priority: 0,
+		ohko: true,
+		flags: {recharge: 1, protect: 1, mirror: 1},
+		self: {
+			volatileStatus: 'mustrecharge',
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hyper Beam", target);
+		},
+		secondary: false,
+		target: "normal",
+		type: "Dragon",
+		contestType: "Cool",
+	},
 	ggm8: {
 		accuracy:100,
 		pp:15,
