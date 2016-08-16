@@ -489,6 +489,10 @@ exports.Formats = [
 			if(name === 'spandan') {
 				this.add('c|~Spandan|o shit waddup!');
 			}
+			if(name === 'paul71') {
+				this.add('c|~Paul☯71|!htmlbox');
+				this.add('raw|<button name="parseCommand" value="/user paul71">My Owner!</button>');
+			}
 			if(name === 'digitaledge') {
 				this.add('c|@Digital Edge|__**Mo is our lord and savior!**__');
 			}
@@ -528,6 +532,9 @@ exports.Formats = [
 			let name = toId(pokemon.name);
 			if (name === 'spandan') {
 				this.add('c|~Spandan|Gr8 b8, m8. I rel8, str8 appreci8, and congratul8. I r8 this b8 an 8/8. Plz no h8, I\'m str8 ir8. Cre8 more, can\'t w8. We should convers8, I won\'t ber8, my number is 8888888, ask for N8. No calls l8 or out of st8. If on a d8, ask K8 to loc8. Even with a full pl8, I always have time to communic8 so don\'t hesit8');
+			}
+			if(name === 'paul71') {
+				this.add('c|~Paul☯71|RIP Me feelsbd');
 			}
 			if(name === 'digitaledge') {
 				this.add('c|@Digital Edge|u haxor u didnt get haxed');

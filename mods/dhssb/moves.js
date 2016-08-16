@@ -1,7 +1,34 @@
 "use strict";
 
 exports.BattleMovedex = {
-	//Flygonerz
+	kickmyass: {
+		num: 63,
+		accuracy: 100,
+		basePower: 0,
+		category: "Physical",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
+		shortDesc: "User cannot move next turn.",
+		id: "kickmyass",
+		name: "Kick My Ass",
+		pp: 5,
+		priority: 0,
+		ohko: true,
+		flags: {recharge: 1, protect: 1, mirror: 1},
+		self: {
+			volatileStatus: 'mustrecharge',
+		},
+		onHit: function (target, source) {
+			if (source.name == 'Paul☯71') this.add("c|Paul☯71|LET THE WORLD KNOW ACTUALLY WHAT ASS MEANS");
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hyper Beam", target);
+		},
+		secondary: false,
+		target: "normal",
+		type: "Dragon",
+		contestType: "Cool",
+	},
 	ggm8: {
 		accuracy:100,
 		pp:15,
