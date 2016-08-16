@@ -11,6 +11,12 @@ exports.BattleScripts = {
 				signatureMove: "ggm8",
 				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
 			},
+			'Paul☯71': {
+				species: 'Palkia', ability: 'discover me', item: 'Leftovers', gender: 'M',
+				moves: ['hyperbeam', 'outrage', 'waterspout'],
+				signatureMove: "Kick My Ass",
+				evs: {spd:4, atk:252, spe:252}, nature: 'Adamant',
+			},
 			'ClassyZ': {
 				species: 'Scizor-Mega', ability: 'Technician', item: 'Scizorite', gender: 'F', shiny: true,
 				moves: ['machpunch', 'bulletpunch', 'swordsdance'],
