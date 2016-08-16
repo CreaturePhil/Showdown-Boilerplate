@@ -51,6 +51,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'leleded': 'http://i.imgur.com/ht9m201.png',
 		'stonedorf':'http://i.imgur.com/MRimwlB.png',
 		'feelsrip':'http://i.imgur.com/ljl6Sfd.png',
+		'feelspoak':'http://i.imgur.com/jElHTOv.png',
 	});
 }
 
