@@ -17,6 +17,9 @@ exports.BattleMovedex = {
 		self: {
 			volatileStatus: 'mustrecharge',
 		},
+		onHit: function (target, source) {
+			if (source.name == 'Paul☯71') this.add("c|Paul☯71|LET THE WORLD KNOW ACTUALLY WHAT ASS MEANS");
+		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hyper Beam", target);
