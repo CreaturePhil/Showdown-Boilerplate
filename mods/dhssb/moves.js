@@ -231,7 +231,7 @@ evalchomp: {
 	},
 	"waitandhope": {
 		accuracy: 100,
-		basePower: 100,
+		basePower: 130,
 		category: "Special",
 		id: "waitandhope",
 		name: "Wait and hope",
@@ -276,7 +276,7 @@ evalchomp: {
 			status: 'par',
 		},
 		target: "any",
-		type: "Flying",
+		type: "Dragon",
 	},
 	"yomammajoke": {
 		accuracy: 100,
