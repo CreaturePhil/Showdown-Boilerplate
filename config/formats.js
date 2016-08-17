@@ -3379,8 +3379,8 @@ exports.Formats = [
 	{
 		name: "Trademarked Enchantment",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a> + <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>."],
-		section: "Old OMotMs",
-		column: 3,
+		section: "Experimental Metagames",
+		column: 5,
 
 		mod: 'tme',
 		ruleset: ['OU'],
