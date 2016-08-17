@@ -569,19 +569,19 @@
   #lobby-userlist-user-camilas, #casino-userlist-user-camilas, #tournaments-userlist-user-camilas {
     background: rgba(244, 244, 244, 0.8) url("http://imgur.com/7rdvKm8.gif") right no-repeat;
   }
-  li[id$='-userlist-user-mdi'] {
+  #lobby-userlist-user-mdi, #suicunesquad-userlist-user-mdi {
     background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
 }
-li[id$='-userlist-user-suicunesquad'] {
+#lobby-userlist-user-suicunesquad,#suicunesquad-userlist-user-suicunesquad {
   background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
 }
-li[id$='-userlist-user-calrissian'] {
+#lobby-userlist-user-calrissian,#suicunesquad-userlist-user-calrissian {
   background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
 }
-li[id$='-userlist-user-suicuter'] {
+#lobby-userlist-user-suicuter,#suicunesquad-userlist-user-suicuter {
   background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
 }
-li[id$='-userlist-user-diarmuidodyna'] {
+#lobby-userlist-user-diarmuidodyna, #staffuserlist-user-diarmuidodyna,#art-userlist-user-diarmuidodyna {
   background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
 }
   #lobby-userlist-user-camilas, #casino-userlist-user-camilas, #staff-userlist-user-camilas {
