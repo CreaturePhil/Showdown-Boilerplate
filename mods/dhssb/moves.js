@@ -24,7 +24,7 @@ exports.BattleMovedex = {
 			}
 			target.side.sideConditions['futuremove'].positions[target.position] = {
 				duration: 3,
-				move: 'futuresight',
+				move: 'rushb',
 				source: source,
 				moveData: {
 					id: 'rushb',
