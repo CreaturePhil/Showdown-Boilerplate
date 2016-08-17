@@ -2177,15 +2177,15 @@ exports.Formats = [
             let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
             for (let i = 0, len = allPokemon.length; i < len; i++) {
                 let pokemon = allPokemon[i];
-                let types = [this.getMove(pokemon.move[0]).type];
-                if (pokemon.move[1] && this.getMove(pokemon.move[1]).type !== types[0]) types.push(this.getMove(pokemon.move[1]).type);
+                let types = [this.getMove(pokemon.moves[0]).type];
+                if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
                 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
                 pokemon.types = pokemon.template.types = types;
             }
         },
         onAfterMega: function (pokemon) {
-            let types = [this.getMove(pokemon.move[0]).type];
-            if (pokemon.move[1] && this.getMove(pokemon.move[1]).type !== types[0]) types.push(this.getMove(pokemon.move[1]).type);
+            let types = [this.getMove(pokemon.moves[0]).type];
+            if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
             pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
             pokemon.types = pokemon.template.types = types;
         },
@@ -2972,15 +2972,15 @@ exports.Formats = [
 				 let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 				 for (let i = 0, len = allPokemon.length; i < len; i++) {
 						 let pokemon = allPokemon[i];
-						 let types = [this.getMove(pokemon.move[0]).type];
-						 if (pokemon.move[1] && this.getMove(pokemon.move[1]).type !== types[0]) types.push(this.getMove(pokemon.move[1]).type);
+						 let types = [this.getMove(pokemon.moves[0]).type];
+						 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
 						 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
 						 pokemon.types = pokemon.template.types = types;
 				 }
 		 },
 		 onAfterMega: function (pokemon) {
-				 let types = [this.getMove(pokemon.move[0]).type];
-				 if (pokemon.move[1] && this.getMove(pokemon.move[1]).type !== types[0]) types.push(this.getMove(pokemon.move[1]).type);
+				 let types = [this.getMove(pokemon.moves[0]).type];
+				 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
 				 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
 				 pokemon.types = pokemon.template.types = types;
 		 },
