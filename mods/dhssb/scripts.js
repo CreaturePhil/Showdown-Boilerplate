@@ -213,6 +213,12 @@ exports.BattleScripts = {
 		let team = [];
 		let variant = (this.random(2) === 1);
 		let sets = {
+                        'Zmeeed': {
+				species: 'Latios', ability: 'Snow Warning', item: 'Safety Goggles', gender: 'M',
+				moves: ['psystrike', 'aurasphere', 'blizzard'],
+				signatureMove: "Rush B",
+				evs: {spd:4, spa:252, spe:252}, nature: 'Timid',
+			},
 			'charizard8888': {
 				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
 				moves: ['fakeout', 'extremespeed', 'flareblitz'],
