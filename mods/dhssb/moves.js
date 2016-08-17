@@ -2,8 +2,7 @@
 
 exports.BattleMovedex = {
 	kickmyass: {
-		num: 63,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Physical",
 		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
@@ -18,7 +17,7 @@ exports.BattleMovedex = {
 			volatileStatus: 'mustrecharge',
 		},
 		onHit: function (target, source) {
-			if (source.name == 'Paul☯71') this.add("c|Paul☯71|LET THE WORLD KNOW ACTUALLY WHAT ASS MEANS");
+			if (source.name == 'Paul☯71') this.add("c|~Paul☯71|LET THE WORLD KNOW ACTUALLY WHAT ASS MEANS");
 		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
