@@ -569,7 +569,21 @@
   #lobby-userlist-user-camilas, #casino-userlist-user-camilas, #tournaments-userlist-user-camilas {
     background: rgba(244, 244, 244, 0.8) url("http://imgur.com/7rdvKm8.gif") right no-repeat;
   }
-
+  li[id$='-userlist-user-mdi'] {
+    background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
+}
+li[id$='-userlist-user-suicunesquad'] {
+  background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
+}
+li[id$='-userlist-user-calrissian'] {
+  background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
+}
+li[id$='-userlist-user-suicuter'] {
+  background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
+}
+li[id$='-userlist-user-diarmuidodyna'] {
+  background: url(http://pldh.net/media/pokexycons/245.png) 100% 70% no-repeat;
+}
   #lobby-userlist-user-camilas, #casino-userlist-user-camilas, #staff-userlist-user-camilas {
     background: rgba(244, 244, 244, 0.8) url("https://raw.githubusercontent.com/msikma/pokesprite/master/icons/pokemon/shiny/rayquaza-mega.png") right no-repeat;
   }
@@ -637,6 +651,19 @@
     color:red !important;
   }
 
+.chat.chatmessage-mdi  strong {
+      color:blue !important;
+    }
+.chat.chatmessage-calrissian  strong {
+    color:blue !important;
+   }
+
+   .chat.chatmessage-suicunesquad  strong {
+         color:blue !important;
+       }
+       .chat.chatmessage-suicuter  strong {
+             color:blue !important;
+           }
 .chat.chatmessage-clawliet  strong {
     color:red !important;
   }
