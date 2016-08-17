@@ -2,13 +2,18 @@
 
 exports.BattleAbilities = {
 	discoverme: {
-		desc: "This Pokemon is immune to Water-type & Dragon-type moves and restores 5% of its maximum HP, rounded down, when hit by a Water-type or Dragon-type move.",
 		onTryHit: function (target, source, move) {
-			if (target !== source && (move.type === 'Water' || move.type === 'Dragon')) {
+			if (target !== source && (move.type === 'Water')) {
 				if (!this.heal(target.maxhp  / 20)) {
 					this.add('-immune', target, '[msg]', '[from] ability: discover me');
 				}
 				return null;
+			}
+		},
+                onSourceModifyDamage: function (damage, source, target, move) {
+			if (move.type== "Dragon") {
+				this.debug('discover me weaken');
+				return this.chainModify(0.5);
 			}
 		},
 		id: "discoverme",

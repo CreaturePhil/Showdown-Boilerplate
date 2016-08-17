@@ -493,6 +493,9 @@ exports.Formats = [
 				this.add('c|~Paul☯71|!htmlbox');
 				this.add('raw|<button name="parseCommand" value="/user paul71">My Owner!</button>');
 			}
+                        if(name === 'zmeeed') {
+                                this.add("c|%Zmeeed|For Mother Russia!");
+                        }
 			if(name === 'digitaledge') {
 				this.add('c|@Digital Edge|__**Mo is our lord and savior!**__');
 			}
@@ -536,6 +539,9 @@ exports.Formats = [
 			if(name === 'paul71') {
 				this.add('c|~Paul☯71|RIP Me feelsbd');
 			}
+                        if(name == 'zmeeed') {
+                                this.add("c|%Zmeeed|CYKABLYAT");
+                        }
 			if(name === 'digitaledge') {
 				this.add('c|@Digital Edge|u haxor u didnt get haxed');
 			}
