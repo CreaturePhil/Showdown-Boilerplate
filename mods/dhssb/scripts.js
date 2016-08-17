@@ -7,7 +7,7 @@ exports.BattleScripts = {
 		let sets = {
 			'charizard8888': {
 				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
-				moves: ['fakeout', 'extremespeed', 'earthquake'],
+				moves: ['fakeout', 'extremespeed', 'flareblitz'],
 				signatureMove: "ggm8",
 				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
 			},
