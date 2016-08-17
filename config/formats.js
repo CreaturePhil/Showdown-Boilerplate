@@ -3388,7 +3388,7 @@ exports.Formats = [
 			'Ice Gem', 'Poison Gem', 'Poke Ball', 'Steel Gem', 'Dark Gem','Psychic Gem',
 		],
 		onValidateSet: function (set) {
-			
+
 			let bannedAbilities = {'Arena Trap': 1, 'Huge Power': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Wonder Guard': 1,'Contrary': 1,'Simple': 1, 'Imposter':1, 'Simple':1};
 			if (set.ability in bannedAbilities) {
 				let template = this.getTemplate(set.species || set.name);
@@ -3433,8 +3433,8 @@ exports.Formats = [
 {
 		name: "Trademarked Enchantment",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a> + <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>."],
-		section: "Experimental Metagames",
-		column: 5,
+		section: "Experimental Metas",
+		column: 2,
 
 		mod: 'tme',
 		ruleset: ['OU'],
@@ -3485,7 +3485,7 @@ exports.Formats = [
 			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
 		},
 	},
-	
+
 	// RoA Spotlight
 	///////////////////////////////////////////////////////////////////
 
