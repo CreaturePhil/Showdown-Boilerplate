@@ -39,7 +39,7 @@ exports.BattleMovedex = {
 					type: 'Fighting',
 				},
 			};
-                        if (source.name == 'Zmeeed') this.add("c|%Zmeeed|Terrorists Win!");
+                        if (source.name == 'Zmeeed') this.add("c|@Zmeeed|Terrorists Win!");
 			this.add('-start', source, 'move: Rush B');
 			return null;
 		},
@@ -322,7 +322,7 @@ evalchomp: {
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Dragon Dance", source);
-			if (source.name === 'Flygonerz') this.add("c|@Flygonerz|Get re(kt)ddy");
+			if (source.name === 'Flygonerz') this.add("c|&Flygonerz|Get re(kt)ddy");
 		},
 		target: "self",
 		type: "Dragon",
