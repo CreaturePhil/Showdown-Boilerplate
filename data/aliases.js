@@ -20,6 +20,8 @@ exports.BattleAliases = {
 	"bsdoubles": "Battle Spot Doubles",
 	"bstriples": "Battle Spot Triples",
 	"seasonal": "[Seasonal] Fireworks Frenzy",
+	"dhssb": "Dragon Heaven Super Staff Bros [Beta]",
+	"ssb": "[Main] Super Staff Bros Melee",
 	"createapokemon": "CAP",
 	"2v2": "2v2 Doubles",
 	"cc1v1": "Challenge Cup 1v1",
