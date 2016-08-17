@@ -3398,11 +3398,11 @@ exports.Formats = [
 				}
 				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
 			}
-			/*let ability = this.getAbility(set.ability);
+			let ability = this.getAbility(set.ability);
 			let item = this.getItem(set.item);
 			if (ability.item && ability.item === item.id) {
 				return ["You are not allowed to have " + ability.name + " and " + item.name + " on the same Pokémon."];
-			}*/
+			}
 		},
 		onValidateTeam: function (team) {
 			let abilityTable = {};
