@@ -1,9 +1,56 @@
 "use strict";
 
 exports.BattleMovedex = {
+        "rushb": {
+		accuracy: 100,
+		basePower: 250,
+		category: "Special",
+		id: "rushb",
+		name: "Rush B",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		ignoreImmunity: true,
+		isFutureMove: true,
+                onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+                        if (source.name == 'Zmeeed') this.add("c|%Zmeeed|The bomb has been planted!");
+			this.add('-anim', source, "Double Edge", target);
+		},
+		onTry: function (source, target) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
+				return false;
+			}
+			target.side.sideConditions['futuremove'].positions[target.position] = {
+				duration: 3,
+				move: 'futuresight',
+				source: source,
+				moveData: {
+					id: 'rushb',
+					name: "Rush B",
+					accuracy: 100,
+					basePower: 250,
+					category: "Special",
+					flags: {},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					type: 'Fighting',
+				},
+			};
+                        if (source.name == 'Zmeeed') this.add("c|%Zmeeed|Terrorists Win!");
+			this.add('-start', source, 'move: Rush B');
+			return null;
+		},
+		secondary: false,
+		target: "normal",
+		type: "Rush B",
+		contestType: "Clever",
+	},
 	kickmyass: {
-		accuracy: true,
-		basePower: 0,
+		accuracy: 100,
+		basePower: 200,
 		category: "Physical",
 		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
