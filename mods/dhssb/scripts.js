@@ -250,7 +250,8 @@ exports.BattleScripts = {
 			},
 			'Snaquaza': {
 				species: 'Lapras', ability: 'Shell Armor', item: 'Leftovers',
-				moves: ['icebeamclone', 'surfclone', 'ancientpowerclone', 'iceshardclone'],
+				moves: ['icebeamclone', 'surfclone', 'iceshardclone'],
+        signatureMove:  'ancientpowerclone',
 				evs: {hp:252, atk:252, def:252, spa:252, spd:252, spe:252}, nature: 'Serious',
 			},
 			'Digital Edge': {
