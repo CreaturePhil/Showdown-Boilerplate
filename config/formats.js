@@ -504,7 +504,7 @@ exports.Formats = [
 			}
 			if(name === 'classyz') {
 				pokemon.addVolatile('simpleinnate', pokemon);
-				this.add('c|@ClassyZ|pro tip: if u kill me go straight to hell do not pass go do not collect $200');
+				this.add('c|&ClassyZ|pro tip: if u kill me go straight to hell do not pass go do not collect $200');
 			}
 			if(name === 'flygonerz') {
 				this.add('c|&Flygonerz|The Sand Dweller has arrived');
@@ -549,7 +549,7 @@ exports.Formats = [
 				this.add('c|%SnakeXZero5|I JUST FORGOT THERES A SUDDEN PROJECT TOMMOROW');
 			}
 			if(name === 'classyz') {
-				this.add('c|@ClassyZ|go straight to hell do not pass go do not collect $200');
+				this.add('c|&ClassyZ|go straight to hell do not pass go do not collect $200');
 			}
 			if(name === 'flygonerz') {
 				this.add('c|&Flygonerz|Plox nerf, Ninten__doh__!');
