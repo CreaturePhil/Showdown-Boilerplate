@@ -67,7 +67,7 @@ exports.BattleAbilities = {
 		id: "toughbounce",
 		name: "Tough Bounce",
 		rating: 5,
-	}
+	},
 	breakingpoint: {
 		onFoeTrapPokemon: function (pokemon) {
 			if ((!pokemon.hasAbility('shadowtag')&&!pokemon.hasAbility('breakingpoint')) && this.isAdjacent(pokemon, this.effectData.target)) {
