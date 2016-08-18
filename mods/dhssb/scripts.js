@@ -261,6 +261,12 @@ exports.BattleScripts = {
 				signatureMove: "Dragon Shift",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Jolly',
 			},
+			'Eternal Mayhem': {
+				species: 'Kyurem-B', ability: 'Breakthrough', item: 'Life Orb', gender: 'M', shiny: true,
+				moves: ['outrage','icebeam','fusionbolt'], name: 'Eternal Mayhem',
+				signatureMove: "Dragon Symphony",
+				evs: {hp:248, spa:8, atk:252}, nature: 'Naughty',
+			},
 			'Spandan': {
 			    species: 'Salamence', ability: 'Multiscale', item: 'Salamencite', gender: 'M',
 				moves: ['extremespeed', 'shiftgear', 'boomburst'],
