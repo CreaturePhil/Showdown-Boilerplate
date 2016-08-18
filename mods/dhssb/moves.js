@@ -505,64 +505,15 @@ evalchomp: {
 		name: "Super Switch",
 		pp: 40,
 		priority: 5,
+		self: {
 		boosts: {
-			def: 1,
-			spd: 1,
-		},
-		onTryHit: function (target) {
-			if (target.volatiles['substitute']) {
-				this.add('-fail', target, 'move: Substitute');
-				return null;
-			}
-			if (target.hp <= target.maxhp / 4 || target.maxhp === 1) { // Shedinja clause
-				this.add('-fail', target, 'move: Substitute', '[weak]');
-				return null;
-			}
-		},
-		onHit: function (target) {
-			this.directDamage(target.maxhp / 4);
-		},
-		effect: {
-			onStart: function (target) {
-				this.add('-start', target, 'Substitute');
-				this.effectData.hp = Math.floor(target.maxhp / 4);
-				delete target.volatiles['partiallytrapped'];
+				def: 1,
+				spd: 1,
 			},
-			onTryPrimaryHitPriority: -1,
-			onTryPrimaryHit: function (target, source, move) {
-				if (target === source || move.flags['authentic'] || move.infiltrates) {
-					return;
-				}
-				let damage = this.getDamage(source, target, move);
-				if (!damage && damage !== 0) {
-					this.add('-fail', target);
-					return null;
-				}
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) {
-					return damage;
-				}
-				if (damage > target.volatiles['substitute'].hp) {
-					damage = target.volatiles['substitute'].hp;
-				}
-				target.volatiles['substitute'].hp -= damage;
-				source.lastDamage = damage;
-				if (target.volatiles['substitute'].hp <= 0) {
-					target.removeVolatile('substitute');
-				} else {
-					this.add('-activate', target, 'Substitute', '[damage]');
-				}
-				if (move.recoil) {
-					this.damage(this.calcRecoilDamage(damage, move), source, target, 'recoil');
-				}
-				if (move.drain) {
-					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
-				}
-				this.runEvent('AfterSubDamage', target, source, move, damage);
-				return 0; // hit
-			},
-			onEnd: function (target) {
-				this.add('-end', target, 'Substitute');
+		},
+		onPrepareHit: function (target, source) {
+				this.useMove('Substitute', source);
+				this.useMove('Baton Pass', source);
 			},
 		},
 		flags: {},
