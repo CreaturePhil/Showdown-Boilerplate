@@ -1,6 +1,21 @@
 'use strict';
 
 exports.BattleAbilities = {
+	shellarmorclone: {
+		onCriticalHit: false,
+		onModifyMove: function (move) {
+			move.willCrit = true;
+			if (move.secondaries) {
+				for (var i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance = 100;
+				}
+			}
+		}
+		id: "shellarmorclone",
+		name: "Shell Armor",
+		rating: 1,
+		num: 1075,
+	},
 	discoverme: {
 		onTryHit: function (target, source, move) {
 			if (target !== source && (move.type === 'Water')) {
