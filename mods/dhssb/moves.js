@@ -380,6 +380,40 @@ evalchomp: {
 		type: "Dark",
 		contestType: "Beautiful",
 	},
+	dragonsymphony: {
+		accuracy: 90,
+		basePower: 120,
+		category: "Physical",
+		id: "dragonsymphony",
+		isNonstandard: true,
+		isViable: true,
+		name: "Dragon Symphony",
+		pp: 20,
+                noPPBoosts: true,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Crabhammer", target);
+		},
+		onHit: function (target, source) {
+			if (toId(source.name) === 'eternalmayhem') {
+				this.add('c|@Eternal Mayhem|How \'bout we turn on some trap, eh? Or the classics, they\'ll lull you to sleep, they will!');
+			}
+		},
+		secondary: {
+			chance: 100,
+			status: 'sleep',
+		},
+                boosts: {
+			chance: 40,
+                        atk: 1,
+			spe: 1,
+		},
+                recoil: [1, 2],
+		target: "normal",
+		type: "Dragon",
+	},
 	// Modified moves
 	"defog": {
 		inherit: true,
