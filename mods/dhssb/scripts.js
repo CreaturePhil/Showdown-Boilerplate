@@ -316,7 +316,7 @@ exports.BattleScripts = {
  			},
 			'FlareonDriod': {
  				species: 'Flareon', ability: 'Analytic', item: 'Charcoal', gender: 'F',
- 				moves: ['fusionflare', 'spacialrend', 'voltswitch'],
+ 				moves: ['vcreate', 'recover', 'bellydrum'],
  				signatureMove: "banhammah",
  				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
  			},
