@@ -1,6 +1,36 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"icebeam": {
+		num: 58,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		desc: "Has a 10% chance to freeze the target.",
+		shortDesc: "10% chance to freeze the target.",
+		id: "icebeam",
+		isViable: true,
+		name: "Ice Beam",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		s
+		if (source.name == 'Snaquaza') {
+			secondary: {
+				chance: 100,
+				status: 'frz',
+			},
+			willCrit: true,
+		} else {
+			secondary: {
+				chance: 10,
+				status: 'frz',
+			}
+		},
+		target: "normal",
+		type: "Ice",
+		contestType: "Beautiful",
+	},
         "rushb": {
 		accuracy: 100,
 		basePower: 250,
