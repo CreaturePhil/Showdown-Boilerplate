@@ -234,4 +234,23 @@ exports.BattleAbilities = {
 		id: "partingshot",
 		name: "Parting Shot",
 	},
+	'hidden': {
+		onStart: function (source) {
+			this.useMove('Substitute', source);
+		},
+		id: "partingshot",
+		name: "Parting Shot",
+	},
+	"dragonfury": {
+		desc: "If this Pokemon, but not its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
+		shortDesc: "If this Pokemon (not its substitute) takes a critical hit, its Attack is raised 12 stages.",
+		onAfterDamage: function (damage, target, source, move) {
+			this.boost({atk:12});
+		},
+		id: "angerpoint",
+		name: "Anger Point",
+		rating: 2,
+		num: 83,
+	},
+
 };
