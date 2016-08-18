@@ -45,7 +45,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: {
-			chance: 100,	
+			chance: 100,
 			status: 'frz',
 		},
 		willCrit: true,
@@ -106,8 +106,8 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
 		selfSwitch: true,
 		boosts: {
-			atk: -12,
-			spa: -12,
+			atk: -2,
+			spa: -2,
 		},
 		secondary: false,
 		target: "normal",
