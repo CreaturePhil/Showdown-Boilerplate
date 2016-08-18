@@ -243,6 +243,17 @@ exports.BattleScripts = {
 				signatureMove: "evalchomp",
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant',
 			},
+			'Snaq': {
+				species: 'Garchomp-Mega', ability: 'Epic Claws', item: 'Leftovers',
+				moves: ['precipiceblades', 'dragonclaw', 'sacredfire'],
+				signatureMove: "evalchomp",
+				evs: {atk:252, def:4, spe:252}, nature: 'Timid',
+			},
+			'Snaquaza': {
+				species: 'Lapras', ability: 'Shell Armor', item: 'Leftovers',
+				moves: ['icebeam', 'surf', 'ancientpower', 'iceshard'],
+				evs: {atk:252, def:4, spe:252}, nature: 'Timid',
+			},
 			'Digital Edge': {
 				species: 'Jirachi', ability: 'Serene Grace', item: 'Choice Scarf',
 				moves: ['iciclecrash', 'ironhead', 'uturn'],
