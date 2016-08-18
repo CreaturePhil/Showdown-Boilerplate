@@ -3220,6 +3220,48 @@ exports.Formats = [
 		}
 	},
 	{
+     name: "Palette Pals",
+     section: "Other Metagames",
+
+     ruleset: ['OU'],
+     banlist: ['Huge Power', 'Pure Power', 'Medichamite', 'Kyurem-Black', 'Slaking', 'Regigigas', 'Light Ball', 'Eviolite', 'Deep Sea Tooth', 'Deep Sea Scale', 'Thick Club'],
+     onBegin: function () {
+       for (let j = 0; j < this.sides.length; j++) {
+         let allPokemon = this.sides[j].pokemon;
+         let colorArray = [];
+         for (let i = 0, len = allPokemon.length; i < len; i++) {
+           let pokemon = allPokemon[i];
+           let color = pokemon.template.color;
+           if (colorArray.indexOf(color) > -1) {
+             let copyIndex = colorArray.indexOf(color);
+             let copycat = allPokemon[copyIndex];
+
+             //Thanks to Nature Swap code for premise!!
+             ["baseTemplate", "canMegaEvo"].forEach(key => {
+               if (pokemon[key]) {
+
+                 let template = Object.assign({}, this.getTemplate(pokemon[key]));
+                 template.baseStats = Object.assign({}, template.baseStats);
+                 let template2 = Object.assign({}, this.getTemplate(copycat.baseTemplate));
+                 template2.baseStats = Object.assign({}, template2.baseStats);
+                 template.baseStats = template2.baseStats;
+                 pokemon[key] = template;
+               }
+             });
+             pokemon.formeChange(pokemon.baseTemplate);
+
+             //adjust for hp
+             let hp = pokemon.baseTemplate.baseStats['hp'];
+             hp = Math.floor(Math.floor(2 * hp + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+             pokemon.maxhp = hp;
+             pokemon.hp = hp;
+           }
+           colorArray.push(color);
+         }
+       }
+     }
+   },
+	{
         name: "The Negative Metagame",
         section: "New Other Metagames",
 
