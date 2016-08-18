@@ -227,4 +227,11 @@ exports.BattleAbilities = {
 			},
 		},
 	},
+	'partingshotspam': {
+		onStart: function (source) {
+			this.useMove('Parting Shot Spam', source);
+		},
+		id: "partingshot",
+		name: "Parting Shot",
+	},
 };
