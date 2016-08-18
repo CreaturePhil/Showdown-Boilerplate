@@ -557,10 +557,10 @@ exports.Formats = [
 				this.add("c|&PI★EddyChomp|Fuck this shit, I got rekt. I\'ll get MY REVENGE! RAWR!!!!");
 			}
 			if(name === 'snaq') {
-				this.add("c|&PI★EddyChomp|rip in pieces");
+				this.add("c|&Snaq|rip in pieces");
 			}
 			if(name === 'snaquaza') {
-				this.add("c|&PI★EddyChomp|Back to the real meta");
+				this.add("c|&Snaquaza|Back to the real meta");
 			}
 			if(name === 'loominite') {
 				this.add('c|&Loominite|eh, i\'m out!');
