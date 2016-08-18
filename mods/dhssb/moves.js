@@ -515,7 +515,6 @@ evalchomp: {
 				this.useMove('Substitute', source);
 				this.useMove('Baton Pass', source);
 			},
-		},
 		flags: {},
 		selfSwitch: 'copyvolatile',
 		secondary: false,
