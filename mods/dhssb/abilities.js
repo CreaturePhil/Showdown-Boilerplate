@@ -255,15 +255,15 @@ exports.BattleAbilities = {
 		onStart: function (source) {
 			this.useMove('Parting Shot Spam', source);
 		},
-		id: "partingshot",
-		name: "Parting Shot",
+		id: "partingshotspam",
+		name: "Parting Shot Spam",
 	},
 	'hidden': {
 		onStart: function (source) {
 			this.useMove('Substitute', source);
 		},
-		id: "partingshot",
-		name: "Parting Shot",
+		id: "hidden",
+		name: "Hidden",
 	},
 	"dragonfury": {
 		desc: "If this Pokemon, but not its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
@@ -271,8 +271,8 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, move) {
 			this.boost({atk:12});
 		},
-		id: "angerpoint",
-		name: "Anger Point",
+		id: "dragonfury",
+		name: "Dragon Fury",
 		rating: 2,
 		num: 83,
 	},
