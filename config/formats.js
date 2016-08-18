@@ -518,6 +518,9 @@ exports.Formats = [
 			if(name === 'loominite') {
 				this.add('c|&Loominite|Okay, lets go :I');
 			}
+			if(name === 'eternalmayhem') {
+				this add('c|@Eternal Mayhem|Let the music overcome you, control you.');
+			}
 			if(name === 'charizard8888') {
 				this.add('c|&charizard8888|It\'s **Outragin\' Time !!**');
 			}
@@ -572,6 +575,9 @@ exports.Formats = [
 			if (name === 'xprienzo') {
  				this.add('c|⚔XpRienzo ☑-☑|Bleh');
  			}
+ 			if(name === 'eternalmayhem') {
+				this add('c|@Eternal Mayhem|The music was too powerful.');
+			}
  			if (name === 'ransei') {
  				this.add('c|~Ransei|ripsei');
  			}
