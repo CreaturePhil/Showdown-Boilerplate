@@ -518,7 +518,7 @@ exports.Formats = [
 				this.add('c|&Loominite|Okay, lets go :I');
 			}
 			if(name === 'eternalmayhem') {
-				this add('c|@Eternal Mayhem|Let the music overcome you, control you.');
+				this.add('c|@Eternal Mayhem|Let the music overcome you, control you.');
 			}
 			if(name === 'charizard8888') {
 				this.add('c|&charizard8888|It\'s **Outragin\' Time !!**');
