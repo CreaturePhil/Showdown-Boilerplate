@@ -582,7 +582,7 @@ evalchomp: {
 		id: "banhammah",
 		isViable: true,
 		name: "BANHAMMAH!!!!",
-		pp: 20,
+		pp: 5,
 		priority: 7,
 		flags: {reflectable: 1, mirror: 1, authentic: 1},
 		forceSwitch: true,
