@@ -52,6 +52,8 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'stonedorf':'http://i.imgur.com/MRimwlB.png',
 		'feelsrip':'http://i.imgur.com/ljl6Sfd.png',
 		'feelspoak':'http://i.imgur.com/jElHTOv.png',
+		'angryblanc': 'http://i.imgur.com/T5k0Tzq.png',
+		'(kappa)': 'http://i.imgur.com/ZxRU4z3.png?1',
 	});
 }
 
