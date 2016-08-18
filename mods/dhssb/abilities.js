@@ -10,7 +10,7 @@ exports.BattleAbilities = {
 					move.secondaries[i].chance = 100;
 				}
 			}
-		}
+		},
 		id: "shellarmorclone",
 		name: "Shell Armor",
 		rating: 1,
