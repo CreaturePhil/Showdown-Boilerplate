@@ -493,6 +493,157 @@ evalchomp: {
 		type: "Dark",
 		contestType: "Beautiful",
 	},
+	"superswitch": {
+		num: 226,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user is replaced with another Pokemon in its party. The selected Pokemon has the user's stat stage changes, confusion, and certain move effects transferred to it.",
+		shortDesc: "User switches, passing stat changes and more.",
+		id: "superswitch",
+		isViable: true,
+		name: "Super Switch",
+		pp: 40,
+		priority: 5,
+		boosts: {
+			def: 1,
+			spd: 1,
+		},
+			"substitute": {
+		num: 164,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The substitute is removed once enough damage is inflicted on it, or if the user switches out or faints. Baton Pass can be used to transfer the substitute to an ally, and the substitute will keep its remaining HP. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat stage changes caused by other Pokemon. Sound-based moves and Pokemon with the Ability Infiltrator ignore substitutes. The user still takes normal damage from weather and status effects while behind its substitute. If the substitute breaks during a multi-hit attack, the user will take damage from any remaining hits. If a substitute is created while the user is partially trapped, the partial-trapping effect ends immediately. This move fails if the user does not have enough HP remaining to create a substitute, or if it already has a substitute.",
+		shortDesc: "User takes 1/4 its max HP to put in a Substitute.",
+		id: "substitute",
+		isViable: true,
+		name: "Substitute",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, nonsky: 1},
+		volatileStatus: 'Substitute',
+		onTryHit: function (target) {
+			if (target.volatiles['substitute']) {
+				this.add('-fail', target, 'move: Substitute');
+				return null;
+			}
+			if (target.hp <= target.maxhp / 4 || target.maxhp === 1) { // Shedinja clause
+				this.add('-fail', target, 'move: Substitute', '[weak]');
+				return null;
+			}
+		},
+		onHit: function (target) {
+			this.directDamage(target.maxhp / 4);
+		},
+		effect: {
+			onStart: function (target) {
+				this.add('-start', target, 'Substitute');
+				this.effectData.hp = Math.floor(target.maxhp / 4);
+				delete target.volatiles['partiallytrapped'];
+			},
+			onTryPrimaryHitPriority: -1,
+			onTryPrimaryHit: function (target, source, move) {
+				if (target === source || move.flags['authentic'] || move.infiltrates) {
+					return;
+				}
+				let damage = this.getDamage(source, target, move);
+				if (!damage && damage !== 0) {
+					this.add('-fail', target);
+					return null;
+				}
+				damage = this.runEvent('SubDamage', target, source, move, damage);
+				if (!damage) {
+					return damage;
+				}
+				if (damage > target.volatiles['substitute'].hp) {
+					damage = target.volatiles['substitute'].hp;
+				}
+				target.volatiles['substitute'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.volatiles['substitute'].hp <= 0) {
+					target.removeVolatile('substitute');
+				} else {
+					this.add('-activate', target, 'Substitute', '[damage]');
+				}
+				if (move.recoil) {
+					this.damage(this.calcRecoilDamage(damage, move), source, target, 'recoil');
+				}
+				if (move.drain) {
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				}
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return 0; // hit
+			},
+			onEnd: function (target) {
+				this.add('-end', target, 'Substitute');
+			},
+		},
+		flags: {},
+		selfSwitch: 'copyvolatile',
+		secondary: false,
+		target: "self",
+		type: "Dragon",
+		contestType: "Cute",
+	},
+	"banhammah": {
+		num: 18,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target used Ingrain previously or has the Ability Suction Cups.",
+		shortDesc: "Forces the target to switch to a random ally.",
+		id: "banhammah",
+		isViable: true,
+		name: "BANHAMMAH!!!!",
+		pp: 20,
+		priority: 7,
+		flags: {reflectable: 1, mirror: 1, authentic: 1},
+		forceSwitch: true,
+		secondary: false,
+		target: "normal",
+		type: "Dark",
+		contestType: "Clever",
+	},
+	"massacre": {
+		num: 153,
+		accuracy: 100,
+		basePower: 250,
+		category: "Physical",
+		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Ability Damp.",
+		shortDesc: "Hits adjacent Pokemon. The user faints.",
+		id: "explosion",
+		isViable: true,
+		name: "Explosion",
+		pp: 5,
+		priority: 3,
+		flags: {protect: 1, mirror: 1},
+		selfdestruct: true,
+		secondary: false,
+		target: "allAdjacent",
+		type: "Dragon",
+		contestType: "Beautiful",
+	},
+	"raginglake": {
+		num: 560,
+		accuracy: 60,
+		basePower: 150,
+		category: "Physical",
+		desc: "This move combines Flying in its type effectiveness against the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "Combines Flying in its type effectiveness.",
+		id: "raginglake",
+		name: "Raging Lake",
+		pp: 10,
+		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
+		onEffectiveness: function (typeMod, type, move) {
+			return typeMod + this.getEffectiveness('Dragon', type);
+		},
+		priority: 0,
+		secondary: false,
+		target: "any",
+		type: "Water",
+		contestType: "Tough",
+	},
 	// Modified moves
 	"defog": {
 		inherit: true,
