@@ -21,6 +21,30 @@ exports.BattleAbilities = {
 		rating: 3.5,
 		num: 10,
 	},
+	breakthrough: {
+		onModifyMovePriority: -5,
+		onModifyMove: function (move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Fighting'] = true;
+				move.ignoreImmunity['Normal'] = true;
+                                move.ignoreImmunity['Dragon'] = true;
+				move.ignoreImmunity['Electric'] = true;
+                                move.ignoreImmunity['Ground'] = true;
+                                move.ignoreImmunity['Psychic'] = true;
+                                move.ignoreImmunity['Poison'] = true;
+                                move.ignoreImmunity['Ghost'] = true;
+                                move.ignoreImmunity['Water'] = true;
+                                move.ignoreImmunity['Fire'] = true;
+                                move.ignoreImmunity['Grass'] = true;
+                                move.ignoreImmunity['Fairy'] = true;
+                                move.ignoreImmunity['Bug'] = true;
+                        }
+		},
+		id: "breakthrough",
+		name: "Breakthrough",
+		rating: 3,
+	},
 	toughbounce: {
 	        onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
