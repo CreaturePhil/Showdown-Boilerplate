@@ -14,7 +14,7 @@ exports.BattleMovedex = {
 		isFutureMove: true,
                 onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-                        if (source.name == 'Zmeeed') this.add("c|%Zmeeed|The bomb has been planted!");
+                        if (source.name == 'Zmeeed') this.add("c|@Zmeeed|The bomb has been planted!");
 			this.add('-anim', source, "Double Edge", target);
 		},
 		onTry: function (source, target) {
