@@ -249,7 +249,7 @@ exports.BattleScripts = {
 				evs: {}, nature: 'Serious',
 			},
 			'Snaquaza': {
-				species: 'Lapras', ability: 'Shell Armor', item: 'Leftovers',
+				species: 'Lapras', ability: 'Shell Armor Clone', item: 'Leftovers',
 				moves: ['icebeam', 'surf', 'iceshard', 'ancientpower'],
 				evs: {hp:252, atk:252, def:252, spa:252, spd:252, spe:252}, nature: 'Serious',
 			},
