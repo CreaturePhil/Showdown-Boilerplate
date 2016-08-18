@@ -244,10 +244,9 @@ exports.BattleScripts = {
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant',
 			},
 			'Snaq': {
-				species: 'Garchomp-Mega', ability: 'Epic Claws', item: 'Leftovers',
-				moves: ['precipiceblades', 'dragonclaw', 'sacredfire'],
-				signatureMove: "evalchomp",
-				evs: {atk:252, def:4, spe:252}, nature: 'Timid',
+				species: 'Magikarp', ability: 'Parting Shot Spam', item: 'Air Balloon',
+				moves: ['splash'],
+				evs: {}, nature: 'Serious',
 			},
 			'Snaquaza': {
 				species: 'Lapras', ability: 'Shell Armor', item: 'Leftovers',
