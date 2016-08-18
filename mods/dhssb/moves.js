@@ -655,12 +655,14 @@ evalchomp: {
 			chance: 100,
 			status: 'sleep',
 		},
-                boosts: {
+		self:{
+		boosts: {
 			chance: 40,
-                        atk: 1,
+      atk: 1,
 			spe: 1,
 		},
-                recoil: [1, 2],
+	},
+		recoil: [1, 2],
 		target: "normal",
 		type: "Dragon",
 	},
