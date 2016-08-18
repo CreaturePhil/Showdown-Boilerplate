@@ -441,13 +441,6 @@ exports.Formats = [
 				}
 			}
 		},
-		// Here we add some flavour or design immunities.
-		onImmunity: function (type, pokemon) {
-			if (toId(pokemon.name) === 'juanma' && type === 'Fire') {
-				this.add('-message', "Did you think fire would stop __him__? You **fool**!");
-				return false;
-			}
-		},
 		onNegateImmunity: function (pokemon, type) {
 			if (pokemon.volatiles['flipside']) return false;
 			const foes = pokemon.side.foe.active;
@@ -512,6 +505,12 @@ exports.Formats = [
 			if(name === 'pieddychomp') {
 				this.add('c|&PI★EddyChomp|Hey guys, watch me KO this guy lmao xaa :)');
 			}
+			if(name === 'snaq') {
+				this.add('c|&Snaq|Sup duds');
+			}
+			if(name === 'snaquaza') {
+				this.add('c|&Snaquaza|Wait, why ain\'t I playing Random Haxmons instead?');
+			}
 			if(name === 'thegodofhaxorus') {
 				this.add('c|@The God of Haxorus|Hi! I\'m a **Hax**orus :3');
 			}
@@ -557,6 +556,12 @@ exports.Formats = [
 			if(name === 'pieddychomp') {
 				this.add("c|&PI★EddyChomp|Fuck this shit, I got rekt. I\'ll get MY REVENGE! RAWR!!!!");
 			}
+			if(name === 'snaq') {
+				this.add("c|&PI★EddyChomp|rip in pieces");
+			}
+			if(name === 'snaquaza') {
+				this.add("c|&PI★EddyChomp|Back to the real meta");
+			}
 			if(name === 'loominite') {
 				this.add('c|&Loominite|eh, i\'m out!');
 			}
@@ -592,67 +597,6 @@ exports.Formats = [
 		},
 		onModifyPokemon: function (pokemon) {
 			let name = toId(pokemon.name);
-			// Enforce choice item locking on custom moves.
-			// qtrx only has one move anyway.
-			if (name !== 'qtrx') {
-				let moves = pokemon.moveset;
-				if (pokemon.getItem().isChoice && pokemon.lastMove === moves[3].id) {
-					for (let i = 0; i < 3; i++) {
-						if (!moves[i].disabled) {
-							pokemon.disableMove(moves[i].id, false);
-							moves[i].disabled = true;
-						}
-					}
-				}
-			}
-		},
-		// Specific residual events for custom moves.
-		// This allows the format to have kind of custom side effects and volatiles.
-		onResidual: function (battle) {
-			// Deal with swapping from qtrx's mega signature move.
-			let swapmon1, swapmon2;
-			let swapped = false;
-			for (let i = 1; i < 6 && !swapped; i++) {
-				swapmon1 = battle.sides[0].pokemon[i];
-				if (swapmon1.swapping && swapmon1.hp > 0) {
-					swapmon1.swapping = false;
-					for (let j = 1; j < 6; j++) {
-						swapmon2 = battle.sides[1].pokemon[j];
-						if (swapmon2.swapping && swapmon2.hp > 0) {
-							swapmon2.swapping = false;
-
-							this.add('message', "Link standby... Please wait.");
-							swapmon1.side = battle.sides[1];
-							swapmon1.fullname = swapmon1.side.id + ': ' + swapmon1.name;
-							swapmon1.id = swapmon1.fullname;
-							swapmon2.side = battle.sides[0];
-							swapmon2.fullname = swapmon2.side.id + ': ' + swapmon2.name;
-							swapmon2.id = swapmon2.fullname;
-							let oldpos = swapmon1.position;
-							swapmon1.position = swapmon2.position;
-							swapmon2.position = oldpos;
-							battle.sides[0].pokemon[i] = swapmon2;
-							battle.sides[1].pokemon[j] = swapmon1;
-
-							this.add("c|\u2605" + swapmon1.side.name + "|Bye-bye, " + swapmon2.name + "!");
-							this.add("c|\u2605" + swapmon2.side.name + "|Bye-bye, " + swapmon1.name + "!");
-							if (swapmon1.side.active[0].hp && swapmon2.side.active[0].hp) {
-								this.add('-anim', swapmon1.side.active, "Healing Wish", swapmon1.side.active);
-								this.add('-anim', swapmon2.side.active, "Aura Sphere", swapmon2.side.active);
-								this.add('message', swapmon2.side.name + " received " + swapmon2.name + "! Take good care of " + swapmon2.name + "!");
-								this.add('-anim', swapmon2.side.active, "Healing Wish", swapmon2.side.active);
-								this.add('-anim', swapmon1.side.active, "Aura Sphere", swapmon1.side.active);
-								this.add('message', swapmon1.side.name + " received " + swapmon1.name + "! Take good care of " + swapmon1.name + "!");
-							} else {
-								this.add('message', swapmon2.side.name + " received " + swapmon2.name + "! Take good care of " + swapmon2.name + "!");
-								this.add('message', swapmon1.side.name + " received " + swapmon1.name + "! Take good care of " + swapmon1.name + "!");
-							}
-							swapped = true;
-							break;
-						}
-					}
-				}
-			}
 		},
 	},
 	{
