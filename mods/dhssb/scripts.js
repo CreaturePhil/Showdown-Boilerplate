@@ -256,10 +256,10 @@ exports.BattleScripts = {
 				evs: {hp:248, atk:252, spa:252, spe:252}, nature: 'Mild',
 			},
 			'Flygonerz': {
-				species: 'Flygon', ability: 'Magic Claws', item: 'Focus Sash', gender: ['F'],shiny:true,
-				moves: ['dragonrush', 'thousandarrows', 'gunkshot'],
+				species: 'Flygon', ability: 'Tough Claws', item: 'Focus Sash', gender: ['F'],shiny:true,
+				moves: ['outrage', 'thousandarrows', 'extremespeed'],
 				signatureMove: "Dragon Shift",
-				evs: {hp:4, atk:252, spe:252}, nature: 'Adamant',
+				evs: {hp:4, atk:252, spe:252}, nature: 'Jolly',
 			},
 			'Spandan': {
 			    species: 'Salamence', ability: 'Multiscale', item: 'Salamencite', gender: 'M',
