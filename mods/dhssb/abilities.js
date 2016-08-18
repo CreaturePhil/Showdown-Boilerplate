@@ -50,6 +50,20 @@ exports.BattleAbilities = {
 		effect: {
 			duration: 1,
 		},
+		onUpdate: function (pokemon) {
+			if (pokemon.volatiles['confusion']) {
+				this.add('-activate', pokemon, 'ability: Own Tempo');
+				pokemon.removeVolatile('confusion');
+			}
+		},
+		onTryAddVolatile: function (status, pokemon) {
+			if (status.id === 'confusion') return null;
+		},
+		onHit: function (target, source, move) {
+			if (move && move.volatileStatus === 'confusion') {
+				this.add('-immune', target, 'confusion', '[from] ability: Own Tempo');
+			}
+		},
 		id: "toughbounce",
 		name: "Tough Bounce",
 		rating: 5,
