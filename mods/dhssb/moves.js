@@ -1,7 +1,7 @@
 "use strict";
 
 exports.BattleMovedex = {
-	"ancientpower": {
+	"ancientpowerclone": {
 		num: 246,
 		accuracy: 100,
 		basePower: 60,
@@ -14,39 +14,24 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		if (source.name == 'Snaquaza') {
-			secondary: {
-				chance: 100,
-				self: {
-					boosts: {
-						atk: 1,
-						def: 1,
-						spa: 1,
-						spd: 1,
-						spe: 1,
-					},
-				},
-			},
-			willCrit: true,
-		} else {
-			secondary: {
-				chance: 10,
-				self: {
-					boosts: {
-						atk: 1,
-						def: 1,
-						spa: 1,
-						spd: 1,
-						spe: 1,
-					},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
 				},
 			},
 		},
+		willCrit: true,
 		target: "normal",
 		type: "Rock",
 		contestType: "Tough",
 	},
-	"icebeam": {
+	"icebeamclone": {
 		num: 58,
 		accuracy: 100,
 		basePower: 90,
@@ -59,23 +44,16 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		if (source.name == 'Snaquaza') {
-			secondary: {
-				chance: 100,
-				status: 'frz',
-			},
-			willCrit: true,
-		} else {
-			secondary: {
-				chance: 10,
-				status: 'frz',
-			}
+		secondary: {
+			chance: 100,	
+			status: 'frz',
 		},
+		willCrit: true,
 		target: "normal",
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-		"iceshard": {
+	"iceshardclone": {
 		num: 420,
 		accuracy: 100,
 		basePower: 40,
@@ -88,15 +66,13 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		flags: {protect: 1, mirror: 1},
-		if (source.name == 'Snaquaza') {
-			willCrit: true,
-		},
+		willCrit: true,
 		secondary: false,
 		target: "normal",
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"surf": {
+	"surfclone": {
 		num: 57,
 		accuracy: 100,
 		basePower: 90,
@@ -109,9 +85,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
-		if (source.name == 'Snaquaza') {
-			willCrit: true,
-		},
+		willCrit: true,
 		secondary: false,
 		target: "allAdjacent",
 		type: "Water",
