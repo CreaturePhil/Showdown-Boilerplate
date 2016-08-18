@@ -321,7 +321,7 @@ exports.BattleScripts = {
  				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
  			},
 			'Dragitbot': {
- 				species: 'Dratini', ability: 'Hidden', item: 'Charcoal', gender: 'F',
+ 				species: 'Dratini', ability: 'Hidden', item: 'Leftovers', gender: 'F',
  				moves: ['swordsdance', 'agility', 'nastyplot'],
  				signatureMove: "superswitch",
  				evs: {hp:252, def:252, spd:4}, nature: 'Bold',
