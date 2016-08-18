@@ -14,7 +14,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit: function (target, source) {
 		if (source.name == 'Snaquaza') {
 			secondary: {
 				chance: 100,
@@ -43,7 +42,6 @@ exports.BattleMovedex = {
 				},
 			},
 		},
-	},
 		target: "normal",
 		type: "Rock",
 		contestType: "Tough",
@@ -61,7 +59,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit: function (target, source) {
 		if (source.name == 'Snaquaza') {
 			secondary: {
 				chance: 100,
@@ -74,7 +71,6 @@ exports.BattleMovedex = {
 				status: 'frz',
 			}
 		},
-	},
 		target: "normal",
 		type: "Ice",
 		contestType: "Beautiful",
@@ -92,11 +88,9 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		flags: {protect: 1, mirror: 1},
-		onHit: function (target, source) {
 		if (source.name == 'Snaquaza') {
 			willCrit: true,
 		},
-	},
 		secondary: false,
 		target: "normal",
 		type: "Ice",
@@ -115,11 +109,9 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
-		onHit: function (target, source) {
 		if (source.name == 'Snaquaza') {
 			willCrit: true,
 		},
-	},
 		secondary: false,
 		target: "allAdjacent",
 		type: "Water",
