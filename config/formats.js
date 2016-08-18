@@ -593,7 +593,7 @@ exports.Formats = [
  				this.add('c|⚔XpRienzo ☑-☑|Bleh');
  			}
  			if(name === 'eternalmayhem') {
-				this add('c|@Eternal Mayhem|The music was too powerful.');
+				this.add('c|@Eternal Mayhem|The music was too powerful.');
 			}
  			if (name === 'ransei') {
  				this.add('c|~Ransei|ripsei');
