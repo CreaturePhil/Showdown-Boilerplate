@@ -3221,7 +3221,7 @@ exports.Formats = [
 	},
 	{
      name: "Palette Pals",
-     section: "Other Metagames",
+     section: "New Other Metagames",
 
      ruleset: ['OU'],
      banlist: ['Huge Power', 'Pure Power', 'Medichamite', 'Kyurem-Black', 'Slaking', 'Regigigas', 'Light Ball', 'Eviolite', 'Deep Sea Tooth', 'Deep Sea Scale', 'Thick Club'],
