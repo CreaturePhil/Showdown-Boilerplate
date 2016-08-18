@@ -313,9 +313,10 @@ evalchomp: {
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		self: {
 				boosts: {
-					atk: 2,
-					accuracy: 1,
+					atk: 3,
+					def: 1.5,
 					spe: 2,
+					spd: 1,
 				},
 			},
 		secondary: false,
@@ -323,6 +324,7 @@ evalchomp: {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Dragon Dance", source);
 			if (source.name === 'Flygonerz') this.add("c|&Flygonerz|Get re(kt)ddy");
+			this.useMove('Wish', source);
 		},
 		target: "self",
 		type: "Dragon",
