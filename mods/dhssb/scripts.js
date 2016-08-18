@@ -300,7 +300,31 @@ exports.BattleScripts = {
  				species: 'Reshiram', ability: 'Adaptability', item: 'Charcoal', gender: 'M',
  				moves: ['fusionflare', 'spacialrend', 'voltswitch'],
  				signatureMove: "blehflame",
- 				evs: {spa:254, spd:4, spe:252}, nature: 'Timid',
+ 				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
+ 			},
+			'BatterBotto': {
+ 				species: 'Dragonite', ability: 'Protean', item: 'Iron Ball', gender: 'M', shiny:true,
+ 				moves: ['highjumpkick', 'extremespeed', 'vcreate'],
+ 				signatureMove: "massacre",
+ 				evs: {atk:252, spd:4, spe:252}, nature: 'Adamant',
+ 			},
+			'OutrageousBoT': {
+ 				species: 'Gyarados', ability: 'Dragon Fury', item: 'Life Orb', gender: 'M',
+ 				moves: ['outrage', 'dragondance', 'dracometeor'],
+ 				signatureMove: "Raging Lake",
+ 				evs: {spa:252, spd:4, spe:252}, nature: 'Jolly',
+ 			},
+			'FlareonDriod': {
+ 				species: 'Flareon', ability: 'Analytic', item: 'Charcoal', gender: 'F',
+ 				moves: ['vcreate', 'recover', 'bellydrum'],
+ 				signatureMove: "banhammah",
+ 				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
+ 			},
+			'Dragitbot': {
+ 				species: 'Dratini', ability: 'Hidden', item: 'Leftovers', gender: 'F',
+ 				moves: ['swordsdance', 'agility', 'nastyplot'],
+ 				signatureMove: "superswitch",
+ 				evs: {hp:252, def:252, spd:4}, nature: 'Bold',
  			},
 		};
 

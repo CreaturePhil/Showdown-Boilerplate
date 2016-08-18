@@ -529,6 +529,18 @@ exports.Formats = [
 			if(name === 'xprienzo') {
  				this.add('c|⚔XpRienzo ☑-☑|Wait, was I supposed to do something?');
  			}
+ 			if (name === 'batterbotto') {
+ 				this.add('c|*BatterBotto|Beep Boop');
+ 			}
+ 			if (name === 'flareondriod') {
+ 				this.add('c|*FlareonDriod|Beep Beep');
+ 			}
+ 			if (name === 'dragitbot') {
+ 				this.add('c|*Dragitbot|Boop Boop');
+ 			}
+ 			if (name === 'outrageousbot') {
+ 				this.add('c|*OutrageousBoT|Boop Beep');
+ 			}
 		},
 		onFaint: function (pokemon, source, effect) {
 			let name = toId(pokemon.name);
@@ -579,6 +591,18 @@ exports.Formats = [
  			}
  			if (name === 'ransei') {
  				this.add('c|~Ransei|ripsei');
+ 			}
+ 			if (name === 'batterbotto') {
+ 				this.add('c|*BatterBotto|Beep Boop');
+ 			}
+ 			if (name === 'flareondriod') {
+ 				this.add('c|*FlareonDriod|Beep Beep');
+ 			}
+ 			if (name === 'dragitbot') {
+ 				this.add('c|*Dragitbot|Boop Boop');
+ 			}
+ 			if (name === 'outrageousbot') {
+ 				this.add('c|*OutrageousBoT|Boop Beep');
  			}
 
 		},
