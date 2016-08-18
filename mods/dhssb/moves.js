@@ -276,7 +276,7 @@ evalchomp: {
 			status: 'par',
 		},
 		target: "any",
-		type: "Dragon",
+		type: "Flying",
 	},
 	"yomammajoke": {
 		accuracy: 100,
