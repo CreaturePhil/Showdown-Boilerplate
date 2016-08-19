@@ -3225,10 +3225,12 @@ exports.Formats = [
              pokemon.formeChange(pokemon.baseTemplate);
 
              //adjust for hp
-             let hp = pokemon.baseTemplate.baseStats['hp'];
-             hp = Math.floor(Math.floor(2 * hp + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
-             pokemon.maxhp = hp;
-             pokemon.hp = hp;
+             	if (pokemon.species !== "Shedinja") {
+        		let hp = pokemon.baseTemplate.baseStats['hp'];
+             		hp = Math.floor(Math.floor(2 * hp + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+             		pokemon.maxhp = hp;
+             		pokemon.hp = hp;
+             	}
            }
            colorArray.push(color);
          }
