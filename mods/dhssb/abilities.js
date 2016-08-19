@@ -143,6 +143,38 @@ exports.BattleAbilities = {
 		name: "Breaking Point",
 		rating: 2,
 	},
+	"theunderlord": {
+		onAfterDamage: function (damage, target, source, move) {
+			if (move && move.flags['contact']) {
+				if (parseInt(this.random(10)) == 7) {
+					source.trySetStatus('brn', target);
+				}
+			}
+		},
+		onAfterMoveSecondary: function (target, source, move) {
+			if (!target.lastMove) {
+				return false;
+			}
+			let possibleTypes = [];
+			let attackType = this.getMove(target.lastMove).type;
+			for (let type in this.data.TypeChart) {
+				if (source.hasType(type) || target.hasType(type)) continue;
+				let typeCheck = this.data.TypeChart[type].damageTaken[attackType];
+				if (typeCheck === 2 || typeCheck === 3) {
+					possibleTypes.push(type);
+				}
+			}
+			if (!possibleTypes.length) {
+				return false;
+			}
+			let randomType = possibleTypes[this.random(possibleTypes.length)];
+
+			if (!source.setType(randomType)) return false;
+			this.add('-start', source, 'typechange', randomType);
+		},
+		id: "theunderlord",
+		name: "The Underlord",
+	},
 	epicclaws: {
 		onModifyAtkPriority: 5,
 		onModifyAtk: function (atk) {
