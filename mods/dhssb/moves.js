@@ -37,6 +37,7 @@ exports.BattleMovedex = {
 		isFutureMove: true,
                 onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
+			this.add('-anim', source, "Doom Desire", source);
                         if (source.name == 'Zmeeed') this.add("c|@Zmeeed|The bomb has been planted!");
 			this.add('-anim', source, "Double Edge", target);
 		},
@@ -62,7 +63,6 @@ exports.BattleMovedex = {
 					type: 'Fighting',
 				},
 			};
-                        if (source.name == 'Zmeeed') this.add("c|@Zmeeed|Terrorists Win!");
 			this.add('-start', source, 'move: Rush B');
 			return null;
 		},
