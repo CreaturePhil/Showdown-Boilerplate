@@ -1,6 +1,28 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"theloomeffect": {
+		num: 407,
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		id: "theloomeffect",
+		name: "The Loom Effect",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					def: 2,
+					spd: 2,
+				},
+			},
+		},
+		target: "normal",
+		type: "Dragon",
+	},
         "rushb": {
 		accuracy: 100,
 		basePower: 250,
