@@ -92,7 +92,7 @@ exports.BattleMovedex = {
 			chance: 100,
 			status: 'brn',
 			volatileStatus: 'confusion',
-			if(parseInt(this.random(10))%2==0)
+			if(this.random(10)%2==0)
 			{
 				self: {
 					boosts: {
@@ -210,7 +210,7 @@ exports.BattleMovedex = {
 		name: "Space Compress",
 		isNonstandard: true,
 		pp: 15,
-		priority: 0,		
+		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
