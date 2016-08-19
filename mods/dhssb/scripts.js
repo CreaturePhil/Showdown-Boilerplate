@@ -256,7 +256,7 @@ exports.BattleScripts = {
 			},
 			'Hydrostatics': {
 				species: 'Palkia', ability: 'Pressure Breaker', item: 'Leftovers', gender: 'M' , shiny:true,
-				moves: ['spacialrend,' 'hydropump', 'flashcannon'],
+				moves: ['spacialrend', 'hydropump', 'flashcannon'],
 				signatureMove: "Space Compress",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest',
 			},
