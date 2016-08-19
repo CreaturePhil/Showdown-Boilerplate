@@ -238,9 +238,9 @@ exports.BattleScripts = {
 				evs: {atk:252, spd:4, hp:252}, nature: 'Adamant',
 			},
 			'PI EddyChomp': {
-				species: 'Garchomp-Mega', ability: 'Epic Claws', item: 'Leftovers',
+				species: 'Garchomp-Mega', ability: 'Epic Claws', item: 'Focus Sash',
 				moves: ['precipiceblades', 'dragonclaw', 'sacredfire'],
-				signatureMove: "evalchomp",
+				signatureMove: "GARCHOMP EPICNESS",
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant',
 			},
 			'Snaq': {
