@@ -221,7 +221,7 @@ exports.BattleScripts = {
 			},
 			'Loominite': {
 				species: 'Giratina-Origin', ability: 'The Underlord', item: 'Griseous Orb', gender: 'M', shiny:true,
-				moves: ['willoswisp', 'shadowball', 'dragonpulse'],
+				moves: ['willowisp', 'shadowball', 'dragonpulse'],
 				signatureMove: "The Loom Effect",
 				ivs: {hp:31, atk:0, def:31, spa:31, spd:31, spe:31}, nature: 'Modest',
 			},
