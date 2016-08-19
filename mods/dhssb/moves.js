@@ -92,8 +92,8 @@ exports.BattleMovedex = {
 			chance: 100,
 			status: 'brn',
 			volatileStatus: 'confusion',
-			let chance=Math.floor(Math.random()*11);
-			if(chance==0)
+			let v=Math.floor(Math.random()*11);
+			if(v==0)
 			{
 				self: {
 					boosts: {
