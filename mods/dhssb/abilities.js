@@ -1,6 +1,64 @@
 'use strict';
 
 exports.BattleAbilities = {
+	dankster: {
+		onModifyPriority: function (priority, pokemon, target, move) {
+			if (move && move.priority == 0) {
+				return priority + 1;
+			}
+		},
+		id: "dankster",
+		name: "Dankster",
+	},
+	flameguard: {
+		onTryHit: function (target, source, move) {
+			if (target !== source && move.type === 'Fire') {
+				move.accuracy = true;
+				if (!target.addVolatile('flashfire')) {
+					this.add('-immune', target, '[msg]', '[from] ability: Flame Guard');
+				}
+				return null;
+			}
+		},
+		onEnd: function (pokemon) {
+			pokemon.removeVolatile('flashfire');
+		},
+		effect: {
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart: function (target) {
+				this.add('-start', target, 'ability: Flash Fire');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk: function (atk, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					this.debug('Flash Fire boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onModifySpAPriority: 5,
+			onModifySpA: function (atk, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					this.debug('Flash Fire boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onEnd: function (target) {
+				this.add('-end', target, 'ability: Flame Guard', '[silent]');
+			},
+		},
+		onDamage: function (damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				return false;
+			}
+		},
+		onAfterDamage: function (damage, target, source, effect) {
+			if (effect && effect.type === 'Fire') {
+				this.add('-setboost', target, 'atk', 12, '[from] ability: Flame Guard');
+			}
+		},
+		id: "flameguard",
+		name: "Flame Guard",
+	},
 	discoverme: {
 		onTryHit: function (target, source, move) {
 			if (target !== source && (move.type === 'Water')) {
