@@ -321,10 +321,10 @@ exports.BattleScripts = {
  				evs: {spa:252, spd:4, spe:252}, nature: 'Jolly',
  			},
 			'FlareonDriod': {
- 				species: 'Flareon', ability: 'Analytic', item: 'Charcoal', gender: 'F',
+ 				species: 'Flareon', ability: 'Slowchat', item: 'Charcoal', gender: 'F',
  				moves: ['vcreate', 'recover', 'bellydrum'],
  				signatureMove: "banhammah",
- 				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
+ 				evs: {hp: 252, atk: 252, spe:252}, nature: 'Jolly',
  			},
 			'Dragitbot': {
  				species: 'Dratini', ability: 'Hidden', item: 'Leftovers', gender: 'F',
