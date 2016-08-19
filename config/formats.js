@@ -489,6 +489,18 @@ exports.Formats = [
 			if(name === 'spandan') {
 				this.add('c|~Spandan|o shit waddup!');
 			}
+			if(name === 'hydrostatics') {
+				this.add('c|~Hydrostatics|Gl, Hf Kid');
+			}
+			if(name === 'tejas10') {
+				this.add('c|+Tejas10|Your time is UP my time in NOW...');
+			}
+			if(name === 'quietchimchar') {
+				this.add('c|@Quiet Chimchar|Introducing the best starter ever!!');
+			}
+			if(name === 'lostcause146') {
+				this.add('c|$Lost Cause 146|Prepare yourself fool!');
+			}
 			if(name === 'paul71') {
 				this.add('c|~Paul☯71|!htmlbox');
 				this.add('raw|<button name="parseCommand" value="/user paul71">My Owner!</button>');
@@ -539,6 +551,18 @@ exports.Formats = [
 			if(name === 'paul71') {
 				this.add('c|~Paul☯71|RIP Me feelsbd');
 			}
+			if(name === 'hydrostatics') {
+				this.add('c|~Hydrostatics|Cya next time Kid. I will not take it easy on you from next time.');
+			}
+			if(name === 'tejas10') {
+				this.add('c|+Tejas10|You can\'t see me!!!');
+			}
+			if(name === 'quietchimchar') {
+				this.add('c|@Quiet Chimchar|I\'ll get you next time!');
+			}
+			if(name === 'lostcause146') {
+				this.add('c|$Lost Cause 146|Maybe i was a fool for believing in you... think on that one.');
+			}
                         if(name == 'zmeeed') {
                                 this.add("c|%Zmeeed|CYKABLYAT");
                         }
@@ -575,17 +599,25 @@ exports.Formats = [
  			if (name === 'ransei') {
  				this.add('c|~Ransei|ripsei');
  			}
-
+			//Wreck phrase test
+			if(source.name=="hydrostatics")
+			this.add("c|~Hydrostatics|Git Gud Kid");
+			if(source.name=="tejas10")
+			this.add("c|+Tejas10|Cena sucks!");
+			if(source.name=="Lost Cause 146")
+			this.add("c|$Lost Cause 146|you cannot stop me.");
 		},
 		// Special switch-out events for some mons.
 		onSwitchOut: function (pokemon) {
 			let name = toId(pokemon.name);
-
+			
 			if (!pokemon.illusion) {
 				if (name === 'hippopotas') {
 					this.add('-message', 'The sandstorm subsided.');
 				}
 			}
+			//Switchout phrase
+			if(name=="spandan") this.add("c|~Spandan|brb"); //testing, hope it works
 
 			// Transform
 			if (pokemon.originalName) pokemon.name = pokemon.originalName;
