@@ -16,6 +16,30 @@ exports.BattleAbilities = {
 		rating: 1,
 		num: 1075,
 	},
+        "flairhax": {
+		onModifyMovePriority: -2,
+		onModifyMove: function (move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (let i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance *= 2.2;
+				}
+			}
+		},
+                onStart: function (pokemon) {
+			this.boost({spe:2});
+		},
+                onPrepareHit: function (source, target, move) {
+			if (move.hasBounced) return;
+			let type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] Flair Hax');
+			}
+		},
+		id: "flairhax",
+		name: "Flair Hax",
+	},
 	pressurebreaker: {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Pressure');

@@ -285,7 +285,7 @@ exports.BattleScripts = {
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest',
 			},
 			'Digital Edge': {
-				species: 'Jirachi', ability: 'Serene Grace', item: 'Choice Scarf',
+				species: 'Flareon', ability: 'Flair Hax', item: 'Focus Sash', shiny:true,
 				moves: ['iciclecrash', 'ironhead', 'uturn'],
 				signatureMove: "Sacred Hax",
 				evs: {atk:252, spd:4, spe:252}, nature: 'Adamant',
