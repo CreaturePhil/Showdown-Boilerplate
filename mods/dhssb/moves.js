@@ -138,7 +138,7 @@ exports.BattleMovedex = {
 				boosts: {
 					spa: 1,
 					spd: 1,
-					eva: 1,
+					evasion: 1,
 				},
 			},
 		boosts: {
@@ -576,10 +576,10 @@ exports.BattleMovedex = {
 			chance: 100,
 			status: 'sleep',
 		},
-		self:{
+		self: {
+	        chance: 40,
 		boosts: {
-			chance: 40,
-      atk: 1,
+                        atk: 1,
 			spe: 1,
 		},
 	},
