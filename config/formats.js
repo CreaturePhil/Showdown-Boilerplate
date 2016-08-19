@@ -409,7 +409,7 @@ exports.Formats = [
 		team: 'randomSeasonalMelee',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
-			this.add("raw|Super Staff Bros. <b>MELEEEEEEEEEEEEEE</b>!!");
+			this.add("raw|Dragon Heaven Super Staff Bros. <b>RAWWWWWWWWWWWWWR!!!!</b>");
 			this.add('message', "SURVIVAL! GET READY FOR THE NEXT BATTLE!");
 
 			let globalRenamedMoves = {};
@@ -481,6 +481,9 @@ exports.Formats = [
 			let sentence = '';
 			if(name === 'spandan') {
 				this.add('c|~Spandan|o shit waddup!');
+			}
+			if(name === 'spandamn') {
+				this.add('c| Spandamn|No I\'m not Spandan');
 			}
 			if(name === 'hydrostatics') {
 				this.add('c|~Hydrostatics|Gl, Hf Kid');
@@ -562,6 +565,12 @@ exports.Formats = [
 			let opp = toId(source.name);
 			if (name === 'spandan') {
 				this.add('c|~Spandan|Gr8 b8, m8. I rel8, str8 appreci8, and congratul8. I r8 this b8 an 8/8. Plz no h8, I\'m str8 ir8. Cre8 more, can\'t w8. We should convers8, I won\'t ber8, my number is 8888888, ask for N8. No calls l8 or out of st8. If on a d8, ask K8 to loc8. Even with a full pl8, I always have time to communic8 so don\'t hesit8');
+			}
+			if (name == 'spandamn') {
+				this.add('c| Spandamn|SPANDAMNIT YOU CAUGHT ME ;-;');
+				this.add("raw|<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+				this.add("raw|<div class=\"broadcast-green\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+				this.add("raw|<div class=\"broadcast-blue\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
 			}
 			if(name === 'paul71') {
 				this.add('c|~Paul☯71|RIP Me feelsbd');
