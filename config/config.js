@@ -317,6 +317,8 @@ exports.grouplist = [
 		roombot: true,
 		roommod: true,
 		roomdriver: true,
+                roommeme: true,
+                roomoperator: true,
 		editroom: true,
 		declare: true,
 		modchatall: true,
