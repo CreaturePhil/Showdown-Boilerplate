@@ -92,15 +92,11 @@ exports.BattleMovedex = {
 			chance: 100,
 			status: 'brn',
 			volatileStatus: 'confusion',
-			let v=Math.floor(Math.random()*11);
-			if(v==0)
-			{
-				self: {
-					boosts: {
-						spe: 1,
-					},
-				},
-			}
+		},
+		self: {
+	        chance: 50,
+		boosts: {
+			spe: 1,
 		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
