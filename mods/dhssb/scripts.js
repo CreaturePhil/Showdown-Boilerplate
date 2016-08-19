@@ -254,6 +254,12 @@ exports.BattleScripts = {
 				signatureMove: "Ice Shard",
 				evs: {hp:252, atk:252, def:252, spa:252, spd:252, spe:252}, nature: 'Serious',
 			},
+			'Hydrostatics': {
+				species: 'Palkia', ability: 'Pressure Breaker', item: 'Leftovers', gender: 'M' , shiny:true,
+				moves: ['spacialrend,' 'hydropump', 'flashcannon'],
+				signatureMove: "Space Compress",
+				evs: {hp:4, spa:252, spe:252}, nature: 'Modest',
+			},
 			'Digital Edge': {
 				species: 'Jirachi', ability: 'Serene Grace', item: 'Choice Scarf',
 				moves: ['iciclecrash', 'ironhead', 'uturn'],
