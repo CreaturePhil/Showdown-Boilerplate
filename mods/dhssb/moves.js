@@ -27,7 +27,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
-	"topsyturvy": {
+	"toodankforya": {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
