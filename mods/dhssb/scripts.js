@@ -245,7 +245,7 @@ exports.BattleScripts = {
 			},
 			'Quiet Chimchar': {
 				species: 'Chimchar', ability: 'Flame Guard', item: 'Focus Sash', gender: 'M',
-				moves: ['batonpass', 'firepunch', 'uturn],
+				moves: ['batonpass', 'firepunch', 'uturn'],
 				signatureMove: "Cha Cha Dance",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Quiet',
 			},
