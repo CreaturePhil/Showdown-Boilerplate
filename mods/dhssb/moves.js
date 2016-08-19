@@ -43,8 +43,91 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Bolt Strike", target);
+		},
 		target: "normal",
 		type: "Dragon",
+	},
+	"toodankforya": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		id: "toodankforya",
+		name: "Too Dank for ya",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		onHit: function (target) {
+			let success = false;
+			for (let i in target.boosts) {
+				if (target.boosts[i] === 0) continue;
+				target.boosts[i] = -target.boosts[i];
+				success = true;
+			}
+			if (!success) return false;
+			this.add('-invertboost', target, '[from] move: Too Dank for ya');
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Topsy-Turvy", target);
+			this.add('-anim', source, "Dark Void", target);
+		},
+		status: 'slp',
+		secondary: false,
+		target: "normal",
+		type: "Dark",
+	},
+	chachadance: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		id: "chachadance",
+		name: "Cha Cha Dance",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 100,
+			status: 'brn',
+			volatileStatus: 'confusion',
+			if(parseInt(this.random(10))%2==0)
+			{
+				self: {
+					boosts: {
+						spe: 1,
+					},
+				},
+			}
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+                        if (source.name == 'Quiet Chimchar') this.add("c|@Quiet Chimchar|I like to Cha Cha");
+			this.add('-anim', source, "Teeter Dance", target);
+		},
+		type: "Fire",
+		contestType: "Cool",
+	},
+	"dragonblades": {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		id: "dragonblades",
+		isViable: true,
+		name: "Dragon Blades",
+		pp: 5,
+		priority: 2,
+		flags: {contact: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+                        if (source.name == 'Lost Cause 146') this.add("c|$Lost Cause 146|Ryujin No Ken No Kurae!");
+			this.add('-anim', source, "Precipice Blades", target);
+		},
+		secondary: false,
+		target: "normal",
+		type: "Dragon",
+		contestType: "Cool",
 	},
         "rushb": {
 		accuracy: 100,
