@@ -231,6 +231,24 @@ exports.BattleScripts = {
 				signatureMove: "ggm8",
 				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
 			},
+			'charizard8888': {
+				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
+				moves: ['fakeout', 'extremespeed', 'flareblitz'],
+				signatureMove: "ggm8",
+				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
+			},
+			'': {
+				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
+				moves: ['fakeout', 'extremespeed', 'flareblitz'],
+				signatureMove: "ggm8",
+				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
+			},
+			'Quiet Chimchar': {
+				species: 'Chimchar', ability: 'Flame Guard', item: 'Focus Sash', gender: 'M',
+				moves: ['batonpass', 'firepunch', 'uturn],
+				signatureMove: "Cha Cha Dance",
+				evs: {hp:4, atk:252, spe:252}, nature: 'Quiet',
+			},
 			'Paul☯71': {
 				species: 'Palkia', ability: 'discover me', item: 'Leftovers', gender: 'M',
 				moves: ['hyperbeam', 'outrage', 'waterspout'],
