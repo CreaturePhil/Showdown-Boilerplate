@@ -16,6 +16,20 @@ exports.BattleAbilities = {
 		rating: 1,
 		num: 1075,
 	},
+	pressurebreaker: {
+		onStart: function (pokemon) {
+			this.add('-ability', pokemon, 'Pressure');
+			this.add('-ability', pokemon, 'Mold Breaker');
+		},
+		onDeductPP: function (target, source) {
+			if (target.side === source.side) return;
+			return 1;
+		},
+		stopAttackEvents: true,
+		id: "pressurebreaker",
+		name: "Pressure Breaker",
+		rating: 1.5,
+	},
 	discoverme: {
 		onTryHit: function (target, source, move) {
 			if (target !== source && (move.type === 'Water')) {

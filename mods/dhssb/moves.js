@@ -98,6 +98,36 @@ exports.BattleMovedex = {
 		type: "Dragon",
 		contestType: "Cool",
 	},
+	spacecompress: {
+		accuracy: 100,
+		category: "Status",
+		id: "spacecompress",
+		name: "Space Compress",
+		isNonstandard: true,
+		pp: 15,
+		priority: 0,		
+		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Wish", target);
+			this.add('-anim', target, "Dark Void", target);
+		},
+		self: {
+				boosts: {
+					spa: 1,
+					spd: 1,
+					eva: 1,
+				},
+			},
+		boosts: {
+			atk: -1,
+			spe: -1,
+			def: -1,
+		},
+		secondary: false,
+		target: "normal",
+		type: "Dragon",
+	},
 	ggm8: {
 		accuracy:100,
 		pp:15,
