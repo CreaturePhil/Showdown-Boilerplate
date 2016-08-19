@@ -44,7 +44,13 @@ exports.BattleAbilities = {
 		rating: 2,
 	},
 	"theunderlord": {
-		
+		onAfterDamage: function (damage, target, source, move) {
+			if (move && move.flags['contact']) {
+				if (parseInt(this.random(10)) == 7) {
+					source.trySetStatus('brn', target);
+				}
+			}
+		},
 		onAfterMoveSecondary: function (target, source, move) {
 			if (!target.lastMove) {
 				return false;
