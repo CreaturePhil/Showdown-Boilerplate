@@ -231,16 +231,16 @@ exports.BattleScripts = {
 				signatureMove: "ggm8",
 				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
 			},
-			'charizard8888': {
-				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
-				moves: ['fakeout', 'extremespeed', 'flareblitz'],
-				signatureMove: "ggm8",
-				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
+			'Tejas10': {
+				species: 'Darkrai', ability: 'Dankster', item: 'Black Glasses', gender: 'M',
+				moves: ['nastyplot', 'darkpulse', 'dracometeor'],
+				signatureMove: "Too Dank for ya",
+				evs: {spe:4, spa:252, spd:252}, nature: 'Modest',
 			},
-			'': {
-				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
-				moves: ['fakeout', 'extremespeed', 'flareblitz'],
-				signatureMove: "ggm8",
+			'Lost Cause 146': {
+				species: 'Weavile', ability: 'Sheer Force', item: 'Life Orb', gender: 'M',
+				moves: ['icepunch', 'knockoff', 'poisonjab'],
+				signatureMove: "Dragon Blades",
 				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
 			},
 			'Quiet Chimchar': {
