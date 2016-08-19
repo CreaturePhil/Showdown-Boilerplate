@@ -219,6 +219,12 @@ exports.BattleScripts = {
 				signatureMove: "Rush B",
 				evs: {spd:4, spa:252, spe:252}, nature: 'Timid',
 			},
+			'Loominite': {
+				species: 'Giratina-Origin', ability: 'The Underlord', item: 'Griseous Orb', gender: 'M', shiny:true,
+				moves: ['willoswisp', 'shadowball', 'dragonpulse'],
+				signatureMove: "The Loom Effect",
+				ivs: {hp:31, atk:0, def:31, spa:31, spd:31, spe:31}, nature: 'Modest',
+			},
 			'charizard8888': {
 				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
 				moves: ['fakeout', 'extremespeed', 'flareblitz'],
