@@ -57,7 +57,7 @@ exports.BattleMovedex = {
 		id: "toodankforya",
 		name: "Too Dank for ya",
 		pp: 20,
-		priority: 0,
+		priority: 4,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit: function (target) {
 			let success = false;
