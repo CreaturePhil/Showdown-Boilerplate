@@ -170,18 +170,27 @@ exports.BattleMovedex = {
 	target: "normal",
 	type: "Bug",
 	},
-evalchomp: {
+        garchompepicness: {
 		accuracy: 100,
 		category: "Status",
-		id: "evalchomp",
+		id: "garchompepicness",
 		isNonstandard: true,
-		name: "evalchomp",
+		name: "GARCHOMP EPICNESS",
 		pp: 5,
 		priority: 2,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		self: {boosts: {spe:1, atk:1, def:1}},
-		secondary: false,
+		secondary: {
+			self: {
+				boosts: {
+					atk: 1.5,
+					def: 2,
+					spe: 2.5,
+				},
+			},
+		},
 		onHit: function (target, source) {
+			target.side.addSideCondition('toxicspikes', source);
 			target.side.addSideCondition('toxicspikes', source);
 			target.side.addSideCondition('toxicspikes', source);
 			source.side.addSideCondition('luckychant', source);
