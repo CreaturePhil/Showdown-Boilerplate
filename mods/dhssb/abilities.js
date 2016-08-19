@@ -291,5 +291,14 @@ exports.BattleAbilities = {
 		rating: 2,
 		num: 83,
 	},
+	'slowchat': {
+		onStart: function (source) {
+			this.useMove('Defog', source);
+			this.useMove('Sticky Web', source);
+			this.useMove('Stealth Rock', source);
+		},
+		id: "slowchat",
+		name: "Slowchat",
+	},
 
 };
