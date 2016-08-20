@@ -21,7 +21,7 @@ exports.Formats = [
 	},
 	{
 		name: "Ubers",
-		desc: [su
+		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3522911/\">Ubers Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3535106/\">Ubers Viability Ranking</a>",
 		],
