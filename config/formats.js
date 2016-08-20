@@ -3118,17 +3118,17 @@ exports.Formats = [
 	    mod: ["gotg"],
 	    onBegin: function() {
 	    	for (let j = 0; j < this.sides.length; j++) {
-	            let allPokemon = this.sides[j].pokemon;
-	                uber = {};
+	            let allPokemon = this.sides[j].pokemon, uber = {}, f=false;
 	            for (let i = 0, len = allPokemon.length; i < len; i++) {
 	                let pokemon = allPokemon[i];
-	                if (pokemon.template.tier == "Uber")
+	                if (pokemon.template.tier == "Uber") {
 	                    uber = pokemon.baseTemplate.baseStats;
-	                    console.log(pokemon.set);
+	                    f=true;
+	                }
 	            }
 	            
 	            let stas = ["hp", "atk", "def", "spa", "spd", "spe"];
-	            if(uber!={})
+	            if(f)
 	            {
 	            for (let i = 0, len = allPokemon.length; i < len; i++) {
 	                let pokemon = allPokemon[i];
