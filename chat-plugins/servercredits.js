@@ -19,6 +19,7 @@ exports.commands = {
 					"<br />" +
 					"<u>Development:</u><br />" +
 					"- " + hashColor('charizard8888', true) + " (Intro's)<br />" +
+                    "- " + hashColor('ClassyZ', true) + " (DHSSB, Development)<br />" +
                     "- " + hashColor('Diarmuid O\'Dyna', true) + " (Art)<br />" +
                     "- " + hashColor('Eternal Mayhem', true) + " (Intro's)<br />" +
 					"<br />" +
