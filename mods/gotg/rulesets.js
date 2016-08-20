@@ -1,5 +1,5 @@
 exports.BattleFormats = {
-   "rules": {
+   "godclause": {
      effectType: 'Rule',
      onValidateTeam: function (team) {
        var problems = [];
