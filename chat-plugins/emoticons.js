@@ -54,6 +54,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'feelspoak':'http://i.imgur.com/jElHTOv.png',
 		'angryblanc': 'http://i.imgur.com/T5k0Tzq.png',
 		'(kappa)': 'http://i.imgur.com/ZxRU4z3.png?1',
+		'rainbowunicorn': 'http://media.boingboing.net/wp-content/uploads/2015/07/unicorn_riding_rainbow_by_k_rui-d3lmuln.gif',
 	});
 }
 
