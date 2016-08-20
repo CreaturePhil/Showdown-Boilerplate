@@ -2239,6 +2239,42 @@ exports.Formats = [
 		},
 	},
 	{
+	    name: "Gift of the Gods",
+	    section: "New Other Metagames",
+	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/gifts-of-the-gods.3579610/\">Gift of the Gods</a>"],
+	    ruleset: ['Pokemon', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Followers Clause', 'Cancel Mod'],
+	    banlist: ['Huge Power', 'Pure Power', 'Eviolite'],
+	    onBegin: function() {
+	        for (let j = 0; j < this.sides.length; j++) {
+	            let allPokemon = this.sides[j].pokemon;
+	            let colorArray = [],
+	                uber = {};
+	            for (let i = 0, len = allPokemon.length; i < len; i++) {
+	                let pokemon = allPokemon[i];
+	                if (pokemon.template.tier == "Uber")
+	                    uber = pokemon.template.baseStats;
+	            }
+	            //Mue hue hue I stole Palette Pal's code
+	            let stas = ["hp", "atk", "def", "spa", "spd", "spe"];
+	            for (let i = 0, len = allPokemon.length; i < len; i++) {
+	                let pokemon = allPokemon[i];
+
+	                ["baseTemplate", "canMegaEvo"].forEach(key => {
+	                    if (pokemon[key]) {
+
+	                        let template = Object.assign({}, this.getTemplate(pokemon[key]));
+	                        template.baseStats = Object.assign({}, template.baseStats);
+	                        template.baseStats[stas[i]] = uber[stas[i]];
+	                        pokemon[key] = template;
+	                    }
+	                });
+	                pokemon.formeChange(pokemon.baseTemplate);
+	            }
+
+	        }
+	    }
+	},
+	{
 		name: "Nature Swap",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3577739/\">Nature Swap</a>"],
 		section: "OM of the Month",
