@@ -58,7 +58,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'buttslappichu': 'http://i364.photobucket.com/albums/oo87/TailsTheFoxPrower/PAPSAV1.gif',
 		'dratinievolution': 'https://media0.giphy.com/media/huzj19aPb2EFO/200_s.gif',
 		'goomyevolution': 'http://2.media.dorkly.cvcdn.com/47/70/208cd140521bf95e47cc9e358f7d4418.gif',
-		'charmanderevolution': 'https://media2.giphy.com/media/5TyykgDzVR5aU/200_s.gif',
+		'charmanderevolution': 'http://0.media.dorkly.cvcdn.com/24/80/cc1436d5b12b108f59e8e8121e2ce766.gif',
 		'pumpkabooevolution': 'http://0.media.dorkly.cvcdn.com/75/33/e6e8cf2b108f6c54331c8e1c443c3bca.gif',
 		'eeveeevolution': 'https://67.media.tumblr.com/773bf673721d9ee963202cf1c19a17cb/tumblr_nlw0vdsLrG1u9mds5o1_r4_500.gif',
 		'machopevolution': 'http://0.media.dorkly.cvcdn.com/73/25/f1e2cb799adce471be3317a6b99dfc88.gif',
