@@ -408,7 +408,7 @@ exports.Formats = [
 			validate: [1, 3],
 			battle: 1,
 		},
-		mod: 'rps',
+		mod: 'rpg',
 		team: 'randomSeasonalMelee',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
