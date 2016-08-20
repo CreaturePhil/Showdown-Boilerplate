@@ -224,7 +224,7 @@ exports.BattleScripts = {
 		  	evs: {hp:0, atk:0, def:0, spa:0, spd:0, spe:0}, nature: 'Serious',
 			},
 			'Scissors': {
-				species: 'Scizor', ability: 'Refrigerate', gender: 'M',
+				species: 'Scizor', ability: 'Scissors', gender: 'M',
 				signatureMove: "Scissors",
 				evs: {hp:0, atk:0, def:0, spa:0, spd:0, spe:0},  nature: 'Serious',
 			},
