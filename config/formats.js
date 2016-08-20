@@ -3124,7 +3124,7 @@ exports.Formats = [
 	            for (let i = 0, len = allPokemon.length; i < len; i++) {
 	                let pokemon = allPokemon[i];
 	                if (pokemon.template.tier == "Uber")
-	                    uber = pokemon.template.baseStats;
+	                    uber = pokemon.baseTemplate.baseStats;
 	                    console.log(pokemon.set);
 	            }
 	            
