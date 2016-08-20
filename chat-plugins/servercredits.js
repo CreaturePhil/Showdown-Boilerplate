@@ -11,17 +11,19 @@ exports.commands = {
 	credit: 'credits',
 	credits: function (target, room, user) {
 		this.popupReply("|html|" + "<font size=4><center><u><b>Dragon Heaven Credits!</b></u></center></font><br />" +
-					"<u>Owners:</u><br />" +
+					"<u>Owner:</u><br />" +
 					"- " + hashColor('XpRienzo', true) + " (Founder, Host, Sysadmin)<br />" +
+                                        "<br />" +
+					"<u>Lead Development Team:</u><br />" +
                     "- " + hashColor('Paul☯71◕‿◕', true) + " (Development, Lead Policy)<br />" +
                     "- " + hashColor('Snaq', true) + " (Major Contributor, Formats, Development)<br />" +
                     "- " + hashColor('Spandan', true) + " (Format Development)<br />" +
 					"<br />" +
 					"<u>Development:</u><br />" +
-					"- " + hashColor('charizard8888', true) + " (Intro's)<br />" +
+					"- " + hashColor('charizard8888', true) + " (Roomintro's)<br />" +
                     "- " + hashColor('ClassyZ', true) + " (DHSSB, Development)<br />" +
                     "- " + hashColor('Diarmuid O\'Dyna', true) + " (Art)<br />" +
-                    "- " + hashColor('Eternal Mayhem', true) + " (Intro's)<br />" +
+                    "- " + hashColor('Eternal Mayhem', true) + " (Roomintro's)<br />" +
 					"<br />" +
 					"<u>Special Thanks:</u><br />" +
 					"- Current staff team<br />" +
