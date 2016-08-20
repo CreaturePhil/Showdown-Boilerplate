@@ -668,6 +668,41 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
+	"secretkiller": {
+		num: 20000,
+		accuracy: 100,
+		basePower: 0,
+		damageCallback: function (pokemon, target) {
+			this.damage(target.maxhp / 16, target, pokemon);
+		},
+		category: "Special",
+		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 1/2 target's current HP.",
+		id: "secretkiller",
+		isViable: true,
+		name: "Secret Killer",
+		boosts: {
+			atk: -1,
+			def: -1,
+			spa: -1,
+			spd: -1,
+			spe: -1,
+			acc: -1,
+			eva: -1,
+		},
+		status: 'slp',
+		pp: 15,
+		priority: 1,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Dark Void", target);
+		},
+		secondary: false,
+		target: "ghost",
+		type: "Ghost",
+		contestType: "Tough",
+	},
 	// Modified moves
 	"defog": {
 		inherit: true,

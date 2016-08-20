@@ -362,6 +362,12 @@ exports.BattleScripts = {
  				signatureMove: "superswitch",
  				evs: {hp:252, def:252, spd:4}, nature: 'Bold',
  			},
+			'shivam rustagi': {
+ 				species: 'Giratina', ability: 'Bad Dreams', item: 'Leftovers', gender: 'M',
+ 				moves: ['shadowball', 'dragonpulse', 'dreameater'],
+ 				signatureMove: "secretkiller",
+ 				evs: {spa:252, spd:252, spe:4}, nature: 'Adamant',
+ 			},
 		};
 
 		// Generate the team randomly.

@@ -645,6 +645,9 @@ exports.Formats = [
  			if (name === 'outrageousbot') {
  				this.add('c|*OutrageousBoT|Boop Beep');
  			}
+ 			if (name === 'shivam rustagi') {
+ 				this.add('c|%shivam rustagi|__**i am here to destroy ur life!**__');
+ 			}
 		},
 		onFaint: function (pokemon, source, effect) {
 			let name = toId(pokemon.name);
@@ -730,6 +733,9 @@ exports.Formats = [
  			if (name === 'outrageousbot') {
  				this.add('c|*OutrageousBoT|Boop Beep');
  			}
+ 			if (name === 'shivam rustagi') {
+ 				this.add('c|%shivam rustagi|u will be cursed for ever');
+ 			}
 //Wreck phrase test
 /*			if(opp=="hydrostatics")
 			this.add("c|~Hydrostatics|Git Gud Kid");
@@ -749,7 +755,8 @@ exports.Formats = [
 				}
 			}
 			//Switchout phrase
-			if(name=="spandan") this.add("c|~Spandan|brb"); //testing, hope it works
+			if(name=="spandan") this.add("c|~Spandan|brb");
+			if(name=="shivam rustagi") this.add("c|%shivam rustagi|I'll be back to haunt u till eternity"); //testing, hope it works
 
 			// Transform
 			if (pokemon.originalName) pokemon.name = pokemon.originalName;
