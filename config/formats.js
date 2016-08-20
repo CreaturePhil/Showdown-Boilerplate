@@ -3125,7 +3125,6 @@ exports.Formats = [
 	                let pokemon = allPokemon[i];
 	                if (pokemon.template.tier == "Uber")
 	                    uber = pokemon.baseTemplate.baseStats;
-	                    console.log(pokemon.set);
 	            }
 	            
 	            let stas = ["hp", "atk", "def", "spa", "spd", "spe"];
