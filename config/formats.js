@@ -404,7 +404,11 @@ exports.Formats = [
 		name: "Rock, Paper, Scissors",
 		desc: ["&bullet; Test your luck with RPS!"],
 		section: "Randomized Metas",
-		mod: 'rps',
+		teamLength: {
+			validate: [1, 3],
+			battle: 1,
+		},
+		mod: 'rpg',
 		team: 'randomSeasonalMelee',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
