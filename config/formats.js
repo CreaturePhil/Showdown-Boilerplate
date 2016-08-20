@@ -3113,18 +3113,18 @@ exports.Formats = [
 	    name: "Gifts of the Gods",
 	    section: "New Other Metagames",
 	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/gifts-of-the-gods.3579610/\">Gift of the Gods</a>"],
-	    ruleset: ['God Clause', 'Pokemon', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Followers Clause', 'Cancel Mod'],
+	    ruleset: ['God Clause', 'Pokemon', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Cancel Mod'],
 	    banlist: ['Huge Power', 'Pure Power', 'Eviolite'],
 	    mod: ["gotg"],
 	    onBegin: function() {
 	    	for (let j = 0; j < this.sides.length; j++) {
 	            let allPokemon = this.sides[j].pokemon;
-	            let colorArray = [],
 	                uber = {};
 	            for (let i = 0, len = allPokemon.length; i < len; i++) {
 	                let pokemon = allPokemon[i];
 	                if (pokemon.template.tier == "Uber")
 	                    uber = pokemon.baseTemplate.baseStats;
+	                    console.log(pokemon.set);
 	            }
 	            
 	            let stas = ["hp", "atk", "def", "spa", "spd", "spe"];
