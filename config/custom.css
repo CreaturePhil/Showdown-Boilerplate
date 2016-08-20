@@ -92,6 +92,10 @@
     background:rgba(255, 204, 153, 0.79);
     border-color: black;
   }
+  .dark .ps-room.ps-room-light.scrollable {
+    background:rgba(240, 140, 100, 0.4)
+    border-color: black;
+  }
 
   .roomlist a.ilink, .roomcounters button {
     border-color: black;
