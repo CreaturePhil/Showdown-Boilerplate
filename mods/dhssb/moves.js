@@ -71,7 +71,7 @@ exports.BattleMovedex = {
              },
              target: 'normal',
              type: 'Fairy',
-        }
+        },
 	"toodankforya": {
 		accuracy: true,
 		basePower: 0,
