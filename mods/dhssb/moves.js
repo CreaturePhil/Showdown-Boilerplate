@@ -50,6 +50,28 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
+        "haxnrun": {
+             id: 'haxnrun',
+             name: 'Hax n Run',
+             category:"Special", 
+             basePower: 10,
+             accuracy: true,
+             priority: 0,
+             pp:5,
+             flags: {authentic:1},
+             onHit(source) {
+             this.useMove('Attract', source);
+             this.add('c| Spandamn|Get haxd m8');
+             },
+             selfSwitch: true,
+             secondary: {
+                  chance:100,
+                  status: 'par',
+                  volatileStatus: 'confusion',
+             },
+             target: 'normal',
+             type: 'Fairy',
+        }
 	"toodankforya": {
 		accuracy: true,
 		basePower: 0,

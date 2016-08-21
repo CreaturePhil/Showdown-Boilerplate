@@ -203,6 +203,28 @@ dankster: {
 		name: "Tough Bounce",
 		rating: 5,
 	},
+        haxlord: {
+                id: "haxlord", 
+                name: "Hax Lord",
+                onStart: function (source) {
+                        this.useMove('Confuse Ray', source);
+                        this.useMove('Thunder Wave', source);
+                        this.useMove('Attract', source);
+		},
+		stopAttackEvents: true,
+                onModifyMovePriority: -2,
+		onModifyMove: function (move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (let i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance *= 2;
+				}
+			}
+		},
+                onModifyPriority: function (priority, pokemon, target, move) {
+			if (move && move.type === 'Flying') return priority + 1;
+		},
+        },
 	breakingpoint: {
 		onFoeTrapPokemon: function (pokemon) {
 			if ((!pokemon.hasAbility('shadowtag')&&!pokemon.hasAbility('breakingpoint')) && this.isAdjacent(pokemon, this.effectData.target)) {

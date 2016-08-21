@@ -231,6 +231,12 @@ exports.BattleScripts = {
 				signatureMove: "ggm8",
 				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
 			},
+                       'Spandamn': {
+				species: 'Togekiss', ability: 'Hax Lord', item: 'Leftovers', gender: 'F',
+				moves: ['airslash', 'roost', 'moonblast'],
+				signatureMove: "Hax n Run",
+				evs: {def:252, spd:252, def:252, spa:252, hp:252}, nature: 'Modest',
+			},
 			'Tejas10': {
 				species: 'Darkrai', ability: 'Dankster', item: 'Black Glasses', gender: 'M',
 				moves: ['nastyplot', 'darkpulse', 'dracometeor'],
