@@ -59,9 +59,9 @@ exports.BattleMovedex = {
              priority: 0,
              pp:5,
              flags: {authentic:1},
-             onHit(source) {
-             this.useMove('Attract', source);
-             this.add('c| Spandamn|Get haxd m8');
+             onHit(source, target) {
+             this.useMove('Attract', target);
+             if(source.name=='Spandamn') this.add('c| Spandamn|Get haxd m8');
              },
              selfSwitch: true,
              secondary: {
