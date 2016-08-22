@@ -3274,6 +3274,10 @@ exports.Formats = [
 
    	{
         name: "Offensification",
+        desc: [
+        	"All attacks are caclulated from the user's highest attacking stat.",
+		"&bullet; <a href=\"http://www.smogon.com/forums/threads/offensification-hoopa-u-banned.3524512/\">Offensification</a>",
+        ],
         section: "New Other Metagames",
 
         ruleset: ['Pokemon', 'Standard', 'Team Preview'],
@@ -3395,6 +3399,7 @@ exports.Formats = [
    },
 	{
         name: "The Negative Metagame",
+        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-negative-metagame-playable-on-aqua.3529936/\">The Negative Metagame</a>"],
         section: "New Other Metagames",
 
         mod: 'thenegativemetagame',
@@ -3439,6 +3444,7 @@ exports.Formats = [
     	},
 	{
         	name: "VoltTurn Mayhem",
+        	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/voltturn-mayhem-lcotm.3527847/\">VoltTurn Mayhem</a>"],
 	        section: "New Other Metagames",
 
         	ruleset: ['Pokemon', 'Standard', 'Team Preview'],
