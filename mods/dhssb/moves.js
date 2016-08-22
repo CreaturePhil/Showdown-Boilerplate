@@ -338,9 +338,9 @@ exports.BattleMovedex = {
 		secondary: {
 			self: {
 				boosts: {
-					atk: 1.5,
+					atk: 1,
 					def: 2,
-					spe: 2.5,
+					spe: 3,
 				},
 			},
 		},
@@ -501,7 +501,7 @@ exports.BattleMovedex = {
 		self: {
 				boosts: {
 					atk: 3,
-					def: 1.5,
+					def: 1,
 					spe: 2,
 					spd: 1,
 				},
