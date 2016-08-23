@@ -3391,6 +3391,51 @@ exports.Formats = [
         ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Swagger Clause', 'Team Preview', 'Evasion Moves Clause'],
         banlist: ['DeepSeaTooth', 'DeepSeaScale', 'Eviolite', 'Huge Power', 'Light Ball', 'Pure Power', 'Smeargle', 'Thick Club', 'Illegal', 'Unreleased']
     	},
+         {
+		name: "Therianmons",
+	    section: "New Other Metagames",
+	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/therianmons.3566303/\">Therianmons</a>"],
+	    ruleset: ['OU'],
+	    
+	    onBegin: function() {
+	    	for (let j = 0; j < this.sides.length; j++) {
+	            let allPokemon = this.sides[j].pokemon;
+	            for (let i = 0, len = allPokemon.length; i < len; i++) {
+	                let pokemon = allPokemon[i];
+	                //Thanks to Nature Swap code for premise!!
+	                ["baseTemplate", "canMegaEvo"].forEach(key => {
+	                    if (pokemon[key]) {
+
+	                        let template = Object.assign({}, this.getTemplate(pokemon[key]));
+	                        template.baseStats = Object.assign({}, template.baseStats);
+	                        if(pokemon.set.ivs.spa==30 && pokemon.set.ivs.spd==30 && pokemon.set.ivs.atk==30 && pokemon.set.ivs.def==30 && pokemon.set.ivs.hp==30)
+	                        {
+	                        	template.baseStats.atk-=15;
+	                        	template.baseStats.def+=10;
+	                        	template.baseStats.spa-=15;
+	                        	template.baseStats.spd+=10;
+	                        	template.baseStats.spe+=10;
+	                        }
+	                        else if(pokemon.set.ivs.spa==30 && pokemon.set.ivs.spd==30)
+	                        {
+	                        	template.baseStats.atk+=20;
+	                        	template.baseStats.spa-=10;
+	                        	template.baseStats.spe-=10;
+	                        }
+	                        else if(pokemon.set.ivs.spa==30)
+	                        {
+	                        	template.baseStats.spa+=20;
+	                        	template.baseStats.atk-=10;
+	                        	template.baseStats.spe-=10;
+	                        }
+	                        pokemon[key] = template;
+	                    }
+	                });
+	                pokemon.formeChange(pokemon.baseTemplate);
+	            }
+	           }
+	    },
+	},
 	{
 		name: "Trademarked",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>"],
