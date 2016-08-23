@@ -50,57 +50,6 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
-        "haxnrun": {
-             id: 'haxnrun',
-             name: 'Hax n Run',
-             category:"Special", 
-             basePower: 10,
-             accuracy: true,
-             priority: 0,
-             pp:5,
-             flags: {authentic:1},
-             onHit(source, target) {
-             this.useMove('Attract', target);
-             if(source.name=='Spandamn') this.add('c| Spandamn|Get haxd m8');
-             },
-             selfSwitch: true,
-             secondary: {
-                  chance:100,
-                  status: 'par',
-                  volatileStatus: 'confusion',
-             },
-             target: 'normal',
-             type: 'Fairy',
-        },
-	"toodankforya": {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		id: "toodankforya",
-		name: "Too Dank for ya",
-		pp: 20,
-		priority: 4,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
-		onHit: function (target) {
-			let success = false;
-			for (let i in target.boosts) {
-				if (target.boosts[i] === 0) continue;
-				target.boosts[i] = -target.boosts[i];
-				success = true;
-			}
-			if (!success) return false;
-			this.add('-invertboost', target, '[from] move: Too Dank for ya');
-		},
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Topsy-Turvy", target);
-			this.add('-anim', source, "Dark Void", target);
-		},
-		status: 'slp',
-		secondary: false,
-		target: "normal",
-		type: "Dark",
-	},
 	chachadance: {
 		accuracy: 100,
 		basePower: 100,
