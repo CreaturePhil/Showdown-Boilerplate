@@ -640,8 +640,13 @@ exports.BattleScripts = {
 		pokemon.formeChange(template);
 		pokemon.baseTemplate = template; // mega evolution is permanent
 		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-		this.add('detailschange', pokemon, pokemon.details);
-		this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
+		if (pokemon.illusion) {
+			pokemon.ability = ''; // Don't allow Illusion to wear off
+			this.add('-mega', pokemon, pokemon.illusion.template.baseSpecies, template.requiredItem);
+		} else {
+			this.add('detailschange', pokemon, pokemon.details);
+			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
+		}
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
 
@@ -1001,7 +1006,7 @@ exports.BattleScripts = {
 		let counter = {
 			Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0, stab: 0, inaccurate: 0, priority: 0, recoil: 0, drain: 0,
 			adaptability: 0, bite: 0, contrary: 0, hustle: 0, ironfist: 0, serenegrace: 0, sheerforce: 0, skilllink: 0, technician: 0,
-			physicalsetup: 0, specialsetup: 0, mixedsetup: 0, speedsetup: 0, physicalpool: 0, specialpool: 0,
+			physicalsetup: 0, specialsetup: 0, mixedsetup: 0, defensesetup: 0, speedsetup: 0, physicalpool: 0, specialpool: 0,
 			damagingMoves: [],
 			damagingMoveIndex: {},
 			setupType: '',
@@ -1018,7 +1023,7 @@ exports.BattleScripts = {
 
 		// Moves that heal a fixed amount:
 		let RecoveryMove = {
-			milkdrink: 1, recover: 1, roost: 1, slackoff: 1, softboiled: 1,
+			healorder: 1, milkdrink: 1, recover: 1, roost: 1, slackoff: 1, softboiled: 1,
 		};
 		// Moves which drop stats:
 		let ContraryMove = {
@@ -1035,6 +1040,10 @@ exports.BattleScripts = {
 		// Moves which boost Attack AND Special Attack:
 		let MixedSetup = {
 			growth:1, shellsmash:1, workup:1,
+		};
+		// Moves which boost Defense and/or Special Defense:
+		let DefenseSetup = {
+			cosmicpower:1, cottonguard:1, defendorder:1,
 		};
 		// Moves which boost Speed:
 		let SpeedSetup = {
@@ -1104,6 +1113,7 @@ exports.BattleScripts = {
 			if (PhysicalSetup[moveid]) counter['physicalsetup']++;
 			if (SpecialSetup[moveid]) counter['specialsetup']++;
 			if (MixedSetup[moveid]) counter['mixedsetup']++;
+			if (DefenseSetup[moveid]) counter['defensesetup']++;
 			if (SpeedSetup[moveid]) counter['speedsetup']++;
 		}
 
@@ -1577,7 +1587,7 @@ exports.BattleScripts = {
 					if (hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'willowisp':
-					if (hasMove['lavaplume'] || hasMove['sacredfire'] || hasMove['scald'] || hasMove['spore']) rejected = true;
+					if (hasMove['scald']) rejected = true;
 					break;
 				case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
 					if (hasMove['rest'] || hasMove['wish']) rejected = true;
@@ -1619,7 +1629,16 @@ exports.BattleScripts = {
 				}
 
 				// Pokemon should have moves that benefit their Ability/Type/Weather, as well as moves required by its forme
-				if (((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
+				if ((hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
+					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
+					(hasType['Electric'] && !counter['Electric']) ||
+					(hasType['Fighting'] && !counter['Fighting'] && counter.setupType) ||
+					(hasType['Fire'] && !counter['Fire']) ||
+					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'] || hasMove['raindance'])) ||
+					(hasType['Ice'] && !counter['Ice']) ||
+					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
+					(hasType['Water'] && !counter['Water'] && (!hasType['Ice'] || !counter['Ice']) && !hasAbility['Protean']) ||
+					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal']) ||
 					(hasAbility['Bad Dreams'] && movePool.includes('darkvoid')) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
@@ -1627,15 +1646,7 @@ exports.BattleScripts = {
 					(hasAbility['Gale Wings'] && !counter['Flying']) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
-					(hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
-					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
-					(hasType['Electric'] && !counter['Electric']) ||
-					(hasType['Fighting'] && !counter['Fighting'] && counter.setupType) ||
-					(hasType['Fire'] && !counter['Fire']) ||
-					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'])) ||
-					(hasType['Ice'] && !counter['Ice']) ||
-					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
-					(hasType['Water'] && !counter['Water'] && (!hasType['Ice'] || !counter['Ice']) && !hasAbility['Protean']) ||
+					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
@@ -2035,7 +2046,7 @@ exports.BattleScripts = {
 		let level = levelScale[tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
-		if (template.name === 'Slurpuff' && !counter.setupType) level = 79;
+		if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
 		if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
 		// Prepare optimal HP

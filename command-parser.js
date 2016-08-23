@@ -75,22 +75,6 @@ for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
 }
 
 /*********************************************************
- * Modlog
- *********************************************************/
-
-let modlog = exports.modlog = {
-	lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}),
-	battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'}),
-};
-
-let writeModlog = exports.writeModlog = function (roomid, text) {
-	if (!modlog[roomid]) {
-		modlog[roomid] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + roomid + '.txt'), {flags:'a+'});
-	}
-	modlog[roomid].write('[' + (new Date().toJSON()) + '] ' + text + '\n');
-};
-
-/*********************************************************
  * Parser
  *********************************************************/
 
@@ -117,20 +101,23 @@ class CommandContext {
 	checkFormat(room, message) {
 		if (!room) return false;
 		if (!room.filterStretching && !room.filterCaps) return false;
-		let formatError = false;
+		let formatError = [];
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
 		let stretchMatch = room.filterStretching && message.match(/(.+?)\1{7,}/i);
 		let capsMatch = room.filterCaps && message.match(/[A-Z\s]{18,}/);
+
 		if (stretchMatch) {
-			formatError = "too much stretching.";
+			formatError.push("too much stretching");
 		}
 		if (capsMatch) {
-			formatError = "too many capital letters.";
+			formatError.push("too many capital letters");
 		}
-		if (stretchMatch && capsMatch) formatError = "too much stretching and too many capital letters.";
-		return formatError;
+		if (formatError.length > 0) {
+			return formatError.join(' and ') + ".";
+		}
+		return false;
 	}
 
 	checkSlowchat(room, user) {
@@ -185,34 +172,13 @@ class CommandContext {
 	send(data) {
 		this.room.send(data);
 	}
-	privateModCommand(data, noLog) {
-		this.sendModCommand(data);
-		this.logEntry(data);
-		this.logModCommand(data);
-	}
 	sendModCommand(data) {
-		let users = this.room.users;
-		let auth = this.room.auth;
-
-		for (let i in users) {
-			let user = users[i];
-			// hardcoded for performance reasons (this is an inner loop)
-			if (user.isStaff || (auth && (auth[user.userid] || '+') !== '+')) {
-				user.sendTo(this.room, data);
-			}
-		}
+		this.room.sendModCommand(data);
 	}
-	logEntry(data) {
-		this.room.logEntry(data);
-	}
-	addModCommand(text, logOnlyText) {
-		this.add(text);
-		this.logModCommand(text + (logOnlyText || ""));
-	}
-	logModCommand(text) {
-		let roomid = (this.room.battle ? 'battle' : this.room.id);
-		if (this.room.isPersonal) roomid = 'groupchat';
-		writeModlog(roomid, '(' + this.room.id + ') ' + text);
+	privateModCommand(data) {
+		this.room.sendModCommand(data);
+		this.logEntry(data);
+		this.room.modlog(data);
 	}
 	globalModlog(action, user, text) {
 		let buf = "(" + this.room.id + ") " + action + ": ";
@@ -224,7 +190,17 @@ class CommandContext {
 			if (user.autoconfirmed && user.autoconfirmed !== userid) buf += " ac:[" + user.autoconfirmed + "]";
 		}
 		buf += text;
-		writeModlog('global', buf);
+		Rooms.global.modlog(buf);
+	}
+	logEntry(data) {
+		this.room.logEntry(data);
+	}
+	addModCommand(text, logOnlyText) {
+		this.add(text);
+		this.room.modlog(text + (logOnlyText || ""));
+	}
+	logModCommand(text) {
+		this.room.modlog(text);
 	}
 	can(permission, target, room) {
 		if (!this.user.can(permission, target, room)) {

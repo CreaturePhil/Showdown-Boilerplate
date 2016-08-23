@@ -1,13 +1,15 @@
 /**
- * DNSBL support [OPTIONAL]
+ * IP-based blocking
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This file controls support for DNSBLs. It's optional, so it can be
- * removed entirely safely.
+ * This file has various tools for IP parsing and IP-based blocking.
  *
- * DNSBLs are DNS-based blackhole lists, which list IPs known for
- * running proxies, spamming, or other abuse. By default, PS will lock
- * users using these IPs.
+ * These include DNSBLs: DNS-based blackhole lists, which list IPs known for
+ * running proxies, spamming, or other abuse.
+ *
+ * We also maintain our own database of datacenter IP ranges (usually
+ * proxies). These are taken from https://github.com/client9/ipcat
+ * but include our own database as well.
  *
  * @license MIT license
  */
@@ -17,12 +19,20 @@
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 let dns = require('dns');
+let fs = require('fs');
+let path = require('path');
 
 let Dnsbl = module.exports;
 
 let dnsblCache = Dnsbl.cache = new Map();
 dnsblCache.set('127.0.0.1', false);
 
+/**
+ * @param {string} ip
+ * @param {function(?string)} callback
+ * @param {string} reversedIpDot
+ * @param {number} index
+ */
 function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 	if (index >= BLOCKLISTS.length) {
 		// not in any blocklist
@@ -48,152 +58,292 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
  * Calls callback(blocklist), where blocklist is the blocklist domain
  * if the passed IP is in a blocklist, or boolean false if the IP is
  * not in any blocklist.
+ *
+ * @param {string} ip
+ * @return {Promise<?string>}
  */
-Dnsbl.query = function queryDnsbl(ip, callback) {
+Dnsbl.query = function queryDnsbl(ip) {
 	if (dnsblCache.has(ip)) {
-		callback(dnsblCache.get(ip));
-		return;
+		return Promise.resolve(dnsblCache.get(ip));
 	}
 	let reversedIpDot = ip.split('.').reverse().join('.') + '.';
-	queryDnsblLoop(ip, callback, reversedIpDot, 0);
+	return new Promise((resolve, reject) => {
+		queryDnsblLoop(ip, resolve, reversedIpDot, 0);
+	});
 };
 
-// require cidr and dns separately for ease of hotpatching
-let cidr = require('./cidr.js');
-let rangeLeaseweb = cidr.checker('207.244.64.0/18');
-let rangeLeaseweb2 = cidr.checker('209.58.128.0/18');
-let rangeLeaseweb3 = cidr.checker('103.254.152.0/22');
-let rangeVoxility = cidr.checker('5.254.64.0/20');
-let rangeCenet = cidr.checker('27.111.64.0/21');
-let rangeQlded = cidr.checker('203.104.0.0/20');
-let rangeCathednet = cidr.checker('180.95.40.0/21');
-let rangeTelefonica = cidr.checker('181.64.0.0/14');
-let rangeTelstra = cidr.checker('101.160.0.0/11');
-let rangeStarhub = cidr.checker(['27.125.128.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
-let rangeUltrasurf = cidr.checker('65.49.0.0/17');
-let rangeTmobile = cidr.checker('172.32.0.0/11');
+/*********************************************************
+ * IP parsing
+ *********************************************************/
 
-Dnsbl.reverse = function reverseDns(ip, callback) {
-	if (ip) {
+/**
+ * @param {string} ip
+ * @return {number} ipNum
+ */
+Dnsbl.ipToNumber = function (ip) {
+	let num = 0;
+	let parts = ip.split('.');
+	for (let i = 0, len = parts.length; i < len; i++) {
+		num *= 256;
+		num += parseInt(parts[i]);
+	}
+	return num;
+};
+/**
+ * @param {string} cidr
+ * @return {?Array<number>}
+ */
+Dnsbl.getCidrPattern = function (cidr) {
+	if (!cidr) return null;
+	let index = cidr.indexOf('/');
+	if (index <= 0) {
+		return [Dnsbl.ipToNumber(cidr), Dnsbl.ipToNumber(cidr)];
+	}
+	let low = Dnsbl.ipToNumber(cidr.slice(0, index));
+	let bits = parseInt(cidr.slice(index + 1));
+	// fun fact: this fails if bits <= 1 because JavaScript
+	// does << with signed int32s.
+	let high = low + (1 << (32 - bits)) - 1;
+	return [low, high];
+};
+/**
+ * @param {string} range
+ * @return {?Array<number>}
+ */
+Dnsbl.getRangePattern = function (range) {
+	if (!range) return null;
+	let index = range.indexOf(' - ');
+	if (index <= 0) {
+		return [Dnsbl.ipToNumber(range), Dnsbl.ipToNumber(range)];
+	}
+	let low = Dnsbl.ipToNumber(range.slice(0, index));
+	let high = Dnsbl.ipToNumber(range.slice(index + 3));
+	return [low, high];
+};
+/**
+ * @param {string}
+ * @return {?Array<number>}
+ */
+Dnsbl.getPattern = function (str) {
+	if (!str) return null;
+	if (str.indexOf(' - ') > 0) return Dnsbl.getRangePattern(str);
+	return Dnsbl.getCidrPattern(str);
+};
+/**
+ * @param {string} cidr
+ * @return {Array<Array<number>>}
+ */
+Dnsbl.cidrToPattern = function (cidr) {
+	if (!cidr || !cidr.length) {
+		return [];
+	}
+	if (typeof cidr === 'string') {
+		return [Dnsbl.getCidrPattern(cidr)];
+	}
+	return cidr.map(Dnsbl.getCidrPattern).filter(x => x);
+};
+/**
+ * @param {string} range
+ * @return {Array<Array<number>>}
+ */
+Dnsbl.rangeToPattern = function (range) {
+	if (!range || !range.length) {
+		return [];
+	}
+	if (typeof range === 'string') {
+		return [Dnsbl.getRangePattern(range)];
+	}
+	return range.map(Dnsbl.getRangePattern).filter(x => x);
+};
+/**
+ * @param {Array<Array<number>>}
+ * @param {number}
+ * @return {boolean}
+ */
+Dnsbl.checkPattern = function (patterns, num) {
+	for (let i = 0; i < patterns.length; ++i) {
+		let pattern = patterns[i];
+		if (num >= pattern[0] && num <= pattern[1]) {
+			return true;
+		}
+	}
+	return false;
+};
+
+/**
+ * Returns a checker function for the passed IP range or array of
+ * ranges. The checker function returns true if its passed IP is
+ * in the range.
+ *
+ * @param {string | Array<string>} ranges
+ * @return {function(string): boolean}
+ */
+Dnsbl.checker = function (ranges) {
+	if (!ranges || !ranges.length) return () => false;
+	let patterns;
+	if (typeof ranges === 'string') {
+		patterns = [Dnsbl.getPattern(ranges)];
+	} else {
+		patterns = ranges.map(Dnsbl.getPattern).filter(x => x);
+	}
+	return ip => Dnsbl.checkPattern(patterns, Dnsbl.ipToNumber(ip));
+};
+
+/*********************************************************
+ * Datacenter parsing
+ *********************************************************/
+
+/**
+ * @param {string} url
+ * @return {string}
+ */
+Dnsbl.urlToHost = function (url) {
+	if (url.startsWith('http://')) url = url.slice(7);
+	if (url.startsWith('https://')) url = url.slice(8);
+	if (url.startsWith('www.')) url = url.slice(4);
+	let slashIndex = url.indexOf('/');
+	if (slashIndex > 0) url = url.slice(0, slashIndex);
+	return url;
+};
+
+Dnsbl.datacenters = [];
+Dnsbl.loadDatacenters = function () {
+	fs.readFile(path.resolve(__dirname, 'config/datacenters.csv'), (err, data) => {
+		if (err) return;
+		data = ('' + data).split("\n");
+		let datacenters = [];
+		for (let row of data) {
+			if (!row) continue;
+			let rowSplit = row.split(',');
+			let rowData = [
+				Dnsbl.ipToNumber(rowSplit[0]),
+				Dnsbl.ipToNumber(rowSplit[1]),
+				Dnsbl.urlToHost(rowSplit[3]),
+			];
+			datacenters.push(rowData);
+		}
+		Dnsbl.datacenters = datacenters;
+	});
+};
+
+let rangeTmobile = Dnsbl.cidrToPattern('172.32.0.0/11');
+let rangeCenet = Dnsbl.cidrToPattern('27.111.64.0/21');
+let rangeQlded = Dnsbl.cidrToPattern('203.104.0.0/20');
+let rangeCathednet = Dnsbl.cidrToPattern('180.95.40.0/21');
+let rangeTelefonica = Dnsbl.cidrToPattern('181.64.0.0/14');
+let rangeStarhub = Dnsbl.cidrToPattern(['27.125.128.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
+let rangeTelstra = Dnsbl.cidrToPattern('101.160.0.0/11');
+
+let rangeOVHres = Dnsbl.rangeToPattern(['109.190.0.0 - 109.190.63.255', '109.190.64.0 - 109.190.127.255', '109.190.128.0 - 109.190.191.255', '109.190.192.0 - 109.190.255.255', '151.80.228.0 - 151.80.228.255', '178.32.37.0 - 178.32.37.255', '178.33.101.0 - 178.33.101.255', '185.15.68.0 - 185.15.69.255', '185.15.70.0 - 185.15.71.255']);
+
+/**
+ * Will not reject; IPs with no RDNS entry will resolve to
+ * '[byte1].[byte2].unknown-nohost'.
+ *
+ * @param {string} ip
+ * @return {Promise<string>}
+ */
+Dnsbl.reverse = function reverseDns(ip) {
+	return new Promise((resolve, reject) => {
+		if (!ip) {
+			resolve('');
+			return;
+		}
+		let ipNumber = Dnsbl.ipToNumber(ip);
+		if (Dnsbl.checkPattern(rangeOVHres, ipNumber)) {
+			resolve('ovh.fr.res-nohost');
+			return;
+		}
+		for (let row of Dnsbl.datacenters) {
+			if (ipNumber >= row[0] && ipNumber <= row[1]) {
+				resolve(row[2] + '.proxy-nohost');
+				return;
+			}
+		}
 		if (ip.startsWith('106.76.') || ip.startsWith('106.77.') || ip.startsWith('106.78.') || ip.startsWith('106.79.') || ip.startsWith('112.110.') || ip.startsWith('27.97.') || ip.startsWith('49.15.') || ip.startsWith('49.14.') || ip.startsWith('1.187.')) {
-			callback(null, ['ideacellular.mobile-nohost']);
+			resolve('ideacellular.mobile-nohost');
 			return;
 		}
-		if (rangeTmobile(ip) || ip.startsWith('149.254.')) {
-			callback(null, ['tmobile.mobile-nohost']);
+		if (Dnsbl.checkPattern(rangeTmobile, ipNumber) || ip.startsWith('149.254.')) {
+			resolve('tmobile.mobile-nohost');
 			return;
 		}
-		if (ip.startsWith('167.114.') || ip.startsWith('149.56.')) {
-			callback(null, ['ovh.proxy-nohost']);
-			return;
-		}
-		if (ip.startsWith('104.131.') || ip.startsWith('104.236.') || ip.startsWith('198.199.') || ip.startsWith('45.55.') || ip.startsWith('192.241.') || ip.startsWith('162.243.') || ip.startsWith('107.170.')) {
-			callback(null, ['digitalocean.proxy-nohost']);
-			return;
-		}
-		if (ip.startsWith('178.62.')) {
-			callback(null, ['digitalocean.proxy-nohost']);
-			return;
-		}
-		if (ip.startsWith('46.16.36.')) {
-			callback(null, ['anchorfree.proxy-nohost']);
-			return;
-		}
-		if (ip.startsWith('216.172.142.')) {
-			callback(null, ['egihosting.proxy-nohost']);
-			return;
-		}
-		if (ip.startsWith('217.78.0.')) {
-			callback(null, ['dediserve.proxy-nohost']);
-			return;
-		}
-		if (ip.startsWith('179.43.147.')) {
-			callback(null, ['privatelayer.proxy-nohost']);
-			return;
-		}
-		if (ip.startsWith('185.86.148.') || ip.startsWith('185.86.149.')) {
-			callback(null, ['yourserver.se.proxy-nohost']);
-			return;
-		}
-		if (rangeLeaseweb(ip) || rangeLeaseweb2(ip) || rangeLeaseweb3(ip) || rangeVoxility(ip)) {
-			callback(null, ['zenmate.proxy-nohost']);
-			return;
-		}
-		if (ip.startsWith('158.58.172.') || ip.startsWith('158.58.173.')) {
-			callback(null, ['seflow.net.proxy-nohost']);
-			return;
-		}
-		if (rangeCenet(ip) || rangeQlded(ip) || ip.startsWith('153.107.') || rangeCathednet(ip)) {
-			callback(null, ['edu.au.res-nohost']);
+		if (Dnsbl.checkPattern(rangeCenet, ipNumber) || Dnsbl.checkPattern(rangeQlded, ipNumber) || ip.startsWith('153.107.') || Dnsbl.checkPattern(rangeCathednet, ipNumber)) {
+			resolve('edu.au.res-nohost');
 			return;
 		}
 		if (ip.startsWith('179.7.')) {
-			callback(null, ['claro.com.pe.mobile-nohost']);
+			resolve('claro.com.pe.mobile-nohost');
 			return;
 		}
-		if (ip.startsWith('190.') || rangeTelefonica(ip)) {
-			callback(null, ['telefonica.net.pe.mobile-nohost']);
+		if (ip.startsWith('190.') || Dnsbl.checkPattern(rangeTelefonica, ipNumber)) {
+			resolve('telefonica.net.pe.mobile-nohost');
 			return;
 		}
 		if (ip.startsWith('180.191.') || ip.startsWith('112.198.')) {
-			callback(null, ['globe.com.ph.mobile-nohost']);
+			resolve('globe.com.ph.mobile-nohost');
 			return;
 		}
 		if (ip.startsWith('218.188.') || ip.startsWith('218.189.')) {
-			callback(null, ['hgc.com.hk.mobile-nohost']);
+			resolve('hgc.com.hk.mobile-nohost');
 			return;
 		}
 		if (ip.startsWith('172.242.') || ip.startsWith('172.243.')) {
-			callback(null, ['viasat.com.mobile-nohost']);
+			resolve('viasat.com.mobile-nohost');
 			return;
 		}
 		if (ip.startsWith('201.141.')) {
-			callback(null, ['cablevision.net.mx.mobile-nohost']);
+			resolve('cablevision.net.mx.mobile-nohost');
 			return;
 		}
-		if (rangeStarhub(ip)) {
-			callback(null, ['starhub.com.mobile-nohost']);
+		if (Dnsbl.checkPattern(rangeStarhub, ipNumber)) {
+			resolve('starhub.com.mobile-nohost');
 			return;
 		}
 		if (ip.startsWith('202.12.94.') || ip.startsWith('202.12.95.')) {
-			callback(null, ['nyp.edu.sg.res-nohost']);
+			resolve('nyp.edu.sg.res-nohost');
 			return;
 		}
 		if (ip.startsWith('64.150.')) {
-			callback(null, ['illinois.net.res-nohost']);
+			resolve('illinois.net.res-nohost');
 			return;
 		}
 		if (ip.startsWith('189.204.')) {
-			callback(null, ['bestel.com.mx.res-nohost']);
+			resolve('bestel.com.mx.res-nohost');
 			return;
 		}
 		if (ip.startsWith('121.54.')) {
-			callback(null, ['smart.com.ph.mobile-nohost']);
+			resolve('smart.com.ph.mobile-nohost');
 			return;
 		}
 		if (ip.startsWith('179.52.') || ip.startsWith('179.53.')) {
-			callback(null, ['codetel.net.do.mobile-nohost']);
+			resolve('codetel.net.do.mobile-nohost');
+			return;
+		}
+		if (ip.startsWith('46.16.36.')) {
+			resolve('anchorfree.proxy-nohost');
 			return;
 		}
 		if (ip.startsWith('198.144.104.') || ip.startsWith('198.47.115.') || ip.startsWith('199.255.215.') || ip.startsWith('204.14.76.') || ip.startsWith('204.14.77.') || ip.startsWith('204.14.78.') || ip.startsWith('204.14.79.') || ip.startsWith('205.164.32.') || ip.startsWith('209.73.132.') || ip.startsWith('209.73.151.') || ip.startsWith('216.172.135.') || ip.startsWith('46.16.34.') || ip.startsWith('46.16.35.') || ip.startsWith('50.117.45.') || ip.startsWith('63.141.198.') || ip.startsWith('63.141.199.') || ip.startsWith('74.115.1.') || ip.startsWith('74.115.5.') || ip.startsWith('85.237.197.') || ip.startsWith('85.237.222.')) {
-			callback(null, ['anchorfree.proxy-nohost']);
+			resolve('anchorfree.proxy-nohost');
 			return;
 		}
-		if (rangeUltrasurf(ip)) {
-			callback(null, ['ultrasurf.proxy-nohost']);
-			return;
-		}
-	}
-	return require('dns').reverse(ip, (err, hosts) => {
-		if (!hosts || !hosts[0]) {
-			if (ip.startsWith('50.')) {
-				hosts = ['comcast.net.res-nohost'];
-			} else if (rangeTelstra(ip)) {
-				hosts = ['telstra.net.res-nohost'];
-			} else {
-				hosts = ['' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost'];
+		require('dns').reverse(ip, (err, hosts) => {
+			if (err) {
+				resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
+				return;
 			}
-		}
-		callback(err, hosts);
+			if (!hosts || !hosts[0]) {
+				if (ip.startsWith('50.')) {
+					resolve('comcast.net.res-nohost');
+				} else if (Dnsbl.checkPattern(rangeTelstra, ipNumber)) {
+					resolve('telstra.net.res-nohost');
+				} else {
+					resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
+				}
+			}
+			resolve(hosts[0]);
+		});
 	});
 };
+

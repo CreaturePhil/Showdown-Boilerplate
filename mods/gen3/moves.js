@@ -22,6 +22,13 @@ exports.BattleMovedex = {
 		inherit: true,
 		flags: {contact: 1, protect: 1, mirror: 1},
 	},
+	aromatherapy: {
+		inherit: true,
+		onHit: function (target, source) {
+			this.add('-cureteam', source, '[from] move: Aromatherapy');
+			source.side.pokemon.forEach(pokemon => pokemon.clearStatus());
+		},
+	},
 	assist: {
 		inherit: true,
 		desc: "The user performs a random move from any of the Pokemon on its team. Assist cannot generate itself, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
@@ -470,6 +477,15 @@ exports.BattleMovedex = {
 			spa: 1,
 		},
 	},
+	healbell: {
+		inherit: true,
+		onHit: function (target, source) {
+			this.add('-activate', source, 'move: Heal Bell');
+			source.side.pokemon.forEach(pokemon => {
+				if (!pokemon.hasAbility('soundproof')) pokemon.cureStatus(true);
+			});
+		},
+	},
 	hiddenpower: {
 		inherit: true,
 		basePower: 0,
@@ -699,6 +715,29 @@ exports.BattleMovedex = {
 				this.add('-fail', pokemon);
 				return true;
 			}
+		},
+		onHit: function (pokemon) {
+			let moves = [];
+			for (let i = 0; i < pokemon.moveset.length; i++) {
+				let move = pokemon.moveset[i].id;
+				let pp = pokemon.moveset[i].pp;
+				let NoSleepTalk = {
+					assist:1, bide:1, focuspunch:1, metronome:1, mirrormove:1, sleeptalk:1, uproar:1,
+				};
+				if (move && !(NoSleepTalk[move] || this.getMove(move).flags['charge'])) {
+					moves.push({move: move, pp: pp});
+				}
+			}
+			let randomMove = '';
+			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (!randomMove) {
+				return false;
+			}
+			if (!randomMove.pp) {
+				this.add('cant', pokemon, 'nopp', randomMove.move);
+				return;
+			}
+			this.useMove(randomMove.move, pokemon);
 		},
 	},
 	spikes: {

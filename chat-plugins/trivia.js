@@ -7,15 +7,11 @@
 
 const fs = require('fs');
 
-// Hack to allow unit tests to run.
-const RoomGame = require('../room-game.js').RoomGame;
-const RoomGamePlayer = require('../room-game.js').RoomGamePlayer;
-
 const CATEGORIES = {
 	ae: 'Arts and Entertainment',
 	pokemon: 'Pok\u00E9mon',
 	sg: 'Science and Geography',
-	sh: 'Society and History',
+	sh: 'Society and Humanities',
 };
 
 const MODES = {
@@ -31,6 +27,10 @@ const SCORE_CAPS = {
 	long: 50,
 };
 
+Object.setPrototypeOf(CATEGORIES, null);
+Object.setPrototypeOf(MODES, null);
+Object.setPrototypeOf(SCORE_CAPS, null);
+
 const SIGNUP_PHASE = 'signups';
 const QUESTION_PHASE = 'question';
 const INTERMISSION_PHASE = 'intermission';
@@ -38,7 +38,7 @@ const INTERMISSION_PHASE = 'intermission';
 const MINIMUM_PLAYERS = 3;
 
 const START_TIMEOUT = 30 * 1000;
-const QUESTION_INTERVAL = 15 * 1000;
+const QUESTION_INTERVAL = 12 * 1000 + 500;
 const INTERMISSION_INTERVAL = 30 * 1000;
 
 const MAX_QUESTION_LENGTH = 252;
@@ -57,31 +57,23 @@ if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
 
 const writeTriviaData = (() => {
 	let writing = false;
-	let writePending = false; // whether or not a new write is pending
-
-	let finishWriting = function () {
-		writing = false;
-		if (writePending) {
-			writePending = false;
-			writeTriviaData();
-		}
-	};
-	return function () {
+	let writePending = false;
+	return () => {
 		if (writing) {
 			writePending = true;
 			return;
 		}
 		writing = true;
+
 		let data = JSON.stringify(triviaData, null, 2);
+
 		fs.writeFile('config/chat-plugins/triviadata.json.0', data, () => {
-			// rename is atomic on POSIX, but will throw an error on Windows
-			fs.rename('config/chat-plugins/triviadata.json.0', 'config/chat-plugins/triviadata.json', err => {
-				if (err) {
-					// This should only happen on Windows
-					fs.writeFile('config/chat-plugins/triviadata.json', data, finishWriting);
-					return;
+			fs.rename('config/chat-plugins/triviadata.json.0', 'config/chat-plugins/triviadata.json', () => {
+				writing = false;
+				if (writePending) {
+					writePending = false;
+					process.nextTick(() => writeTriviaData());
 				}
-				finishWriting();
 			});
 		});
 	};
@@ -132,7 +124,7 @@ function sliceCategory(category) {
 	return questions.slice(sliceFrom, sliceUpTo);
 }
 
-class TriviaPlayer extends RoomGamePlayer {
+class TriviaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
 		super(user, game);
 
@@ -161,7 +153,7 @@ class TriviaPlayer extends RoomGamePlayer {
 	}
 }
 
-class Trivia extends RoomGame {
+class Trivia extends Rooms.RoomGame {
 	constructor(room, mode, category, length, questions) {
 		super(room);
 		this.gameid = 'trivia';
@@ -295,6 +287,14 @@ class Trivia extends RoomGame {
 		this.kickedUsers.add(user.userid);
 		for (let id in user.prevNames) {
 			this.kickedUsers.add(id);
+		}
+
+		super.removePlayer(user);
+	}
+
+	leave(user) {
+		if (!this.players[user.userid]) {
+			return 'You are not a player in the current trivia game.';
 		}
 
 		super.removePlayer(user);
@@ -755,6 +755,19 @@ const commands = {
 	},
 	kickhelp: ["/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~"],
 
+	leave: function (target, room, user) {
+		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
+		if (room.game.gameid !== 'trivia') {
+			return this.errorReply("There is already a game of " + room.game.title + " in progress.");
+		}
+
+		let res = room.game.leave(user);
+		if (typeof res === 'string') return this.errorReply(res);
+		this.sendReply("You have left the current game of trivia.");
+	},
+	leavehelp: ["/trivia leave - Makes the player leave the game."],
+
 	start: function (target, room) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('broadcast', null, room)) return false;
@@ -1161,6 +1174,7 @@ module.exports = {
 			"- /trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~",
 			"- /ta [answer] - Answer the current question.",
 			"- /trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~",
+			"- /trivia leave - Makes the player leave the game.",
 			"- /trivia end - End a trivia game. Requires: + % @ # ~",
 			"Question modifying commands:",
 			"- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.",

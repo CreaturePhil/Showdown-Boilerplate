@@ -215,6 +215,12 @@ class Tournament {
 			return;
 		}
 
+		let gameCount = user.games.size;
+		if (gameCount > 4) {
+			output.errorReply("Due to high load, you are limited to 4 games at the same time.");
+			return;
+		}
+
 		if (!isAllowAlts) {
 			let users = this.generator.getUsers();
 			for (let i = 0; i < users.length; i++) {
@@ -763,7 +769,7 @@ class Tournament {
 		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
-			this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + score.join(',') + '|fail');
+			this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + score.join(',') + '|fail|' + room.id);
 
 			this.generator.setUserBusy(from, false);
 			this.generator.setUserBusy(to, false);
@@ -783,7 +789,7 @@ class Tournament {
 			return this.room.add("Unexpected " + error + " from setMatchResult([" + room.p1.userid + ", " + room.p2.userid + "], " + result + ", " + score + ") in onBattleWin(" + room.id + ", " + winnerid + "). Please report this to an admin.").update();
 		}
 
-		this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + score.join(','));
+		this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + score.join(',') + '|success|' + room.id);
 
 		this.generator.setUserBusy(from, false);
 		this.generator.setUserBusy(to, false);
@@ -989,7 +995,7 @@ let commands = {
 		begin: 'start',
 		start: function (tournament, user) {
 			if (tournament.startTournament(this)) {
-				this.sendModCommand("(" + user.name + " started the tournament.)");
+				this.room.sendModCommand("(" + user.name + " started the tournament.)");
 			}
 		},
 		dq: 'disqualify',
