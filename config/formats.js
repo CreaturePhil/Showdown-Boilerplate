@@ -3701,6 +3701,30 @@ exports.Formats = [
 			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
 		},
 	},
+{ 		name: "Nature Swap 
+Megamons", 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3566648/\">Megamons</a> + <a href=\"https://www.smogon.com/forums/threads/3577739/\">Nature Swap</a>"], 		section: "Experimental Metas", 		searchShow: false, 		mod: 'nsmm', 		ruleset: ['Ubers'],
+onBegin: function () {
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				let nature = pokemon.battle.getNature(pokemon.set.nature);
+				if (nature.plus !== nature.minus) {
+					["baseTemplate", "canMegaEvo"].forEach(key => {
+						if (pokemon[key]) {
+							let template = Object.assign({}, this.getTemplate(pokemon[key]));
+							template.baseStats = Object.assign({}, template.baseStats);
+							let plus = template.baseStats[nature.plus];
+							let minus = template.baseStats[nature.minus];
+							template.baseStats[nature.plus] = minus;
+							template.baseStats[nature.minus] = plus;
+							pokemon[key] = template;
+						}
+					});
+					pokemon.formeChange(pokemon.baseTemplate);
+				}
+			}
+		},
+	},
 
 	// RoA Spotlight
 	///////////////////////////////////////////////////////////////////
