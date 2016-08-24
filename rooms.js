@@ -17,12 +17,12 @@ const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
 const fs = require('fs');
+const path = require('path');
 
 let Rooms = module.exports = getRoom;
 
-let rooms = Rooms.rooms = Object.create(null);
-
-let aliases = Object.create(null);
+Rooms.rooms = new Map();
+Rooms.aliases = new Map();
 
 let Room = (() => {
 	function Room(roomid, title) {
@@ -307,6 +307,19 @@ let Room = (() => {
 		}
 		return successUserid;
 	};
+	Room.prototype.modlog = function (text) {
+		if (!this.modlogStream) return;
+		this.modlogStream.write('[' + (new Date().toJSON()) + '] (' + this.id + ') ' + text + '\n');
+	};
+	Room.prototype.sendModCommand = function (data) {
+		for (let i in this.users) {
+			let user = this.users[i];
+			// hardcoded for performance reasons (this is an inner loop)
+			if (user.isStaff || (this.auth && (this.auth[user.userid] || '+') !== '+')) {
+				user.sendTo(this, data);
+			}
+		}
+	};
 
 	return Room;
 })();
@@ -359,24 +372,19 @@ let GlobalRoom = (() => {
 			let room = Rooms.createChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
 			if (room.aliases) {
 				for (let a = 0; a < room.aliases.length; a++) {
-					aliases[room.aliases[a]] = id;
+					Rooms.aliases.set(room.aliases[a], id);
 				}
 			}
 			this.chatRooms.push(room);
 			if (room.autojoin) this.autojoin.push(id);
 			if (room.staffAutojoin) this.staffAutojoin.push(id);
 		}
+		Rooms.lobby = Rooms.rooms.get('lobby');
 
 		// this function is complex in order to avoid several race conditions
 		this.writeNumRooms = (() => {
 			let writing = false;
-			let lastBattle;	// last lastBattle to be written to file
-			let finishWriting = () => {
-				writing = false;
-				if (lastBattle < this.lastBattle) {
-					this.writeNumRooms();
-				}
-			};
+			let lastBattle = -1;	// last lastBattle to be written to file
 			return () => {
 				if (writing) return;
 
@@ -386,14 +394,11 @@ let GlobalRoom = (() => {
 
 				writing = true;
 				fs.writeFile('logs/lastbattle.txt.0', '' + lastBattle, () => {
-					// rename is atomic on POSIX, but will throw an error on Windows
-					fs.rename('logs/lastbattle.txt.0', 'logs/lastbattle.txt', err => {
-						if (err) {
-							// This should only happen on Windows.
-							fs.writeFile('logs/lastbattle.txt', '' + lastBattle, finishWriting);
-							return;
+					fs.rename('logs/lastbattle.txt.0', 'logs/lastbattle.txt', () => {
+						writing = false;
+						if (lastBattle < this.lastBattle) {
+							process.nextTick(() => this.writeNumRooms());
 						}
-						finishWriting();
 					});
 				});
 			};
@@ -401,30 +406,26 @@ let GlobalRoom = (() => {
 
 		this.writeChatRoomData = (() => {
 			let writing = false;
-			let writePending = false; // whether or not a new write is pending
-			let finishWriting = () => {
-				writing = false;
-				if (writePending) {
-					writePending = false;
-					this.writeChatRoomData();
-				}
-			};
+			let writePending = false;
 			return () => {
 				if (writing) {
 					writePending = true;
 					return;
 				}
 				writing = true;
-				let data = JSON.stringify(this.chatRoomData).replace(/\{"title"\:/g, '\n{"title":').replace(/\]$/, '\n]');
+
+				let data = JSON.stringify(this.chatRoomData)
+					.replace(/\{"title"\:/g, '\n{"title":')
+					.replace(/\]$/, '\n]');
+
 				fs.writeFile('config/chatrooms.json.0', data, () => {
-					// rename is atomic on POSIX, but will throw an error on Windows
-					fs.rename('config/chatrooms.json.0', 'config/chatrooms.json', err => {
-						if (err) {
-							// This should only happen on Windows.
-							fs.writeFile('config/chatrooms.json', data, finishWriting);
-							return;
+					data = null;
+					fs.rename('config/chatrooms.json.0', 'config/chatrooms.json', () => {
+						writing = false;
+						if (writePending) {
+							writePending = false;
+							process.nextTick(() => this.writeChatRoomData());
 						}
-						finishWriting();
 					});
 				});
 			};
@@ -445,6 +446,9 @@ let GlobalRoom = (() => {
 			() => this.periodicMatch(),
 			PERIODIC_MATCH_INTERVAL
 		);
+
+		// Create writestream for modlog
+		this.modlogStream = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_global.txt'), {flags:'a+'});
 	}
 	GlobalRoom.prototype.type = 'global';
 
@@ -495,14 +499,13 @@ let GlobalRoom = (() => {
 		if (this.battleCount > 150 && !filter) {
 			skipCount = this.battleCount - 150;
 		}
-		for (let i in Rooms.rooms) {
-			let room = Rooms.rooms[i];
-			if (!room || !room.active || room.isPrivate) continue;
-			if (filter && filter !== room.format && filter !== true) continue;
-			if (skipCount && skipCount--) continue;
+		Rooms.rooms.forEach(room => {
+			if (!room || !room.active || room.isPrivate) return;
+			if (filter && filter !== room.format && filter !== true) return;
+			if (skipCount && skipCount--) return;
 
 			rooms.push(room);
-		}
+		});
 
 		let roomTable = {};
 		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
@@ -671,17 +674,17 @@ let GlobalRoom = (() => {
 		}
 	};
 	GlobalRoom.prototype.add = function (message) {
-		if (rooms.lobby) return rooms.lobby.add(message);
+		if (Rooms.lobby) return Rooms.lobby.add(message);
 		return this;
 	};
 	GlobalRoom.prototype.addRaw = function (message) {
-		if (rooms.lobby) return rooms.lobby.addRaw(message);
+		if (Rooms.lobby) return Rooms.lobby.addRaw(message);
 		return this;
 	};
 	GlobalRoom.prototype.addChatRoom = function (title) {
 		let id = toId(title);
 		if (id === 'battles' || id === 'rooms' || id === 'ladder' || id === 'teambuilder') return false;
-		if (rooms[id]) return false;
+		if (Rooms.rooms.has(id)) return false;
 
 		let chatRoomData = {
 			title: title,
@@ -694,7 +697,7 @@ let GlobalRoom = (() => {
 	};
 	GlobalRoom.prototype.deregisterChatRoom = function (id) {
 		id = toId(id);
-		let room = rooms[id];
+		let room = Rooms(id);
 		if (!room) return false; // room doesn't exist
 		if (!room.chatRoomData) return false; // room isn't registered
 		// deregister from global chatRoomData
@@ -713,7 +716,7 @@ let GlobalRoom = (() => {
 	};
 	GlobalRoom.prototype.delistChatRoom = function (id) {
 		id = toId(id);
-		if (!rooms[id]) return false; // room doesn't exist
+		if (!Rooms.rooms.has(id)) return false; // room doesn't exist
 		for (let i = this.chatRooms.length - 1; i >= 0; i--) {
 			if (id === this.chatRooms[i].id) {
 				this.chatRooms.splice(i, 1);
@@ -723,7 +726,7 @@ let GlobalRoom = (() => {
 	};
 	GlobalRoom.prototype.removeChatRoom = function (id) {
 		id = toId(id);
-		let room = rooms[id];
+		let room = Rooms(id);
 		if (!room) return false; // room doesn't exist
 		room.destroy();
 		return true;
@@ -795,7 +798,6 @@ let GlobalRoom = (() => {
 		this.cancelSearch(user);
 	};
 	GlobalRoom.prototype.startBattle = function (p1, p2, format, p1team, p2team, options) {
-		let newRoom;
 		p1 = Users.get(p1);
 		p2 = Users.get(p2);
 
@@ -823,12 +825,13 @@ let GlobalRoom = (() => {
 		//console.log('BATTLE START BETWEEN: ' + p1.userid + ' ' + p2.userid);
 		let i = this.lastBattle + 1;
 		let formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g, '');
-		while (rooms['battle-' + formaturlid + '-' + i]) {
+		while (Rooms.rooms.has('battle-' + formaturlid + '-' + i)) {
 			i++;
 		}
 		this.lastBattle = i;
-		rooms.global.writeNumRooms();
-		newRoom = Rooms.createBattle('battle-' + formaturlid + '-' + i, format, p1, p2, options);
+		this.writeNumRooms();
+
+		let newRoom = Rooms.createBattle('battle-' + formaturlid + '-' + i, format, p1, p2, options);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
 		newRoom.battle.addPlayer(p1, p1team);
@@ -852,11 +855,14 @@ let GlobalRoom = (() => {
 		return newRoom;
 	};
 	GlobalRoom.prototype.chat = function (user, message, connection) {
-		if (rooms.lobby) return rooms.lobby.chat(user, message, connection);
+		if (Rooms.lobby) return Rooms.lobby.chat(user, message, connection);
 		message = CommandParser.parse(message, this, user, connection);
 		if (message && message !== true) {
 			connection.popup("You can't send messages directly to the server.");
 		}
+	};
+	GlobalRoom.prototype.modlog = function (text) {
+		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + text + '\n');
 	};
 	return GlobalRoom;
 })();
@@ -874,7 +880,7 @@ let BattleRoom = (() => {
 		format = '' + (format || '');
 
 		this.format = format;
-		this.auth = {};
+		this.auth = Object.create(null);
 		//console.log("NEW BATTLE");
 
 		let formatid = toId(format);
@@ -910,6 +916,8 @@ let BattleRoom = (() => {
 		this.disconnectTickDiff = [0, 0];
 
 		if (Config.forcetimer) this.requestKickInactive(false);
+
+		this.modlogStream = Rooms.battleModlogStream;
 	}
 	BattleRoom.prototype = Object.create(Room.prototype);
 	BattleRoom.prototype.type = 'battle';
@@ -964,6 +972,8 @@ let BattleRoom = (() => {
 			}
 			this.update();
 			this.logBattle(p1score);
+		} else {
+			this.battle.logData = null;
 		}
 		if (Config.autosavereplays) {
 			let uploader = Users.get(winnerid);
@@ -973,7 +983,6 @@ let BattleRoom = (() => {
 		}
 		if (this.tour) {
 			this.tour.onBattleWin(this, winnerid);
-			this.tour = null;
 		}
 		this.update();
 	};
@@ -1020,11 +1029,13 @@ let BattleRoom = (() => {
 	};
 	BattleRoom.prototype.logBattle = function (p1score, p1rating, p2rating) {
 		let logData = this.battle.logData;
+		if (!logData) return;
+		this.battle.logData = null; // deallocate to save space
+		logData.log = BattleRoom.prototype.getLog.call(logData, 3); // replay log (exact damage)
 		logData.p1rating = p1rating;
 		logData.p2rating = p2rating;
 		logData.endType = this.battle.endType;
 		if (!p1rating) logData.ladderError = true;
-		logData.log = BattleRoom.prototype.getLog.call(logData, 3); // replay log (exact damage)
 		const date = new Date();
 		const logsubfolder = Tools.toTimeStamp(date).split(' ')[0];
 		const logfolder = logsubfolder.split('-', 2).join('-');
@@ -1302,7 +1313,7 @@ let BattleRoom = (() => {
 
 		if (this.tour) {
 			// resolve state of the tournament;
-			this.tour.onBattleWin(this, '');
+			if (!this.battle.ended) this.tour.onBattleWin(this, '');
 			this.tour = null;
 		}
 
@@ -1337,7 +1348,7 @@ let BattleRoom = (() => {
 		this.muteTimer = null;
 
 		// get rid of some possibly-circular references
-		delete rooms[this.id];
+		Rooms.rooms.delete(this.id);
 	};
 	return BattleRoom;
 })();
@@ -1354,6 +1365,7 @@ let ChatRoom = (() => {
 		this.logFile = null;
 		this.logFilename = '';
 		this.destroyingLog = false;
+		if (this.auth) Object.setPrototypeOf(this.auth, null);
 		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
 		if (!this.modjoin) this.modjoin = false;
 		if (!this.filterStretching) this.filterStretching = false;
@@ -1375,6 +1387,12 @@ let ChatRoom = (() => {
 		if (Config.reportjoinsperiod) {
 			this.userList = this.getUserList();
 			this.reportJoinsQueue = [];
+		}
+
+		if (this.isPersonal) {
+			this.modlogStream = Rooms.groupchatModlogStream;
+		} else {
+			this.modlogStream = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + roomid + '.txt'), {flags:'a+'});
 		}
 	}
 	ChatRoom.prototype = Object.create(Room.prototype);
@@ -1605,12 +1623,12 @@ let ChatRoom = (() => {
 		}
 		this.users = null;
 
-		rooms.global.deregisterChatRoom(this.id);
-		rooms.global.delistChatRoom(this.id);
+		Rooms.global.deregisterChatRoom(this.id);
+		Rooms.global.delistChatRoom(this.id);
 
 		if (this.aliases) {
 			for (let i = 0; i < this.aliases.length; i++) {
-				delete aliases[this.aliases[i]];
+				Rooms.aliases.delete(this.aliases[i]);
 			}
 		}
 
@@ -1633,56 +1651,60 @@ let ChatRoom = (() => {
 		this.logUserStatsInterval = null;
 
 		// get rid of some possibly-circular references
-		delete rooms[this.id];
+		Rooms.rooms.delete(this.id);
 	};
 	return ChatRoom;
 })();
 
-// to make sure you don't get null returned, pass the second argument
 function getRoom(roomid, fallback) {
+	if (fallback) throw new Error("fallback parameter in getRoom no longer supported");
 	if (roomid && roomid.id) return roomid;
-	if (!roomid) roomid = 'default';
-	if (!rooms[roomid] && fallback) {
-		return rooms.global;
-	}
-	return rooms[roomid];
+	return Rooms.rooms.get(roomid);
 }
 Rooms.get = getRoom;
 Rooms.search = function (name, fallback) {
-	return getRoom(name) || getRoom(toId(name)) || getRoom(Rooms.aliases[toId(name)]) || (fallback ? rooms.global : undefined);
+	if (fallback) throw new Error("fallback parameter in Rooms.search no longer supported");
+	return getRoom(name) || getRoom(toId(name)) || getRoom(Rooms.aliases.get(toId(name)));
 };
 
 Rooms.createBattle = function (roomid, format, p1, p2, options) {
 	if (roomid && roomid.id) return roomid;
 	if (!p1 || !p2) return false;
 	if (!roomid) roomid = 'default';
-	if (!rooms[roomid]) {
+	if (!Rooms.rooms.has(roomid)) {
 		// console.log("NEW BATTLE ROOM: " + roomid);
 		Monitor.countBattle(p1.latestIp, p1.name);
 		Monitor.countBattle(p2.latestIp, p2.name);
-		rooms[roomid] = new BattleRoom(roomid, format, p1, p2, options);
+		Rooms.rooms.set(roomid, new BattleRoom(roomid, format, p1, p2, options));
 	}
-	return rooms[roomid];
+	return Rooms.rooms.get(roomid);
 };
 Rooms.createChatRoom = function (roomid, title, data) {
-	let room;
-	if ((room = rooms[roomid])) return room;
+	let room = Rooms.rooms.get(roomid);
+	if (room) return room;
 
-	room = rooms[roomid] = new ChatRoom(roomid, title, data);
+	room = new ChatRoom(roomid, title, data);
+	Rooms.rooms.set(roomid, room);
 	return room;
 };
 
-if (!Config.quietconsole) console.log("NEW GLOBAL: global");
-rooms.global = new GlobalRoom('global');
+Rooms.battleModlogStream = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'});
+Rooms.groupchatModlogStream = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_groupchat.txt'), {flags:'a+'});
+
+Rooms.global = null;
+Rooms.lobby = null;
 
 Rooms.Room = Room;
 Rooms.GlobalRoom = GlobalRoom;
 Rooms.BattleRoom = BattleRoom;
 Rooms.ChatRoom = ChatRoom;
 
-Rooms.global = rooms.global;
-Rooms.lobby = rooms.lobby;
-Rooms.aliases = aliases;
-
 Rooms.RoomGame = require('./room-game.js').RoomGame;
 Rooms.RoomGamePlayer = require('./room-game.js').RoomGamePlayer;
+
+// initialize
+
+if (!Config.quietconsole) console.log("NEW GLOBAL: global");
+Rooms.global = new GlobalRoom('global');
+
+Rooms.rooms.set('global', Rooms.global);
