@@ -23,26 +23,26 @@ The first letter of a commit summary should be capitalized (unless the first wor
 
 The commit summary should not end in a period.
 
-BAD: `refactor users to use classes`  
-BAD: `Refactor Users to use classes.`
-GOOD: `Refactor Users to use classes`
+- BAD: `refactor users to use classes`
+- BAD: `Refactor Users to use classes.`
+- GOOD: `Refactor Users to use classes`
 
 If the first word is a verb, it should be in imperative mood (the first word doesn't have to be a verb, but we recommend it).
 
-BAD: `Adding namefilter`  
-BAD: `Adds namefilter`  
-GOOD: `Add namefilter`
+- BAD: `Adding namefilter`
+- BAD: `Adds namefilter`
+- GOOD: `Add namefilter`
 
 Your commit summary should make it clear what part of the code you're talking about. For instance, if you're editing the Trivia plugin, you might want to add "Trivia: " to the beginning of your commit summary so it's clear.
 
-BAD: `Ban Genesect`  
-GOOD: `Monotype: Ban Genesect` (notice the uppercase "B")  
+- BAD: `Ban Genesect`
+- GOOD: `Monotype: Ban Genesect` (notice the uppercase "B")
 
 Do not make commits to fix commits in your pull request. Just squash/amend them into one commit.
 
-BAD: `Add /lock`, `Fix crash in /lock`, `Fix another crash in /lock` (if these are the same pullreq, they should be the same commit)  
-GOOD: `Add /lock`  
-GOOD: `Fix crash in /lock`
+- BAD: `Add /lock`, `Fix crash in /lock`, `Fix another crash in /lock` (if these are the same pullreq, they should be the same commit)
+- GOOD: `Add /lock`
+- GOOD: `Fix crash in /lock`
 
 You may have more than one commit, as long as they make sense as separate commits, and none of your commits are just fixing an earlier commit in your pull request.
 
@@ -64,7 +64,7 @@ In particular:
 ES5 and ES6
 ------------------------------------------------------------------------
 
-In general, use modern features only if they're supported in Node 4 and reasonably performant.
+In general, use modern features only if they're supported in Node 4 and reasonably performant in the latest version of Node.
 
 - **let, const: ALWAYS** - Supported in Node 4+, good performance.
 
@@ -72,13 +72,13 @@ In general, use modern features only if they're supported in Node 4 and reasonab
 
 - **Array#forEach: NEVER** - Worse performance than `for-of` on Arrays. See `for-of`.
 
+- **for-in on Arrays: NEVER** - Horrible performance, weird bugs due to string keys, poor interaction with Array prototype modification. Everyone tells you never to do it; we're no different. See `for-of`.
+
 - **Map, Set: SOMETIMES** - Much worse write/iteration performance, much better read performance than `Object.create(null)`. Use whatever's faster for your use case.
 
 - **for-of on Maps: NEVER** - Poor performance. Use `Map#forEach`.
 
 - **Map#forEach: ALWAYS** - This is our preferred method of iterating `Map`s.
-
-- **Object.keys: SOMETIMES** - Poor performance. Prefer `for-in` if you're just going to iterate the keys.
 
 - **Object literal functions: ALWAYS** - Supported in Node 4+, good performance.
 
@@ -88,12 +88,10 @@ In general, use modern features only if they're supported in Node 4 and reasonab
 
 - **Function#bind: ALMOST NEVER** - Horrible performance. Use arrow functions. Basically, never use outside of the (deprecated) trick we use in battle-engine for split logs.
 
-- **classes: USUALLY** - Supported in Node 4+ and good performance, but see subclasses.
-
-- **subclasses: SPARINGLY** - Supported in Node 4+, horrible performance, but often not noticeable considering how rarely most subclassed objects are created.
+- **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+, please start refactoring existing code over.
 
 - **String#includes: ALWAYS** - Supported in Node 4+, poor performance, but not really noticeable and worth the better readability.
 
-- **Template strings: NEVER** - Horrible performance. Prefer manually stringing strings together with `+`.
+- **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+, please start refactoring existing code over.
 
 Take "good performance" to mean "approximately on par with ES3" and "great performance" to mean "better than ES3".
