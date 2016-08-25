@@ -124,8 +124,8 @@ function handleBoughtItem(item, user, cost) {
 		this.sendReply('You purchased an icon, contact an administrator to obtain the article.');
 	} else {
 		let msg = '**' + user.name + " has bought " + item + ".**";
-		Rooms.rooms.staff.add('|c|~Shop Alert|' + msg);
-		Rooms.rooms.staff.update();
+		Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
+		Rooms.rooms.get("staff").update();
 		Users.users.forEach(function (user) {
 			if (user.group === '~' || user.group === '&') {
 				user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
