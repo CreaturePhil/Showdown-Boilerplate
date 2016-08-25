@@ -125,8 +125,8 @@ function handleBoughtItem(item, user, cost) {
 		this.sendReply('You purchased an icon, contact an administrator to obtain the article.');
 	} else {
 		let msg = '**' + user.name + " has bought " + item + ".**";
-		Rooms.rooms.staff.add('|c|~Shop Alert|' + msg);
-		Rooms.rooms.staff.update();
+		Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
+		Rooms.rooms.get("staff").update();
 		Users.users.forEach(function (user) {
 			if (user.group === '~' || user.group === '&') {
 				user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
@@ -144,7 +144,7 @@ exports.commands = {
 
 		const amount = Db('money').get(toId(target), 0);
 		let group = user.getIdentity().charAt(0);
-		this.sendReply("|raw|<font color=#948A88>" + group +  "</font><font color=" + color(user.userid) + "><b>" + Tools.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
+		this.sendReplyBox("<font color=#948A88>" + group +  "</font><font color=" + color(user.userid) + "><b>" + Tools.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 
