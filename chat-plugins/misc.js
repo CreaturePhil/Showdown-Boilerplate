@@ -85,10 +85,7 @@ exports.commands = {
 		for (let u in Users.users) {
 			Users.users[u].popup("All rooms are being clear.");
 		}
-
-		for (let r in Rooms.rooms) {
-			clearRoom(Rooms.rooms[r]);
-		}
+		Rooms.rooms.forEach(clearRoom);
 	},
 
 	hide: function (target, room, user) {
