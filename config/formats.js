@@ -2798,21 +2798,6 @@ exports.Formats = [
             return this.chainModify([0x14CD, 0x1000]);
         },
     },
-    { 
-	name:"Mirror Move",
-	section: "Other Metagames",
-	ruleset:['OU'],
-	onSwitchIn: function () {
-			this.p1.pokemon[0].moveset[2]=this.p2.pokemon[0].moveset[0];
-			this.p1.pokemon[0].moveset[3]=this.p2.pokemon[0].moveset[1];
-			this.p2.pokemon[0].moveset[2]=this.p1.pokemon[0].moveset[0];
-			this.p2.pokemon[0].moveset[3]=this.p1.pokemon[0].moveset[1];
-			this.p1.pokemon[0].baseMoveset[2]=this.p2.pokemon[0].baseMoveset[0];
-			this.p1.pokemon[0].baseMoveset[3]=this.p2.pokemon[0].baseMoveset[1];
-			this.p2.pokemon[0].baseMoveset[2]=this.p1.pokemon[0].baseMoveset[0];
-			this.p2.pokemon[0].baseMoveset[3]=this.p1.pokemon[0].baseMoveset[1];
-	},
-    },
 	{
 		name: "Mix and Mega",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3540979/\">Mix and Mega</a>"],
@@ -3220,7 +3205,7 @@ exports.Formats = [
 	                    f=true;
 	                }
 	            }
-	            
+
 	            let stas = ["hp", "atk", "def", "spa", "spd", "spe"];
 	            if(f)
 	            {
@@ -3272,7 +3257,21 @@ exports.Formats = [
 	       if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
 	   }
    	},
-
+		{
+	name:"Mirror Move",
+	section: "New Other Metagames",
+	ruleset:['OU'],
+	onSwitchIn: function () {
+			this.p1.pokemon[0].moveset[2]=this.p2.pokemon[0].moveset[0];
+			this.p1.pokemon[0].moveset[3]=this.p2.pokemon[0].moveset[1];
+			this.p2.pokemon[0].moveset[2]=this.p1.pokemon[0].moveset[0];
+			this.p2.pokemon[0].moveset[3]=this.p1.pokemon[0].moveset[1];
+			this.p1.pokemon[0].baseMoveset[2]=this.p2.pokemon[0].baseMoveset[0];
+			this.p1.pokemon[0].baseMoveset[3]=this.p2.pokemon[0].baseMoveset[1];
+			this.p2.pokemon[0].baseMoveset[2]=this.p1.pokemon[0].baseMoveset[0];
+			this.p2.pokemon[0].baseMoveset[3]=this.p1.pokemon[0].baseMoveset[1];
+	},
+		},
    	{
         name: "Offensification",
         desc: [
@@ -3412,7 +3411,7 @@ exports.Formats = [
 	    section: "New Other Metagames",
 	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/therianmons.3566303/\">Therianmons</a>"],
 	    ruleset: ['OU'],
-	    
+
 	    onBegin: function() {
 	    	for (let j = 0; j < this.sides.length; j++) {
 	            let allPokemon = this.sides[j].pokemon;
