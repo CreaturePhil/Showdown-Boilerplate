@@ -3257,7 +3257,7 @@ exports.Formats = [
 	       if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
 	   }
    	},
-		{
+		/*{
 	name:"Mirror Move",
 	section: "New Other Metagames",
 	ruleset:['OU'],
@@ -3271,7 +3271,7 @@ exports.Formats = [
 			this.p2.pokemon[0].baseMoveset[2]=this.p1.pokemon[0].baseMoveset[0];
 			this.p2.pokemon[0].baseMoveset[3]=this.p1.pokemon[0].baseMoveset[1];
 	},
-		},
+		},*/
    	{
         name: "Offensification",
         desc: [
