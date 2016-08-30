@@ -1,3 +1,6 @@
+'use strict';
+
+exports.BattleItems = {
 //%Elcrest
      "unknownsash": {
 	id: "unknownsash",
@@ -17,3 +20,4 @@
 				},
 	desc: "If holder is Elcrest, this item allows it to Evolve in battle. For some reason, if Elcrest's HP is full, it will survive that would KO it with 1 HP. Single Use"
 },
+};
