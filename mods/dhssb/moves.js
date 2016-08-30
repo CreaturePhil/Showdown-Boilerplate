@@ -145,6 +145,26 @@ exports.BattleMovedex = {
 		type: "Rush B",
 		contestType: "Clever",
 	},
+	//%Elcrest
+	"turbulence": {
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		shortDesc: "Nearly always goes first.",
+		id: "turbulence",
+		isViable: true,
+		name: "Turbulence",
+		pp: 10,
+		onPrepareHit: function (target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Brave Bird", target);
+		},
+		priority: 2,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: false,
+		target: "normal",
+		type: "Flying"
+	},
 	kickmyass: {
 		accuracy: 100,
 		basePower: 200,

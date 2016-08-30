@@ -590,6 +590,9 @@ exports.Formats = [
 			if(name === 'snakexzero5') {
 				this.add('c|%SnakeXZero5|A project on Friday and its Monday, YAY!');
 			}
+			if (name === 'elcrest') {
+					this.add('c|%Elcrest|Get ready to be blown away.');
+				}
 			if(name === 'classyz') {
 				pokemon.addVolatile('simpleinnate', pokemon);
 				this.add('c|&ClassyZ|pro tip: if u kill me go straight to hell do not pass go do not collect $200');
@@ -667,6 +670,9 @@ exports.Formats = [
 			if(name === 'digitaledge') {
 				this.add('c|@Digital Edge|u haxor u didnt get haxed');
 			}
+			if (name === 'elcrest') {
+					this.add('c|%Elcrest|It seems that I can\'t control my turbulence....');
+				}
 			if(name === 'snakexzero5') {
 				this.add('c|%SnakeXZero5|I JUST FORGOT THERES A SUDDEN PROJECT TOMMOROW');
 			}

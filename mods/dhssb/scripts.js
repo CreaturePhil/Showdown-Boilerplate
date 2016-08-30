@@ -243,6 +243,12 @@ exports.BattleScripts = {
 				signatureMove: "Cha Cha Dance",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Quiet',
 			},
+      '%Elcrest': {
+	species: 'Dratini', ability: 'Water Change', item: 'Unknown Sash', gender: 'M',
+	moves: ['dragondance', 'outrage', 'raindance'],
+	signatureMove: "Turbulence",
+	evs: {spe:252, atk:252, hp:4}, nature: 'Jolly',
+      },
 			'Paul☯71': {
 				species: 'Palkia', ability: 'discover me', item: 'Leftovers', gender: 'M',
 				moves: ['hyperbeam', 'outrage', 'waterspout'],

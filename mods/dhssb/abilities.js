@@ -16,6 +16,43 @@ exports.BattleAbilities = {
 		rating: 1,
 		num: 1075,
 	},
+	//%Elcrest
+                "waterchange": {
+                     shortDesc: "If user is Elcrest and Rain Dance is active, it changes to Gyarados and it and allies' Attack and Speed are 1.5x.",
+                     onStart: function (pokemon) {
+			  delete this.effectData.forme;
+		},
+		onUpdate: function (pokemon) {
+			if (!pokemon.isActive || pokemon.baseTemplate.speciesid !== 'dratini') return;
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				if (pokemon.template.speciesid !== 'gyarados') {
+					pokemon.formeChange('Gyarados');
+					this.add('-formechange', pokemon, 'Gyarados', '[msg]');
+				}
+			} else {
+				if (pokemon.template.speciesid === 'gyarados') {
+					pokemon.formeChange('Dratini');
+					this.add('-formechange', pokemon, 'Dratini', '[msg]');
+				}
+			}
+		},
+		onModifyAtkPriority: 3,
+		onAllyModifyAtk: function (atk) {
+			if (this.effectData.target.baseTemplate.speciesid !== 'dratini') return;
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 4,
+		onAllyModifySpD: function (spe) {
+			if (this.effectData.target.baseTemplate.speciesid !== 'dratini') return;
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				return this.chainModify(1.5);
+			}
+		},
+		id: "waterchange",
+		name: "Water Change",
+                },
         "flairhax": {
 		onModifyMovePriority: -2,
 		onModifyMove: function (move) {
