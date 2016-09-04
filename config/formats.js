@@ -409,7 +409,7 @@ exports.Formats = [
 			battle: 1,
 		},
 		mod: 'rpg',
-		team: 'randomSeasonalMelee',
+		team: 'randomRPS',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.add('message', "ROCK!");
