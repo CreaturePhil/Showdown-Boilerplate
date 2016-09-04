@@ -667,7 +667,6 @@ class NumberModeTrivia extends Trivia {
 
 const commands = {
 	new: function (target, room, user) {
-		if (room.id !== 'trivia') return this.errorReply("This command can only be used in the Trivia room.");
 		if (!this.can('broadcast', null, room) || !target) return false;
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (room.game) {
