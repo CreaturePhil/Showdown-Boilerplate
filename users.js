@@ -390,6 +390,9 @@ class User {
 		if (this.namelocked) {
 			return '‽' + this.name;
 		}
+		if (this.hiding) {
+			return ' ' + this.name;
+		}
 		if (roomid) {
 			let room = Rooms(roomid);
 			if (!room) {
@@ -399,9 +402,6 @@ class User {
 				return '!' + this.name;
 			}
 			return room.getAuth(this) + this.name;
-		}
-		if (this.hiding) {
-			return ' ' + this.name;
 		}
 		if (this.customSymbol) {
 			return this.customSymbol + this.name;
