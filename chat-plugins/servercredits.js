@@ -16,7 +16,7 @@ exports.commands = {
                                         "<br />" +
 					"<u>Lead Development Team:</u><br />" +
                     "- " + hashColor('Alpha Paul☯71◕‿◕', true) + " (Development, Lead Policy)<br />" +
-                    "- " + hashColor('Snaq', true) + " (Major Contributor, Formats, Development)<br />" +
+                    "- " + hashColor('Snaquaza', true) + " (Major Contributor, Formats, Development)<br />" +
                     "- " + hashColor('Spandan', true) + " (Format Development)<br />" +
 					"<br />" +
 					"<u>Development:</u><br />" +
