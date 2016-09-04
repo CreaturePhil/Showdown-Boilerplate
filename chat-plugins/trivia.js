@@ -725,7 +725,7 @@ const commands = {
 	newhelp: ["/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # & ~"],
 
 	join: function (target, room, user) {
-		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		//if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
 		if (room.game.gameid !== 'trivia') {
 			return this.errorReply("There is already a game of " + room.game.title + " in progress.");
@@ -737,7 +737,7 @@ const commands = {
 	joinhelp: ["/trivia join - Join the current trivia game."],
 
 	kick: function (target, room, user) {
-		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		//if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
@@ -755,7 +755,7 @@ const commands = {
 	kickhelp: ["/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~"],
 
 	leave: function (target, room, user) {
-		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		//if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
 		if (room.game.gameid !== 'trivia') {
 			return this.errorReply("There is already a game of " + room.game.title + " in progress.");
@@ -768,7 +768,7 @@ const commands = {
 	leavehelp: ["/trivia leave - Makes the player leave the game."],
 
 	start: function (target, room) {
-		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		//if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('broadcast', null, room)) return false;
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
@@ -782,7 +782,7 @@ const commands = {
 	starthelp: ["/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # & ~"],
 
 	answer: function (target, room, user) {
-		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		//if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
 		if (room.game.gameid !== 'trivia') {
 			return this.errorReply("There is already a game of " + room.game.title + " in progress.");
@@ -797,7 +797,7 @@ const commands = {
 	answerhelp: ["/trivia answer OR /ta [answer] - Answer a pending question."],
 
 	end: function (target, room, user) {
-		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		//if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('broadcast', null, room)) return false;
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
@@ -812,7 +812,7 @@ const commands = {
 	'': 'status',
 	players: 'status',
 	status: function (target, room, user) {
-		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		//if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.runBroadcast()) return false;
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
 		if (room.game.gameid !== 'trivia') {
@@ -1096,7 +1096,7 @@ const commands = {
 	],
 
 	rank: function (target, room, user) {
-		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
+		//if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
 
 		let name;
 		let userid;
@@ -1122,7 +1122,7 @@ const commands = {
 	rankhelp: ["/trivia rank [username] - View the rank of the specified user. If none is given, view your own."],
 
 	ladder: function (target, room) {
-		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
+		//if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
 		if (!this.runBroadcast()) return false;
 
 		let ladder = triviaData.ladder;
