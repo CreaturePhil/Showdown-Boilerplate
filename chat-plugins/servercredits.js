@@ -15,7 +15,7 @@ exports.commands = {
 					"- " + hashColor('XpRienzo', true) + " (Founder, Host, Sysadmin)<br />" +
                                         "<br />" +
 					"<u>Lead Development Team:</u><br />" +
-                    "- " + hashColor('Paul☯71◕‿◕', true) + " (Development, Lead Policy)<br />" +
+                    "- " + hashColor('Alpha Paul☯71◕‿◕', true) + " (Development, Lead Policy)<br />" +
                     "- " + hashColor('Snaq', true) + " (Major Contributor, Formats, Development)<br />" +
                     "- " + hashColor('Spandan', true) + " (Format Development)<br />" +
 					"<br />" +
