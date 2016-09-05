@@ -3748,7 +3748,7 @@ exports.Formats = [
 	{
 	    name: "Gifts of the Gods",
 	    section: "New Other Metagames",
-	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/gifts-of-the-gods.3579610/\">Gift of the Gods</a>"],
+	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/gifts-of-the-gods.3579610/\">Gifts of the Gods</a>"],
 	    ruleset: ['God Clause', 'Pokemon', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Cancel Mod'],
 	    banlist: ['Illegal', 'Huge Power', 'Pure Power', 'Eviolite'],
 	    mod: ["gotg"],
