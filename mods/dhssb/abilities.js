@@ -280,7 +280,7 @@ exports.BattleAbilities = {
 			let randomType = possibleTypes[this.random(possibleTypes.length)];
 
 			if (!source.setType(randomType)) return false;
-			this.add('-start', source, 'typechange', randomType);
+			this.add('-start', target, 'typechange', randomType);
 		},
 		id: "theunderlord",
 		name: "The Underlord",
