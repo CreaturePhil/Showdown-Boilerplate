@@ -3768,7 +3768,7 @@ exports.Formats = [
 	       if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
 	   }
    	},
-	{ 
+	{
 	name:"Mirror Move",
 	section: "New Other Metagames",
 	ruleset:['OU'],
@@ -3789,7 +3789,7 @@ exports.Formats = [
 					target: "normal",
 					disabled: false,
 						  disabledSource: '',
-						  used: false 
+						  used: false
 				}
 				this.p1.pokemon[i].baseMoveset[j] = {
 					move: "Mirror Move",
@@ -3799,7 +3799,7 @@ exports.Formats = [
 					target: "normal",
 					disabled: false,
 						  disabledSource: '',
-						  used: false 
+						  used: false
 				}
 				}
 			}
@@ -3819,7 +3819,7 @@ exports.Formats = [
 					target: "normal",
 					disabled: false,
 				    disabledSource: '',
-				    used: false 
+				    used: false
 				}
 				this.p2.pokemon[i].baseMoveset[j] = {
 					move: "Mirror Move",
@@ -3829,13 +3829,12 @@ exports.Formats = [
 					target: "normal",
 					disabled: false,
 				    disabledSource: '',
-					used: false 
+					used: false
 				}
 				}
 			}
 			i=i+1;
-		}
-	},
+		},
 	onSwitchIn: function () {
 			for(let kek=2,ke=0;kek<4;kek++,ke++)
 			{

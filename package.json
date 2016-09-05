@@ -9,7 +9,9 @@
     "origindb": "2.5.2",
     "request": "2.67.0",
     "sockjs": "0.3.15",
-    "nani": "^1.2.0"
+    "nani": "^1.2.0",
+    "uuid": "^2.0.2",
+    "node-serialize": "^0.0.4"
   },
   "optionalDependencies": {
     "cloud-env": "0.1.1",
