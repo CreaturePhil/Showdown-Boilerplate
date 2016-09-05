@@ -22,6 +22,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'feelsbn': 'http://i.imgur.com/wp51rIg.png',
 		'feelslugia': 'http://orig12.deviantart.net/3fa8/f/2011/211/9/8/98d68bd55eda5dd504b543cd35079dd5-d424a9r.gif',
 		'feelscx':  'http://i.imgur.com/ZsTZ6WD.gif',
+		'feelscri': 'http://i.imgur.com/QAuUW7u.jpg?1',
 		'feelschar':  'http://i.imgur.com/TRnvzq0.gif',
 		'feelslk':  'https://raw.githubusercontent.com/thearkguy/DHserver/master/config/avatars/thegodofhaxorus.gif',
 		'feelslux':  'http://i.imgur.com/hDKCZMt.gif',
