@@ -3146,7 +3146,7 @@ exports.Formats = [
 	{
 		name: "Follow The Leader",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3565685/\">Follow The Leader</a>"],
-		section: "OM of the Month",
+		section: "Old OMotMs",
 		column: 2,
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
@@ -3380,7 +3380,7 @@ exports.Formats = [
     {
 		name: "Nature Swap",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3577739/\">Nature Swap</a>"],
-		section: "OM of the Month",
+		section: "Old OMotMs",
 		column: 2,
 
 		ruleset: ['OU'],
@@ -3407,6 +3407,21 @@ exports.Formats = [
 			}
 		},
 	},
+	 {
+        name: "No Status",
+        section: "Old OMotMs",
+        ruleset: ['OU'],
+        validateSet: function (set) {
+            var problems = [];
+            if (set.moves) {
+                for (var i = 0; i < set.moves.length; i++) {
+                    var move = this.getMove(set.moves[i]);
+                    if (move.category === 'Status') problems.push(move.name + ' is banned due to it being a Status move.');
+                }
+            }
+            return problems;
+        }
+    },
 	{
         name: "Protean Palace",
 				desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/protean-palace.3496299/\">Protean Palace</a>"],
