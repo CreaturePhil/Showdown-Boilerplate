@@ -12,7 +12,7 @@ exports.Formats = [
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3546114/\">OU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571990/\">OU Viability Ranking</a>",
+			"&bullet; <a href=\"htlotps://www.smogon.com/forums/threads/3571990/\">OU Viability Ranking</a>",
 		],
 		section: "ORAS Singles",
 
@@ -3814,21 +3814,92 @@ exports.Formats = [
 	       if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
 	   }
    	},
-		/*{
+	{ 
 	name:"Mirror Move",
 	section: "New Other Metagames",
 	ruleset:['OU'],
-	onSwitchIn: function () {
-			this.p1.pokemon[0].moveset[2]=this.p2.pokemon[0].moveset[0];
-			this.p1.pokemon[0].moveset[3]=this.p2.pokemon[0].moveset[1];
-			this.p2.pokemon[0].moveset[2]=this.p1.pokemon[0].moveset[0];
-			this.p2.pokemon[0].moveset[3]=this.p1.pokemon[0].moveset[1];
-			this.p1.pokemon[0].baseMoveset[2]=this.p2.pokemon[0].baseMoveset[0];
-			this.p1.pokemon[0].baseMoveset[3]=this.p2.pokemon[0].baseMoveset[1];
-			this.p2.pokemon[0].baseMoveset[2]=this.p1.pokemon[0].baseMoveset[0];
-			this.p2.pokemon[0].baseMoveset[3]=this.p1.pokemon[0].baseMoveset[1];
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mirror-move.3572990/\">Mirror Move</a>"],
+	onBegin: function() {
+		let i=0;
+		while(this.p1.pokemon[i] != undefined)
+		{
+			for(let j=2;j<4;j++)
+			{
+				if(this.p1.pokemon[i].baseMoveset[j]==undefined)
+				{
+					this.p1.pokemon[i].moveset[j] = {
+					move: "Mirror Move",
+					id: "mirrormove",
+					pp: 32,
+					maxpp: 32,
+					target: "normal",
+					disabled: false,
+						  disabledSource: '',
+						  used: false 
+				}
+				this.p1.pokemon[i].baseMoveset[j] = {
+					move: "Mirror Move",
+					id: "mirrormove",
+					pp: 32,
+					maxpp: 32,
+					target: "normal",
+					disabled: false,
+						  disabledSource: '',
+						  used: false 
+				}
+				}
+			}
+			i=i+1;
+		}
+		i=0;
+		while(this.p2.pokemon[i] != undefined)
+		{
+			for(let j=2;j<4;j++)
+			{
+				if(this.p2.pokemon[i].baseMoveset[j]==undefined)
+					this.p2.pokemon[i].moveset[j] = {
+					move: "Mirror Move",
+					id: "mirrormove",
+					pp: 32,
+					maxpp: 32,
+					target: "normal",
+					disabled: false,
+				    disabledSource: '',
+				    used: false 
+				}
+				this.p2.pokemon[i].baseMoveset[j] = {
+					move: "Mirror Move",
+					id: "mirrormove",
+					pp: 32,
+					maxpp: 32,
+					target: "normal",
+					disabled: false,
+				    disabledSource: '',
+					used: false 
+				}
+				}
+			}
+			i=i+1;
+		}
 	},
-		},*/
+	onSwitchIn: function () {
+			for(let kek=2,ke=0;kek<4;kek++,ke++)
+			{
+				this.p1.pokemon[0].moveset[kek].move=this.p2.pokemon[0].moveset[ke].move;
+				this.p2.pokemon[0].moveset[kek].move=this.p1.pokemon[0].moveset[ke].move;
+				this.p1.pokemon[0].baseMoveset[kek].move=this.p2.pokemon[0].baseMoveset[ke].move;
+				this.p2.pokemon[0].baseMoveset[kek].move=this.p1.pokemon[0].baseMoveset[ke].move;
+				this.p1.pokemon[0].moveset[kek].id=this.p2.pokemon[0].moveset[ke].id;
+				this.p2.pokemon[0].moveset[kek].id=this.p1.pokemon[0].moveset[ke].id;
+				this.p1.pokemon[0].baseMoveset[kek].id=this.p2.pokemon[0].baseMoveset[ke].id;
+				this.p2.pokemon[0].baseMoveset[kek].id=this.p1.pokemon[0].baseMoveset[ke].id;
+				this.p1.pokemon[0].moveset[kek].maxpp=this.p2.pokemon[0].moveset[ke].maxpp;
+				this.p2.pokemon[0].moveset[kek].maxpp=this.p1.pokemon[0].moveset[ke].maxpp;
+				this.p1.pokemon[0].baseMoveset[kek].maxpp=this.p2.pokemon[0].baseMoveset[ke].maxpp;
+				this.p2.pokemon[0].baseMoveset[kek].maxpp=this.p1.pokemon[0].baseMoveset[ke].maxpp;
+			}
+		},
+	},
    	{
         name: "Offensification",
         desc: [
