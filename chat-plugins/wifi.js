@@ -7,7 +7,7 @@
 'use strict';
 
 let banned = Object.create(null);
-
+ 
 class Giveaway {
 	constructor(host, giver, room, prize) {
 		if (room.gaNumber) {
