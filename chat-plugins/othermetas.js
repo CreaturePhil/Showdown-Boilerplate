@@ -99,6 +99,7 @@ let rebuild = function(zom)
 exports.commands= {
 	'ei':function(target,room,user)
 	{
+                 if (!this.runBroadcast()) return;
 		let abilities =
 		{
 			aerilate : 'Air Balloon',
@@ -323,6 +324,7 @@ exports.commands= {
 	        this.sendReplyBox(text);
 	},
 	fuse: function(target, room, user) {
+         if (!this.runBroadcast()) return;
         let text = "";
         let separated = target.split(",");
         let name = (("" + separated[0]).trim()).toLowerCase();
