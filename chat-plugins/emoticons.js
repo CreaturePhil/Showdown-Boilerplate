@@ -66,6 +66,8 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'trubbishevolution': 'http://1.media.dorkly.cvcdn.com/22/19/f0b535f2c8ae1036dc617b8a48d13767.gif',
 		'gastlyevolution': 'http://67.media.tumblr.com/47b50b9d568665081eaaa2744eec7a47/tumblr_n1i283cepG1r5iumyo1_1280.gif',
 		'solosisevolution': 'http://0.media.dorkly.cvcdn.com/67/87/ad9e4bf24d851a0481971ac2310ea3de.gif',
+		'ghoststrolling': 'https://media.giphy.com/media/nwErbJbGs6hBS/giphy.gif',
+		'jamesbreasts': 'http://stream1.gifsoup.com/view3/1797152/james-and-his-boobs-o.gif',
 	});
 }
 
