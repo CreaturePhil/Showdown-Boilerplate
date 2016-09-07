@@ -95,6 +95,22 @@ let rebuild = function(zom)
 		}
 		return k.toLowerCase();
 		}
+let isMega = function(zom) {
+        var k = "",
+                b = false;
+        zom = rebuild(zom);
+        for (var i = 0; i < k.length; i++) {
+
+                if (k.charAt(i) == 'm' && k.charAt(i + 1) == 'e' && k.charAt(i + 2) == 'g' && k.charAt(i + 3) == 'a')
+                        b = true;
+        }
+        if (k == "yanmega")
+                b = false;
+        if (k.charAt(0) == 'm')
+                if (pokemen[k.substring(1, k.length) + "mega"] != undefined)
+                        b = true;
+        return b;
+}
 let natures = {
         adamant: {
                 name: "Adamant",
@@ -238,6 +254,599 @@ let natures = {
         },
 };
 exports.commands= {
+	mixandmega: 'mnm',
+        mnm: function(target, room, user) {
+		if (!this.runBroadcast()) return;
+                var text = "",arg=target,by=user,pokemen=Tools.data.Pokedex; 
+                var stones = {
+                        abomasite: {
+                                atk: 40,
+                                def: 30,
+                                spa: 40,
+                                spd: 20,
+                                spe: -30,
+                                ability: 'Snow Warning',
+                                type: 'None',
+                                wt: 49.5
+                        },
+                        absolite: {
+                                atk: 20,
+                                def: 0,
+                                spa: 40,
+                                spd: 0,
+                                spe: 40,
+                                ability: 'Magic Bounce',
+                                type: 'None',
+                                wt: 2
+                        },
+                        aerodactylite: {
+                                atk: 30,
+                                def: 20,
+                                spa: 10,
+                                spd: 20,
+                                spe: 20,
+                                ability: 'Tough Claws',
+                                type: 'None',
+                                wt: 20
+                        },
+                        aggronite: {
+                                atk: 30,
+                                def: 50,
+                                spa: 0,
+                                spd: 20,
+                                spe: 20,
+                                ability: 'Filter',
+                                type: 'Steel',
+                                wt: 35
+                        },
+                        alakazite: {
+                                atk: 0,
+                                def: 20,
+                                spa: 40,
+                                spd: 0,
+                                spe: 30,
+                                ability: 'Trace',
+                                type: 'None',
+                                wt: 0
+                        },
+                        altarianite: {
+                                atk: 40,
+                                def: 20,
+                                spa: 40,
+                                spd: 0,
+                                spe: 0,
+                                ability: 'Pixilate',
+                                type: 'Fairy',
+                                wt: 0
+                        },
+                        ampharosite: {
+                                atk: 20,
+                                def: 20,
+                                spa: 50,
+                                spd: 20,
+                                spe: -10,
+                                ability: 'Mold Breaker',
+                                type: 'Dragon',
+                                wt: 0
+                        },
+                        audinite: {
+                                atk: 0,
+                                def: 40,
+                                spa: 20,
+                                spd: 40,
+                                spe: 0,
+                                ability: 'Healer',
+                                type: 'Fairy',
+                                wt: 1
+                        },
+                        banettite: {
+                                atk: 50,
+                                def: 10,
+                                spa: 10,
+                                spd: 20,
+                                spe: 10,
+                                ability: 'Prankster',
+                                type: 'None',
+                                wt: 0.5
+                        },
+                        blastoisinite: {
+                                atk: 20,
+                                def: 20,
+                                spa: 50,
+                                spd: 10,
+                                spe: 0,
+                                ability: 'Mega Launcher',
+                                type: 'None',
+                                wt: 15.6
+                        },
+                        cameruptite: {
+                                atk: 20,
+                                def: 30,
+                                spa: 40,
+                                spd: 30,
+                                spe: -20,
+                                ability: 'Sheer Force',
+                                type: 'None',
+                                wt: 100.5
+                        },
+                        'charizardite x': {
+                                atk: 46,
+                                def: 33,
+                                spa: 21,
+                                spd: 0,
+                                spe: 0,
+                                ability: 'Tough Claws',
+                                type: 'Dragon',
+                                wt: 20
+                        },
+                        'charizardite y': {
+                                atk: 20,
+                                def: 0,
+                                spa: 50,
+                                spd: 30,
+                                spe: 0,
+                                ability: 'Drought',
+                                type: 'None',
+                                wt: 10
+                        },
+                        diancite: {
+                                atk: 60,
+                                def: -40,
+                                spa: 60,
+                                spd: -40,
+                                spe: 60,
+                                ability: 'Magic Bounce',
+                                type: 'None',
+                                wt: 19
+                        },
+                        galladite: {
+                                atk: 40,
+                                def: 30,
+                                spa: 0,
+                                spd: 0,
+                                spe: 30,
+                                ability: 'Inner Focus',
+                                type: 'None',
+                                wt: 4.4
+                        },
+                        garchompite: {
+                                atk: 40,
+                                def: 20,
+                                spa: 40,
+                                spd: 10,
+                                spe: -10,
+                                ability: 'Sand Force',
+                                type: 'None',
+                                wt: 0
+                        },
+                        gardevoirite: {
+                                atk: 20,
+                                def: 0,
+                                spa: 40,
+                                spd: 20,
+                                spe: 20,
+                                ability: 'Pixilate',
+                                type: 'None',
+                                wt: 0
+                        },
+                        gengarite: {
+                                atk: 0,
+                                def: 20,
+                                spa: 40,
+                                spd: 20,
+                                spe: 20,
+                                ability: 'Shadow Tag',
+                                type: 'None',
+                                wt: 0
+                        },
+                        glalitite: {
+                                atk: 40,
+                                def: 0,
+                                spa: 40,
+                                spd: 0,
+                                spe: 20,
+                                ability: 'Refrigerate',
+                                type: 'None',
+                                wt: 93.7
+                        },
+                        gyaradosite: {
+                                atk: 30,
+                                def: 30,
+                                spa: 10,
+                                spd: 30,
+                                spe: 0,
+                                ability: 'Mold Breaker',
+                                type: 'Dark',
+                                wt: 70
+                        },
+                        heracronite: {
+                                atk: 60,
+                                def: 40,
+                                spa: 0,
+                                spd: 10,
+                                spe: -10,
+                                ability: 'Skill Link',
+                                type: 'None',
+                                wt: 8.5
+                        },
+                        houndoominite: {
+                                atk: 0,
+                                def: 40,
+                                spa: 30,
+                                spd: 10,
+                                spe: 20,
+                                ability: 'Solar Power',
+                                type: 'None',
+                                wt: 14.5
+                        },
+                        latiasite: {
+                                atk: 20,
+                                def: 30,
+                                spa: 30,
+                                spd: 20,
+                                spe: 0,
+                                ability: 'Levitate',
+                                type: 'None',
+                                wt: 12
+                        },
+                        latiosite: {
+                                atk: 40,
+                                def: 20,
+                                spa: 30,
+                                spd: 10,
+                                spe: 0,
+                                ability: 'Levitate',
+                                type: 'None',
+                                wt: 10
+                        },
+                        lopunnite: {
+                                atk: 60,
+                                def: 10,
+                                spa: 0,
+                                spd: 0,
+                                spe: 30,
+                                ability: 'Scrappy',
+                                type: 'Fighting',
+                                wt: 5
+                        },
+                        lucarionite: {
+                                atk: 35,
+                                def: 18,
+                                spa: 25,
+                                spd: 0,
+                                spe: 22,
+                                ability: 'Adaptability',
+                                type: 'None',
+                                wt: 3.5
+                        },
+                        manectite: {
+                                atk: 0,
+                                def: 20,
+                                spa: 30,
+                                spd: 20,
+                                spe: 30,
+                                ability: 'Intimidate',
+                                type: 'None',
+                                wt: 3.8
+                        },
+                        metagrossite: {
+                                atk: 10,
+                                def: 20,
+                                spa: 10,
+                                spd: 20,
+                                spe: 40,
+                                ability: 'Tough Claws',
+                                type: 'None',
+                                wt: 392.9
+                        },
+                        'mewtwonite x': {
+                                atk: 80,
+                                def: 10,
+                                spa: 0,
+                                spd: 10,
+                                spe: 0,
+                                ability: 'Steadfast',
+                                type: 'Fighting',
+                                wt: 5
+                        },
+                        'mewtwonite y': {
+                                atk: 40,
+                                def: -20,
+                                spa: 40,
+                                spd: 30,
+                                spe: 10,
+                                ability: 'Insomnia',
+                                type: 'None',
+                                wt: 89
+                        },
+                        pidgeotite: {
+                                atk: 0,
+                                def: 5,
+                                spa: 65,
+                                spd: 10,
+                                spe: 20,
+                                ability: 'No Guard',
+                                type: 'None',
+                                wt: 11
+                        },
+                        pinsirite: {
+                                atk: 30,
+                                def: 20,
+                                spa: 10,
+                                spd: 20,
+                                spe: 20,
+                                ability: 'Aerilate',
+                                type: 'Flying',
+                                wt: 4
+                        },
+                        sablenite: {
+                                atk: 10,
+                                def: 50,
+                                spa: 20,
+                                spd: 50,
+                                spe: -30,
+                                ability: 'Magic Bounce',
+                                type: 'None',
+                                wt: 150
+                        },
+                        salamencite: {
+                                atk: 10,
+                                def: 50,
+                                spa: 10,
+                                spd: 10,
+                                spe: 20,
+                                ability: 'Aerilate',
+                                type: 'None',
+                                wt: 10
+                        },
+                        sceptilite: {
+                                atk: 25,
+                                def: 10,
+                                spa: 40,
+                                spd: 0,
+                                spe: 25,
+                                ability: 'Lightning Rod',
+                                type: 'Dragon',
+                                wt: 3
+                        },
+                        scizorite: {
+                                atk: 20,
+                                def: 40,
+                                spa: 10,
+                                spd: 20,
+                                spe: 10,
+                                ability: 'Technician',
+                                type: 'None',
+                                wt: 7
+                        },
+                        sharpedonite: {
+                                atk: 20,
+                                def: 30,
+                                spa: 15,
+                                spd: 25,
+                                spe: 10,
+                                ability: 'Strong Jaw',
+                                type: 'None',
+                                wt: 41.5
+                        },
+                        slowbronite: {
+                                atk: 0,
+                                def: 70,
+                                spa: 30,
+                                spd: 0,
+                                spe: 0,
+                                ability: 'Shell Armor',
+                                type: 'None',
+                                wt: 31.5
+                        },
+                        steelixite: {
+                                atk: 40,
+                                def: 30,
+                                spa: 0,
+                                spd: 30,
+                                spe: 0,
+                                ability: 'Sand Force',
+                                type: 'None',
+                                wt: 340
+                        },
+                        swampertite: {
+                                atk: 40,
+                                def: 20,
+                                spa: 10,
+                                spd: 20,
+                                spe: 10,
+                                ability: 'Swift Swim',
+                                type: 'None',
+                                wt: 20.1
+                        },
+                        tyranitarite: {
+                                atk: 40,
+                                def: 20,
+                                spa: 10,
+                                spd: 20,
+                                spe: 10,
+                                ability: 'Sand Stream',
+                                type: 'None',
+                                wt: 53
+                        },
+                        venusaurite: {
+                                atk: 18,
+                                def: 40,
+                                spa: 22,
+                                spd: 20,
+                                spe: 0,
+                                ability: 'Thick Fat',
+                                type: 'None',
+                                wt: 55.5
+                        },
+                        'red orb': {
+                                atk: 30,
+                                def: 20,
+                                spa: 50,
+                                spd: 0,
+                                spe: 0,
+                                ability: 'Desolate Land',
+                                type: 'Fire',
+                                wt: 49.7
+                        },
+                        'blue orb': {
+                                atk: 50,
+                                def: 0,
+                                spa: 30,
+                                spd: 20,
+                                spe: 0,
+                                ability: 'Primodal Sea',
+                                type: 'None',
+                                wt: 78
+                        },
+                        beedrillite: {
+                                atk: 60,
+                                def: 0,
+                                spa: -30,
+                                spd: 0,
+                                spe: 70,
+                                ability: 'Adaptability',
+                                type: 'None',
+                                wt: 11
+                        },
+                        blazikenite: {
+                                atk: 40,
+                                def: 10,
+                                spa: 20,
+                                spd: 10,
+                                spe: 20,
+                                ability: 'Speed Boost',
+                                type: 'None',
+                                wt: 0
+                        },
+                        kangaskhanite: {
+                                atk: 30,
+                                def: 20,
+                                spa: 20,
+                                spd: 20,
+                                spe: 10,
+                                ability: 'Parental Bond',
+                                type: 'None',
+                                wt: 20
+                        },
+                        mawilite: {
+                                atk: 20,
+                                def: 40,
+                                spa: 0,
+                                spd: 40,
+                                spe: 0,
+                                ability: 'Huge Power',
+                                type: 'None',
+                                wt: 12
+                        },
+                        medichamite: {
+                                atk: 40,
+                                def: 10,
+                                spa: 20,
+                                spd: 10,
+                                spe: 20,
+                                ability: 'Pure Power',
+                                type: 'None',
+                                wt: 0
+                        }
+                };
+                let separated = arg.split(" ");
+                let stone = ("" + separated[0]).toLowerCase();
+                let name = ("" + separated[1]).toLowerCase();
+                let justincase = ("" + separated[2]).toLowerCase();
+                stone = rebuild(stone);
+                name = rebuild(name);
+                justincase = rebuild(justincase);
+                if (name == 'x' || name == 'y' || name == 'orb') {
+                        stone = stone + ' ' + name;
+                        name = justincase;
+                }
+                if (arg == '' || arg == ' ')
+                        this.sendReplyBox("Usage: <code>/mnm &lt;Mega Stone Name> &lt;Pokemon Name></code>");
+                else if (stones[stone] == undefined)
+                        this.errorReply("Error: Mega stone not found")
+                else if (pokemen[name] == undefined)
+                        this.errorReply("Error: Pokemon not found");
+                else {
+                        if (!isMega(name)) {
+                                let tot = {};
+                                let secondtype;
+                                if (stones[stone].type != 'None') {
+                                        if (stones[stone].type == pokemen[name].types[0])
+                                                secondtype = "";
+                                        else
+                                                secondtype = "/" + stones[stone].type;
+                                } else {
+                                        if (pokemen[name].types[1] == undefined)
+                                                secondtype = "";
+                                        else
+                                                secondtype = "/" + pokemen[name].types[1];
+                                }
+                                tot['hp'] = pokemen[name].baseStats.hp;
+                                tot['atk'] = pokemen[name].baseStats.atk + stones[stone].atk;
+                                tot['def'] = pokemen[name].baseStats.def + stones[stone].def;
+                                tot['spa'] = pokemen[name].baseStats.spa + stones[stone].spa;
+                                tot['spd'] = pokemen[name].baseStats.spd + stones[stone].spd;
+                                tot['spe'] = pokemen[name].baseStats.spe + stones[stone].spe;
+                                tot['wt'] = pokemen[name].weightkg + stones[stone].wt;
+                                tot['type'] = pokemen[name].types[0] + secondtype;
+                                let gnbp = function(wtkg) {
+                                        var bp;
+                                        if (wtkg > 0.1 && wtkg <= 9.9)
+                                                bp = 20;
+                                        if (wtkg > 10 && wtkg <= 24.9)
+                                                bp = 40;
+                                        if (wtkg > 25 && wtkg <= 49.9)
+                                                bp = 60;
+                                        if (wtkg > 50 && wtkg <= 99.9)
+                                                bp = 80;
+                                        if (wtkg > 100 && wtkg <= 199.9)
+                                                bp = 100;
+                                        if (wtkg > 199.9)
+                                                bp = 120;
+                                        return bp;
+                                }
+                                if (tot['hp'] > 255 || tot['hp'] < 0 || tot['atk'] > 255 || tot['atk'] < 0 || tot['def'] > 255 || tot['def'] < 0 || tot['spa'] > 255 || tot['spa'] < 0 || tot['spd'] > 255 || tot['spd'] < 0 || tot['spe'] > 255 || tot['spe'] < 0) {
+                                        if (tot['hp'] > 255)
+                                                tot['hp'] = 255;
+                                        if (tot['atk'] > 255)
+                                                tot['atk'] = 255;
+                                        if (tot['def'] > 255)
+                                                tot['def'] = 255;
+                                        if (tot['spa'] > 255)
+                                                tot['spa'] = 255;
+                                        if (tot['spd'] > 255)
+                                                tot['spd'] = 255;
+                                        if (tot['spe'] > 255)
+                                                tot['spe'] = 255;
+                                        if (tot['hp'] < 1)
+                                                tot['hp'] = 1;
+                                        if (tot['atk'] < 1)
+                                                tot['atk'] = 1;
+                                        if (tot['def'] < 1)
+                                                tot['def'] = 1;
+                                        if (tot['spa'] < 1)
+                                                tot['spa'] = 1;
+                                        if (tot['spd'] < 1)
+                                                tot['spd'] = 1;
+                                        if (tot['spe'] < 1)
+                                                tot['spe'] = 1;
+                                        text = "The new stats are: " + tot['hp'] + "/" + tot['atk'] + "/" + tot['def'] + "/" + tot['spa'] + "/" + tot['spd'] + "/" + tot['spe'] + "<br />"
++"Ability:<b>" + stones[stone].ability + "</b><br />" 
++"Type:<b>" + tot['type'] + "</b><br />" 
++"GrassKnot/LowKick Base Power:<b>" + gnbp(tot['wt'])+"</b>";
+
+                                } else
+                                        text = "The new stats are: " + tot['hp'] + "/" + tot['atk'] + "/" + tot['def'] + "/" + tot['spa'] + "/" + tot['spd'] + "/" + tot['spe'] + "<br />"
++"Ability:<b>" + stones[stone].ability + "</b><br />" 
++"Type:<b>" + tot['type'] + "</b><br />" 
++"GrassKnot/LowKick Base Power:<b>" + gnbp(tot['wt'])+"</b>";
+
+                        } else
+                                text += "<font color=\"red\">Uh, I don't think you can mega evolve a mega Pokemon....</font>"
+                        this.sendReplyBox(text);
+                }
+        },
 	ns: 'natureswap',
         'natureswap': function(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -245,7 +854,7 @@ exports.commands= {
 		let pokemen=Tools.data.Pokedex;
                 let text = "";
                 if (arg == " " || arg == '') {
-                        text += "Usage: <code>ns &lt;Nature> &lt;Pokemon></code>";
+                        text += "Usage: <code>/ns &lt;Nature> &lt;Pokemon></code>";
                 } else {
                         let tar = arg.split(' ');
                         let poke = tar[1],
@@ -495,7 +1104,7 @@ exports.commands= {
 		let text = "";
 	        let abe = rebuild(target.toLowerCase());
 	        if(target=='')
-	        	text+="Usage: ``.ei <Ability>``"
+	        	text+="Usage: <code>/ei <Ability></code>"
 			else if(target=='bans')
 	        	text+="The current banlist for Enchanted Items is: Ubers, Kyurem-Black, Chatter, Shedinja, and the held abilities of Arena Trap, Contrary, Fur Coat, Huge Power, Imposter, Parental Bond, Pure Power, Shadow Tag, Simple, Trace(temporarily) and Wonder Guard.";
 	        else if(target=='retain')
