@@ -95,8 +95,193 @@ let rebuild = function(zom)
 		}
 		return k.toLowerCase();
 		}
-
+let natures = {
+        adamant: {
+                name: "Adamant",
+                swap: true,
+                plus: 'atk',
+                minus: 'spa'
+        },
+        bashful: {
+                name: "Bashful",
+                swap: false,
+        },
+        bold: {
+                name: "Bold",
+                swap: true,
+                plus: 'def',
+                minus: 'atk'
+        },
+        brave: {
+                name: "Brave",
+                swap: true,
+                plus: 'atk',
+                minus: 'spe'
+        },
+        calm: {
+                name: "Calm",
+                swap: true,
+                plus: 'spd',
+                minus: 'atk'
+        },
+        careful: {
+                name: "Careful",
+                swap: true,
+                plus: 'spd',
+                minus: 'spa'
+        },
+        docile: {
+                name: "Docile",
+                swap: false
+        },
+        gentle: {
+                name: "Gentle",
+                swap: true,
+                plus: 'spd',
+                minus: 'def'
+        },
+        hardy: {
+                name: "Hardy",
+                swap: false
+        },
+        hasty: {
+                name: "Hasty",
+                swap: true,
+                plus: 'spe',
+                minus: 'def'
+        },
+        impish: {
+                name: "Impish",
+                swap: true,
+                plus: 'def',
+                minus: 'spa'
+        },
+        jolly: {
+                name: "Jolly",
+                swap: true,
+                plus: 'spe',
+                minus: 'spa'
+        },
+        lax: {
+                name: "Lax",
+                swap: true,
+                plus: 'def',
+                minus: 'spd'
+        },
+        lonely: {
+                name: "Lonely",
+                swap: true,
+                plus: 'atk',
+                minus: 'def'
+        },
+        mild: {
+                name: "Mild",
+                swap: true,
+                plus: 'spa',
+                minus: 'def'
+        },
+        modest: {
+                name: "Modest",
+                swap: true,
+                plus: 'spa',
+                minus: 'atk'
+        },
+        naive: {
+                name: "Naive",
+                swap: true,
+                plus: 'spe',
+                minus: 'spd'
+        },
+        naughty: {
+                name: "Naughty",
+                swap: true,
+                plus: 'atk',
+                minus: 'spd'
+        },
+        quiet: {
+                name: "Quiet",
+                swap: true,
+                plus: 'spa',
+                minus: 'spe'
+        },
+        quirky: {
+                name: "Quirky",
+                swap: false
+        },
+        rash: {
+                name: "Rash",
+                swap: true,
+                plus: 'spa',
+                minus: 'spd'
+        },
+        relaxed: {
+                name: "Relaxed",
+                swap: true,
+                plus: 'def',
+                minus: 'spe'
+        },
+        sassy: {
+                name: "Sassy",
+                swap: true,
+                plus: 'spd',
+                minus: 'spe'
+        },
+        serious: {
+                name: "Serious",
+                swap: false
+        },
+        timid: {
+                name: "Timid",
+                swap: true,
+                plus: 'spe',
+                minus: 'atk'
+        },
+};
 exports.commands= {
+	ns: 'natureswap',
+        'natureswap': function(target, room, user) {
+		if (!this.runBroadcast()) return;
+		let arg=target,by=user;
+		let pokemen=Tools.data.Pokedex;
+                let text = "";
+                if (arg == " " || arg == '') {
+                        text += "Usage: <code>ns &lt;Nature> &lt;Pokemon></code>";
+                } else {
+                        let tar = arg.split(' ');
+                        let poke = tar[1],
+                                nat = rebuild(tar[0]),
+                                p = rebuild(poke);
+                        if (p == "mega")
+                                poke = tar[2] + "mega";
+                        if (p.charAt(0) == "m" && pokemen[p.substring(1, p.length) + "mega"] != undefined)
+                                poke = poke.substring(1, poke.length) + "mega";
+                        let temp = "";
+                        p = rebuild(poke);
+                        if (pokemen[p] == undefined) {
+                                text += "Error: Pokemon not found";
+                        } else if (natures[nat] == undefined) {
+                                text += "Error: Nature not found";
+                        } else {
+                                let pokeobj = {
+                                        hp: "" + pokemen[p].baseStats.hp,
+                                        atk: "" + pokemen[p].baseStats.atk,
+                                        def: "" + pokemen[p].baseStats.def,
+                                        spa: "" + pokemen[p].baseStats.spa,
+                                        spd: "" + pokemen[p].baseStats.spd,
+                                        spe: "" + pokemen[p].baseStats.spe,
+                                        name: pokemen[p].species,
+                                };
+                                let natureobj = natures[nat];
+                                if (natureobj['swap']) {
+                                        temp = "<b>" + pokeobj[natureobj['plus']] + "</b>";
+                                        pokeobj[natureobj['plus']] = "<b>" + pokeobj[natureobj['minus']] + "</b>";
+                                        pokeobj[natureobj['minus']] = temp;
+                                }
+                                text += "The new stats for " + pokeobj['name'] + " are: " + pokeobj['hp'] + "/" + pokeobj['atk'] + "/" + pokeobj['def'] + "/" + pokeobj['spa'] + "/" + pokeobj['spd'] + "/" + pokeobj['spe'] + "";
+                        }
+                }
+                this.sendReplyBox(text);
+        },
 	'ei':function(target,room,user)
 	{
                  if (!this.runBroadcast()) return;
