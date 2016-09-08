@@ -4326,7 +4326,7 @@ onBegin: function () {
 			"Mega Stones and Primal Orbs can be used on almost any fully evolved Pok&eacute;mon with no Mega Evolution limit.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3540979/\">Mix and Mega</a>",
 		],
-		section: "Experimental Metagames",
+		section: "Experimental Metas",
 		column: 2,
 
 		mod: 'mixandmega',
