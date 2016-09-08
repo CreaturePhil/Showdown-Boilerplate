@@ -4329,7 +4329,7 @@ onBegin: function () {
 		section: "Experimental Metas",
 		column: 2,
 
-		mod: 'mixandmega',
+		mod: 'mnmbh',
 		ruleset: ['Balanced Hackmons'],
 		//banlist: ['Dynamic Punch', 'Electrify', 'Zap Cannon'],
 		/*onValidateTeam: function (team) {
