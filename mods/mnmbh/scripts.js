@@ -24,7 +24,7 @@ exports.BattleScripts = {
 		}
 	},
 	runMegaEvo: function (pokemon) {
-		if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
+		//if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
 		let template = this.getMixedTemplate(pokemon.originalSpecies, pokemon.canMegaEvo);
 		let side = pokemon.side;
 
