@@ -3978,6 +3978,35 @@ exports.Formats = [
        }
      }
    },
+{
+	name:"Recyclables",
+	section:"Other Metagames",
+desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.3581818/\">Recyclables</a>: <br />If the item on a Pokemon was not knocked off, it will be recycled at the end of every turn."],
+	ruleset:['OU'],
+		onResidualOrder: 999, //This will always occur as the last possible occurence of the turn's residual phase.
+        onResidual: function () {
+            if ((this.p1.pokemon[0].item || !this.p1.pokemon[0].lastItem)&&!(this.p2.pokemon[0].item || !this.p2.pokemon[0].lastItem))
+            {
+            	this.p2.pokemon[0].setItem(this.p2.pokemon[0].lastItem);
+			this.add('-item', this.p2.pokemon[0], this.p2.pokemon[0].getItem(), '[from] move: Recycle');
+			//return false;
+            }
+            else if (!(this.p1.pokemon[0].item || !this.p1.pokemon[0].lastItem)&&(this.p2.pokemon[0].item || !this.p2.pokemon[0].lastItem))
+            {
+            	this.p1.pokemon[0].setItem(this.p1.pokemon[0].lastItem);
+			this.add('-item', this.p1.pokemon[0], this.p1.pokemon[0].getItem(), '[from] move: Recycle');
+			//return false;
+            }
+            else if (!(this.p1.pokemon[0].item || !this.p1.pokemon[0].lastItem)&&!(this.p2.pokemon[0].item || !this.p2.pokemon[0].lastItem))
+            {
+            	this.p1.pokemon[0].setItem(this.p1.pokemon[0].lastItem);
+			this.add('-item', this.p1.pokemon[0], this.p1.pokemon[0].getItem(), '[from] move: Recycle');
+            	this.p2.pokemon[0].setItem(this.p2.pokemon[0].lastItem);
+			this.add('-item', this.p2.pokemon[0], this.p2.pokemon[0].getItem(), '[from] move: Recycle');
+            }
+            else return false;
+        }
+},
 	{
         name: "The Negative Metagame",
         desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-negative-metagame-playable-on-aqua.3529936/\">The Negative Metagame</a>"],
