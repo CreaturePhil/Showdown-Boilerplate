@@ -3980,7 +3980,7 @@ exports.Formats = [
    },
 {
 	name:"Recyclables",
-	section:"Other Metagames",
+	section:"New Other Metagames",
 desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.3581818/\">Recyclables</a>: <br />If the item on a Pokemon was not knocked off, it will be recycled at the end of every turn."],
 	ruleset:['OU'],
 		onResidualOrder: 999, //This will always occur as the last possible occurence of the turn's residual phase.
