@@ -458,7 +458,7 @@ exports.BattleAbilities = {
 		num: 186
 	},
 	"deathforce": {
-		desc: "This Pokemon traps the Pokemon that KOed it."
+		desc: "This Pokemon traps the Pokemon that KOed it.",
 		onAfterDamageOrder: 1,
 		onFaint: function (target, source, effect) {
 			if (source && source !== target) {
@@ -1347,7 +1347,7 @@ exports.BattleAbilities = {
 		num: 26
 	},
 	"lifeforce": {
-		shortDesc: "This Pokemon's multi-turn moves happen in one turn.",	
+		shortDesc: "This Pokemon's multi-turn moves happen in one turn.",
 		onChargeMove: function (pokemon, target, move) {
 			if (pokemon.useItem()) {
 				this.debug('power herb - remove charge turn for ' + move.id);
