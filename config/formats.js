@@ -4098,6 +4098,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
         }
     	},
 	{
+		name: "Universal Ubers",
+		section: "Pet Mods",
+		mod: 'primordialpokemon',
+
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
+		banlist: []
+	},
+	{
         	name: "VoltTurn Mayhem",
         	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/voltturn-mayhem-lcotm.3527847/\">VoltTurn Mayhem</a>"],
 	        section: "New Other Metagames",
