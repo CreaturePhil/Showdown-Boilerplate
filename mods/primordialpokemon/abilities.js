@@ -469,7 +469,7 @@ exports.BattleAbilities = {
 		name: "Death Force",
 		rating: 5,
 		num: 1003
-	}
+	},
 	"defeatist": {
 		desc: "While this Pokemon has 1/2 or less of its maximum HP, its Attack and Special Attack are halved.",
 		shortDesc: "While this Pokemon has 1/2 or less of its max HP, its Attack and Sp. Atk are halved.",
