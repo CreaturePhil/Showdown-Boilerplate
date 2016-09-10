@@ -4876,7 +4876,7 @@ exports.BattleItems = {
 		onSwitchIn: function (pokemon) {
 			var legends = {"Articuno":true, "Zapdos":true, "Moltres":true, "Mewtwo":true, "Mew":true, "Raikou":true, "Entei":true, "Suicune":true, "Lugia":true, "Ho-Oh":true, "Celebi":true, "Regirock":true, "Regice":true, "Registeel":true, "Latias":true, "Latios":true, "Kyogre":true, "Groudon":true, "Rayquaza":true, "Jirachi":true, "Deoxys":true, "Deoxys-Attack":true, "Deoxys-Defense":true, "Deoxys-Speed":true, "Uxie":true, "Mesprit":true, "Azelf":true, "Dialga":true, "Palkia":true, "Heatran":true, "Regigigas":true, "Giratina":true, "Cresselia":true, "Phione":true, "Manaphy":true, "Darkrai":true, "Shaymin":true, "Shaymin-Sky":true, "Arceus":true, "Victini":true, "Cobalion":true, "Terrakion":true, "Virizion":true, "Tornadus":true, "Tornadus-Therian":true, "Thundurus":true, "Thundurus-Therian":true, "Reshiram":true, "Zekrom":true, "Landorus":true, "Landorus-Therian":true, "Kyurem":true, "Kyurem-Black":true, "Kyurem-White":true, "Keldeo":true, "Keldeo-Resolute":true, "Meloetta":true, "Meloetta-Pirouette":true, "Genesect":true, "Xerneas":true, "Yveltal":true, "Zygarde":true, "Diancie":true, "Hoopa":true, "Hoopa-Unbound":true, "Volcanion":true};
 			if (pokemon.isActive && !pokemon.baseTemplate.isPrimal && pokemon.baseTemplate.species in legends) {
-				var template = Object.clone(this.getTemplate(pokemon.baseTemplate.species + '-Primal'));
+				var template = this.getTemplate(pokemon.baseTemplate.species + '-Primal');
 				if (pokemon.baseTemplate.species !== "Groudon" && pokemon.baseTemplate.species !== "Kyogre") {
 					template.spriteid = toId(pokemon.baseTemplate.species);
 					template.actualSpecies = template.species;
@@ -4884,7 +4884,7 @@ exports.BattleItems = {
 					template.requiredItem = "Rainbow Orb";
 				}
 				template.isPrimal = true;
-				
+
 				pokemon.formeChange(template);
 				pokemon.baseTemplate = template;
 				pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
