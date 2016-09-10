@@ -4099,7 +4099,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
     	},
 	{
 		name: "Universal Ubers",
-		section: "Pet Mods",
+		section: "New Other Metagames",
 		mod: 'primordialpokemon',
 
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
