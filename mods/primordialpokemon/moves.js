@@ -11359,38 +11359,16 @@ exports.BattleMovedex = {
 		flags: {snatch: 1, heal: 1},
 		heal: [1, 2],
 		self: {
-			volatileStatus: 'roost'
+			volatileStatus: 'roost',
 		},
 		effect: {
 			duration: 1,
-			onStart: function (pokemon) {
-				for (var i = 0, l = pokemon.typesData.length; i < l; i++) {
-					if (pokemon.typesData[i].type === 'Flying') {
-						pokemon.typesData[i].suppressed = true;
-						break;
-					}
-				}
-			},
-			onModifyPokemon: function (pokemon) {
-				for (var i = 0, l = pokemon.typesData.length; i < l; i++) {
-					if (pokemon.typesData[i].type === 'Flying') {
-						pokemon.typesData[i].suppressed = true;
-						break;
-					}
-				}
-			},
-			onEnd: function (pokemon) {
-				for (var i = 0, l = pokemon.typesData.length; i < l; i++) {
-					if (pokemon.typesData[i].type === 'Flying') {
-						pokemon.typesData[i].suppressed = false;
-						break;
-					}
-				}
-			}
+			// implemented in BattlePokemon#getTypes
 		},
 		secondary: false,
 		target: "self",
-		type: "Flying"
+		type: "Flying",
+		contestType: "Clever",
 	},
 	"rototiller": {
 		num: 563,
