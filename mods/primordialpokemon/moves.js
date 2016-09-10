@@ -10861,19 +10861,14 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			if (source.template && source.template.num === 493) return false;
 			this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
-			source.typesData = [];
-			for (var i = 0, l = target.typesData.length; i < l; i++) {
-				if (target.typesData[i].suppressed) continue;
-				source.typesData.push({
-					type: target.typesData[i].type,
-					suppressed: false,
-					isAdded: target.typesData[i].isAdded
-				});
-			}
+			source.types = target.getTypes(true);
+			source.addedType = target.addedType;
+			source.knownType = target.side === source.side && target.knownType;
 		},
 		secondary: false,
 		target: "normal",
-		type: "Normal"
+		type: "Normal",
+		contestType: "Clever",
 	},
 	"refresh": {
 		num: 287,
