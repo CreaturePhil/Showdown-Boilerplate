@@ -473,7 +473,7 @@ exports.BattleAbilities = {
 	"deathforce": {
 		desc: "This Pokemon traps the Pokemon that KOed it.",
 		onAfterDamageOrder: 1,
-		onFaint: function (target, source, effect) {
+		onFaint: function (target, source, move) {
 			if (source && source !== target) {
 				target.addVolatile('trapped', source, move, 'trapper');
 			}
