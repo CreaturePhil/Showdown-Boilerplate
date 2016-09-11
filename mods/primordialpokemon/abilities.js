@@ -475,7 +475,7 @@ exports.BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onFaint: function (target, source, effect) {
 			this.add('-activate', source, 'trapped');
-			source.tryTrap();
+			source.trapped=true;
 		},
 		id: "deathforce",
 		name: "Death Force",
