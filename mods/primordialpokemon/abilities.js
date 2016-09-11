@@ -474,7 +474,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon traps the Pokemon that KOed it.",
 		onAfterDamageOrder: 1,
 		onFaint: function (target, source, effect) {
-			if (source && source !== target) {
+			if (target.isActive) {
 				target.addVolatile('trapped', source, effect, 'trapper');
 			}
 		},
