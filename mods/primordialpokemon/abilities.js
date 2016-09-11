@@ -474,8 +474,8 @@ exports.BattleAbilities = {
 		desc: "This Pokemon traps the Pokemon that KOed it.",
 		onAfterDamageOrder: 1,
 		onFaint: function (target, source, effect) {
-			source.tryTrap();
 			this.add('-activate', source, 'trapped');
+			source.tryTrap();
 		},
 		id: "deathforce",
 		name: "Death Force",
