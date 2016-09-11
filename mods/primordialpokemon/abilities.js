@@ -475,7 +475,7 @@ exports.BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onFaint: function (target, source, move) {
 			if (!source.addVolatile('trapped', source, move, 'trapper')) {
-				this.add('-fail', target);
+				this.add('-fail', source);
 			}
 		},
 		id: "deathforce",
