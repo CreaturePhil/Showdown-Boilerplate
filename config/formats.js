@@ -2479,7 +2479,7 @@ exports.Formats = [
 			'Kyurem-White', 'Genesect', 'Greninja', 'Aegislash', 'Xerneas', 'Yveltal',
 			'Slaking', 'Regigigas', 'Shedinja', 'Kyurem-Black'
 		],
-		validateSet: (function () {
+		onValidateSet: (function () {
 			var pokemonWithAbility;
 			var createAbilityMap = function () {
 				var abilityMap = Object.create(null);
@@ -2526,8 +2526,8 @@ exports.Formats = [
 				var originalTemplate = this.getTemplate(set.species);
 				var template = originalTemplate;
 
-				item = this.getItem(set.item);
-				ability = this.getAbility(set.ability);
+				let item = this.getItem(set.item);
+				let ability = this.getAbility(set.ability);
 
 				if (!ability.name) return [name + " needs to have an ability."];
 
@@ -2564,7 +2564,7 @@ exports.Formats = [
 				}
 
 				for (var i = 0; i < set.moves.length; i++) {
-					var move = this.getMove(string(set.moves[i]));
+					var move = this.getMove(set.moves[i]);
 					set.moves[i] = move.name;
 					check = move.id;
 					setHas[check] = true;
@@ -2994,7 +2994,7 @@ exports.Formats = [
 					}
 					lsetData.sources = intersectSources;
 				} else {
-					lsetData.sources = sources.unique();
+					lsetData.sources = sources.unique;
 				}
 			}
 
