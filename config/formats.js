@@ -3493,8 +3493,8 @@ exports.Formats = [
             }
         },
         validateSet: function (set) {
-            var template = this.getTemplate(set.species);
-            var item = this.getItem(set.item);
+            var template = this.tools.getTemplate(set.species);
+            var item = this.tools.getItem(set.item);
             var problems = [];
 
             if (set.species === set.name) delete set.name;
@@ -3505,13 +3505,13 @@ exports.Formats = [
                 problems.push(item.name + ' is not a real item.');
             }
             var ability = {};
-            if (set.ability) ability = this.getAbility(set.ability);
+            if (set.ability) ability = this.tools.getAbility(set.ability);
             if (ability.isNonstandard) {
                 problems.push(ability.name + ' is not a real ability.');
             }
             if (set.moves) {
                 for (var i = 0; i < set.moves.length; i++) {
-                    var move = this.getMove(set.moves[i]);
+                    var move = this.tools.getMove(set.moves[i]);
                     if (move.isNonstandard) {
                         problems.push(move.name + ' is not a real move.');
                     }
