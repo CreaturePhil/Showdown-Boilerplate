@@ -3360,6 +3360,50 @@ exports.Formats = [
 	        }
 	    }
 	},
+	{
+	name:"Imprisoned",
+	section:"New Other Metagames",
+	ruleset:['OU'],
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/imprisoned.3580920/\">Imprisoned</a>"],
+	onBegin: function()
+	{
+		this.p1.impris = [];
+		this.p2.impris = [];
+		this.isImpris=function(side,move)
+		{
+			let b=false;
+			for(let i=0;i<this[side].impris.length;i++)
+				if(this[side].impris[i]==move)
+					b=true;
+			return b;
+		}
+	},
+	onDisableMove: function(pokemon)
+	{
+		let side=pokemon.side.id;
+			for(let j=0;j<pokemon.moves.length;j++)
+			{
+				let curmove=pokemon.moves[j];
+				if(this.isImpris(side,curmove))
+					pokemon.disableMove(curmove);
+			}
+	},
+	onTryMove: function(source, target, move)
+	{
+		let side=target.side.id,opside=source.side.id;
+		if(!this.isImpris(side,move.id))
+			this[side].impris.push(move.id);
+		for(let i=0;i<this[opside].pokemon.length;i++)
+		{
+			for(let j=0;j<this[opside].pokemon[i].moves.length;j++)
+			{
+				let curmove=this[opside].pokemon[i].moves[j];
+				if(this.isImpris(opside,curmove))
+					this[opside].pokemon[i].disableMove(curmove);
+			}
+		}
+	},
+},
     {
 	     name: "Lockdown",
 	     desc: [
