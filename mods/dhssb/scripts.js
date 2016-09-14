@@ -231,12 +231,6 @@ exports.BattleScripts = {
 				signatureMove: "ggm8",
 				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
 			},
-			'Lost Cause 146': {
-				species: 'Weavile', ability: 'Sheer Force', item: 'Life Orb', gender: 'M',
-				moves: ['icepunch', 'knockoff', 'poisonjab'],
-				signatureMove: "Dragon Blades",
-				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
-			},
 			'Quiet Chimchar': {
 				species: 'Chimchar', ability: 'Flame Guard', item: 'Focus Sash', gender: 'M',
 				moves: ['batonpass', 'firepunch', 'uturn'],
