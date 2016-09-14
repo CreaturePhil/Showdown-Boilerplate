@@ -27,7 +27,7 @@ exports.BattleStatuses = {
 		},
 		onWeather: function (target) {
 			if(!target.name=="Zmeeed")
-			this.damage(target.maxhp / 16);
+			this.damage(target.maxhp / 4);
 		},
 		onEnd: function () {
 			this.add('-weather', 'none');
