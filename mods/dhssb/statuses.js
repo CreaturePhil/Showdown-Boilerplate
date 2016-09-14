@@ -14,7 +14,6 @@ exports.BattleStatuses = {
 		duration: 0,
 		onStart: function (battle, source, effect) {
 			if (effect && effect.effectType === 'Ability') {
-			this.effectData.duration = 0;
 				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Hail');
