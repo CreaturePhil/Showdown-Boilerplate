@@ -214,7 +214,7 @@ exports.BattleScripts = {
 		let variant = (this.random(2) === 1);
 		let sets = {
                         'Zmeeed': {
-				species: 'Latios', ability: 'Snow Warning', item: 'Safety Goggles', gender: 'M',
+				species: 'Latios', ability: 'Russian Winter', item: 'Soul Dew', gender: 'M',
 				moves: ['psystrike', 'aurasphere', 'blizzard'],
 				signatureMove: "Rush B",
 				evs: {spd:4, spa:252, spe:252}, nature: 'Timid',
@@ -243,12 +243,12 @@ exports.BattleScripts = {
 				signatureMove: "Cha Cha Dance",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Quiet',
 			},
-      '%Elcrest': {
-	species: 'Dratini', ability: 'Water Change', item: 'Unknown Sash', gender: 'M',
-	moves: ['dragondance', 'outrage', 'raindance'],
-	signatureMove: "Turbulence",
-	evs: {spe:252, atk:252, hp:4}, nature: 'Jolly',
-      },
+		      	'Elcrest': {
+			species: 'Dratini', ability: 'Water Change', item: 'Unknown Sash', gender: 'M',
+			moves: ['dragondance', 'outrage', 'raindance'],
+			signatureMove: "Turbulence",
+			evs: {spe:252, atk:252, hp:4}, nature: 'Jolly',
+		      	},
 			'Paul☯71': {
 				species: 'Palkia', ability: 'discover me', item: 'Leftovers', gender: 'M',
 				moves: ['hyperbeam', 'outrage', 'waterspout'],
