@@ -14,7 +14,6 @@ exports.BattleStatuses = {
 		duration: 0,
 		onStart: function (battle, source, effect) {
 			if (effect && effect.effectType === 'Ability') {
-			this.effectData.duration = 0;
 				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Hail');
@@ -26,8 +25,8 @@ exports.BattleStatuses = {
 			if (this.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather: function (target) {
-			if(!target.ability=="Russian Winter")
-			this.damage(target.maxhp / 16);
+			if(!target.name=="Zmeeed")
+			this.damage(target.maxhp / 4);
 		},
 		onEnd: function () {
 			this.add('-weather', 'none');

@@ -92,7 +92,7 @@ exports.BattleMovedex = {
                 onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Doom Desire", source);
-                        if (source.name == 'Zmeeed') this.add("c|@Zmeeed|The bomb has been planted!");
+                        if (source.name == 'Zmeeed') this.add("c|@Zmeeed|LET'S GO RUSH B! ON BOMBSITE B! CYKA YEBANY IDI NAKHUI LET'S GO RUSH B!~");
 			this.add('-anim', source, "Double Edge", target);
 		},
 		onTry: function (source, target) {
