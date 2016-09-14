@@ -26,7 +26,7 @@ exports.BattleStatuses = {
 			if (this.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather: function (target) {
-			if(!target.ability=="Russian Winter")
+			if(!target.name=="Zmeeed")
 			this.damage(target.maxhp / 16);
 		},
 		onEnd: function () {
