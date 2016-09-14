@@ -574,9 +574,6 @@ exports.Formats = [
 			if(name === 'quietchimchar') {
 				this.add('c|@Quiet Chimchar|Introducing the best starter ever!!');
 			}
-			if(name === 'lostcause146') {
-				this.add('c|$Lost Cause 146|Prepare yourself fool!');
-			}
 			if(name === 'paul71') {
 				this.add('c|~Paul☯71|!htmlbox');
 				this.add('raw|<button name="parseCommand" value="/user paul71">My Owner!</button>');
@@ -660,9 +657,6 @@ exports.Formats = [
 			}
 			if(name === 'quietchimchar') {
 				this.add('c|@Quiet Chimchar|I\'ll get you next time!');
-			}
-			if(name === 'lostcause146') {
-				this.add('c|$Lost Cause 146|Maybe i was a fool for believing in you... think on that one.');
 			}
                         if(name == 'zmeeed') {
                                 this.add("c|@Zmeeed|CYKABLYAT");
