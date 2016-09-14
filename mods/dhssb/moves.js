@@ -78,26 +78,6 @@ exports.BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-	"dragonblades": {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		id: "dragonblades",
-		isViable: true,
-		name: "Dragon Blades",
-		pp: 5,
-		priority: 2,
-		flags: {contact: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-                        if (source.name == 'Lost Cause 146') this.add("c|$Lost Cause 146|Ryujin No Ken No Kurae!");
-			this.add('-anim', source, "Precipice Blades", target);
-		},
-		secondary: false,
-		target: "normal",
-		type: "Dragon",
-		contestType: "Cool",
-	},
         "rushb": {
 		accuracy: 100,
 		basePower: 250,
