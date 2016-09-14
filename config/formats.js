@@ -3714,6 +3714,126 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	    },
 	},
 	{
+	name:"The Great Pledge",
+	section:"New Other Metagames",
+	ruleset:['OU'],
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-great-pledge.3581858/\">The Great Pledge</a>"],
+	onBegin: function()
+	{
+		this.p1.pledge= {
+			terrain:"",
+			duration:0
+			}
+		this.p2.pledge=
+			{
+			terrain:"",
+			duration:0
+			}
+	},
+	onResidual: function()
+	{
+		if(this.p2.pledge.duration>4)
+			this.add('-sideend', this.p2, this.p2.pledge.terrain);
+		else
+			this.p2.pledge.duration++;
+		if(this.p1.pledge.duration>4)
+			this.add('-sideend', this.p1, this.p1.pledge.terrain);
+		else
+			this.p1.pledge.duration++;
+		if(this.p1.terrain=="Fire Pledge")
+		{
+			if (this.p1.pokemon[0] && !this.p1.pokemon[0].hasType('Fire')) {
+				this.damage(this.p1.pokemon[0].maxhp / 8, this.p1.pokemon[0]);
+			}
+		}
+		if(this.p2.terrain=="Fire Pledge")
+		{
+			if (this.p2.pokemon[0] && !this.p2.pokemon[0].hasType('Fire')) {
+				this.damage(this.p2.pokemon[0].maxhp / 8, this.p2.pokemon[0]);
+			}
+		}
+	},
+	onModifySpe: function (spe, pokemon) 
+	{
+		if(this[pokemon.side.id].pledge.terrain=="Grass Pledge")
+		return this.chainModify(0.25);
+	},
+	onModifyMove: function (move, source) 
+	{
+		if(this[source.side.id].pledge.terrain=="Water Pledge")
+		{
+			if (move.secondaries && move.id !== 'secretpower') {
+					this.debug('doubling secondary chance');
+					for (let i = 0; i < move.secondaries.length; i++) {
+						move.secondaries[i].chance *= 2;
+					}
+				}
+		}
+	},
+	onSwitchIn: function(pokemon)
+	{
+		var tSide;
+		if(pokemon.side.id=='p1')
+			tSide='p2';
+		if(pokemon.side.id=='p2')
+			tSide='p1';
+		var pledgetype = function()
+		{
+			if(pokemon.types[0]=='Water') return 'water';
+			if(pokemon.types[0]=='Grass') return 'grass';
+			if(pokemon.types[0]=='Fire') return 'fire';
+			if(pokemon.types[1]=='Water') return 'water';
+			if(pokemon.types[1]=='Grass') return 'grass';
+			if(pokemon.types[1]=='Fire') return 'fire';
+		}
+		if(pledgetype()=='fire')
+		{
+			if(pokemon.baseHpType=="Grass")
+			{
+				this.add('-sidestart', this[tSide], 'Fire Pledge');
+				this[tSide].addSideCondition('firepledge');
+				this[tSide].pledge.terrain="Fire Pledge";
+			}
+			if(pokemon.baseHpType=="Water")
+			{
+				this.add('-sidestart', this[tSide], 'Water Pledge');
+				this[tSide].addSideCondition('waterpledge');
+				this[tSide].pledge.terrain="Water Pledge";
+			}
+		}
+		if(pledgetype()=='grass')
+		{
+			if(pokemon.baseHpType=="Fire")
+			{
+				this.add('-sidestart', this[tSide], 'Fire Pledge');
+				this[tSide].addSideCondition('firepledge');
+				this[tSide].pledge.terrain="Fire Pledge";
+			}
+			if(pokemon.baseHpType=="Water")
+			{
+				this.add('-sidestart', this[tSide], 'Grass Pledge');
+				this[tSide].addSideCondition('grasspledge');
+				this[tSide].pledge.terrain="Grass Pledge";
+			}
+		}
+		if(pledgetype()=='water')
+		{
+			if(pokemon.baseHpType=="Grass")
+			{
+				this.add('-sidestart', this[tSide], 'Grass Pledge');
+				this[tSide].addSideCondition('grasspledge');
+				this[tSide].pledge.terrain="Grass Pledge";
+			}
+			if(pokemon.baseHpType=="Fire")
+			{
+				this.add('-sidestart', this[tSide], 'Water Pledge');
+				this[tSide].addSideCondition('waterpledge');
+				this[tSide].pledge.terrain="Water Pledge";
+			}
+		}
+	},
+},
+	{
 		name: "Trademarked",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>"],
 		section: "New Other Metagames",
