@@ -211,10 +211,6 @@ class CommandContext {
 	}
 	canBroadcast(suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
-			if (this.user.broadcasting) {
-				this.errorReply("You can't broadcast another command too soon.");
-				return false;
-			}
 
 			let message = this.canTalk(suppressMessage || this.message);
 			if (!message) return false;
