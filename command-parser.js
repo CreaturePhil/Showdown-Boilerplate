@@ -380,16 +380,6 @@ class CommandContext {
 				return false;
 			}
 
-			if (room) {
-				let normalized = message.trim();
-				if (room.id === 'lobby' && (normalized === user.lastMessage) &&
-						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-					this.errorReply("You can't send the same message again so soon.");
-					return false;
-				}
-				user.lastMessage = message;
-				user.lastMessageTime = Date.now();
-			}
 
 			if (Config.chatfilter) {
 				return Config.chatfilter.call(this, message, user, room, connection, targetUser);
