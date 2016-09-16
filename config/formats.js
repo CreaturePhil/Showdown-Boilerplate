@@ -3801,12 +3801,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				this.add('-sidestart', this[tSide], 'Fire Pledge');
 				//this[tSide].addSideCondition('firepledge');
 				this[tSide].pledge.terrain="Fire Pledge";
+				this[tSide].pledge.duration=0;
 			}
 			if(pokemon.baseHpType=="Water")
 			{
 				this.add('-sidestart', this[tSide], 'Water Pledge');
 				//this[tSide].addSideCondition('waterpledge');
 				this[tSide].pledge.terrain="Water Pledge";
+				this[tSide].pledge.duration=0;
 			}
 		}
 		if(pledgetype()=='grass')
@@ -3814,14 +3816,16 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(pokemon.baseHpType=="Fire")
 			{
 				this.add('-sidestart', this[tSide], 'Fire Pledge');
-				this[tSide].addSideCondition('firepledge');
+				//this[tSide].addSideCondition('firepledge');
 				this[tSide].pledge.terrain="Fire Pledge";
+				this[tSide].pledge.duration=0;
 			}
 			if(pokemon.baseHpType=="Water")
 			{
 				this.add('-sidestart', this[tSide], 'Grass Pledge');
-				this[tSide].addSideCondition('grasspledge');
+				//this[tSide].addSideCondition('grasspledge');
 				this[tSide].pledge.terrain="Grass Pledge";
+				this[tSide].pledge.duration=0;
 			}
 		}
 		if(pledgetype()=='water')
@@ -3829,14 +3833,16 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(pokemon.baseHpType=="Grass")
 			{
 				this.add('-sidestart', this[tSide], 'Grass Pledge');
-				this[tSide].addSideCondition('grasspledge');
+				//this[tSide].addSideCondition('grasspledge');
 				this[tSide].pledge.terrain="Grass Pledge";
+				this[tSide].pledge.duration=0;
 			}
 			if(pokemon.baseHpType=="Fire")
 			{
 				this.add('-sidestart', this[tSide], 'Water Pledge');
-				this[tSide].addSideCondition('waterpledge');
+				//this[tSide].addSideCondition('waterpledge');
 				this[tSide].pledge.terrain="Water Pledge";
+				this[tSide].pledge.duration=0;
 			}
 		}
 	},
