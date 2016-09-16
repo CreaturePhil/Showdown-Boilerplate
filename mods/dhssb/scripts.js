@@ -243,7 +243,7 @@ exports.BattleScripts = {
 			signatureMove: "Turbulence",
 			evs: {spe:252, atk:252, hp:4}, nature: 'Jolly',
 		      	},
-			'Paul☯71': {
+			'Alpha Paul☯71': {
 				species: 'Palkia', ability: 'discover me', item: 'Leftovers', gender: 'M',
 				moves: ['hyperbeam', 'outrage', 'waterspout'],
 				signatureMove: "Kick My Ass",
