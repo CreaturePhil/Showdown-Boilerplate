@@ -3732,13 +3732,21 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	},
 	onResidual: function()
 	{
-		if(this.p2.pledge.duration>4)
+		if(this.p2.pledge.duration>4 && this.p2.pledge.terrain!="")
+		{
 			this.add('-sideend', this.p2, this.p2.pledge.terrain);
-		else
+			this.p2.pledge.duration=0;
+			this.p2.pledge.terrain="";
+		}
+		else if(this.p2.pledge.terrain!="")
 			this.p2.pledge.duration++;
-		if(this.p1.pledge.duration>4)
+		if(this.p1.pledge.duration>4 && this.p1.pledge.terrain!="")
+		{
 			this.add('-sideend', this.p1, this.p1.pledge.terrain);
-		else
+			this.p1.pledge.duration=0;
+			this.p1.pledge.terrain="";
+		}
+		else if(this.p1.pledge.terrain!="")
 			this.p1.pledge.duration++;
 		if(this.p1.terrain=="Fire Pledge")
 		{
@@ -3791,13 +3799,13 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(pokemon.baseHpType=="Grass")
 			{
 				this.add('-sidestart', this[tSide], 'Fire Pledge');
-				this[tSide].addSideCondition('firepledge');
+				//this[tSide].addSideCondition('firepledge');
 				this[tSide].pledge.terrain="Fire Pledge";
 			}
 			if(pokemon.baseHpType=="Water")
 			{
 				this.add('-sidestart', this[tSide], 'Water Pledge');
-				this[tSide].addSideCondition('waterpledge');
+				//this[tSide].addSideCondition('waterpledge');
 				this[tSide].pledge.terrain="Water Pledge";
 			}
 		}
