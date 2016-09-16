@@ -26,6 +26,8 @@ For more information on Pokémon Showdown, visit the main
 
 ## Quick Start
 
+(Requires Node.js 6+)
+
 ```bash
 $ git clone https://github.com/CreaturePhil/Showdown-Boilerplate.git
 $ cd Showdown-Boilerplate && npm install

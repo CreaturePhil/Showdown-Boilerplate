@@ -1159,7 +1159,7 @@ exports.BattleScripts = {
 			template = this.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../crashlogger.js')(err, 'The randbat set generator');
+			require('../crashlogger')(err, 'The randbat set generator');
 		}
 
 		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};
@@ -1847,7 +1847,7 @@ exports.BattleScripts = {
 				ability = 'Solid Rock';
 			} else if (template.id === 'sigilyph') {
 				ability = 'Magic Guard';
-			} else if (template.id === 'unfezant') {
+			} else if (template.id === 'togetic' || template.id === 'unfezant') {
 				ability = 'Super Luck';
 			} else if (template.id === 'venusaurmega') {
 				ability = 'Chlorophyll';
@@ -1922,9 +1922,9 @@ exports.BattleScripts = {
 		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
 			item = (hasMove['raindance'] && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
 		} else if (hasMove['raindance']) {
-			item = 'Damp Rock';
+			item = (ability === 'Swift Swim' && counter.Status < 2) ? 'Life Orb' : 'Damp Rock';
 		} else if (hasMove['sunnyday']) {
-			item = 'Heat Rock';
+			item = (ability === 'Chlorophyll' && counter.Status < 2) ? 'Life Orb' : 'Heat Rock';
 		} else if (hasMove['lightscreen'] && hasMove['reflect']) {
 			item = 'Light Clay';
 		} else if (hasMove['acrobatics']) {
@@ -2103,7 +2103,7 @@ exports.BattleScripts = {
 		let pokemon = [];
 
 		let excludedTiers = {'NFE':1, 'LC Uber':1, 'LC':1};
-		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1};
+		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1, 'Togetic':1};
 
 		// For Monotype
 		let isMonotype = this.format === 'monotyperandombattle';
@@ -2230,10 +2230,15 @@ exports.BattleScripts = {
 				if (skip) continue;
 			}
 
-			let set = this.randomSet(template, pokemon.length, teamDetails);
+			let set = this[this.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](template, pokemon.length, teamDetails);
 
 			// Illusion shouldn't be the last Pokemon of the team
 			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
+
+			// Pokemon shouldn't have Physical and Special setup on the same set
+			let incompatibleMoves = ['bellydrum', 'swordsdance', 'calmmind', 'nastyplot'];
+			let intersectMoves = set.moves.filter(move => incompatibleMoves.includes(move));
+			if (intersectMoves.length > 1) continue;
 
 			// Limit 1 of any type combination, 2 in monotype
 			let typeCombo = types.slice().sort().join();
@@ -2283,148 +2288,6 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomDoublesTeam: function (side) {
-		let pokemon = [];
-
-		let excludedTiers = {'NFE':1, 'LC Uber':1, 'LC':1};
-		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Porygon2':1, 'Scyther':1};
-
-		let pokemonPool = [];
-		for (let id in this.data.FormatsData) {
-			let template = this.getTemplate(id);
-			if (!excludedTiers[template.tier] && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
-				pokemonPool.push(id);
-			}
-		}
-
-		// PotD stuff
-		let potd;
-		if (Config.potd && 'Rule:potd' in this.getBanlistTable(this.getFormat())) {
-			potd = this.getTemplate(Config.potd);
-		}
-
-		let typeCount = {};
-		let typeComboCount = {};
-		let baseFormes = {};
-		let teamDetails = {megaCount: 0, stealthRock: 0, hazardClear: 0};
-
-		while (pokemonPool.length && pokemon.length < 6) {
-			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
-			if (!template.exists) continue;
-
-			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseSpecies]) continue;
-
-			// Only certain NFE Pokemon are allowed
-			if (template.evos.length && !allowedNFE[template.species]) continue;
-
-			// Slaking, without ability swap or a similar gimmick, makes the battle 5v6 at best
-			if (template.species === 'Slaking') continue;
-
-			let tier = template.tier;
-			switch (tier) {
-			case 'CAP':
-				// CAPs have 20% the normal rate
-				if (this.random(5) >= 1) continue;
-				break;
-			case 'Unreleased':
-				// Unreleased Pokémon have 20% the normal rate
-				if (this.random(5) >= 1) continue;
-			}
-
-			// Adjust rate for species with multiple formes
-			switch (template.baseSpecies) {
-			case 'Arceus':
-				if (this.random(18) >= 1) continue;
-				break;
-			case 'Basculin':
-				if (this.random(2) >= 1) continue;
-				break;
-			case 'Castform':
-				if (this.random(2) >= 1) continue;
-				break;
-			case 'Cherrim':
-				if (this.random(2) >= 1) continue;
-				break;
-			case 'Genesect':
-				if (this.random(5) >= 1) continue;
-				break;
-			case 'Gourgeist':
-				if (this.random(4) >= 1) continue;
-				break;
-			case 'Hoopa':
-				if (this.random(2) >= 1) continue;
-				break;
-			case 'Meloetta':
-				if (this.random(2) >= 1) continue;
-				break;
-			case 'Pikachu':
-				// Pikachu is not a viable NFE Pokemon
-				continue;
-			}
-
-			// Limit 2 of any type
-			let types = template.types;
-			let skip = false;
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
-					skip = true;
-					break;
-				}
-			}
-			if (skip) continue;
-
-			if (potd && potd.exists) {
-				// The Pokemon of the Day belongs in slot 3
-				if (pokemon.length === 2) {
-					template = potd;
-				} else if (template.species === potd.species) {
-					continue; // No, thanks, I've already got one
-				}
-			}
-
-			let set = this.randomDoublesSet(template, pokemon.length, teamDetails);
-
-			// Illusion shouldn't be on the last pokemon of the team
-			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
-
-			// Limit 1 of any type combination
-			let typeCombo = types.slice().sort().join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
-				// Drought and Drizzle don't count towards the type combo limit
-				typeCombo = set.ability;
-			}
-			if (typeCombo in typeComboCount) continue;
-
-			// Limit the number of Megas to one
-			let forme = template.otherFormes && this.getTemplate(template.otherFormes[0]);
-			let isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.includes(toId(forme.requiredMove)));
-			if (isMegaSet && teamDetails.megaCount > 0) continue;
-
-			// Okay, the set passes, add it to our team
-			pokemon.push(set);
-
-			// Now that our Pokemon has passed all checks, we can increment our counters
-			// Increment type counters
-			for (let t = 0; t < types.length; t++) {
-				if (types[t] in typeCount) {
-					typeCount[types[t]]++;
-				} else {
-					typeCount[types[t]] = 1;
-				}
-			}
-			typeComboCount[typeCombo] = 1;
-
-			// Increment mega, stealthrock, weather, and base species counters
-			if (isMegaSet) teamDetails.megaCount++;
-			if (set.ability === 'Snow Warning') teamDetails['hail'] = 1;
-			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails['rain'] = 1;
-			if (set.moves.includes('stealthrock')) teamDetails.stealthRock++;
-			if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails.hazardClear++;
-			baseFormes[template.baseSpecies] = 1;
-		}
-		return pokemon;
-	},
 	randomDoublesSet: function (template, slot, teamDetails) {
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -2433,7 +2296,7 @@ exports.BattleScripts = {
 			template = this.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../crashlogger.js')(err, 'The doubles randbat set generator');
+			require('../crashlogger')(err, 'The doubles randbat set generator');
 		}
 
 		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};

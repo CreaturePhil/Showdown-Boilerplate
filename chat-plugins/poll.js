@@ -188,14 +188,18 @@ exports.commands = {
 			if (target.length > 1024) return this.errorReply("Poll too long.");
 
 			const supportHTML = cmd === 'htmlcreate';
-			const separator = target.match(/[\n\|,]/);
-			if (!separator) return this.errorReply("Not enough arguments for /poll new.");
-			if (separator[0] !== '\n') {
-				if (/\n\//.test(target)) return this.errorReply("/poll " + cmd + " is a multiline command now. Please send queued commands separately instead.");
-				target = target.replace(/[\r\n]+/g, '');
+			let separator = '';
+			if (target.includes('\n')) {
+				separator = '\n';
+			} else if (target.includes('|')) {
+				separator = '|';
+			} else if (target.includes(',')) {
+				separator = ',';
+			} else {
+				return this.errorReply("Not enough arguments for /poll new.");
 			}
 
-			let params = target.split(separator[0]).map(param => param.trim());
+			let params = target.split(separator).map(param => param.trim());
 
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;
@@ -312,6 +316,7 @@ exports.commands = {
 	pollhelp: ["/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.",
 				"Accepts the following commands:",
 				"/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~",
+				"/poll htmlcreate [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~",
 				"/poll vote [number] - Votes for option [number].",
 				"/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ * # & ~",
 				"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",

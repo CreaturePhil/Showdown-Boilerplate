@@ -61,13 +61,13 @@ exports.multiLinePattern = {
  * Load command files
  *********************************************************/
 
-let baseCommands = exports.baseCommands = require('./commands.js').commands;
+let baseCommands = exports.baseCommands = require('./commands').commands;
 let commands = exports.commands = Object.assign({}, baseCommands);
 
 // Install plug-in commands
 
 // info always goes first so other plugins can shadow it
-Object.assign(commands, require('./chat-plugins/info.js').commands);
+Object.assign(commands, require('./chat-plugins/info').commands);
 
 for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
 	if (file.substr(-3) !== '.js' || file === 'info.js') continue;
@@ -211,11 +211,6 @@ class CommandContext {
 	}
 	canBroadcast(suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
-			if (this.user.broadcasting) {
-				this.errorReply("You can't broadcast another command too soon.");
-				return false;
-			}
-
 			let message = this.canTalk(suppressMessage || this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
@@ -235,7 +230,6 @@ class CommandContext {
 
 			this.message = message;
 			this.broadcastMessage = broadcastMessage;
-			this.user.broadcasting = this.cmd;
 		}
 		return true;
 	}
@@ -255,7 +249,6 @@ class CommandContext {
 		this.room.lastBroadcastTime = Date.now();
 
 		this.broadcasting = true;
-		this.user.broadcasting = false;
 
 		return true;
 	}
@@ -284,7 +277,7 @@ class CommandContext {
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
 		} catch (err) {
-			if (require('./crashlogger.js')(err, 'A chat command', {
+			if (require('./crashlogger')(err, 'A chat command', {
 				user: this.user.name,
 				room: this.room.id,
 				message: this.message,
@@ -304,6 +297,11 @@ class CommandContext {
 		let user = this.user;
 		let connection = this.connection;
 
+		if (room && room.id === 'global') {
+			// should never happen
+			console.log(`Command tried to write to global: ${user.name}: ${message}`);
+			return false;
+		}
 		if (!user.named) {
 			connection.popup("You must choose a name before you can talk.");
 			return false;
@@ -550,32 +548,32 @@ exports.CommandContext = CommandContext;
  * Usage:
  *   CommandParser.parse(message, room, user, connection)
  *
- * message - the message the user is trying to say
- * room - the room the user is trying to say it in
- * user - the user that sent the message
- * connection - the connection the user sent the message from
- *
- * Returns the message the user should say, or a falsy value which
- * means "don't say anything"
+ * Parses the message. If it's a command, the commnad is executed, if
+ * not, it's displayed directly in the room.
  *
  * Examples:
  *   CommandParser.parse("/join lobby", room, user, connection)
- *     will make the user join the lobby, and return false.
+ *     will make the user join the lobby.
  *
  *   CommandParser.parse("Hi, guys!", room, user, connection)
  *     will return "Hi, guys!" if the user isn't muted, or
- *     if he's muted, will warn him that he's muted, and
- *     return false.
+ *     if he's muted, will warn him that he's muted.
+ *
+ * The return value is the return value of the command handler, if any,
+ * or the message, if there wasn't a command. This value could be a success
+ * or failure (few commands report these) or a Promise for when the command
+ * is done executing, if it's not currently done.
+ *
+ * @param {string} message - the message the user is trying to say
+ * @param {Room} room - the room the user is trying to say it in
+ * @param {User} user - the user that sent the message
+ * @param {Connection} connection - the connection the user sent the message from
  */
-let parse = exports.parse = function (message, room, user, connection, levelsDeep) {
+let parse = exports.parse = function (message, room, user, connection, levelsDeep = 0) {
 	let cmd = '', target = '', cmdToken = '';
 	if (!message || !message.trim().length) return;
-	if (!levelsDeep) {
-		levelsDeep = 0;
-	} else {
-		if (levelsDeep > MAX_PARSE_RECURSION) {
-			return connection.sendTo(room, "Error: Too much recursion");
-		}
+	if (levelsDeep > MAX_PARSE_RECURSION) {
+		return connection.sendTo(room, "Error: Too much command recursion");
 	}
 
 	if (message.slice(0, 3) === '>> ') {
@@ -642,7 +640,7 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 	});
 
 	if (commandHandler) {
-		return context.run(commandHandler);
+		message = context.run(commandHandler);
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
 		for (let g in Config.groups) {
@@ -675,13 +673,21 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 				message = message.charAt(0) + message;
 			}
 		}
-	}
 
-	message = context.canTalk(message);
+		message = context.canTalk(message);
+	}
 
 	if (parseEmoticons(message, room, user)) return;
 
-	return message || false;
+	// Output the message to the room
+
+	if (message && message !== true && typeof message.then !== 'function') {
+		room.add('|c|' + user.getIdentity(room.id) + '|' + message);
+	}
+
+	room.update();
+
+	return message;
 };
 
 exports.package = {};

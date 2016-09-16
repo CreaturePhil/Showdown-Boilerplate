@@ -8,6 +8,12 @@
 
 let banned = Object.create(null);
 
+function checkPlural(variable, plural, singular) {
+	if (!plural) plural = 's';
+	if (!singular) singular = '';
+	return ((variable.length || variable) > 1 ? plural : singular);
+}
+
 class Giveaway {
 	constructor(host, giver, room, prize) {
 		if (room.gaNumber) {
@@ -27,15 +33,17 @@ class Giveaway {
 		Object.assign(this.excluded, banned);
 
 		this.joined = {};
+
+		this.sprite = Giveaway.getSprite(prize);
 	}
 
 	send(content) {
-		this.room.add('|uhtml|giveaway' + this.room.gaNumber + this.phase + '|<div class="broadcast-blue">' + content + '</div>');
+		this.room.add(`|uhtml|giveaway${this.room.gaNumber}${this.phase}|<div class="broadcast-blue">${content}</div>`);
 		this.room.update();
 	}
 
 	changeUhtml(content) {
-		this.room.add('|uhtmlchange|giveaway' + this.room.gaNumber + this.phase + '|<div class="broadcast-blue">' + content + '</div>');
+		this.room.add(`|uhtmlchange|giveaway${this.room.gaNumber}${this.phase}|<div class="broadcast-blue">${content}</div>`);
 		this.room.update();
 	}
 
@@ -58,7 +66,7 @@ class Giveaway {
 		for (let ip in this.joined) {
 			if (user.latestIp === ip || this.joined[ip] in user.prevNames) {
 				this.excluded[ip] = this.joined[ip];
-				if (this.generateReminder) user.sendTo(this.room, '|uhtmlchange|giveaway' + this.room.gaNumber + this.phase + '|<div class="broadcast-blue">' + this.generateReminder() + '</div>');
+				if (this.generateReminder) user.sendTo(this.room, `|uhtmlchange|giveaway${this.room.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder()}</div>`);
 				delete this.joined[ip];
 			}
 		}
@@ -79,6 +87,64 @@ class Giveaway {
 		}
 		return false;
 	}
+
+	static getSprite(text) {
+		text = text.toLowerCase();
+		let mons = new Map();
+		let output = '';
+		for (let i in Tools.data.Pokedex) {
+			let regexp = new RegExp(`\\b${i}\\b`);
+			if (regexp.test(text)) {
+				let mon = Tools.getTemplate(i);
+				mons.set(mon.baseSpecies, mon);
+			}
+		}
+		// the previous regex doesn't match "nidoran-m" or "nidoran male"
+		if (/\bnidoran\W{0,1}m(ale){0,1}\b/.test(text)) {
+			mons.set('nidoranm', Tools.getTemplate('nidoranm'));
+		}
+		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
+			mons.set('nidoranf', Tools.getTemplate('nidoranf'));
+		}
+		text = toId(text);
+		if (mons.size) {
+			mons.forEach(function (value, key) {
+				let spriteid = value.spriteid;
+				if (value.otherForms) {
+					for (let i = 0; i < value.otherForms.length; i++) {
+						if (text.includes(value.otherForms[i])) {
+							spriteid += '-' + value.otherForms[i].substr(key.length);
+							break; // We don't want to end up with deerling-summer-spring
+						}
+					}
+				}
+				if (value.otherFormes) {
+					for (let i = 0; i < value.otherFormes.length; i++) {
+						if (text.includes(value.otherFormes[i])) {
+							spriteid += '-' + value.otherFormes[i].substr(key.length);
+							break; // We don't want to end up with landorus-therian-therian
+						}
+					}
+				}
+				if (mons.size > 1) {
+					let top = Math.floor(value.num / 12) * 30;
+					let left = (value.num % 12) * 40;
+					output += `<div style="display:inline-block;width:40px;height:30px;background:transparent url('/sprites/xyicons-sheet.png?a1') no-repeat scroll -${left}px -${top}px'"></div>`;
+				} else {
+					let shiny = (text.includes("shiny") && !text.includes("shinystone") ? '-shiny' : '');
+					output += `<img src="/sprites/xyani${shiny}/${spriteid}.gif">`;
+				}
+			});
+		}
+		return output;
+	}
+
+	generateWindow(rightSide) {
+		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">It's giveaway time!</p>` +
+			`<p style="text-align:center;font-size:7pt;">Giveaway started by ${Tools.escapeHTML(this.host.name)}</p>` +
+			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${Tools.escapeHTML(this.prize)}</td>` +
+			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> Please do not join if you don't have a 3DS and a copy of Pok&eacute;mon XY or ORAS.</p>`;
+	}
 }
 
 class QuestionGiveaway extends Giveaway {
@@ -90,20 +156,17 @@ class QuestionGiveaway extends Giveaway {
 		this.answers = QuestionGiveaway.sanitizeAnswers(answers);
 		this.answered = {}; // userid: number of guesses
 
-		this.send('<p style="text-align:center;font-size:14pt;font-weight:bold;">It\'s giveaway time!</p>' +
-			'<p style="text-align:center;font-size:7pt;">Question Giveaway started by ' + Tools.escapeHTML(host.name) + '</p>' +
-			'<p style="text-align:center;"><b>' + Tools.escapeHTML(giver.name) + '</b> will be giving away a <b>' + Tools.escapeHTML(this.prize) + '!</b><br/>' +
-			'The question will be displayed in one minute! Use /ga to answer.</p>');
+		this.send(this.generateWindow('The question will be displayed in one minute! Use /ga to answer.'));
 
 		this.timer = setTimeout(() => this.start(), 1000 * 60);
 	}
 
 	generateQuestion() {
-		return '<p style="text-align:center;font-size:13pt;">Giveaway Question: <b>' + this.question + '</b></p><p style="text-align:center;">use /ga to guess.</p>';
+		return this.generateWindow(`<p style="text-align:center;font-size:13pt;">Giveaway Question: <b>${this.question}</b></p><p style="text-align:center;">use /ga to guess.</p>`);
 	}
 
 	start() {
-		this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway has started! Scroll down to see the question.</p>');
+		this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has started! Scroll down to see the question.</p>');
 		this.phase = 'started';
 		this.send(this.generateQuestion());
 		this.timer = setTimeout(() => this.end(), 1000 * 60 * 5);
@@ -129,9 +192,9 @@ class QuestionGiveaway extends Giveaway {
 		this.joined[user.latestIp] = user.userid;
 		this.answered[user.userid]++;
 		if (this.answered[user.userid] >= 3) {
-			user.sendTo(this.room, "Your guess '" + guess + "' is wrong. You have used up all of your guesses. Better luck next time!");
+			user.sendTo(this.room, `Your guess '${guess}' is wrong. You have used up all of your guesses. Better luck next time!`);
 		} else {
-			user.sendTo(this.room, "Your guess '" + guess + "' is wrong. Try again!");
+			user.sendTo(this.room, `Your guess '${guess}' is wrong. Try again!`);
 		}
 	}
 
@@ -140,31 +203,32 @@ class QuestionGiveaway extends Giveaway {
 		if (this.phase !== 'pending') return user.sendTo(this.room, "You cannot change the question or answer once the giveaway has started.");
 		if (key === 'question') {
 			this.question = value;
-			return user.sendTo(this.room, "The question has been changed to " + value + ".");
+			return user.sendTo(this.room, `The question has been changed to ${value}.`);
 		}
 		let ans = QuestionGiveaway.sanitizeAnswers(value);
 		if (!ans.length) return user.sendTo(this.room, "You must specify at least one answer and it must not contain any special characters.");
 		this.answers = ans;
-		user.sendTo(this.room, "The answer" + (ans.length > 1 ? "s have" : " has") + " been changed to " + ans.join(', ') + ".");
+		user.sendTo(this.room, `The answer${checkPlural(ans, "s have", "has")} been changed to ${ans.join(', ')}.`);
 	}
 
 	end(force) {
 		if (force) {
 			this.clearTimer();
-			this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
 			if (!this.winner) {
-				this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+				this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 				this.room.send("The giveaway has been forcibly ended as no one has answered the question.");
 			} else {
+				this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the answer.</p>');
 				this.phase = 'ended';
 				this.clearTimer();
-				this.room.modlog(this.winner.name + ' won ' + this.giver.name + '\'s giveaway for a "' + this.prize + '"');
-				this.send('<p style="text-align:center;font-size:14pt;font-weight:bold;"><b>' + Tools.escapeHTML(this.winner.name) + '</b> won ' + Tools.escapeHTML(this.giver.name) + '\'s giveaway for a <b>' + Tools.escapeHTML(this.prize) + '</b>! Congratulations!</p>' +
-				'<p style="text-align:center;">Correct answer(s): ' + this.answers.join(', ') + '</p>');
-				if (this.winner.connected) this.winner.popup('You have won the giveaway. PM **' + Tools.escapeHTML(this.giver.name) + '** to claim your prize!');
-				if (this.giver.connected) this.giver.popup(Tools.escapeHTML(this.winner.name) + " has won your question giveaway!");
+				this.room.modlog(`${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}"`);
+				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>${Tools.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
+				`<p style="text-align:center;">${this.question}<br/>Correct answer${checkPlural(this.answers)}: ${this.answers.join(', ')}</p>`));
+				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Tools.escapeHTML(this.giver.name)}** to claim your prize!`);
+				if (this.giver.connected) this.giver.popup(`${Tools.escapeHTML(this.winner.name)} has won your question giveaway!`);
 			}
 		}
 
@@ -196,12 +260,9 @@ class LotteryGiveaway extends Giveaway {
 	}
 
 	generateReminder(joined) {
-		return '<p style="text-align:center;font-size:14pt;font-weight:bold;">It\'s giveaway time!</p>' +
-			'<p style="text-align:center;font-size:7pt;">Lottery Giveaway started by ' + Tools.escapeHTML(this.host.name) + '</p>' +
-			'<p style="text-align:center;"><b>' + Tools.escapeHTML(this.giver.name) + '</b> will be giving away: <b>' + Tools.escapeHTML(this.prize) + '!</b><br/>' +
-			'The lottery drawing will occur in 2 minutes, and with ' + this.maxwinners + ' winner' + (this.maxwinners > 1 ? 's' : '') + '!<br/>' +
-			(joined ? '<button name="send" value="/giveaway leavelottery"><font size="1"><b>Leave</b></font></button><br/>' : '<button name="send" value="/giveaway joinlottery"><font size="1"><b>Join</b></font></button>') + '</p>' +
-			'<p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pok&eacute;mon XY or ORAS.</p>';
+		let cmd = (joined ? 'Leave' : 'Join');
+		let button = `<button style="margin:4px;" name="send" value="/giveaway ${toId(cmd)}lottery"><font size=1><b>${cmd}</b></font></button>`;
+		return this.generateWindow(`The lottery drawing will occur in 2 minutes, and with ${this.maxwinners} winner${checkPlural(this.maxwinners)}!<br/>${button}</p>`);
 	}
 
 	display() {
@@ -211,9 +272,9 @@ class LotteryGiveaway extends Giveaway {
 		for (let i in this.room.users) {
 			let thisUser = this.room.users[i];
 			if (this.checkJoined(thisUser)) {
-				thisUser.sendTo(this.room, '|uhtmlchange|giveaway' + this.room.gaNumber + this.phase + '|<div class="broadcast-blue">' + joined + '</div>');
+				thisUser.sendTo(this.room, `|uhtmlchange|giveaway${this.room.gaNumber}${this.phase}|<div class="broadcast-blue">${joined}</div>`);
 			} else {
-				thisUser.sendTo(this.room, '|uhtmlchange|giveaway' + this.room.gaNumber + this.phase + '|<div class="broadcast-blue">' + notJoined + '</div>');
+				thisUser.sendTo(this.room, `|uhtmlchange|giveaway${this.room.gaNumber}${this.phase}|<div class="broadcast-blue">${notJoined}</div>`);
 			}
 		}
 	}
@@ -226,7 +287,7 @@ class LotteryGiveaway extends Giveaway {
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
 		this.joined[user.latestIp] = user.userid;
-		user.sendTo(this.room, '|uhtmlchange|giveaway' + this.room.gaNumber + this.phase + '|<div class="broadcast-blue">' + this.generateReminder(true) + '</div>');
+		user.sendTo(this.room, `|uhtmlchange|giveaway${this.room.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(true)}</div>`);
 		user.sendTo(this.room, "You have successfully joined the lottery giveaway.");
 	}
 
@@ -238,16 +299,16 @@ class LotteryGiveaway extends Giveaway {
 				delete this.joined[ip];
 			}
 		}
-		user.sendTo(this.room, '|uhtmlchange|giveaway' + this.room.gaNumber + this.phase + '|<div class="broadcast-blue">' + this.generateReminder(false) + '</div>');
+		user.sendTo(this.room, `|uhtmlchange|giveaway${this.room.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(false)}</div>`);
 		user.sendTo(this.room, "You have left the lottery giveaway.");
 	}
 
 	drawLottery() {
 		this.clearTimer();
-		this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway has ended. Scroll down for results.</p>');
 
 		let userlist = Object.values(this.joined);
 		if (userlist.length < this.maxwinners) {
+			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			delete this.room.giveaway;
 			return this.room.send("The giveaway has been forcibly ended as there are not enough participants.");
 		}
@@ -264,18 +325,18 @@ class LotteryGiveaway extends Giveaway {
 	end(force) {
 		if (force) {
 			this.clearTimer();
-			this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
+			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${checkPlural(this.winners)}.</p>`);
 			this.phase = 'ended';
-			let winnerNames = this.winners.reduce((prev, cur, index, array) => prev + cur.name + (index === array.length - 1 ? "" : ', '), '');
-			this.room.modlog(winnerNames + ' won ' + this.giver.name + '\'s giveaway for "' + this.prize + '"');
-			this.send('<p style="text-align:center;font-size:12pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">' + Object.keys(this.joined).length + " users joined " + Tools.escapeHTML(this.giver.name) + "'s giveaway for: <b>" + Tools.escapeHTML(this.prize) + "</b><br/>" +
-				"Our lucky winner" + (this.winners.length > 1 ? "s" : "") + ": <b>" + Tools.escapeHTML(winnerNames) + "!</b> Congratulations!</p>");
+			let winnerNames = this.winners.map(winner => winner.name).join(', ');
+			this.room.modlog(`${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}"`);
+			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br/>Our lucky winner${checkPlural(this.winners)}: <b>${Tools.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
 			for (let i = 0; i < this.winners.length; i++) {
-				if (this.winners[i].connected) this.winners[i].popup("You have won the lottery giveaway! PM **" + this.giver.name + "** to claim your prize!");
+				if (this.winners[i].connected) this.winners[i].popup(`You have won the lottery giveaway! PM **${this.giver.name}** to claim your prize!`);
 			}
-			if (this.giver.connected) this.giver.popup("The following users have won your lottery giveaway:\n" + Tools.escapeHTML(this.winners.reduce((prev, cur, index, array) => prev + cur.name + (index === array.length - 1 ? "" : ', '), '')));
+			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${Tools.escapeHTML(winnerNames)}`);
 		}
 		delete this.room.giveaway;
 	}
@@ -292,13 +353,13 @@ let commands = {
 		let params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 		if (params.length < 4) return this.errorReply("Invalid arguments specified - /question giver, prize, question, answer(s)");
 		let targetUser = Users(params[0]);
-		if (!targetUser || !targetUser.connected) return this.errorReply("User '" + params[0] + "' is not online.");
+		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${params[0]}' is not online.`);
 		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
-		if (!targetUser.autoconfirmed) return this.errorReply("User '" + targetUser.name + "' needs to be autoconfirmed to give something away.");
+		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
 
 		room.giveaway = new QuestionGiveaway(user, targetUser, room, params[1], params[2], params.slice(3).join(','));
 
-		this.privateModCommand("(" + user.name + " started a question giveaway for " + targetUser.name + ")");
+		this.privateModCommand(`(${user.name} started a question giveaway for ${targetUser.name})`);
 	},
 	changeanswer: 'changequestion',
 	changequestion: function (target, room, user, conn, cmd) {
@@ -318,8 +379,8 @@ let commands = {
 		if (giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
 		if (user.userid !== giveaway.host.userid && user.userid !== giveaway.giver.userid) return;
 
-		this.sendReply("The giveaway question is " + giveaway.question + ".\n" +
-			"The " + ((giveaway.answers.length === 1) ? 'answer is ' : 'answers are ') + giveaway.answers.join(', ') + ".");
+		this.sendReply(`The giveaway question is ${giveaway.question}.\n` +
+			`The answer${checkPlural(giveaway.answers, 's are', ' is')} ${giveaway.answers.join(', ')}.`);
 	},
 	guessanswer: 'guess',
 	guess: function (target, room, user) {
@@ -340,9 +401,9 @@ let commands = {
 		let params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 		if (params.length < 2) return this.errorReply("Invalid arguments specified - /lottery giver, prize [, maxwinners]");
 		let targetUser = Users(params[0]);
-		if (!targetUser || !targetUser.connected) return this.errorReply("User '" + params[0] + "' is not online.");
+		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${params[0]}' is not online.`);
 		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
-		if (!targetUser.autoconfirmed) return this.errorReply("User '" + targetUser.name + "' needs to be autoconfirmed to give something away.");
+		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
 
 		let numWinners = 1;
 		if (params.length > 2) {
@@ -352,7 +413,7 @@ let commands = {
 
 		room.giveaway = new LotteryGiveaway(user, targetUser, room, params[1], numWinners);
 
-		this.privateModCommand("(" + user.name + " started a lottery giveaway for " + targetUser.name + ")");
+		this.privateModCommand(`(${user.name} started a lottery giveaway for ${targetUser.name})`);
 	},
 	leavelotto: 'join',
 	leavelottery: 'join',
@@ -387,14 +448,15 @@ let commands = {
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' not found.");
+		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
 		if (target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		if (targetUser.latestIp in banned || Object.values(banned).indexOf(toId(targetUser)) > -1) return this.errorReply("User '" + this.targetUsername + "' is already banned from entering giveaways.");
+		if (targetUser.latestIp in banned || Object.values(banned).indexOf(toId(targetUser)) > -1) return this.errorReply(`User '${this.targetUsername}' is already banned from entering giveaways.`);
 		banned[targetUser.latestIp] = toId(targetUser);
 		if (room.giveaway) room.giveaway.banUser(targetUser);
-		this.addModCommand("" + targetUser.name + " was banned from entering giveaways by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		if (target) target = ` (${target})`;
+		this.addModCommand(`${targetUser.name} was banned from entering giveaways by ${user.name}.${target}`);
 	},
 	unban: function (target, room, user) {
 		if (!target) return false;
@@ -403,9 +465,9 @@ let commands = {
 
 		this.splitTarget(target);
 		let targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' not found.");
+		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
 		if (!(targetUser.latestIp in banned)) {
-			if (Object.values(banned).indexOf(toId(targetUser)) < 0) return this.errorReply("User '" + this.targetUsername + "' isn't banned from entering giveaways.");
+			if (Object.values(banned).indexOf(toId(targetUser)) < 0) return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
 
 			for (let ip in banned) {
 				if (banned[ip] === toId(targetUser)) delete banned[ip];
@@ -413,7 +475,7 @@ let commands = {
 		}
 		delete banned[targetUser.latestIp];
 		if (room.giveaway) room.giveaway.unbanUser(targetUser);
-		this.addModCommand("" + targetUser.name + " was unbanned from entering giveaways by " + user.name + ".");
+		this.addModCommand(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
 	},
 	stop: 'end',
 	end: function (target, room, user) {
@@ -425,7 +487,8 @@ let commands = {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
 		room.giveaway.end(true);
-		this.privateModCommand("(The giveaway was forcibly ended by " + user.name + (target ? ": " + target : "") + ")");
+		if (target) target = `: ${target}`;
+		this.privateModCommand(`(The giveaway was forcibly ended by ${user.name}${target})`);
 	},
 	rm: 'remind',
 	remind: function (target, room, user) {

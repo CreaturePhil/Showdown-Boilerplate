@@ -24,6 +24,10 @@ let Rooms = module.exports = getRoom;
 Rooms.rooms = new Map();
 Rooms.aliases = new Map();
 
+/*********************************************************
+ * the Room object.
+ *********************************************************/
+
 let Room = (() => {
 	function Room(roomid, title) {
 		this.id = roomid;
@@ -34,8 +38,6 @@ let Room = (() => {
 
 		this.log = [];
 
-		this.bannedUsers = Object.create(null);
-		this.bannedIps = Object.create(null);
 		this.muteQueue = [];
 		this.muteTimer = null;
 	}
@@ -94,97 +96,11 @@ let Room = (() => {
 		log.unshift('|:|' + (~~(Date.now() / 1000)));
 		return log;
 	};
-	Room.prototype.chat = function (user, message, connection) {
-		// Battle actions are actually just text commands that are handled in
-		// parseCommand(), which in turn often calls Simulator.prototype.sendFor().
-		// Sometimes the call to sendFor is done indirectly, by calling
-		// room.decision(), where room.constructor === BattleRoom.
-
-		message = CommandParser.parse(message, this, user, connection);
-
-		if (message && message !== true && typeof message.then !== 'function') {
-			this.add('|c|' + user.getIdentity(this.id) + '|' + message);
-		}
-		this.update();
-	};
 
 	Room.prototype.toString = function () {
 		return this.id;
 	};
 
-	// roomban handling
-	Room.prototype.isRoomBanned = function (user) {
-		if (!user) return;
-		if (this.bannedUsers) {
-			if (user.userid in this.bannedUsers) {
-				return this.bannedUsers[user.userid];
-			}
-			if (user.autoconfirmed in this.bannedUsers) {
-				return this.bannedUsers[user.autoconfirmed];
-			}
-		}
-		if (this.bannedIps) {
-			for (let ip in user.ips) {
-				if (ip in this.bannedIps) return this.bannedIps[ip];
-			}
-		}
-	};
-	Room.prototype.roomBan = function (user, noRecurse, userid) {
-		if (!userid) userid = user.userid;
-		let alts;
-		if (!noRecurse) {
-			alts = [];
-			Users.users.forEach(otherUser => {
-				if (otherUser === user) return;
-				for (let myIp in user.ips) {
-					if (myIp in otherUser.ips) {
-						alts.push(otherUser.name);
-						this.roomBan(otherUser, true, userid);
-						return;
-					}
-				}
-			});
-		}
-		this.bannedUsers[userid] = userid;
-		if (user.autoconfirmed) this.bannedUsers[user.autoconfirmed] = userid;
-		if (this.game && this.game.removeBannedUser) {
-			this.game.removeBannedUser(user);
-		}
-		for (let ip in user.ips) {
-			this.bannedIps[ip] = userid;
-		}
-		if (!user.can('bypassall')) user.leaveRoom(this.id);
-		return alts;
-	};
-	Room.prototype.unRoomBan = function (userid, noRecurse) {
-		userid = toId(userid);
-		let successUserid = false;
-		for (let i in this.bannedUsers) {
-			let entry = this.bannedUsers[i];
-			if (i === userid || entry === userid) {
-				delete this.bannedUsers[i];
-				successUserid = entry;
-				if (!noRecurse && entry !== userid) {
-					this.unRoomBan(entry, true);
-				}
-			}
-		}
-		for (let i in this.bannedIps) {
-			if (this.bannedIps[i] === userid) {
-				delete this.bannedIps[i];
-				successUserid = userid;
-			}
-		}
-		return successUserid;
-	};
-	Room.prototype.checkBanned = function (user) {
-		let userid = this.isRoomBanned(user);
-		if (userid) {
-			this.roomBan(user, true, userid);
-			return false;
-		}
-		return true;
-	};
 	//mute handling
 	Room.prototype.runMuteTimer = function (forceReschedule) {
 		if (forceReschedule && this.muteTimer) {
@@ -586,7 +502,7 @@ let GlobalRoom = (() => {
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2, formatid) {
 		// This should never happen.
-		if (!user1 || !user2) return void require('./crashlogger.js')(new Error("Matched user " + (user1 ? search2.userid : search1.userid) + " not found"), "The main process");
+		if (!user1 || !user2) return void require('./crashlogger')(new Error("Matched user " + (user1 ? search2.userid : search1.userid) + " not found"), "The main process");
 
 		// users must be different
 		if (user1 === user2) return false;
@@ -853,13 +769,6 @@ let GlobalRoom = (() => {
 			this.ladderIpLog.write(p2.userid + ': ' + p2.latestIp + '\n');
 		}
 		return newRoom;
-	};
-	GlobalRoom.prototype.chat = function (user, message, connection) {
-		if (Rooms.lobby) return Rooms.lobby.chat(user, message, connection);
-		message = CommandParser.parse(message, this, user, connection);
-		if (message && message !== true) {
-			connection.popup("You can't send messages directly to the server.");
-		}
 	};
 	GlobalRoom.prototype.modlog = function (text) {
 		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + text + '\n');
@@ -1581,14 +1490,11 @@ let ChatRoom = (() => {
 		this.users[user.userid] = user;
 		if (joining) {
 			this.reportJoin('j', user.getIdentity(this.id));
-			if (this.staffMessage && user.can('mute', null, this)) this.sendUser(user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage + '</div></div>');
+			if (this.staffMessage && user.can('mute', null, this)) this.sendUser(user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage.replace(/\n/g, '') + '</div></div>');
 		} else if (!user.named) {
 			this.reportJoin('l', oldid);
 		} else {
 			this.reportJoin('n', user.getIdentity(this.id) + '|' + oldid);
-		}
-		if (!this.checkBanned(user, oldid)) {
-			return;
 		}
 		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
 		return user;
@@ -1699,8 +1605,8 @@ Rooms.GlobalRoom = GlobalRoom;
 Rooms.BattleRoom = BattleRoom;
 Rooms.ChatRoom = ChatRoom;
 
-Rooms.RoomGame = require('./room-game.js').RoomGame;
-Rooms.RoomGamePlayer = require('./room-game.js').RoomGamePlayer;
+Rooms.RoomGame = require('./room-game').RoomGame;
+Rooms.RoomGamePlayer = require('./room-game').RoomGamePlayer;
 
 // initialize
 
