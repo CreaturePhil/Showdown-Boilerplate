@@ -686,8 +686,6 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 	}
 
 	room.update();
-
-	return message;
 };
 
 exports.package = {};
