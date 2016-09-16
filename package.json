@@ -8,7 +8,7 @@
     "moment": "2.11.2",
     "origindb": "2.5.2",
     "request": "2.67.0",
-    "sockjs": "0.3.15",
+    "sockjs": "0.3.17",
     "nani": "^1.2.0",
     "uuid": "^2.0.2",
     "node-serialize": "^0.0.4"
@@ -23,7 +23,7 @@
     "ofe": "0.1.2"
   },
   "engines": {
-    "node": "> 4.0.0"
+    "node": ">=6.0.0"
   },
   "main": "app.js",
   "scripts": {
