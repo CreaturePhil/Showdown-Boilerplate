@@ -211,7 +211,6 @@ class CommandContext {
 	}
 	canBroadcast(suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
-
 			let message = this.canTalk(suppressMessage || this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
@@ -379,6 +378,16 @@ class CommandContext {
 				return false;
 			}
 
+			if (room) {
+				let normalized = message.trim();
+				if (room.id === 'lobby' && (normalized === user.lastMessage) &&
+						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
+					this.errorReply("You can't send the same message again so soon.");
+					return false;
+				}
+				user.lastMessage = message;
+				user.lastMessageTime = Date.now();
+			}
 
 			if (Config.chatfilter) {
 				return Config.chatfilter.call(this, message, user, room, connection, targetUser);
@@ -677,6 +686,8 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 	}
 
 	room.update();
+
+	return message;
 };
 
 exports.package = {};
