@@ -566,7 +566,7 @@ exports.Formats = [
                                 this.add('c|@Quiet Chimchar|Introducing the best starter ever!!');
                         }
                         if (name === 'alphapaul71') {
-                                this.add('c|~alphaPaul☯71|!htmlbox');
+                                this.add('c|~Alpha Paul☯71|!htmlbox');
                                 this.add('raw|<button name="parseCommand" value="/user alphapaul71">My Owner!</button>');
                         }
                         if (name === 'zmeeed') {
