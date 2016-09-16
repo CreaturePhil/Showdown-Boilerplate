@@ -63,7 +63,6 @@
 		"no-octal-escape": "error",
 		"no-param-reassign": "off",
 		"no-proto": "error",
-		"no-prototype-builtins": "error",
 		"no-return-assign": ["error", "except-parens"],
 		"no-self-compare": "error",
 		"no-sequences": "error",
@@ -166,7 +165,7 @@
 		"prefer-arrow-callback": "off",
 		"rest-spread-spacing": ["error", "never"],
 		"template-curly-spacing": ["error", "never"],
-		"no-restricted-syntax": ["error", "TaggedTemplateExpression", "ObjectPattern", "ArrayPattern"],
+		"no-restricted-syntax": ["error", "WithStatement"],
 
 		"validate-conditionals": "error",
 	}

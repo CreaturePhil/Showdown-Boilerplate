@@ -39,17 +39,17 @@ module.exports = (() => {
 
 	let dataTypes = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
 	let dataFiles = {
-		'Pokedex': 'pokedex.js',
-		'Movedex': 'moves.js',
-		'Statuses': 'statuses.js',
-		'TypeChart': 'typechart.js',
-		'Scripts': 'scripts.js',
-		'Items': 'items.js',
-		'Abilities': 'abilities.js',
-		'Formats': 'rulesets.js',
-		'FormatsData': 'formats-data.js',
-		'Learnsets': 'learnsets.js',
-		'Aliases': 'aliases.js',
+		'Pokedex': 'pokedex',
+		'Movedex': 'moves',
+		'Statuses': 'statuses',
+		'TypeChart': 'typechart',
+		'Scripts': 'scripts',
+		'Items': 'items',
+		'Abilities': 'abilities',
+		'Formats': 'rulesets',
+		'FormatsData': 'formats-data',
+		'Learnsets': 'learnsets',
+		'Aliases': 'aliases',
 	};
 
 	let BattleNatures = dataFiles.Natures = {
@@ -616,15 +616,18 @@ module.exports = (() => {
 					if (subformat.banlist[i].includes('+')) {
 						if (subformat.banlist[i].includes('++')) {
 							complexList = subformat.banlist[i].split('++');
+							let banlist = complexList.join('+');
 							for (let j = 0; j < complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}
+							complexList.unshift(banlist);
 							format.teamBanTable.push(complexList);
 						} else {
 							complexList = subformat.banlist[i].split('+');
 							for (let j = 0; j < complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}
+							complexList.unshift(subformat.banlist[i]);
 							format.setBanTable.push(complexList);
 						}
 					}
@@ -717,6 +720,27 @@ module.exports = (() => {
 	Tools.prototype.escapeHTML = function (str) {
 		if (!str) return '';
 		return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
+	};
+
+	Tools.prototype.html = function (strings) {
+		let buf = strings[0];
+		for (let i = 1; i < arguments.length; i++) {
+			buf += moddedTools.base.escapeHTML(arguments[i]);
+			buf += strings[i];
+		}
+		return buf;
+	};
+	Tools.prototype.plural = function (num, plural, singular) {
+		if (!plural) plural = 's';
+		if (!singular) singular = '';
+		if (num && typeof num.length === 'number') {
+			num = num.length;
+		} else if (num && typeof num.size === 'number') {
+			num = num.size;
+		} else {
+			num = Number(num);
+		}
+		return (num !== 1 ? plural : singular);
 	};
 
 	Tools.prototype.toTimeStamp = function (date, options) {
@@ -1137,7 +1161,7 @@ module.exports = (() => {
 		this.data.Aliases = BattleAliases;
 
 		// Load formats
-		let maybeFormats = tryRequire('./config/formats.js');
+		let maybeFormats = tryRequire('./config/formats');
 		if (maybeFormats instanceof Error) {
 			if (maybeFormats.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING FORMATS:\n" + maybeFormats.stack);
 		}
