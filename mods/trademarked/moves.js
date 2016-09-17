@@ -52,6 +52,7 @@ exports.BattleMovedex = {
                         if (pokemon.ability == "copycat") {
                                 noCopycat.batonpass = 1;
                                 noCopycat.partingshot = 1;
+                                noCopycat.fakeout = 1;
                         }
                         if (!this.lastMove || noCopycat[this.lastMove]) {
                                 return false;
