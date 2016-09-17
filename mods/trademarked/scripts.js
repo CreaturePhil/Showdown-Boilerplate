@@ -12,7 +12,20 @@ exports.BattleScripts = {
 					name: move.name,
 					onStart: function (pokemon) {
 						this.add('-activate', pokemon, 'ability: ' + move.name);
-						this.useMove(move.id, pokemon);
+						if(move.id=='partingshot' || move.id=='batonpass')
+						{
+							if(this[pokemon.side.id].lastPshot==this.turn)
+								this.add('-message',"But it failed!");
+							else
+							{
+								this.useMove(move.id, pokemon);
+								this[pokemon.side.id].lastPshot=this.turn;
+							}
+						}
+						else
+						{
+							this.useMove(move.id, pokemon);
+						}
 					},
 				};
 			}
