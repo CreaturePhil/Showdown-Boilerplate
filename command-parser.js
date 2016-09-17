@@ -96,6 +96,8 @@ class CommandContext {
 		this.targetUser = null;
 		this.targetUsername = '';
 		this.inputUsername = '';
+
+		this.pmTarget = options.pmTarget;
 	}
 
 	checkFormat(room, message) {
@@ -142,11 +144,41 @@ class CommandContext {
 		}
 		return true;
 	}
+	pmTransform(message) {
+		let prefix = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity ? this.pmTarget.getIdentity() : ' ' + this.pmTarget}|`;
+		return message.split('\n').map(message => {
+			if (message.startsWith('||')) {
+				return prefix + '/text ' + message.slice(2);
+			} else if (message.startsWith('|html|')) {
+				return prefix + '/raw ' + message.slice(6);
+			} else if (message.startsWith('|raw|')) {
+				return prefix + '/raw ' + message.slice(5);
+			} else if (message.startsWith('|c~|')) {
+				return prefix + message.slice(4);
+			} else if (message.startsWith('|c|~|/')) {
+				return prefix + message.slice(5);
+			}
+			return prefix + '/text ' + message;
+		}).join('\n');
+	}
 	sendReply(data) {
 		if (this.broadcasting) {
-			this.room.add(data);
+			// broadcasting
+			if (this.pmTarget) {
+				data = this.pmTransform(data);
+				this.user.send(data);
+				if (this.pmTarget.send) this.pmTarget.send(data);
+			} else {
+				this.room.add(data);
+			}
 		} else {
-			this.connection.sendTo(this.room, data);
+			// not broadcasting
+			if (this.pmTarget) {
+				data = this.pmTransform(data);
+				this.connection.send(data);
+			} else {
+				this.connection.sendTo(this.room, data);
+			}
 		}
 	}
 	errorReply(message) {
@@ -167,9 +199,21 @@ class CommandContext {
 		this.connection.popup(message);
 	}
 	add(data) {
+		if (this.pmTarget) {
+			data = this.pmTransform(data);
+			this.user.send(data);
+			if (this.pmTarget.send) this.pmTarget.send(data);
+			return;
+		}
 		this.room.add(data);
 	}
 	send(data) {
+		if (this.pmTarget) {
+			data = this.pmTransform(data);
+			this.user.send(data);
+			if (this.pmTarget.send) this.pmTarget.send(data);
+			return;
+		}
 		this.room.send(data);
 	}
 	sendModCommand(data) {
@@ -193,6 +237,7 @@ class CommandContext {
 		Rooms.global.modlog(buf);
 	}
 	logEntry(data) {
+		if (this.pmTarget) return;
 		this.room.logEntry(data);
 	}
 	addModCommand(text, logOnlyText) {
@@ -213,7 +258,7 @@ class CommandContext {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			let message = this.canTalk(suppressMessage || this.message);
 			if (!message) return false;
-			if (!this.user.can('broadcast', null, this.room)) {
+			if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
 				this.errorReply("To see it for yourself, use: /" + this.message.substr(1));
 				return false;
@@ -244,9 +289,15 @@ class CommandContext {
 			if (!this.canBroadcast(suppressMessage)) return false;
 		}
 
-		this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
-		this.room.lastBroadcast = this.broadcastMessage;
-		this.room.lastBroadcastTime = Date.now();
+		if (this.pmTarget) {
+			this.add('|c~|' + (suppressMessage || this.message));
+		} else {
+			this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
+		}
+		if (!this.pmTarget) {
+			this.room.lastBroadcast = this.broadcastMessage;
+			this.room.lastBroadcastTime = Date.now();
+		}
 
 		this.broadcasting = true;
 
@@ -256,7 +307,7 @@ class CommandContext {
 		if (inNamespace && this.cmdToken) {
 			message = this.cmdToken + this.namespaces.concat(message.slice(1)).join(" ");
 		}
-		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.levelsDeep + 1);
+		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.pmTarget, this.levelsDeep + 1);
 	}
 	run(targetCmd, inNamespace) {
 		if (targetCmd === 'constructor') return this.sendReply("Access denied.");
@@ -294,6 +345,10 @@ class CommandContext {
 	}
 	canTalk(message, room, targetUser) {
 		if (room === undefined) room = this.room;
+		if (targetUser === undefined && this.pmTarget) {
+			room = undefined;
+			targetUser = this.pmTarget;
+		}
 		let user = this.user;
 		let connection = this.connection;
 
@@ -568,8 +623,9 @@ exports.CommandContext = CommandContext;
  * @param {Room} room - the room the user is trying to say it in
  * @param {User} user - the user that sent the message
  * @param {Connection} connection - the connection the user sent the message from
+ * @param {User?} pmTarget - the PM the user wants to send the message to
  */
-let parse = exports.parse = function (message, room, user, connection, levelsDeep = 0) {
+let parse = exports.parse = function (message, room, user, connection, pmTarget, levelsDeep = 0) {
 	let cmd = '', target = '', cmdToken = '';
 	if (!message || !message.trim().length) return;
 	if (levelsDeep > MAX_PARSE_RECURSION) {
@@ -610,6 +666,8 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 		if (typeof commandHandler === 'string') {
 			// in case someone messed up, don't loop
 			commandHandler = currentCommands[commandHandler];
+		} else if (Array.isArray(commandHandler)) {
+			return parse(cmdToken + 'help ' + cmd.slice(0, -4), room, user, connection, undefined, levelsDeep + 1);
 		}
 		if (commandHandler && typeof commandHandler === 'object') {
 			namespaces.push(cmd);
@@ -636,7 +694,7 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 
 	let context = new CommandContext({
 		target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
-		namespaces: namespaces, cmdToken: cmdToken, levelsDeep: levelsDeep,
+		namespaces: namespaces, cmdToken: cmdToken, levelsDeep: levelsDeep, pmTarget: pmTarget,
 	});
 
 	if (commandHandler) {
@@ -646,15 +704,15 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 		for (let g in Config.groups) {
 			let groupid = Config.groups[g].id;
 			if (cmd === groupid) {
-				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
+				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
 			} else if (cmd === 'global' + groupid) {
-				return parse('/globalpromote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
+				return parse('/globalpromote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
 			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
-				return parse('/demote ' + toId(target), room, user, connection, levelsDeep + 1);
+				return parse('/demote ' + toId(target), room, user, connection, undefined, levelsDeep + 1);
 			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
+				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
 			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
-				return parse('/roomdemote ' + toId(target), room, user, connection, levelsDeep + 1);
+				return parse('/roomdemote ' + toId(target), room, user, connection, undefined, levelsDeep + 1);
 			}
 		}
 
