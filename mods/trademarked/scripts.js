@@ -14,7 +14,7 @@ exports.BattleScripts = {
 						this.add('-activate', pokemon, 'ability: ' + move.name);
 						if(move.id=='partingshot' || move.id=='batonpass')
 						{
-							if(this[pokemon.side.id].lastPshot==this.turn)
+							if(this[pokemon.side.id].lastPshot==this.turn && this.lastMove=="Parting Shot")/*If this fails to work, use "Parting shot" instead*/
 								this.add('-message',"But it failed!");
 							else
 							{
