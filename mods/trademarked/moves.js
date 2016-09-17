@@ -125,8 +125,8 @@ exports.BattleMovedex = {
                 onTryHit: function(target)
                 {
                     let oppside;
-                    if(target.side.id='p1')oppside='p2';
-                    if(target.side.id='p2')oppside='p1';
+                    if(target.side.id=='p1')oppside='p2';
+                    if(target.side.id=='p2')oppside='p1';
                     if(this[oppside].lastPshot==this.turn)
                         return false;
                 },
