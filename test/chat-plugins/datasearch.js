@@ -17,11 +17,13 @@ describe('Learn', function () {
 
 			const cmdText1 = '!learn nidoking, counter';
 			const cmdText2 = '!gsclearn nidoking, counter';
-			const cmdP = CommandParser.parse(cmdText1, room, user, user.connections[0]).then(() => {
+			const noop = {then: function () {}};
+			const cmdP1 = CommandParser.parse(cmdText1, room, user, user.connections[0]);
+			const cmdP2 = (cmdP1 || noop).then(() => {
 				return CommandParser.parse(cmdText2, room, user, user.connections[0]);
 			});
 
-			(cmdP || {then: function () {}}).then(() => {
+			(cmdP2 || noop).then(() => {
 				room.update();
 				const logEntry = room.log[room.log.length - 1];
 				user.disconnectAll();
