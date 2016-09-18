@@ -21,7 +21,7 @@ describe('Learn', function () {
 				return CommandParser.parse(cmdText2, room, user, user.connections[0]);
 			});
 
-			(cmdP || {then: function() {}}).then(() => {
+			(cmdP || {then: function () {}}).then(() => {
 				room.update();
 				const logEntry = room.log[room.log.length - 1];
 				user.disconnectAll();
