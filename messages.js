@@ -10,6 +10,7 @@
 'use strict';
 
 let Messages = module.exports;
+const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 
 Messages.send = function (target, context) {
 	let targetUser = context.targetUser;
@@ -65,8 +66,8 @@ Messages.send = function (target, context) {
 			break;
 		case 'ignore':
 		case 'unignore':
-			this.errorReply("This command can only be used by itself to ignore the person you're talking to: /" + innerCmd);
-			break;
+			context.errorReply(`This command can only be used by itself to ignore the person you're talking to: "/${innerCmd}", not "/${innerCmd} ${innerTarget}"`);
+			return;
 		case 'invite':
 		case 'inv': {
 			let targetRoom = Rooms.search(innerTarget);
@@ -110,6 +111,11 @@ Messages.send = function (target, context) {
 			}
 		}
 	}
+
+	let emoteMsg = parseEmoticons(target, {}, user, true);
+	if ((!user.blockEmoticons && !targetUser.blockEmoticons) && emoteMsg) target = '/html ' + emoteMsg;
+
+	buf = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 
 	if (!buf) buf = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 	user.send(buf);
