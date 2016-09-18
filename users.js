@@ -344,6 +344,7 @@ class User {
 		// settings
 		this.isSysop = false;
 		this.isStaff = false;
+		this.isUpperStaff = false;
 		this.blockChallenges = false;
 		this.ignorePMs = false;
 		this.lastConnected = 0;
@@ -903,6 +904,7 @@ class User {
 			this.registered = false;
 			this.group = Config.groupsranking[0];
 			this.isStaff = false;
+			this.isUpperStaff = false;
 			return;
 		}
 		this.registered = true;
@@ -927,6 +929,7 @@ class User {
 		}
 
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1, '⚔':1 });
+		this.isUpperStaff = (this.group in {'&':1, '~':1, '⚔':1 });
 		if (!this.isStaff) {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
@@ -952,6 +955,7 @@ class User {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1, '⚔':1});
+		this.isUpperStaff = (this.group in {'&':1, '~':1, '⚔':1 });
 		if (!this.isStaff) {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
@@ -998,6 +1002,7 @@ class User {
 			this.group = Config.groupsranking[0];
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
+			this.isUpperStaff = false;
 			// This isn't strictly necessary since we don't reuse User objects
 			// for PS, but just in case.
 			// We're not resetting .confirmed/.autoconfirmed so those accounts
