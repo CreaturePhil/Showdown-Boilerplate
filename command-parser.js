@@ -768,7 +768,7 @@ let parse = exports.parse = function (message, room, user, connection, pmTarget,
 		message = context.canTalk(message);
 	}
 
-	if (parseEmoticons(message, room, user)) return;
+	if (parseEmoticons(message, room, user)) return message;
 
 	// Output the message to the room
 
@@ -777,6 +777,8 @@ let parse = exports.parse = function (message, room, user, connection, pmTarget,
 	}
 
 	room.update();
+
+	return message;
 };
 
 exports.package = {};
