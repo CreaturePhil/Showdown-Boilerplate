@@ -6,7 +6,7 @@ const User = userUtils.User;
 describe('Learn', function () {
 	describe('Past gen variants', function () {
 		it('should be independent of previous commands', function (done) {
-			done();
+			return done();
 			const room = Rooms('staff');
 
 			const user = new User();
