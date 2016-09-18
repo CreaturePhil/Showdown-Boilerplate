@@ -393,7 +393,7 @@ class User {
 		if (this.hiding) {
 			return ' ' + this.name;
 		}
-		if (roomid) {
+		if (roomid && roomid !== 'global') {
 			let room = Rooms(roomid);
 			if (!room) {
 				throw new Error(`Room doesn't exist: ${roomid}`);
@@ -1534,18 +1534,20 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	let pipeIndex = message.indexOf('|');
 	if (pipeIndex < 0) return;
 
-	let roomid = message.substr(0, pipeIndex);
-	let lines = message.substr(pipeIndex + 1);
-	let room = Rooms(roomid);
-	if (!room) room = Rooms.lobby || Rooms.global;
-	let user = connection.user;
+	const user = connection.user;
 	if (!user) return;
 
-	if (CommandParser.multiLinePattern.test(lines)) {
-		user.chat(lines, room, connection);
+	// The client obviates the room id when sending messages to Lobby by default
+	const roomId = message.substr(0, pipeIndex) || (Rooms.lobby || Rooms.global).id;
+	message = message.slice(pipeIndex + 1);
+
+	const room = Rooms(roomId);
+	if (CommandParser.multiLinePattern.test(message)) {
+		user.chat(message, room, connection);
 		return;
 	}
-	lines = lines.split('\n');
+
+	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
 	if (lines.length > (user.isStaff ? THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN)) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
@@ -1553,7 +1555,7 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	}
 	// Emergency logging
 	if (Config.emergency) {
-		fs.appendFile('logs/emergency.log', `[${user} (${connection.ip})] ${message}\n`, err => {
+		fs.appendFile('logs/emergency.log', `[${user} (${connection.ip})] ${roomId}|${message}\n`, err => {
 			if (err) {
 				console.log(`!! Error in emergency log !!`);
 				throw err;
@@ -1567,6 +1569,6 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	}
 	let deltaTime = Date.now() - startTime;
 	if (deltaTime > 1000) {
-		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${message}`);
+		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${roomId}|${message}`);
 	}
 };

@@ -574,6 +574,10 @@ let GlobalRoom = (() => {
 			}
 		}
 	};
+	GlobalRoom.prototype.update = function () {};
+	GlobalRoom.prototype.isMuted = function () {
+		return false;
+	};
 	GlobalRoom.prototype.send = function (message, user) {
 		if (user) {
 			user.sendTo(this, message);

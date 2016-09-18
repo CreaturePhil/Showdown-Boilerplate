@@ -1178,9 +1178,11 @@ exports.commands = {
 		if (!targetRoom) return this.errorReply("The room '" + target + "' does not exist.");
 		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title || target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
 
-		let cannotJoin = (targetRoom.isPrivate && targetRoom.modjoin &&
-			!targetRoom.auth[user.userid] || targetRoom.staffRoom) &&
-			!user.can('makeroom');
+		let cannotJoin = !user.can('makeroom') && (
+			targetRoom.staffRoom ||
+			targetRoom.isPrivate && targetRoom.modjoin &&
+			(!targetRoom.auth || !targetRoom.auth[user.userid])
+		);
 		let unavailableRoom = !user.inRooms.has(targetRoom.id) && cannotJoin;
 		if (unavailableRoom) return this.errorReply("The room '" + target + "' does not exist.");
 
@@ -1364,12 +1366,11 @@ exports.commands = {
 
 	leave: 'part',
 	part: function (target, room, user, connection) {
-		if (room.id === 'global') return false;
-		let targetRoom = Rooms.search(target);
-		if (target && !targetRoom) {
+		let targetRoom = target ? Rooms.search(target) : room;
+		if (!targetRoom || targetRoom === Rooms.global) {
 			return this.errorReply("The room '" + target + "' does not exist.");
 		}
-		user.leaveRoom(targetRoom || room, connection);
+		user.leaveRoom(targetRoom, connection);
 	},
 
 	/*********************************************************
@@ -3418,7 +3419,14 @@ exports.commands = {
 };
 
 process.nextTick(() => {
+	// We might want to migrate most of this to a JSON schema of command attributes.
 	CommandParser.multiLinePattern.register('>>>? ');
 	CommandParser.multiLinePattern.register('/(room|staff)(topic|intro) ');
 	CommandParser.multiLinePattern.register('/adddatacenters ');
+	CommandParser.globalPattern.register([
+		'/join ', '/leave ', '/cmd ', '/trn', '/logout ', '/autojoin ', '/utm ', '/vtm', '/pm ',
+		'/accept ', '/reject ', '/challenge ', '/cancelchallenge ', '/search ', '/cancelsearch ',
+		'/avatar ',
+		'/roomauth ', '/auth ', '/stafflist ', '/globalauth ', '/authlist ', '/authority ',
+	]);
 });
