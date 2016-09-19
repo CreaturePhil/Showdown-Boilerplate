@@ -676,6 +676,7 @@ let GlobalRoom = (() => {
 				user.joinRoom(room.id, connection);
 			}
 			if (user.isUpperStaff) user.joinRoom('upperstaff');
+			if(user.isAdmin) user.joinRoom('theadminchat');
 		}
 		for (let i = 0; i < user.connections.length; i++) {
 			connection = user.connections[i];

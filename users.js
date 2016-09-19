@@ -345,6 +345,7 @@ class User {
 		this.isSysop = false;
 		this.isStaff = false;
 		this.isUpperStaff = false;
+		this.isAdmin = false;
 		this.blockChallenges = false;
 		this.ignorePMs = false;
 		this.lastConnected = 0;
@@ -905,6 +906,7 @@ class User {
 			this.group = Config.groupsranking[0];
 			this.isStaff = false;
 			this.isUpperStaff = false;
+			this.isAdmin = false;
 			return;
 		}
 		this.registered = true;
@@ -930,6 +932,7 @@ class User {
 
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1, '⚔':1 });
 		this.isUpperStaff = (this.group in {'&':1, '~':1, '⚔':1 });
+		this.isAdmin = (this.group in {'~':1,'⚔':1});
 		if (!this.isStaff) {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
@@ -956,6 +959,7 @@ class User {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1, '⚔':1});
 		this.isUpperStaff = (this.group in {'&':1, '~':1, '⚔':1 });
+		this.isAdmin = (this.group in {'~':1,'⚔':1});
 		if (!this.isStaff) {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
@@ -1003,6 +1007,7 @@ class User {
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
 			this.isUpperStaff = false;
+			this.isAdmin = false;
 			// This isn't strictly necessary since we don't reuse User objects
 			// for PS, but just in case.
 			// We're not resetting .confirmed/.autoconfirmed so those accounts
