@@ -294,12 +294,6 @@ class CommandContext {
 			// broadcast cooldown
 			let broadcastMessage = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 
-			if (this.room.lastBroadcast === this.broadcastMessage &&
-					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-				this.errorReply("You can't broadcast this because it was just broadcast.");
-				return false;
-			}
-
 			this.message = message;
 			this.broadcastMessage = broadcastMessage;
 		}
@@ -462,11 +456,6 @@ class CommandContext {
 
 			if (room) {
 				let normalized = message.trim();
-				if (room.id === 'lobby' && (normalized === user.lastMessage) &&
-						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-					this.errorReply("You can't send the same message again so soon.");
-					return false;
-				}
 				user.lastMessage = message;
 				user.lastMessageTime = Date.now();
 			}
