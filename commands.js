@@ -20,7 +20,6 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 const dir = fs.readdirSync(path.resolve(__dirname, 'chat-plugins'));
 
 const MAX_REASON_LENGTH = 300;
@@ -385,123 +384,10 @@ exports.commands = {
 		}
 		this.pmTarget = (targetUser || this.targetUsername);
 		if (!targetUser) {
-			this.errorReply("User "  + this.targetUsername + " not found. Did you misspell their name? If they are offline, try using /tell to send them an offline message.");
+			this.errorReply("User " + this.targetUsername + " not found. Did you misspell their name?");
 			return this.parse('/help msg');
 		}
-		if (!targetUser.connected) {
-					return this.errorReply("User " + this.targetUsername + " is offline. Try using /tell to send them an offline message.");
-				}
 
-				if (Config.pmmodchat && !user.matchesRank(Config.pmmodchat)) {
-					let groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-					return this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to PM users.");
-				}
-
-				if (user.locked && !targetUser.can('lock')) {
-					return this.errorReply("You can only private message members of the global moderation team (users marked by @ or above in the Help room) when locked.");
-				}
-				if (targetUser.locked && !user.can('lock')) {
-					return this.errorReply("This user is locked and cannot PM.");
-				}
-				if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
-					if (!targetUser.can('lock')) {
-						return this.errorReply("This user is blocking private messages right now.");
-					} else if (targetUser.can('bypassall')) {
-						return this.errorReply("This admin is too busy to answer private messages right now. Please contact a different staff member.");
-					}
-				}
-				if (user.ignorePMs && user.ignorePMs !== targetUser.group && !targetUser.can('lock')) {
-					return this.errorReply("You are blocking private messages right now.");
-				}
-
-				target = this.canTalk(target, null, targetUser);
-				if (!target) return false;
-
-				let message;
-				if (target.charAt(0) === '/' && target.charAt(1) !== '/') {
-					// PM command
-					let innerCmdIndex = target.indexOf(' ');
-					let innerCmd = (innerCmdIndex >= 0 ? target.slice(1, innerCmdIndex) : target.slice(1));
-					let innerTarget = (innerCmdIndex >= 0 ? target.slice(innerCmdIndex + 1) : '');
-					switch (innerCmd) {
-					case 'me':
-					case 'mee':
-					case 'announce':
-						break;
-					case 'ME':
-					case 'MEE':
-						message = '|pm|' + user.getIdentity().toUpperCase() + '|' + targetUser.getIdentity() + '|/' + innerCmd.toLowerCase() + ' ' + innerTarget;
-						break;
-					case 'invite':
-					case 'inv': {
-						let targetRoom = Rooms.search(innerTarget);
-						if (!targetRoom || targetRoom === Rooms.global) return this.errorReply('The room "' + innerTarget + '" does not exist.');
-						if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply('User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
-						if (targetRoom.modjoin) {
-							if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !(targetUser.userid in targetRoom.auth)) {
-								this.parse('/roomvoice ' + targetUser.name, false, targetRoom);
-								if (!(targetUser.userid in targetRoom.auth)) {
-									return;
-								}
-							}
-						}
-						if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
-							if (!(user.userid in targetRoom.auth)) {
-								return this.errorReply('The room "' + innerTarget + '" does not exist.');
-							}
-							if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
-								return this.errorReply('The user "' + targetUser.name + '" does not have permission to join "' + innerTarget + '".');
-							}
-						}
-						if (targetRoom.auth && targetRoom.isPrivate && !(user.userid in targetRoom.auth) && !user.can('makeroom')) {
-							return this.errorReply('You do not have permission to invite people to this room.');
-						}
-
-						target = '/invite ' + targetRoom.id;
-						break;
-					}
-					default:
-						return this.errorReply("The command '/" + innerCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + innerCmd + "', type '//" + innerCmd + "'.");
-					}
-				}
-
-				let emoteMsg = parseEmoticons(target, room, user, true);
-				if ((!user.blockEmoticons && !targetUser.blockEmoticons) && emoteMsg) target = '/html ' + emoteMsg;
-
-				message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
-
-				if (!message) message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
-				user.send(message);
-				if (targetUser !== user) targetUser.send(message);
-				targetUser.lastPM = user.userid;
-				user.lastPM = targetUser.userid;
-			},
-			msghelp: ["/msg OR /whisper OR /w [username], [message] - Send a private message."],
-
-			pminfobox: function (target, room, user, connection) {
-				if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-				if (!this.can('addhtml', null, room)) return false;
-				if (!target) return this.parse("/help pminfobox");
-
-				target = this.canHTML(target);
-				if (!target) return;
-
-				target = this.splitTarget(target);
-				let targetUser = this.targetUser;
-
-				if (!targetUser || !targetUser.connected) return this.errorReply("User " + targetUser + " is not currently online.");
-				if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-				if (targetUser.ignorePMs) return this.errorReply("This user is currently ignoring PMs.");
-				if (targetUser.locked) return this.errorReply("This user is currently locked, so you cannot send them a pminfobox.");
-
-				// Apply the infobox to the message
-				target = '/raw <div class="infobox">' + target + '</div>';
-				let message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
-
-				user.send(message);
-				if (targetUser !== user) targetUser.send(message);
-				targetUser.lastPM = user.userid;
-				user.lastPM = targetUser.userid;
 		return Messages.send(target, this);
 	},
 	msghelp: ["/msg OR /whisper OR /w [username], [message] - Send a private message."],
