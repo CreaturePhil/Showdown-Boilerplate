@@ -1552,6 +1552,7 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	message = message.slice(pipeIndex + 1);
 
 	const room = Rooms(roomId);
+	if (!room) return;
 	if (CommandParser.multiLinePattern.test(message)) {
 		user.chat(message, room, connection);
 		return;
