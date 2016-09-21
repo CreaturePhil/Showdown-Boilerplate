@@ -40,6 +40,8 @@ const fs = require('fs');
 const path = require('path');
 const parseEmoticons = require('./chat-plugins/emoticons').parseEmoticons;
 
+exports.Messages = require('./messages');
+
 class PatternTester {
 	// This class sounds like a RegExp
 	// In fact, one could in theory implement it as a RegExp subclass
