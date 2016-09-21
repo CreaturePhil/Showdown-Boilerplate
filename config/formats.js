@@ -347,7 +347,140 @@ exports.Formats = [
 
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
+		{
+		name: "Haze Super Staff Bros",
+		desc: ["&bullet; The staff here becomes a Pokemon and battles!"],
+		section: "Haze Super Staff Bros!",
+		mod: 'hazeseasonal',
+		team: 'randomSeasonalMelee',
+		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		onBegin: function () {
+			this.add("raw|Haze Super Staff Bros! <b>FORMAT CHOSEN</b>");
+			this.add('message', "SURVIVAL! GET READY FOR THE NEXT BATTLE!");
 
+			let globalRenamedMoves = {};
+			let customRenamedMoves = {};
+
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				let last = pokemon.moves.length - 1;
+				if (pokemon.moves[last]) {
+					pokemon.moves[last] = toId(pokemon.set.signatureMove);
+					pokemon.moveset[last].move = pokemon.set.signatureMove;
+					pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
+				}
+				for (let j = 0; j < pokemon.moveset.length; j++) {
+					let moveData = pokemon.moveset[j];
+					if (globalRenamedMoves[moveData.id]) {
+						pokemon.moves[j] = toId(pokemon.set.signatureMove);
+						moveData.move = globalRenamedMoves[moveData.id];
+						pokemon.baseMoveset[j].move = globalRenamedMoves[moveData.id];
+					}
+
+					let customRenamedSet = customRenamedMoves[toId(pokemon.name)];
+					if (customRenamedSet && customRenamedSet[moveData.id]) {
+						pokemon.moves[j] = toId(pokemon.set.signatureMove);
+						moveData.move = customRenamedSet[moveData.id];
+						pokemon.baseMoveset[j].move = customRenamedSet[moveData.id];
+					}
+				}
+			}
+		},
+		onNegateImmunity: function (pokemon, type) {
+			if (pokemon.volatiles['flipside']) return false;
+			const foes = pokemon.side.foe.active;
+			if (foes.length && foes[0].volatiles['samuraijack'] && pokemon.hasType('Dark') && type === 'Psychic') return false;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			if (!target.volatiles['flipside']) return;
+			if (move && move.id === 'retreat') return;
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		},
+		// Hacks for megas changed abilities. This allow for their changed abilities.
+		onUpdate: function (pokemon) {
+			let name = toId(pokemon.name);
+			if (!this.shownTip) {
+				this.add('raw|<div class=\"broadcast-green\">Huh? But what do all these weird moves do??<br><b>Protip: Refer to the <a href="https://github.com/Zarel/Pokemon-Showdown/blob/129d35d5eefb295b1ec24f3e1985a586da3f049c/mods/seasonal/README.md">PLAYER\'S MANUAL</a>!</b></div>');
+				this.shownTip = true;
+			}
+		},
+		// Here we treat many things, read comments inside for information.
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+			// Wonder Guard is available, but it curses you.
+			if (pokemon.getAbility().id === 'wonderguard' && pokemon.baseTemplate.baseSpecies !== 'Shedinja' && pokemon.baseTemplate.baseSpecies !== 'Kakuna') {
+				pokemon.addVolatile('curse', pokemon);
+				this.add('-message', pokemon.name + "'s Wonder Guard has cursed it!");
+			}
+
+			// Add here more hacky stuff for mega abilities.
+			// This happens when the mega switches in, as opposed to mega-evolving on the turn.
+
+
+			// Edgy switch-in sentences go here.
+			// Sentences vary in style and how they are presented, so each Pokémon has its own way of sending them.
+			let sentences = [];
+			let sentence = '';
+			if(name === 'digitaledge') {
+				this.add('c|~Digital Edge|__**EEVEE IS OUR NEW MASCOT BTW**__');
+			}
+			if(name === 'halowhavoc') {
+				this.add('c|@Halow Havoc| No way I\'m winning ;-;')
+			}
+			if(name === 'therittz') {
+				this.add('c|@TheRittz| Oh dear')
+			}
+			if(name === 'pennygadget') {
+				this.add('c|+Penny★Gadget| GO GO GADGET INFERNAPE')
+			}
+			if(name === 'powerpackbot') {
+				this.add('c|*PowerPackBot| COSTUMES ON POWER PACK')
+			}
+		},
+		onFaint: function (pokemon, source, effect) {
+			let name = toId(pokemon.name);
+			//let opp = toId(source.name);
+			if(name === 'digitaledge') {
+				this.add('c|~Digital Edge|WEEEEEEEEEEEEEEE FUN!');
+			}
+			if(name === 'halowhavoc') {
+				this.add('c|@Halow Havoc|I was SO close!')
+			}
+			if(name === 'pennygadget') {
+				this.add('c|+Penny★Gadget| UNCLE GADGET!')
+			}
+			if(name === 'powerpackbot') {
+				this.add('c|*PowerPackBot| ZERO-G GET US OUT OF HERE')
+			}
+//Wreck phrase test
+/*			if(opp=="hydrostatics")
+			this.add("c|~Hydrostatics|Git Gud Kid");
+			if(opp=="tejas10")
+			this.add("c|+Tejas10|Cena sucks!");
+			if(opp=="Lost Cause 146")
+			this.add("c|$Lost Cause 146|you cannot stop me.");
+*/
+		},
+		// Special switch-out events for some mons.
+		onSwitchOut: function (pokemon) {
+			let name = toId(pokemon.name);
+
+			if (!pokemon.illusion) {
+				if (name === 'hippopotas') {
+					this.add('-message', 'The sandstorm subsided.');
+				}
+			}
+			// Transform
+			if (pokemon.originalName) pokemon.name = pokemon.originalName;
+		},
+		onModifyPokemon: function (pokemon) {
+			let name = toId(pokemon.name);
+		},
+	},
 	{
 		name: "Mix and Mega",
 		desc: [
