@@ -551,33 +551,33 @@ exports.Formats = [
 				this.add('c|~Spandan|o shit waddup!');
 			}
 			if(name === 'hydrostatics') {
-				this.add('c|~Hydrostatics|Gl, Hf Kid');
+				this.add('c|+Hydrostatics|Gl, Hf Kid');
 			}
 			if(name === 'quietchimchar') {
-				this.add('c|@Quiet Chimchar|Introducing the best starter ever!!');
+				this.add('c| Quiet Chimchar|Introducing the best starter ever!!');
 			}
 			if(name === 'alphapaul71') {
-				this.add('c|~Alpha Paul☯71|!htmlbox');
+				this.add('c| Alpha Paul☯71|!htmlbox');
 				this.add('raw|<button name="parseCommand" value="/user alphapaul71">My Owner!</button>');
 			}
                         if(name === 'zmeeed') {
                                 this.add("c|@Zmeeed|For Mother Russia!");
                         }
 			if(name === 'digitaledge') {
-				this.add('c|@Digital Edge|__**Mo is our lord and savior!**__');
+				this.add('c|&Digital Edge|__**Mo is our lord and savior!**__');
 			}
 			if(name === 'snakexzero5') {
-				this.add('c|%SnakeXZero5|A project on Friday and its Monday, YAY!');
+				this.add('c| SnakeXZero5|A project on Friday and its Monday, YAY!');
 			}
 			if (name === 'elcrest') {
-					this.add('c|%Elcrest|Get ready to be blown away.');
-				}
+				this.add('c| Elcrest|Get ready to be blown away.');
+			}
 			if(name === 'classyz') {
 				pokemon.addVolatile('simpleinnate', pokemon);
 				this.add('c|&ClassyZ|pro tip: if u kill me go straight to hell do not pass go do not collect $200');
 			}
 			if(name === 'flygonerz') {
-				this.add('c|&Flygonerz|The Sand Dweller has arrived');
+				this.add('c|@Flygonerz|The Sand Dweller has arrived');
 			}
 			if(name === 'pieddychomp') {
 				this.add('c|&PI★EddyChomp|Hey guys, watch me KO this guy lmao xaa :)');
@@ -589,13 +589,13 @@ exports.Formats = [
 				this.add('c|~Snaquaza|Wait, why ain\'t I playing Random Haxmons instead?');
 			}
 			if(name === 'thegodofhaxorus') {
-				this.add('c|@The God of Haxorus|Hi! I\'m a **Hax**orus :3');
+				this.add('c| The God of Haxorus|Hi! I\'m a **Hax**orus :3');
 			}
 			if(name === 'loominite') {
-				this.add('c|&Loominite|Okay, lets go :I');
+				this.add('c|+Loominite|Okay, lets go :I');
 			}
 			if(name === 'eternalmayhem') {
-				this.add('c|@Eternal Mayhem|Let the music overcome you, control you.');
+				this.add('c| Eternal Mayhem|Let the music overcome you, control you.');
 			}
 			if(name === 'charizard8888') {
 				this.add('c|&charizard8888|It\'s **Outragin\' Time !!**');
@@ -632,31 +632,31 @@ exports.Formats = [
 				this.add('c|~Spandan|Gr8 b8, m8. I rel8, str8 appreci8, and congratul8. I r8 this b8 an 8/8. Plz no h8, I\'m str8 ir8. Cre8 more, can\'t w8. We should convers8, I won\'t ber8, my number is 8888888, ask for N8. No calls l8 or out of st8. If on a d8, ask K8 to loc8. Even with a full pl8, I always have time to communic8 so don\'t hesit8');
 			}
 			if(name === 'alphapaul71') {
-				this.add('c|~Alpha Paul☯71|RIP Me feelsbd');
+				this.add('c| Alpha Paul☯71|RIP Me feelsbd');
 			}
 			if(name === 'hydrostatics') {
-				this.add('c|~Hydrostatics|Cya next time Kid. I will not take it easy on you from next time.');
+				this.add('c|+Hydrostatics|Cya next time Kid. I will not take it easy on you from next time.');
 			}
 			if(name === 'quietchimchar') {
-				this.add('c|@Quiet Chimchar|I\'ll get you next time!');
+				this.add('c| Quiet Chimchar|I\'ll get you next time!');
 			}
                         if(name == 'zmeeed') {
                                 this.add("c|@Zmeeed|CYKABLYAT");
                         }
 			if(name === 'digitaledge') {
-				this.add('c|@Digital Edge|u haxor u didnt get haxed');
+				this.add('c|&Digital Edge|u haxor u didnt get haxed');
 			}
 			if (name === 'elcrest') {
-					this.add('c|%Elcrest|It seems that I can\'t control my turbulence....');
-				}
+				this.add('c| Elcrest|It seems that I can\'t control my turbulence....');
+			}
 			if(name === 'snakexzero5') {
-				this.add('c|%SnakeXZero5|I JUST FORGOT THERES A SUDDEN PROJECT TOMMOROW');
+				this.add('c| SnakeXZero5|I JUST FORGOT THERES A SUDDEN PROJECT TOMMOROW');
 			}
 			if(name === 'classyz') {
 				this.add('c|&ClassyZ|go straight to hell do not pass go do not collect $200');
 			}
 			if(name === 'flygonerz') {
-				this.add('c|&Flygonerz|Plox nerf, Ninten__doh__!');
+				this.add('c|@Flygonerz|Plox nerf, Ninten__doh__!');
 			}
 			if(name === 'pieddychomp') {
 				this.add("c|&PI★EddyChomp|Fuck this shit, I got rekt. I\'ll get MY REVENGE! RAWR!!!!");
@@ -668,10 +668,10 @@ exports.Formats = [
 				this.add("c|~Snaquaza|Back to the real meta");
 			}
 			if(name === 'loominite') {
-				this.add('c|&Loominite|eh, i\'m out!');
+				this.add('c|+Loominite|eh, i\'m out!');
 			}
 			if (name === 'thegodofhaxorus') {
-				this.add('c|@The God of Haxorus|My own hax against me -3-');
+				this.add('c| The God of Haxorus|My own hax against me -3-');
 			}
 			if (name === 'charizard8888') {
 				this.add('c|&charizard8888|I\'m Outta here!');
@@ -683,7 +683,7 @@ exports.Formats = [
  				this.add('c|⚔XpRienzo ☑-☑|Bleh');
  			}
  			if(name === 'eternalmayhem') {
-				this.add('c|@Eternal Mayhem|The music was too powerful.');
+				this.add('c| Eternal Mayhem|The music was too powerful.');
 			}
  			if (name === 'ransei') {
  				this.add('c|~Ransei|ripsei');
