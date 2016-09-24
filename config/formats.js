@@ -501,6 +501,10 @@ exports.Formats = [
 					pokemon.moveset[last].move = pokemon.set.signatureMove;
 					pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
 				}
+				if (pokemon.name=="diarmuidodyna")
+				{
+					pokemon.types[1]="Ice";
+				}
 				for (let j = 0; j < pokemon.moveset.length; j++) {
 					let moveData = pokemon.moveset[j];
 					if (globalRenamedMoves[moveData.id]) {
