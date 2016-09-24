@@ -227,6 +227,12 @@ exports.commands = {
 		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
 	},
 	seenhelp: ["/seen - Shows when the user last connected on the server."],
+	music: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.parse('/help music');
+		this.sendReplyBox('<audio controls="" src="'+target+'" style="width: 99.6% ; border: 5px solid #E9DF15; background-color:Blue">Your user agent does not support the HTML5 Audio element.</audio>');
+	},
+	musichelp: ["<code>/music &lt;mp3 link></code>: Shows a box which can play mp3 music."],
 
 	tell: function (target, room, user, connection) {
 		if (!target) return this.parse('/help tell');
