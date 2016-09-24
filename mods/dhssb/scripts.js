@@ -257,9 +257,9 @@ exports.BattleScripts = {
 			},
 			'Diarmuid O\'Dyna': {
 				species: 'Suicune', ability: 'Serene Grace', item: 'Leftovers', gender: 'F',
-				moves: ['flirt', 'yandereblast', 'forcedassistance','bitchslap'],
-				signatureMove: 'Hyperspeed Punch',
-				evs: {atk:252, spd:4, hp:252}, nature: 'Adamant',
+				moves: ['flirt', 'yandereblast', 'forcedassistance'],
+				signatureMove: 'Bitch Slap',
+				evs: {def:252, spd:4, hp:252}, nature: 'Bold',
 			},
 			'PI EddyChomp': {
 				species: 'Garchomp-Mega', ability: 'Epic Claws', item: 'Focus Sash',
