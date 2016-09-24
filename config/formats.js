@@ -501,7 +501,8 @@ exports.Formats = [
 					pokemon.moveset[last].move = pokemon.set.signatureMove;
 					pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
 				}
-				if (pokemon.name=="diarmuidodyna")
+				let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+				if (name=="diarmuidodyna")
 				{
 					pokemon.types[1]="Ice";
 				}
