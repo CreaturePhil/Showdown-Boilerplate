@@ -14,13 +14,13 @@ exports.commands = {
 					"<u>Owner:</u><br />" +
 					"- " + hashColor('XpRienzo', true) + " (Founder, Host, Sysadmin)<br />" +
                                         "<br />" +
-					"<u>Lead Development Team:</u><br />" +
-                    "- " + hashColor('Alpha Paul☯71◕‿◕', true) + " (Development, Lead Policy)<br />" +
-                    "- " + hashColor('Snaquaza', true) + " (Major Contributor, Formats, Development)<br />" +
-                    "- " + hashColor('Spandan', true) + " (Format Development)<br />" +
-					"<br />" +
 					"<u>Development:</u><br />" +
+                    "- " + hashColor('Snaquaza', true) + " (Major Contributor, Formats, Development)<br />" +
+                    "- " + hashColor('Spandan', true) + " (Format Development, <s>Crashes</s>)<br />" +
+					"<br />" +
+					"<u>Contributors:</u><br />" +
 					"- " + hashColor('charizard8888', true) + " (Roomintro's)<br />" +
+                    "- " + hashColor('Alpha Paul☯71◕‿◕', true) + " (Development)<br />" +
                     "- " + hashColor('ClassyZ', true) + " (DHSSB, Development)<br />" +
                     "- " + hashColor('Diarmuid O\'Dyna', true) + " (Art)<br />" +
                     "- " + hashColor('Eternal Mayhem', true) + " (Roomintro's)<br />" +
