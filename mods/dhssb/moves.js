@@ -1,6 +1,129 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"flirt": {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if both the user and the target are the same gender, if either is genderless, or if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Ability Oblivious or protected by the Ability Aroma Veil are immune.",
+		shortDesc: "A target of the opposite gender gets infatuated.",
+		id: "flirt",
+		name: "flirt",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
+		volatileStatus: 'attract',
+		effect: {
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart: function (pokemon, source, effect) {
+				if (!this.runEvent('Attract', pokemon, source)) {
+					this.debug('Attract event failed');
+					return false;
+				}
+			},
+			onUpdate: function (pokemon) {
+				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['attract']) {
+					this.debug('Removing Attract volatile on ' + pokemon);
+					pokemon.removeVolatile('attract');
+				}
+			},
+			onBeforeMovePriority: 2,
+			onBeforeMove: function (pokemon, target, move) {
+				this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectData.source);
+				if (this.random(2) === 0) {
+					this.add('cant', pokemon, 'Attract');
+					return false;
+				}
+			},
+			onEnd: function (pokemon) {
+				this.add('-end', pokemon, 'Attract', '[silent]');
+			},
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Attract", target);
+		},
+		secondary: false,
+		target: "normal",
+		type: "Normal",
+		contestType: "Cute",
+	},
+	"forcedassistance": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		id: "forcedassistance",
+		isViable: true,
+		name: "Forced Assistance",
+		pp: 15,
+		priority: 0,
+		flags: {snatch: 1},
+		sideCondition: 'tailwind',
+		effect: {
+			onStart: function (side) {
+				this.add('-sidestart', side, 'move: Forced Assistance');
+			},
+			onModifyAtk: function (spe, pokemon) {
+				return this.chainModify(1);
+			},
+			onModifySpa: function (spa, pokemon) {
+				return this.chainModify(1);
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 4,
+			onEnd: function (side) {
+				this.add('-sideend', side, 'move: Tailwind');
+			},
+		},
+		secondary: false,
+		target: "allySide",
+		type: "Psychic",
+		contestType: "Cool",
+	},
+	"yandereblast": {
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		id: "yandereblast",
+		name: "Yandere Blast",
+		pp: 20,
+                recoil : [2, 5],
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 30,
+			volatileStatus: 'confusion',
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Night Slash", target);
+		},
+		target: "normal",
+		type: "Water",
+		contestType: "Beautiful",
+	},
+	"bitchslap": {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		id: "bitchslap",
+		name: "Bitch Slap",
+		pp: 20,
+                recoil : [2, 5],
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Wake-Up Slap", target);
+		},
+		target: "normal",
+		type: "Ice",
+		contestType: "Beautiful",
+	},
 	"partingshotspam": {
 		num: 575,
 		accuracy: 100,
