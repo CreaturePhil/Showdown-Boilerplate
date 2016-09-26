@@ -8,7 +8,7 @@ exports.BattleMovedex = {
 		desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if both the user and the target are the same gender, if either is genderless, or if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Ability Oblivious or protected by the Ability Aroma Veil are immune.",
 		shortDesc: "A target of the opposite gender gets infatuated.",
 		id: "flirt",
-		name: "flirt",
+		name: "Flirt",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
@@ -72,7 +72,7 @@ exports.BattleMovedex = {
 			onResidualOrder: 21,
 			onResidualSubOrder: 4,
 			onEnd: function (side) {
-				this.add('-sideend', side, 'move: Tailwind');
+				this.add('-sideend', side, 'move: Forced Assistance');
 			},
 		},
 		secondary: false,
