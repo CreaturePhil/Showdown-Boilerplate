@@ -4212,7 +4212,26 @@ onBegin: function () {
 			}
 		},
 	},
-
+	{
+		name: "Choonmons δ",
+		desc: ["Choonmons is a pet mod created by Choon. Yup.<br>&bullet; <a href=\"http://www.smogon.com/forums/threads/3546063/\">Choonmons Thread</a>"],
+		section: "Experimental Metas",
+		mod: 'choonmons',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Lucarionite', 'Mawilite', 'Salamencite'],
+		
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+			var changed = {'Venusaur-Mega-X':true, 'Blastoise':true, 'Butterfree':true, 'Pikachu':true, 'Raichu':true, 'Golduck':true, 'Happiny':true, 'Blissey':true, 'Gyarados':true, 'Aerodactyl':true, 'Feraligatr-Mega':true, 'Sceptile':true};
+			var bt = pokemon.baseTemplate;
+			if (bt.baseSpecies in changed || (bt.actualSpecies && bt.actualSpecies in changed)) {
+				var types = bt.types;
+				var bTypes = (types.length === 1 || types[1] === 'caw') ? '' + types[0] : '' + types[0] + '/' + types[1];
+				this.add('-start', pokemon, 'typechange', bTypes);
+			}
+			if (bt.actualSpecies) this.add('-message', '(' + pokemon.name + ' is a ' + bt.actualSpecies + '.)');
+		}
+	},
 	// RoA Spotlight
 	///////////////////////////////////////////////////////////////////
 
