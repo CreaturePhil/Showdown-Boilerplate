@@ -355,7 +355,19 @@ exports.Formats = [
 
 	// Randomized Metas
 	///////////////////////////////////////////////////////////////////
-
+	{
+		name: "0v0",
+		section: "Randomized Metas",
+		team: 'random', // Just so a team can be generated so the "battle" can occur
+		ruleset: [],
+		onBegin: function () {
+			this.p1.team = this.p2.team = [];
+			this.p1.pokemon = this.p2.pokemon = [];
+			this.p1.pokemonLeft = this.p2.pokemonLeft = 0;
+			let p = 'p' + (this.random(2) + 1);
+			this.win(this[p]);
+		},
+	},
 	{
 		name: "Random Battle",
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
