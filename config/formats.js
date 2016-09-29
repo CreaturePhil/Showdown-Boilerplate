@@ -355,7 +355,19 @@ exports.Formats = [
 
 	// Randomized Metas
 	///////////////////////////////////////////////////////////////////
-
+	{
+		name: "0v0",
+		section: "Randomized Metas",
+		team: 'random', // Just so a team can be generated so the "battle" can occur
+		ruleset: [],
+		onBegin: function () {
+			this.p1.team = this.p2.team = [];
+			this.p1.pokemon = this.p2.pokemon = [];
+			this.p1.pokemonLeft = this.p2.pokemonLeft = 0;
+			let p = 'p' + (this.random(2) + 1);
+			this.win(this[p]);
+		},
+	},
 	{
 		name: "Random Battle",
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
@@ -501,6 +513,11 @@ exports.Formats = [
 					pokemon.moveset[last].move = pokemon.set.signatureMove;
 					pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
 				}
+				let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+				if (name=="diarmuidodyna")
+				{
+					pokemon.types[1]="Ice";
+				}
 				for (let j = 0; j < pokemon.moveset.length; j++) {
 					let moveData = pokemon.moveset[j];
 					if (globalRenamedMoves[moveData.id]) {
@@ -558,6 +575,9 @@ exports.Formats = [
 			let sentence = '';
 			if(name === 'spandan') {
 				this.add('c|~Spandan|o shit waddup!');
+			}
+			if(name === 'diarmuidodyna') {
+				this.add('c|&Diarmuid O\'Dyna|OMG can i help yoU?');
 			}
 			if(name === 'hydrostatics') {
 				this.add('c|+Hydrostatics|Gl, Hf Kid');
@@ -639,6 +659,9 @@ exports.Formats = [
 			//let opp = toId(source.name);
 			if (name === 'spandan') {
 				this.add('c|~Spandan|Gr8 b8, m8. I rel8, str8 appreci8, and congratul8. I r8 this b8 an 8/8. Plz no h8, I\'m str8 ir8. Cre8 more, can\'t w8. We should convers8, I won\'t ber8, my number is 8888888, ask for N8. No calls l8 or out of st8. If on a d8, ask K8 to loc8. Even with a full pl8, I always have time to communic8 so don\'t hesit8');
+			}
+			if(name === 'diarmuidodyna') {
+				this.add('c|&Diarmuid O\'Dyna|awwww okieee');
 			}
 			if(name === 'alphapaul71') {
 				this.add('c| Alpha Paul☯71|RIP Me feelsbd');
