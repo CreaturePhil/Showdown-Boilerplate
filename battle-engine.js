@@ -3475,8 +3475,6 @@ Battle = (() => {
 			format.onBegin.call(this);
 			if (this.ended) return; // fix for 0v0
 		}
-
-		}
 		if (format && format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				this.addPseudoWeather(format.ruleset[i]);
