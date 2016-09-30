@@ -358,6 +358,7 @@ exports.Formats = [
 	{
 		name: "0v0",
 		section: "Randomized Metas",
+		column: 2,
 		team: 'random', // Just so a team can be generated so the "battle" can occur
 		ruleset: [],
 		onBegin: function () {
