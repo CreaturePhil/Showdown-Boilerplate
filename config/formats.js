@@ -4106,8 +4106,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        if (!set.name || set.name === set.species) return;
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.name);
+			let problems = [];
 			if (!crossTemplate.exists) return;
 			let canHaveAbility = false;
+			if(crossTemplate.tier == "Uber") return ["You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")"];
 			for (let a in crossTemplate.abilities) {
 				if (crossTemplate.abilities[a] === set.ability) {
 					canHaveAbility = true;
@@ -4146,7 +4148,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
 			        prevo = this.getTemplate(prevo).prevo;
 			}
-			let problems = [];
 			let moves = {};
 			for(let kek =0;kek<movepool.length;kek++) moves[movepool[kek]]=true;
 			for (let i in set.moves) {
