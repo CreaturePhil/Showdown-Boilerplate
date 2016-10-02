@@ -4091,16 +4091,25 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
 		        let types = pokemon.types;
+		        pokemon.fusetype = types;
 			if (pokemon.fusion) {
 				this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
 			}
+		},
+		onAfterMega: function(pokemon)
+		{
+		        console.log("in");
+		        pokemon.types = pokemon.fusetype;
+		        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
 		onValidateSet: function(set) {
 		        if (!set.name || set.name === set.species) return;
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.name);
+			let problems = [];
 			if (!crossTemplate.exists) return;
 			let canHaveAbility = false;
+			if(crossTemplate.tier == "Uber") return ["You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")"];
 			for (let a in crossTemplate.abilities) {
 				if (crossTemplate.abilities[a] === set.ability) {
 					canHaveAbility = true;
@@ -4113,25 +4122,38 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 			if (!canHaveAbility) return ["" + set.species + " cannot use " + set.ability + " when fused."];
 			let added = {};
-			let standardMovepool = [];
-			let crossMovepool = [];
+			let movepool = [];
+			let prevo = template.prevo;
+			crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species)];
+			template.learnset = this.data.Learnsets[toId(template.species)].learnset;
+			if(!crossTemplate.learnset)
+			{
+			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species.split("-")[0])].learnset;
+			}
+			else
+			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species)].learnset;
 			do {
-
 				added[template.species] = true;
-				standardMovepool = standardMovepool.concat(Object.keys(template.learnset));
+				movepool = movepool.concat(Object.keys(template.learnset));
+				movepool = movepool.concat(Object.keys(crossTemplate.learnset))
 			} while (template && template.species && !added[template.species]);
-			do {
-				added[crossTemplate.species] = true;
-				crossMovepool = crossMovepool.concat(Object.keys(crossTemplate.learnset));
-			} while (crossTemplate && crossTemplate.species && !added[crossTemplate.species]);
-			let problems = [];
-			let newMoves = 0;
+			while(prevo)
+			{
+			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
+			        prevo = this.getTemplate(prevo).prevo;
+			}
+			prevo = crossTemplate.prevo;
+			while(prevo)
+			{
+			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
+			        prevo = this.getTemplate(prevo).prevo;
+			}
+			let moves = {};
+			for(let kek =0;kek<movepool.length;kek++) moves[movepool[kek]]=true;
 			for (let i in set.moves) {
 				let move = toId(set.moves[i]);
 				if (move.substr(0, 11) === 'hiddenpower') move = 'hiddenpower'; // Really big hack :(
-				if (crossMovepool.indexOf(move) >= 0 && standardMovepool.indexOf(move) < 0) {
-					newMoves++;
-				} else if (standardMovepool.indexOf(move) < 0) {
+				if (!moves[move]) {
 					problems.push(set.species + " cannot learn " + set.moves[i] + ".");
 				}
 			}
@@ -4143,7 +4165,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				let name = team[i].name;
 				if (name) {
 					if (name === team[i].species) continue;
-					// This also takes care of cross-evolving to the same target more than once
 					if (nameTable[name]) {
 						return ["Your Pok&eacute;mon must have different nicknames.", "(You have more than one " + name + ")"];
 					}
@@ -4151,8 +4172,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				}
 			}
 		},
-        },
-{
+	{
 		name: "Trademarked Enchantment",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a> + <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>."],
 		section: "Experimental Metas",
