@@ -4079,6 +4079,79 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
 		},
 	},
+	{
+		name: "Franctic Fusions [WIP]",
+		desc: [
+	     		"&bullet; A non pet mod version of Fusion Evolution. <BR /> &bullet; The resultant Pokemon has the primary types of the parents, and the averaged stats. <br />&bullet; Use !fuse if needed.",
+	     ],
+		section: "Experimental Metas",
+		mod: 'francticfusions',
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Shadow Tag', 'Soul Dew'],
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+		        let types = pokemon.types;
+			if (pokemon.fusion) {
+				this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
+			}
+		},
+		onValidateSet: function(set) {
+		        if (!set.name || set.name === set.species) return;
+		        let template = this.getTemplate(set.species);
+		        let crossTemplate = this.getTemplate(set.name);
+			if (!crossTemplate.exists) return;
+			let canHaveAbility = false;
+			for (let a in crossTemplate.abilities) {
+				if (crossTemplate.abilities[a] === set.ability) {
+					canHaveAbility = true;
+				}
+			}
+			for (let a in template.abilities) {
+				if (template.abilities[a] === set.ability) {
+					canHaveAbility = true;
+				}
+			}
+			if (!canHaveAbility) return ["" + set.species + " cannot use " + set.ability + " when fused."];
+			let added = {};
+			let standardMovepool = [];
+			let crossMovepool = [];
+			do {
+
+				added[template.species] = true;
+				standardMovepool = standardMovepool.concat(Object.keys(template.learnset));
+			} while (template && template.species && !added[template.species]);
+			do {
+				added[crossTemplate.species] = true;
+				crossMovepool = crossMovepool.concat(Object.keys(crossTemplate.learnset));
+			} while (crossTemplate && crossTemplate.species && !added[crossTemplate.species]);
+			let problems = [];
+			let newMoves = 0;
+			for (let i in set.moves) {
+				let move = toId(set.moves[i]);
+				if (move.substr(0, 11) === 'hiddenpower') move = 'hiddenpower'; // Really big hack :(
+				if (crossMovepool.indexOf(move) >= 0 && standardMovepool.indexOf(move) < 0) {
+					newMoves++;
+				} else if (standardMovepool.indexOf(move) < 0) {
+					problems.push(set.species + " cannot learn " + set.moves[i] + ".");
+				}
+			}
+			if (problems) return problems;
+		},
+		onValidateTeam: function (team) {
+			let nameTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let name = team[i].name;
+				if (name) {
+					if (name === team[i].species) continue;
+					// This also takes care of cross-evolving to the same target more than once
+					if (nameTable[name]) {
+						return ["Your Pok&eacute;mon must have different nicknames.", "(You have more than one " + name + ")"];
+					}
+					nameTable[name] = true;
+				}
+			}
+		},
+        },
 {
 		name: "Trademarked Enchantment",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a> + <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>."],
