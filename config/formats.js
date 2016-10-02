@@ -4080,7 +4080,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{
-		name: "Franctic Fusions [WIP]",
+		name: "Frantic Fusions [WIP]",
 		desc: [
 	     		"&bullet; A non pet mod version of Fusion Evolution. <BR /> &bullet; The resultant Pokemon has the primary types of the parents, and the averaged stats. <br />&bullet; Use !fuse if needed.",
 	     ],
