@@ -4119,8 +4119,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			let added = {};
 			let movepool = [];
 			let prevo = template.prevo;
-			crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species)];
-			template.learnset = this.data.Learnsets[toId(template.species)].learnset;
 			if(!crossTemplate.learnset)
 			{
 			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species.split("-")[0])].learnset;
