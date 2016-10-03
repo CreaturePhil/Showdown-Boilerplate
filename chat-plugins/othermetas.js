@@ -1090,7 +1090,7 @@ exports.commands= {
 			aftermath : 'Premier Ball'
 		};
 		let text = "";
-	        let abe = toId(target.toLowerCase());
+	        let abe = toId(target);
 	        if(target=='')
 	        	text+="Usage: <code>/ei <Ability></code>"
 			else if(target=='bans')
