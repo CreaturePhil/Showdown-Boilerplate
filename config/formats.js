@@ -4172,7 +4172,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 					nameTable[name] = true;
 				}
 			}
-		}
+		},
 	},
 	{
 		name: "Trademarked Enchantment",
