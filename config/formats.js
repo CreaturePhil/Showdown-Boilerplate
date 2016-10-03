@@ -4080,9 +4080,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{
-		name: "Frantic Fusions [WIP]",
+		name: "Frantic Fusions",
 		desc: [
-	     		"&bullet; A non pet mod version of Fusion Evolution. <BR /> &bullet; The resultant Pokemon has the primary types of the parents, and the averaged stats. <br />&bullet; Use !fuse if needed.",
+	     		"&bullet; A non pet mod version of Fusion Evolution. <BR /> &bullet; The resultant Pokemon has the primary types of the parents, and the averaged stats.<br />&bullet;You can choose any ability from the original Pokemon, and you also get the primary ability of the second Pokemon (The one you put in the nickname). <br />&bullet; Use !fuse if needed.",
 	     ],
 		section: "Experimental Metas",
 		mod: 'francticfusions',
@@ -4095,10 +4095,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if (pokemon.fusion) {
 				this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
 			}
+			pokemon.addVolatile(pokemon.abilitwo, pokemon);//Second Ability! YAYAYAY
 		},
 		onAfterMega: function(pokemon)
 		{
-		        console.log("in");
 		        pokemon.types = pokemon.fusetype;
 		        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
@@ -4109,18 +4109,13 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			let problems = [];
 			if (!crossTemplate.exists) return;
 			let canHaveAbility = false;
-			if(crossTemplate.tier == "Uber") return ["You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")"];
-			for (let a in crossTemplate.abilities) {
-				if (crossTemplate.abilities[a] === set.ability) {
-					canHaveAbility = true;
-				}
-			}
+			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
 			for (let a in template.abilities) {
 				if (template.abilities[a] === set.ability) {
 					canHaveAbility = true;
 				}
 			}
-			if (!canHaveAbility) return ["" + set.species + " cannot use " + set.ability + " when fused."];
+			if (!canHaveAbility) return ["" + set.species + " cannot have " + set.ability + "."];
 			let added = {};
 			let movepool = [];
 			let prevo = template.prevo;
