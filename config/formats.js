@@ -4127,6 +4127,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 			else
 			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species)].learnset;
+			if(!template.learnset)
+			{
+			        template.learnset = this.data.Learnsets[toId(template.species.split("-")[0])].learnset;
+			}
+			else
+			        template.learnset = this.data.Learnsets[toId(template.species)].learnset;
 			do {
 				added[template.species] = true;
 				movepool = movepool.concat(Object.keys(template.learnset));
@@ -4165,8 +4171,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 					}
 					nameTable[name] = true;
 				}
-			}
+			},
 		},
+	}
 	{
 		name: "Trademarked Enchantment",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a> + <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>."],
