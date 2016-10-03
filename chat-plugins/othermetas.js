@@ -83,18 +83,6 @@ if (process.send && module === process.mainModule) {
 } else if (!PM.maxProcesses) {
 	process.nextTick(() => Tools.includeMods());
 }//All this isfrom datasearch.js
-let rebuild = function(zom)
-		{
-    		var k="";
-		for(var i=0;i<zom.length;i++)
-		{
-			if(zom.charAt(i)===' '||zom.charAt(i)==='-'||zom.charAt(i)==='.'||zom.charAt(i)==='/'||zom.charAt(i)==='+')
-				continue;
-			else
-				k=k+zom.charAt(i);
-		}
-		return k.toLowerCase();
-		}
 let isMega = function(zom) {
         var k = "",
                 b = false;
@@ -754,9 +742,9 @@ exports.commands= {
                 let stone = ("" + separated[0]).toLowerCase();
                 let name = ("" + separated[1]).toLowerCase();
                 let justincase = ("" + separated[2]).toLowerCase();
-                stone = rebuild(stone);
-                name = rebuild(name);
-                justincase = rebuild(justincase);
+                stone = toId(stone);
+                name = toId(name);
+                justincase = toId(justincase);
                 if (name == 'x' || name == 'y' || name == 'orb') {
                         stone = stone + ' ' + name;
                         name = justincase;
@@ -858,14 +846,14 @@ exports.commands= {
                 } else {
                         let tar = arg.split(' ');
                         let poke = tar[1],
-                                nat = rebuild(tar[0]),
-                                p = rebuild(poke);
+                                nat = toId(tar[0]),
+                                p = toId(poke);
                         if (p == "mega")
                                 poke = tar[2] + "mega";
                         if (p.charAt(0) == "m" && pokemen[p.substring(1, p.length) + "mega"] != undefined)
                                 poke = poke.substring(1, poke.length) + "mega";
                         let temp = "";
-                        p = rebuild(poke);
+                        p = toId(poke);
                         if (pokemen[p] == undefined) {
                                 text += "Error: Pokemon not found";
                         } else if (natures[nat] == undefined) {
@@ -1102,7 +1090,7 @@ exports.commands= {
 			aftermath : 'Premier Ball'
 		};
 		let text = "";
-	        let abe = rebuild(target.toLowerCase());
+	        let abe = toId(target.toLowerCase());
 	        if(target=='')
 	        	text+="Usage: <code>/ei <Ability></code>"
 			else if(target=='bans')
