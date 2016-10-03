@@ -4118,8 +4118,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if (!canHaveAbility) return ["" + set.species + " cannot have " + set.ability + "."];
 			let added = {};
 			let movepool = [];
-			let prevo = template.prevo;
-			if(!crossTemplate.learnset)
+			let prevo = template.isMega?this.getTemplate(template.species.substring(0,template.species.length-5)).prevo:template.prevo;
+			
+			if(!this.data.Learnsets[toId(crossTemplate.species)])
 			{
 			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species.split("-")[0])].learnset;
 			}
@@ -4141,7 +4142,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
 			        prevo = this.getTemplate(prevo).prevo;
 			}
-			prevo = crossTemplate.prevo;
+			prevo = crossTemplate.isMega?this.getTemplate(crossTemplate.species.substring(0,crossTemplate.species.length-5)).prevo:crossTemplate.prevo;
 			while(prevo)
 			{
 			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
