@@ -1123,10 +1123,10 @@ exports.commands= {
         let separated = target.split(",");
         let name = (("" + separated[0]).trim()).toLowerCase();
         let name2 = (("" + separated[1]).trim()).toLowerCase();
-        name = rebuild(name);
-        name2 = rebuild(name2);
+        name = toId(name);
+        name2 = toId(name2);
 	let pokemen=Tools.data.Pokedex;
-        if (pokemen[name] == undefined || pokemen[name2] == undefined)
+        if (!(pokemen[name] || pokemen[name2]))
         {
                 this.say(room, "Error: Pokemon not found")
         }
