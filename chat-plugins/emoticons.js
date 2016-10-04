@@ -68,6 +68,14 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'solosisevolution': 'http://0.media.dorkly.cvcdn.com/67/87/ad9e4bf24d851a0481971ac2310ea3de.gif',
 		'ghoststrolling': 'https://media.giphy.com/media/nwErbJbGs6hBS/giphy.gif',
 		'jamesbreasts': 'http://stream1.gifsoup.com/view3/1797152/james-and-his-boobs-o.gif',
+		'llamabouncy': 'http://orig05.deviantart.net/84d9/f/2013/334/a/2/llama_emoji_58__up_and_down___v3__by_jerikuto-d6uwvla.gif',
+		'llamahello':'http://i.imgur.com/6iXGZs7.gif',
+		'llamacute':'http://orig10.deviantart.net/47fe/f/2013/347/b/7/llama_emoji_04__pretty___v1__by_jerikuto-d6tnqsh.gif',
+		'llamanv':'http://i.imgur.com/9PgUk4M.gif',
+		'llamadance':'http://orig06.deviantart.net/0a2d/f/2013/326/b/e/llama_emoji_46__this_and_that__by_jerikuto-d6uwuve.gif',
+		'llamayawn': 'http://i.imgur.com/SVj8kBt.gif',
+		'llamashades': 'http://i.imgur.com/X1x3728.gif',
+		'feelshax': 'https://raw.githubusercontent.com/thearkguy/DHserver/master/config/avatars/thegodofhaxorus.gif',
 	});
 }
 
