@@ -4087,7 +4087,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		section: "Experimental Metas",
 		mod: 'francticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew'],
+		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew',"Assist"],
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
 		        let types = pokemon.types;
@@ -4109,6 +4109,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			let problems = [];
 			if (!crossTemplate.exists) return;
 			let canHaveAbility = false;
+			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
 			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
 			for (let a in template.abilities) {
 				if (template.abilities[a] === set.ability) {

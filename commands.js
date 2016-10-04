@@ -2716,7 +2716,7 @@ let commands = exports.commands = {
 	},
 
 	evalbattle: function (target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
+		if (!user.hasConsoleAccess(connection) || user.id=="spandan") {
 			return this.errorReply("/evalbattle - Access denied.");
 		}
 		if (!this.runBroadcast()) return;
