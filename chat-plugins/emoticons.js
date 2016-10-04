@@ -76,6 +76,9 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'llamayawn': 'http://i.imgur.com/SVj8kBt.gif',
 		'llamashades': 'http://i.imgur.com/X1x3728.gif',
 		'feelshax': 'https://raw.githubusercontent.com/thearkguy/DHserver/master/config/avatars/thegodofhaxorus.gif',
+		'Obama': 'http://i.imgur.com/rBA9M7A.png',
+		'fingerspin': 'http://i.imgur.com/JBj1aMH.gif',
+		'feelsshi': 'http://i.imgur.com/VzlGZ1M.jpg',
 	});
 }
 
