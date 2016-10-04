@@ -1,12 +1,13 @@
 /**
- * Command parser
+ * Chat
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This is the command parser. Call it with CommandParser.parse
+ * This handles chat and chat commands sent from users to chatrooms
+ * and PMs. The main function you're lookoing for is Chat.parse
  * (scroll down to its definition for details)
  *
  * Individual commands are put in:
- *   commands.js - "core" commands that shouldn't be modified
+ *   chat-commands.js - "core" commands that shouldn't be modified
  *   chat-plugins/ - other commands that can be safely modified
  *
  * The command API is (mostly) documented in chat-plugins/COMMANDS.md
@@ -24,16 +25,16 @@ To reload chat commands:
 
 'use strict';
 
+let Chat = module.exports;
+
 const MAX_MESSAGE_LENGTH = 300;
 
 const BROADCAST_COOLDOWN = 20 * 1000;
-
 const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 
 const MAX_PARSE_RECURSION = 10;
 
 const VALID_COMMAND_TOKENS = '/!';
-
 const BROADCAST_TOKEN = '!';
 
 const fs = require('fs');
@@ -59,14 +60,12 @@ class PatternTester {
 			this.regexp = new RegExp('^(' + slowElements.map(elem => '(?:' + elem + ')').join('|') + ')', 'i');
 		}
 	}
-	register(elem) {
-		if (Array.isArray(elem)) {
-			elem.forEach(e => this.register(e));
-			return;
-		}
-		this.elements.push(elem);
-		if (/^[^ \^\$\?\|\(\)\[\]]+ $/.test(elem)) {
-			this.fastElements.add(this.fastNormalize(elem));
+	register(...elems) {
+		for (let elem of elems) {
+			this.elements.push(elem);
+			if (/^[^ \^\$\?\|\(\)\[\]]+ $/.test(elem)) {
+				this.fastElements.add(this.fastNormalize(elem));
+			}
 		}
 		this.update();
 	}
@@ -80,25 +79,14 @@ class PatternTester {
 	}
 }
 
-exports.multiLinePattern = new PatternTester();
-exports.globalPattern = new PatternTester();
+Chat.multiLinePattern = new PatternTester();
 
 /*********************************************************
  * Load command files
  *********************************************************/
 
-let baseCommands = exports.baseCommands = require('./commands').commands;
-let commands = exports.commands = Object.assign({}, baseCommands);
-
-// Install plug-in commands
-
-// info always goes first so other plugins can shadow it
-Object.assign(commands, require('./chat-plugins/info').commands);
-
-for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
-	if (file.substr(-3) !== '.js' || file === 'info.js') continue;
-	Object.assign(commands, require('./chat-plugins/' + file).commands);
-}
+Chat.baseCommands = undefined;
+Chat.commands = undefined;
 
 /*********************************************************
  * Parser
@@ -106,25 +94,220 @@ for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
 
 class CommandContext {
 	constructor(options) {
+		this.message = options.message || ``;
+		this.recursionDepth = 0;
+
+		// message context
+		this.room = options.room;
+		this.user = options.user;
+		this.connection = options.connection;
+		this.pmTarget = options.pmTarget;
+
+		// command context
 		this.cmd = options.cmd || '';
 		this.cmdToken = options.cmdToken || '';
+		this.target = options.target || ``;
+		this.fullCmd = options.fullCmd || '';
 
-		this.target = options.target || '';
-		this.message = options.message || '';
-
-		this.levelsDeep = options.levelsDeep || 0;
-		this.namespaces = options.namespaces || null;
-
-		this.room = options.room || null;
-		this.user = options.user || null;
-		this.connection = options.connection || null;
-
+		// target user
 		this.targetUser = null;
-		this.targetUsername = '';
-		this.inputUsername = '';
+		this.targetUsername = "";
+		this.inputUsername = "";
+	}
 
-		this.pmTarget = options.pmTarget;
-		this.relatedRoom = options.relatedRoom;
+	parse(message) {
+		if (message) {
+			// spawn subcontext
+			let subcontext = new CommandContext(this);
+			subcontext.recursionDepth++;
+			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
+				throw new Error("Too much command recursion");
+			}
+			subcontext.message = message;
+			return subcontext.parse();
+		}
+		message = this.message;
+
+		let originalRoom = this.room;
+		if (this.room && !(this.user.userid in this.room.users)) {
+			this.room = Rooms.global;
+		}
+
+		let commandHandler = this.splitCommand(message);
+
+		if (typeof commandHandler === 'function') {
+			message = this.run(commandHandler);
+		} else {
+			if (commandHandler === '!') {
+				if (originalRoom === Rooms.global) {
+					return this.popupReply(`You tried use "${message}" as a global command, but it is not a global command.`);
+				} else if (originalRoom) {
+					return this.popupReply(`You tried to send "${message}" to the room "${originalRoom.id}" but it failed because you were not in that room.`);
+				}
+				return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" is unavailable in private messages. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
+			}
+			if (this.cmdToken) {
+				// To guard against command typos, show an error message
+				if (this.cmdToken === BROADCAST_TOKEN) {
+					if (/[a-z0-9]/.test(this.cmd.charAt(0))) {
+						return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
+					}
+				} else {
+					return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
+				}
+			} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) && VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
+				message = message.trim();
+				if (message.charAt(0) !== BROADCAST_TOKEN) {
+					message = message.charAt(0) + message;
+				}
+			}
+
+			message = this.canTalk(message);
+		}
+
+		// Output the message
+
+		if (message && message !== true && typeof message.then !== 'function') {
+			if (this.pmTarget) {
+				const parsedMsg = parseEmoticons(message, this.room, this.user, true);
+				if (parsedMsg) message = '/html ' + parsedMsg;
+				let buf = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity()}|${message}`;
+				this.user.send(buf);
+				if (this.pmTarget !== this.user) this.pmTarget.send(buf);
+
+				this.pmTarget.lastPM = this.user.userid;
+				this.user.lastPM = this.pmTarget.userid;
+			} else {
+				if (parseEmoticons(message, this.room, this.user)) return;
+				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
+			}
+		}
+
+
+		this.update();
+
+		return message;
+	}
+	splitCommand(message = this.message, recursing) {
+		this.cmd = '';
+		this.cmdToken = '';
+		this.target = '';
+		if (!message || !message.trim().length) return;
+
+		// hardcoded commands
+		if (message.startsWith(`>> `)) {
+			message = `/eval ${message.slice(3)}`;
+		} else if (message.startsWith(`>>> `)) {
+			message = `/evalbattle ${message.slice(4)}`;
+		} else if (message.startsWith(`/me`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
+			message = `/mee ${message.slice(3)}`;
+		} else if (message.startsWith(`/ME`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
+			message = `/MEE ${message.slice(3)}`;
+		}
+
+		let cmdToken = message.charAt(0);
+		if (!VALID_COMMAND_TOKENS.includes(cmdToken)) return;
+		if (cmdToken === message.charAt(1)) return;
+		if (cmdToken === BROADCAST_TOKEN && /[^A-Za-z0-9]/.test(message.charAt(1))) return;
+
+		let cmd = '', target = '';
+
+		let spaceIndex = message.indexOf(' ');
+		if (spaceIndex > 0) {
+			cmd = message.slice(1, spaceIndex).toLowerCase();
+			target = message.slice(spaceIndex + 1);
+		} else {
+			cmd = message.slice(1).toLowerCase();
+			target = '';
+		}
+
+		let curCommands = Chat.commands;
+		let commandHandler;
+		let fullCmd = cmd;
+
+		do {
+			if (curCommands.hasOwnProperty(cmd)) {
+				commandHandler = curCommands[cmd];
+			} else {
+				commandHandler = undefined;
+			}
+			if (typeof commandHandler === 'string') {
+				// in case someone messed up, don't loop
+				commandHandler = curCommands[commandHandler];
+			} else if (Array.isArray(commandHandler) && !recursing) {
+				return this.splitCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
+			}
+			if (commandHandler && typeof commandHandler === 'object') {
+				let spaceIndex = target.indexOf(' ');
+				if (spaceIndex > 0) {
+					cmd = target.substr(0, spaceIndex).toLowerCase();
+					target = target.substr(spaceIndex + 1);
+				} else {
+					cmd = target.toLowerCase();
+					target = '';
+				}
+
+				fullCmd += ' ' + cmd;
+				curCommands = commandHandler;
+			}
+		} while (commandHandler && typeof commandHandler === 'object');
+
+		if (!commandHandler && curCommands.default) {
+			commandHandler = curCommands.default;
+			if (typeof commandHandler === 'string') {
+				commandHandler = curCommands[commandHandler];
+			}
+		}
+
+		if (!commandHandler && !recursing) {
+			for (let g in Config.groups) {
+				let groupid = Config.groups[g].id;
+				target = toId(target);
+				if (cmd === groupid) {
+					return this.splitCommand(`/promote ${target}, ${g}`, true);
+				} else if (cmd === 'global' + groupid) {
+					return this.splitCommand(`/globalpromote ${target}, ${g}`, true);
+				} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
+					return this.splitCommand(`/demote ${target}`, true);
+				} else if (cmd === 'room' + groupid) {
+					return this.splitCommand(`/roompromote ${target}, ${g}`, true);
+				} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
+					return this.splitCommand(`/roomdemote ${target}`, true);
+				}
+			}
+		}
+
+		this.cmd = cmd;
+		this.cmdToken = cmdToken;
+		this.target = target;
+		this.fullCmd = fullCmd;
+
+		if (typeof commandHandler === 'function' && (this.pmTarget || this.room === Rooms.global)) {
+			if (!curCommands['!' + (typeof curCommands[cmd] === 'string' ? curCommands[cmd] : cmd)]) {
+				return '!';
+			}
+		}
+
+		return commandHandler;
+	}
+	run(commandHandler) {
+		if (typeof commandHandler === 'string') commandHandler = Chat.commands[commandHandler];
+		let result;
+		try {
+			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
+		} catch (err) {
+			require('./crashlogger')(err, 'A chat command', {
+				user: this.user.name,
+				room: this.room && this.room.id,
+				pmTarget: this.pmTarget && this.pmTarget.name,
+				message: this.message,
+			});
+			Rooms.global.reportCrash(err);
+			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we\'re working on fixing it.</div>`);
+		}
+		if (result === undefined) result = false;
+
+		return result;
 	}
 
 	checkFormat(room, message) {
@@ -172,7 +355,7 @@ class CommandContext {
 		return true;
 	}
 	pmTransform(message) {
-		let prefix = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity ? this.pmTarget.getIdentity() : ' ' + this.pmTarget}|`;
+		let prefix = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity()}|`;
 		return message.split('\n').map(message => {
 			if (message.startsWith('||')) {
 				return prefix + '/text ' + message.slice(2);
@@ -194,7 +377,7 @@ class CommandContext {
 			if (this.pmTarget) {
 				data = this.pmTransform(data);
 				this.user.send(data);
-				if (this.pmTarget.send) this.pmTarget.send(data);
+				if (this.pmTarget !== this.user) this.pmTarget.send(data);
 			} else {
 				this.room.add(data);
 			}
@@ -210,10 +393,10 @@ class CommandContext {
 	}
 	errorReply(message) {
 		if (this.pmTarget) {
-			let prefix = '|pm|' + this.user.getIdentity() + '|' + (this.pmTarget.getIdentity ? this.pmTarget.getIdentity() : ' ' + this.pmTarget) + '|/error ';
+			let prefix = '|pm|' + this.user.getIdentity() + '|' + this.pmTarget.getIdentity() + '|/error ';
 			this.connection.send(prefix + message.replace(/\n/g, prefix));
 		} else {
-			this.sendReply('|html|<div class="message-error">' + Tools.escapeHTML(message).replace(/\n/g, '<br />') + '</div>');
+			this.sendReply('|html|<div class="message-error">' + Chat.escapeHTML(message).replace(/\n/g, '<br />') + '</div>');
 		}
 	}
 	addBox(html) {
@@ -229,7 +412,7 @@ class CommandContext {
 		if (this.pmTarget) {
 			data = this.pmTransform(data);
 			this.user.send(data);
-			if (this.pmTarget.send) this.pmTarget.send(data);
+			if (this.pmTarget !== this.user) this.pmTarget.send(data);
 			return;
 		}
 		this.room.add(data);
@@ -238,7 +421,7 @@ class CommandContext {
 		if (this.pmTarget) {
 			data = this.pmTransform(data);
 			this.user.send(data);
-			if (this.pmTarget.send) this.pmTarget.send(data);
+			if (this.pmTarget !== this.user) this.pmTarget.send(data);
 			return;
 		}
 		this.room.send(data);
@@ -274,9 +457,12 @@ class CommandContext {
 	logModCommand(text) {
 		this.room.modlog(text);
 	}
+	update() {
+		if (this.room) this.room.update();
+	}
 	can(permission, target, room) {
 		if (!this.user.can(permission, target, room)) {
-			this.errorReply(this.cmdToken + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
+			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
 			return false;
 		}
 		return true;
@@ -294,9 +480,9 @@ class CommandContext {
 			// broadcast cooldown
 			let broadcastMessage = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 
-			if (this.room.lastBroadcast === this.broadcastMessage &&
+			if (this.room && this.room.lastBroadcast === this.broadcastMessage &&
 					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-				this.errorReply("You can't broadcast this because it was just broadcast.");
+				this.errorReply("You can't broadcast this because it was just broadcasted.");
 				return false;
 			}
 
@@ -330,46 +516,6 @@ class CommandContext {
 
 		return true;
 	}
-	parse(message, inNamespace, room) {
-		if (inNamespace && this.cmdToken) {
-			message = this.cmdToken + this.namespaces.concat(message.slice(1)).join(" ");
-		}
-		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.pmTarget, this.levelsDeep + 1);
-	}
-	run(targetCmd, inNamespace) {
-		if (targetCmd === 'constructor') return this.sendReply("Access denied.");
-		let commandHandler;
-		if (typeof targetCmd === 'function') {
-			commandHandler = targetCmd;
-		} else if (inNamespace) {
-			commandHandler = commands;
-			for (let i = 0; i < this.namespaces.length; i++) {
-				commandHandler = commandHandler[this.namespaces[i]];
-			}
-			commandHandler = commandHandler[targetCmd];
-		} else {
-			commandHandler = commands[targetCmd];
-		}
-
-		let result;
-		try {
-			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
-		} catch (err) {
-			if (require('./crashlogger')(err, 'A chat command', {
-				user: this.user.name,
-				room: this.room.id,
-				message: this.message,
-			}) === 'lockdown') {
-				let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
-			} else {
-				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
-			}
-		}
-		if (result === undefined) result = false;
-
-		return result;
-	}
 	canTalk(message, room, targetUser) {
 		if (room === undefined) room = this.room;
 		if (targetUser === undefined && this.pmTarget) {
@@ -385,44 +531,55 @@ class CommandContext {
 			return false;
 		}
 		if (!user.named) {
-			connection.popup("You must choose a name before you can talk.");
+			connection.popup(`You must choose a name before you can talk.`);
 			return false;
 		}
 		if (!user.can('bypassall')) {
-			if (room && user.locked) {
-				this.errorReply("You are locked from talking in chat.");
-				return false;
-			}
-			if (room && room.isMuted(user)) {
-				this.errorReply("You are muted and cannot talk in this room.");
-				return false;
-			}
-			if ((!room || !room.battle) && (!targetUser || " +".includes(targetUser.group))) {
-				// in a chat room, or PMing non-staff
-				if (user.namelocked) {
-					this.errorReply("You are namelocked and cannot talk except in battles and to global staff.");
+			let lockType = (user.namelocked ? `namelocked` : user.locked ? `locked` : ``);
+			if (room) {
+				if (lockType) {
+					this.errorReply(`You are ${lockType} and can't talk in chat.`);
 					return false;
 				}
-			}
-			if (room && room.modchat) {
-				let userGroup = user.group;
-				if (!user.can('makeroom')) {
-					userGroup = room.getAuth(user);
+				if (room.isMuted(user)) {
+					this.errorReply(`You are muted and cannot talk in this room.`);
+					return false;
 				}
-				if (room.modchat === 'autoconfirmed') {
-					if (!user.autoconfirmed && userGroup === ' ') {
-						this.errorReply("Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
+				if (room.modchat && !user.authAtLeast(room.modchat, room)) {
+					if (room.modchat === 'autoconfirmed') {
+						this.errorReply(`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`);
 						return false;
 					}
-				} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat)) {
-					let groupName = Config.groups[room.modchat].name || room.modchat;
-					this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
+					const groupName = Config.groups[room.modchat] && Config.groups[room.modchat].name || room.modchat;
+					this.errorReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`);
+					return false;
+				}
+				if (!(user.userid in room.users)) {
+					connection.popup("You can't send a message to this room without being in it.");
 					return false;
 				}
 			}
-			if (room && !(user.userid in room.users)) {
-				connection.popup("You can't send a message to this room without being in it.");
-				return false;
+			if (targetUser) {
+				if (lockType && !targetUser.can('lock')) {
+					return this.errorReply(`You are ${lockType} and can only private message members of the global moderation team (users marked by @ or above in the Help room).`);
+				}
+				if (targetUser.locked && !user.can('lock')) {
+					return this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
+				}
+				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat)) {
+					let groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+					return this.errorReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to PM users.`);
+				}
+				if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
+					if (!targetUser.can('lock')) {
+						return this.errorReply(`This user is blocking private messages right now.`);
+					} else if (targetUser.can('bypassall')) {
+						return this.errorReply(`This admin is too busy to answer private messages right now. Please contact a different staff member.`);
+					}
+				}
+				if (user.ignorePMs && user.ignorePMs !== targetUser.group && !targetUser.can('lock')) {
+					return this.errorReply(`You are blocking private messages right now.`);
+				}
 			}
 		}
 
@@ -622,22 +779,22 @@ class CommandContext {
 		return target.substr(commaIndex + 1).trim();
 	}
 }
-exports.CommandContext = CommandContext;
+Chat.CommandContext = CommandContext;
 
 /**
  * Command parser
  *
  * Usage:
- *   CommandParser.parse(message, room, user, connection)
+ *   Chat.parse(message, room, user, connection)
  *
  * Parses the message. If it's a command, the commnad is executed, if
  * not, it's displayed directly in the room.
  *
  * Examples:
- *   CommandParser.parse("/join lobby", room, user, connection)
+ *   Chat.parse("/join lobby", room, user, connection)
  *     will make the user join the lobby.
  *
- *   CommandParser.parse("Hi, guys!", room, user, connection)
+ *   Chat.parse("Hi, guys!", room, user, connection)
  *     will return "Hi, guys!" if the user isn't muted, or
  *     if he's muted, will warn him that he's muted.
  *
@@ -650,144 +807,17 @@ exports.CommandContext = CommandContext;
  * @param {Room} room - the room the user is trying to say it in
  * @param {User} user - the user that sent the message
  * @param {Connection} connection - the connection the user sent the message from
- * @param {User?} pmTarget - the PM the user wants to send the message to
  */
-let parse = exports.parse = function (message, room, user, connection, pmTarget, levelsDeep = 0) {
-	let cmd = '', target = '', cmdToken = '';
+Chat.parse = function (message, room, user, connection) {
+	Chat.loadCommands();
+	let context = new CommandContext({message, room, user, connection});
 
-	if (!message || !message.trim().length) return;
-
-	if (levelsDeep > MAX_PARSE_RECURSION) {
-		throw new Error("Too much command recursion");
-	}
-
-	let relatedRoom = null;
-	if (!user.inRooms.has(room.id) || room === Rooms.global) {
-		if (!CommandParser.globalPattern.test(message)) return;
-		relatedRoom = room;
-	}
-	if (relatedRoom) room = Rooms.global;
-
-	if (message.slice(0, 3) === '>> ') {
-		// multiline eval
-		message = '/eval ' + message.slice(3);
-	} else if (message.slice(0, 4) === '>>> ') {
-		// multiline eval
-		message = '/evalbattle ' + message.slice(4);
-	} else if (message.slice(0, 3) === '/me' && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
-		message = '/mee ' + message.slice(3);
-	}
-
-	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
-		cmdToken = message.charAt(0);
-		let spaceIndex = message.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = message.substr(1, spaceIndex - 1).toLowerCase();
-			target = message.substr(spaceIndex + 1);
-		} else {
-			cmd = message.substr(1).toLowerCase();
-			target = '';
-		}
-	}
-
-	let namespaces = [];
-	let currentCommands = commands;
-	let commandHandler;
-
-	do {
-		if (toId(cmd) === 'constructor') {
-			return connection.sendTo(room, "Error: Access denied.");
-		}
-		commandHandler = currentCommands[cmd];
-		if (typeof commandHandler === 'string') {
-			// in case someone messed up, don't loop
-			commandHandler = currentCommands[commandHandler];
-		} else if (Array.isArray(commandHandler)) {
-			return parse(cmdToken + 'help ' + cmd.slice(0, -4), room, user, connection, undefined, levelsDeep + 1);
-		}
-		if (commandHandler && typeof commandHandler === 'object') {
-			namespaces.push(cmd);
-
-			let spaceIndex = target.indexOf(' ');
-			if (spaceIndex > 0) {
-				cmd = target.substr(0, spaceIndex).toLowerCase();
-				target = target.substr(spaceIndex + 1);
-			} else {
-				cmd = target.toLowerCase();
-				target = '';
-			}
-
-			currentCommands = commandHandler;
-		}
-	} while (commandHandler && typeof commandHandler === 'object');
-	if (!commandHandler && currentCommands.default) {
-		commandHandler = currentCommands.default;
-		if (typeof commandHandler === 'string') {
-			commandHandler = currentCommands[commandHandler];
-		}
-	}
-	let fullCmd = namespaces.concat(cmd).join(' ');
-
-	let context = new CommandContext({target, room, user, connection, cmd, message, namespaces, cmdToken, levelsDeep, pmTarget, relatedRoom});
-
-	if (typeof commandHandler === 'function') {
-		message = context.run(commandHandler);
-	} else {
-		// Check for mod/demod/admin/deadmin/etc depending on the group ids
-		for (let g in Config.groups) {
-			let groupid = Config.groups[g].id;
-			if (cmd === groupid) {
-				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
-			} else if (cmd === 'global' + groupid) {
-				return parse('/globalpromote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
-			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
-				return parse('/demote ' + toId(target), room, user, connection, undefined, levelsDeep + 1);
-			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
-			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
-				return parse('/roomdemote ' + toId(target), room, user, connection, undefined, levelsDeep + 1);
-			}
-		}
-
-		if (cmdToken && fullCmd) {
-			// To guard against command typos, we now emit an error message
-			if (cmdToken === BROADCAST_TOKEN) {
-				if (/[a-z0-9]/.test(cmd.charAt(0))) {
-					return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized.");
-				}
-			} else {
-				return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
-			}
-		} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) && VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
-			message = message.trim();
-			if (message.charAt(0) !== BROADCAST_TOKEN) {
-				message = message.charAt(0) + message;
-			}
-		}
-
-		message = context.canTalk(message);
-	}
-
-	if (parseEmoticons(message, room, user)) return message;
-
-	// Output the message to the room
-
-	if (message && message !== true && typeof message.then !== 'function') {
-		room.add('|c|' + user.getIdentity(room.id) + '|' + message);
-	}
-
-	room.update();
-
-	return message;
+	return context.parse();
 };
 
-exports.package = {};
-fs.readFile(path.resolve(__dirname, 'package.json'), (err, data) => {
-	if (err) return;
-	exports.package = JSON.parse(data);
-});
+Chat.package = {};
 
-exports.uncacheTree = function (root) {
+Chat.uncacheTree = function (root) {
 	let uncache = [require.resolve(root)];
 	do {
 		let newuncache = [];
@@ -803,4 +833,117 @@ exports.uncacheTree = function (root) {
 		}
 		uncache = newuncache;
 	} while (uncache.length > 0);
+};
+
+Chat.loadCommands = function () {
+	if (Chat.commands) return;
+
+	fs.readFile(path.resolve(__dirname, 'package.json'), (err, data) => {
+		if (err) return;
+		Chat.package = JSON.parse(data);
+	});
+
+	let baseCommands = Chat.baseCommands = require('./chat-commands').commands;
+	let commands = Chat.commands = Object.assign({}, baseCommands);
+
+	// Install plug-in commands
+
+	// info always goes first so other plugins can shadow it
+	Object.assign(commands, require('./chat-plugins/info').commands);
+
+	for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
+		if (file.substr(-3) !== '.js' || file === 'info.js') continue;
+		Object.assign(commands, require('./chat-plugins/' + file).commands);
+	}
+};
+
+/**
+ * Escapes HTML in a string.
+ *
+ * @param  {string} str
+ * @return {string}
+ */
+Chat.escapeHTML = function (str) {
+	if (!str) return '';
+	return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
+};
+
+/**
+ * Template string tag function for escaping HTML
+ *
+ * @param  {string[]} strings
+ * @param  {...any} values
+ * @return {string}
+ */
+Chat.html = function (strings) {
+	let buf = strings[0];
+	for (let i = 1; i < arguments.length; i++) {
+		buf += Chat.escapeHTML(arguments[i]);
+		buf += strings[i];
+	}
+	return buf;
+};
+
+/**
+ * Returns singular (defaulting to '') if num is 1, or plural
+ * (defaulting to 's') otherwise. Helper function for pluralizing
+ * words.
+ *
+ * @param  {any} num
+ * @param  {?string} plural
+ * @param  {?string} singular
+ * @return {string}
+ */
+Chat.plural = function (num, plural = 's', singular = '') {
+	if (num && typeof num.length === 'number') {
+		num = num.length;
+	} else if (num && typeof num.size === 'number') {
+		num = num.size;
+	} else {
+		num = Number(num);
+	}
+	return (num !== 1 ? plural : singular);
+};
+
+/**
+ * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
+ *
+ * options.hour12 = true will reports hours in mod-12 format.
+ *
+ * @param  {Date} date
+ * @param  {object} options
+ * @return {string}
+ */
+Chat.toTimestamp = function (date, options) {
+	const isHour12 = options && options.hour12;
+	let parts = [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
+	if (isHour12) {
+		parts.push(parts[3] >= 12 ? 'pm' : 'am');
+		parts[3] = parts[3] % 12 || 12;
+	}
+	parts = parts.map(val => val < 10 ? '0' + val : '' + val);
+	return parts.slice(0, 3).join("-") + " " + parts.slice(3, 6).join(":") + (isHour12 ? " " + parts[6] : "");
+};
+
+/**
+ * Takes a number of milliseconds, and reports the duration in English: hours, minutes, etc.
+ *
+ * options.hhmmss = true will instead report the duration in 00:00:00 format
+ *
+ * @param  {number} number
+ * @param  {object} options
+ * @return {string}
+ */
+Chat.toDurationString = function (number, options) {
+	// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
+	// https://github.com/tc39/ecma402/issues/47
+	const date = new Date(+number);
+	const parts = [date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()];
+	const unitNames = ["second", "minute", "hour", "day", "month", "year"];
+	const positiveIndex = parts.findIndex(elem => elem > 0);
+	if (options && options.hhmmss) {
+		let string = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
+		return string.length === 2 ? "00:" + string : string;
+	}
+	return parts.slice(positiveIndex).reverse().map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "").reverse().join(" ").trim();
 };

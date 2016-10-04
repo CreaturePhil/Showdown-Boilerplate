@@ -8,7 +8,7 @@
     "moment": "2.11.2",
     "origindb": "2.5.2",
     "request": "2.67.0",
-    "sockjs": "0.3.17"
+    "sockjs": "0.3.18"
   },
   "optionalDependencies": {
     "cloud-env": "0.1.1",

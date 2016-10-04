@@ -32,6 +32,7 @@ exports.BattleAliases = {
 	"aaa": "Almost Any Ability",
 	"mnm": "Mix and Mega",
 	"monorandom": "Monotype Random Battle",
+	"bf": "Battle Factory",
 
 	// mega evos
 	"maero": "Aerodactyl-Mega",
@@ -285,6 +286,7 @@ exports.BattleAliases = {
 	"azu": "Azumarill",
 	"bliss": "Blissey",
 	"bee": "Beedrill",
+	"cathy": "Trevenant",
 	"chomp": "Garchomp",
 	"clef": "Clefable",
 	"coba": "Cobalion",
@@ -357,7 +359,8 @@ exports.BattleAliases = {
 	"whimsi": "Whimsicott",
 	"zam": "Alakazam",
 	"zard": "Charizard",
-	"ohmagod":"Plasmanta",
+	"ohmagod": "Plasmanta",
+	"zong": "Bronzong",
 
 	// moves
 	"bb": "Brave Bird",
