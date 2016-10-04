@@ -68,7 +68,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'solosisevolution': 'http://0.media.dorkly.cvcdn.com/67/87/ad9e4bf24d851a0481971ac2310ea3de.gif',
 		'ghoststrolling': 'https://media.giphy.com/media/nwErbJbGs6hBS/giphy.gif',
 		'jamesbreasts': 'http://stream1.gifsoup.com/view3/1797152/james-and-his-boobs-o.gif',
-		'llamabouncy': 'http://i.imgur.com/RE18vpp.gif,
+		'llamabouncy': 'http://i.imgur.com/RE18vpp.gif',
 		'llamahello': 'http://i.imgur.com/6iXGZs7.gif',
 		'llamacute': 'http://i.imgur.com/sAUYErc.gif',
 		'llamanv': 'http://i.imgur.com/9PgUk4M.gif',
