@@ -2532,6 +2532,76 @@ exports.Formats = [
 		ruleset: ['Doubles OU'],
 		banlist: ['Kangaskhanite', 'Perish Song'],
 	},
+{
+				name:"Partners in Crime",
+		        section: "Other Metagames",
+		        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/partners-in-crime.3559988/\">Partners in Crime</a>"],
+		        ruleset: ["Doubles OU"],
+		        mod: "pic",
+		        gameType:"doubles",
+		        banlist: ["Huge Power","Kangaskhanite", "Mawilite","Medichamite","Pure Power","Wonder Guard"],
+		        onSwitchIn: function(pokemon)
+		        {
+		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
+		        	let sm = function (om,mo)
+			        		{
+			        			if(!om) om = mo
+			        			else
+			        			{
+			        				om.move = mo.move;
+			        				om.maxpp = mo.maxpp;
+			        				om.id = mo.id;
+			        			}
+			        		}
+		        	if(pokemon.isActive && this[side].pokemon[partner].isActive)
+		        	{
+		        		for(let i=0;i<4;i++)
+		        		{
+		        			/*sm(pokemon.moveset[i + 4] , this[side].pokemon[partner].moveset[i]);
+		        			sm(pokemon.baseMoveset[i + 4] , this[side].pokemon[partner].baseMoveset[i]);
+		        			sm(this[side].pokemon[partner].moveset[i + 4] , pokemon.moveset[i]);
+		        			sm(this[side].pokemon[partner].baseMoveset[i + 4] , pokemon.baseMoveset[i]); */
+		        			pokemon.moveset[i + 4] = this[side].pokemon[partner].moveset[i];
+		        			pokemon.baseMoveset[i + 4] = this[side].pokemon[partner].baseMoveset[i];
+		        			this[side].pokemon[partner].moveset[i + 4] = pokemon.moveset[i];
+		        			this[side].pokemon[partner].baseMoveset[i + 4] = pokemon.baseMoveset[i]; 
+		        		}
+		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0)
+		        		{
+		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
+		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
+		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
+		        		}
+		        		if(Object.keys(pokemon.volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0)
+		        		{
+		        			if(pokemon.innate) pokemon.removeVolatile(pokemon.innate);
+		        			pokemon.innate = toId(this[side].pokemon[partner].ability);
+		        			pokemon.addVolatile(pokemon.innate);
+		        		}
+		        	}
+		        },
+		        onAfterMega: function(pokemon)
+		        {
+		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
+		        	if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0)
+		        	{
+		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
+		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
+		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
+		        	}
+		        },
+		        onFaint: function(pokemon)
+		        {
+		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
+		        	if(this[side].pokemon[partner].isActive)
+		        	{
+		        		this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate)
+		        		delete this[side].pokemon[partner].innate;
+		        	}
+		        	pokemon.moveset = [pokemon.moveset[0],pokemon.moveset[1],pokemon.moveset[2],pokemon.moveset[3]];
+		        	pokemon.baseMoveset = [pokemon.baseMoveset[0],pokemon.baseMoveset[1],pokemon.baseMoveset[2],pokemon.baseMoveset[3]];
+		        },
+		},
 	{
 		name: "Averagemons",
 		desc: [
