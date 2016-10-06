@@ -2533,46 +2533,41 @@ exports.Formats = [
 		banlist: ['Kangaskhanite', 'Perish Song'],
 	},
 {
-				name:"Partners in Crime",
+			name:"Partners in Crime",
 		        section: "Other Metagames",
 		        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/partners-in-crime.3559988/\">Partners in Crime</a>"],
 		        ruleset: ["Doubles OU"],
 		        mod: "pic",
 		        gameType:"doubles",
 		        banlist: ["Huge Power","Kangaskhanite", "Mawilite","Medichamite","Pure Power","Wonder Guard"],
+				onBegin: function()
+				{
+					for(let i=1;i<=2;i++)
+					{
+						for(let j=0;j<this["p"+i].pokemon.length;j++)
+						{
+							this["p"+i].pokemon[j].om = this["p"+i].pokemon[j].moveset;
+							this["p"+i].pokemon[j].obm = this["p"+i].pokemon[j].baseMoveset;
+						}
+					}
+				},
 		        onSwitchIn: function(pokemon)
 		        {
 		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
-		        	let sm = function (om,mo)
-			        		{
-			        			if(!om) om = mo
-			        			else
-			        			{
-			        				om.move = mo.move;
-			        				om.maxpp = mo.maxpp;
-			        				om.id = mo.id;
-			        			}
-			        		}
 		        	if(pokemon.isActive && this[side].pokemon[partner].isActive)
 		        	{
-		        		for(let i=0;i<4;i++)
-		        		{
-		        			/*sm(pokemon.moveset[i + 4] , this[side].pokemon[partner].moveset[i]);
-		        			sm(pokemon.baseMoveset[i + 4] , this[side].pokemon[partner].baseMoveset[i]);
-		        			sm(this[side].pokemon[partner].moveset[i + 4] , pokemon.moveset[i]);
-		        			sm(this[side].pokemon[partner].baseMoveset[i + 4] , pokemon.baseMoveset[i]); */
-		        			pokemon.moveset[i + 4] = this[side].pokemon[partner].moveset[i];
-		        			pokemon.baseMoveset[i + 4] = this[side].pokemon[partner].baseMoveset[i];
-		        			this[side].pokemon[partner].moveset[i + 4] = pokemon.moveset[i];
-		        			this[side].pokemon[partner].baseMoveset[i + 4] = pokemon.baseMoveset[i]; 
-		        		}
-		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0)
+		        		let partl = this[side].pokemon[partner].obm.length, pokl = pokemon.obm.length;
+		        		this[side].pokemon[partner].moveset = this[side].pokemon[partner].om.concat(pokemon.om);
+		        		this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm.concat(pokemon.obm);
+		        		pokemon.moveset = pokemon.om.concat(this[side].pokemon[partner].om);
+		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
+		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0)
 		        		{
 		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
 		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
 		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
 		        		}
-		        		if(Object.keys(pokemon.volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0)
+		        		if(Object.keys(pokemon.volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0 && Object.keys(pokemon.volatiles).indexOf(toId(pokemon.ability))<0)
 		        		{
 		        			if(pokemon.innate) pokemon.removeVolatile(pokemon.innate);
 		        			pokemon.innate = toId(this[side].pokemon[partner].ability);
@@ -2598,8 +2593,8 @@ exports.Formats = [
 		        		this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate)
 		        		delete this[side].pokemon[partner].innate;
 		        	}
-		        	pokemon.moveset = [pokemon.moveset[0],pokemon.moveset[1],pokemon.moveset[2],pokemon.moveset[3]];
-		        	pokemon.baseMoveset = [pokemon.baseMoveset[0],pokemon.baseMoveset[1],pokemon.baseMoveset[2],pokemon.baseMoveset[3]];
+		        	this[side].pokemon[partner].moveset = this[side].pokemon[partner].om;
+		        	this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm;
 		        },
 		},
 	{
