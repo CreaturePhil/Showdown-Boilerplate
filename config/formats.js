@@ -2532,7 +2532,7 @@ exports.Formats = [
 		ruleset: ['Doubles OU'],
 		banlist: ['Kangaskhanite', 'Perish Song'],
 	},
-{
+	{
 			name:"Partners in Crime",
 		        section: "Other Metagames",
 		        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/partners-in-crime.3559988/\">Partners in Crime</a>"],
@@ -2561,13 +2561,13 @@ exports.Formats = [
 		        		this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm.concat(pokemon.obm);
 		        		pokemon.moveset = pokemon.om.concat(this[side].pokemon[partner].om);
 		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
-		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0)
+		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability))
 		        		{
 		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
 		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
 		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
 		        		}
-		        		if(Object.keys(pokemon.volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0 && Object.keys(pokemon.volatiles).indexOf(toId(pokemon.ability))<0)
+		        		if(Object.keys(pokemon.volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0 && this[side].pokemon[partner].ability != pokemon.ability))
 		        		{
 		        			if(pokemon.innate) pokemon.removeVolatile(pokemon.innate);
 		        			pokemon.innate = toId(this[side].pokemon[partner].ability);
