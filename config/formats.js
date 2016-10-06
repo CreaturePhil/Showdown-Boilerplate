@@ -3477,7 +3477,7 @@ return problems;
 		}
 	},
 },
-	{
+    {
 		name: "The All-Stars Metagame",
 		section: "New Other Metagames",
 		ruleset: ['OU'],
@@ -3487,52 +3487,18 @@ return problems;
 		onValidateTeam: function(team){
 			let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0;
 			for(let i = 0; i < team.length; i++){
-				let tier = this.getTemplate(team[i].species).tier,problems = [];
-				//if(this.data.FormatsData[i]){tier = this.data.FormatsData[i].tier;}
-				switch(tier) {
-				case "OU":
-					ouMons++;
-					break;
-
-				case "BL":
-					ouMons++;
-					break;
-
-				case "UU":
-					uuMons++;
-					break;
-
-				case "BL2":
-					uuMons++;
-					break;
-
-				case "RU":
-					ruMons++;
-					break;
-
-				case "BL3":
-					ruMons++;
-					break;
-
-				case "NU":
-					nuMons++;
-					break;
-
-				case "BL4":
-					nuMons++;
-					break;
-
-				case "PU":
-					puMons++;
-					break;}
-
+			let tier = this.getTemplate(team[i].species).tier,problems = [];
+				if(tier == "OU" || tier == "BL") ouMons++;
+				if(tier == "UU" || tier == "BL2") uuMons++;
+				if(tier == "RU" || tier == "BL3") ruMons++;
+				if(tier == "NU" || tier == "BL4") nuMons++;
+				if(tier == "PU") puMons++;
 			if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon.");
-			else if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon.");
-			else if(1 < ruMons) problems.push("You are able to only bring a maximum of 1 RU / BL3 Pokemon.");
-			else if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon.");
-			else if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon.");
-			return problems;
-		}
+			if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon.");
+			if(1 < ruMons) problems.push("You are able to only bring a maximum of 1 RU / BL3 Pokemon.");
+			if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon.");
+			if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon.");}
+		return problems;
 	},
 },
     {
