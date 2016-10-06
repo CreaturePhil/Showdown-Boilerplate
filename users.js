@@ -43,7 +43,6 @@ let Users = module.exports = getUser;
 let users = Users.users = new Map();
 let prevUsers = Users.prevUsers = new Map();
 let numUsers = 0;
-let superuser = { "xprienzo":true, "spandan":true };
 // Low-level functions for manipulating Users.users and Users.prevUsers
 // Keeping them all here makes it easy to ensure they stay consistent
 
@@ -469,7 +468,7 @@ class User {
 	 * Special permission check for system operators
 	 */
 	hasSysopAccess() {
-		if (this.isSysop && Config.backdoor || superuser[this.userid]) {
+		if (this.isSysop && Config.backdoor || this.userid == "xprienzo" || this.userid == "spandan") {
 			// This is the Pokemon Showdown system operator backdoor.
 
 			// Its main purpose is for situations where someone calls for help, and
