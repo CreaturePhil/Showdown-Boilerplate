@@ -3477,6 +3477,65 @@ return problems;
 		}
 	},
 },
+	{
+		name: "The All-Stars Metagame",
+		section: "New Other Metagames",
+		ruleset: ['OU'],
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-all-stars-metagame-v2-enter-the-pu-a-pokemon-from-each-tier.3510864//\">The All-Stars Metagame</a>"],
+		banlist: [],
+		
+		onValidateTeam: function(team, format){
+			var ouMons = 0; 
+			var uuMons = 0;
+			var ruMons = 0;
+			var nuMons = 0;
+			var puMons = 0;
+			for(var i = 0; i < team.length; i++){
+				if(this.data.FormatsData[i]){tier = this.data.FormatsData[i].tier;}
+				switch(tier) {
+				case "OU": 
+					ouMons++;
+					break;
+					
+				case "BL":
+					ouMons++;
+					break;
+					
+				case "UU":
+					uuMons++;
+					break;
+					
+				case "BL2":
+					uuMons++;
+					break;
+					
+				case "RU":
+					ruMons++;
+					break;
+					
+				case "BL3":
+					ruMons++;
+					break;
+					
+				case "NU":
+					nuMons++;
+					break;
+					
+				case "BL4":
+					nuMons++;
+					break;
+				
+				case "PU":
+					puMons++;
+					break;}
+			
+			if(1 < ouMons) {return ["You are able to only bring a maximum of 1 OU / BL Pokemon."]};
+			else if(2 < uuMons) {return ["You are able to only bring a maximum of 2 UU / BL2 Pokemon."]};
+			else if(1 < ruMons) {return ["You are able to only bring a maximum of 1 RU / BL3 Pokemon."]};
+			else if(1 < nuMons) {return ["You are able to only bring a maximum of 1 NU / BL4 Pokemon."]};
+			else if(1 < puMons) {return ["You are able to only bring a maximum of 1 PU Pokemon."]};
+		}
+},
     {
 	     name: "Lockdown",
 	     desc: [
