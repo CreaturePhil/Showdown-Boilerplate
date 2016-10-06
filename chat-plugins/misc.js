@@ -275,7 +275,7 @@ exports.commands = {
 	ytmusic: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse('/help music');
-		this.sendReplyBox('<audio  style="width: 99.6%;border: 6px solid #F74823; color:green;" controls="" autoplay="false" loop="false" src="http://www.youtubeinmp3.com/fetch/?video=+'target+'" >Your user agent does not support the HTML5 Audio element.</audio>');
+		this.sendReplyBox('<audio  style="width: 99.6%;border: 6px solid #F74823; color:green;" controls="" autoplay="false" loop="false" src="http://www.youtubeinmp3.com/fetch/?video='+target+'" >Your user agent does not support the HTML5 Audio element.</audio>');
 	},
 	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."],
 };
