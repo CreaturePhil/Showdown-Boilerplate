@@ -3485,12 +3485,8 @@ return problems;
 		banlist: [],
 
 		onValidateTeam: function(team){
-			var ouMons = 0;
-			var uuMons = 0;
-			var ruMons = 0;
-			var nuMons = 0;
-			var puMons = 0;
-			for(var i = 0; i < team.length; i++){
+			let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0;
+			for(let i = 0; i < team.length; i++){
 				let tier = this.getTemplate(team[i].species).tier,problems = [];
 				//if(this.data.FormatsData[i]){tier = this.data.FormatsData[i].tier;}
 				switch(tier) {
