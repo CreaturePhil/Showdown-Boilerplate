@@ -4209,6 +4209,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
 			}
 			pokemon.addVolatile(pokemon.abilitwo, pokemon);//Second Ability! YAYAYAY
+			pokemon.volatiles[pokemon.abilitwo].noCopy = true; //Prevent it from being Baton Passed
 		},
 		onAfterMega: function(pokemon)
 		{
