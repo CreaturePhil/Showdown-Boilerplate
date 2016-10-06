@@ -3477,7 +3477,7 @@ return problems;
 		}
 	},
 },
-{
+    {
 		name: "The All-Stars Metagame",
 		section: "New Other Metagames",
 		ruleset: ['OU'],
