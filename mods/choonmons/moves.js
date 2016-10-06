@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleMovedex = {
 	aurasphere: {
 		inherit: true,
@@ -9,16 +11,16 @@ exports.BattleMovedex = {
 			boosts: {
 				spd: -1
 			}
-		}
+		},
 	},
 	boomburst: {
 		inherit: true,
-		basePower: 100
+		basePower: 100,
 	},
 	bubblebeam: {
 		inherit: true,
 		basePower: 90,
-		pp: 10
+		pp: 10,
 	},
 	darkpulse: {
 		inherit: true,
@@ -27,7 +29,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch'
-		}
+		},
 	},
 	dazzlinggleam: {
 		inherit: true,
@@ -38,7 +40,7 @@ exports.BattleMovedex = {
 			boosts: {
 				spa: -1
 			}
-		}
+		},
 	},
 	dracometeor: {
 		inherit: true,
@@ -53,30 +55,30 @@ exports.BattleMovedex = {
 			boosts: {
 				atk: -2
 			}
-		}
+		},
 	},
 	focusblast: {
 		inherit: true,
-		accuracy: 85
+		accuracy: 85,
 	},
 	freezedry: {
 		inherit: true,
 		basePower: 80,
-		pp: 10
+		pp: 10,
 	},
 	guillotine: {
 		inherit: true,
 		basePower: 70,
 		accuracy: 90,
 		ohko: false,
-		multihit: 2
+		multihit: 2,
 	},
 	horndrill: {
 		inherit: true,
 		basePower: 100,
 		accuracy: 90,
 		ohko: false,
-		willCrit: true
+		willCrit: true,
 	},
 	hydropump: {
 		inherit: true,
@@ -85,21 +87,21 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch'
-		}
+		},
 	},
 	knockoff: {
 		inherit: true,
 		basePower: 70,
-		onBasePower: function () {}
+		onBasePower: function () {},
 	},
 	leafstorm: {
 		inherit: true,
-		basePower: 140
+		basePower: 140,
 	},
 	leechlife: {
 		inherit: true,
 		basePower: 75,
-		pp: 10
+		pp: 10,
 	},
 	lightofruin: {
 		inherit: true,
@@ -108,7 +110,7 @@ exports.BattleMovedex = {
 			boosts: {
 				spa: -2
 			}
-		}
+		},
 	},
 	moonblast: {
 		inherit: true,
@@ -120,7 +122,7 @@ exports.BattleMovedex = {
 			boosts: {
 				spa: -1
 			}
-		}
+		},
 	},
 	muddywater: {
 		inherit: true,
@@ -131,7 +133,7 @@ exports.BattleMovedex = {
 	},
 	overheat: {
 		inherit: true,
-		basePower: 140
+		basePower: 140,
 	},
 	scald: {
 		inherit: true,
@@ -143,7 +145,7 @@ exports.BattleMovedex = {
 		},
 		onEffectiveness: function (typeMod, type) {
 			if (type === 'Ice') return 1;
-		}
+		},
 	},
 	shadowball: {
 		inherit: true,
@@ -153,7 +155,7 @@ exports.BattleMovedex = {
 			boosts: {
 				spd: -1
 			}
-		}
+		},
 	},
 	sheercold: {
 		inherit: true,
@@ -164,42 +166,42 @@ exports.BattleMovedex = {
 			boosts: {
 				spa: -2
 			}
-		}
+		},
 	},
 	sludgebomb: {
 		inherit: true,
 		secondary: {
 			chance: 10,
 			status: 'psn'
-		}
+		},
 	},
 	sludgewave: {
 		inherit: true,
 		basePower: 100,
-		secondary: false
+		secondary: false,
 	},
 	suckerpunch: {
 		inherit: true,
 		basePower: 40,
 		pp: 48,
-		onTry: function () {}
+		onTry: function () {},
 	},
 	surf: {
 		inherit: true,
 		basePower: 100,
-		pp: 10
+		pp: 10,
 	},
 	tailglow: {
 		inherit: true,
 		boosts: {
 			spa: 1,
 			spd: 2
-		}
+		},
 	},
 	volttackle: {
 		inherit: true,
 		recoil: false,
-		pp: 10
+		pp: 10,
 	},
 	
 	
@@ -228,7 +230,7 @@ exports.BattleMovedex = {
 		},
 		drain: [1, 2],
 		target: "normal",
-		type: "Steel"
+		type: "Steel",
 	},
 	"dynamocannon": {
 		num: -1101,
@@ -253,7 +255,7 @@ exports.BattleMovedex = {
 			status: 'par'
 		},
 		target: "normal",
-		type: "Electric"
+		type: "Electric",
 	},
 	"genesisnova": {
 		num: -1102,
@@ -280,7 +282,7 @@ exports.BattleMovedex = {
 			}
 		},
 		target: "normal",
-		type: "Psychic"
+		type: "Psychic",
 	},
 	"heavenscrack": {
 		num: -1103,
@@ -304,7 +306,7 @@ exports.BattleMovedex = {
 		ignoreImmunity: {'Ground': true},
 		secondary: false,
 		target: "allAdjacentFoes",
-		type: "Ground"
+		type: "Ground",
 	},
 	"imprisonedstrike": {
 		num: -1104,
@@ -329,7 +331,7 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "normal",
-		type: "Fighting"
+		type: "Fighting",
 	},
 	"perfectglacialist": {
 		num: -1105,
@@ -355,7 +357,7 @@ exports.BattleMovedex = {
 		},
 		multihit: 9,
 		target: "normal",
-		type: "Ice"
+		type: "Ice",
 	},
 	"valkyriearrow": {
 		num: -1106,
@@ -377,6 +379,6 @@ exports.BattleMovedex = {
 		},
 		selfdestruct: true,
 		target: "normal",
-		type: "Fairy"
-	}
+		type: "Fairy",
+	},
 };

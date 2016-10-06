@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleStatuses = {
 	frz: {
 		inherit: true,
@@ -9,6 +11,6 @@ exports.BattleStatuses = {
 			}
 			this.add('cant', pokemon, 'frz');
 			return false;
-		}
-	}
+		},
+	},
 };

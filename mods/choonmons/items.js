@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleItems = {
 	"lightball": {
 		inherit: true,
@@ -10,7 +12,7 @@ exports.BattleItems = {
 			if (pokemon.baseTemplate.baseSpecies === 'Pichu') {
 				return this.chainModify(2);
 			}
-		}
+		},
 	},
 	"luckypunch": {
 		inherit: true,
@@ -18,7 +20,7 @@ exports.BattleItems = {
 			if (user.baseTemplate.species === 'Happiny' || user.baseTemplate.species === 'Chansey' || user.baseTemplate.species === 'Blissey') {
 				move.critRatio += 2;
 			}
-		}
+		},
 	},
 	
 	
@@ -38,7 +40,7 @@ exports.BattleItems = {
 		},
 		num: -1100,
 		gen: 6,
-		desc: "If holder is a Venusaur, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Venusaur, this item allows it to Mega Evolve in battle.",
 	},
 	"venusauritey": {
 		id: "venusauritey",
@@ -52,7 +54,7 @@ exports.BattleItems = {
 		},
 		num: 659,
 		gen: 6,
-		desc: "If holder is a Venusaur, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Venusaur, this item allows it to Mega Evolve in battle.",
 	},
 	"blastoisinitex": {
 		id: "blastoisinitex",
@@ -66,7 +68,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "If holder is a Blastoise, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Blastoise, this item allows it to Mega Evolve in battle.",
 	},
 	"blastoisinitey": {
 		id: "blastoisinitey",
@@ -80,7 +82,7 @@ exports.BattleItems = {
 		},
 		num: -1101,
 		gen: 6,
-		desc: "If holder is a Blastoise, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Blastoise, this item allows it to Mega Evolve in battle.",
 	},
 	"butterfrite": {
 		id: "butterfrite",
@@ -94,7 +96,7 @@ exports.BattleItems = {
 		},
 		num: -1102,
 		gen: 6,
-		desc: "If holder is a Butterfree, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Butterfree, this item allows it to Mega Evolve in battle.",
 	},
 	"fearowite": {
 		id: "fearowite",
@@ -108,7 +110,7 @@ exports.BattleItems = {
 		},
 		num: -1103,
 		gen: 6,
-		desc: "If holder is a Fearow, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Fearow, this item allows it to Mega Evolve in battle.",
 	},
 	"raichuite": {
 		id: "raichuite",
@@ -122,7 +124,7 @@ exports.BattleItems = {
 		},
 		num: -1104,
 		gen: 6,
-		desc: "If holder is a Raichu, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Raichu, this item allows it to Mega Evolve in battle.",
 	},
 	"machampite": {
 		id: "machampite",
@@ -136,7 +138,7 @@ exports.BattleItems = {
 		},
 		num: -1105,
 		gen: 6,
-		desc: "If holder is a Machamp, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Machamp, this item allows it to Mega Evolve in battle.",
 	},
 	"slowkingite": {
 		id: "slowkingite",
@@ -150,7 +152,7 @@ exports.BattleItems = {
 		},
 		num: -1106,
 		gen: 6,
-		desc: "If holder is a Slowking, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Slowking, this item allows it to Mega Evolve in battle.",
 	},
 	"mimezite": {
 		id: "mimezite",
@@ -164,7 +166,7 @@ exports.BattleItems = {
 		},
 		num: -1107,
 		gen: 6,
-		desc: "If holder is a Mr. Mime, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Mr. Mime, this item allows it to Mega Evolve in battle.",
 	},
 	"meganiumite": {
 		id: "meganiumite",
@@ -178,21 +180,21 @@ exports.BattleItems = {
 		},
 		num: -1108,
 		gen: 6,
-		desc: "If holder is a Meganium, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Meganium, this item allows it to Mega Evolve in battle.",
 	},
 	"typhlosionite": {
 		id: "typhlosionite",
 		name: "Typhlosionite",
 		spritenum: 589,
 		megaStone: "Typhlosion-Mega",
-		megaEvolves: "Typhloion",
+		megaEvolves: "Typhlosion",
 		onTakeItem: function (item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
 		num: -1109,
 		gen: 6,
-		desc: "If holder is a Typhlosion, this item allows it to Mega Evolve in battle."
+		desc: "If holder is a Typhlosion, this item allows it to Mega Evolve in battle.",
 	},
 	"feraligatrite": {
 		id: "feraligatrite",
@@ -206,6 +208,6 @@ exports.BattleItems = {
 		},
 		num: -1110,
 		gen: 6,
-		desc: "If holder is a Feraligatr, this item allows it to Mega Evolve in battle."
-	}
+		desc: "If holder is a Feraligatr, this item allows it to Mega Evolve in battle.",
+	},
 };

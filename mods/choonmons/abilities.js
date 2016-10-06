@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleAbilities = {
 	"bigpecks": {
 		inherit: true,
@@ -6,8 +8,8 @@ exports.BattleAbilities = {
 			if (!source || target.side === source.side) {
 				return;
 			}
-			var statsLowered = false;
-			for (var i in boost) {
+			let statsLowered = false;
+			for (let i in boost) {
 				if (boost[i] < 0) {
 					statsLowered = true;
 				}
@@ -20,11 +22,11 @@ exports.BattleAbilities = {
 	"healer": {
 		inherit: true,
 		onResidual: function (pokemon) {
-			var allyActive = pokemon.side.active;
+			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i = 0; i < allyActive.length; i++) {
+			for (let i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && this.isAdjacent(pokemon, allyActive[i]) && allyActive[i].status && !this.random(6)) {
 					this.debug('healer');
 					this.add('-activate', pokemon, 'ability: Healer');
@@ -36,7 +38,7 @@ exports.BattleAbilities = {
 				this.add('-activate', pokemon, 'ability: Healer');
 				pokemon.cureStatus();
 			}
-		}
+		},
 	},
 	"keeneye": {
 		inherit: true,
@@ -44,7 +46,7 @@ exports.BattleAbilities = {
 			if (typeof accuracy !== 'number') return;
 			this.debug('keeneye - enhancing accuracy');
 			return accuracy * 1.2;
-		}
+		},
 	},
 	"leafguard": {
 		inherit: true,
@@ -57,7 +59,7 @@ exports.BattleAbilities = {
 				this.debug('leafguard');
 				pokemon.cureStatus();
 			}
-		}
+		},
 	},
 	"parentalbond": {
 		inherit: true,
@@ -85,14 +87,14 @@ exports.BattleAbilities = {
 					this.effectData.hitt = true;
 				}
 			}
-		}
+		},
 	},
 	"stall": {
 		inherit: true,
 		onSourceModifyDamage: function (damage, source, target, move) {
 			this.debug('Stall neutralize');
 			return this.chainModify(0.9);
-		}
+		},
 	},
 	"tangledfeet": {
 		inherit: true,
@@ -108,7 +110,7 @@ exports.BattleAbilities = {
 				this.debug('Tangled Feet - nullifying accuracy');
 				move.accuracy = 0;
 			}
-		}
+		},
 	},
 	"wonderguard": {
 		inherit: true,
@@ -124,6 +126,6 @@ exports.BattleAbilities = {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;
 			}
-		}
-	}
+		},
+	},
 };

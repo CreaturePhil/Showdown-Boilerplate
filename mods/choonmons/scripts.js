@@ -1,9 +1,11 @@
+'use strict';
+
 exports.BattleScripts = {
 	//Pokemon Modification:
 	init: function () {
-		for (var i in this.data.Pokedex) {
-			var learnset = (this.data.Learnsets[i]) ? this.data.Learnsets[i].learnset : false;
-			var pokemon = this.data.Pokedex[i];
+		for (let i in this.data.Pokedex) {
+			let learnset = (this.data.Learnsets[i]) ? this.data.Learnsets[i].learnset : false;
+			let pokemon = this.data.Pokedex[i];
 			if (learnset) {
 				//Everyone who has access to dazzling gleam now has access to moonblast.
 				if (learnset.dazzlinggleam) {
@@ -75,8 +77,8 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'fearow').learnset.bravebird = ['6L1'];
 		
 		//Give Pika the event moves that it deserves, make volt tackle egg-independent, and add coverage. Do the same for Raichu since it branches off of Pichu.
-		var chu = {'pikachu':1, 'pikachucosplay':1, 'pikachurockstar':1, 'pikachubelle':1, 'pikachupopstar':1, 'pikachuphd':1, 'pikachulibre':1, 'raichu':1};
-		for (var i in chu) {
+		let chu = {'pikachu':1, 'pikachucosplay':1, 'pikachurockstar':1, 'pikachubelle':1, 'pikachupopstar':1, 'pikachuphd':1, 'pikachulibre':1, 'raichu':1};
+		for (let i in chu) {
 			//Overlap the cosplay forms with Pikachu's moveset.
 			if (i !== 'pikachu' && i !== 'raichu') this.modData('Learnsets', i).learnset = this.data.Learnsets.pikachu.learnset;
 			//Do the thing
@@ -161,49 +163,49 @@ exports.BattleScripts = {
 		// Ampharos gets Tail Glow
 		this.modData('Learnsets', 'ampharos').learnset.tailglow = ['6L1'];
 		
-		for (var i in this.data.FormatsData) {
+		for (let i in this.data.FormatsData) {
 			// Every hidden ability becomes released. Nothing could possibly go wrong™
 			this.modData('FormatsData', i).unreleasedHidden = false;
 			// Make certain mons OU
-			var OUmons = {pikachu:'o3o', pikachurockstar:'o3o', pikachubelle:'o3o', pikachupopstar:'o3o', pikachuphd:'o3o', pikachulibre:'o3o', gengarmega:'o3o', kangaskhanmega:'o3o', blaziken:'o3o', blazikenmega:'o3o', aegislash:'o3o'}
+			let OUmons = {pikachu:1, pikachurockstar:1, pikachubelle:1, pikachupopstar:1, pikachuphd:1, pikachulibre:1, gengarmega:1, kangaskhanmega:1, blaziken:1, blazikenmega:1, aegislash:1}
 			if (i in OUmons) this.modData('FormatsData', i).tier = 'OU';
 		}
 	},
 	//Allow custom mega-evolutions without anything in terms of sprites breaking:
 	runMegaEvo: function (pokemon) {
-		var template = this.getTemplate(pokemon.canMegaEvo);
-		var side = pokemon.side;
+		let template = this.getTemplate(pokemon.canMegaEvo);
+		let side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		var foeActive = side.foe.active;
-		for (var i = 0; i < foeActive.length; i++) {
+		let foeActive = side.foe.active;
+		for (let i = 0; i < foeActive.length; i++) {
 			if (foeActive[i].volatiles['skydrop'] && foeActive[i].volatiles['skydrop'].source === pokemon) {
 				return false;
 			}
 		}
 		
 		//Prevent sprites from screwing with our stuff.
-		var forbid = {'Venusaur-Mega-X':'Venusaurite X', 'Blastoise-Mega-Y':'Blastoisinite Y', 'Butterfree-Mega':'Butterfrite', 'Fearow-Mega':'Fearowite', 'Raichu-Mega':'Raichuite', 'Machamp-Mega':'Machampite', 'Slowking-Mega':'Slowkingite', 'Mr. Mime-Mega':'Mimezite', 'Meganium-Mega':'Meganiumite', 'Typhlosion-Mega':'Typhlosionite', 'Feraligatr-Mega':'Feraligatrite'};
+		let forbid = {'Venusaur-Mega-X':'Venusaurite X', 'Blastoise-Mega-Y':'Blastoisinite Y', 'Butterfree-Mega':'Butterfrite', 'Fearow-Mega':'Fearowite', 'Raichu-Mega':'Raichuite', 'Machamp-Mega':'Machampite', 'Slowking-Mega':'Slowkingite', 'Mr. Mime-Mega':'Mimezite', 'Meganium-Mega':'Meganiumite', 'Typhlosion-Mega':'Typhlosionite', 'Feraligatr-Mega':'Feraligatrite'};
 		if (template.species in forbid) {
 			//Case 1: Sprites don't exist
-			template = Object.clone(template); //Prevent voodoo magics from breaking the sim.
+			template = Object.assign({}, template); //Prevent metagame crosstalk.
 			template.spriteid = toId(template.baseSpecies);
 			template.actualSpecies = template.species;
 			template.species = template.species.split('-')[0];
 			template.requiredItem = forbid[template.species];
 		} else if (template.species === 'Venusaur-Mega-Y') {
 			//Case 2: Sprites do exist, but the mega changed.
-			template = Object.clone(template); //Prevent voodoo magics from breaking the sim.
+			template = Object.assign({}, template);
 			template.spriteid = 'venusaur-mega';
 			template.species = 'Venusaur-Mega';
 			template.actualSpecies = 'Venusaur-Mega-Y'; //yes this is venusaur-mega-y
 			template.requiredItem = 'Venusaurite Y';
 		} else if (template.species === 'Blastoise-Mega-X') {
 			//Case 2: Sprites do exist, but the mega changed.
-			template = Object.clone(template); //Prevent voodoo magics from breaking the sim.
+			template = Object.assign({}, template);
 			template.spriteid = 'blastoise-mega';
 			template.species = 'Blastoise-Mega';
-			template.actualSpecies = 'Blastoise-Mega-X'; //yes this is blastoise-mega-x
+			template.actualSpecies = 'Blastoise-Mega-X';
 			template.requiredItem = 'Blastoisinite X';
 		}
 		pokemon.formeChange(template);
@@ -213,17 +215,18 @@ exports.BattleScripts = {
 		this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
-		var changed = {'Blastoise':true, 'Raichu':true, 'Aerodactyl':true, 'Feraligatr':true};
+		let changed = {'Blastoise':true, 'Raichu':true, 'Aerodactyl':true, 'Feraligatr':true};
 		if (template.actualSpecies in forbid || template.species === 'Venusaur-Mega' || template.baseSpecies in changed) {
-			var types = template.types;
-			var bTypes = (types.length === 1 || types[1] === 'caw') ? '' + types[0] : '' + types[0] + '/' + types[1];
-			this.add('-start', pokemon, 'typechange', bTypes);
+			let types = template.types;
+			let bTypes = (types.length === 1 || types[1] === 'caw') ? types[0] : types.join('/');
+			this.add('-start', pokemon, 'typechange', bTypes, '[silent]');
 		}
+		if (template.actualSpecies) this.add('-start', pokemon, template.actualSpecies, '[silent]'); //Show the pokemon's actual species
 
 		// Limit one mega evolution
-		for (var i = 0; i < side.pokemon.length; i++) {
+		for (let i = 0; i < side.pokemon.length; i++) {
 			side.pokemon[i].canMegaEvo = false;
 		}
 		return true;
-	}
+	},
 };

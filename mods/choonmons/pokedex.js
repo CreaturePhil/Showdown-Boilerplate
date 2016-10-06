@@ -1,324 +1,326 @@
+'use strict';
+
 exports.BattlePokedex = {
 	venusaur: {
 		inherit: true,
 		baseStats: {hp:83, atk:85, def:89, spa:100, spd:109, spe:84},
 		abilities: {0:"Overgrow", H:"Leaf Guard"},
-		otherFormes: ["venusaurmegax", "venusaurmegay"]
+		otherFormes: ["venusaurmegax", "venusaurmegay"],
 	},
 	venusaurmega: {
 		inherit: true,
-		baseStats: {hp:83, atk:100, def:130, spa:119, spd:144, spe:74}
+		baseStats: {hp:83, atk:100, def:130, spa:119, spd:144, spe:74},
 	},
 	charizard: {
 		inherit: true,
-		baseStats: {hp:78, atk:89, def:78, spa:109, spd:85, spe:100}
+		baseStats: {hp:78, atk:89, def:78, spa:109, spd:85, spe:100},
 	},
 	charizardmegax: {
 		inherit: true,
 		types: ["Fire", "Dragon", "caw"],
-		baseStats: {hp:83, atk:140, def:107, spa:135, spd:85, spe:100}
+		baseStats: {hp:83, atk:140, def:107, spa:135, spd:85, spe:100},
 	},
 	charizardmegay: {
 		inherit: true,
-		baseStats: {hp:83, atk:109, def:84, spa:159, spd:115, spe:100}
+		baseStats: {hp:83, atk:109, def:84, spa:159, spd:115, spe:100},
 	},
 	blastoise: {
 		inherit: true,
 		types: ["Water", "Steel"],
 		baseStats: {hp:84, atk:85, def:109, spa:89, spd:105, spe:83},
-		otherFormes: ["blastoisemegax", "blastoisemegay"]
+		otherFormes: ["blastoisemegax", "blastoisemegay"],
 	},
 	blastoisemega: {
 		inherit: true,
 		types: ["Water", "Steel"],
-		baseStats: {hp:84, atk:100, def:119, spa:169, spd:115, spe:63}
+		baseStats: {hp:84, atk:100, def:119, spa:169, spd:115, spe:63},
 	},
 	butterfree: {
 		inherit: true,
 		types: ["Bug", "Psychic", "caw"],
 		baseStats: {hp:105, atk:50, def:60, spa:110, spd:90, spe:65},
 		abilities: {0:"Swarm", 1:"Tinted Lens", H:"Magic Guard"},
-		otherFormes: ["butterfreemega"]
+		otherFormes: ["butterfreemega"],
 	},
 	beedrill: {
 		inherit: true,
 		types: ["Bug", "Poison", "caw"],
 		baseStats: {hp:65, atk:110, def:90, spa:50, spd:60, spe:105},
-		abilities: {0:"Swarm", 1:"Technician", H:"Sniper"}
+		abilities: {0:"Swarm", 1:"Technician", H:"Sniper"},
 	},
 	pidgeot: {
 		inherit: true,
-		baseStats: {hp:83, atk:60, def:85, spa:110, spd:90, spe:101}
+		baseStats: {hp:83, atk:60, def:85, spa:110, spd:90, spe:101},
 	},
 	pidgeotmega: {
 		inherit: true,
-		baseStats: {hp:83, atk:60, def:95, spa:150, spd:105, spe:136}
+		baseStats: {hp:83, atk:60, def:95, spa:150, spd:105, spe:136},
 	},
 	fearow: {
 		inherit: true,
 		baseStats: {hp:83, atk:105, def:80, spa:60, spd:75, spe:102},
 		abilities: {0:"Defiant", 1:"Keen Eye", H:"Sniper"},
-		otherFormes: ["fearowmega"]
+		otherFormes: ["fearowmega"],
 	},
 	pichu: {
 		inherit: true,
 		types: ["Electric", "Ground"],
-		evos: ["pikachu","raichu"]
+		evos: ["pikachu","raichu"],
 	},
 	pikachu: {
 		inherit: true,
 		types: ["Electric", "Ground"],
 		baseStats: {hp:66, atk:121, def:88, spa:110, spd:88, spe:132},
 		abilities: {0:"Static", 1:"Lightning Rod", H:"Sheer Force"},
-		evos: []
+		evos: [],
 	},
 	pikachucosplay: {
 		inherit: true,
 		types: ["Electric", "Ground"],
 		gender: '',
 		baseStats: {hp:66, atk:121, def:88, spa:110, spd:88, spe:132},
-		abilities: {0:"Static", 1:"Lightning Rod", H:"Sheer Force"}
+		abilities: {0:"Static", 1:"Lightning Rod", H:"Sheer Force"},
 	},
 	pikachurockstar: {
 		inherit: true,
 		types: ["Electric", "Steel"],
 		gender: '',
 		baseStats: {hp:66, atk:132, def:110, spa:99, spd:77, spe:121},
-		abilities: {0:"Static", 1:"Lightning Rod", H:"Filter"}
+		abilities: {0:"Static", 1:"Lightning Rod", H:"Filter"},
 	},
 	pikachubelle: {
 		inherit: true,
 		types: ["Electric", "Ice"],
 		gender: '',
 		baseStats: {hp:66, atk:110, def:121, spa:110, spd:121, spe:77},
-		abilities: {0:"Static", 1:"Lightning Rod", H:"Magic Bounce"}
+		abilities: {0:"Static", 1:"Lightning Rod", H:"Magic Bounce"},
 	},
 	pikachupopstar: {
 		inherit: true,
 		types: ["Electric", "Fairy"],
 		gender: '',
 		baseStats: {hp:66, atk:88, def:88, spa:132, spd:121, spe:110},
-		abilities: {0:"Static", 1:"Lightning Rod", H:"Magic Guard"}
+		abilities: {0:"Static", 1:"Lightning Rod", H:"Magic Guard"},
 	},
 	pikachuphd: {
 		inherit: true,
 		types: ["Electric", "Psychic"],
 		gender: '',
 		baseStats: {hp:66, atk:132, def:99, spa:132, spd:110, spe:66},
-		abilities: {0:"Static", 1:"Lightning Rod", H:"Analytic"}
+		abilities: {0:"Static", 1:"Lightning Rod", H:"Analytic"},
 	},
 	pikachulibre: {
 		inherit: true,
 		types: ["Electric", "Fighting"],
 		gender: '',
 		baseStats: {hp:66, atk:143, def:121, spa:77, spd:121, spe:77},
-		abilities: {0:"Static", 1:"Lightning Rod", H:"Iron Fist"}
+		abilities: {0:"Static", 1:"Lightning Rod", H:"Iron Fist"},
 	},
 	raichu: {
 		inherit: true,
 		types: ["Electric", "Dark"],
 		baseStats: {hp:65, atk:117, def:104, spa:117, spd:104, spe:78},
 		abilities: {0:"Static", 1:"Lightning Rod", H:"Tough Claws"},
-		otherFormes: ["raichumega"]
+		otherFormes: ["raichumega"],
 	},
 	golduck: {
 		inherit: true,
 		types: ["Water", "Ghost"],
 		baseStats: {hp:90, atk:82, def:78, spa:115, spd:90, spe:85},
-		abilities: {0:"Cloud Nine", 1:"Swift Swim", H:"Drizzle"}
+		abilities: {0:"Cloud Nine", 1:"Swift Swim", H:"Drizzle"},
 	},
 	alakazam: {
 		inherit: true,
-		baseStats: {hp:55, atk:50, def:45, spa:135, spd:100, spe:120}
+		baseStats: {hp:55, atk:50, def:45, spa:135, spd:100, spe:120},
 	},
 	alakazammega: {
 		inherit: true,
 		types: ["Psychic", "caw"],
 		baseStats: {hp:55, atk:50, def:65, spa:175, spd:110, spe:150},
-		abilities: {0:"Technician"}
+		abilities: {0:"Technician"},
 	},
 	machamp: {
 		inherit: true,
-		otherFormes: ["machampmega"]
+		otherFormes: ["machampmega"],
 	},
 	slowbro: {
 		inherit: true,
-		baseStats: {hp:95, atk:100, def:110, spa:75, spd:80, spe:30}
+		baseStats: {hp:95, atk:100, def:110, spa:75, spd:80, spe:30},
 	},
 	slowbromega: {
 		inherit: true,
-		baseStats: {hp:95, atk:130, def:180, spa:75, spd:80, spe:30}
+		baseStats: {hp:95, atk:130, def:180, spa:75, spd:80, spe:30},
 	},
 	slowking: {
 		inherit: true,
-		otherFormes: ["slowkingmega"]
+		otherFormes: ["slowkingmega"],
 	},
 	gengar: {
 		inherit: true,
 		types: ["Ghost", "Poison", "caw"],
-		abilities: {0:"Prankster"}
+		abilities: {0:"Prankster"},
 	},
 	gengarmega: {
 		inherit: true,
 		types: ["Ghost", "Poison", "caw"],
-		abilities: {0:"Prankster"}
+		abilities: {0:"Prankster"},
 	},
 	happiny: {
 		inherit: true,
 		types: ["Normal", "Fairy"],
 		baseStats: {hp:128, atk:10, def:80, spa:10, spd:80, spe:32},
-		evos: ["chansey","blissey"]
+		evos: ["chansey","blissey"],
 	},
 	chansey: {
 		inherit: true,
 		baseStats: {hp:255, atk:90, def:140, spa:15, spd:15, spe:55},
-		evos: []
+		evos: [],
 	},
 	blissey: {
 		inherit: true,
 		types: ["Fairy"],
 		baseStats: {hp:255, atk:15, def:15, spa:90, spd:140, spe:55},
-		prevo: "happiny"
+		prevo: "happiny",
 	},
 	mrmime: {
 		inherit: true,
 		baseStats: {hp:90, atk:45, def:105, spa:100, spd:130, spe:70},
-		otherFormes: ["mrmimemega"]
+		otherFormes: ["mrmimemega"],
 	},
 	pinsir: {
 		inherit: true,
-		baseStats: {hp:75, atk:130, def:100, spa:55, spd:70, spe:95}
+		baseStats: {hp:75, atk:130, def:100, spa:55, spd:70, spe:95},
 	},
 	pinsirmega: {
 		inherit: true,
-		baseStats: {hp:75, atk:160, def:120, spa:65, spd:90, spe:115}
+		baseStats: {hp:75, atk:160, def:120, spa:65, spd:90, spe:115},
 	},
 	gyarados: {
 		inherit: true,
-		types: ["Water", "Dark", "caw"]
+		types: ["Water", "Dark", "caw"],
 	},
 	gyaradosmega: {
 		inherit: true,
-		types: ["Water", "Dark", "caw"]
+		types: ["Water", "Dark", "caw"],
 	},
 	porygon: {
 		inherit: true,
 		types: ["Electric", "caw"],
-		abilities: {0:"Trace", 1:"Download", H:"Lightningrod"}
+		abilities: {0:"Trace", 1:"Download", H:"Lightningrod"},
 	},
 	porygon2: {
 		inherit: true,
 		baseStats: {hp:85, atk:60, def:125, spa:100, spd:135, spe:50},
 		types: ["Electric", "Psychic", "caw"],
 		abilities: {0:"Trace", 1:"Download", H:"Analytic"},
-		evos: []
+		evos: [],
 	},
 	porygonz: {
 		inherit: true,
 		baseStats: {hp:85, atk:90, def:60, spa:145, spd:65, spe:110},
 		types: ["Electric", "Ghost", "caw"],
 		abilities: {0:"Trace", 1:"Download", H:"Adaptability"},
-		prevo: "porygon"
+		prevo: "porygon",
 	},
 	aerodactyl: {
 		inherit: true,
-		types: ["Rock", "Dragon", "caw"]
+		types: ["Rock", "Dragon", "caw"],
 	},
 	aerodactylmega: {
 		inherit: true,
-		types: ["Rock", "Dragon", "caw"]
+		types: ["Rock", "Dragon", "caw"],
 	},
 	meganium: {
 		inherit: true,
 		baseStats: {hp:90, atk:83, def:119, spa:68, spd:125, spe:65},
 		abilities: {0:"Overgrow", H:"Leaf Guard"},
-		otherFormes: ["meganiummega"]
+		otherFormes: ["meganiummega"],
 	},
 	typhlosion: {
 		inherit: true,
 		baseStats: {hp:78, atk:69, def:78, spa:129, spd:85, spe:106},
 		abilities: {0:"Blaze", H:"Flash Fire"},
-		otherFormes: ["typhlosionmega"]
+		otherFormes: ["typhlosionmega"],
 	},
 	feraligatr: {
 		inherit: true,
 		baseStats: {hp:85, atk:110, def:100, spa:84, spd:88, spe:83},
 		abilities: {0:"Torrent", H:"Sheer Force"},
-		otherFormes: ["feraligatrmega"]
+		otherFormes: ["feraligatrmega"],
 	},
 	xatu: {
 		inherit: true,
-		baseStats: {hp:80, atk:75, def:85, spa:100, spd:110, spe:90}
+		baseStats: {hp:80, atk:75, def:85, spa:100, spd:110, spe:90},
 	},
 	ampharosmega: {
 		inherit: true,
 		baseStats: {hp:90, atk:115, def:85, spa:155, spd:120, spe:45},
-		abilities: {0:"Fur Coat"}
+		abilities: {0:"Fur Coat"},
 	},
 	sceptile: {
 		inherit: true,
 		baseStats: {hp:70, atk:85, def:75, spa:115, spd:85, spe:120},
-		types: ["Grass", "Dragon"]
+		types: ["Grass", "Dragon"],
 	},
 	sceptilemega: {
 		inherit: true,
-		baseStats: {hp:70, atk:100, def:95, spa:145, spd:95, spe:145}
+		baseStats: {hp:70, atk:100, def:95, spa:145, spd:95, spe:145},
 	},
 	blaziken: {
 		inherit: true,
 		baseStats: {hp:80, atk:120, def:70, spa:110, spd:70, spe:100},
-		abilities: {0:"Blaze", H:"Reckless"}
+		abilities: {0:"Blaze", H:"Reckless"},
 	},
 	blazikenmega: {
 		inherit: true,
 		baseStats: {hp:80, atk:150, def:80, spa:140, spd:80, spe:120},
-		abilities: {0:"Reckless"}
+		abilities: {0:"Reckless"},
 	},
 	swampert: {
 		inherit: true,
-		baseStats: {hp:100, atk:110, def:110, spa:75, spd:100, spe:60}
+		baseStats: {hp:100, atk:110, def:110, spa:75, spd:100, spe:60},
 	},
 	swampertmega: {
 		inherit: true,
-		baseStats: {hp:100, atk:150, def:130, spa:75, spd:120, spe:80}
+		baseStats: {hp:100, atk:150, def:130, spa:75, spd:120, spe:80},
 	},
 	gastrodon: {
 		inherit: true,
 		baseStats: {hp:123, atk:83, def:83, spa:100, spd:100, spe:51},
-		abilities: {0:"Sticky Hold", 1:"Storm Drain", H:"Regenerator"}
+		abilities: {0:"Sticky Hold", 1:"Storm Drain", H:"Regenerator"},
 	},
 	genesectdouse: {
 		inherit: true,
-		types: ["Bug","Water"]
+		types: ["Bug","Water"],
 	},
 	genesectshock: {
 		inherit: true,
-		types: ["Bug","Electric"]
+		types: ["Bug","Electric"],
 	},
 	genesectburn: {
 		inherit: true,
-		types: ["Bug","Fire"]
+		types: ["Bug","Fire"],
 	},
 	genesectchill: {
 		inherit: true,
-		types: ["Bug","Ice"]
+		types: ["Bug","Ice"],
 	},
 	honedge: {
 		inherit: true,
-		evos: ["doublade", "aegislash"]
+		evos: ["doublade", "aegislash"],
 	},
 	doublade: {
 		inherit: true,
 		baseStats: {hp:60, atk:125, def:150, spa:60, spd:70, spe:35},
-		evos: []
+		evos: [],
 	},
 	aegislash: {
 		inherit: true,
-		baseStats: {hp:60, atk:100, def:150, spa:55, spd:85, spe:50}
+		baseStats: {hp:60, atk:100, def:150, spa:55, spd:85, spe:50},
 	},
 	aegislashblade: {
 		inherit: true,
-		baseStats: {hp:60, atk:150, def:100, spa:85, spd:55, spe:50}
+		baseStats: {hp:60, atk:150, def:100, spa:85, spd:55, spe:50},
 	},
 	
 	
@@ -342,7 +344,7 @@ exports.BattlePokedex = {
 		color: "Green",
 		prevo: "ivysaur",
 		evoLevel: 32,
-		eggGroups: ["Monster", "Grass"]
+		eggGroups: ["Monster", "Grass"],
 	},
 	venusaurmegay: {
 		num: 3,
@@ -359,7 +361,7 @@ exports.BattlePokedex = {
 		color: "Green",
 		prevo: "ivysaur",
 		evoLevel: 32,
-		eggGroups: ["Monster", "Grass"]
+		eggGroups: ["Monster", "Grass"],
 	},
 	blastoisemegax: {
 		num: 9,
@@ -376,7 +378,7 @@ exports.BattlePokedex = {
 		color: "Blue",
 		prevo: "wartortle",
 		evoLevel: 36,
-		eggGroups: ["Monster", "Water 1"]
+		eggGroups: ["Monster", "Water 1"],
 	},
 	blastoisemegay: {
 		num: 9,
@@ -393,7 +395,7 @@ exports.BattlePokedex = {
 		color: "Blue",
 		prevo: "wartortle",
 		evoLevel: 36,
-		eggGroups: ["Monster", "Water 1"]
+		eggGroups: ["Monster", "Water 1"],
 	},
 	butterfreemega: {
 		num: 12,
@@ -409,7 +411,7 @@ exports.BattlePokedex = {
 		color: "White",
 		prevo: "metapod",
 		evoLevel: 10,
-		eggGroups: ["Bug"]
+		eggGroups: ["Bug"],
 	},
 	fearowmega: {
 		num: 22,
@@ -425,7 +427,7 @@ exports.BattlePokedex = {
 		color: "Brown",
 		prevo: "spearow",
 		evoLevel: 20,
-		eggGroups: ["Flying"]
+		eggGroups: ["Flying"],
 	},
 	raichumega: {
 		num: 26,
@@ -441,7 +443,7 @@ exports.BattlePokedex = {
 		color: "Yellow",
 		prevo: "pikachu",
 		evoLevel: 1,
-		eggGroups: ["Field", "Fairy"]
+		eggGroups: ["Field", "Fairy"],
 	},
 	machampmega: {
 		num: 68,
@@ -458,7 +460,7 @@ exports.BattlePokedex = {
 		color: "Gray",
 		prevo: "machoke",
 		evoLevel: 28,
-		eggGroups: ["Human-Like"]
+		eggGroups: ["Human-Like"],
 	},
 	slowkingmega: {
 		num: 199,
@@ -474,7 +476,7 @@ exports.BattlePokedex = {
 		color: "Pink",
 		prevo: "slowpoke",
 		evoLevel: 1,
-		eggGroups: ["Monster", "Water 1"]
+		eggGroups: ["Monster", "Water 1"],
 	},
 	mrmimemega: {
 		num: 122,
@@ -490,7 +492,7 @@ exports.BattlePokedex = {
 		color: "Pink",
 		prevo: "mimejr",
 		evoLevel: 1,
-		eggGroups: ["Human-Like"]
+		eggGroups: ["Human-Like"],
 	},
 	meganiummega: {
 		num: 154,
@@ -506,7 +508,7 @@ exports.BattlePokedex = {
 		color: "Grass",
 		prevo: "bayleef",
 		evoLevel: 32,
-		eggGroups: ["Monster", "Grass"]
+		eggGroups: ["Monster", "Grass"],
 	},
 	typhlosionmega: {
 		num: 157,
@@ -522,7 +524,7 @@ exports.BattlePokedex = {
 		color: "Yellow",
 		prevo: "quilava",
 		evoLevel: 36,
-		eggGroups: ["Field"]
+		eggGroups: ["Field"],
 	},
 	feraligatrmega: {
 		num: 157,
@@ -538,6 +540,6 @@ exports.BattlePokedex = {
 		color: "Blue",
 		prevo: "croconaw",
 		evoLevel: 30,
-		eggGroups: ["Monster", "Water 1"]
-	}
+		eggGroups: ["Monster", "Water 1"],
+	},
 };

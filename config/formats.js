@@ -4405,18 +4405,20 @@ onBegin: function () {
 		mod: 'choonmons',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Lucarionite', 'Mawilite', 'Salamencite'],
-
-		onSwitchInPriority: 1,
+		
 		onSwitchIn: function (pokemon) {
-			var changed = {'Venusaur-Mega-X':true, 'Blastoise':true, 'Butterfree':true, 'Pikachu':true, 'Raichu':true, 'Golduck':true, 'Happiny':true, 'Blissey':true, 'Gyarados':true, 'Aerodactyl':true, 'Feraligatr-Mega':true, 'Sceptile':true};
-			var bt = pokemon.baseTemplate;
+			let changed = {'Venusaur-Mega-X':true, 'Blastoise':true, 'Butterfree':true, 'Pikachu':true, 'Raichu':true, 'Golduck':true, 'Happiny':true, 'Blissey':true, 'Gyarados':true, 'Aerodactyl':true, 'Feraligatr-Mega':true, 'Sceptile':true};
+			let bt = pokemon.baseTemplate;
 			if (bt.baseSpecies in changed || (bt.actualSpecies && bt.actualSpecies in changed)) {
-				var types = bt.types;
-				var bTypes = (types.length === 1 || types[1] === 'caw') ? '' + types[0] : '' + types[0] + '/' + types[1];
-				this.add('-start', pokemon, 'typechange', bTypes);
+				let types = bt.types;
+				let bTypes = (types.length === 1 || types[1] === 'caw') ? types[0] : types.join('/');
+				this.add('-start', pokemon, 'typechange', bTypes, '[silent]');
 			}
-			if (bt.actualSpecies) this.add('-message', '(' + pokemon.name + ' is a ' + bt.actualSpecies + '.)');
-		}
+			if (bt.actualSpecies) this.add('-start', pokemon, bt.actualSpecies, '[silent]'); //Show the pokemon's actual species
+		},
+		onSwitchOut: function (pokemon) {
+			if (pokemon.baseTemplate.actualSpecies) this.add('-end', pokemon, pokemon.baseTemplate.actualSpecies, '[silent]');
+		},
 	},
 	// RoA Spotlight
 	///////////////////////////////////////////////////////////////////

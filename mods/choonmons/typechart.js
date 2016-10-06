@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleTypeChart = {
 	"Fairy": {
 		damageTaken: {
@@ -18,8 +20,8 @@ exports.BattleTypeChart = {
 			"Psychic": 0,
 			"Rock": 0,
 			"Steel": 1,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
 	"Ice": {
 		damageTaken: {
@@ -42,9 +44,9 @@ exports.BattleTypeChart = {
 			"Psychic": 0,
 			"Rock": 1,
 			"Steel": 1,
-			"Water": 2
+			"Water": 2,
 		},
-		HPivs: {"atk":30, "def":30}
+		HPivs: {"atk":30, "def":30},
 	},
 	"Steel": {
 		damageTaken: {
@@ -68,9 +70,9 @@ exports.BattleTypeChart = {
 			"Psychic": 2,
 			"Rock": 2,
 			"Steel": 2,
-			"Water": 0
+			"Water": 0,
 		},
-		HPivs: {"spd":30}
+		HPivs: {"spd":30},
 	},
 	"caw": {
 		damageTaken: {
@@ -91,7 +93,7 @@ exports.BattleTypeChart = {
 			"Psychic": 0,
 			"Rock": 0,
 			"Steel": 0,
-			"Water": 0
-		}
-	}
+			"Water": 0,
+		},
+	},
 };
