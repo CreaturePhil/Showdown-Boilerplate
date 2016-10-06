@@ -3493,24 +3493,30 @@ return problems;
 		}
 	},
 },
-    {
+     {
 		name: "The All-Stars Metagame",
 		section: "New Other Metagames",
 		ruleset: ['OU'],
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-all-stars-metagame-v2-enter-the-pu-a-pokemon-from-each-tier.3510864//\">The All-Stars Metagame</a>"],
+		desc: [
+			"Teams consist of one Pok&eacute;mon from each tier, besides UU/BL2 in which two Pok&eacute;mon are allowed.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/the-all-stars-metagame-v2-enter-the-pu-a-pokemon-from-each-tier.3510864//\">The All-Stars Metagame</a>",
+		],
 		banlist: [],
 
 		onValidateTeam: function(team){
 			let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0, problems = [], check = true;
 			for(let i = 0; i < team.length; i++){
            		let item = this.getItem(team[i].item);
-           		var mega = "mega";
-           		let pokemon = this.getTemplate(team[i].species)
-            	if(item.megaStone = true && pokemon == item.megaEvolves) pokemon = pokemon.concat(mega);
-            	else if(item.id == "charizarditex") pokemon = "charizardmegax";
-            	else if(item.id == "charizarditey") pokemon = "charizardmegay";
-            	let tier = pokemon.tier;
-            	if(tier == "OU" || tier == "BL") ouMons++;
+           		let ability = this.getAbility(template.ability);
+            		let template = this.getTemplate(item.megaEvolves === template.species ? item.megaStone : template.species);
+	            	let tier = template.tier;
+            		if(ability.id == "drizzle" || ability.id == "drought") tier = "OU";
+           		//Bans Drought + Drizzle users to OU
+        		for(var j in team[i].moves){
+            		var move = this.getMove(team[i].moves[j]);
+            		if(move.id == "chatter") tier = "NU";}
+            		//Bans Chatter to NU
+            		if(tier == "OU" || tier == "BL") ouMons++;
 				if(tier == "UU" || tier == "BL2") uuMons++;
 				if(tier == "RU" || tier == "BL3") ruMons++;
 				if(tier == "NU" || tier == "BL4") nuMons++;
