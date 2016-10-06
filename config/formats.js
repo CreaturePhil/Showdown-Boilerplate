@@ -2540,8 +2540,8 @@ exports.Formats = [
 		        mod: "pic",
 		        gameType:"doubles",
 		        banlist: ["Huge Power","Kangaskhanite", "Mawilite","Medichamite","Pure Power","Wonder Guard"],
-				onBegin: function()
-				{
+			onBegin: function()
+			{
 					for(let i=1;i<=2;i++)
 					{
 						for(let j=0;j<this["p"+i].pokemon.length;j++)
@@ -2550,7 +2550,23 @@ exports.Formats = [
 							this["p"+i].pokemon[j].obm = this["p"+i].pokemon[j].baseMoveset;
 						}
 					}
-				},
+					this.status_ability = function(ability){
+						let sas = {
+						aerilate:true,
+						aurabreak:true,
+						flashfire:true,
+						parentalbond:true,
+						pixilate:true,
+						refrigerate:true,
+						sheerforce:true,
+						slowstart:true,
+						truant:true,
+						unburden:true,
+						zenmod:true, }
+						if(sas[ability]) return ability+"1";
+						return ability;
+					}
+			},
 		        onSwitchIn: function(pokemon)
 		        {
 		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
@@ -2561,17 +2577,17 @@ exports.Formats = [
 		        		this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm.concat(pokemon.obm);
 		        		pokemon.moveset = pokemon.om.concat(this[side].pokemon[partner].om);
 		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
-		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
+		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf((this.status_ability(toId(pokemon.ability)))<0 && this[side].pokemon[partner].ability != pokemon.ability)
 		        		{
-		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
+		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile((this.status_ability(this[side].pokemon[partner].innate));
 		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
-		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
+		        			this[side].pokemon[partner].addVolatile((this.status_ability(this[side].pokemon[partner].innate));
 		        		}
-		        		if(Object.keys(pokemon.volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
+		        		if(Object.keys(pokemon.volatiles).indexOf((this.status_ability(toId(this[side].pokemon[partner].ability)))<0 && this[side].pokemon[partner].ability != pokemon.ability)
 		        		{
-		        			if(pokemon.innate) pokemon.removeVolatile(pokemon.innate);
+		        			if(pokemon.innate) pokemon.removeVolatile((this.status_ability(pokemon.innate));
 		        			pokemon.innate = toId(this[side].pokemon[partner].ability);
-		        			pokemon.addVolatile(pokemon.innate);
+		        			pokemon.addVolatile((this.status_ability(pokemon.innate));
 		        		}
 		        	}
 		        },
@@ -2580,9 +2596,9 @@ exports.Formats = [
 		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
 		        	if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
 		        	{
-		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
+		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile((this.status_ability(this[side].pokemon[partner].innate));
 		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
-		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
+		        			this[side].pokemon[partner].addVolatile((this.status_ability(this[side].pokemon[partner].innate));
 		        	}
 		        },
 		        onFaint: function(pokemon)
@@ -2590,7 +2606,7 @@ exports.Formats = [
 		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
 		        	if(this[side].pokemon[partner].isActive)
 		        	{
-		        		this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate)
+		        		this[side].pokemon[partner].removeVolatile((this.status_ability(this[side].pokemon[partner].innate));
 		        		delete this[side].pokemon[partner].innate;
 		        	}
 		        	this[side].pokemon[partner].moveset = this[side].pokemon[partner].om;
