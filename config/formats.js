@@ -3504,9 +3504,12 @@ return problems;
 			let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0, problems = [], check = true;
 			for(let i = 0; i < team.length; i++){
            		let item = this.getItem(team[i].item);
+           		var mega = "mega";
            		let pokemon = this.getTemplate(team[i].species)
-            	if(item.megaStone = true && pokemon == item.megaEvolves) pokemon = pokemon + "mega";
-            		let tier = this.getTemplate(team[i].species).tier;
+            	if(item.megaStone = true && pokemon == item.megaEvolves) pokemon = pokemon.concat(mega);
+            	else if(item.id == "charizarditex") pokemon = "charizardmegax";
+            	else if(item.id == "charizarditey") pokemon = "charizardmegay";
+            	let tier = pokemon.tier;
             	if(tier == "OU" || tier == "BL") ouMons++;
 				if(tier == "UU" || tier == "BL2") uuMons++;
 				if(tier == "RU" || tier == "BL3") ruMons++;
