@@ -3484,14 +3484,15 @@ return problems;
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-all-stars-metagame-v2-enter-the-pu-a-pokemon-from-each-tier.3510864//\">The All-Stars Metagame</a>"],
 		banlist: [],
 
-		onValidateTeam: function(team, format){
+		onValidateTeam: function(team){
 			var ouMons = 0;
 			var uuMons = 0;
 			var ruMons = 0;
 			var nuMons = 0;
 			var puMons = 0;
 			for(var i = 0; i < team.length; i++){
-				if(this.data.FormatsData[i]){tier = this.data.FormatsData[i].tier;}
+				let tier = this.getTemplate(team[i].species).tier,problems = [];
+				//if(this.data.FormatsData[i]){tier = this.data.FormatsData[i].tier;}
 				switch(tier) {
 				case "OU":
 					ouMons++;
@@ -3529,13 +3530,14 @@ return problems;
 					puMons++;
 					break;}
 
-			if(1 < ouMons) {return ["You are able to only bring a maximum of 1 OU / BL Pokemon."];}
-			else if(2 < uuMons) {return ["You are able to only bring a maximum of 2 UU / BL2 Pokemon."];}
-			else if(1 < ruMons) {return ["You are able to only bring a maximum of 1 RU / BL3 Pokemon."];}
-			else if(1 < nuMons) {return ["You are able to only bring a maximum of 1 NU / BL4 Pokemon."];}
-			else if(1 < puMons) {return ["You are able to only bring a maximum of 1 PU Pokemon."];}
+			if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon.");
+			else if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon."];
+			else if(1 < ruMons) problems.push("You are able to only bring a maximum of 1 RU / BL3 Pokemon.";
+			else if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon."];
+			else if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon."];
+			return problems;	
 		}
-},
+	},
 },
     {
 	     name: "Lockdown",
