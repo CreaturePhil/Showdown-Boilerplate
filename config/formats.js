@@ -3527,11 +3527,11 @@ return problems;
 					break;}
 
 			if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon.");
-			else if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon."];
-			else if(1 < ruMons) problems.push("You are able to only bring a maximum of 1 RU / BL3 Pokemon.";
-			else if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon."];
-			else if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon."];
-			return problems;	
+			else if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon.");
+			else if(1 < ruMons) problems.push("You are able to only bring a maximum of 1 RU / BL3 Pokemon.");
+			else if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon.");
+			else if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon.");
+			return problems;
 		}
 	},
 },
