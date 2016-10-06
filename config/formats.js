@@ -3536,6 +3536,7 @@ return problems;
 			else if(1 < puMons) {return ["You are able to only bring a maximum of 1 PU Pokemon."];}
 		}
 },
+},
     {
 	     name: "Lockdown",
 	     desc: [
