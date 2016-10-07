@@ -3493,7 +3493,7 @@ return problems;
 		}
 	},
 },
-     {
+    {
 		name: "The All-Stars Metagame",
 		section: "New Other Metagames",
 		ruleset: ['OU'],
@@ -3507,20 +3507,20 @@ return problems;
 			let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0, problems = [], check = true;
 			for(let i = 0; i < team.length; i++){
            		let item = this.getItem(team[i].item);
+           		let template = this.getTemplate(item.megaEvolves === template.species ? item.megaStone : template.species);
            		let ability = this.getAbility(template.ability);
-            		let template = this.getTemplate(item.megaEvolves === template.species ? item.megaStone : template.species);
-	            	let tier = template.tier;
+	      	 	let tier = template.tier;
             		if(ability.id == "drizzle" || ability.id == "drought") tier = "OU";
-           		//Bans Drought + Drizzle users to OU
+            		//Bans Drought + Drizzle users to OU
         		for(var j in team[i].moves){
-            		var move = this.getMove(team[i].moves[j]);
-            		if(move.id == "chatter") tier = "NU";}
+            			var move = this.getMove(team[i].moves[j]);
+            			if(move.id == "chatter") tier = "NU";}
             		//Bans Chatter to NU
-            		if(tier == "OU" || tier == "BL") ouMons++;
-				if(tier == "UU" || tier == "BL2") uuMons++;
-				if(tier == "RU" || tier == "BL3") ruMons++;
-				if(tier == "NU" || tier == "BL4") nuMons++;
-				if(tier == "PU") puMons++;}
+           		if(tier == "OU" || tier == "BL") ouMons++;
+			if(tier == "UU" || tier == "BL2") uuMons++;
+			if(tier == "RU" || tier == "BL3") ruMons++;
+			if(tier == "NU" || tier == "BL4") nuMons++;
+			if(tier == "PU") puMons++;}
 			while(check){
 				if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon."); 
 				if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon."); 
