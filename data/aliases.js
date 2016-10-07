@@ -449,4 +449,10 @@ exports.BattleAliases = {
 	"borutorosu": "Thundurus",
 	// there's no need to type out the other Japanese names
 	// I'll autogenerate them at some point
+	
+	// Users
+	"snaq": "Rayquaza-Mega",
+	"snaquaza": "Rayquaza-Mega",
+	"charizard8888": "sunkern",
+	"xprienzo": "reshiram",
 };
