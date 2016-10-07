@@ -2579,13 +2579,13 @@ exports.Formats = [
 		        		this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm.concat(pokemon.obm);
 		        		pokemon.moveset = pokemon.om.concat(this[side].pokemon[partner].om);
 		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
-		        		if(this[side].pokemon[partner].getVolatile(poka) && poka != parta)
+		        		if(this[side].pokemon[partner].volatiles[poka] && poka != parta)
 		        		{
 		        			if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(this[side].pokemon[partner].innate)>0) this[side].pokemon[partner].removeVolatile(this.sm(this[side].pokemon[partner].innate));
 		        			this[side].pokemon[partner].innate = this.sm(pokemon.ability);
 		        			this[side].pokemon[partner].addVolatile(this.sm(this[side].pokemon[partner].innate));
 		        		}
-		        		if(pokemon.getVolatile(parta)<0 && poka != parta)
+		        		if(pokemon.volatiles[parta]<0 && poka != parta)
 		        		{
 		        			if(Object.keys(pokemon.volatiles).indexOf(pokemon.innate)>0) pokemon.removeVolatile(pokemon.innate);
 		        			pokemon.innate = this.sm(this[side].pokemon[partner].ability);
@@ -2596,7 +2596,7 @@ exports.Formats = [
 		        onAfterMega: function(pokemon)
 		        {
 		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
-		        	if(this[side].pokemon[partner].getVolatile(this.sm(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
+		        	if(this[side].pokemon[partner].volatiles[this.sm(pokemon.ability)] && this[side].pokemon[partner].ability != pokemon.ability)
 		        	{
 		        			this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
 		        			this[side].pokemon[partner].innate = this.sm(pokemon.ability);
