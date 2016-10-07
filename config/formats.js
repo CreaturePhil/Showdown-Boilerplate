@@ -3501,11 +3501,11 @@ return problems;
 		banlist: [],
 
 		onValidateTeam: function(team){
-			let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0, problems = [], check = true;
+			let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0, problems = [], check = true, template;
 			for(let i = 0; i < team.length; i++){
            		let item = this.getItem(team[i].item);
-           		if(item.megaStone) let template = this.getTemplate(team[i].item.megaStone);
-           		else let template = this.getTemplate(team[i].species);
+           		if(item.megaStone) template = this.getTemplate(team[i].item.megaStone);
+           		else template = this.getTemplate(team[i].species);
            		let ability = this.getAbility(template.ability);
            		let tier = template.tier;
 	            for(var j in team[i].moves){
@@ -3520,11 +3520,11 @@ return problems;
 				if(tier == "NU" || tier == "BL4") nuMons++;
 				if(tier == "PU") puMons++;}
 			while(check){
-				if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon."); 
-				if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon."); 
+				if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon.");
+				if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon.");
 				if(1 < ruMons) problems.push("You are able to only bring a maximum of 1 RU / BL3 Pokemon.");
-				if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon."); 
-				if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon."); 
+				if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon.");
+				if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon.");
 				else check = false;}
 		return problems;
 	},
