@@ -3522,11 +3522,11 @@ return problems;
 			if(tier == "NU" || tier == "BL4") nuMons++;
 			if(tier == "PU") puMons++;}
 			while(check){
-				if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon."); 
-				if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon."); 
+				if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon.");
+				if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon.");
 				if(1 < ruMons) problems.push("You are able to only bring a maximum of 1 RU / BL3 Pokemon.");
-				if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon."); 
-				if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon."); 
+				if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon.");
+				if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon.");
 				else check = false;}
 		return problems;
 	},
@@ -4215,7 +4215,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
 			}
 			pokemon.addVolatile(pokemon.abilitwo, pokemon);//Second Ability! YAYAYAY
-			pokemon.volatiles[pokemon.abilitwo].noCopy = true; //Prevent it from being Baton Passed
+			// pokemon.volatiles[pokemon.abilitwo].noCopy = true; //Prevent it from being Baton Passed | Disabled because was causing a crash.
 		},
 		onAfterMega: function(pokemon)
 		{
@@ -4435,7 +4435,7 @@ onBegin: function () {
 		mod: 'choonmons',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Lucarionite', 'Mawilite', 'Salamencite'],
-		
+
 		onSwitchIn: function (pokemon) {
 			let changed = {'Venusaur-Mega-X':true, 'Blastoise':true, 'Butterfree':true, 'Pikachu':true, 'Raichu':true, 'Golduck':true, 'Happiny':true, 'Blissey':true, 'Gyarados':true, 'Aerodactyl':true, 'Feraligatr-Mega':true, 'Sceptile':true};
 			let bt = pokemon.baseTemplate;
