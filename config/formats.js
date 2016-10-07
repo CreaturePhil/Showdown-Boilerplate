@@ -3504,12 +3504,17 @@ return problems;
 			let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0, problems = [], check = true;
 			for(let i = 0; i < team.length; i++){
            		let item = this.getItem(team[i].item);
-           		let template = this.getTemplate(item.megaEvolves === template.species ? item.megaStone : template.species);
+           		if(item.megaStone) let template = this.getTemplate(team[i].item.megaStone);
+           		else let template = this.getTemplate(team[i].species);
            		let ability = this.getAbility(template.ability);
-	                let tier = template.tier;
+           		let tier = template.tier;
+	            for(var j in team[i].moves){
+            		var move = this.getMove(team[i].moves[j]);
+            		if(move.id == "chatter") tier = "NU";}
             		//Bans Drought + Drizzle users to OU
+            	if(ability.id == "drizzle" || ability.id == "drought") tier = "OU";
             		//Bans Chatter to NU
-            		if(tier == "OU" || tier == "BL") ouMons++;
+            	if(tier == "OU" || tier == "BL") ouMons++;
 				if(tier == "UU" || tier == "BL2") uuMons++;
 				if(tier == "RU" || tier == "BL3") ruMons++;
 				if(tier == "NU" || tier == "BL4") nuMons++;
