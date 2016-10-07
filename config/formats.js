@@ -2581,13 +2581,13 @@ exports.Formats = [
 		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
 		        		if(this[side].pokemon[partner].volatiles[poka] && poka != parta)
 		        		{
-		        			if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(this[side].pokemon[partner].innate)>0) this[side].pokemon[partner].removeVolatile(this.sm(this[side].pokemon[partner].innate));
+		        			if(this[side].pokemon[partner].volatiles[this[side].pokemon[partner].innate]) this[side].pokemon[partner].removeVolatile(this.sm(this[side].pokemon[partner].innate));
 		        			this[side].pokemon[partner].innate = this.sm(pokemon.ability);
 		        			this[side].pokemon[partner].addVolatile(this.sm(this[side].pokemon[partner].innate));
 		        		}
-		        		if(pokemon.volatiles[parta]<0 && poka != parta)
+		        		if(pokemon.volatiles[parta] && poka != parta)
 		        		{
-		        			if(Object.keys(pokemon.volatiles).indexOf(pokemon.innate)>0) pokemon.removeVolatile(pokemon.innate);
+		        			if(pokemon.volatiles[pokemon.innate]) pokemon.removeVolatile(pokemon.innate);
 		        			pokemon.innate = this.sm(this[side].pokemon[partner].ability);
 		        			pokemon.addVolatile(this.sm(pokemon.innate));
 		        		}
