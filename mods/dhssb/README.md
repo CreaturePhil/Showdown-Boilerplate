@@ -4,3 +4,5 @@
 - [Digital Edge](http://hastebin.com/raw/akiyanuloz.vbs)
 - [Spandan](hastebin.com/raw/vohuxogasa.pas)
 - [Alpha Paul 71](http://pastebin.com/raw/pSABFALe)
+- [Ransei](http://pastebin.com/eQf2AJrW)
+- [QuietChimchar](http://hastebin.com/raw/emovofopiw.coffee)
