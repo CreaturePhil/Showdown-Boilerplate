@@ -79,6 +79,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'Obama': 'http://i.imgur.com/rBA9M7A.png',
 		'fingerspin': 'http://i.imgur.com/JBj1aMH.gif',
 		'feelsshi': 'http://i.imgur.com/VzlGZ1M.jpg',
+		'lovelykiss': 'https://nintendrewps4.files.wordpress.com/2016/03/jynx-kiss-gif.gif?w=315&h=476',
 	});
 }
 
