@@ -35,7 +35,6 @@ exports.BattleScripts = {
 			}
 			//Second Ability
 			this.abilitwo = crossTemplate.abilities[0];
-			this.abilitwo.noCopy = true;
 			// Type changes
 			if(this.types[0]!=crossTemplate.types[0])
 				this.types[1]= crossTemplate.types[0];
