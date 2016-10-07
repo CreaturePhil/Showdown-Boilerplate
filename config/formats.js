@@ -2540,8 +2540,8 @@ exports.Formats = [
 		        mod: "pic",
 		        gameType:"doubles",
 		        banlist: ["Huge Power","Kangaskhanite", "Mawilite","Medichamite","Pure Power","Wonder Guard"],
-			onBegin: function()
-			{
+				onBegin: function()
+				{
 					for(let i=1;i<=2;i++)
 					{
 						for(let j=0;j<this["p"+i].pokemon.length;j++)
@@ -2550,56 +2550,38 @@ exports.Formats = [
 							this["p"+i].pokemon[j].obm = this["p"+i].pokemon[j].baseMoveset;
 						}
 					}
-					this.sm = function(ability){
-						let abe = toId(ability)
-						let sas = {
-						aerilate:true,
-						aurabreak:true,
-						flashfire:true,
-						parentalbond:true,
-						pixilate:true,
-						refrigerate:true,
-						sheerforce:true,
-						slowstart:true,
-						truant:true,
-						unburden:true,
-						zenmode:true, }
-						if(sas[abe]) return abe+"1";
-						return abe;
-					}
-			},
+				},
 		        onSwitchIn: function(pokemon)
 		        {
 		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
 		        	if(pokemon.isActive && this[side].pokemon[partner].isActive)
 		        	{
 		        		let partl = this[side].pokemon[partner].obm.length, pokl = pokemon.obm.length;
-					let poka = this.sm(pokemon.ability), parta = this.sm(this[side].pokemon[partner].ability);
 		        		this[side].pokemon[partner].moveset = this[side].pokemon[partner].om.concat(pokemon.om);
 		        		this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm.concat(pokemon.obm);
 		        		pokemon.moveset = pokemon.om.concat(this[side].pokemon[partner].om);
 		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
-		        		if(this[side].pokemon[partner].volatiles[poka] && poka != parta)
+		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
 		        		{
-		        			if(this[side].pokemon[partner].volatiles[this[side].pokemon[partner].innate]) this[side].pokemon[partner].removeVolatile(this.sm(this[side].pokemon[partner].innate));
-		        			this[side].pokemon[partner].innate = this.sm(pokemon.ability);
-		        			this[side].pokemon[partner].addVolatile(this.sm(this[side].pokemon[partner].innate));
+		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
+		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
+		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
 		        		}
-		        		if(pokemon.volatiles[parta] && poka != parta)
+		        		if(Object.keys(pokemon.volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
 		        		{
-		        			if(pokemon.volatiles[pokemon.innate]) pokemon.removeVolatile(pokemon.innate);
-		        			pokemon.innate = this.sm(this[side].pokemon[partner].ability);
-		        			pokemon.addVolatile(this.sm(pokemon.innate));
+		        			if(pokemon.innate) pokemon.removeVolatile(pokemon.innate);
+		        			pokemon.innate = toId(this[side].pokemon[partner].ability);
+		        			pokemon.addVolatile(pokemon.innate);
 		        		}
 		        	}
 		        },
 		        onAfterMega: function(pokemon)
 		        {
 		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
-		        	if(this[side].pokemon[partner].volatiles[this.sm(pokemon.ability)] && this[side].pokemon[partner].ability != pokemon.ability)
+		        	if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
 		        	{
-		        			this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
-		        			this[side].pokemon[partner].innate = this.sm(pokemon.ability);
+		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
+		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
 		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
 		        	}
 		        },
@@ -2608,13 +2590,13 @@ exports.Formats = [
 		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
 		        	if(this[side].pokemon[partner].isActive)
 		        	{
-		        		this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
+		        		this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate)
 		        		delete this[side].pokemon[partner].innate;
 		        	}
 		        	this[side].pokemon[partner].moveset = this[side].pokemon[partner].om;
 		        	this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm;
 		        },
-	},
+		},
 	{
 		name: "Averagemons",
 		desc: [

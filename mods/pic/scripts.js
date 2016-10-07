@@ -3,19 +3,6 @@
 exports.BattleScripts = {    
     init: function()
     	{
-			let status_ability = {
-				aerilate:true,
-				aurabreak:true,
-				flashfire:true,
-				parentalbond:true,
-				pixilate:true,
-				refrigerate:true,
-				sheerforce:true,
-				slowstart:true,
-				truant:true,
-				unburden:true,
-				zenmod:true,
-			}
     			Object.values(this.data.Abilities).forEach(ability => {
     				if(ability.id=="trace")
     				{
@@ -47,11 +34,6 @@ exports.BattleScripts = {
 							effectType: "Ability",
 						}
     				}
-				else if(status_ability[ability.id])
-				{
-					this.data.Statuses[ability.id+"1"] = ability;
-					this.data.Statuses[ability.id+"1"].effectType = "Ability";
-				}
     				else
     				{
     					this.data.Statuses[ability.id] = ability;
