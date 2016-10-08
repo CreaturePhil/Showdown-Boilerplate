@@ -284,11 +284,11 @@ exports.BattleMovedex = {
 			volatileStatus: 'mustrecharge',
 		},
 		onHit: function (target, source) {
-			if (source.name == 'iAlain') this.add("c|~iAlain|LET THE WORLD KNOW ACTUALLY WHAT ASS MEANS");
+			if (source.name == 'iAlain') this.add("c|~iAlain|Let's llamadance");
 		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Hyper Beam", target);
+			this.add('-anim', source, "earthquake", target);
 		},
 		secondary: false,
 		target: "normal",
