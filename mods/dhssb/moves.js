@@ -268,15 +268,15 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Flying"
 	},
-	kickmyass: {
+	llamadance: {
 		accuracy: 100,
 		basePower: 200,
 		category: "Physical",
 		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
 		shortDesc: "User cannot move next turn.",
-		id: "kickmyass",
-		name: "Kick My Ass",
-		pp: 5,
+		id: "llamadance",
+		name: "llamadance",
+		pp: 12,
 		priority: 0,
 		ohko: true,
 		flags: {recharge: 1, protect: 1, mirror: 1},
@@ -284,7 +284,7 @@ exports.BattleMovedex = {
 			volatileStatus: 'mustrecharge',
 		},
 		onHit: function (target, source) {
-			if (source.name == 'Alpha Paul☯71') this.add("c|~Alpha Paul☯71|LET THE WORLD KNOW ACTUALLY WHAT ASS MEANS");
+			if (source.name == 'iAlain') this.add("c|~iAlain|LET THE WORLD KNOW ACTUALLY WHAT ASS MEANS");
 		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
