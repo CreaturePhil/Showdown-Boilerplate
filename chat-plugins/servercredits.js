@@ -20,7 +20,7 @@ exports.commands = {
 					"<br />" +
 					"<u>Contributors:</u><br />" +
 					"- " + hashColor('charizard8888', true) + " (Roomintro's)<br />" +
-                    "- " + hashColor('Alpha Paul☯71◕‿◕', true) + " (Development)<br />" +
+                    "- " + hashColor('iAlain', true) + " (Development)<br />" +
                     "- " + hashColor('ClassyZ', true) + " (DHSSB, Development)<br />" +
                     "- " + hashColor('Diarmuid O\'Dyna', true) + " (Art)<br />" +
                     "- " + hashColor('Eternal Mayhem', true) + " (Roomintro's)<br />" +
