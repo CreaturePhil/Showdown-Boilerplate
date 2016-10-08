@@ -243,11 +243,11 @@ exports.BattleScripts = {
 			signatureMove: "Turbulence",
 			evs: {spe:252, atk:252, hp:4}, nature: 'Jolly',
 		      	},
-			'Alpha Paul☯71': {
-				species: 'Palkia', ability: 'discover me', item: 'Leftovers', gender: 'M',
-				moves: ['hyperbeam', 'outrage', 'waterspout'],
-				signatureMove: "Kick My Ass",
-				evs: {spd:4, atk:252, spe:252}, nature: 'Adamant',
+			'iAlain': {
+				species: 'Articuno', ability: 'discover me', item: 'Leftovers', gender: 'M',
+				moves: ['sheercold', 'outrage', 'waterspout'],
+				signatureMove: "llamadance",
+				evs: {spd:4, hp:252, spe:252}, nature: 'Adamant',
 			},
 			'ClassyZ': {
 				species: 'Scizor-Mega', ability: 'Technician', item: 'Scizorite', gender: 'F', shiny: true,
