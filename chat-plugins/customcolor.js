@@ -47,7 +47,6 @@ function generateCSS(name, color) {
         rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' span');
     }
     css = rooms.join(', ');
-    css += '{\ncolor: ' + color + ' !important;\n}\n';
     css += '.chat.chatmessage-' + name + ' strong {\n';
     css += 'color: ' + color + ' !important;\n}\n';
     return css;
