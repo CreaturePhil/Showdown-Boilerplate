@@ -2455,8 +2455,6 @@ exports.Formats = [
 	{
 		name: "Classic Hackmons",
 		section: "Other Metagames",
-
-		searchShow: false,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species);
