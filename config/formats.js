@@ -2579,15 +2579,10 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['OU'],
-		onSwitchIn: function(pokemon)
-		{
-			if(pokemon.armor) pokemon.ability = pokemon.armor;
-		},
 		onFaint: function(pokemon)
 		{
 			let opp = (pokemon.side.id=="p1")?"p2":"p1";
-			this[opp].pokemon[0].ability = pokemon.ability;
-			this[opp].pokemon[0].armor = pokemon.ability;
+			this[opp].pokemon[0].setAbility(pokemon.ability);
 			this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.ability+"!");
 			let lastMove = undefined;
 			for(let i=0;i<pokemon.moveset.length;i++)
