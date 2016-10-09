@@ -40,12 +40,13 @@ function generateCSS(name, color) {
     var css = '';
     var rooms = [];
     name = toId(name);
-    for (var room in Rooms.rooms) {
-        if (Rooms.rooms[room].id === 'global' || Rooms.rooms[room].type !== 'chat' || Rooms.rooms[room].isPersonal) continue;
-        rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' strong em');
-        rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' strong');
-        rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' span');
-    }
+    Rooms.rooms.forEach((curRoom, id) => {
+		if (id === 'global' || curRoom.type !== 'chat' || curRoom.isPersonal) return;
+		if (!isNaN(Number(id.charAt(0)))) return;
+		rooms.push('#' + id + '-userlist-user-' + name + ' strong em');
+		rooms.push('#' + id + '-userlist-user-' + name + ' strong');
+		rooms.push('#' + id + '-userlist-user-' + name + ' span');
+	});
     css = rooms.join(', ') + '{\ncolor: ' + color + ' !important;\n}\n';
     css += '.chat.chatmessage-' + name + ' strong {\n';
     css += 'color: ' + color + ' !important;\n}\n';
