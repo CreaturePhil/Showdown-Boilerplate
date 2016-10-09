@@ -2533,6 +2533,44 @@ exports.Formats = [
 		banlist: ['Kangaskhanite', 'Perish Song'],
 	},
 	{
+		name: "Meta Man",
+		desc: [
+			"When a Pokemon faints, the opposing Pokemon replaces its current ability with the fainted Pokemon's and gains its last-used move in a new slot (for up to 9 total moves). These changes last the entire match. If a Pokemon faints before using a move during the match, no move is gained by the opponent.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/meta-man.3565966/\">Meta Man</a>",
+		],
+		section: "Other Metagames",
+
+		ruleset: ['OU'],
+		onSwitchIn: function(pokemon)
+		{
+			if(pokemon.armor) pokemon.ability = pokemon.armor;
+		},
+		onFaint: function(pokemon)
+		{
+			let opp = (pokemon.side.id=="p1")?"p2":"p1";
+			this[opp].pokemon[0].ability = pokemon.ability;
+			this[opp].pokemon[0].armor = pokemon.ability;
+			this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.ability+"!");
+			let lastMove = undefined;
+			for(let i=0;i<pokemon.moveset.length;i++)
+			{
+				if(pokemon.lastMove == pokemon.moveset[i].id)
+				{
+					lastMove = pokemon.moveset[i];
+					lastMove.disabled = false;
+					lastMove.pp = lastMove.maxpp;
+					break;
+				}
+			}
+			if(this[opp].pokemon[0].moveset.length<=9 && lastMove) 
+			{
+				this[opp].pokemon[0].moveset.push(lastMove);
+				this[opp].pokemon[0].baseMoveset.push(lastMove);
+				this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastMove+"!");
+			}
+		},
+	},
+	{
 			name:"Partners in Crime",
 		        section: "Other Metagames",
 		        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/partners-in-crime.3559988/\">Partners in Crime</a>"],
