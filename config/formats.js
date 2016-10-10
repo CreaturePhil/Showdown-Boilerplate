@@ -2582,17 +2582,23 @@ exports.Formats = [
 		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
 					for(let i=0;i<this[side].pokemon[partner].moveset.length;i++)
 					{
-						this[side].pokemon[partner].moveset[i].disabled=false;
-						this[side].pokemon[partner].moveset[i].disabledSource = '';
-						this[side].pokemon[partner].baseMoveset[i].disabled=false;
-						this[side].pokemon[partner].baseMoveset[i].disabledSource = '';
+						if(!this[side].pokemon[partner].volatiles.choicelock)
+						{
+							this[side].pokemon[partner].moveset[i].disabled=false;
+							this[side].pokemon[partner].moveset[i].disabledSource = '';
+							this[side].pokemon[partner].baseMoveset[i].disabled=false;
+							this[side].pokemon[partner].baseMoveset[i].disabledSource = '';
+						}
 					}
 					for(let i=0;i<pokemon.moveset.length;i++)
 					{
-						pokemon.moveset[i].disabled=false;
-						pokemon.moveset[i].disabledSource = '';
-						pokemon.baseMoveset[i].disabled=false;
-						pokemon.baseMoveset[i].disabledSource = '';
+						if(!pokemon.volatiles.choicelock)
+						{		
+							pokemon.moveset[i].disabled=false;
+							pokemon.moveset[i].disabledSource = '';
+							pokemon.baseMoveset[i].disabled=false;
+							pokemon.baseMoveset[i].disabledSource = '';
+						}
 					}
 		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
 		        		{
