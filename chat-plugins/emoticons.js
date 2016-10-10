@@ -80,6 +80,15 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'fingerspin': 'http://i.imgur.com/JBj1aMH.gif',
 		'feelsshi': 'http://i.imgur.com/VzlGZ1M.jpg',
 		'lovelykiss': 'https://nintendrewps4.files.wordpress.com/2016/03/jynx-kiss-gif.gif?w=315&h=476',
+		'llamawhistle': 'http://i.imgur.com/3L3DHNI.gif',
+		'llamagrumpy': 'http://i.imgur.com/aMW4ep7.gif',
+		'llamablush': 'http://i.imgur.com/LW5fkve.gif',
+		'llamasquishy': 'http://i.imgur.com/VLKb2FS.gif',
+		'llamasparkle': 'http://i.imgur.com/NKSldPn.gif',
+		'llamahide': 'http://i.imgur.com/RLwIDjZ.gif',
+		'llamasneaky': 'http://i.imgur.com/uPjrY3P.gif',
+		'llamacry': 'http://i.imgur.com/YWfKiyb.gif',
+		'llamamad': 'http://i.imgur.com/M4qpLQd.gif',
 	});
 }
 
