@@ -71,8 +71,8 @@ exports.commands = {
             return;
         }
 
-        this.sendReply("|raw|You have given <b><font color=" + target[1] + ">" + Tools.escapeHTML(target[0]) + "</font></b> a custom color.");
-        Rooms('staff').add('|raw|' + Tools.escapeHTML(target[0]) + " has recieved a <b><font color=" + target[1] + ">custom color</font></b> from " + Tools.escapeHTML(user.name) + ".").update();
+        this.sendReply("|raw|You have given <b><font color=" + target[1] + ">" + Chat.escapeHTML(target[0]) + "</font></b> a custom color.");
+        Rooms('staff').add('|raw|' + Chat.escapeHTML(target[0]) + " has recieved a <b><font color=" + target[1] + ">custom color</font></b> from " + Chat.escapeHTML(user.name) + ".").update();
         customColors[toId(target[0])] = target[1];
         updateColor();
     },
@@ -107,7 +107,7 @@ exports.commands = {
         target = target.split(',');
         for (var u in target) target[u] = target[u].trim();
         if (!target[1]) return this.parse('/help colorpreview');
-        return this.sendReplyBox('<b><font size="3" color="' +  target[1] + '">' + Tools.escapeHTML(target[0]) + '</font></b>');
+        return this.sendReplyBox('<b><font size="3" color="' +  target[1] + '">' + Chat.escapeHTML(target[0]) + '</font></b>');
     },
     colorpreviewhelp: ["Usage: /colorpreview [user], [color] - Previews what that username looks like with [color] as the color."],
 };
