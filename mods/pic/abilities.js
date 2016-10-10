@@ -127,7 +127,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it.",
 		// airborneness implemented in battle-engine.js:BattlePokemon#isGrounded
     onTryHit: function (target, source, move) {
-			if (!this.pseudoWeather['gravity']&&!('ingrain' in target.volatiles)&&!('smackdown' in target.volatiles)&&(target !== source && move.type === 'Ground')) {
+			if (!this.pseudoWeather['gravity']&&!('ingrain' in target.volatiles)&&!('smackdown' in target.volatiles)&&(target.item!=='ironball')&&(target !== source && move.type === 'Ground')) {
 				move.accuracy = true;
 				this.add('-immune', target, '[msg]', '[from] ability: Levitate');
 				return null;
