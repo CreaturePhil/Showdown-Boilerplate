@@ -160,7 +160,7 @@ exports.commands = {
 			return (part < 0x10 ? '0' : '') + part.toString(16);
 		}).join('');
 
-		room.addRaw("<strong><font color=\"" + colour + "\">~~ " + Tools.escapeHTML(message) + " ~~</font></strong>");
+		room.addRaw("<strong><font color=\"" + colour + "\">~~ " + Chat.escapeHTML(message) + " ~~</font></strong>");
 		user.disconnectAll();
 	},
 	poofhelp: ["/poof - Disconnects the user and leaves a message in the room."],
@@ -186,16 +186,16 @@ exports.commands = {
 		let username = toId(target);
 		request('http://pokemonshowdown.com/users/' + username, function (error, response, body) {
 			if (error && response.statusCode !== 200) {
-				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
+				this.sendReplyBox(Chat.escapeHTML(target) + " is not registered.");
 				return room.update();
 			}
 			let regdate = body.split('<small>')[1].split('</small>')[0].replace(/(<em>|<\/em>)/g, '');
 			if (regdate === '(Unregistered)') {
-				this.sendReplyBox(Tools.escapeHTML(target) + " is not registered.");
+				this.sendReplyBox(Chat.escapeHTML(target) + " is not registered.");
 			} else if (regdate === '(Account disabled)') {
-				this.sendReplyBox(Tools.escapeHTML(target) + "'s account is disabled.");
+				this.sendReplyBox(Chat.escapeHTML(target) + "'s account is disabled.");
 			} else {
-				this.sendReplyBox(Tools.escapeHTML(target) + " was registered on " + regdate.slice(7) + ".");
+				this.sendReplyBox(Chat.escapeHTML(target) + " was registered on " + regdate.slice(7) + ".");
 			}
 			room.update();
 		}.bind(this));
@@ -221,7 +221,7 @@ exports.commands = {
 		if (!target) return this.parse('/help seen');
 		let targetUser = Users.get(target);
 		if (targetUser && targetUser.connected) return this.sendReplyBox(targetUser.name + " is <b>currently online</b>.");
-		target = Tools.escapeHTML(target);
+		target = Chat.escapeHTML(target);
 		let seen = Db('seen').get(toId(target));
 		if (!seen) return this.sendReplyBox(target + " has never been online on this server.");
 		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
