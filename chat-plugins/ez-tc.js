@@ -11,7 +11,7 @@ let trainerCards = {};
 function loadTrainerCards() {
 	try {
 		trainerCards = serialize.unserialize(fs.readFileSync('config/trainercards.json', 'utf8'));
-		Object.assign(CommandParser.commands, trainerCards);
+		Object.assign(Chat.commands, trainerCards);
 	} catch (e) {}
 }
 
@@ -21,7 +21,7 @@ setTimeout(function load() {
 
 function saveTrainerCards() {
 	fs.writeFileSync('config/trainercards.json', serialize.serialize(trainerCards));
-	Object.assign(CommandParser.commands, trainerCards);
+	Object.assign(Chat.commands, trainerCards);
 }
 
 exports.commands = {
@@ -38,7 +38,7 @@ exports.commands = {
 			if (!this.can('trainercard')) return false;
 			if (!parts[2]) return this.sendReply("Usage: /trainercard add, [command name], [html]");
 			let commandName = toId(parts[1]);
-			if (CommandParser.commands[commandName]) return this.sendReply("/trainercards - The command \"" + commandName + "\" already exists.");
+			if (Chat.commands[commandName]) return this.sendReply("/trainercards - The command \"" + commandName + "\" already exists.");
 			let html = parts.splice(2, parts.length).join(',');
 			trainerCards[commandName] = new Function('target', 'room', 'user', "if (!room.disableTrainerCards) if (!this.runBroadcast()) return; this.sendReplyBox('" + html.replace(/'/g, "\\'") + "');"); // eslint-disable-line no-new-func
 			saveTrainerCards();
@@ -54,7 +54,7 @@ exports.commands = {
 			if (!parts[1]) return this.sendReply("Usage: /trainercard remove, [command name]");
 			let command = toId(parts[1]);
 			if (!trainerCards[command]) return this.sendReply("/trainercards - The command \"" + command + "\" does not exist, or was added manually.");
-			delete CommandParser.commands[command];
+			delete Chat.commands[command];
 			delete trainerCards[command];
 			saveTrainerCards();
 			this.sendReply("The trainer card \"" + command + "\" has been removed.");

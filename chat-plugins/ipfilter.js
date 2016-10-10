@@ -187,8 +187,8 @@ class IPValidator {
 				// confirmed to be a command
 				// find the actual command one
 				let cmd = toId(message.split(" ")[0]);
-				if (!CommandParser.commands[cmd]) return true;
-				if (typeof CommandParser.commands[cmd] === "string") cmd = CommandParser.commands[cmd];
+				if (!Chat.commands[cmd]) return true;
+				if (typeof Chat.commands[cmd] === "string") cmd = Chat.commands[cmd];
 				// block it if it is blacklisted
 				if (IP_BLACKLISTED_COMMANDS.indexOf(cmd) > -1) {
 					return false;
