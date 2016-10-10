@@ -480,6 +480,7 @@ exports.Formats = [
 				if (name=="diarmuidodyna")
 				{
 					pokemon.types[1]="Ice";
+					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 				}
 				for (let j = 0; j < pokemon.moveset.length; j++) {
 					let moveData = pokemon.moveset[j];
