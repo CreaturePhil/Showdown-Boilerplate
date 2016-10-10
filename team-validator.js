@@ -13,24 +13,46 @@ let TeamValidator = module.exports = getValidator;
 let PM;
 
 function banReason(strings, reason) {
-	return reason && typeof reason === 'string' ? ` banned by ${reason}.` : `banned`;
+	return reason && typeof reason === 'string' ? `banned by ${reason}` : `banned`;
 }
 
 class Validator {
-	constructor(format) {
-		this.format = Tools.getFormat(format);
+	constructor(format, supplementaryBanlist) {
+		format = Tools.getFormat(format);
+		if (supplementaryBanlist && supplementaryBanlist.length) {
+			format = Object.assign({}, format);
+			if (format.banlistTable) delete format.banlistTable;
+			if (format.banlist) {
+				format.banlist = format.banlist.slice();
+			} else {
+				format.banlist = [];
+			}
+			for (let i = 0; i < supplementaryBanlist.length; i++) {
+				let ban = supplementaryBanlist[i];
+				if (ban.charAt(0) === '!') {
+					let index = format.banlist.indexOf(ban.substr(1));
+					if (index > -1) format.banlist.splice(index, 1);
+				} else {
+					if (!format.banlist.includes(ban)) format.banlist.push(ban);
+				}
+			}
+			supplementaryBanlist = supplementaryBanlist.join(',');
+		} else {
+			supplementaryBanlist = '0';
+		}
+		this.format = format;
+		this.supplementaryBanlist = supplementaryBanlist;
 		this.tools = Tools.mod(this.format);
 	}
 
 	validateTeam(team, removeNicknames) {
-		let format = Tools.getFormat(this.format);
-		if (format.validateTeam) return format.validateTeam.call(this, team, removeNicknames);
+		if (this.format.validateTeam) return this.format.validateTeam.call(this, team, removeNicknames);
 		return this.baseValidateTeam(team, removeNicknames);
 	}
 
 	prepTeam(team, removeNicknames) {
 		removeNicknames = removeNicknames ? '1' : '0';
-		return PM.send(this.format.id, removeNicknames, team);
+		return PM.send(this.format.id, this.supplementaryBanlist, removeNicknames, team);
 	}
 
 	baseValidateTeam(team, removeNicknames) {
@@ -82,6 +104,19 @@ class Validator {
 			}
 		}
 
+		for (let i = 0; i < format.teamLimitTable.length; i++) {
+			let entry = format.teamLimitTable[i];
+			let count = 0;
+			for (let j = 3; j < entry.length; j++) {
+				if (teamHas[entry[j]] > 0) count += teamHas[entry[j]];
+			}
+			let limit = entry[2];
+			if (count > limit) {
+				let clause = entry[1] ? " by " + entry[1] : '';
+				problems.push("You are limited to " + limit + " of " + entry[0] + clause + ".");
+			}
+		}
+
 		if (format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				let subformat = tools.getFormat(format.ruleset[i]);
@@ -107,12 +142,6 @@ class Validator {
 			return [`This is not a Pokemon.`];
 		}
 
-		if (!template) {
-			template = tools.getTemplate(Tools.getString(set.species));
-			if (!template.exists) {
-				return [`The Pokemon "${set.species}" does not exist.`];
-			}
-		}
 		set.species = Tools.getSpecies(set.species);
 
 		set.name = tools.getName(set.name);
@@ -148,11 +177,6 @@ class Validator {
 
 		let setHas = {};
 
-		if (!template || !template.abilities) {
-			set.species = 'Unown';
-			template = tools.getTemplate('Unown');
-		}
-
 		if (format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				let subformat = tools.getFormat(format.ruleset[i]);
@@ -164,7 +188,14 @@ class Validator {
 		if (format.onChangeSet) {
 			problems = problems.concat(format.onChangeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
-		if (toId(set.species) !== template.speciesid) template = tools.getTemplate(set.species);
+
+		if (!template) {
+			template = tools.getTemplate(set.species);
+		}
+		if (!template.exists) {
+			return [`The Pokemon "${set.species}" does not exist.`];
+		}
+
 		item = tools.getItem(set.item);
 		if (item.id && !item.exists) {
 			return [`"${set.item}" is an invalid item.`];
@@ -283,7 +314,8 @@ class Validator {
 								problemString = problemString.concat(` because it's incompatible with another move.`);
 							}
 						} else if (problem.type === 'oversketched') {
-							problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${tools.plural(problem.maxSketches)}.`);
+							let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
+							problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${plural}.`);
 						} else if (problem.type === 'pokebank') {
 							problemString = problemString.concat(` because it's only obtainable from a previous generation.`);
 						} else {
@@ -868,8 +900,8 @@ class Validator {
 }
 TeamValidator.Validator = Validator;
 
-function getValidator(format) {
-	return new Validator(format);
+function getValidator(format, supplementaryBanlist) {
+	return new Validator(format, supplementaryBanlist);
 }
 
 /*********************************************************
@@ -895,7 +927,7 @@ class TeamValidatorManager extends ProcessManager {
 
 	onMessageDownstream(message) {
 		// protocol:
-		// "[id]|[format]|[removeNicknames]|[team]"
+		// "[id]|[format]|[supplementaryBanlist]|[removeNicknames]|[team]"
 		let pipeIndex = message.indexOf('|');
 		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let id = message.substr(0, pipeIndex);
@@ -903,19 +935,24 @@ class TeamValidatorManager extends ProcessManager {
 
 		pipeIndex = nextPipeIndex;
 		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
+		let supplementaryBanlist = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
+
+		pipeIndex = nextPipeIndex;
+		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let removeNicknames = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
 		let team = message.substr(nextPipeIndex + 1);
 
-		process.send(id + '|' + this.receive(format, removeNicknames, team));
+		process.send(id + '|' + this.receive(format, supplementaryBanlist, removeNicknames, team));
 	}
 
-	receive(format, removeNicknames, team) {
+	receive(format, supplementaryBanlist, removeNicknames, team) {
 		let parsedTeam = Tools.fastUnpackTeam(team);
+		supplementaryBanlist = supplementaryBanlist === '0' ? false : supplementaryBanlist.split(',');
 		removeNicknames = removeNicknames === '1';
 
 		let problems;
 		try {
-			problems = TeamValidator(format).validateTeam(parsedTeam, removeNicknames);
+			problems = TeamValidator(format, supplementaryBanlist).validateTeam(parsedTeam, removeNicknames);
 		} catch (err) {
 			require('./crashlogger')(err, 'A team validation', {
 				format: format,

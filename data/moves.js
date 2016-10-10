@@ -2590,7 +2590,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's evasiveness by 1 stage. If this move is successful and whether or not the target's evasiveness was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the target's side, and the effects of Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the user's side. Ignores a target's substitute, although a substitute will still block the lowering of evasiveness.",
-		shortDesc: "Removes hazards from field. Lowers foe's evasion.",
+		shortDesc: "-1 evasion; clears user and target side's hazards.",
 		id: "defog",
 		isViable: true,
 		name: "Defog",
@@ -5137,7 +5137,7 @@ exports.BattleMovedex = {
 			return this.clampIntRange(move.basePower * pokemon.volatiles.furycutter.multiplier, 1, 160);
 		},
 		category: "Physical",
-		desc: "Power doubles with each successful hit, up to a maximum of 160 power; resets to 40 power if the move misses or another move is used.",
+		desc: "Power doubles with each successful hit, up to a maximum of 160 power; power is reset if the move misses or another move is used.",
 		shortDesc: "Power doubles with each hit, up to 160.",
 		id: "furycutter",
 		name: "Fury Cutter",
@@ -12102,7 +12102,7 @@ exports.BattleMovedex = {
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 30% chance to burn the target. The target thaws out if it is frozen.",
-		shortDesc: "30% chance to burn the target. Thaws user.",
+		shortDesc: "30% chance to burn the target. Thaws target.",
 		id: "scald",
 		isViable: true,
 		name: "Scald",
@@ -12628,7 +12628,6 @@ exports.BattleMovedex = {
 		onHit: function (pokemon) {
 			let oldAbility = pokemon.setAbility('simple');
 			if (oldAbility) {
-				this.add('-endability', pokemon, oldAbility, '[from] move: Simple Beam');
 				this.add('-ability', pokemon, 'Simple', '[from] move: Simple Beam');
 				return;
 			}
@@ -13952,11 +13951,7 @@ exports.BattleMovedex = {
 			move.type = '???';
 			this.add('-activate', pokemon, 'move: Struggle');
 		},
-		self: {
-			onHit: function (source) {
-				this.directDamage(source.maxhp / 4, source, source, {id: 'strugglerecoil'});
-			},
-		},
+		struggleRecoil: true,
 		secondary: false,
 		target: "randomNormal",
 		type: "Normal",
@@ -16183,7 +16178,6 @@ exports.BattleMovedex = {
 		onHit: function (pokemon) {
 			let oldAbility = pokemon.setAbility('insomnia');
 			if (oldAbility) {
-				this.add('-endability', pokemon, oldAbility, '[from] move: Worry Seed');
 				this.add('-ability', pokemon, 'Insomnia', '[from] move: Worry Seed');
 				if (pokemon.status === 'slp') {
 					pokemon.cureStatus();

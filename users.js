@@ -207,15 +207,15 @@ function cacheGroupData() {
 }
 cacheGroupData();
 
-Users.setOfflineGroup = function (name, group, forceConfirmed) {
+Users.setOfflineGroup = function (name, group, forceTrusted) {
 	if (!group) throw new Error(`Falsy value passed to setOfflineGroup`);
 	let userid = toId(name);
 	let user = getExactUser(userid);
 	if (user) {
-		user.setGroup(group, forceConfirmed);
+		user.setGroup(group, forceTrusted);
 		return true;
 	}
-	if (group === Config.groupsranking[0] && !forceConfirmed) {
+	if (group === Config.groupsranking[0] && !forceTrusted) {
 		delete usergroups[userid];
 	} else {
 		let usergroup = usergroups[userid];
@@ -234,6 +234,17 @@ Users.isUsernameKnown = function (name) {
 		let curRoom = Rooms.global.chatRooms[i];
 		if (!curRoom.auth) continue;
 		if (userid in curRoom.auth) return true;
+	}
+	return false;
+};
+
+Users.isTrusted = function (name) {
+	if (name.trusted) return name.trusted;
+	let userid = toId(name);
+	if (userid in usergroups) return userid;
+	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
+		let curRoom = Rooms.global.chatRooms[i];
+		if (!curRoom.isPrivate && !curRoom.isPersonal && curRoom.auth && userid in curRoom.auth && curRoom.auth[userid] !== '+') return userid;
 	}
 	return false;
 };
@@ -409,12 +420,14 @@ class User {
 		}
 		return this.group + this.name;
 	}
-	matchesRank(rank) {
-		if (!rank || rank === ' ') return true;
-		if (rank === 'confirmed') return this.confirmed;
-		if (rank === 'autoconfirmed') return this.autoconfirmed;
-		if (!(rank in Config.groups)) return true;
-		return this.group in Config.groups && Config.groups[this.group].rank >= Config.groups[rank].rank;
+	authAtLeast(minAuth, room) {
+		if (!minAuth || minAuth === ' ') return true;
+		if (minAuth === 'trusted') return this.trusted;
+		if (minAuth === 'autoconfirmed') return this.autoconfirmed;
+		if (!(minAuth in Config.groups)) return true;
+		let auth = (room ? room.getAuth(this) : this.group);
+		if (room && this.can('makeroom')) auth = this.group;
+		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
 	can(permission, target, room) {
 		if (this.hasSysopAccess()) return true;
@@ -711,7 +724,7 @@ class User {
 
 			if (userType === '3') {
 				this.isSysop = true;
-				this.confirmed = userid;
+				this.trusted = userid;
 				this.autoconfirmed = userid;
 			} else if (userType === '4') {
 				this.autoconfirmed = userid;
@@ -894,9 +907,9 @@ class User {
 	}
 	/**
 	 * Updates several group-related attributes for the user, namely:
-	 * User#group, User#registered, User#isStaff, User#confirmed
+	 * User#group, User#registered, User#isStaff, User#trusted
 	 *
-	 * Note that unlike the others, User#confirmed isn't reset every
+	 * Note that unlike the others, User#trusted isn't reset every
 	 * name change.
 	 */
 	updateGroup(registered) {
@@ -911,18 +924,13 @@ class User {
 		this.registered = true;
 		if (this.userid in usergroups) {
 			this.group = usergroups[this.userid].charAt(0);
-			this.confirmed = this.userid;
-			this.autoconfirmed = this.userid;
 		} else {
 			this.group = Config.groupsranking[0];
-			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
-				let room = Rooms.global.chatRooms[i];
-				if (!room.isPrivate && !room.isPersonal && room.auth && this.userid in room.auth && room.auth[this.userid] !== '+') {
-					this.confirmed = this.userid;
-					this.autoconfirmed = this.userid;
-					break;
-				}
-			}
+		}
+
+		if (Users.isTrusted(this)) {
+			this.trusted = this.userid;
+			this.autoconfirmed = this.userid;
 		}
 
 		if (Config.customavatars && Config.customavatars[this.userid]) {
@@ -936,8 +944,7 @@ class User {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
 		}
-		if (this.confirmed) {
-			this.autoconfirmed = this.confirmed;
+		if (this.trusted) {
 			this.locked = false;
 			this.namelocked = false;
 		}
@@ -950,10 +957,10 @@ class User {
 		if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
 	}
 	/**
-	 * Set a user's group. Pass (' ', true) to force confirmed
+	 * Set a user's group. Pass (' ', true) to force trusted
 	 * status without giving the user a group.
 	 */
-	setGroup(group, forceConfirmed) {
+	setGroup(group, forceTrusted) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1, '⚔':1});
@@ -965,9 +972,9 @@ class User {
 		}
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
-			if (forceConfirmed || this.group !== Config.groupsranking[0]) {
+			if (forceTrusted || this.group !== Config.groupsranking[0]) {
 				usergroups[this.userid] = this.group + this.name;
-				this.confirmed = this.userid;
+				this.trusted = this.userid;
 				this.autoconfirmed = this.userid;
 			} else {
 				delete usergroups[this.userid];
@@ -976,12 +983,12 @@ class User {
 		}
 	}
 	/**
-	 * Demotes a user from anything that grants confirmed status.
+	 * Demotes a user from anything that grants trusted status.
 	 * Returns an array describing what the user was demoted from.
 	 */
-	deconfirm() {
-		if (!this.confirmed) return;
-		let userid = this.confirmed;
+	distrust() {
+		if (!this.trusted) return;
+		let userid = this.trusted;
 		let removed = [];
 		if (usergroups[userid]) {
 			removed.push(usergroups[userid].charAt(0));
@@ -993,7 +1000,7 @@ class User {
 				room.auth[userid] = '+';
 			}
 		}
-		this.confirmed = '';
+		this.trusted = '';
 		this.setGroup(Config.groupsranking[0]);
 		return removed;
 	}
@@ -1009,7 +1016,7 @@ class User {
 			this.isAdmin = false;
 			// This isn't strictly necessary since we don't reuse User objects
 			// for PS, but just in case.
-			// We're not resetting .confirmed/.autoconfirmed so those accounts
+			// We're not resetting .trusted/.autoconfirmed so those accounts
 			// can still be locked after logout.
 		}
 	}
@@ -1068,16 +1075,16 @@ class User {
 		});
 		this.inRooms.clear();
 	}
-	getAlts(includeConfirmed, forPunishment) {
-		return this.getAltUsers(includeConfirmed, forPunishment).map(user => user.getLastName());
+	getAlts(includeTrusted, forPunishment) {
+		return this.getAltUsers(includeTrusted, forPunishment).map(user => user.getLastName());
 	}
-	getAltUsers(includeConfirmed, forPunishment) {
+	getAltUsers(includeTrusted, forPunishment) {
 		let alts = [];
 		if (forPunishment) alts.push(this);
 		users.forEach(user => {
 			if (user === this) return;
 			if (!forPunishment && !user.named && !user.connected) return;
-			if (!includeConfirmed && user.confirmed) return;
+			if (!includeTrusted && user.trusted) return;
 			for (let myIp in this.ips) {
 				if (myIp in user.ips) {
 					alts.push(user);
@@ -1100,7 +1107,7 @@ class User {
 	tryJoinRoom(room, connection) {
 		let roomid = (room && room.id ? room.id : room);
 		room = Rooms.search(room);
-		if (!room) {
+		if (!room || !room.checkModjoin(this)) {
 			if (!this.named) {
 				return null;
 			} else {
@@ -1114,18 +1121,6 @@ class User {
 			if (errorMessage) {
 				connection.sendTo(roomid, `|noinit|joinfailed|${errorMessage}`);
 				return false;
-			}
-		}
-		if (room.modjoin && !makeRoom) {
-			let userGroup = room.getAuth(this);
-			let modjoinGroup = room.modjoin !== true ? room.modjoin : room.modchat;
-			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(modjoinGroup)) {
-				if (!this.named) {
-					return null;
-				} else {
-					connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
-					return false;
-				}
 			}
 		}
 		if (room.isPrivate) {
@@ -1207,7 +1202,7 @@ class User {
 			this.inRooms.delete(room.id);
 		}
 	}
-	prepBattle(formatid, type, connection) {
+	prepBattle(formatid, type, connection, supplementaryBanlist) {
 		// all validation for a battle goes through here
 		if (!connection) connection = this;
 		if (!type) type = 'challenge';
@@ -1237,7 +1232,7 @@ class User {
 			connection.popup(`You are already searching a battle in that format.`);
 			return Promise.resolve(false);
 		}
-		return TeamValidator(formatid).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
+		return TeamValidator(formatid, supplementaryBanlist).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
 	}
 	finishPrepBattle(connection, result) {
 		if (result.charAt(0) !== '1') {
@@ -1371,7 +1366,7 @@ class User {
 		if (message.substr(0, 16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
-			CommandParser.parse(message, room, this, connection);
+			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 			return false; // but end the loop here
 		}
@@ -1397,7 +1392,7 @@ class User {
 		} else {
 			this.lastChatMessage = now;
 			Monitor.activeIp = connection.ip;
-			CommandParser.parse(message, room, this, connection);
+			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		}
 	}
@@ -1417,7 +1412,7 @@ class User {
 		let room = Rooms(roomid);
 		if (room) {
 			Monitor.activeIp = connection.ip;
-			CommandParser.parse(message, room, this, connection);
+			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		} else {
 			// room is expired, do nothing
@@ -1437,7 +1432,18 @@ class User {
 	destroy() {
 		// deallocate user
 		this.games.forEach(roomid => {
-			let game = Rooms(roomid).game;
+			let room = Rooms(roomid);
+			if (!room) {
+				Monitor.warn(`while deallocating, room ${roomid} did not exist for ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				this.games.delete(roomid);
+				return;
+			}
+			let game = room.game;
+			if (!game) {
+				Monitor.warn(`while deallocating, room ${roomid} did not have a game for ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				this.games.delete(roomid);
+				return;
+			}
 			if (game.ended) return;
 			if (game.forfeit) {
 				game.forfeit(this);
@@ -1552,7 +1558,7 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 
 	const room = Rooms(roomId);
 	if (!room) return;
-	if (CommandParser.multiLinePattern.test(message)) {
+	if (Chat.multiLinePattern.test(message)) {
 		user.chat(message, room, connection);
 		return;
 	}

@@ -4,9 +4,13 @@
  *
  * Handles getting data about pokemon, items, etc.
  *
- * This file is used by the main process (to validate teams)
- * as well as the individual simulator processes (to get
- * information about pokemon, items, etc to simulate).
+ * This file is used by basically every PS process. Sim processes use it
+ * to get game data for simulation, team validators use it to get data
+ * for validation, dexsearch uses it for dex data, and the main process
+ * uses it for format listing and miscellaneous dex lookup chat commands.
+ *
+ * It currently also contains our shims, since it has no dependencies and
+ * is included by nearly every process.
  *
  * @license MIT license
  */
@@ -23,15 +27,6 @@ if (!Object.values) {
 		for (let k in object) values.push(object[k]);
 		return values;
 	};
-}
-// shim Array.prototype.includes
-if (!Array.prototype.includes) {
-	Object.defineProperty(Array.prototype, 'includes', { // eslint-disable-line no-extend-native
-		writable: true, configurable: true,
-		value: function (object) {
-			return this.indexOf(object) !== -1;
-		},
-	});
 }
 
 module.exports = (() => {
@@ -182,10 +177,16 @@ module.exports = (() => {
 	};
 
 	/**
-	 * Safely ensures the passed variable is a string
-	 * Simply doing '' + str can crash if str.toString crashes or isn't a function
-	 * If we're expecting a string and being given anything that isn't a string
-	 * or a number, it's safe to assume it's an error, and return ''
+	 * Safely converts the passed variable into a string. Unlike '' + str,
+	 * String(str), or str.toString(), Tools.getString is guaranteed not to
+	 * crash.
+	 *
+	 * The other methods of casting to string can crash if str.toString crashes
+	 * or isn't a function. Instead, Tools.getString simply returns '' if the
+	 * passed variable isn't a string or a number.
+	 *
+	 * @param {mixed} str
+	 * @return {string}
 	 */
 	Tools.prototype.getString = function (str) {
 		if (typeof str === 'string' || typeof str === 'number') return '' + str;
@@ -209,8 +210,12 @@ module.exports = (() => {
 	 * functions are expected to check for that condition and deal with it
 	 * accordingly.
 	 *
-	 * getName also enforces that there are not multiple space characters
-	 * in the name, although this is not strictly necessary for safety.
+	 * getName also enforces that there are not multiple consecutive space
+	 * characters in the name, although this is not strictly necessary for
+	 * safety.
+	 *
+	 * @param {mixed} name
+	 * @return {string}
 	 */
 	Tools.prototype.getName = function (name) {
 		if (typeof name !== 'string' && typeof name !== 'number') return '';
@@ -231,6 +236,12 @@ module.exports = (() => {
 	 * non-alphanumeric characters will be stripped.
 	 * If an object with an ID is passed, its ID will be returned.
 	 * Otherwise, an empty string will be returned.
+	 *
+	 * Tools.getId is generally assigned to the global toId, because of how
+	 * commonly it's used.
+	 *
+	 * @param {mixed} text
+	 * @return {string}
 	 */
 	Tools.prototype.getId = function (text) {
 		if (text && text.id) {
@@ -243,6 +254,14 @@ module.exports = (() => {
 	};
 	let toId = Tools.prototype.getId;
 
+	/**
+	 * Convert a pokemon name, ID, or template into its species name, preserving
+	 * form name (which is the main way Tools.getSpecies(id) differs from
+	 * Tools.getTemplate(id).species).
+	 *
+	 * @param {string|DexTemplate} species
+	 * @return {string}
+	 */
 	Tools.prototype.getSpecies = function (species) {
 		let id = toId(species || '');
 		let template = this.getTemplate(id);
@@ -601,6 +620,7 @@ module.exports = (() => {
 			if (!format.banlistTable) format.banlistTable = {};
 			if (!format.setBanTable) format.setBanTable = [];
 			if (!format.teamBanTable) format.teamBanTable = [];
+			if (!format.teamLimitTable) format.teamLimitTable = [];
 
 			banlistTable = format.banlistTable;
 			if (!subformat) subformat = format;
@@ -613,7 +633,14 @@ module.exports = (() => {
 					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
 
 					let complexList;
-					if (subformat.banlist[i].includes('+')) {
+					if (subformat.banlist[i].includes('>')) {
+						complexList = subformat.banlist[i].split('>');
+						let limit = parseInt(complexList[1]);
+						let banlist = complexList[0].trim();
+						complexList = banlist.split('+').map(toId);
+						complexList.unshift(banlist, subformat.name, limit);
+						format.teamLimitTable.push(complexList);
+					} else if (subformat.banlist[i].includes('+')) {
 						if (subformat.banlist[i].includes('++')) {
 							complexList = subformat.banlist[i].split('++');
 							let banlist = complexList.join('+');
@@ -715,59 +742,6 @@ module.exports = (() => {
 		if (num < min) num = min;
 		if (max !== undefined && num > max) num = max;
 		return num;
-	};
-
-	Tools.prototype.escapeHTML = function (str) {
-		if (!str) return '';
-		return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
-	};
-
-	Tools.prototype.html = function (strings) {
-		let buf = strings[0];
-		for (let i = 1; i < arguments.length; i++) {
-			buf += moddedTools.base.escapeHTML(arguments[i]);
-			buf += strings[i];
-		}
-		return buf;
-	};
-	Tools.prototype.plural = function (num, plural, singular) {
-		if (!plural) plural = 's';
-		if (!singular) singular = '';
-		if (num && typeof num.length === 'number') {
-			num = num.length;
-		} else if (num && typeof num.size === 'number') {
-			num = num.size;
-		} else {
-			num = Number(num);
-		}
-		return (num !== 1 ? plural : singular);
-	};
-
-	Tools.prototype.toTimeStamp = function (date, options) {
-		// Return a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
-		// Optionally reports hours in mod-12 format.
-		const isHour12 = options && options.hour12;
-		let parts = [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
-		if (isHour12) {
-			parts.push(parts[3] >= 12 ? 'pm' : 'am');
-			parts[3] = parts[3] % 12 || 12;
-		}
-		parts = parts.map(val => val < 10 ? '0' + val : '' + val);
-		return parts.slice(0, 3).join("-") + " " + parts.slice(3, 6).join(":") + (isHour12 ? " " + parts[6] : "");
-	};
-
-	Tools.prototype.toDurationString = function (number, options) {
-		// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
-		// https://github.com/tc39/ecma402/issues/47
-		const date = new Date(+number);
-		const parts = [date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()];
-		const unitNames = ["second", "minute", "hour", "day", "month", "year"];
-		const positiveIndex = parts.findIndex(elem => elem > 0);
-		if (options && options.hhmmss) {
-			let string = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
-			return string.length === 2 ? "00:" + string : string;
-		}
-		return parts.slice(positiveIndex).reverse().map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "").reverse().join(" ").trim();
 	};
 
 	Tools.prototype.dataSearch = function (target, searchIn, isInexact) {

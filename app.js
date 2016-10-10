@@ -32,9 +32,9 @@
  *
  *   Used to access the simulator itself.
  *
- * CommandParser - from command-parser.js
+ * Chat - from chat.js
  *
- *   Parses text commands like /me
+ *   Handles chat and parses chat commands like /me and /ban
  *
  * Sockets - from sockets.js
  *
@@ -119,6 +119,8 @@ global.Users = require('./users');
 
 global.Punishments = require('./punishments');
 
+global.Chat = require('./chat');
+
 global.Rooms = require('./rooms');
 
 global.Tells = require('./tells.js');
@@ -128,8 +130,6 @@ global.Db = require('origindb')('config/db');
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier');
 Verifier.PM.spawn();
-
-global.CommandParser = require('./command-parser');
 
 global.Simulator = require('./simulator');
 
@@ -141,15 +141,12 @@ Dnsbl.loadDatacenters();
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', err => {
-		let crashMessage = require('./crashlogger')(err, 'The main process');
-		if (crashMessage !== 'lockdown') return;
-		let stack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-		if (Rooms.lobby) {
-			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
-			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to start new battles until the server restarts.</div>');
-			Rooms.lobby.update();
+		let crashType = require('./crashlogger')(err, 'The main process');
+		if (crashType === 'lockdown') {
+			Rooms.global.startLockdown(err);
+		} else {
+			Rooms.global.reportCrash(err);
 		}
-		Rooms.global.lockdown = true;
 	});
 	process.on('unhandledRejection', err => {
 		throw err;
@@ -182,7 +179,6 @@ if (require.main === module) {
 
 // Generate and cache the format list.
 Tools.includeFormats();
-Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.TeamValidator = require('./team-validator');
 TeamValidator.PM.spawn();
