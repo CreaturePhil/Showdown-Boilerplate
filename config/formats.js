@@ -2559,8 +2559,8 @@ exports.Formats = [
 		        mod: "pic",
 		        gameType:"doubles",
 		        banlist: ["Huge Power","Kangaskhanite", "Mawilite","Medichamite","Pure Power","Wonder Guard"],
-				onBegin: function()
-				{
+			onBegin: function()
+			{
 					for(let i=1;i<=2;i++)
 					{
 						for(let j=0;j<this["p"+i].pokemon.length;j++)
@@ -2569,7 +2569,7 @@ exports.Formats = [
 							this["p"+i].pokemon[j].obm = this["p"+i].pokemon[j].baseMoveset;
 						}
 					}
-				},
+			},
 		        onSwitchIn: function(pokemon)
 		        {
 		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
@@ -2580,6 +2580,20 @@ exports.Formats = [
 		        		this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm.concat(pokemon.obm);
 		        		pokemon.moveset = pokemon.om.concat(this[side].pokemon[partner].om);
 		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
+					for(let i=0;i<this[side].pokemon[partner].moveset.length;i++)
+					{
+						this[side].pokemon[partner].moveset[i].disabled=false;
+						this[side].pokemon[partner].moveset[i].disabledSource = '';
+						this[side].pokemon[partner].baseMoveset[i].disabled=false;
+						this[side].pokemon[partner].baseMoveset[i].disabledSource = '';
+					}
+					for(let i=0;i<pokemon.moveset.length;i++)
+					{
+						pokemon.moveset[i].disabled=false;
+						pokemon.moveset[i].disabledSource = '';
+						pokemon.baseMoveset[i].disabled=false;
+						pokemon.baseMoveset[i].disabledSource = '';
+					}
 		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
 		        		{
 		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
