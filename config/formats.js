@@ -2572,7 +2572,7 @@ exports.Formats = [
 					break;
 				}
 			}
-			if(this[opp].pokemon[0].moveset.length<=9 && lastMove) 
+			if(this[opp].pokemon[0].moveset.length<=9 && lastMove)
 			{
 				this[opp].pokemon[0].moveset.push(lastMove);
 				this[opp].pokemon[0].baseMoveset.push(lastMove);
@@ -2680,7 +2680,6 @@ exports.Formats = [
 		],
 		section: "Other Metagames",
 
-		searchShow: false,
 		mod: 'mixandmega',
 		ruleset: ['Ubers', 'Baton Pass Clause'],
 		banlist: ['Dynamic Punch', 'Electrify', 'Zap Cannon'],
