@@ -10,7 +10,7 @@ exports.commands = {
     anime: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.errorReply("No target.");
-		let targetAnime = Tools.escapeHTML(target.trim());
+		let targetAnime = Chat.escapeHTML(target.trim());
 		let id = targetAnime.toLowerCase().replace(/ /g, '');
 		if (amCache.anime[id]) return this.sendReply('|raw|' + amCache.anime[id]);
 
@@ -47,7 +47,7 @@ exports.commands = {
 	manga: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.errorReply("No target.");
-		let targetAnime = Tools.escapeHTML(target.trim());
+		let targetAnime = Chat.escapeHTML(target.trim());
 		let id = targetAnime.toLowerCase().replace(/ /g, '');
 		if (amCache.anime[id]) return this.sendReply('|raw|' + amCache.anime[id]);
 
