@@ -122,6 +122,22 @@ exports.BattleAbilities = {
 		rating: 3,
 		num: 18,
 	},
+  "levitate": {
+		desc: "This Pokemon is immune to Ground. Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
+		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it.",
+		// airborneness implemented in battle-engine.js:BattlePokemon#isGrounded
+    onTryHit: function (target, source, move) {
+			if (!this.pseudoWeather['gravity']&&!('ingrain' in this.volatiles)&&!('smackdown' in this.volatiles)&&(target !== source && move.type === 'Ground')) {
+				move.accuracy = true;
+				this.add('-immune', target, '[msg]', '[from] ability: Levitate');
+				return null;
+			}
+		},
+		id: "levitate",
+		name: "Levitate",
+		rating: 3.5,
+		num: 26,
+	},
 	"parentalbond": {
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect multi-hit moves or moves that have multiple targets.",
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
