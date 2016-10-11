@@ -3584,89 +3584,32 @@ return problems;
 	   }
    	},
 	{
-	name:"Mirror Move",
-	section: "New Other Metagames",
-	ruleset:['OU'],
-	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mirror-move.3572990/\">Mirror Move</a>"],
-	onBegin: function() {
-		let i=0;
-		while(this.p1.pokemon[i] != undefined)
+		name:"Mirror Move",
+		section: "New Other Metagames",
+		ruleset:['OU'],
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mirror-move.3572990/\">Mirror Move</a>"],
+		mod:"mirrormove",
+		onBegin: function()
 		{
-			for(let j=2;j<4;j++)
+			for(let p=1;p<=2;p++)
 			{
-				if(this.p1.pokemon[i].baseMoveset[j]==undefined)
+				for(let i=0;i<this["p"+p].pokemon.length;i++)
 				{
-					this.p1.pokemon[i].moveset[j] = {
-					move: "Mirror Move",
-					id: "mirrormove",
-					pp: 32,
-					maxpp: 32,
-					target: "normal",
-					disabled: false,
-						  disabledSource: '',
-						  used: false
-				}
-				this.p1.pokemon[i].baseMoveset[j] = {
-					move: "Mirror Move",
-					id: "mirrormove",
-					pp: 32,
-					maxpp: 32,
-					target: "normal",
-					disabled: false,
-						  disabledSource: '',
-						  used: false
-				}
+					this["p"+p].pokemon[i].om = [this["p"+p].pokemon[i].moveset[0]];
+					this["p"+p].pokemon[i].obm = [this["p"+p].pokemon[i].baseMoveset[0]];
+					if(this["p"+p].pokemon[i].baseMoveset[1])
+					{
+						this["p"+p].pokemon[i].om[1] = this["p"+p].pokemon[i].moveset[1];
+						this["p"+p].pokemon[i].obm[1] = this["p"+p].pokemon[i].baseMoveset[1];
+					}
 				}
 			}
-			i=i+1;
-		}
-		i=0;
-		while(this.p2.pokemon[i] != undefined)
+		},
+		onValidateSet(set)
 		{
-			for(let j=2;j<4;j++)
-			{
-				if(this.p2.pokemon[i].baseMoveset[j]==undefined)
-					this.p2.pokemon[i].moveset[j] = {
-					move: "Mirror Move",
-					id: "mirrormove",
-					pp: 32,
-					maxpp: 32,
-					target: "normal",
-					disabled: false,
-				    disabledSource: '',
-				    used: false
-				}
-				this.p2.pokemon[i].baseMoveset[j] = {
-					move: "Mirror Move",
-					id: "mirrormove",
-					pp: 32,
-					maxpp: 32,
-					target: "normal",
-					disabled: false,
-				    disabledSource: '',
-					used: false
-				}
-				}
-			}
-			i=i+1;
-		},
-	onSwitchIn: function () {
-			for(let kek=2,ke=0;kek<4;kek++,ke++)
-			{
-				this.p1.pokemon[0].moveset[kek].move=this.p2.pokemon[0].moveset[ke].move;
-				this.p2.pokemon[0].moveset[kek].move=this.p1.pokemon[0].moveset[ke].move;
-				this.p1.pokemon[0].baseMoveset[kek].move=this.p2.pokemon[0].baseMoveset[ke].move;
-				this.p2.pokemon[0].baseMoveset[kek].move=this.p1.pokemon[0].baseMoveset[ke].move;
-				this.p1.pokemon[0].moveset[kek].id=this.p2.pokemon[0].moveset[ke].id;
-				this.p2.pokemon[0].moveset[kek].id=this.p1.pokemon[0].moveset[ke].id;
-				this.p1.pokemon[0].baseMoveset[kek].id=this.p2.pokemon[0].baseMoveset[ke].id;
-				this.p2.pokemon[0].baseMoveset[kek].id=this.p1.pokemon[0].baseMoveset[ke].id;
-				this.p1.pokemon[0].moveset[kek].maxpp=this.p2.pokemon[0].moveset[ke].maxpp;
-				this.p2.pokemon[0].moveset[kek].maxpp=this.p1.pokemon[0].moveset[ke].maxpp;
-				this.p1.pokemon[0].baseMoveset[kek].maxpp=this.p2.pokemon[0].baseMoveset[ke].maxpp;
-				this.p2.pokemon[0].baseMoveset[kek].maxpp=this.p1.pokemon[0].baseMoveset[ke].maxpp;
-			}
-		},
+			if(set.moves.length>2)
+				return ["You are allowed to bring only 2 moves on a Pokemon.","("+set.name+" has more than 2 moves)"]
+		}
 	},
    	{
         name: "Offensification",
