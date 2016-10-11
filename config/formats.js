@@ -3675,7 +3675,6 @@ return problems;
 		"&bullet; <a href=\"http://www.smogon.com/forums/threads/offensification-hoopa-u-banned.3524512/\">Offensification</a>",
         ],
         section: "New Other Metagames",
-
         ruleset: ['Pokemon', 'Standard', 'Team Preview'],
         banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Flatter', 'Kyurem-Black'],
         onModifyMove: function (move, pokemon) {
@@ -3731,7 +3730,29 @@ return problems;
             }
         }
     },
-
+	{
+		name:"Open House",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
+		section: "New Other Metagames",
+		mod:"openhouse",
+		onBegin: function()
+		{
+			this.houses = ["Wonder Room","Trick Room","Magic Room"];
+			this.nexthouse = this.houses[this.random(3)];
+			this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
+		},
+		onResidualOrder:999,
+		onResidual: function()
+		{
+			if(this.turn%5==4)
+			{
+				let nexthouse = this.houses[this.random(3)];
+				while(nexthouse==this.curhouse) nexthouse = this.houses[this.random(3)];
+				this.nexthouse = nexthouse;
+				this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
+			}
+		}
+	},
 	{
 		name: "No Haxmons",
 		section: "New Other Metagames",
