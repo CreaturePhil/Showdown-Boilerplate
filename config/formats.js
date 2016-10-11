@@ -3607,8 +3607,9 @@ return problems;
 		},
 		onValidateSet(set)
 		{
+			let name = (set.name)?set.name:set.species;
 			if(set.moves.length>2)
-				return ["You are allowed to bring only 2 moves on a Pokemon.","("+set.name+" has more than 2 moves)"]
+				return ["You are allowed to bring only 2 moves on a Pokemon.","("+name+" has more than 2 moves)"]
 		}
 	},
    	{
