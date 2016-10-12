@@ -3704,18 +3704,18 @@ return problems;
 	    {
 			if(this.turn % 4 === 0) 
 			{
-				if(condition === "Wonder Room") 
+				if(this.condition === "Wonder Room") 
 				{
 					if(this.randNo2 === 1) 
 					{
 						this.condition = "Magic Room";
-						this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+						this.add("-message","Starting next turn, the battle will begin in the " + this.condition + "!");
 						this.addPsuedoWeather(toId(this.condition));
 					}
 					else 
 					{
 						this.condition = "Trick Room";
-						this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+						this.add("-message","Starting next turn, the battle will begin in the " + this.condition + "!");
 						this.addPsuedoWeather(toId(this.condition));
 					}
 				}
@@ -3724,13 +3724,13 @@ return problems;
 					if(this.randNo2 === 1) 
 					{
 						this.condition = "Trick Room";
-						this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+						this.add("-message","Starting next turn, the battle will begin in the " + this.condition + "!");
 						this.addPsuedoWeather(toId(this.condition));
 					}
 					else 
 					{
 						this.condition = "Wonder Room";
-						this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+						this.add("-message","Starting next turn, the battle will begin in the " + this.condition + "!");
 						this.addPsuedoWeather(toId(this.condition));
 					}
 				}
@@ -3739,13 +3739,13 @@ return problems;
 					if(this.randNo2 === 1) 
 					{
 						this.condition = "Wonder Room";
-						this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+						this.add("-message","Starting next turn, the battle will begin in the " + this.condition + "!");
 						this.addPsuedoWeather(toId(this.condition));
 					}
 					else 
 					{
 						this.condition = "Magic Room";
-						this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+						this.add("-message","Starting next turn, the battle will begin in the " + this.condition + "!");
 						this.addPsuedoWeather(toId(this.condition));
 					}
 				}
