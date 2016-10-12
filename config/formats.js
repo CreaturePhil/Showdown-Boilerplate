@@ -345,7 +345,7 @@ exports.Formats = [
 		section: "Randomized Metas",
 		mod:"openhouse",
 		team: 'random',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ["Team Preview",'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function()
 		{
 			this.houses = ["Wonder Room","Trick Room","Magic Room"];
