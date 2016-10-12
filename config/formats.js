@@ -3681,9 +3681,9 @@ return problems;
 	   banlist: [], 
 	   onBegin: function()
 	    { 
-		    this.randnumber  = Math.floor(Math.random() * 3);
-		    this.randNo2 = Math.floor(Math.random() * 2);
-		    this.condition;
+		    this.randnumber  = this.random(3);
+		    this.randNo2 = this.random(2);
+		    this.condition = "";
 		    if(this.randnumber === 0)
 		    { 
 			    this.condition = "Magic Room";
@@ -3702,7 +3702,7 @@ return problems;
 	   onResidualOrder:999,
 	   onResidual: function() 
 	    {
-			if(this.turn % 4 === 0) 
+			if(this.turn % 5 === 4) 
 			{
 				if(this.condition === "Wonder Room") 
 				{
