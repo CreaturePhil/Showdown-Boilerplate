@@ -205,6 +205,7 @@ exports.BattleScripts = {
 			}
 		}
 		this.add('turn', this.turn);
+		this.makeRequest('move');
 		if(this.turn%5==0 || this.turn==1)
 		{
 			let b = false;
@@ -224,10 +225,9 @@ exports.BattleScripts = {
 			if(!b)
 			{
 				this.add("-message",this.nexthouse+" started!");
-				this.addPseudoWeather(toId(this.nexthouse));
+				this.addPseudoWeather(toId(this.nexthouse), this.p1.pokemon[0], "[move]: "+this.nexthouse);
 			}
 			this.curhouse = this.nexthouse;
 		}
-		this.makeRequest('move');
 	},
 };
