@@ -3696,7 +3696,7 @@ return problems;
 		    {
 			    this.condition = "Wonder Room";
 		    }
-		    this.add("The battle will begin in the " + condition + "!");
+		    this.add("-message","The battle will begin in the " + this.condition + "!");
 		    this.addPsuedoWeather(toId(this.condition));
 	   },
 	   onResidualOrder:999,
