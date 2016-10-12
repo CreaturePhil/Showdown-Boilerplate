@@ -3679,6 +3679,7 @@ return problems;
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
 		section: "New Other Metagames",
 		mod:"openhouse",
+		ruleset: ["OU"],
 		onBegin: function()
 		{
 			this.houses = ["Wonder Room","Trick Room","Magic Room"];
