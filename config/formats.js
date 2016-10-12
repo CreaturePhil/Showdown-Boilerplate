@@ -3674,30 +3674,56 @@ return problems;
             }
         }
     },
-	{
-		name:"Open House",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
-		section: "New Other Metagames",
-		mod:"openhouse",
-		ruleset: ["OU"],
-		onBegin: function()
-		{
-			this.houses = ["Wonder Room","Trick Room","Magic Room"];
-			this.nexthouse = this.houses[this.random(3)];
-			this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
-		},
-		onResidualOrder:999,
-		onResidual: function()
-		{
-			if(this.turn%5==4)
-			{
-				let nexthouse = this.houses[this.random(3)];
-				while(nexthouse==this.curhouse) nexthouse = this.houses[this.random(3)];
-				this.nexthouse = nexthouse;
-				this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
-			}
-		}
-	},
+{
+   name: "Open House",
+   section: "Other Metagames",
+
+   ruleset: ['OU'],
+   banlist: [], 
+   	
+   onBegin: function(){ 
+    this.randnumber  = Math.floor(Math.random() * 3);
+    this.randNo2 = Math.floor(Math.random() * 2);
+    this.condition;
+    if(this.randnumber === 0){ this.condition = "Magic Room";}
+    else if(this.randnumber === 1) {this.condition = "Trick Room";}
+    else {this.condition = "Wonder Room";}
+    this.add("The battle will begin in the " + condition + "!");
+    this.addPsuedoWeather(toId(this.condition));
+   },
+   onResidualOrder:999,
+   onResidual: function() {
+		if(this.turn % 4 === 0) {
+   			if(condition === "Wonder Room") {
+   				if(this.randNo2 === 1) {
+   					this.condition = "Magic Room";
+   					this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+   					this.addPsuedoWeather(toId(this.condition));}}
+   				else {
+   					this.condition = "Trick Room";
+   					this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+   					this.addPsuedoWeather(toId(this.condition));}}
+   			if(this.condition === "Magic Room") {
+   				if(this.randNo2 === 1) {
+   					this.condition = "Trick Room";
+   					this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+   					this.addPsuedoWeather(toId(this.condition));}
+   				else {
+   					this.condition = "Wonder Room";
+   					this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+   					this.addPsuedoWeather(toId(this.condition));}}
+   			if(this.condition === "Trick Room") {
+   				if(this.randNo2 === 1) {
+   					this.condition = "Wonder Room";
+   					this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+   					this.addPsuedoWeather(toId(this.condition));}
+   				else {
+   					this.condition = "Magic Room";
+   					this.add("-message","Starting next turn, the battle will begin in the " + condition + "!");
+   					this.addPsuedoWeather(toId(this.condition));}}}}
+   					
+},
+   			
 	{
 		name: "No Haxmons",
 		section: "New Other Metagames",
