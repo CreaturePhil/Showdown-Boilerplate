@@ -342,7 +342,7 @@ exports.Formats = [
 	{
 		name:"Open House Randbats",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
-		section: "New Other Metagames",
+		section: "Randomized Metas",
 		mod:"openhouse",
 		team: 'random',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
@@ -3700,7 +3700,7 @@ return problems;
     },
     {
     name: "Open House",
-    section: "Other Metagames",
+    section: "New Other Metagames",
 
     ruleset: ['OU'],
     banlist: [],
