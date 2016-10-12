@@ -336,9 +336,33 @@ exports.Formats = [
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
 		section: "Randomized Metas",
 		column: 2,
-
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name:"Open House Randbats",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
+		section: "New Other Metagames",
+		mod:"openhouse",
+		team: 'random',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		onBegin: function()
+		{
+			this.houses = ["Wonder Room","Trick Room","Magic Room"];
+			this.nexthouse = this.houses[this.random(3)];
+			this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
+		},
+		onResidualOrder:999,
+		onResidual: function()
+		{
+			if(this.turn%5==4)
+			{
+				let nexthouse = this.houses[this.random(3)];
+				while(nexthouse==this.curhouse) nexthouse = this.houses[this.random(3)];
+				this.nexthouse = nexthouse;
+				this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
+			}
+		}
 	},
 	{
 		name: "[Seasonal] Fireworks Frenzy",
