@@ -3702,7 +3702,8 @@ return problems;
 	   onResidualOrder:999,
 	   onResidual: function() 
 	    {
-			if(this.turn % 4 === 0) {
+			if(this.turn % 4 === 0) 
+			{
 				if(condition === "Wonder Room") 
 				{
 					if(this.randNo2 === 1) 
@@ -3748,7 +3749,8 @@ return problems;
 						this.addPsuedoWeather(toId(this.condition));
 					}
 				}
-			}	
+			}
+	    }
 	},	
 	{
 		name: "No Haxmons",
