@@ -341,7 +341,7 @@ exports.Formats = [
 	},
 	{
 		name:"Open House Randbats",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
+		desc: ["Every 5 turns, one of Trick Room, Magic Room or Wonder Room is set up.","&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
 		section: "Randomized Metas",
 		mod:"openhouse",
 		team: 'random',
