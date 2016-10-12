@@ -3676,7 +3676,7 @@ return problems;
     },
     {
 	   name: "Open House",
-	   section: "Other Metagames",
+	   section: "New Other Metagames",
 	   ruleset: ['OU'],
 	   banlist: [], 
 	   onBegin: function()
