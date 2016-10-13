@@ -1116,7 +1116,7 @@ exports.commands= {
 	let pokemen=Tools.data.Pokedex;
         if (pokemen[name]==undefined || pokemen[name2]==undefined)
         {
-                this.say(room, "Error: Pokemon not found")
+                this.errorReply("Error: Pokemon not found");
 		return;
         }
         else {
