@@ -373,18 +373,41 @@ exports.Formats = [
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		section: "Randomized Metas",
-		mod: "metaman",
+		//mod: "metaman",
+		onBegin: function()
+		{
+			for(let p = 0;p<this.sides.length;p++)
+			{
+				for(let i=0;i<this.sides[p].pokemon.length;i++)
+				{
+					this.sides[p].pokemon[i].moveUsed = function {
+						this.lastMove = this.battle.getMove(move).id;
+						for(let i=0;i<this.moveset.length;i++)
+						{
+							if(move.id == this.moveset[i].id)
+							{
+								this.lastM = this.moveset[i];
+								this.lastM.disabled = false;
+								this.lastM.pp = this.lastM.maxpp;
+								break;
+							}
+						}
+						this.moveThisTurn = this.lastMove;
+					}
+				}
+			}
+		},
 		onFaint: function(pokemon)
 		{
-			let opp = (pokemon.side.id=="p1")?"p2":"p1";
-			this[opp].pokemon[0].ability = pokemon.ability;
-			this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
+			pokemon.side.foe.pokemon[0].ability = pokemon.ability;
+			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
 			let lastMove = pokemon.lastM;
-			if(this[opp].pokemon[0].moveset.length<=9 && lastMove)
+			let has
+			if(pokemon.side.foe.pokemon[0].moveset.length<=9 && lastMove && !pokemon.side.foe.pokemon[0].hasMove(lastMove.id))
 			{
-				this[opp].pokemon[0].moveset.push(lastMove);
-				this[opp].pokemon[0].baseMoveset.push(lastMove);
-				this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
+				pokemon.side.foe.pokemon[0].moveset.push(lastMove);
+				pokemon.side.foe.pokemon[0].baseMoveset.push(lastMove);
+				this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
 			}
 		},
 	},
