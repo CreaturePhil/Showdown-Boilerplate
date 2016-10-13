@@ -1117,6 +1117,7 @@ exports.commands= {
         if (!(pokemen[name] || pokemen[name2]))
         {
                 this.say(room, "Error: Pokemon not found")
+		return;
         }
         else {
                 let baseStats = {};
