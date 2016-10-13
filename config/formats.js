@@ -376,9 +376,9 @@ exports.Formats = [
 		mod: "metaman",
 		onFaint: function(pokemon)
 		{
+			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
 			pokemon.side.foe.pokemon[0].setAbility(pokemon.ability);
 			pokemon.side.foe.pokemon[0].baseAbility = pokemon.ability;
-			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
 			let lastMove = pokemon.lastM;
 			let has
 			if(pokemon.side.foe.pokemon[0].moveset.length<=9 && lastMove && !pokemon.side.foe.pokemon[0].hasMove(lastMove.id))
@@ -2576,9 +2576,9 @@ exports.Formats = [
 		ruleset: ['OU'],
 		onFaint: function(pokemon)
 		{
+			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
 			pokemon.side.foe.pokemon[0].setAbility(pokemon.ability);
 			pokemon.side.foe.pokemon[0].baseAbility = pokemon.ability;
-			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
 			let lastMove = pokemon.lastM;
 			let has
 			if(pokemon.side.foe.pokemon[0].moveset.length<=9 && lastMove && !pokemon.side.foe.pokemon[0].hasMove(lastMove.id))
