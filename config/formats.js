@@ -371,7 +371,7 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/meta-man.3565966/\">Meta Man</a>",
 		],
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Team Preview', 'Random Battle'],
 		section: "Randomized Metas",
 		mod: "metaman",
 		onFaint: function(pokemon)
@@ -2454,9 +2454,9 @@ exports.Formats = [
 		section: "Other Metagames",
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		validateSet: function (set) {
-			var template = this.getTemplate(set.species);
-			var item = this.getItem(set.item);
-			var problems = [];
+			let template = this.getTemplate(set.species);
+			let item = this.getItem(set.item);
+			let problems = [];
 
 			if (set.species === set.name) delete set.name;
 			if (template.isNonstandard) {
@@ -2465,14 +2465,14 @@ exports.Formats = [
 			if (item.isNonstandard) {
 				problems.push(item.name + ' is not a real item.');
 			}
-			var ability = {};
+			let ability = {};
 			if (set.ability) ability = this.getAbility(set.ability);
 			if (ability.isNonstandard) {
 				problems.push(ability.name + ' is not a real ability.');
 			}
 			if (set.moves) {
-				for (var i = 0; i < set.moves.length; i++) {
-					var move = this.getMove(set.moves[i]);
+				for (let i = 0; i < set.moves.length; i++) {
+					let move = this.getMove(set.moves[i]);
 					if (move.isNonstandard) {
 						problems.push(move.name + ' is not a real move.');
 					}
@@ -2578,15 +2578,15 @@ exports.Formats = [
 		ruleset: ['OU'],
 		onFaint: function(pokemon)
 		{
-			let opp = (pokemon.side.id=="p1")?"p2":"p1";
-			this[opp].pokemon[0].ability = pokemon.ability;
-			this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
+			pokemon.side.foe.pokemon[0].ability = pokemon.ability;
+			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
 			let lastMove = pokemon.lastM;
-			if(this[opp].pokemon[0].moveset.length<=9 && lastMove)
+			let has
+			if(pokemon.side.foe.pokemon[0].moveset.length<=9 && lastMove && !pokemon.side.foe.pokemon[0].hasMove(lastMove.id))
 			{
-				this[opp].pokemon[0].moveset.push(lastMove);
-				this[opp].pokemon[0].baseMoveset.push(lastMove);
-				this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
+				pokemon.side.foe.pokemon[0].moveset.push(lastMove);
+				pokemon.side.foe.pokemon[0].baseMoveset.push(lastMove);
+				this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
 			}
 		},
 	},
