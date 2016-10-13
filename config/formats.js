@@ -380,7 +380,7 @@ exports.Formats = [
 			{
 				for(let i=0;i<this.sides[p].pokemon.length;i++)
 				{
-					this.sides[p].pokemon[i].moveUsed = function {
+					this.sides[p].pokemon[i].moveUsed = function() {
 						this.lastMove = this.battle.getMove(move).id;
 						for(let i=0;i<this.moveset.length;i++)
 						{
