@@ -2555,24 +2555,14 @@ exports.Formats = [
 		onFaint: function(pokemon)
 		{
 			let opp = (pokemon.side.id=="p1")?"p2":"p1";
-			this[opp].pokemon[0].setAbility(pokemon.ability);
-			this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.ability+"!");
-			let lastMove = undefined;
-			for(let i=0;i<pokemon.moveset.length;i++)
-			{
-				if(pokemon.lastMove == pokemon.moveset[i].id)
-				{
-					lastMove = pokemon.moveset[i];
-					lastMove.disabled = false;
-					lastMove.pp = lastMove.maxpp;
-					break;
-				}
-			}
+			this[opp].pokemon[0].ability = pokemon.ability;
+			this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
+			let lastMove = pokemon.lastM;
 			if(this[opp].pokemon[0].moveset.length<=9 && lastMove)
 			{
 				this[opp].pokemon[0].moveset.push(lastMove);
 				this[opp].pokemon[0].baseMoveset.push(lastMove);
-				this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastMove+"!");
+				this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
 			}
 		},
 	},
