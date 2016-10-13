@@ -365,6 +365,30 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Meta Man Randbats",
+		desc: [
+			"When a Pokemon faints, the opposing Pokemon replaces its current ability with the fainted Pokemon's and gains its last-used move in a new slot (for up to 9 total moves). These changes last the entire match. If a Pokemon faints before using a move during the match, no move is gained by the opponent.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/meta-man.3565966/\">Meta Man</a>",
+		],
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		section: "Randomized Metas",
+		mod: "metaman",
+		onFaint: function(pokemon)
+		{
+			let opp = (pokemon.side.id=="p1")?"p2":"p1";
+			this[opp].pokemon[0].ability = pokemon.ability;
+			this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
+			let lastMove = pokemon.lastM;
+			if(this[opp].pokemon[0].moveset.length<=9 && lastMove)
+			{
+				this[opp].pokemon[0].moveset.push(lastMove);
+				this[opp].pokemon[0].baseMoveset.push(lastMove);
+				this.add("-message",this[opp].pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
+			}
+		},
+	},
+	{
 		name: "[Seasonal] Fireworks Frenzy",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "Randomized Metas",
@@ -2550,7 +2574,7 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/meta-man.3565966/\">Meta Man</a>",
 		],
 		section: "Other Metagames",
-
+		mod: "metaman",
 		ruleset: ['OU'],
 		onFaint: function(pokemon)
 		{
