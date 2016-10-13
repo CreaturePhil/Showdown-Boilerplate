@@ -1114,7 +1114,7 @@ exports.commands= {
         name = toId(name);
         name2 = toId(name2);
 	let pokemen=Tools.data.Pokedex;
-        if (!(pokemen[name] || pokemen[name2]))
+        if (pokemen[name]==undefined || pokemen[name2]==undefined)
         {
                 this.say(room, "Error: Pokemon not found")
 		return;
