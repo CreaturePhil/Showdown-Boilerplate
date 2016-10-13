@@ -376,7 +376,8 @@ exports.Formats = [
 		mod: "metaman",
 		onFaint: function(pokemon)
 		{
-			pokemon.side.foe.pokemon[0].ability = pokemon.ability;
+			pokemon.side.foe.pokemon[0].setAbility(pokemon.ability);
+			pokemon.side.foe.pokemon[0].baseAbility = pokemon.ability;
 			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
 			let lastMove = pokemon.lastM;
 			let has
@@ -2578,7 +2579,8 @@ exports.Formats = [
 		ruleset: ['OU'],
 		onFaint: function(pokemon)
 		{
-			pokemon.side.foe.pokemon[0].ability = pokemon.ability;
+			pokemon.side.foe.pokemon[0].setAbility(pokemon.ability);
+			pokemon.side.foe.pokemon[0].baseAbility = pokemon.ability;
 			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
 			let lastMove = pokemon.lastM;
 			let has
