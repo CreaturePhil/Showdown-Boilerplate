@@ -2454,12 +2454,12 @@ exports.Formats = [
 		name: "Classic Hackmons",
 		section: "Other Metagames",
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
-		validateSet: function (set) {
+		maxLevel: 100,
+		defaultLevel: 100,
+		onValidateSet: function (set) {
 			let template = this.getTemplate(set.species);
 			let item = this.getItem(set.item);
 			let problems = [];
-
-			if (set.species === set.name) delete set.name;
 			if (template.isNonstandard) {
 				problems.push(set.species + ' is not a real Pokemon.');
 			}
@@ -2481,9 +2481,6 @@ exports.Formats = [
 				if (set.moves.length > 4) {
 					problems.push((set.name || set.species) + ' has more than four moves.');
 				}
-			}
-			if (set.level && set.level > 100) {
-				problems.push((set.name || set.species) + ' is higher than level 100.');
 			}
 			return problems;
 		}
@@ -3542,12 +3539,12 @@ return problems;
 	onDisableMove: function(pokemon)
 	{
 		let side=pokemon.side.id;
-			for(let j=0;j<pokemon.moves.length;j++)
-			{
-				let curmove=pokemon.moves[j];
-				if(this.isImpris(side,curmove))
-					pokemon.disableMove(curmove);
-			}
+		for(let j=0;j<pokemon.moves.length;j++)
+		{
+			let curmove=pokemon.moves[j];
+			if(this.isImpris(side,curmove))
+				pokemon.disableMove(curmove);
+		}
 	},
 	onTryMove: function(source, target, move)
 	{
@@ -3631,16 +3628,16 @@ return problems;
 		mod:"mirrormove",
 		onBegin: function()
 		{
-			for(let p=1;p<=2;p++)
+			for(let p=0;p<this.sides.length;p++)
 			{
-				for(let i=0;i<this["p"+p].pokemon.length;i++)
+				for(let i=0;i<this.sides[p].pokemon.length;i++)
 				{
-					this["p"+p].pokemon[i].om = [this["p"+p].pokemon[i].moveset[0]];
-					this["p"+p].pokemon[i].obm = [this["p"+p].pokemon[i].baseMoveset[0]];
-					if(this["p"+p].pokemon[i].baseMoveset[1])
+					this.sides[p].pokemon[i].om = [this.sides[p].pokemon[i].moveset[0]];
+					this.sides[p].pokemon[i].obm = [this.sides[p].pokemon[i].baseMoveset[0]];
+					if(this.sides[p].pokemon[i].baseMoveset[1])
 					{
-						this["p"+p].pokemon[i].om[1] = this["p"+p].pokemon[i].moveset[1];
-						this["p"+p].pokemon[i].obm[1] = this["p"+p].pokemon[i].baseMoveset[1];
+						this.sides[p].pokemon[i].om[1] = this.sides[p].pokemon[i].moveset[1];
+						this.sides[p].pokemon[i].obm[1] = this.sides[p].pokemon[i].baseMoveset[1];
 					}
 				}
 			}
@@ -3987,11 +3984,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	},
 	onSwitchIn: function(pokemon)
 	{
-		var tSide;
-		if(pokemon.side.id=='p1')
-			tSide='p2';
-		if(pokemon.side.id=='p2')
-			tSide='p1';
 		var pledgetype = function()
 		{
 			if(pokemon.types[0]=='Water') return 'water';
@@ -4006,16 +3998,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(pokemon.baseHpType=="Grass")
 			{
 				this.add('-sidestart', this[tSide], 'Fire Pledge');
-				//this[tSide].addSideCondition('firepledge');
-				this[tSide].pledge.terrain="Fire Pledge";
-				this[tSide].pledge.duration=0;
+				pokemon.side.foe.pledge.terrain="Fire Pledge";
+				pokemon.side.foe.pledge.duration=0;
 			}
 			if(pokemon.baseHpType=="Water")
 			{
 				this.add('-sidestart', this[tSide], 'Water Pledge');
-				//this[tSide].addSideCondition('waterpledge');
-				this[tSide].pledge.terrain="Water Pledge";
-				this[tSide].pledge.duration=0;
+				pokemon.side.foe.pledge.terrain="Water Pledge";
+				pokemon.side.foe.pledge.duration=0;
 			}
 		}
 		if(pledgetype()=='grass')
@@ -4023,16 +4013,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(pokemon.baseHpType=="Fire")
 			{
 				this.add('-sidestart', this[tSide], 'Fire Pledge');
-				//this[tSide].addSideCondition('firepledge');
-				this[tSide].pledge.terrain="Fire Pledge";
-				this[tSide].pledge.duration=0;
+				pokemon.side.foe.pledge.terrain="Fire Pledge";
+				pokemon.side.foe.pledge.duration=0;
 			}
 			if(pokemon.baseHpType=="Water")
 			{
 				this.add('-sidestart', this[tSide], 'Grass Pledge');
-				//this[tSide].addSideCondition('grasspledge');
-				this[tSide].pledge.terrain="Grass Pledge";
-				this[tSide].pledge.duration=0;
+				pokemon.side.foe.pledge.terrain="Grass Pledge";
+				pokemon.side.foe.pledge.duration=0;
 			}
 		}
 		if(pledgetype()=='water')
@@ -4040,16 +4028,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(pokemon.baseHpType=="Grass")
 			{
 				this.add('-sidestart', this[tSide], 'Grass Pledge');
-				//this[tSide].addSideCondition('grasspledge');
-				this[tSide].pledge.terrain="Grass Pledge";
-				this[tSide].pledge.duration=0;
+				pokemon.side.foe.pledge.terrain="Grass Pledge";
+				pokemon.side.foe.pledge.duration=0;
 			}
 			if(pokemon.baseHpType=="Fire")
 			{
 				this.add('-sidestart', this[tSide], 'Water Pledge');
-				//this[tSide].addSideCondition('waterpledge');
-				this[tSide].pledge.terrain="Water Pledge";
-				this[tSide].pledge.duration=0;
+				pokemon.side.foe.pledge.terrain="Water Pledge";
+				pokemon.side.foe.pledge.duration=0;
 			}
 		}
 	},
@@ -4133,11 +4119,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				}
 				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
 			}
-			/*let ability = this.getAbility(set.ability);
-			let item = this.getItem(set.item);
-			if (ability.item && ability.item === item.id) {
-				return ["You are not allowed to have " + ability.name + " and " + item.name + " on the same Pokémon."];
-			}*/
 		},
 		onValidateTeam: function (team) {
 			let abilityTable = {};
@@ -4174,42 +4155,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		mod: 'enchanteditems',
 		ruleset: ['HP Percentage Mod'],
 		banlist: ['Ignore Illegal Abilities','Ignore Illegal Moves'],
-		/*onValidateSet: function (set) {
-
-		let bannedAbilities = {'Arena Trap': 1, 'Huge Power': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Wonder Guard': 1};
-			if (set.ability in bannedAbilities) {
-				let template = this.getTemplate(set.species || set.name);
-				let legalAbility = false;
-				for (let i in template.abilities) {
-					if (set.ability === template.abilities[i]) legalAbility = true;
-				}
-				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
-			}
-			/*let ability = this.getAbility(set.ability);
-			let item = this.getItem(set.item);
-			if (ability.item && ability.item === item.id) {
-				return ["You are not allowed to have " + ability.name + " and " + item.name + " on the same Pokémon."];
-			}*/
-		//},
-		/*onValidateTeam: function (team) {
-			let abilityTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let ability = this.getAbility(team[i].ability);
-				if (!abilityTable[ability.id]) abilityTable[ability.id] = 0;
-				if (++abilityTable[ability.id] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getItem(ability.item).name + ")"];
-				}
-				let item = toId(team[i].item);
-				if (!item) continue;
-				item = this.getItem(item);
-				ability = item.ability;
-				if (!ability) continue;
-				if (!abilityTable[ability]) abilityTable[ability] = 0;
-				if (++abilityTable[ability] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item.name + ")"];
-				}
-			}
-		},*/
 		onFaint: function (pokemon) {
 			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
 		},
@@ -4457,17 +4402,6 @@ onBegin: function () {
 
 		mod: 'mnmbh',
 		ruleset: ['Balanced Hackmons'],
-		//banlist: ['Dynamic Punch', 'Electrify', 'Zap Cannon'],
-		/*onValidateTeam: function (team) {
-			let itemTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let item = this.getItem(team[i].item);
-				if (!item) continue;
-				if (itemTable[item] && item.megaStone) return ["You are limited to one of each Mega Stone.", "(You have more than one " + this.getItem(item).name + ")"];
-				if (itemTable[item] && (item.id === 'blueorb' || item.id === 'redorb')) return ["You are limited to one of each Primal Orb.", "(You have more than one " + this.getItem(item).name + ")"];
-				itemTable[item] = true;
-			}
-		},*/
 		onValidateSet: function (set) {
 			let template = this.getTemplate(set.species || set.name);
 			let item = this.getItem(set.item);
