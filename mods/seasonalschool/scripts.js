@@ -259,7 +259,7 @@ exports.BattleScripts = {
                                 //make the pokemon drowsy
                         }
                         if (classType == 'Fairy')
-                        for(let i=0;i<this.side.length;i++)
+                        for(let i=0;i<this.sides.length;i++)
                         {
                                         if (this.sides[i].pokemon[0].setStatus('slp')) {
                                         this.sides[i].pokemon[0].statusData.time = 1;
