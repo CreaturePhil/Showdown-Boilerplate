@@ -241,12 +241,12 @@ exports.BattleScripts = {
                         }
 
                         //console.dir(classType);
-                        for(let i=0;i<this.side.length;i++)
+                        for(let i=0;i<this.sides.length;i++)
                         {
-                            if (!this.side[i].pokemon[0].hasType(classType))
-                                    if (this.side[i].pokemon[0].addType(classType))
+                            if (!this.sides[i].pokemon[0].hasType(classType))
+                                    if (this.sides[i].pokemon[0].addType(classType))
                                             if (classType != '')
-                                                    this.add('-start', this.side[i].pokemon[0], 'typeadd', classType);
+                                                    this.add('-start', this.sides[i].pokemon[0], 'typeadd', classType);
                         }
 
                         if (halfHour == 2) {
@@ -261,11 +261,11 @@ exports.BattleScripts = {
                         if (classType == 'Fairy')
                         for(let i=0;i<this.side.length;i++)
                         {
-                                        if (this.side[i].pokemon[0].setStatus('slp')) {
-                                        this.side[i].pokemon[0].statusData.time = 1;
-                                        this.side[i].pokemon[0].statusData.startTime = 1;
-                                        this.heal(this.side[i].pokemon[0].maxhp);
-                                        this.add('-status', this.side[i].pokemon[0], 'slp', '[from] move: Rest');
+                                        if (this.sides[i].pokemon[0].setStatus('slp')) {
+                                        this.sides[i].pokemon[0].statusData.time = 1;
+                                        this.sides[i].pokemon[0].statusData.startTime = 1;
+                                        this.heal(this.sides[i].pokemon[0].maxhp);
+                                        this.add('-status', this.sides[i].pokemon[0], 'slp', '[from] move: Rest');
                                         this.add('-message', "Rest up, you've got another big day tomorrow!");
                                         }
                         }
