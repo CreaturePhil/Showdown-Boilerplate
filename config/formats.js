@@ -332,6 +332,51 @@ exports.Formats = [
 		},
 	},
 	{
+                name: "[Experimental] School",
+                section: "Randomized Metas",
+                mod: 'seasonalschool',
+                team: 'random',
+                ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+                onBegin: function() {
+                        this.add('-message', "Welcome back to school! Your class schedule is Gym, Math, Lunch, History, and Music! Be sure to get a good night's sleep on school nights!");
+                },
+                onSwitchIn: function(pokemon) {
+                        let halfHour = (pokemon.side.battle.turn - 1) % 15;
+                        let classType = '';
+                        if (halfHour >= 0 && halfHour < 3)
+                                classType = 'Fighting'; //First Period: Gym
+                        if (halfHour >= 3 && halfHour < 6)
+                                classType = 'Psychic'; //Second Period: Math
+                        if (halfHour >= 6 && halfHour < 8)
+                                classType = 'Poison'; //Lunch Hour
+                        if (halfHour >= 8 && halfHour < 11)
+                                classType = 'Rock'; //Third Period: History
+                        if (halfHour >= 11 && halfHour < 14)
+                                classType = 'Normal'; //Fourth Period: Music
+                        if (halfHour == 14)
+                                classType = 'Fairy';
+
+
+                        if (!pokemon.hasType(classType))
+                                if (pokemon.addType(classType))
+                                        if (classType != '')
+                                                this.add('-start', pokemon, 'typeadd', classType); //Add type corresponding to current class
+                },
+                onBasePower: function(basePower, attacker, defender, move) {
+                        let halfHour = (attacker.side.battle.turn - 1) % 15;
+                        if (halfHour >= 3 && halfHour < 6)
+                                if (!this.willMove(defender)) {
+                                        this.debug('Analytic boost');
+                                        return this.chainModify([0x14CD, 0x1000]);
+                                }
+                },
+                //onResidual: function(pokemon) {
+                //    let halfHour = (pokemon.side.battle.turn - 1) % 15;
+                //    if (halfHour >= 6 && halfHour < 8)
+                //        this.heal(pokemon.maxhp / 16);
+                //},
+        },
+	{
 		name: "Random Battle",
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
 		section: "Randomized Metas",
