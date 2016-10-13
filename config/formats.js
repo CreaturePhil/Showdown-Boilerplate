@@ -373,30 +373,7 @@ exports.Formats = [
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		section: "Randomized Metas",
-		//mod: "metaman",
-		onBegin: function()
-		{
-			for(let p = 0;p<this.sides.length;p++)
-			{
-				for(let i=0;i<this.sides[p].pokemon.length;i++)
-				{
-					this.sides[p].pokemon[i].moveUsed = function() {
-						this.lastMove = this.battle.getMove(move).id;
-						for(let i=0;i<this.moveset.length;i++)
-						{
-							if(move.id == this.moveset[i].id)
-							{
-								this.lastM = this.moveset[i];
-								this.lastM.disabled = false;
-								this.lastM.pp = this.lastM.maxpp;
-								break;
-							}
-						}
-						this.moveThisTurn = this.lastMove;
-					}
-				}
-			}
-		},
+		mod: "metaman",
 		onFaint: function(pokemon)
 		{
 			pokemon.side.foe.pokemon[0].ability = pokemon.ability;
