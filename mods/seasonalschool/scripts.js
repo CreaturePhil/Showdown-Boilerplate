@@ -259,18 +259,19 @@ exports.BattleScripts = {
                                 //make the pokemon drowsy
                         }
                         if (classType == 'Fairy')
-{
-                                        this.add('-message', "Rest up, you've got another big day tomorrow!");
-                        for(let i=0;i<this.sides.length;i++)
-                        {
-                                        if (this.sides[i].pokemon[0].setStatus('slp')) {
-                                        this.sides[i].pokemon[0].statusData.time = 1;
-                                        this.sides[i].pokemon[0].statusData.startTime = 1;
-                                        this.heal(this.sides[i].pokemon[0].maxhp);
-                                        this.add('-status', this.sides[i].pokemon[0], 'slp', '[from] move: Rest');
-                                        }
-                        }
-}
+			{
+                                this.add('-message', "Rest up, you've got another big day tomorrow!");
+				for(let i=0;i<this.sides.length;i++)
+				{
+					if (this.sides[i].pokemon[0].setStatus('slp') && !(this.sides[i].pokemon[0].hp >= this.sides[i].pokemon[0].maxhp)) 
+					{
+						this.sides[i].pokemon[0].statusData.time = 3;
+						this.sides[i].pokemon[0].statusData.startTime = 3;
+						this.heal(this.sides[i].pokemon[0].maxhp);
+						this.add('-status', this.sides[i].pokemon[0], 'slp', '[from] move: Rest');
+					}
+				}
+		}
 		this.makeRequest('move');
     }
 };
