@@ -205,32 +205,20 @@ exports.BattleScripts = {
 			}
 		}
 		this.add('turn', this.turn);
-		this.makeRequest('move');
 		if(this.turn%5==0 || this.turn==1)
 		{
-			let b = false;
 			if(this.curhouse) this.removePseudoWeather(toId(this.curhouse));
-			for(let i in this.pseudoWeather)
+			this.add("-message",this.nexthouse+" started!");
+			if(this.nexthouse!="Trick Room")
+				this.addPseudoWeather(toId(this.nexthouse), this.p1.pokemon[0], "[move]: "+this.nexthouse);
+			else
 			{
-				if(i.substring(i.length-4,i.length)=="room")
-				{
-					this.add("-message",'A room is already present!');
-					b=true;
-					break;
-				}
-			} 
-			if(!b)
-			{
-				this.add("-message",this.nexthouse+" started!");
-				if(this.nexthouse!="Trick Room")
-					this.addPseudoWeather(toId(this.nexthouse), this.p1.pokemon[0], "[move]: "+this.nexthouse);
-				else
-				{
-					this.pseudoWeather["trickroom"] = {id:'trickroom', duration:5};
-					this.add("-hint","Although its not visible, Trick Room would been in effect.");
-				}
+				this.pseudoWeather["trickroom"] = {id:'trickroom', duration:5};
+				this.add("-message","The dimensions were twisted!");
+				this.add("-hint","Although its not visible, Trick Room would been in effect.");
 			}
 			this.curhouse = this.nexthouse;
 		}
+		this.makeRequest('move');
 	},
 };
