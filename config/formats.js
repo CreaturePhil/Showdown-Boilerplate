@@ -3698,7 +3698,8 @@ return problems;
 		name: "Nature's Fear",
 		section: "New Other Metagames",
 		ruleset:['OU'],
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/natures-fear.3584688/\">Nature's Fear</a>"],
+		desc: ["All pokes have a special \"Intimidate\" on top on their ability, which means it still have their original Ability. This Intimidate lowers opposing stats by 1 stage based on negative (may be changed to positive if it's better) side of the Nature. For example, if you send out a Timid natured pokemon, your opponent's Attack is lowered.",
+		       "&bullet; <a href=\"http://www.smogon.com/forums/threads/natures-fear.3584688/\">Nature's Fear</a>"],
 		onSwitchIn: function (pokemon) {
 			let foeactive = pokemon.side.foe.active, nature = {};
 			if(!pokemon.battle.getNature(pokemon.set.nature).minus) return;
