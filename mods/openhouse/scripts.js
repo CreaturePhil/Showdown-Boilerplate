@@ -209,9 +209,7 @@ exports.BattleScripts = {
 		if(this.turn%5==0 || this.turn==1)
 		{
 			let b = false;
-			if(this.curhouse)
-			{
-				this.removePseudoWeather(toId(this.curhouse));
+			if(this.curhouse) this.removePseudoWeather(toId(this.curhouse));
 			}
 			for(let i in this.pseudoWeather)
 			{
@@ -225,7 +223,13 @@ exports.BattleScripts = {
 			if(!b)
 			{
 				this.add("-message",this.nexthouse+" started!");
-				this.addPseudoWeather(toId(this.nexthouse), this.p1.pokemon[0], "[move]: "+this.nexthouse);
+				if(this.nexthouse!="Trick Room")
+					this.addPseudoWeather(toId(this.nexthouse), this.p1.pokemon[0], "[move]: "+this.nexthouse);
+				else
+				{
+					this.pseudoWeather["trickroom"] = {id:'trickroom', duration:5};
+					this.add("-hint","Although its not visible, Trick Room would been in effect.");
+				}
 			}
 			this.curhouse = this.nexthouse;
 		}
