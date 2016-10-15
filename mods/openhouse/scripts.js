@@ -210,7 +210,6 @@ exports.BattleScripts = {
 		{
 			let b = false;
 			if(this.curhouse) this.removePseudoWeather(toId(this.curhouse));
-			}
 			for(let i in this.pseudoWeather)
 			{
 				if(i.substring(i.length-4,i.length)=="room")
