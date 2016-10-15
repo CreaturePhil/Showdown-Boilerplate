@@ -3694,6 +3694,48 @@ return problems;
 				return ["You are allowed to bring only 2 moves on a Pokemon.","("+name+" has more than 2 moves)"]
 		}
 	},
+	{
+		name: "Nature's Fear",
+		section: "New Other Metagames",
+		ruleset:['OU'],
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/natures-fear.3584688/\">Nature's Fear</a>"],
+		onSwitchIn: function (pokemon) {
+			let foeactive = pokemon.side.foe.active, nature = {};
+			if(!pokemon.battle.getNature(pokemon.set.nature).minus) return;
+			nature[pokemon.battle.getNature(pokemon.set.nature).minus]=1;
+			let activated = false;
+			for (let i = 0; i < foeactive.length; i++) {
+				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
+				if (!activated) {
+					this.add('-ability', pokemon, 'Nature\'s Fear', 'boost');
+					activated = true;
+				}
+				if (foeactive[i].volatiles['substitute']) {
+					this.add('-immune', foeactive[i], '[msg]');
+				} else {
+					this.boost(nature, foeactive[i], pokemon);
+				}
+			}
+		},
+		onAfterMega: function (pokemon) {
+			let foeactive = pokemon.side.foe.active, nature = {};
+			if(!pokemon.battle.getNature(pokemon.set.nature).minus) return;
+			nature[pokemon.battle.getNature(pokemon.set.nature).minus]=1;
+			let activated = false;
+			for (let i = 0; i < foeactive.length; i++) {
+				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
+				if (!activated) {
+					this.add('-ability', pokemon, 'Nature\'s Fear', 'boost');
+					activated = true;
+				}
+				if (foeactive[i].volatiles['substitute']) {
+					this.add('-immune', foeactive[i], '[msg]');
+				} else {
+					this.boost(nature, foeactive[i], pokemon);
+				}
+			}
+		},
+	},
    	{
         name: "Offensification",
         desc: [
