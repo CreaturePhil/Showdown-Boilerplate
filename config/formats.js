@@ -3702,8 +3702,8 @@ return problems;
 		       "&bullet; <a href=\"http://www.smogon.com/forums/threads/natures-fear.3584688/\">Nature's Fear</a>"],
 		onSwitchIn: function (pokemon) {
 			let foeactive = pokemon.side.foe.active, nature = {};
-			if(!pokemon.battle.getNature(pokemon.set.nature).minus) return;
-			nature[pokemon.battle.getNature(pokemon.set.nature).minus]=-1;
+			if(!this.getNature(pokemon.set.nature).minus) return;
+			nature[this.getNature(pokemon.set.nature).minus]=-1;
 			let activated = false;
 			for (let i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
@@ -3720,8 +3720,8 @@ return problems;
 		},
 		onAfterMega: function (pokemon) {
 			let foeactive = pokemon.side.foe.active, nature = {};
-			if(!pokemon.battle.getNature(pokemon.set.nature).minus) return;
-			nature[pokemon.battle.getNature(pokemon.set.nature).minus]=-1;
+			if(!this.getNature(pokemon.set.nature).minus) return;
+			nature[this.getNature(pokemon.set.nature).minus]=-1;
 			let activated = false;
 			for (let i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
