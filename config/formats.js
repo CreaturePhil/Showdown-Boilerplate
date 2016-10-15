@@ -3702,7 +3702,7 @@ return problems;
 		onSwitchIn: function (pokemon) {
 			let foeactive = pokemon.side.foe.active, nature = {};
 			if(!pokemon.battle.getNature(pokemon.set.nature).minus) return;
-			nature[pokemon.battle.getNature(pokemon.set.nature).minus]=1;
+			nature[pokemon.battle.getNature(pokemon.set.nature).minus]=-1;
 			let activated = false;
 			for (let i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
@@ -3720,7 +3720,7 @@ return problems;
 		onAfterMega: function (pokemon) {
 			let foeactive = pokemon.side.foe.active, nature = {};
 			if(!pokemon.battle.getNature(pokemon.set.nature).minus) return;
-			nature[pokemon.battle.getNature(pokemon.set.nature).minus]=1;
+			nature[pokemon.battle.getNature(pokemon.set.nature).minus]=-1;
 			let activated = false;
 			for (let i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
