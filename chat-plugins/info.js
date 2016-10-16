@@ -96,9 +96,8 @@ exports.commands = {
 				buf += `<br />NAMELOCKED: ${targetUser.namelocked}`;
 				let punishment = Punishments.userids.get(targetUser.locked);
 				if (punishment) {
-					let expiresIn = new Date(punishment[2]).getTime() - Date.now();
-					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-					if (expiresIn > 1) buf += ` (expires in around ${expiresDays} day${Chat.plural(expiresDays)})`;
+					let expiresIn = Punishments.checkLockExpiration(targetUser.locked);
+					if (expiresIn) buf += expiresIn;
 					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
 				}
 			} else if (targetUser.locked) {
@@ -116,9 +115,8 @@ exports.commands = {
 				}
 				let punishment = Punishments.userids.get(targetUser.locked);
 				if (punishment) {
-					let expiresIn = new Date(punishment[2]).getTime() - Date.now();
-					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-					if (expiresIn > 1) buf += ` (expires in around ${expiresDays} day${Chat.plural(expiresDays)})`;
+					let expiresIn = Punishments.checkLockExpiration(targetUser.locked);
+					if (expiresIn) buf += expiresIn;
 					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
 				}
 			}
@@ -974,7 +972,7 @@ exports.commands = {
 			"- Language: JavaScript (Node.js)<br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source code</a><br />" +
-			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a>" +
+			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Dex\">Dex source code</a>"
 		);
 	},
@@ -1402,6 +1400,8 @@ exports.commands = {
 			let formatId = extraFormat.id;
 			if (formatId === 'doublesou') {
 				formatId = 'doubles';
+			} else if (formatId === 'balancedhackmons') {
+				formatId = 'bh';
 			} else if (formatId === 'battlespotsingles') {
 				formatId = 'battle_spot_singles';
 			} else if (formatId.includes('vgc')) {
@@ -1444,6 +1444,8 @@ exports.commands = {
 			let formatId = format.id;
 			if (formatId === 'doublesou') {
 				formatId = 'doubles';
+			} else if (formatId === 'balancedhackmons') {
+				formatId = 'bh';
 			} else if (formatId.includes('vgc')) {
 				formatId = 'vgc' + formatId.slice(-2);
 				formatName = 'VGC20' + formatId.slice(-2);
@@ -1721,7 +1723,7 @@ exports.commands = {
 	},
 	addhtmlbox: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help htmlbox');
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		target = this.canHTML(target);
 		if (!target) return;
 		if (!this.can('addhtml', null, room)) return;

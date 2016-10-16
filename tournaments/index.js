@@ -116,8 +116,15 @@ class Tournament {
 			if (!search || search.length < 1) continue;
 			search = search[0];
 			if (search.searchType === 'nature') continue;
-			let ban = (unban ? '!' : '') + search.name;
-			let oppositeBan = unban ? search.name : '!' + search.name;
+			let ban = search.name;
+			let oppositeBan;
+			if (unban) {
+				if (format.unbanlist && format.unbanlist.includes(ban)) continue;
+				oppositeBan = ban;
+				ban = '!' + ban;
+			} else {
+				oppositeBan = '!' + ban;
+			}
 			let index = banlist.indexOf(oppositeBan);
 			if (index > -1) {
 				banlist.splice(index, 1);
@@ -1011,6 +1018,13 @@ let commands = {
 		acceptchallenge: function (tournament, user) {
 			tournament.acceptChallenge(user, this);
 		},
+		viewbanlist: function (tournament) {
+			if (!this.runBroadcast()) return;
+			if (tournament.banlist.length < 1) {
+				return this.errorReply("The tournament's banlist is empty.");
+			}
+			this.sendReplyBox("<b>This tournament's banlist:</b><br />" + Chat.escapeHTML(tournament.banlist.join(', ')));
+		},
 	},
 	creation: {
 		settype: function (tournament, user, params, cmd) {
@@ -1049,7 +1063,7 @@ let commands = {
 			}
 			if (tournament.setBanlist(params, this)) {
 				const banlist = tournament.banlist.join(', ');
-				this.room.addRaw("<b>The tournament's banlist now includes:</b> " + banlist + ".");
+				this.room.addRaw("<b>The tournament's banlist is now:</b> " + Chat.escapeHTML(banlist) + ".");
 				this.privateModCommand("(" + user.name + " set the tournament's banlist to " + banlist + ".)");
 			}
 		},
@@ -1133,9 +1147,10 @@ let commands = {
 				this.privateModCommand("(The tournament auto disqualify timer was set to " + params[0] + " by " + user.name + ")");
 			}
 		},
-		runautodq: function (tournament) {
+		runautodq: function (tournament, user) {
 			if (tournament.autoDisqualifyTimeout === Infinity) return this.errorReply("The automatic tournament disqualify timer is not set.");
 			tournament.runAutoDisqualify(this);
+			this.logEntry(user.name + " used /tour runautodq");
 		},
 		scout: 'setscouting',
 		scouting: 'setscouting',
@@ -1217,15 +1232,26 @@ Chat.commands.tournament = function (paramString, room, user) {
 		return this.parse('/help tournament');
 	} else if (cmd === 'on' || cmd === 'enable') {
 		if (!this.can('tournamentsmanagement', null, room)) return;
-		if (room.toursEnabled) {
-			return this.errorReply("Tournaments are already enabled.");
+		let rank = params[0];
+		if (rank && rank === '@') {
+			if (room.toursEnabled === true) return this.errorReply("Tournaments are already enabled for @ and above in this room.");
+			room.toursEnabled = true;
+			if (room.chatRoomData) {
+				room.chatRoomData.toursEnabled = true;
+				Rooms.global.writeChatRoomData();
+			}
+			return this.sendReply("Tournaments are now enabled for @ and up.");
+		} else if (rank && rank === '%') {
+			if (room.toursEnabled === rank) return this.errorReply("Tournaments are already enabled for % and above in this room.");
+			room.toursEnabled = rank;
+			if (room.chatRoomData) {
+				room.chatRoomData.toursEnabled = rank;
+				Rooms.global.writeChatRoomData();
+			}
+			return this.sendReply("Tournaments are now enabled for % and up.");
+		} else {
+			return this.errorReply("Tournament enable setting not recognized.  Valid options include [%|@].");
 		}
-		room.toursEnabled = true;
-		if (room.chatRoomData) {
-			room.chatRoomData.toursEnabled = true;
-			Rooms.global.writeChatRoomData();
-		}
-		return this.sendReply("Tournaments enabled.");
 	} else if (cmd === 'off' || cmd === 'disable') {
 		if (!this.can('tournamentsmanagement', null, room)) return;
 		if (!room.toursEnabled) {
@@ -1236,7 +1262,7 @@ Chat.commands.tournament = function (paramString, room, user) {
 			delete room.chatRoomData.toursEnabled;
 			Rooms.global.writeChatRoomData();
 		}
-		return this.sendReply("Tournaments disabled.");
+		return this.sendReply("Tournaments are now disabled.");
 	} else if (cmd === 'announce' || cmd === 'announcements') {
 		if (!this.can('tournamentsmanagement', null, room)) return;
 		if (!Config.tourannouncements.includes(room.id)) {
@@ -1268,8 +1294,10 @@ Chat.commands.tournament = function (paramString, room, user) {
 			Rooms.global.writeChatRoomData();
 		}
 	} else if (cmd === 'create' || cmd === 'new') {
-		if (room.toursEnabled) {
+		if (room.toursEnabled === true) {
 			if (!this.can('tournaments', null, room)) return;
+		} else if (room.toursEnabled === '%') {
+			if (!this.can('tournamentsmoderation', null, room)) return;
 		} else {
 			if (!user.can('tournamentsmanagement', null, room)) {
 				return this.errorReply("Tournaments are disabled in this room (" + room.id + ").");
@@ -1299,8 +1327,10 @@ Chat.commands.tournament = function (paramString, room, user) {
 		}
 
 		if (commands.creation[cmd]) {
-			if (room.toursEnabled) {
+			if (room.toursEnabled === true) {
 				if (!this.can('tournaments', null, room)) return;
+			} else if (room.toursEnabled === '%') {
+				if (!this.can('tournamentsmoderation', null, room)) return;
 			} else {
 				if (!user.can('tournamentsmanagement', null, room)) {
 					return this.errorReply("Tournaments are disabled in this room (" + room.id + ").");
@@ -1329,6 +1359,7 @@ Chat.commands.tournamenthelp = function (target, room, user) {
 		"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
 		"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
 		"- banlist &lt;comma-separated arguments>: Sets the supplementary banlist for the tournament before it has started.<br />" +
+		"- viewbanlist: Shows the supplementary banlist for the tournament.<br />" +
 		"- clearbanlist: Clears the supplementary banlist for the tournament before it has started.<br />" +
 		"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
 		"- begin/start: Starts the tournament in the current room.<br />" +
@@ -1339,7 +1370,8 @@ Chat.commands.tournamenthelp = function (target, room, user) {
 		"- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />" +
 		"- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />" +
 		"- getusers: Lists the users in the current tournament.<br />" +
-		"- on/off: Enables/disables allowing mods to start tournaments in the current room.<br />" +
+		"- on/enable &lt;%|@>: Enables allowing drivers or mods to start tournaments in the current room.<br />" +
+		"- off/disable: Disables allowing drivers and mods to start tournaments in the current room.<br />" +
 		"- announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />" +
 		"More detailed help can be found <a href=\"https://www.smogon.com/forums/threads/3570628/#post-6777489\">here</a>"
 	);
