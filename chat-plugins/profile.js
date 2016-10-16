@@ -21,7 +21,7 @@ function Profile(isOnline, user, image) {
 	this.user = user || null;
 	this.image = image;
 
-	this.username = Tools.escapeHTML(this.isOnline ? this.user.name : this.user);
+	this.username = Chat.escapeHTML(this.isOnline ? this.user.name : this.user);
 	this.url = Config.avatarurl || '';
 }
 

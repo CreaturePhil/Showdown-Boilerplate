@@ -44,7 +44,7 @@ exports.commands = {
 					let count = 1;
 					for (let u in page) {
 						if (count > 3) break;
-						output += "(<b>" + count + "</b>) " + Tools.escapeHTML(page[u]['text']) + "<br />";
+						output += "(<b>" + count + "</b>) " + Chat.escapeHTML(page[u]['text']) + "<br />";
 						count++;
 					}
 					self.sendReplyBox(output);
@@ -76,7 +76,7 @@ exports.commands = {
 		};
 
 		if (urbanCache[target.toLowerCase().replace(/ /g, '')] && Math.round(Math.abs((urbanCache[target.toLowerCase().replace(/ /g, '')].time - Date.now()) / (24 * 60 * 60 * 1000))) < 31) {
-			return this.sendReplyBox("<b>" + Tools.escapeHTML(target) + ":</b> " + urbanCache[target.toLowerCase().replace(/ /g, '')].definition.substr(0, 400));
+			return this.sendReplyBox("<b>" + Chat.escapeHTML(target) + ":</b> " + urbanCache[target.toLowerCase().replace(/ /g, '')].definition.substr(0, 400));
 		}
 
 		let self = this;
@@ -86,16 +86,16 @@ exports.commands = {
 				let page = JSON.parse(body);
 				let definitions = page['list'];
 				if (page['result_type'] === 'no_results') {
-					self.sendReplyBox("No results for <b>\"" + Tools.escapeHTML(target) + "\"</b>.");
+					self.sendReplyBox("No results for <b>\"" + Chat.escapeHTML(target) + "\"</b>.");
 					return room.update();
 				} else {
 					if (!definitions[0]['word'] || !definitions[0]['definition']) {
-						self.sendReplyBox("No results for <b>\"" + Tools.escapeHTML(target) + "\"</b>.");
+						self.sendReplyBox("No results for <b>\"" + Chat.escapeHTML(target) + "\"</b>.");
 						return room.update();
 					}
-					let output = "<b>" + Tools.escapeHTML(definitions[0]['word']) + ":</b> " + Tools.escapeHTML(definitions[0]['definition']).replace(/\r\n/g, '<br />').replace(/\n/g, ' ');
+					let output = "<b>" + Chat.escapeHTML(definitions[0]['word']) + ":</b> " + Chat.escapeHTML(definitions[0]['definition']).replace(/\r\n/g, '<br />').replace(/\n/g, ' ');
 					if (output.length > 400) output = output.slice(0, 400) + '...';
-					cacheUrbanWord(target, Tools.escapeHTML(definitions[0]['definition']).replace(/\r\n/g, '<br />').replace(/\n/g, ' '));
+					cacheUrbanWord(target, Chat.escapeHTML(definitions[0]['definition']).replace(/\r\n/g, '<br />').replace(/\n/g, ' '));
 					self.sendReplyBox(output);
 					return room.update();
 				}
