@@ -90,6 +90,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'llamacry': 'http://i.imgur.com/YWfKiyb.gif',
 		'llamamad': 'http://i.imgur.com/M4qpLQd.gif',
 		'gudone':'http://i.imgur.com/USkp1b9.png',
+		'xoxo':'http://i.imgur.com/Yyw9ICj.png',
 	});
 }
 
