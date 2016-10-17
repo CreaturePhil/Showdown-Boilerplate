@@ -390,7 +390,7 @@ exports.Formats = [
 		section: "Randomized Metas",
 		mod:"openhouse",
 		team: 'random',
-		ruleset: ["Team Preview",'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ["Team Preview",'Random Battle'],
 		onBegin: function()
 		{
 			this.houses = ["Wonder Room","Trick Room","Magic Room"];
@@ -431,6 +431,49 @@ exports.Formats = [
 				pokemon.side.foe.pokemon[0].moveset.push(lastMove);
 				pokemon.side.foe.pokemon[0].baseMoveset.push(lastMove);
 				this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
+			}
+		},
+	},
+	{
+		name: "Nature's Fear Randbats",
+		section: "Randomized Metas",
+		ruleset:['Random Battle',"Team Preview"],
+		desc: ["All pokes have a special \"Intimidate\" on top on their ability, which means it still have their original Ability. This Intimidate lowers opposing stats by 1 stage based on negative (may be changed to positive if it's better) side of the Nature. For example, if you send out a Timid natured pokemon, your opponent's Attack is lowered.",
+		       "&bullet; <a href=\"http://www.smogon.com/forums/threads/natures-fear.3584688/\">Nature's Fear</a>"],
+		onSwitchIn: function (pokemon) {
+			let foeactive = pokemon.side.foe.active, nature = {};
+			if(!this.getNature(pokemon.set.nature).minus) return;
+			nature[this.getNature(pokemon.set.nature).minus]=-1;
+			let activated = false;
+			for (let i = 0; i < foeactive.length; i++) {
+				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
+				if (!activated) {
+					this.add('-ability', pokemon, 'Nature\'s Fear', 'boost');
+					activated = true;
+				}
+				if (foeactive[i].volatiles['substitute']) {
+					this.add('-immune', foeactive[i], '[msg]');
+				} else {
+					this.boost(nature, foeactive[i], pokemon);
+				}
+			}
+		},
+		onAfterMega: function (pokemon) {
+			let foeactive = pokemon.side.foe.active, nature = {};
+			if(!this.getNature(pokemon.set.nature).minus) return;
+			nature[this.getNature(pokemon.set.nature).minus]=-1;
+			let activated = false;
+			for (let i = 0; i < foeactive.length; i++) {
+				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
+				if (!activated) {
+					this.add('-ability', pokemon, 'Nature\'s Fear', 'boost');
+					activated = true;
+				}
+				if (foeactive[i].volatiles['substitute']) {
+					this.add('-immune', foeactive[i], '[msg]');
+				} else {
+					this.boost(nature, foeactive[i], pokemon);
+				}
 			}
 		},
 	},
