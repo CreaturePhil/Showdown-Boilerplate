@@ -25,7 +25,7 @@ exports.BattleStatuses = {
 			if (this.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather: function (target) {
-			if(!target.name=="Zmeeed")
+			if(target.name=="Zmeeed") return;
 			this.damage(target.maxhp / 4);
 		},
 		onEnd: function () {
