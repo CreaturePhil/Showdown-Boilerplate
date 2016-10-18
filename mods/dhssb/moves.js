@@ -1,6 +1,30 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"blizzard": {
+		num: 59,
+		accuracy: 70,
+		basePower: 110,
+		category: "Special",
+		desc: "Has a 10% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
+		shortDesc: "10% chance to freeze the foe(s).",
+		id: "blizzard",
+		isViable: true,
+		name: "Blizzard",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onModifyMove: function (move) {
+			if (this.isWeather('hail') || this.isWeather('russianwinter')) move.accuracy = true;
+		},
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		target: "allAdjacentFoes",
+		type: "Ice",
+		contestType: "Beautiful",
+	},
 	"flirt": {
 		accuracy: 100,
 		basePower: 0,
