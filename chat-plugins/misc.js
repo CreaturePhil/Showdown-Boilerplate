@@ -227,12 +227,18 @@ exports.commands = {
 		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
 	},
 	seenhelp: ["/seen - Shows when the user last connected on the server."],
-	music: function (target, room, user) {
+	ytmusic: "music",
+	music: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help music');
 		if (!this.runBroadcast()) return;
+		if(cmd=="ytmusic")
+		{
+			this.sendReplyBox('<audio  style="width: 99.6%;border: 6px solid #F74823; color:green;" controls="" autoplay="false" loop="false" src="http://www.youtubeinmp3.com/fetch/?video='+target+'" >Your user agent does not support the HTML5 Audio element.</audio>');
+			return;
+		}
 		this.sendReplyBox('<audio  style="width: 99.6%" controls="" autoplay="false" loop="false" src="'+target+'" border: 5px solid #E9DF15; background-color:Blue">Your user agent does not support the HTML5 Audio element.</audio>');
 	},
-	musichelp: ["<code>/music &lt;mp3 link></code>: Shows a box which can play mp3 music."],
+	musichelp: ["/music <mp3 link>: Shows a box which can play mp3 music."],
 
 	tell: function (target, room, user, connection) {
 		if (!target) return this.parse('/help tell');
@@ -271,11 +277,6 @@ exports.commands = {
 		return connection.send('|pm|' + user.getIdentity() + '|' +
 			(targetUser ? targetUser.getIdentity() : ' ' + this.targetUsername) +
 			"|/text This user is currently offline. Your message will be delivered when they are next online.");
-	},
-	ytmusic: function (target, room, user) {
-		if (!this.runBroadcast()) return;
-		if (!target) return this.parse('/help music');
-		this.sendReplyBox('<audio  style="width: 99.6%;border: 6px solid #F74823; color:green;" controls="" autoplay="false" loop="false" src="http://www.youtubeinmp3.com/fetch/?video='+target+'" >Your user agent does not support the HTML5 Audio element.</audio>');
 	},
 	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."],
 };
