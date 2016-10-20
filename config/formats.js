@@ -4462,6 +4462,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			{
 				if(statusability[pokemon.innates[i]])
 					pokemon.addVolatile(pokemon.innates[i]+"p", pokemon);
+				else 
+					pokemon.addVolatile(pokemon.innates[i], pokemon);
 			}
 		},
 		onAfterMega: function(pokemon)
@@ -4471,6 +4473,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			{
 				if(statusability[pokemon.innates[i]])
 					pokemon.removeVolatile(pokemon.innates[i]+"p", pokemon);
+				else
+					pokemon.removeVolatile(pokemon.innates[i], pokemon);
 			}
 		},
 	},
