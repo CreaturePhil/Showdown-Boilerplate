@@ -4313,7 +4313,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		section: "Experimental Metas",
 		mod: 'francticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power"],
+		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
 		        let types = pokemon.types;
