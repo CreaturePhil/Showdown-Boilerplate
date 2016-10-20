@@ -4450,8 +4450,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 					this.sides[p].pokemon[i].innates = [];
 					for(let a in template.abilities)
 					{
-						if(template.abilities[a]!=pokemon.ability)
-							this.sides[p].pokemon[i].innates.push(template.abilities[a]);
+						if(toId(template.abilities[a])!=pokemon.ability)
+							this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
 					}
 				}
 			}
