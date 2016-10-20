@@ -4436,7 +4436,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	     	],
 		section: "Experimental Metas",
 		mod: 'pokebilities',
-		ruleset: ["OU"],//'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		team:"random",
+		ruleset: ["Random Battle"],//'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		//banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
 		onSwitchInPriority: 1,
 		onBegin: function()
@@ -4451,31 +4452,19 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 					for(let a in template.abilities)
 					{
 						if(toId(template.abilities[a])!=pokemon.ability)
-							this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+							this.sides[p].pokemon[i].innates.push("poke"+toId(template.abilities[a]));
 					}
 				}
 			}
 		},
 		onSwitchIn: function (pokemon) {
-			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			for(let i=0;i<pokemon.innates.length;i++)
-			{
-				if(statusability[pokemon.innates[i]])
-					pokemon.addVolatile(pokemon.innates[i]+"p", pokemon);
-				else 
-					pokemon.addVolatile(pokemon.innates[i], pokemon);
-			}
+				pokemon.addVolatile(pokemon.innates[i]+"p", pokemon);
 		},
 		onAfterMega: function(pokemon)
 		{
-			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			for(let i=0;i<pokemon.innates.length;i++)
-			{
-				if(statusability[pokemon.innates[i]])
-					pokemon.removeVolatile(pokemon.innates[i]+"p", pokemon);
-				else
 					pokemon.removeVolatile(pokemon.innates[i], pokemon);
-			}
 		},
 	},
 	{
