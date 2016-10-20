@@ -4188,7 +4188,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	{
 		name: "Varietype",
 		section: "Experimental Metas",
-		ruleset: ['Balanced Hackmons'],
+		ruleset: ['OU'],
 		onBegin: function()
 		{
 			for(let p=0;p<this.sides.length;p++)
