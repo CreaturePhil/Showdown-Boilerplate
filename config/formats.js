@@ -4186,6 +4186,27 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
         	}
     	},
 	{
+		name: "Varietype",
+		section: "Experimental Metas",
+		ruleset: ['Balanced Hackmons'],
+		onBegin: function()
+		{
+			for(let p=0;p<this.sides.length;p++)
+			{
+				for(let i=0;i<this.sides[p].pokemon.length;i++)
+				{
+					let pokemon = this.sides[p].pokemon[i];
+					if(pokemon.types[1]) this.sides[p].pokemon[i].type2 = this.sides[p].pokemon[i].types[1];
+					if(!pokemon.hasType(pokemon.hpType)) this.sides[p].pokemon[i].types[1] = this.sides[p].pokemon[i].hpType || "Dark";
+				}
+			}
+		},
+		onModifyMove: function(move, pokemon)
+		{
+			if(move.type === pokemon.type2) move.type = pokemon.hpType || "Dark";
+		},
+	},
+	{
 		name: "Enchanted Items Balanced Hackmons",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
 		section: "Experimental Metas",
