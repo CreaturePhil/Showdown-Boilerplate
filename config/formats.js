@@ -4334,7 +4334,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.name);
 			let problems = [];
-			let banlist: {"shedinja":true,"hugepower":true,"purepower":true};
+			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
 			if (!crossTemplate.exists) return;
 			let canHaveAbility = false;
 			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
