@@ -4459,12 +4459,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 		onSwitchIn: function (pokemon) {
 			for(let i=0;i<pokemon.innates.length;i++)
-				pokemon.addVolatile(pokemon.innates[i]+"p", pokemon);
+				pokemon.addVolatile(pokemon.innates[i]);
 		},
 		onAfterMega: function(pokemon)
 		{
 			for(let i=0;i<pokemon.innates.length;i++)
-					pokemon.removeVolatile(pokemon.innates[i], pokemon);
+				pokemon.removeVolatile(pokemon.innates[i]);
 		},
 	},
 	{
