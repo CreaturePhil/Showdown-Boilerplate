@@ -4457,13 +4457,21 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 		},
 		onSwitchIn: function (pokemon) {
+			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			for(let i=0;i<pokemon.innates.length;i++)
-				pokemon.addVolatile(pokemon.innates[i], pokemon);
+			{
+				if(statusability[pokemon.innates[i]])
+					pokemon.addVolatile(pokemon.innates[i]+"p", pokemon);
+			}
 		},
 		onAfterMega: function(pokemon)
 		{
+			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			for(let i=0;i<pokemon.innates.length;i++)
-				pokemon.removeVolatile(pokemon.innates[i], pokemon);
+			{
+				if(statusability[pokemon.innates[i]])
+					pokemon.removeVolatile(pokemon.innates[i]+"p", pokemon);
+			}
 		},
 	},
 	{
