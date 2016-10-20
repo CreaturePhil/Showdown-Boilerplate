@@ -4197,20 +4197,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				{
 					let pokemon = this.sides[p].pokemon[i];
 					if(pokemon.types[1]) this.sides[p].pokemon[i].type2 = this.sides[p].pokemon[i].types[1];
-					if(!pokemon.hasType(pokemon.hpType))
-					{
-						this.sides[p].pokemon[i].types[1] = this.sides[p].pokemon[i].hpType || "Dark";
-						this.sides[p].pokemon[i].varietype = true;
-					}
+					this.sides[p].pokemon[i].types[1] = this.sides[p].pokemon[i].hpType || "Dark";
 				}
 			}
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
 		        let types = pokemon.types;
-			if (pokemon.varietype) {
-				this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
-			}
+			this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
 		},
 		onModifyMove: function(move, pokemon)
 		{
