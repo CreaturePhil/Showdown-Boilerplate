@@ -4,9 +4,19 @@ exports.BattleScripts = {
 	init: function()
 	{
 			Object.values(this.data.Abilities).forEach(ability => {
+				let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true}
+				if(statusability[ability.id])
+				{
+					this.data.Statuses[ability.id+"p"] = ability;
+					this.data.Statuses[ability.id+"p"].effectType = "Ability";
+					this.data.Statuses[ability.id+"p"].noCopy = true;
+				}
+				else
+				{
 					this.data.Statuses[ability.id] = ability;
 					this.data.Statuses[ability.id].effectType = "Ability";
 					this.data.Statuses[ability.id].noCopy = true;
+				}
 			});
 	},
 	pokemon: {
