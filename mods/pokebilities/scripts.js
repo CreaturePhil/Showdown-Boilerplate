@@ -5,8 +5,8 @@ exports.BattleScripts = {
 	{
 			Object.values(this.data.Abilities).forEach(ability => {
 				this.data.Statuses["poke"+ability.id] = ability;
-				this.data.Statuses["poke"+ability.id] = "poke"+ability.id;
-				this.data.Statuses["poke"+ability.name] = "Pokebility "+ability.name;
+				this.data.Statuses["poke"+ability.id].id = "poke"+ability.id;
+				this.data.Statuses["poke"+ability.id].name = "Pokebility "+ability.name;
 				this.data.Statuses["poke"+ability.id].effectType = "Ability";
 				this.data.Statuses["poke"+ability.id].noCopy = true;
 			});
