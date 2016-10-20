@@ -217,9 +217,26 @@ exports.BattleScripts = {
 		}
 		for(let p=1;p<=2;p++)
 		{
-			let opp = "p"+((p==1)?2:1),om = this["p"+p].pokemon[0].om,obm=this["p"+p].pokemon[0].obm;
+			let choicereason = "",lockdmove = "";
+			let opp = "p"+((p==1)?2:1),om = this["p"+p].pokemon[0].om,oobm=this["p"+p].foe.pokemon[0].obm,oom = this["p"+p].foe.pokemon[0].om,obm=this["p"+p].pokemon[0].obm;
+			for(let i=0;i<om.length;i++)
+			{
+				if(this["p"+p].pokemon[0].moveset[i].disabled && this["p"+p].pokemon[0].volatiles.choicelock) {
+					choicereason = this["p"+p].pokemon[0].moveset[i].disabledSource;
+					lockdmove = this["p"+p].pokemon[0].volatiles.choicelock.move;
+					break;
+				}
+			}
 			this["p"+p].pokemon[0].moveset = om.concat(this[opp].pokemon[0].om);
 			this["p"+p].pokemon[0].baseMoveset = obm.concat(this[opp].pokemon[0].obm);
+			for(let i=0;i<this["p"+p].pokemon.baseMoveset.length;i++)
+			{
+				if(this["p"+p].pokemon.volatiles.choicelock && this["p"+p].pokemon.moveset[i].id!=lockdmove)
+				{
+					this["p"+p].pokemon.moveset[i].disabled = true;
+					this["p"+p].pokemon.moveset[i].disabledSource = choicereason;
+				}
+			}
 		}
 		this.makeRequest('move');
 	},
