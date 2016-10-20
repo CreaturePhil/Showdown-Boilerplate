@@ -4313,7 +4313,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		section: "Experimental Metas",
 		mod: 'francticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja"],
+		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power"],
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
 		        let types = pokemon.types;
@@ -4334,13 +4334,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.name);
 			let problems = [];
+			let banlist: {"shedinja":true,"hugepower":true,"purepower":true};
 			if (!crossTemplate.exists) return;
 			let canHaveAbility = false;
 			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
 			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
-			if(crossTemplate.species === "Shedinja") problems.push("You cannot fuse with Shedinja. ("+template.species+" has nickname "+crossTemplate.species+")");
+			if(banlist[toId(crossTemplate.species)]) problems.push("Fusing with "+crossTemplate.species" is banned. ("+template.species+" has nickname "+crossTemplate.species+")");
 			for (let a in template.abilities) {
-				if (template.abilities[a] === set.ability) {
+				if ((template.abilities[a] === set.ability) && !banlist[toId(template.abilities[a])]) {
 					canHaveAbility = true;
 				}
 			}
