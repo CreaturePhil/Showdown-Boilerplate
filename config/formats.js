@@ -4429,7 +4429,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 		},
 	},
-	/*{
+	{
 		name: "Pokebilities",
 		desc: [
 	     		"&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokebilities</a>",
@@ -4473,7 +4473,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				pokemon.removeVolatile(pokemon.innates[i]);
 			}
 		},
-	},*/
+	},
 	{
 		name: "Trademarked Enchantment",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a> + <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>."],
