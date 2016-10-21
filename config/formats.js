@@ -4438,6 +4438,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		    ruleset: ["OU"],
 		    onSwitchInPriority: 1,
 		    onBegin: function() {
+			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 		        for (let p = 0; p < this.sides.length; p++) {
 		            for (let i = 0; i < this.sides[p].pokemon.length; i++) {
 		                let pokemon = this.sides[p].pokemon[i];
@@ -4445,7 +4446,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		                this.sides[p].pokemon[i].innates = [];
 		                for (let a in template.abilities) {
 		                    if (toId(template.abilities[a]) != pokemon.ability)
+				    {
+					if(statusability[toId(template.abilities[a])])
 		                        this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
+					else
+		                        this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+				    }
 		                }
 		            }
 		        }
