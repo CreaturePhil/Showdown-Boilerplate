@@ -8,8 +8,8 @@ exports.BattleScripts = {
 				this.data.Statuses[ability.id] = ability;
 				this.data.Statuses[ability.id].effectType = "Ability";
 				this.data.Statuses[ability.id].noCopy = true;
-				this.data.Statuses[ability.id].id = "other"+ability.id;
-				this.data.Statuses[ability.id].name = "Other "+ability.name;
+				this.data.Statuses[ability.id]["id"] = "other"+ability.id;
+				this.data.Statuses[ability.id]["name"] = "Other "+ability.name;
 			});
 	},
 	pokemon: {
