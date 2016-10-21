@@ -31,8 +31,8 @@
     border: 6px solid #FFA500;
     color: #01272d;
     font-family: Jokerman;
-	   font-size: 3em;
-    padding: 40px;
+    font-size: 2em;
+    padding: 35px;
     text-align: center;
     margin: 5px;
     text-shadow: 2px 0px 0px #00FF7F;
@@ -358,7 +358,7 @@
 /*Battle CSS*/
 
   .backdrop {
-    background: url(../fx/bg-beach.png) !important;
+    background: url(https://img-fotki.yandex.ru/get/16110/7416871.1e/0_7fdd6_17c4d552_XL.jpg) !important;
         opacity: 0.6;
 }
 
@@ -529,11 +529,11 @@
     border-color: #000000;
 }
 .pmnote {
-	color:white;
+	color:#FFA000;
 	
 }
 .message-pm {
-	color:white;
+	color:#FFA000;
 
 }
 
