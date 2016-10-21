@@ -4452,30 +4452,25 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 					for(let a in template.abilities)
 					{
 						if(toId(template.abilities[a])!=pokemon.ability)
-							this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+							this.sides[p].pokemon[i].innates.push("other"+toId(template.abilities[a]));
 					}
 				}
 			}
 		},
 		onSwitchIn: function (pokemon) {
-			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+			//let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			for(let i=0;i<pokemon.innates.length;i++)
 			{
-				if(statusability[pokemon.innates[i]])
-					pokemon.addVolatile(pokemon.innates[i]+"p");
-				else
+				if(!pokemon.volatiles[pokemon.innates[i]])
 					pokemon.addVolatile(pokemon.innates[i]);
 			}
 		},
 		onAfterMega: function(pokemon)
 		{
-			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+			//let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			for(let i=0;i<pokemon.innates.length;i++)
 			{
-				if(statusability[pokemon.innates[i]])
-					pokemon.removeVolatile(pokemon.innates[i]+"p");
-				else
-					pokemon.removeVolatile(pokemon.innates[i]);
+				pokemon.removeVolatile(pokemon.innates[i]);
 			}
 		},
 	},
