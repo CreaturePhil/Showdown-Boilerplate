@@ -29,6 +29,7 @@ exports.BattleAliases = {
 	"mnm": "Mix and Mega",
 	"mnmbh": "Mix and Mega Balanced Hackmons",
 	"vgc": "VGC 2016",
+	"bss": "Battle Spot Singles",
 	"tasm": "The All-Stars Metagame",
 	"bsdoubles": "Battle Spot Doubles",
 	"bstriples": "Battle Spot Triples",
