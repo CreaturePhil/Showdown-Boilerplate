@@ -460,8 +460,8 @@ exports.Formats = [
 		    //note: making this 0.1 because I got 1.10 times 10^-15 once
 		    //something silly with rounding
 		    //this works well enough
-	            this.add('raw|'+source.side.name+" has dealt 400% damage!");
-		    this.win(source.side);
+	            this.add('raw|'+target.side.foe.name+" has dealt 400% damage!");
+		    this.win(target.side.foe);
 		}
 	    },
 		/*onAfterDamage: function(damage, target, source, move) {
