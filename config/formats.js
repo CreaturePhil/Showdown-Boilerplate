@@ -443,6 +443,7 @@ exports.Formats = [
 	    ruleset: ['Random Battle',"Team Preview"],
 	    team: "random",
 	    onBegin: function() {
+			this.add("raw|Welcome to Top Percentage! The first Player to deal 400% damage wins! HAHAHAH!");
 		for (var i = 0; i < this.sides.length; i++) {
 		    this.sides[i].metaCount = 400;
 		}
@@ -2671,6 +2672,7 @@ exports.Formats = [
 	    desc:["&lt; <a href=\"http://www.smogon.com/forums/threads/top-percentage.3564459/\">Top Percentage</a>"],
 	    ruleset: ['OU'],
 	    onBegin: function() {
+			this.add("raw|Welcome to Top Percentage! The first Player to deal 400% damage wins! HAHAHAH!");
 		for (var i = 0; i < this.sides.length; i++) {
 		    this.sides[i].metaCount = 400;
 		}
