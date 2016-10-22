@@ -436,6 +436,35 @@ exports.Formats = [
 		},
 	},
 	{
+	    name: "Top Percentage Randbats",
+	    section: "Randomized Metas",
+	    mod: 'toppercentage',
+	    desc:["&lt; <a href=\"http://www.smogon.com/forums/threads/top-percentage.3564459/\">Top Percentage</a>"],
+	    ruleset: ['Random Battle',"Team Preview"],
+	    team: "random",
+	    onBegin: function() {
+		for (var i = 0; i < this.sides.length; i++) {
+		    this.sides[i].metaCount = 400;
+		}
+	    },
+	    onDamage: function(damage, target) {
+		//only should work if does not make target faint
+		let percentage = 100 * damage / target.maxhp;
+		if (damage >= target.hp) {
+		    percentage = 100 * target.hp / target.maxhp;
+		}
+		target.side.metaCount -= percentage;
+		this.add('-message', target.side.name+" has " + Math.round(target.side.metaCount)) + "% left!";
+		if (target.side.metaCount <= 0.1) {
+		    //note: making this 0.1 because I got 1.10 times 10^-15 once
+		    //something silly with rounding
+		    //this works well enough
+	            this.add('-message', target.side.foe.name+" has dealt 400% damage!");
+		    this.win(target.side.foe);
+		}
+	    }
+	},
+	{
 		name: "[Seasonal] Fireworks Frenzy",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "Randomized Metas",
@@ -2639,7 +2668,7 @@ exports.Formats = [
 	    name: "Top Percentage",
 	    section: "Other Metagames",
 	    mod: 'toppercentage',
-
+	    desc:["&lt; <a href=\"http://www.smogon.com/forums/threads/top-percentage.3564459/\">Top Percentage</a>"],
 	    ruleset: ['OU'],
 	    onBegin: function() {
 		for (var i = 0; i < this.sides.length; i++) {
