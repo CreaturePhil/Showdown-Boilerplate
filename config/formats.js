@@ -2636,6 +2636,38 @@ exports.Formats = [
 		},
 	},
 	{
+	    name: "Top Percentage",
+	    section: "Other Metagames",
+	    mod: 'toppercentage',
+
+	    ruleset: ['OU'],
+	    onBegin: function() {
+		console.log("ok");
+		for (var i = 0; i < this.sides.length; i++) {
+		    this.sides[i].metaCount = 400;
+		    console.log("done once!");
+
+		}
+	    },
+	    onDamage: function(damage, target) {
+		//only should work if does not make target faint
+		let percentage = 100 * damage / target.maxhp;
+		if (damage >= target.hp) {
+		    percentage = 100 * target.hp / target.maxhp;
+		}
+		target.side.metaCount -= percentage;
+		console.log(target.id + ": " + target.side.metaCount);
+		this.add('-message', target.id.slice(4) + ": " + Math.round(target.side.metaCount));
+		if (target.side.metaCount <= 0.1) {
+		    //note: making this 0.1 because I got 1.10 times 10^-15 once
+		    //something silly with rounding
+		    //this works well enough
+		    this.win(target.side.foe);
+		}
+
+	    }
+	},
+	{
 			name:"Partners in Crime",
 		        section: "Other Metagames",
 		        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/partners-in-crime.3559988/\">Partners in Crime</a>"],
