@@ -218,8 +218,10 @@ exports.BattleScripts = {
             {
                for(let k in this.sides[p].pokemon[0].moveset[i])
                {
-                  if(k!="pp") this.sides[p].pokemon[0].moveset[i][k] = this.sides[p].foe.pokemon[0].om[i-this.sides[p].pokemon[0].om.length][k];
-                  if(k!="pp") this.sides[p].pokemon[0].baseMoveset[i][k] = this.sides[p].foe.pokemon[0].obm[i-this.sides[p].pokemon[0].om.length][k];
+                  if(k!="pp" && this.sides[p].foe.pokemon[0].obm[i-this.sides[p].pokemon[0].om.length])
+                  { this.sides[p].pokemon[0].moveset[i][k] = this.sides[p].foe.pokemon[0].om[i-this.sides[p].pokemon[0].om.length][k];
+                  this.sides[p].pokemon[0].baseMoveset[i][k] = this.sides[p].foe.pokemon[0].obm[i-this.sides[p].pokemon[0].om.length][k];
+              	}
                }
             }
             /*this.sides[p].pokemon[0].moveset = om.concat(this.sides[p].foe.pokemon[0].om);
