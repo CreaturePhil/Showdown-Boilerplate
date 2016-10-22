@@ -213,13 +213,13 @@ exports.BattleScripts = {
             }
         }
         for (let p = 0; p <this.sides.length; p++) {
-                let om = {}, obm = {};
+                //let om = this.sides[p].pokemon[0].om, obm = this.sides[p].pokemon[0].obm;
             for(let i = this.sides[p].pokemon[0].obm.length-1;i<(this.sides[p].pokemon[0].obm.length + this.sides[p].foe.pokemon[0].obm.length);i++)
             {
                for(let k in this.sides[p].pokemon[0].moveset[i])
                {
-                  if(k!="pp") this.sides[p].pokemon[0].baseMoveset[i][k] = this.sides[p].foe.pokemon[0].obm[i][k];
-                  if(k!="pp") this.sides[p].pokemon[0].moveset[i][k] = this.sides[p].foe.pokemon[0].om[i][k];
+                  if(k!="pp") this.sides[p].pokemon[0].moveset[i][k] = this.sides[p].foe.pokemon[0].om[i-this.sides[p].pokemon[0].om.length][k];
+                  if(k!="pp") this.sides[p].pokemon[0].baseMoveset[i][k] = this.sides[p].foe.pokemon[0].obm[i-this.sides[p].pokemon[0].om.length][k];
                }
             }
             /*this.sides[p].pokemon[0].moveset = om.concat(this.sides[p].foe.pokemon[0].om);
