@@ -2642,11 +2642,8 @@ exports.Formats = [
 
 	    ruleset: ['OU'],
 	    onBegin: function() {
-		console.log("ok");
 		for (var i = 0; i < this.sides.length; i++) {
 		    this.sides[i].metaCount = 400;
-		    console.log("done once!");
-
 		}
 	    },
 	    onDamage: function(damage, target) {
@@ -2656,15 +2653,14 @@ exports.Formats = [
 		    percentage = 100 * target.hp / target.maxhp;
 		}
 		target.side.metaCount -= percentage;
-		console.log(target.id + ": " + target.side.metaCount);
-		this.add('-message', target.id.slice(4) + ": " + Math.round(target.side.metaCount));
+		this.add('-message', target.side.name+" has " + Math.round(target.side.metaCount)) + "% left!";
 		if (target.side.metaCount <= 0.1) {
 		    //note: making this 0.1 because I got 1.10 times 10^-15 once
 		    //something silly with rounding
 		    //this works well enough
+	            this.add('-message', target.side.foe.name+" has dealt 400% damage!");
 		    this.win(target.side.foe);
 		}
-
 	    }
 	},
 	{
