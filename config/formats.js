@@ -448,7 +448,7 @@ exports.Formats = [
 		    this.sides[i].metaCount = 400;
 		}
 	    },
-	    onDamage: function(damage, target) {
+	    onAfterDamage: function(damage, target, source, move) {
 		//only should work if does not make target faint
 		let percentage = 100 * damage / target.maxhp;
 		if (damage >= target.hp) {
@@ -460,10 +460,13 @@ exports.Formats = [
 		    //note: making this 0.1 because I got 1.10 times 10^-15 once
 		    //something silly with rounding
 		    //this works well enough
-	            this.add('-message', target.side.foe.name+" has dealt 400% damage!");
-		    this.win(target.side.foe);
+	            this.add('raw|'+source.side.name+" has dealt 400% damage!");
+		    this.win(source.side);
 		}
-	    }
+	    },
+		/*onAfterDamage: function(damage, target, source, move) {
+		
+		},*/
 	},
 	{
 		name: "[Seasonal] Fireworks Frenzy",
