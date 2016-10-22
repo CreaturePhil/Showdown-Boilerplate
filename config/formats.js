@@ -3667,33 +3667,36 @@ return problems;
 	   }
    	},
 	{
-	     name: "Mirror Move",
-	     desc:["&bullet; <a href=\"http://www.smogon.com/forums/threads/mirror-move.3572990/\">Mirror Move</a>"],
-	     section: "New Other Metagames",
-	     ruleset: ["OU"],
-	     banlist: ["Imprison"],
-	     mod:"mirrormove",
-	     onBegin: function()
-	     {
-	       for(let p=1;p<=2;p++)
-	       {
-		 for(let i=0;i<this["p"+p].pokemon.length;i++)
-		 {
-		   this["p"+p].pokemon[i].om = [this["p"+p].pokemon[i].moveset[0]];
-		   this["p"+p].pokemon[i].obm = [this["p"+p].pokemon[i].baseMoveset[0]];
-		   if(this["p"+p].pokemon[i].baseMoveset[1])
-		   {
-		     this["p"+p].pokemon[i].om[1] = this["p"+p].pokemon[i].moveset[1];
-		     this["p"+p].pokemon[i].obm[1] = this["p"+p].pokemon[i].baseMoveset[1];
-		   }
-		 }
-	       }
-	     },
-	     onValidateSet(set)
-	     {
-	       if(set.moves.length>2)
-		 return ["You are allowed to bring only 2 moves on a Pokemon.","("+set.species+" has more than 2 moves)"]
-	     }
+	    name: "Mirror Move",
+	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mirror-move.3572990/\">Mirror Move</a>"],
+	    section: "New Other Metagames",
+	    ruleset: ["OU"],
+	    banlist: ["Imprison"],
+	    mod: "mirrormove",
+	    onBegin: function() {
+		for (let p = 0; p < this.sides.length; p++) {
+		    for (let i = 0; i < this.sides[p].pokemon.length; i++) {
+			this.sides[p].pokemon[i].om = [{}]; 
+			this.sides[p].pokemon[i].obm = [{}]; 
+			for (let k in this.sides[p].pokemon[i].baseMoveset[0]) {
+			    this.sides[p].pokemon[i].om[0][k] = this.sides[p].pokemon[i].moveset[0][k];
+			    this.sides[p].pokemon[i].obm[0][k] = this.sides[p].pokemon[i].baseMoveset[0][k];
+			}
+			if (this.sides[p].pokemon[i].baseMoveset[1]) {
+			    this.sides[p].pokemon[i].om[1] = {};
+			    this.sides[p].pokemon[i].obm[1] = {};
+			    for (let k in this.sides[p].pokemon[i].baseMoveset[1]) {
+				this.sides[p].pokemon[i].om[1][k] = this.sides[p].pokemon[i].moveset[1][k];
+				this.sides[p].pokemon[i].obm[1][k] = this.sides[p].pokemon[i].baseMoveset[1][k];
+			    }
+			}
+		    }
+		}
+	    },
+	    onValidateSet(set) {
+		if (set.moves.length > 2)
+		    return ["You are allowed to bring only 2 moves on a Pokemon.", "(" + set.species + " has more than 2 moves)"]
+	    }
 	},
 	{
 		name: "Nature's Fear",
