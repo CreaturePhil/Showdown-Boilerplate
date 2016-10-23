@@ -18,6 +18,9 @@ exports.BattleAbilities = {
 	},
 	"phantomguard": {
 		shortDesc: "This Pokemon can only be damaged by supereffective moves and indirect damage.",
+		onStart: function (pokemon) {
+			this.boost({def:3});
+		},
 		onTryHit: function (target, source, move) {
 			if (target.runEffectiveness(move) = 1) {
 				this.add('-immune', target, '[msg]', '[from] ability: Phantom Guard');
