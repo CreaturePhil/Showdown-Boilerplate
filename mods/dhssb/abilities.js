@@ -16,6 +16,19 @@ exports.BattleAbilities = {
 		rating: 1,
 		num: 1075,
 	},
+	"phantomguard": {
+		shortDesc: "This Pokemon can only be damaged by supereffective moves and indirect damage.",
+		onTryHit: function (target, source, move) {
+			if (target.runEffectiveness(move) = 1) {
+				this.add('-immune', target, '[msg]', '[from] ability: Phantom Guard');
+				return null;
+			}
+		},
+		id: "phantomguard",
+		name: "Phantom Guard",
+		rating: 5,
+		num: 25,
+	},
 	//%Elcrest
                 "waterchange": {
                      shortDesc: "If user is Elcrest and Rain Dance is active, it changes to Gyarados and it and allies' Attack and Speed are 1.5x.",
