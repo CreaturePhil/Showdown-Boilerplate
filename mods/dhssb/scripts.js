@@ -278,6 +278,12 @@ exports.BattleScripts = {
 				signatureMove: "Ice Shard",
 				evs: {hp:252, atk:252, def:252, spa:252, spd:252, spe:252}, nature: 'Serious',
 			},
+			'Spookuaza': {
+				species: 'Pumpkaboo', ability: 'Phantom Guard', item: 'Eviolite',
+				moves: ['destinybond', 'willowisp', 'hornleech'],
+				signatureMove: "Necromancy",
+				evs: {hp:252, atk:4, def:252}, nature: 'Impish',
+			},
 			'Hydrostatics': {
 				species: 'Palkia', ability: 'Pressure Breaker', item: 'Leftovers', gender: 'M' , shiny:true,
 				moves: ['spacialrend', 'hydropump', 'flashcannon'],
