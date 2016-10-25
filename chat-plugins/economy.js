@@ -7,7 +7,7 @@ let path = require('path');
 let shop = [
 	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
 	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
-	['Custom Card', 'Buys a custom card to be added in the /packshop. (You Supply, Card Be Rejected)', 15],
+	['Custom Card', 'Buys a custom card to be added in the /packshop. (You Supply, Card Can Be Rejected)', 15],
 	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
 	['League Room', 'Purchases a room at a reduced rate for use with a league.  A roster must be supplied with at least 10 members for this room.', 25],
 	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 40],
@@ -68,19 +68,19 @@ function logMoney(message) {
  * @return {String} display
  */
 function getShopDisplay(shop) {
-	let display = "<table border='1' cellspacing='0' cellpadding='5' width='100%'>" +
-					"<tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>";
-	let start = 0;
-	while (start < shop.length) {
-		display += "<tr>" +
-						"<td align='center'><button name='send' value='/buy " + shop[start][0] + "'><b>" + shop[start][0] + "</b></button>" + "</td>" +
-						"<td align='center'>" + shop[start][1] + "</td>" +
-						"<td align='center'>" + shop[start][2] + "</td>" +
-					"</tr>";
-		start++;
-	}
-	display += "</tbody></table><center>To buy an item from the shop, use /buy <em>command</em>.</center>";
-	return display;
+    let display = "<center><img src=//pldh.net/media/pokemon/gen5/blackwhite_animated_front/643.gif> <img src=http://i.imgur.com/7xvOBqH.png width=350> <img src=//pldh.net/media/pokemon/gen5/blackwhite_animated_front/643.gif></center><br><div' + (!this.isOfficial ? ' class=infobox-limited' : '') + '><table style='background: orange; border-color: Red; border-radius: 8px' border='1' cellspacing='0' cellpadding='5' width='100%'>" +
+                    "<tbody><tr><th><font color=White face=courier>Command</font></th><th><font color=White face=courier>Description</font></th><th><font color=White face=courier>Cost</font></th></tr>";
+    let start = 0;
+    while (start < shop.length) {
+        display += "<tr>" +
+                        "<td align='center'><button name='send' style= border: 1px solid Red ; background: Black ; box-shadow: 0px 1px 1px rgba(255 , 255 , 255 , 0.3) inset ; color: Red ; text-shadow: 0px -1px 0px #000 ; border-radius: 3px ; margin: 3px ; padding: 2px 4px' value='/buy " + shop[start][0] + "'><font color=purple face=courier><b>" + shop[start][0] + "</b></font></button>" + "</td>" +
+                        "<td align='center'><font color=White face=courier>" + shop[start][1] + "</font></td>" +
+                        "<td align='center'><font color=White face=courier>" + shop[start][2] + "</font></td>" +
+                    "</tr>";
+        start++;
+    }
+    display += "</tbody></table></div><br><center><font color=purple face=courier>To buy an item from the shop, use /buy <em>command</em>.</font></center>";
+    return display;
 }
 
 
