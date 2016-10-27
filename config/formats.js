@@ -487,6 +487,44 @@ exports.Formats = [
 			if (!target.hasType('Fire')) this.damage(target.maxhp / 16, target, null, 'exploding fireworks');
 		},
 	},
+        {
+		    name: "Pokebilities Randbats",
+		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokebilities</a>"],
+		    section: "Randomized Metas",
+		    mod: 'pokebilities',
+		    ruleset: ["Random Battle"],
+		    onSwitchInPriority: 1,
+		    onBegin: function() {
+			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+		        for (let p = 0; p < this.sides.length; p++) {
+		            for (let i = 0; i < this.sides[p].pokemon.length; i++) {
+		                let pokemon = this.sides[p].pokemon[i];
+		                let template = this.getTemplate(pokemon.species);
+		                this.sides[p].pokemon[i].innates = [];
+		                for (let a in template.abilities) {
+		                    if (toId(template.abilities[a]) != pokemon.ability)
+				    {
+					if(statusability[toId(template.abilities[a])])
+		                        this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
+					else
+		                        this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+				    }
+		                }
+		            }
+		        }
+		    },
+		    onSwitchIn: function(pokemon) {
+		        for (let i = 0; i < pokemon.innates.length; i++) {
+		            if (!pokemon.volatiles[pokemon.innates[i]])
+		                pokemon.addVolatile(pokemon.innates[i]);
+		        }
+		    },
+		    onAfterMega: function(pokemon) {
+		        for (let i = 0; i < pokemon.innates.length; i++) {
+		            pokemon.removeVolatile(pokemon.innates[i]);
+		        }
+		    },
+	},
 	{
 		name: "Battle Factory",
 		section: "Randomized Metas",
