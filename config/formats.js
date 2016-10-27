@@ -493,6 +493,7 @@ exports.Formats = [
 		    section: "Randomized Metas",
 		    mod: 'pokebilities',
 		    ruleset: ["Random Battle"],
+                    team:'random',
 		    onSwitchInPriority: 1,
 		    onBegin: function() {
 			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
