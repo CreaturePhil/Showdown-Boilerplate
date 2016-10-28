@@ -385,89 +385,7 @@ exports.Formats = [
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
-	{
-		name:"Open House Randbats",
-		desc: ["Every 5 turns, one of Trick Room, Magic Room or Wonder Room is set up.","&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
-		section: "Randomized Metas",
-		mod:"openhouse",
-		team: 'random',
-		ruleset: ["Team Preview",'Random Battle'],
-		onBegin: function()
-		{
-			this.houses = ["Wonder Room","Trick Room","Magic Room"];
-			this.nexthouse = this.houses[this.random(3)];
-			this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
-		},
-		onResidualOrder:999,
-		onResidual: function()
-		{
-			if(this.turn%5==4)
-			{
-				let nexthouse = this.houses[this.random(3)];
-				while(nexthouse==this.curhouse) nexthouse = this.houses[this.random(3)];
-				this.nexthouse = nexthouse;
-				this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
-			}
-		}
-	},
-	{
-		name: "Meta Man Randbats",
-		desc: [
-			"When a Pokemon faints, the opposing Pokemon replaces its current ability with the fainted Pokemon's and gains its last-used move in a new slot (for up to 9 total moves). These changes last the entire match. If a Pokemon faints before using a move during the match, no move is gained by the opponent.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/meta-man.3565966/\">Meta Man</a>",
-		],
-		team: 'random',
-		ruleset: ['Team Preview', 'Random Battle'],
-		section: "Randomized Metas",
-		mod: "metaman",
-		onFaint: function(pokemon)
-		{
-			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
-			pokemon.side.foe.pokemon[0].setAbility(pokemon.ability);
-			pokemon.side.foe.pokemon[0].baseAbility = pokemon.ability;
-			let lastMove = pokemon.lastM;
-			let has
-			if(pokemon.side.foe.pokemon[0].moveset.length<=9 && lastMove && !pokemon.side.foe.pokemon[0].hasMove(lastMove.id))
-			{
-				pokemon.side.foe.pokemon[0].moveset.push(lastMove);
-				pokemon.side.foe.pokemon[0].baseMoveset.push(lastMove);
-				this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
-			}
-		},
-	},
-	{
-	    name: "Top Percentage Randbats",
-	    section: "Randomized Metas",
-	    mod: 'toppercentage',
-	    desc:["&lt; <a href=\"http://www.smogon.com/forums/threads/top-percentage.3564459/\">Top Percentage</a>"],
-	    ruleset: ['Random Battle',"Team Preview"],
-	    team: "random",
-	    onBegin: function() {
-			this.add("raw|Welcome to Top Percentage! The first Player to deal 400% damage wins! HAHAHAH!");
-		for (var i = 0; i < this.sides.length; i++) {
-		    this.sides[i].metaCount = 400;
-		}
-	    },
-	    onAfterDamage: function(damage, target, source, move) {
-		//only should work if does not make target faint
-		let percentage = 100 * damage / target.maxhp;
-		if (damage >= target.hp) {
-		    percentage = 100 * target.hp / target.maxhp;
-		}
-		target.side.metaCount -= percentage;
-		this.add('-message', target.side.name+" has " + Math.round(target.side.metaCount) + "% left!");
-		if (target.side.metaCount <= 0.1) {
-		    //note: making this 0.1 because I got 1.10 times 10^-15 once
-		    //something silly with rounding
-		    //this works well enough
-	            this.add('raw|'+target.side.foe.name+" has dealt 400% damage!");
-		    this.win(target.side.foe);
-		}
-	    },
-		/*onAfterDamage: function(damage, target, source, move) {
-		
-		},*/
-	},
+
 	{
 		name: "[Seasonal] Fireworks Frenzy",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
@@ -486,45 +404,6 @@ exports.Formats = [
 		onWeather: function (target) {
 			if (!target.hasType('Fire')) this.damage(target.maxhp / 16, target, null, 'exploding fireworks');
 		},
-	},
-        {
-		    name: "Pokebilities Randbats",
-		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokebilities</a>"],
-		    section: "Randomized Metas",
-		    mod: 'pokebilities',
-		    ruleset: ["Random Battle"],
-                    team:'random',
-		    onSwitchInPriority: 1,
-		    onBegin: function() {
-			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
-		        for (let p = 0; p < this.sides.length; p++) {
-		            for (let i = 0; i < this.sides[p].pokemon.length; i++) {
-		                let pokemon = this.sides[p].pokemon[i];
-		                let template = this.getTemplate(pokemon.species);
-		                this.sides[p].pokemon[i].innates = [];
-		                for (let a in template.abilities) {
-		                    if (toId(template.abilities[a]) != pokemon.ability)
-				    {
-					if(statusability[toId(template.abilities[a])])
-		                        this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
-					else
-		                        this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
-				    }
-		                }
-		            }
-		        }
-		    },
-		    onSwitchIn: function(pokemon) {
-		        for (let i = 0; i < pokemon.innates.length; i++) {
-		            if (!pokemon.volatiles[pokemon.innates[i]])
-		                pokemon.addVolatile(pokemon.innates[i]);
-		        }
-		    },
-		    onAfterMega: function(pokemon) {
-		        for (let i = 0; i < pokemon.innates.length; i++) {
-		            pokemon.removeVolatile(pokemon.innates[i]);
-		        }
-		    },
 	},
 	{
 		name: "Battle Factory",
@@ -2385,6 +2264,157 @@ exports.Formats = [
 
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
+		{
+		name: "[Seasonal] Octoberfest",
+		section: "Randomized Formats",
+
+		team: 'randomSeasonalOF',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		onModifyMove: function(move) {
+			if (move.id === 'trick') {
+				delete move.onHit;
+				switch (this.random(17)) {
+				case 0:
+					move.onTryHit = function() {
+						this.add('-message', 'Trick: Kick on the nuts!');
+					};
+					move.category = 'Physical';
+					move.type = 'Normal';
+					move.basePower = 200;
+					break;
+				case 1:
+					move.onTryHit = function() {
+						this.add('-message', 'Trick: Fireworks at your feet!');
+					};
+					move.category = 'Special';
+					move.type = 'Fire';
+					move.basePower = 200;
+					break;
+				case 2:
+					move.onTryHit = function() {
+						this.add('-message', 'Trick: Doused with water!');
+					};
+					move.category = 'Special';
+					move.type = 'Water';
+					move.basePower = 200;
+					break;
+				case 3:
+					move.onTryHit = function() {
+						this.add('-message', 'Trick: Bombed with rotten eggs!');
+					};
+					move.category = 'Special';
+					move.type = 'Poison';
+					move.basePower = 200;
+					break;
+				case 4:
+					move.onTryHit = function() {
+						this.add('-message', 'Trick: You got scared by a real-looking costume!');
+					};
+					move.category = 'Physical';
+					move.type = 'Dark';
+					move.basePower = 200;
+					break;
+				case 5:
+					move.onTryHit = function() {
+						this.add('-message', 'Trick: You got hit in the head!');
+					};
+					move.volatileStatus = 'confusion';
+					break;
+				case 6:
+					move.onTryHit = function() {
+						this.add('-message', 'Trick: Your arms were maimed!');
+					};
+					move.volatileStatus = 'disable';
+					break;
+				case 7:
+					move.onTryHit = function() {
+						this.add('-message', "Trick: You've been taunted by those meddling kids!");
+					};
+					move.volatileStatus = 'taunt';
+					break;
+				case 8:
+					move.onTryHit = function() {
+						this.add('-message', 'Treat: You got some yummy seeds!');
+					};
+					move.volatileStatus = 'leechseed';
+					break;
+				case 9:
+					move.onTryHit = function() {
+						this.add('-message', 'Trick: Your car was stolen!');
+					};
+					move.volatileStatus = 'embargo';
+					break;
+				case 10:
+					move.onTryHit = function() {
+						this.add('-message', "Trick: You're haunted and you're going to die!");
+					};
+					move.volatileStatus = 'perishsong';
+					break;
+				case 11:
+					move.onTryHit = function() {
+						this.add('-message', 'Trick: A ghost cursed you!');
+					};
+					move.volatileStatus = 'curse';
+					break;
+				case 12:
+					move.onTryHit = function() {
+						this.add('-message', "Trick: You're tormented by the constant tricking!");
+					};
+					move.volatileStatus = 'torment';
+					break;
+				case 13:
+					move.onTryHit = function() {
+						this.add('-message', 'Treat: Om nom nom roots!');
+					};
+					move.volatileStatus = 'ingrain';
+					break;
+				case 14:
+					move.onTryHit = function() {
+						this.add('-message', 'Treat: Uhm, these candy taste weird...');
+					};
+					var boosts = {};
+					var possibleBoosts = ['atk','def','spa','spd','spe','accuracy','evasion'].randomize();
+					boosts[possibleBoosts[0]] = 2;
+					boosts[possibleBoosts[1]] = -1;
+					boosts[possibleBoosts[2]] = -1;
+					move.boosts = boosts;
+					break;
+				case 15:
+					move.onTryHit = function() {
+						this.add('-message', "Trick: You're tired of running after teenagers with your baseball bat.");
+					};
+					move.volatileStatus = 'mustrecharge';
+					break;
+				case 16:
+					move.onTryHit = function() {
+						this.add('-message', "Treat: You got candy!");
+					};
+					move.heal = [1,2];
+					break;
+				}
+			} else if (move.id === 'present') {
+				move.accuracy = 100;
+				move.basePower = 0;
+				move.category = 'Status';
+				move.volatileStatus = 'confusion';
+				move.pp = 10;
+				move.priority = 0;
+				move.name = 'Offer Beer';
+				move.boosts = {'atk':-1, 'spa':-1, 'def':1, 'spd':1, 'spe':-1, 'accuracy':-1, 'evasion':1};
+				move.onTryHit = function() {
+					this.add('-message', "Oh, why, thank you! This beer is delicious!");
+				};
+				move.effect = {
+					onBeforeMove: function(pokemon, target, move) {
+						if (this.random(10) < 3) {
+							this.useMove('Sing', target);
+							return;
+						}
+					}
+				};
+			}
+		}
+	},
 	{
 		name: "Random Haxmons",
 		section: "Randomized Metas",
@@ -2430,6 +2460,129 @@ exports.Formats = [
             pokemon.types = pokemon.template.types = types;
         },
     },
+		{
+		name:"Random Open House",
+		desc: ["Every 5 turns, one of Trick Room, Magic Room or Wonder Room is set up.","&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
+		section: "Randomized Metas",
+		mod:"openhouse",
+		team: 'random',
+		ruleset: ["Team Preview",'Random Battle'],
+		onBegin: function()
+		{
+			this.houses = ["Wonder Room","Trick Room","Magic Room"];
+			this.nexthouse = this.houses[this.random(3)];
+			this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
+		},
+		onResidualOrder:999,
+		onResidual: function()
+		{
+			if(this.turn%5==4)
+			{
+				let nexthouse = this.houses[this.random(3)];
+				while(nexthouse==this.curhouse) nexthouse = this.houses[this.random(3)];
+				this.nexthouse = nexthouse;
+				this.add("-message","Starting next turn, the battle will take place in the "+this.nexthouse+"!");
+			}
+		}
+	},
+	{
+		name: "Random Meta Man",
+		desc: [
+			"When a Pokemon faints, the opposing Pokemon replaces its current ability with the fainted Pokemon's and gains its last-used move in a new slot (for up to 9 total moves). These changes last the entire match. If a Pokemon faints before using a move during the match, no move is gained by the opponent.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/meta-man.3565966/\">Meta Man</a>",
+		],
+		team: 'random',
+		ruleset: ['Team Preview', 'Random Battle'],
+		section: "Randomized Metas",
+		mod: "metaman",
+		onFaint: function(pokemon)
+		{
+			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
+			pokemon.side.foe.pokemon[0].setAbility(pokemon.ability);
+			pokemon.side.foe.pokemon[0].baseAbility = pokemon.ability;
+			let lastMove = pokemon.lastM;
+			let has
+			if(pokemon.side.foe.pokemon[0].moveset.length<=9 && lastMove && !pokemon.side.foe.pokemon[0].hasMove(lastMove.id))
+			{
+				pokemon.side.foe.pokemon[0].moveset.push(lastMove);
+				pokemon.side.foe.pokemon[0].baseMoveset.push(lastMove);
+				this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
+			}
+		},
+	},
+	
+	{
+	    name: "Random Top Percentage",
+	    section: "Randomized Metas",
+	    mod: 'toppercentage',
+	    desc:["&lt; <a href=\"http://www.smogon.com/forums/threads/top-percentage.3564459/\">Top Percentage</a>"],
+	    ruleset: ['Random Battle',"Team Preview"],
+	    team: "random",
+	    onBegin: function() {
+			this.add("raw|Welcome to Top Percentage! The first Player to deal 400% damage wins! HAHAHAH!");
+		for (var i = 0; i < this.sides.length; i++) {
+		    this.sides[i].metaCount = 400;
+		}
+	    },
+	    onAfterDamage: function(damage, target, source, move) {
+		//only should work if does not make target faint
+		let percentage = 100 * damage / target.maxhp;
+		if (damage >= target.hp) {
+		    percentage = 100 * target.hp / target.maxhp;
+		}
+		target.side.metaCount -= percentage;
+		this.add('-message', target.side.name+" has " + Math.round(target.side.metaCount) + "% left!");
+		if (target.side.metaCount <= 0.1) {
+		    //note: making this 0.1 because I got 1.10 times 10^-15 once
+		    //something silly with rounding
+		    //this works well enough
+	            this.add('raw|'+target.side.foe.name+" has dealt 400% damage!");
+		    this.win(target.side.foe);
+		}
+	    },
+		/*onAfterDamage: function(damage, target, source, move) {
+		
+		},*/
+	},
+	       {
+		    name: "Random Pokebilities",
+		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokebilities</a>"],
+		    section: "Randomized Metas",
+		    mod: 'pokebilities',
+		    ruleset: ["Random Battle"],
+                    team:'random',
+		    onSwitchInPriority: 1,
+		    onBegin: function() {
+			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+		        for (let p = 0; p < this.sides.length; p++) {
+		            for (let i = 0; i < this.sides[p].pokemon.length; i++) {
+		                let pokemon = this.sides[p].pokemon[i];
+		                let template = this.getTemplate(pokemon.species);
+		                this.sides[p].pokemon[i].innates = [];
+		                for (let a in template.abilities) {
+		                    if (toId(template.abilities[a]) != pokemon.ability)
+				    {
+					if(statusability[toId(template.abilities[a])])
+		                        this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
+					else
+		                        this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+				    }
+		                }
+		            }
+		        }
+		    },
+		    onSwitchIn: function(pokemon) {
+		        for (let i = 0; i < pokemon.innates.length; i++) {
+		            if (!pokemon.volatiles[pokemon.innates[i]])
+		                pokemon.addVolatile(pokemon.innates[i]);
+		        }
+		    },
+		    onAfterMega: function(pokemon) {
+		        for (let i = 0; i < pokemon.innates.length; i++) {
+		            pokemon.removeVolatile(pokemon.innates[i]);
+		        }
+		    },
+	},
     {
 		name: "Gifts of the Gods",
 		desc: [
