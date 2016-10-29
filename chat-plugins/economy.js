@@ -68,7 +68,7 @@ function logMoney(message) {
  * @return {String} display
  */
 function getShopDisplay(shop) {
-    let display = "<center><img src=//pldh.net/media/pokemon/gen5/blackwhite_animated_front/643.gif> <img src=http://i.imgur.com/7xvOBqH.png width=350> <img src=//pldh.net/media/pokemon/gen5/blackwhite_animated_front/643.gif></center><br><div' + (!this.isOfficial ? ' class=infobox-limited' : '') + '><table style='background: orange; border-color: Red; border-radius: 8px' border='1' cellspacing='0' cellpadding='5' width='100%'>" +
+    let display = "<center><img src=//pldh.net/media/pokemon/gen5/blackwhite_animated_front/643.gif> <img src=http://i.imgur.com/7xvOBqH.png width=300> <img src=//pldh.net/media/pokemon/gen5/blackwhite_animated_front/643.gif></center><br><div' + (!this.isOfficial ? ' class=infobox-limited' : '') + '><table style='background: orange; border-color: Red; border-radius: 8px' border='1' cellspacing='0' cellpadding='5' width='100%'>" +
                     "<tbody><tr><th><font color=White face=courier>Command</font></th><th><font color=White face=courier>Description</font></th><th><font color=White face=courier>Cost</font></th></tr>";
     let start = 0;
     while (start < shop.length) {
