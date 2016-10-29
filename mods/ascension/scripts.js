@@ -7,7 +7,6 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'samurott').learnset.focusblast = ['6M'];
 		this.modData('Learnsets', 'samurott').learnset.shellsmash = ['6L100'];
     
-    this.modData('Pokedex', 'arcanine').abilities['H'] = 'Desolate Land';
-		}
+    		this.modData('Pokedex', 'arcanine').abilities['H'] = 'Desolate Land';
 	},
 };
