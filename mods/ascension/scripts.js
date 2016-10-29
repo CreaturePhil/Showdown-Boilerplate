@@ -8,5 +8,12 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'samurott').learnset.shellsmash = ['6L100'];
     
     		this.modData('Pokedex', 'arcanine').abilities['H'] = 'Desolate Land';
+				
+		this.modData('Pokedex', 'milotic').types = ['Water', 'Dragon'];
+    		this.modData('Pokedex', 'milotic').abilities['H'] = 'Poison Heal';
+		
+		this.modData('Learnsets', 'jynx').learnset.quiverdance = ['6L100'];	
+				
+		this.modData('Learnsets', 'mew').learnset.sketch = ['6E'];
 	},
 };
