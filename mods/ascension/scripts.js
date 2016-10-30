@@ -16,5 +16,7 @@ exports.BattleScripts = {
     		this.modData('Pokedex', 'jynx').abilities['1'] = 'Dazzling';
 				
 		this.modData('Learnsets', 'mew').learnset.sketch = ['6E'];
+		
+		this.modData('Pokedex', 'banettemega').abilities['1'] = 'Shadow Tag';
 	},
 };
