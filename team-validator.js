@@ -47,7 +47,7 @@ class Validator {
 		}
 		this.format = format;
 		this.supplementaryBanlist = supplementaryBanlist;
-		this.tools = Tools.mod(this.format);
+		this.tools = Tools.format(this.format);
 	}
 
 	validateTeam(team, removeNicknames) {
@@ -153,6 +153,7 @@ class Validator {
 		set.item = item.name;
 		let ability = tools.getAbility(Tools.getString(set.ability));
 		set.ability = ability.name;
+		set.nature = tools.getNature(Tools.getString(set.nature)).name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		let maxLevel = format.maxLevel || 100;
@@ -214,6 +215,14 @@ class Validator {
 				return [`"${set.ability}" is an invalid ability.`];
 			}
 		}
+		if (set.nature && !tools.getNature(set.nature).exists) {
+			if (tools.gen < 3) {
+				// gen 1-2 don't have natures, just remove them
+				set.nature = '';
+			} else {
+				return [`${set.species}'s nature is invalid.`];
+			}
+		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${set.species} has an invalid happiness.`);
 		}
@@ -232,24 +241,6 @@ class Validator {
 				return [`${template.baseSpecies} is ${reason}.`];
 			}
 		}
-		if (banlistTable['Unreleased'] && template.isUnreleased) {
-			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
-				problems.push(`${name} (${template.species}) is unreleased.`);
-			}
-		}
-		let species = template.species;
-		let tier = template.tier;
-		if (item.megaEvolves === template.species) {
-			species = item.megaStone;
-			tier = tools.getTemplate(item.megaStone).tier;
-		}
-		if (tier) {
-			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
-			setHas[toId(tier)] = true;
-			if (banlistTable[tier] && banlistTable[toId(species)] !== false) {
-				problems.push(`${template.species} is in ${tier}, which is banned.`);
-			}
-		}
 
 		check = toId(set.ability);
 		setHas[check] = true;
@@ -265,6 +256,11 @@ class Validator {
 		}
 		if (banlistTable['Unreleased'] && item.isUnreleased) {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
+		}
+		if (banlistTable['Unreleased'] && template.isUnreleased) {
+			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
+				problems.push(`${name} (${template.species}) is unreleased.`);
+			}
 		}
 		setHas[toId(set.ability)] = true;
 		if (banlistTable['illegal']) {
@@ -543,6 +539,17 @@ class Validator {
 				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
 					problems.push(`${name} has moves incompatible with its ability.`);
 				}
+			}
+		}
+		if (item.megaEvolves === template.species) {
+			template = tools.getTemplate(item.megaStone);
+		}
+		if (template.tier) {
+			let tier = template.tier;
+			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+			setHas[toId(tier)] = true;
+			if (banlistTable[tier] && banlistTable[template.id] !== false) {
+				problems.push(`${template.species} is in ${tier}, which is banned.`);
 			}
 		}
 
@@ -1000,7 +1007,7 @@ if (process.send && module === process.mainModule) {
 		});
 	}
 
-	global.Tools = require('./tools').includeMods();
+	global.Tools = require('./tools').includeData();
 	global.toId = Tools.getId;
 
 	require('./repl').start('team-validator-', process.pid, cmd => eval(cmd));

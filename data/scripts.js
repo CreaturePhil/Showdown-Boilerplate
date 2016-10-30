@@ -731,7 +731,8 @@ exports.BattleScripts = {
 		const teamGenerator = typeof format.team === 'string' && format.team.startsWith('random') ? format.team + 'Team' : '';
 		if (!teamGenerator && team) return team;
 		// Reinitialize the RNG seed to create random teams.
-		this.startingSeed = this.startingSeed.concat(this.generateSeed());
+		this.seed = this.generateSeed();
+		this.startingSeed = this.startingSeed.concat(this.seed);
 		team = this[teamGenerator || 'randomTeam'](side);
 		// Restore the default seed
 		this.seed = this.startingSeed.slice(0, 4);
@@ -1346,7 +1347,7 @@ exports.BattleScripts = {
 					break;
 				case 'protect':
 					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if ((hasMove['lightscreen'] && hasMove['reflect']) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'roar': case 'whirlwind':
 					if (counter.setupType || hasMove['dragontail']) rejected = true;
@@ -1725,6 +1726,9 @@ exports.BattleScripts = {
 		// Moveset modifications
 		if (hasMove['autotomize'] && hasMove['heavyslam']) {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
+		}
+		if (hasMove['nuzzle'] && counter['Electric'] < 2) {
+			moves[moves.indexOf('nuzzle')] = 'thunderbolt';
 		}
 
 		// If Hidden Power has been removed, reset the IVs
@@ -2178,10 +2182,10 @@ exports.BattleScripts = {
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
-			case 'Gourgeist':
+			case 'Castform': case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
 				break;
-			case 'Basculin': case 'Castform': case 'Cherrim': case 'Hoopa': case 'Meloetta': case 'Meowstic':
+			case 'Basculin': case 'Cherrim': case 'Hoopa': case 'Meloetta': case 'Meowstic':
 				if (this.random(2) >= 1) continue;
 				break;
 			}
