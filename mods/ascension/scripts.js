@@ -13,6 +13,7 @@ exports.BattleScripts = {
     		this.modData('Pokedex', 'milotic').abilities['H'] = 'Poison Heal';
 		
 		this.modData('Learnsets', 'jynx').learnset.quiverdance = ['6L100'];	
+    		this.modData('Pokedex', 'jynx').abilities['1'] = 'Dazzling';
 				
 		this.modData('Learnsets', 'mew').learnset.sketch = ['6E'];
 	},
