@@ -1,3 +1,6 @@
+'use strict';
+
+exports.BattleAbilities = {
 "dazzling": {
 		desc: "This Pokemon is immune to moves with increased priority. ",
 		shortDesc: "This PokÃ©mon is immune to moves with increased priority.",
@@ -10,3 +13,4 @@
 		id: "dazzling",
 		name: "Dazzling",
 	},
+};
