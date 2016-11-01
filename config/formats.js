@@ -4455,7 +4455,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				{
 					let pokemon = this.sides[p].pokemon[i];
 					if(pokemon.types[1]) this.sides[p].pokemon[i].type2 = this.sides[p].pokemon[i].types[1];
-					if(pokemon.types[0]===pokemon.types[1]) this.sides[p].pokemon[i].types[1] = this.sides[p].pokemon[i].hpType || "Dark";
+				        this.sides[p].pokemon[i].types[1] = this.sides[p].pokemon[i].hpType || "Dark";
+				        if(pokemon.types[0] === pokemon.types[1]) this.sides[p].pokemon[i].types.length = 1;
 				}
 			}
 		},
@@ -4466,7 +4467,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 		onModifyMove: function(move, pokemon)
 		{
-			if(move.type == pokemon.type2) move.type = pokemon.hpType || "Dark";
+			if(pokemon.type2 && move.type == pokemon.type2) move.type = pokemon.hpType || "Dark";
 		},
 	},
 	{
