@@ -4469,6 +4469,13 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		{
 			if(pokemon.type2 && move.type == pokemon.type2) move.type = pokemon.hpType || "Dark";
 		},
+		onAfterMega: function(pokemon) {
+			if(pokemon.type2 !== pokemon.types[1]) {
+				pokemon.types[1] = pokemon.hpType;
+				if(pokemon.types[0] === pokemon.types[1]) pokemon.types.length = 1;
+			        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+			}
+		},
 	},
 	{
 		name: "Enchanted Items Balanced Hackmons",
