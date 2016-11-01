@@ -4444,7 +4444,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
         	}
     	},
 	{
-		name: "Varietype",
+		name: "Diversitype",
 		section: "Experimental Metas",
 		ruleset: ['OU'],
 		onBegin: function()
