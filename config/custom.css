@@ -32,7 +32,7 @@
     color: #FFA000;
     font-family: Arial;
     font-size: 2em;
-    padding: 35px;
+    padding: 5px;
     text-align: center;
     margin: 5px;
     text-shadow: 2px 0px 0px #000000;
@@ -76,11 +76,7 @@
     border: 1px solid #252F3F;
     box-shadow: none !important;
   }
-  .message-announce {
-	  background-color:#36688D;
-	  color:#F3CD05;
-	  font-size:16px;
-	  font-weight:bold
+
   }
   .closebutton, .minimizebutton {
     color: #413B45;
