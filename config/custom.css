@@ -27,15 +27,14 @@
   }
 
   .broadcast-blue {
-    background-image: #cccccc;
-    border: 6px solid #FFA500;
-    color: #FFA000;
-    font-family: Arial;
-    font-size: 2em;
+    background-color: #cccccc;
+    border: 5px solid #FFA000;
+    color: #000000;
+    font-family: sans-serif;
     padding: 5px;
     text-align: center;
     margin: 5px;
-    text-shadow: 2px 0px 0px #000000;
+    text-shadow: 0px -1px 0px #e6e6e6;
   }
 
   .broadcast-blue a {
