@@ -68,17 +68,19 @@ function logMoney(message) {
  * @return {String} display
  */
 function getShopDisplay(shop) {
-	let display = '<center><b><font color="red" size="4">Read the description of the item you want to buy if you haven\'t already.</font></b></center></center><div style="box-shadow: 4px 4px 4px #000 inset, -4px -4px 4px #000 inset, 5px 3px 8px rgba(0, 0, 0, 0.6); max-height: 310px; overflow-y: scroll;"><table style="width: 100%; border-collapse: collapse;"><table style="width: 100%; border-collapse: collapse;"><tr><th colspan="3" class="table-header" style="background: -moz-linear-gradient(right, #09263A, #03121C); background: -webkit-linear-gradient(left, #09263A, #03121C); background: -o-linear-gradient(right, #09263A, #03121C); background: linear-gradient(right, #09263A, #03121C); padding: 8px 20px 16px 8px; box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.8) inset; text-shadow: 1px 1px #0A2D43, 2px 2px #0A2D43, 3px 3px #0A2D43, 4px 4px #0A2D43, 5px 5px #0A2D43, 6px 6px #0A2D43, 7px 7px #0A2D43, 8px 8px #0A2D43, 9px 9px #0A2D43, 10px 10px #0A2D43;"><h2>Dragon Heaven Shop</h2></th></tr>' +
-		'<tr><th class="table-header" style="background: -moz-linear-gradient(#173C54, #061C2A); background: -webkit-linear-gradient(#173C54, #061C2A); background: -o-linear-gradient(#173C54, #061C2A); background: linear-gradient(#173C54, #061C2A); box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.8) inset;">Item</th><th class="table-header" style="background: -moz-linear-gradient(#173C54, #061C2A); background: -webkit-linear-gradient(#173C54, #061C2A); background: -o-linear-gradient(#173C54, #061C2A); background: linear-gradient(#173C54, #061C2A); box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.8) inset;">Description</th><th class="table-header" style="background: -moz-linear-gradient(#173C54, #061C2A); background: -webkit-linear-gradient(#173C54, #061C2A); background: -o-linear-gradient(#173C54, #061C2A); background: linear-gradient(#173C54, #061C2A); box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.8) inset;">Cost</th></tr>';
-	let start = 0;
-	while (start < shop.length) {
-		display += '<tr><td class="table-option"><button class="table-btn" name="send" value="/buy ' + shop[start][0] + '">' + shop[start][0] + '</button></td>' +
-			'<td class="table-option">' + shop[start][1] + '</td>' +
-			'<td class="table-option">' + shop[start][2] + '</td></tr>';
-		start++;
-	}
-	display += '</table></div>';
-	return display;
+    let display = "<center><img src=//pldh.net/media/pokemon/gen5/blackwhite_animated_front/643.gif> <img src=http://i.imgur.com/7xvOBqH.png width=300> <img src=//pldh.net/media/pokemon/gen5/blackwhite_animated_front/643.gif></center><br><div' + (!this.isOfficial ? ' class=infobox-limited' : '') + '><table style='background: orange; border-color: Red; border-radius: 8px' border='1' cellspacing='0' cellpadding='5' width='100%'>" +
+                    "<tbody><tr><th><font color=White face=courier>Command</font></th><th><font color=White face=courier>Description</font></th><th><font color=White face=courier>Cost</font></th></tr>";
+    let start = 0;
+    while (start < shop.length) {
+        display += "<tr>" +
+                        "<td align='center'><button name='send' style= border: 1px solid Red ; background: Black ; box-shadow: 0px 1px 1px rgba(255 , 255 , 255 , 0.3) inset ; color: Red ; text-shadow: 0px -1px 0px #000 ; border-radius: 3px ; margin: 3px ; padding: 2px 4px' value='/buy " + shop[start][0] + "'><font color=purple face=courier><b>" + shop[start][0] + "</b></font></button>" + "</td>" +
+                        "<td align='center'><font color=White face=courier>" + shop[start][1] + "</font></td>" +
+                        "<td align='center'><font color=White face=courier>" + shop[start][2] + "</font></td>" +
+                    "</tr>";
+        start++;
+    }
+    display += "</tbody></table></div><br><center><font color=purple face=courier>To buy an item from the shop, use /buy <em>command</em>.</font></center>";
+    return display;
 }
 
 
