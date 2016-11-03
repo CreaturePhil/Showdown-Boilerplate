@@ -4606,6 +4606,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		mod: 'francticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
+ 		onBegin: function() {
+			for(int p =0;p<this.sides.length;p++) {
+				for(int i=0;i<this.sides[p].pokemon.length;i++) this.sides[p].pokemon[i]. fusethatshit();
+				}
+			}
+		},
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
 		        let types = pokemon.types;
