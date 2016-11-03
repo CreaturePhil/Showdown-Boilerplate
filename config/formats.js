@@ -4609,7 +4609,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
  		onBegin: function() {
 			for(let p =0;p<this.sides.length;p++) {
 				for(let i=0;i<this.sides[p].pokemon.length;i++) this.sides[p].pokemon[i]. fusethatshit();
-				}
 			}
 		},
 		onSwitchInPriority: 1,
