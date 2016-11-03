@@ -27,15 +27,15 @@
   }
 
   .broadcast-blue {
-    background-image: url(http://www.bar82.com/wp-content/uploads/2014/09/Halloween-Banner.jpg);
+    background-image: #cccccc;
     border: 6px solid #FFA500;
-    color: #01272d;
-    font-family: Jokerman;
+    color: #FFA000;
+    font-family: Arial;
     font-size: 2em;
     padding: 35px;
     text-align: center;
     margin: 5px;
-    text-shadow: 2px 0px 0px #00FF7F;
+    text-shadow: 2px 0px 0px #000000;
   }
 
   .broadcast-blue a {
@@ -77,8 +77,10 @@
     box-shadow: none !important;
   }
   .message-announce {
-	  background-color:#088e4b;
-	  color:yellow;
+	  background-color:#36688D;
+	  color:#F3CD05;
+	  font-size:16px;
+	  font-weight:bold
   }
   .closebutton, .minimizebutton {
     color: #413B45;
@@ -358,7 +360,7 @@
 /*Battle CSS*/
 
   .backdrop {
-    background: url(https://img-fotki.yandex.ru/get/16110/7416871.1e/0_7fdd6_17c4d552_XL.jpg) !important;
+    background: url(../fx/bg-beach.png) !important;
         opacity: 0.6;
 }
 
@@ -529,17 +531,70 @@
     border-color: #000000;
 }
 .pmnote {
-	color:#FFA000;
+	color:#36688D;
+	font-weight:bold
 	
 }
 .message-pm {
-	color:#FFA000;
+	color:#36688D;
+	font-weight:bold;
 
 }
 
 .userlist li button:hover {
         background:rgba(244, 244, 244, 0.5)
   }
+
+/*Custom PM Box*/
+.pm-window-charizard8888 h3 {
+  background: Red url("http://pldh.net/media/pokecons_action/006.gif") no-repeat !important;
+  background-position: 225px -8px !important;
+  color: #FFE697 !important;
+  text-shadow: 0px 0px 1px #4d2600 !important;
+  border-color: #ff0000 !important;
+}
+
+.pm-window-charizard8888 h3:hover, .pm-window-charizard8888.focused h3, .pm-window-charizard8888.focused h3:hover {
+  background: #fb9800 url("http://pldh.net/media/pokecons_action/006.gif") no-repeat !important;
+  background-position: 225px -8px !important;
+  color: #FFE697 !important;
+  text-shadow: 0px 0px 0px  !important;
+  border-color: #ff0000 !important;
+}
+
+.pm-window-charizard8888 h3 small, .pm-window-charizard8888 h3 .minimizebutton, .pm-window-charizard8888 h3 .closebutton, .pm-window-charizard8888 h3:hover .minimizebutton {
+  color: #ffe700 !important;
+}
+
+.pm-window-charizard8888 h3 .closebutton:hover + .minimizebutton.minimizebutton {
+  color: #ffe700 !important;
+}
+
+.pm-window-charizard8888 h3 .closebutton:hover {
+  color: #ffe700 !important;
+}
+
+.pm-window-charizard8888 h3 .minimizebutton:hover {
+  color: #ffe700 !important;
+}
+
+.pm-window-charizard8888 .pm-log, .pm-window-charizard8888.focused .pm-log {
+  background: rgba(255, 230, 151, 0.9) url("http://i.imgur.com/Of2r0d5.png") top right no-repeat !important;
+  border-color: #ff0000 !important;
+}
+
+.pm-window-charizard8888 .pm-log-add, .pm-window-charizard8888.focused .pm-log-add {
+  background: #fb9800 !important;
+  border-color: #ff0000 !important;
+}
+
+.pm-window-charizard8888 .pm-log-add .textbox {
+  border-color: #ff0000 !important;
+  background: rgba(255, 230 , 151, 0.95) !important;
+  color: #000 !important;
+}
+
+/*Custom PM Box-end*/
 
 /*************************************
   * Userlist Icons *
