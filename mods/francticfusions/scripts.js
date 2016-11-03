@@ -30,7 +30,7 @@ let template = this.battle.getTemplate(this.set.species);
 			this.baseStats[statName] = Math.floor(stat);
 		}
 
-		this.maxhp = Math.floor(Math.floor(2 * Math.floor((this.template.baseStats['hp']+crossTemplate.baseStats['hp])/2) + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100) * this.level / 100 + 10);
+		this.maxhp = Math.floor(Math.floor(2 * Math.floor((this.template.baseStats['hp']+crossTemplate.baseStats['hp'])/2) + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100) * this.level / 100 + 10);
 		this.hp = this.hp || this.maxhp;
 
                         /*
