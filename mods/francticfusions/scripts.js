@@ -250,7 +250,7 @@ else {
 
 		this.clearVolatile(true);
 	},
-		formeChange: function (template) {
+		/*formeChange: function (template) {
 			template = this.battle.getTemplate(template);
 			let crossTemplate = this.battle.getTemplate(this.set.name);
 			if (!crossTemplate.exists) return false;
@@ -281,7 +281,7 @@ else {
 				this.types[1]= crossTemplate.types[0];
 			this.fusion = true;
 			return true;
-		},
+		},*/
 		isGrounded(negateImmunity) {
 			if ('gravity' in this.battle.pseudoWeather) return true;
 			if ('ingrain' in this.volatiles) return true;
