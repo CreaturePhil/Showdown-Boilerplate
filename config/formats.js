@@ -4607,8 +4607,34 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
  		onBegin: function() {
-			for(let p =0;p<this.sides.length;p++) {
-				for(let i=0;i<this.sides[p].pokemon.length;i++) this.sides[p].pokemon[i]. fusethatshit();
+                        let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+                                if (pokemon.set.name === pokemon.set.species) continue;
+				let crossTemplate = this.getTemplate(pokemon.name);
+				if (!crossTemplate.exists) continue;
+				try {
+				let template = pokemon.baseTemplate;
+				let mixedTemplate = Object.assign({}, template);
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
+				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + crossTemplate.weightkg)/2)
+
+				mixedTemplate.baseStats = {};
+				for (let statid in template.baseStats) {
+					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + crossTemplate.baseStats[statid])/2;
+				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+
+				mixedTemplate.types = template.types.slice();
+                                if(mixedTemplate.types[0]!= crossTemplate.types[1]) mixedTemplate.types[1]=crossTemplate.types[1];
+                                elss mixedTemplate.types.length = 1;
+				pokemon.baseTemplate = mixedTemplate;
+				pokemon.fusion = true;
+				pokemon.abilitwo = crossTemplate.abilities[0];
+				pokemon.formeChange(mixedTemplate);
+				} catch (e) {
+					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
+				}
 			}
 		},
 		onSwitchInPriority: 1,
