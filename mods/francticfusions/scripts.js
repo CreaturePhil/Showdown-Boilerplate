@@ -54,7 +54,7 @@ let template = this.battle.getTemplate(this.set.species);
 			// Type changes
 			if(this.types[0]!=crossTemplate.types[0])
 				this.types[1]= crossTemplate.types[0];
-			this.fusion = true;*/
+			this.fusion = true;
 }
 	},
 		isGrounded(negateImmunity) {
