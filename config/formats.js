@@ -4627,7 +4627,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 
 				mixedTemplate.types = template.types.slice();
                                 if(mixedTemplate.types[0]!= crossTemplate.types[1]) mixedTemplate.types[1]=crossTemplate.types[1];
-                                elss mixedTemplate.types.length = 1;
+                                else mixedTemplate.types.length = 1;
 				pokemon.baseTemplate = mixedTemplate;
 				pokemon.fusion = true;
 				pokemon.abilitwo = crossTemplate.abilities[0];
