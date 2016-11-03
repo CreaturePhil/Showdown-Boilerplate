@@ -4626,7 +4626,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
 
 				mixedTemplate.types = template.types.slice();
-                                if(mixedTemplate.types[0]!= crossTemplate.types[1]) mixedTemplate.types[1]=crossTemplate.types[1];
+                                if(mixedTemplate.types[0]!= crossTemplate.types[0]) mixedTemplate.types[1]=crossTemplate.types[0];
                                 else mixedTemplate.types.length = 1;
 				pokemon.baseTemplate = mixedTemplate;
 				pokemon.fusion = true;
