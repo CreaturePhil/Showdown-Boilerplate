@@ -398,13 +398,6 @@ exports.grouplist = [
 		joinbattle: true
 	},
 	{
-		symbol: '>',
-		id: "meme",
-		name: "Esteemed Meme",
-		inherit: '+',
-		joinbattle: true
-	},
-	{
 		symbol: '+',
 		id: "voice",
 		name: "Voice",
