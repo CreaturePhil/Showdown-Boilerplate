@@ -99,6 +99,8 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'Sanic':'http://i.imgur.com/Y6etmna.png',
 		'feelstab':'http://www.sherv.net/cm/emoticons/fighting/stabbing.gif',
 		'feelshigh':'http://i.imgur.com/s9I2bxp.jpg?1',
+		'feelsdyna':'http://i.imgur.com/pqkCFZx.png',
+		'feelskaneki':'http://i.imgur.com/h97QxFN.png',
 		'llamaconfuse':'http://orig01.deviantart.net/7863/f/2013/347/1/6/llama_emoji_38__confused___v2__by_jerikuto-d6uwuuu.gif',
 		'xoxo':'http://i.imgur.com/Yyw9ICj.png',
 	});
