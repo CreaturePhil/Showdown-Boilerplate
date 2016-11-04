@@ -4,7 +4,7 @@
   **************/
 
   body {
-    background: #EEE url("http://i.imgur.com/kBU4mQc.png") no-repeat left fixed;
+    background: #EEE url("http://i.imgur.com/6Wbik2f.png") no-repeat left fixed;
   }
 
 .button{color:black;background:#ff9966!important;border:solid 1px black!important}.menugroup
@@ -540,56 +540,6 @@
         background:rgba(244, 244, 244, 0.5)
   }
 
-/*Custom PM Box*/
-.pm-window-charizard8888 h3 {
-  background: Red url("http://pldh.net/media/pokecons_action/006.gif") no-repeat !important;
-  background-position: 225px -8px !important;
-  color: #FFE697 !important;
-  text-shadow: 0px 0px 1px #4d2600 !important;
-  border-color: #ff0000 !important;
-}
-
-.pm-window-charizard8888 h3:hover, .pm-window-charizard8888.focused h3, .pm-window-charizard8888.focused h3:hover {
-  background: #fb9800 url("http://pldh.net/media/pokecons_action/006.gif") no-repeat !important;
-  background-position: 225px -8px !important;
-  color: #FFE697 !important;
-  text-shadow: 0px 0px 0px  !important;
-  border-color: #ff0000 !important;
-}
-
-.pm-window-charizard8888 h3 small, .pm-window-charizard8888 h3 .minimizebutton, .pm-window-charizard8888 h3 .closebutton, .pm-window-charizard8888 h3:hover .minimizebutton {
-  color: #ffe700 !important;
-}
-
-.pm-window-charizard8888 h3 .closebutton:hover + .minimizebutton.minimizebutton {
-  color: #ffe700 !important;
-}
-
-.pm-window-charizard8888 h3 .closebutton:hover {
-  color: #ffe700 !important;
-}
-
-.pm-window-charizard8888 h3 .minimizebutton:hover {
-  color: #ffe700 !important;
-}
-
-.pm-window-charizard8888 .pm-log, .pm-window-charizard8888.focused .pm-log {
-  background: rgba(255, 230, 151, 0.9) url("http://i.imgur.com/Of2r0d5.png") top right no-repeat !important;
-  border-color: #ff0000 !important;
-}
-
-.pm-window-charizard8888 .pm-log-add, .pm-window-charizard8888.focused .pm-log-add {
-  background: #fb9800 !important;
-  border-color: #ff0000 !important;
-}
-
-.pm-window-charizard8888 .pm-log-add .textbox {
-  border-color: #ff0000 !important;
-  background: rgba(255, 230 , 151, 0.95) !important;
-  color: #000 !important;
-}
-
-/*Custom PM Box-end*/
 
 /*************************************
   * Userlist Icons *
