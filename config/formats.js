@@ -2460,6 +2460,44 @@ exports.Formats = [
             pokemon.types = pokemon.template.types = types;
         },
     },
+    {
+        name: "Random Camomons Plus Plus",
+        desc: [
+            "Pok&eacute;mon change type to match their moves. Hence, a Pokemon can now have a maximum of 4 types.",
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
+        ],
+        section: "Randomized Metas",
+        team: 'random',
+
+        ruleset: ['Random Battle', 'Team Preview'],
+        onBegin: function () {
+            let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+            for (let i = 0, len = allPokemon.length; i < len; i++) {
+                let pokemon = allPokemon[i];
+                let types = [this.getMove(pokemon.moves[0]).type], type = {};
+                type[this.getMove(pokemon.moves[0]).type]=true;
+                for(let j=1;j<pokemon.moves.length;j++)
+                {
+                if (pokemon.moves[j] && !type[this.getMove(pokemon.moves[j]).type]) { types.push(this.getMove(pokemon.moves[j]).type); type[this.getMove(pokemon.moves[j]).type]=true; }
+                }
+                pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
+                pokemon.types = pokemon.template.types = types;
+            }
+        },
+        onSwitchIn(pokemon) {
+                this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+        },
+        onAfterMega: function (pokemon) {
+            let types = [this.getMove(pokemon.moves[0]).type], type = {};
+                type[this.getMove(pokemon.moves[0]).type]=true;
+                for(let j=1;j<pokemon.moves.length;j++)
+                {
+                if (pokemon.moves[j] && !type[this.getMove(pokemon.moves[j]).type]) { types.push(this.getMove(pokemon.moves[j]).type); type[this.getMove(pokemon.moves[j]).type]=true; }
+                }
+                pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
+                pokemon.types = pokemon.template.types = types;
+        },
+    },
 		{
 		name:"Random Open House",
 		desc: ["Every 5 turns, one of Trick Room, Magic Room or Wonder Room is set up.","&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
