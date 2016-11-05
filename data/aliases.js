@@ -471,5 +471,12 @@ exports.BattleAliases = {
 	"zmeeed": "latias",
 	"loominite": "sluxray",
 	"diarmuidodyna": "suicune",
+	"flufi:raichu",
+	"falcon:samurott",
+	"thetruefalcon:samurott",
+	"amberdillo:flygon",
+	"flareondriod:Flareon",
+	"pikachuun:pikachu",
+	"pikaxreme:pikachu".
 	"xprienzo": "reshiram",
 };
