@@ -473,10 +473,10 @@ exports.BattleAliases = {
 	"diarmuidodyna": "suicune",
 	"flufi": "raichu",
 	"falcon": "samurott",
-	"thetruefalcon": samurott",
+	"thetruefalcon": "samurott",
 	"amberdillo": "flygon",
 	"flareondriod": "Flareon",
 	"pikachuun": "pikachu",
-	"pikaxreme": pikachu".
+	"pikaxreme": "pikachu".
 	"xprienzo": "reshiram",
 };
