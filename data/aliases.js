@@ -469,14 +469,14 @@ exports.BattleAliases = {
 	"flareondriod": "flareon",
 	"demkyogres": "kyogre-primal",
 	"zmeeed": "latias",
-	"loominite": "sluxray",
+	"loominite": "luxray",
 	"diarmuidodyna": "suicune",
-	"flufi:raichu",
-	"falcon:samurott",
-	"thetruefalcon:samurott",
-	"amberdillo:flygon",
-	"flareondriod:Flareon",
-	"pikachuun:pikachu",
-	"pikaxreme:pikachu".
+	"flufi": "raichu",
+	"falcon": samurott",
+	"thetruefalcon": samurott",
+	"amberdillo": "flygon",
+	"flareondriod": "Flareon",
+	"pikachuun": "pikachu",
+	"pikaxreme": pikachu".
 	"xprienzo": "reshiram",
 };
