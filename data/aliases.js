@@ -472,7 +472,7 @@ exports.BattleAliases = {
 	"loominite": "luxray",
 	"diarmuidodyna": "suicune",
 	"flufi": "raichu",
-	"falcon": samurott",
+	"falcon": "samurott",
 	"thetruefalcon": samurott",
 	"amberdillo": "flygon",
 	"flareondriod": "Flareon",
