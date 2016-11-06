@@ -33,7 +33,7 @@ exports.BattleScripts = {
 							let rand = 0;
 							if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 							let target = possibleTargets[rand];
-							let ability = this.getAbility(target.abilitwo);
+							let ability = target.abilitwo;
 							let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
 							if (bannedAbilities[ability]) {
 								possibleTargets.splice(rand, 1);
