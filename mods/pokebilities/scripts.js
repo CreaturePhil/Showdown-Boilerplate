@@ -41,9 +41,9 @@ exports.BattleScripts = {
 							}
 							this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 							let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
-							let sec = statusability[pokemon.abilitwo]? "other"+pokemon.abilitwo : pokemon.abilitwo;
+							let tempab = statusability[target.abilitwo]? "other"+target.abilitwo : target.abilitwo;
 							pokemon.removeVolatile("trace", pokemon);
-							pokemon.addVolatile(sec, pokemon);
+							pokemon.addVolatile(tempab, pokemon);
 							return;
 						}
 					},
@@ -52,22 +52,19 @@ exports.BattleScripts = {
 					rating: 3,
 					num: 36,
 					effectType: "Ability", 
-					noCopy: true,
+					noCopy: true
 				};
 			});
 	},
 	pokemon: {
-		isGrounded(negateImmunity) {
-			if ('gravity' in this.battle.pseudoWeather) return true;
-			if ('ingrain' in this.volatiles) return true;
-			if ('smackdown' in this.volatiles) return true;
-			let item = (this.ignoringItem() ? '' : this.item);
-			if (item === 'ironball') return true;
-			if (!negateImmunity && this.hasType('Flying')) return false;
-			if ((this.hasAbility('levitate') || this.volatiles["otherlevitate"]) && !this.battle.suppressingAttackEvents()) return null;
-			if ('magnetrise' in this.volatiles) return false;
-			if ('telekinesis' in this.volatiles) return false;
-			return item !== 'airballoon';
+		hasAbility: function(ability) {
+			if (this.ignoringAbility()) return false;
+			if (this.volatiles[ability] || this.volatiles["other"+ability]) return true;
+			let ownAbility = this.ability;
+			if (!Array.isArray(ability)) {
+				return ownAbility === toId(ability);
+			}
+			return ability.map(toId).includes(ownAbility);
 		}
 	},
 };
