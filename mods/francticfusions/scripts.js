@@ -51,7 +51,7 @@ exports.BattleScripts = {
 					name: "Trace",
 					effectType: "Ability", 
 					noCopy:true,
-				},
+				};
 		});
 	},
 	pokemon: {
