@@ -4693,7 +4693,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		onValidateSet: function(set, teamHas) {
 			let problems = [];
 		        if (!set.name || set.name === set.species) {
-				return this.validateSet(set) || [];
+				return this.validateSet(set, teamHas) || [];
 			}
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.name);
