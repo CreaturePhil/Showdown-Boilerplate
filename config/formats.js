@@ -4682,8 +4682,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if (pokemon.fusion) {
 				this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
 			}
-			pokemon.addVolatile(pokemon.abilitwo, pokemon);//Second Ability! YAYAYAY
-			// pokemon.volatiles[pokemon.abilitwo].noCopy = true; //Prevent it from being Baton Passed | Disabled because was causing a crash.
+			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+			let sec = statusability[pokemon.abilitwo]? "other"+pokemon.abilitwo : pokemon.abilitwo;
+			pokemon.addVolatile(sec, pokemon);//Second Ability! YAYAYAY
 		},
 		onAfterMega: function(pokemon)
 		{
