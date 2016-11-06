@@ -4691,10 +4691,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
 		onValidateSet: function(set) {
-		        if (!set.name || set.name === set.species) return this.validateSet(set);
+			let problems = [];
+		        if (!set.name || set.name === set.species) {
+				problems = this.validateSet(set);
+				if(problems && problems!==[]) return problems;
+				else return;
+			}
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.name);
-			let problems = [];
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
 			if (!crossTemplate.exists) return;
 			let canHaveAbility = false;
