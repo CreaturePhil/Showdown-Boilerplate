@@ -4691,7 +4691,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
 		onValidateSet: function(set) {
-		        if (!set.name || set.name === set.species) return;
+		        if (!set.name || set.name === set.species) return this.validateSet(set);
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.name);
 			let problems = [];
