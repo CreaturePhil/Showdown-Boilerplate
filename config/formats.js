@@ -4691,9 +4691,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        pokemon.types = pokemon.fusetype;
 		        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
-		validateSet: function(set, teamHas) {
+		onValidateSet: function(set, teamHas) {
 			let problems = [];
-		        if (!set.name || set.name === set.species) return this.validateSet(set, teamHas) || [];
+		        if (!set.name || set.name === set.species) return;
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.name);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
