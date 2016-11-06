@@ -41,9 +41,9 @@ exports.BattleScripts = {
 							}
 							this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 							let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
-							let sec = statusability[pokemon.abilitwo]? "other"+pokemon.abilitwo : pokemon.abilitwo;
+							pokemon.tempab = statusability[target.abilitwo]? "other"+target.abilitwo : target.abilitwo;
 							pokemon.removeVolatile("trace", pokemon);
-							pokemon.addVolatile(sec, pokemon);
+							pokemon.addVolatile(pokemon.tempab, pokemon);
 							return;
 						}
 					},
