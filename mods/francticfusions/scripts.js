@@ -52,7 +52,6 @@ exports.BattleScripts = {
 					effectType: "Ability", 
 					noCopy:true,
 				},
-			}
 		});
 	},
 	pokemon: {
