@@ -32,18 +32,14 @@ exports.BattleScripts = {
 						while (possibleTargets.length) {
 							let rand = 0;
 							if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
-							let target = possibleTargets[rand];
-							let ability = this.getAbility(target.abilitwo);
-							let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
-							if (bannedAbilities[ability]) {
-								possibleTargets.splice(rand, 1);
-								continue;
+							let target = possibleTargets[rand], abe=target.innates[this.random(target.innates.length)];
+							let ability = this.getStatus(abe).id;
+							let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, otherzenmode:1};
+							if(!bannedAbilities[ability]) {
+								this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+								pokemon.removeVolatile("trace", pokemon);
+								pokemon.addVolatile(ability, pokemon);
 							}
-							this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
-							let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
-							let tempab = statusability[target.abilitwo]? "other"+target.abilitwo : target.abilitwo;
-							pokemon.removeVolatile("trace", pokemon);
-							pokemon.addVolatile(tempab, pokemon);
 							return;
 						}
 					},
@@ -52,7 +48,7 @@ exports.BattleScripts = {
 					rating: 3,
 					num: 36,
 					effectType: "Ability", 
-					noCopy: true
+					noCopy: true,
 				};
 			});
 	},
