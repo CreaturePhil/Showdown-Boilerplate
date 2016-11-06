@@ -4690,7 +4690,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        pokemon.types = pokemon.fusetype;
 		        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
-		onValidateSet: function(set) {
+		onValidateSet: function(set, teamHas) {
 			let problems = [];
 		        if (!set.name || set.name === set.species) {
 				return this.validateSet(set) || [];
