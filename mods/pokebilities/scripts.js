@@ -33,12 +33,11 @@ exports.BattleScripts = {
 							let rand = 0;
 							if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 							let target = possibleTargets[rand], abe=target.innates[this.random(target.innates.length)];
-							let ability = this.getStatus(abe).id;
 							let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, otherzenmode:1};
-							if(!bannedAbilities[ability]) {
-								this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+							if(!bannedAbilities[abe]) {
+								this.add('-ability', pokemon, abe, '[from] ability: Trace', '[of] ' + target);
 								pokemon.removeVolatile("trace", pokemon);
-								pokemon.addVolatile(ability, pokemon);
+								pokemon.addVolatile(abe, pokemon);
 							}
 							return;
 						}
