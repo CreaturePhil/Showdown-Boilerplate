@@ -35,26 +35,25 @@ exports.BattleScripts = {
 							let target = possibleTargets[rand];
 							let ability = this.battle.getAbility(target.abilitwo);
 							let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
-							if (bannedAbilities[ability.id]) {
+							if (bannedAbilities[target.ability]) {
 								possibleTargets.splice(rand, 1);
 								continue;
 							}
 							this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 							let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
-							let tempab = statusability[target.abilitwo]? "other"+target.abilitwo : target.abilitwo;
+							let abe = statusability[ability.id] ? ("other"+ability.id) : ability.id;
 							pokemon.removeVolatile("trace", pokemon);
-							pokemon.addVolatile(tempab, pokemon);
+							pokemon.addVolatile(abe, pokemon);
 							return;
 						}
 					},
 					id: "trace",
 					name: "Trace",
-					rating: 3,
-					num: 36,
 					effectType: "Ability", 
-					noCopy: true
-				};
-			});
+					noCopy:true,
+				},
+			}
+		});
 	},
 	pokemon: {
 		hasAbility: function(ability) {
