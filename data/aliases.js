@@ -477,6 +477,6 @@ exports.BattleAliases = {
 	"amberdillo": "flygon",
 	"flareondriod": "Flareon",
 	"pikachuun": "pikachu",
-	"pikaxreme": "pikachu".
+	"pikaxreme": "pikachu",
 	"xprienzo": "reshiram",
 };
