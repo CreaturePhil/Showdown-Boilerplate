@@ -1458,6 +1458,24 @@ exports.BattleAbilities = {
 		rating: 1.5,
 		num: 64,
 	},
+	/*"liquidvoice": {
+		desc: "This Pokemon's sound based moves change to Water Type.",
+		shortDesc: "This Pokemon's sound based moves change to Water Type.",
+		onModifyMove: function (move) {
+			if(move.flags['sound']) move.type = "Water";
+		},
+		id: "liquidvoice",
+		name: "Liquid Voice",
+	},
+	"longreach": {
+		desc: "This Pokemon's moves no longer make contact if they would.",
+		shortDesc: "This Pokemon's moves no longer make contact if they would.",
+		onModifyMove: function (move) {
+			if(move.flags['contact']) delete move.flags.contact;
+		},
+		id: "longreach",
+		name: "Long Reach",
+	},*/
 	"magicbounce": {
 		desc: "This Pokemon blocks certain status moves and instead uses the move against the original user.",
 		shortDesc: "This Pokemon blocks certain status moves and bounces them back to the user.",
