@@ -196,8 +196,12 @@ exports.avatarurl = '';
 // tourroom - specify a room to receive tournament announcements (defaults to
 // the room 'tournaments').
 // tourannouncements - announcements are only allowed in these rooms
+// tourdefaultplayercap - a set cap of how many players can be in a tournament
+// ratedtours - toggles tournaments being ladder rated (true) or not (false)
 exports.tourroom = '';
 exports.tourannouncements = [/* roomids */];
+exports.tourdefaultplayercap = 0;
+exports.ratedtours = false;
 
 // appealurl - specify a URL containing information on how users can appeal
 // disciplinary actions on your section. You can also leave this blank, in
