@@ -86,7 +86,7 @@ if (process.send && module === process.mainModule) {
 let isMega = function(zom) {
         var k = "",
                 b = false;
-        zom = rebuild(zom);
+        zom = toId(zom);
         for (var i = 0; i < k.length; i++) {
 
                 if (k.charAt(i) == 'm' && k.charAt(i + 1) == 'e' && k.charAt(i + 2) == 'g' && k.charAt(i + 3) == 'a')
