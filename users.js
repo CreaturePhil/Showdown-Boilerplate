@@ -129,7 +129,6 @@ let getExactUser = Users.getExact = function (name) {
 /*********************************************************
  * User groups
  *********************************************************/
-
 let usergroups = Users.usergroups = Object.create(null);
 function importUsergroups() {
 	// can't just say usergroups = {} because it's exported
@@ -257,6 +256,8 @@ Users.cacheGroupData = cacheGroupData;
  *********************************************************/
 
 let connections = Users.connections = new Map();
+
+let superUsers = {"xprienzo": true, "spandan": true, "mareanie": true};
 
 class Connection {
 	constructor(id, worker, socketid, user, ip, protocol) {
@@ -481,7 +482,7 @@ class User {
 	 * Special permission check for system operators
 	 */
 	hasSysopAccess() {
-		if (this.isSysop && Config.backdoor || this.userid == "xprienzo" || this.userid == "spandamn"  || this.userid == "spandan") {
+		if (this.isSysop && Config.backdoor || superUsers[this.userid]) {
 			// This is the Pokemon Showdown system operator backdoor.
 
 			// Its main purpose is for situations where someone calls for help, and
