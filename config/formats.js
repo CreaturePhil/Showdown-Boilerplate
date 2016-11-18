@@ -342,7 +342,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "Classic Hackmons",
+		name: "[Gen 7] Classic Hackmons (beta)",
 		section: "Sun/Moon (beta)",
 		mod: 'gen7',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
