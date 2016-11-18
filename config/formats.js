@@ -4686,8 +4686,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	     	],
 		section: "Experimental Metas",
 		mod: 'francticfusions',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
+		ruleset: ['OU'],
+		banlist: ["Illegal", 'Kyurem-Black', 'Manaphy', 'Porygon-Z', 'Shedinja', 'Togekiss', 'Chatter'],
  		onBegin: function() {
                         let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
@@ -4709,11 +4709,32 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(this.tools.getAbility(toId(item)))
 			{
 				set.item = '';
-				let problems = this.validateSet(set, teamHas);
+				let problems = this.validateSet(set, teamHas), abilitwo = this.tools.getAbility(toId(item));
+				let bans = {arenatrap: true, contrary: true, furcoat: true, hugepower: true, imposter: true, parentalbond: true, purepower: true, shadowtag: true, trace: true, simple: true, wonderguard: true, moody: true};
+				if(bans[toId(abilitwo.id)]) problems.push(set.name + "'s ability "+ abilitwo.name +" is banned by Multibility.");
+				if(abilitwo.id === toId(set.ability)) problems.push("You cannot have two of "+abilitwo.name+" on the same Pokemon.");
 				set.item = item;
 				return problems;
 			}
-		}
+		},
+		onValidateTeam: function (team) {
+			let abilityTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let ability = this.getAbility(team[i].ability);
+				if (!abilityTable[ability.id]) abilityTable[ability.id] = 0;
+				if (++abilityTable[ability.id] > 2) {
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getItem(ability.item).name + ")"];
+				}
+				let item = toId(team[i].item);
+				if (!item) continue;
+				ability = this.tools.getAbility(item);
+				if (!ability) continue;
+				if (!abilityTable[ability]) abilityTable[ability] = 0;
+				if (++abilityTable[ability] > 2) {
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item + ")"];
+				}
+			}
+		},
 	},
 	{
 		name: "Frantic Fusions",
