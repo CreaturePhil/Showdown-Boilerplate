@@ -4661,7 +4661,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 		},
 		onValidateSet: function(set) {
-			if(this.getAbility(set.item)) set.item ="";
+			if(this.getAbility(set.item)) return [];
 		},
 	},
 	{
