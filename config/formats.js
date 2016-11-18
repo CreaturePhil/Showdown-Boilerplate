@@ -4709,15 +4709,16 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(this.tools.getAbility(toId(item)))
 			{
 				set.item = '';
-				let problems = this.validateSet(set, teamHas), abilitwo = this.tools.getAbility(toId(item));
+				let problems = this.validateSet(set, teamHas) || [];
+				let abilitwo = this.tools.getAbility(toId(item));
 				let bans = {'arenatrap': true, 'contrary': true, 'furcoat': true, 'hugepower': true, 'imposter': true, 'parentalbond': true, 'purepower': true, 'shadowtag': true, 'trace': true, 'simple': true, 'wonderguard': true, 'moody': true};
-				if(bans[toId(abilitwo.id)]) problems.push(set.name + "'s ability "+ abilitwo.name +" is banned by Multibility.");
+				if(bans[toId(abilitwo.id)]) problems.push(set.species + "'s ability "+ abilitwo.name +" is banned by Multibility.");
 				if(abilitwo.id === toId(set.ability)) problems.push("You cannot have two of "+abilitwo.name+" on the same Pokemon.");
 				set.item = item;
 				return problems;
 			}
 		},
-		/*onValidateTeam: function (team) {
+		onValidateTeam: function (team) {
 			let abilityTable = {};
 			for (let i = 0; i < team.length; i++) {
 				let ability = this.getAbility(team[i].ability);
@@ -4731,10 +4732,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				if (!ability) continue;
 				if (!abilityTable[ability]) abilityTable[ability] = 0;
 				if (++abilityTable[ability] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item + ")"];
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + ")"];
 				}
 			}
-		},*/
+		},
 	},
 	{
 		name: "Frantic Fusions",
