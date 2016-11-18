@@ -4636,7 +4636,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{
-		name: "Abilitwo",
+		name: "Multibility",
 		desc: [
 	     		"&bullet; Put your second ability in the item slot.",
 	     	],
@@ -4661,7 +4661,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 		},
 		validateSet: function(set) {
-			if(this.getAbility(set.item)) set.item= "pokeball";
+			if(this.getAbility(toId(set.item))) set.item = "pokeball";
 		},
 	},
 	{
