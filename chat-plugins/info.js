@@ -26,10 +26,11 @@ exports.commands = {
 		if (room && room.id === 'staff' && !this.runBroadcast()) return;
 		if (!room) room = Rooms.global;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
+		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (!targetUser) {
+			if (showAll) return this.parse('/checkpunishment ' + target);
 			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
-		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (showAll && !user.trusted && targetUser !== user) {
 			return this.errorReply("/alts - Access denied.");
 		}
@@ -175,6 +176,65 @@ exports.commands = {
 	},
 	whoishelp: ["/whois - Get details on yourself: alts, group, IP address, and rooms.",
 		"/whois [username] - Get details on a username: alts (Requires: % @ * & ~), group, IP address (Requires: @ * & ~), and rooms."],
+
+	'!checkpunishment': true,
+	checkpunishment: function (target, room, user) {
+		if (!user.trusted) {
+			return this.errorReply("/checkpunishment - Access denied.");
+		}
+		let userid = toId(target);
+		let buf = Chat.html`<strong class="username">${target}</strong> <em style="color:gray">(offline)</em><br /><br />`;
+		let atLeastOne = false;
+
+		let punishment = Punishments.userids.get(userid);
+		if (punishment) {
+			const [punishType, punishUserid, , reason] = punishment;
+			const punishName = {BAN: "BANNED", LOCK: "LOCKED", NAMELOCK: "NAMELOCKED"}[punishType] || punishType;
+			buf += `${punishName}: ${punishUserid}`;
+			let expiresIn = Punishments.checkLockExpiration(userid);
+			if (expiresIn) buf += expiresIn;
+			if (reason) buf += ` (reason: ${reason})`;
+			buf += '<br />';
+			atLeastOne = true;
+		}
+
+		if (!user.can('alts') && !atLeastOne) {
+			let hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.id, userid);
+			if (!hasJurisdiction) {
+				return this.errorReply("/checkpunishment - User not found.");
+			}
+		}
+
+		let roomPunishments = ``;
+		for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
+			const curRoom = Rooms.global.chatRooms[i];
+			if (!curRoom || curRoom.isPrivate === true) continue;
+			let punishment = Punishments.roomUserids.nestedGet(curRoom.id, userid);
+			let punishDesc = ``;
+			if (punishment) {
+				const [punishType, punishUserid, expireTime, reason] = punishment;
+				punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+				if (!punishDesc) punishDesc = `punished`;
+				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
+
+				let expiresIn = new Date(expireTime).getTime() - Date.now();
+				let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
+				if (expiresIn > 1) punishDesc += ` for ${expiresDays} day${Chat.plural(expiresDays)}`;
+				if (reason) punishDesc += `: ${reason}`;
+			}
+			if (!punishDesc) continue;
+			if (roomPunishments) roomPunishments += `, `;
+			roomPunishments += `<a href="/${curRoom}">${curRoom}</a> (${punishDesc})`;
+		}
+		if (roomPunishments) {
+			buf += `Room punishments: ` + roomPunishments;
+			atLeastOne = true;
+		}
+		if (!atLeastOne) {
+			buf += `This username has no punishments associated with it.`;
+		}
+		this.sendReplyBox(buf);
+	},
 
 	'!host': true,
 	host: function (target, room, user, connection, cmd) {
@@ -432,17 +492,27 @@ exports.commands = {
 		let pokemon = Tools.getTemplate(target);
 		let type1 = Tools.getType(targets[0]);
 		let type2 = Tools.getType(targets[1]);
+		let type3 = Tools.getType(targets[2]);
 
 		if (pokemon.exists) {
 			target = pokemon.species;
-		} else if (type1.exists && type2.exists && type1 !== type2) {
-			pokemon = {types: [type1.id, type2.id]};
-			target = type1.id + "/" + type2.id;
-		} else if (type1.exists) {
-			pokemon = {types: [type1.id]};
-			target = type1.id;
 		} else {
-			return this.sendReplyBox("" + Chat.escapeHTML(target) + " isn't a recognized type or pokemon.");
+			let types = [];
+			if (type1.exists) {
+				types.push(type1.id);
+				if (type2.exists && type2 !== type1) {
+					types.push(type2.id);
+				}
+				if (type3.exists && type3 !== type1 && type3 !== type2) {
+					types.push(type3.id);
+				}
+			}
+
+			if (types.length === 0) {
+				return this.sendReplyBox("" + Chat.escapeHTML(target) + " isn't a recognized type or pokemon.");
+			}
+			pokemon = {types: types};
+			target = types.join("/");
 		}
 
 		let weaknesses = [];
@@ -459,11 +529,17 @@ exports.commands = {
 				case 2:
 					weaknesses.push("<b>" + type + "</b>");
 					break;
+				case 3:
+					weaknesses.push("<b><i>" + type + "</i></b>");
+					break;
 				case -1:
 					resistances.push(type);
 					break;
 				case -2:
 					resistances.push("<b>" + type + "</b>");
+					break;
+				case -3:
+					resistances.push("<b><i>" + type + "</i></b>");
 					break;
 				}
 			} else {
@@ -920,7 +996,6 @@ exports.commands = {
 		}
 		return this.sendReplyBox('Base ' + statValue + (calcHP ? ' HP ' : ' ') + 'at level ' + level + ' with ' + iv + ' IVs, ' + ev + (nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')) + ' EVs' + (modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : '') + ': <b>' + Math.floor(output) + '</b>.');
 	},
-
 	statcalchelp: ["/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.",
 		"!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.",
 		"Inputing 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature."],
@@ -949,16 +1024,22 @@ exports.commands = {
 	groups: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
+			"<b>Room Rank</b><br />" +
 			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
-			"% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />" +
-			"@ <b>Moderator</b> - The above, and they can ban users<br />" +
+			"% <b>Driver</b> - The above, and they can mute and warn<br />" +
+			"@ <b>Moderator</b> - The above, and they can room ban users<br />" +
 			"* <b>Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
-			"&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />" +
-			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br />" +
-			"~ <b>Administrator</b> - They can do anything, like change what this message says"
+			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br /><br />" +
+			"<b>Global Rank</b><br />" +
+			"+ <b>Global Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
+			"% <b>Global Driver</b> - The above, and they can also lock users and check for alts<br />" +
+			"@ <b>Global Moderator</b> - The above, and they can globally ban users<br />" +
+			"* <b>Global Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
+			"&amp; <b>Global Leader</b> - The above, and they can promote to global moderator and force ties<br />" +
+			"~ <b>Global Administrator</b> -  They can do anything, like change what this message says"
 		);
 	},
-	groupshelp: ["/groups - Explains what the + % @ # & next to people's names mean.",
+	groupshelp: ["/groups - Explains what the symbols (like % and @) before people's names mean.",
 		"!groups - Shows everyone that information. Requires: + % @ * # & ~"],
 
 	'!opensource': true,
@@ -1564,7 +1645,7 @@ exports.commands = {
 		if (!this.can('potd')) return false;
 
 		Config.potd = target;
-		Simulator.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
+		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
 		if (target) {
 			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
 			this.logModCommand("The Pok\u00e9mon of the Day was changed to " + target + " by " + user.name + ".");

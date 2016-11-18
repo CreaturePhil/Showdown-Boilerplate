@@ -196,8 +196,12 @@ exports.avatarurl = '';
 // tourroom - specify a room to receive tournament announcements (defaults to
 // the room 'tournaments').
 // tourannouncements - announcements are only allowed in these rooms
+// tourdefaultplayercap - a set cap of how many players can be in a tournament
+// ratedtours - toggles tournaments being ladder rated (true) or not (false)
 exports.tourroom = '';
 exports.tourannouncements = [/* roomids */];
+exports.tourdefaultplayercap = 0;
+exports.ratedtours = false;
 
 // appealurl - specify a URL containing information on how users can appeal
 // disciplinary actions on your section. You can also leave this blank, in
@@ -244,7 +248,6 @@ exports.replsocketmode = 0o600;
 //     - lock: locking (ipmute) and unlocking.
 //     - receivemutedpms: Receive PMs from muted users.
 //     - forcerename: /fr command.
-//     - redirect: /redir command.
 //     - ip: IP checking.
 //     - alts: Alt checking.
 //     - modlog: view the moderator logs.
