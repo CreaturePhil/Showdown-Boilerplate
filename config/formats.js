@@ -4664,9 +4664,16 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				pokemon.addVolatile(sec, pokemon);//Second Ability! YAYAYAY
 			}
 		},
-		validateSet: function(set) {
-			if(this.getAbility(toId(set.item))) set.item = "pokeball";
-		},
+		validateSet(set, teamHas) { 
+			let item = set.item;
+			if(this.getAbility(item))
+			{
+				set.item = ''; 
+				let problems = this.validateSet(set, teamHas); 
+				set.item = item; 
+				return problems; 
+			}
+		}
 	},
 	{
 		name: "Frantic Fusions",
