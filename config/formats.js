@@ -4660,8 +4660,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				pokemon.addVolatile(sec, pokemon);//Second Ability! YAYAYAY
 			}
 		},
-		onValidateSet: function(set) {
-			if(this.getAbility(set.item)) return [];
+		validateSet: function(set) {
+			if(this.getAbility(set.item)) set.item= "pokeball";
 		},
 	},
 	{
