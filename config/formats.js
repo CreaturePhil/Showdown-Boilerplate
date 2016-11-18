@@ -2291,7 +2291,7 @@ exports.Formats = [
 	},
 		{
 		name: "[Seasonal] Octoberfest",
-		section: "Randomized Formats",
+		section: "Randomized Metas",
 
 		team: 'randomSeasonalOF',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
@@ -2573,7 +2573,7 @@ exports.Formats = [
 			}
 		},
 	},
-	
+
 	{
 	    name: "Random Top Percentage",
 	    section: "Randomized Metas",
@@ -2604,7 +2604,7 @@ exports.Formats = [
 		}
 	    },
 		/*onAfterDamage: function(damage, target, source, move) {
-		
+
 		},*/
 	},
 	       {
@@ -2998,7 +2998,7 @@ exports.Formats = [
 					for(let i=0;i<pokemon.moveset.length;i++)
 					{
 						if(!pokemon.volatiles.choicelock)
-						{		
+						{
 							pokemon.moveset[i].disabled=false;
 							pokemon.moveset[i].disabledSource = '';
 							pokemon.baseMoveset[i].disabled=false;
@@ -3976,8 +3976,8 @@ return problems;
 	    onBegin: function() {
 		for (let p = 0; p < this.sides.length; p++) {
 		    for (let i = 0; i < this.sides[p].pokemon.length; i++) {
-			this.sides[p].pokemon[i].om = [{}]; 
-			this.sides[p].pokemon[i].obm = [{}]; 
+			this.sides[p].pokemon[i].om = [{}];
+			this.sides[p].pokemon[i].obm = [{}];
 			for (let k in this.sides[p].pokemon[i].baseMoveset[0]) {
 			    this.sides[p].pokemon[i].om[0][k] = this.sides[p].pokemon[i].moveset[0][k];
 			    this.sides[p].pokemon[i].obm[0][k] = this.sides[p].pokemon[i].baseMoveset[0][k];
@@ -4668,14 +4668,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				pokemon.addVolatile(sec, pokemon);//Second Ability! YAYAYAY
 			}
 		},
-		validateSet: function(set, teamHas) { 
+		validateSet: function(set, teamHas) {
 			let item = set.item;
 			if(this.getAbility(item))
 			{
-				set.item = ''; 
-				let problems = this.validateSet(set, teamHas); 
-				set.item = item; 
-				return problems; 
+				set.item = '';
+				let problems = this.validateSet(set, teamHas);
+				set.item = item;
+				return problems;
 			}
 		}
 	},
