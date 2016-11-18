@@ -219,10 +219,12 @@ exports.commands = {
 			this.update();
 		});
 	},
-	itemsearchhelp: ["/itemsearch [move description] - finds items that match the given key words.",
-	"Command accepts natural language. (tip: fewer words tend to work better)",
-	"Searches with \"fling\" in them will find items with the specified Fling behavior.",
-	"Searches with \"natural gift\" in them will find items with the specified Natural Gift behavior."],
+	itemsearchhelp: [
+		"/itemsearch [move description] - finds items that match the given key words.",
+		"Command accepts natural language. (tip: fewer words tend to work better)",
+		"Searches with \"fling\" in them will find items with the specified Fling behavior.",
+		"Searches with \"natural gift\" in them will find items with the specified Natural Gift behavior.",
+	],
 
 	'!learn': true,
 	learnset: 'learn',
@@ -354,7 +356,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			let targetInt = 0;
 			if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) targetInt = parseInt(target.substr(3).trim());
-			if (0 < targetInt && targetInt < 7) {
+			if (0 < targetInt && targetInt < 8) {
 				let invalid = validParameter("gens", targetInt, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup.gens[targetInt] = !isNotSearch;
