@@ -4723,7 +4723,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				let ability = this.getAbility(team[i].ability);
 				if (!abilityTable[ability.id]) abilityTable[ability.id] = 0;
 				if (++abilityTable[ability.id] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getItem(ability.item).name + ")"];
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getAbility(toId(team[i].item)).name + " [Item])"];
 				}
 				let item = toId(team[i].item);
 				if (!item) continue;
