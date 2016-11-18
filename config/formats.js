@@ -4636,6 +4636,35 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{
+		name: "Abilitwo",
+		desc: [
+	     		"&bullet; Put your second ability in the item slot.",
+	     	],
+		section: "Experimental Metas",
+		mod: 'francticfusions',
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
+ 		onBegin: function() {
+                        let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				if(this.getAbility(toId(pokemon.item)));
+                                	pokemon.abilitwo = toId(pokemon.item);
+			}
+		},
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+		        if(pokemon.abilitwo && this.getAbility(pokemon.abilitwo)) {
+				let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+				let sec = statusability[pokemon.abilitwo]? "other"+pokemon.abilitwo : pokemon.abilitwo;
+				pokemon.addVolatile(sec, pokemon);//Second Ability! YAYAYAY
+			}
+		},
+		onValidateSet: function(set) {
+			if(this.getAbility(set.item)) set.item ="";
+		},
+	},
+	{
 		name: "Frantic Fusions",
 		desc: [
 	     		"&bullet; A non pet mod version of Fusion Evolution. <BR /> &bullet; The resultant Pokemon has the primary types of the parents, and the averaged stats.<br />&bullet;You can choose any ability from the original Pokemon, and you also get the primary ability of the second Pokemon (The one you put in the nickname). <br />&bullet; Use !fuse if needed.",
