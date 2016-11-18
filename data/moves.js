@@ -8780,8 +8780,8 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
-		shortDesc: "Protects from attacks. Contact: lowers Atk by 2.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+		shortDesc: "Protects from attacks. Contact try: lowers Atk by 2.",
 		id: "kingsshield",
 		isViable: true,
 		name: "King's Shield",
@@ -8800,6 +8800,12 @@ exports.BattleMovedex = {
 			duration: 1,
 			onStart: function (target) {
 				this.add('-singleturn', target, 'Protect');
+			},
+			onSourcePrepareHit: function (source, target, effect) {
+				if (effect.effectType !== 'Move' || !effect.flags['protect'] || effect.category === 'Status') return;
+				if (effect.flags['contact']) {
+					effect.ignoreImmunity = true;
+				}
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
@@ -13034,7 +13040,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, authentic: 1, mystery: 1},
 		onHit: function (target, source) {
-			if (source.template && source.template.num === 493) return false;
+			if (source.template && (source.template.num === 493 || source.template.num === 773)) return false;
 			this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
 			source.types = target.getTypes(true);
 			source.addedType = target.addedType;
@@ -15276,24 +15282,18 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user swaps its Speed stat stage changes with the target.", // TODO: is it actually raw Speed stat?
-		shortDesc: "Swaps Speed stat stages with target.",
+		desc: "The user swaps its raw Speed stat with the target.",
+		shortDesc: "Swaps Speed stat with target.",
 		id: "speedswap",
 		name: "Speed Swap",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1},
 		onHit: function (target, source) {
-			let targetBoosts = {};
-			let sourceBoosts = {};
-
-			targetBoosts['spe'] = target.boosts['spe'];
-			sourceBoosts['spe'] = source.boosts['spe'];
-
-			source.setBoost(targetBoosts);
-			target.setBoost(sourceBoosts);
-
-			this.add('-swapboost', source, target, 'spe', '[from] move: Speed Swap');
+			const targetSpe = target.stats.spe;
+			target.stats.spe = source.stats.spe;
+			source.stats.spe = targetSpe;
+			this.add('-activate', source, 'move: Speed Swap', '[of] ' + target);
 		},
 		secondary: false,
 		target: "normal",

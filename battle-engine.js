@@ -192,7 +192,7 @@ class BattlePokemon {
 			// In Gen 6, Hidden Power is always 60 base power
 			this.hpPower = (this.battle.gen && this.battle.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60;
 		}
-		if (this.battle.gen >= 7) {
+		if (this.battle.gen >= 7 && desiredHPType) {
 			this.hpType = desiredHPType;
 		}
 
@@ -1201,8 +1201,8 @@ class BattlePokemon {
 	 * reality doesn't support setting a type to more than one type.
 	 */
 	setType(newType, enforce) {
-		// Arceus first type cannot be normally changed
-		if (!enforce && this.template.num === 493) return false;
+		// First type of Arceus, Silvally cannot be normally changed
+		if (!enforce && (this.template.num === 493 || this.template.num === 773)) return false;
 
 		if (!newType) throw new Error("Must pass type to setType");
 		this.types = (typeof newType === 'string' ? [newType] : newType);
