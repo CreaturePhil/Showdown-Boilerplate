@@ -4727,7 +4727,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				}
 				let item = toId(team[i].item);
 				if (!item) continue;
-				ability = this.tools.getAbility(item);
+				ability = this.getAbility(item);
 				if (!ability) continue;
 				if (!abilityTable[ability]) abilityTable[ability] = 0;
 				if (++abilityTable[ability] > 2) {
