@@ -4668,9 +4668,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				pokemon.addVolatile(sec, pokemon);//Second Ability! YAYAYAY
 			}
 		},
-		onValidateSet: function(set, teamHas) {
+		validateSet: function(set, teamHas) {
 			let item = set.item;
-			if(this.getAbility(item))
+			if(this.tools.getAbility(toId(item)))
 			{
 				set.item = '';
 				let problems = this.validateSet(set, teamHas);
