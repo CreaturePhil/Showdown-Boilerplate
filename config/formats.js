@@ -4710,7 +4710,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			{
 				set.item = '';
 				let problems = this.validateSet(set, teamHas), abilitwo = this.tools.getAbility(toId(item));
-				let bans = {arenatrap: true, contrary: true, furcoat: true, hugepower: true, imposter: true, parentalbond: true, purepower: true, shadowtag: true, trace: true, simple: true, wonderguard: true, moody: true};
+				let bans = {'arenatrap': true, 'contrary': true, 'furcoat': true, 'hugepower': true, 'imposter': true, 'parentalbond': true, 'purepower': true, 'shadowtag': true, 'trace': true, 'simple': true, 'wonderguard': true, 'moody': true};
 				if(bans[toId(abilitwo.id)]) problems.push(set.name + "'s ability "+ abilitwo.name +" is banned by Multibility.");
 				if(abilitwo.id === toId(set.ability)) problems.push("You cannot have two of "+abilitwo.name+" on the same Pokemon.");
 				set.item = item;
