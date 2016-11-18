@@ -341,6 +341,42 @@ exports.Formats = [
 		team: 'randomCC',
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
+	{
+		name: "Classic Hackmons",
+		section: "Sun/Moon (beta)",
+		mod: 'gen7',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		maxLevel: 100,
+		defaultLevel: 100,
+		onValidateSet: function (set) {
+			let template = this.getTemplate(set.species);
+			let item = this.getItem(set.item);
+			let problems = [];
+			if (template.isNonstandard) {
+				problems.push(set.species + ' is not a real Pokemon.');
+			}
+			if (item.isNonstandard) {
+				problems.push(item.name + ' is not a real item.');
+			}
+			let ability = {};
+			if (set.ability) ability = this.getAbility(set.ability);
+			if (ability.isNonstandard) {
+				problems.push(ability.name + ' is not a real ability.');
+			}
+			if (set.moves) {
+				for (let i = 0; i < set.moves.length; i++) {
+					let move = this.getMove(set.moves[i]);
+					if (move.isNonstandard) {
+						problems.push(move.name + ' is not a real move.');
+					}
+				}
+				if (set.moves.length > 4) {
+					problems.push((set.name || set.species) + ' has more than four moves.');
+				}
+			}
+			return problems;
+		}
+	},
 	// Randomized Metas
 	///////////////////////////////////////////////////////////////////
 	{
