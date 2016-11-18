@@ -3159,7 +3159,7 @@ exports.Formats = [
             "Each Pok&eacute;mon receives one base stat, depending on its position, from the Uber.",
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3579610/\">Gifts of the Gods</a>",
         ],
-        section: "Old OMoTMs",
+        section: "Old OMotMs",
         column: 3,
 
         ruleset: ['Ubers', 'Baton Pass Clause'],
