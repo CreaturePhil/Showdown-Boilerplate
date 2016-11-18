@@ -203,7 +203,7 @@ exports.BattleFormats = {
 			let battleForme = template.battleOnly && template.species;
 			if (battleForme) {
 				if (template.requiredAbility && set.ability !== template.requiredAbility) {
-					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen, Zygarde-Complete
 				}
 				if (template.requiredItem && item.name !== template.requiredItem) {
 					problems.push("" + template.species + " transforms in-battle with " + template.requiredItem + '.'); // Mega or Primal
@@ -291,12 +291,12 @@ exports.BattleFormats = {
 			this.add('clearpoke');
 			for (let i = 0; i < this.sides[0].pokemon.length; i++) {
 				let pokemon = this.sides[0].pokemon[i];
-				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*');
+				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 			for (let i = 0; i < this.sides[1].pokemon.length; i++) {
 				let pokemon = this.sides[1].pokemon[i];
-				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*');
+				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 		},

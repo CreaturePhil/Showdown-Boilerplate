@@ -5295,6 +5295,10 @@ exports.BattleFormatsData = {
 		],
 		tier: "OU",
 	},
+	greninjaash: {
+		requiredAbility: "Battle Bond",
+		battleOnly: true,
+	},
 	bunnelby: {
 		randomBattleMoves: ["agility", "earthquake", "return", "quickattack", "uturn", "stoneedge", "spikes", "bounce"],
 		tier: "LC",
@@ -5671,6 +5675,10 @@ exports.BattleFormatsData = {
 		eventOnly: true,
 		tier: "BL",
 	},
+	zygardecomplete: {
+		requiredAbility: "Power Construct",
+		battleOnly: true,
+	},
 	diancie: {
 		randomBattleMoves: ["reflect", "lightscreen", "stealthrock", "diamondstorm", "moonblast", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["diamondstorm", "moonblast", "reflect", "lightscreen", "safeguard", "substitute", "calmmind", "psychic", "dazzlinggleam", "protect"],
@@ -5882,54 +5890,71 @@ exports.BattleFormatsData = {
 	},
 	silvallybug: {
 		tier: "OU",
+		requiredItem: "Bug Memory",
 	},
 	silvallydark: {
 		tier: "OU",
+		requiredItem: "Dark Memory",
 	},
 	silvallydragon: {
 		tier: "OU",
+		requiredItem: "Dragon Memory",
 	},
 	silvallyelectric: {
 		tier: "OU",
+		requiredItem: "Electric Memory",
 	},
 	silvallyfairy: {
 		tier: "OU",
+		requiredItem: "Fairy Memory",
 	},
 	silvallyfighting: {
 		tier: "OU",
+		requiredItem: "Fighting Memory",
 	},
 	silvallyfire: {
 		tier: "OU",
+		requiredItem: "Fire Memory",
 	},
 	silvallyflying: {
 		tier: "OU",
+		requiredItem: "Flying Memory",
 	},
 	silvallyghost: {
 		tier: "OU",
+		requiredItem: "Ghost Memory",
 	},
 	silvallygrass: {
 		tier: "OU",
+		requiredItem: "Grass Memory",
 	},
 	silvallyground: {
 		tier: "OU",
+		requiredItem: "Ground Memory",
 	},
 	silvallyice: {
 		tier: "OU",
+		requiredItem: "Ice Memory",
 	},
 	silvallypoison: {
 		tier: "OU",
+		requiredItem: "Poison Memory",
 	},
 	silvallypsychic: {
 		tier: "OU",
+		requiredItem: "Psychic Memory",
 	},
 	silvallyrock: {
 		tier: "OU",
+		requiredItem: "Rock Memory",
 	},
 	silvallysteel: {
 		tier: "OU",
+		requiredItem: "Steel Memory",
 	},
 	silvallywater: {
 		tier: "OU",
+		requiredItem: "Water Memory",
 	},
 	minior: {
 		tier: "OU",

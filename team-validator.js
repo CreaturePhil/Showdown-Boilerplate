@@ -495,7 +495,7 @@ class Validator {
 				events:
 				for (let i = 0; i < eventPokemon.length; i++) {
 					let eventData = eventPokemon[i];
-					if (format.requirePentagon && eventData.generation < 6) continue;
+					if (format.requirePentagon && eventData.generation < tools.gen) continue;
 					if (eventData.level && set.level < eventData.level) continue;
 					if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
 					if (eventData.nature && set.nature !== eventData.nature) continue;
@@ -543,6 +543,9 @@ class Validator {
 		}
 		if (item.megaEvolves === template.species) {
 			template = tools.getTemplate(item.megaStone);
+		}
+		if (banlistTable['mega'] && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1}) {
+			problems.push(`Mega evolutions are banned.`);
 		}
 		if (template.tier) {
 			let tier = template.tier;
