@@ -32,7 +32,7 @@ exports.commands = {
 			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
 		if (showAll && !user.trusted && targetUser !== user) {
-			return this.errorReply("/alts - Access denied.");
+			return this.errorReply(`/${cmd} - Access denied.`);
 		}
 
 		let buf = Chat.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
@@ -183,6 +183,7 @@ exports.commands = {
 			return this.errorReply("/checkpunishment - Access denied.");
 		}
 		let userid = toId(target);
+		if (!userid) return this.errorReply("Please enter a valid username.");
 		let buf = Chat.html`<strong class="username">${target}</strong> <em style="color:gray">(offline)</em><br /><br />`;
 		let atLeastOne = false;
 
@@ -1829,8 +1830,10 @@ exports.commands = {
 
 		this.addBox(target);
 	},
-	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained.",
-	"!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & * with global authority OR # * with room authority"],
+	htmlboxhelp: [
+		"/htmlbox [message] - Displays a message, parsing HTML code contained.",
+		"!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & * with global authority OR # * with room authority",
+	],
 };
 
 process.nextTick(() => {
