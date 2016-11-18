@@ -4717,7 +4717,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				return problems;
 			}
 		},
-		onValidateTeam: function (team) {
+		/*onValidateTeam: function (team) {
 			let abilityTable = {};
 			for (let i = 0; i < team.length; i++) {
 				let ability = this.getAbility(team[i].ability);
@@ -4734,7 +4734,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item + ")"];
 				}
 			}
-		},
+		},*/
 	},
 	{
 		name: "Frantic Fusions",
