@@ -4700,8 +4700,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
                         let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
 				let pokemon = allPokemon[i];
-				if(this.getAbility(toId(pokemon.item)));
+				if(this.getAbility(toId(pokemon.item))) {
                                 	pokemon.abilitwo = toId(pokemon.item);
+					pokemon.item = "";
+				}
 			}
 		},
 		onSwitchInPriority: 1,
