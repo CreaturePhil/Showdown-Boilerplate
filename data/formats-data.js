@@ -5815,7 +5815,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	lycanroc: {
-		randomBattleMoves: ["swordsdance", "accelrock", "stoneedge", "crunch", "firefang"],
+		randomBattleMoves: ["swordsdance", "accelerock", "stoneedge", "crunch", "firefang"],
 		tier: "OU",
 	},
 	lycanrocmidnight: {
@@ -5825,6 +5825,9 @@ exports.BattleFormatsData = {
 	wishiwashi: {
 		randomBattleMoves: ["scald", "hydropump", "icebeam", "hiddenpowergrass", "earthquake"],
 		tier: "OU",
+	},
+	wishiwashischool: {
+		battleOnly: true,
 	},
 	mareanie: {
 		tier: "LC",
