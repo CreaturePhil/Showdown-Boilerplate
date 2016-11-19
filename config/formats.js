@@ -316,7 +316,17 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 7] OU",
+		name: "[Gen 7] OU (β)",
+		section: "Sun/Moon (beta)",
+		column: 2,
+
+		mod: 'gen7',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Shadow Tag'],
+		requirePentagon: true,
+	},
+	{
+		name: "[Gen 7] Pokebank OU (β)",
 		section: "Sun/Moon (beta)",
 		column: 2,
 
@@ -325,7 +335,15 @@ exports.Formats = [
 		banlist: ['Uber', 'Shadow Tag'],
 	},
 	{
-		name: "[Gen 7] Anything Goes (beta)",
+		name: "[Gen 7] Challenge Cup (β)",
+		section: "Sun/Moon (beta)",
+
+		mod: 'gen7',
+		team: 'randomCC',
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "[Gen 7] Pokebank AG (β)",
 		section: "Sun/Moon (beta)",
 		column: 2,
 
@@ -334,7 +352,21 @@ exports.Formats = [
 		banlist: ['Illegal', 'Unreleased'],
 	},
 	{
-		name: "[Gen 7] Doubles Anything Goes (beta)",
+		name: "[Gen 7] Pokebank Doubles OU (β)",
+		section: "Sun/Moon (beta)",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview'],
+		banlist: [
+			'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Lunala',
+			'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Soul Dew', 'Dark Void',
+			'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder', 'Gravity ++ Spore',
+		],
+	},
+	{
+		name: "[Gen 7] Pokebank Doubles AG (β)",
 		section: "Sun/Moon (beta)",
 
 		mod: 'gen7',
@@ -343,15 +375,7 @@ exports.Formats = [
 		banlist: ['Illegal', 'Unreleased'],
 	},
 	{
-		name: "[Gen 7] Challenge Cup (beta)",
-		section: "Sun/Moon (beta)",
-
-		mod: 'gen7',
-		team: 'randomCC',
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
-	},
-	{
-		name: "[Gen 7] VGC 2017 (beta)",
+		name: "[Gen 7] VGC 2017 (β)",
 		section: "Sun/Moon (beta)",
 
 		mod: 'gen7',
