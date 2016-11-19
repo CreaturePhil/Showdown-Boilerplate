@@ -438,6 +438,7 @@ exports.BattleMovedex = {
 		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		shortDesc: "Prevents the target from switching out.",
 		id: "anchorshot",
+		isViable: true,
 		name: "Anchor Shot",
 		pp: 20,
 		priority: 0,
@@ -1103,6 +1104,7 @@ exports.BattleMovedex = {
 		desc: "If the user is hit by a contact move this turn before it can execute this move, the attacker is burned.",
 		shortDesc: "Burns on contact with the user before it moves.",
 		id: "beakblast",
+		isViable: true,
 		name: "Beak Blast",
 		pp: 15,
 		priority: -3,
@@ -8580,7 +8582,7 @@ exports.BattleMovedex = {
 			let noInstruct = {
 				// TODO: fill this up
 			};
-			if (!target.lastMove || noInstruct[target.lastMove]) {
+			if (!target.lastMove || this.getMove(target.lastMove).isZ || noInstruct[target.lastMove]) {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
@@ -8704,7 +8706,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove: function (move, pokemon) {
-			move.type = this.runEvent('Plate', pokemon, null, 'judgment', 'Normal');
+			const item = pokemon.getItem();
+			if (item.id && item.onPlate && !item.zMove) {
+				move.type = item.onPlate;
+			}
 		},
 		secondary: false,
 		target: "normal",
@@ -9056,6 +9061,7 @@ exports.BattleMovedex = {
 		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "leechlife",
+		isViable: true,
 		name: "Leech Life",
 		pp: 10,
 		priority: 0,
@@ -10576,6 +10582,7 @@ exports.BattleMovedex = {
 		desc: "This move and its effects ignore the Abilities of other Pokemon.",
 		shortDesc: "Ignores the Abilities of other Pokemon.",
 		id: "moongeistbeam",
+		isViable: true,
 		name: "Moongeist Beam",
 		pp: 5,
 		priority: 0,
@@ -15270,7 +15277,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, authentic: 1},
 		stealsBoosts: true,
-		// Boost stealing implemented in scripts.js TODO: actually implement it
+		// Boost stealing implemented in scripts.js
 		secondary: false,
 		target: "normal",
 		type: "Ghost",
@@ -15358,6 +15365,7 @@ exports.BattleMovedex = {
 		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		shortDesc: "Prevents the target from switching out.",
 		id: "spiritshackle",
+		isViable: true,
 		name: "Spirit Shackle",
 		pp: 10,
 		priority: 0,
@@ -16116,6 +16124,7 @@ exports.BattleMovedex = {
 		desc: "The user restores its HP equal to the target's Attack stat, calculated with its stat stage, then lowers the target's Attack by 1 stage.",
 		shortDesc: "User heals HP=target's Atk stat. Lowers Atk by 1.",
 		id: "strengthsap",
+		isViable: true,
 		name: "Strength Sap",
 		pp: 10,
 		priority: 0,
@@ -16387,6 +16396,7 @@ exports.BattleMovedex = {
 		desc: "This move and its effects ignore the Abilities of other Pokemon.",
 		shortDesc: "Ignores the Abilities of other Pokemon.",
 		id: "sunsteelstrike",
+		isViable: true,
 		name: "Sunsteel Strike",
 		pp: 5,
 		priority: 0,
@@ -18841,6 +18851,7 @@ exports.BattleMovedex = {
 		desc: "Has a 30% chance to flinch the target.",
 		shortDesc: "30% chance to flinch the target.",
 		id: "zingzap",
+		isViable: true,
 		name: "Zing Zap",
 		pp: 10,
 		priority: 0,
