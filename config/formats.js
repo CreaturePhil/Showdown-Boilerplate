@@ -3122,7 +3122,7 @@ exports.Formats = [
 			"Pok&eacute;mon have an added type determined by their IVs. Same as the Hidden Power type.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a>",
 		],
-		
+
 
 		mod: 'hiddentype',
 		ruleset: ['OU'],
@@ -3130,14 +3130,14 @@ exports.Formats = [
 	{
 		name: "OU Theorymon",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3559611/\">OU Theorymon</a>"],
-		
+
 		mod: 'theorymon',
 		searchShow: false,
 		ruleset: ['OU'],
 	},
 	{
 		name: "Gen-NEXT OU",
-		
+
 		mod: 'gennext',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
@@ -5063,7 +5063,7 @@ onBegin: function () {
 
 	{
 		section: "BW2 Singles",
-		column: 3,
+		column: 4,
 	},
 	{
 		name: "[Gen 5] OU",
@@ -5170,7 +5170,7 @@ onBegin: function () {
 
 	{
 		section: 'BW2 Doubles',
-		column: 3,
+		column: 4,
 	},
 	{
 		name: "[Gen 5] Doubles OU",
@@ -5541,7 +5541,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
         ],
-        
+
         mod: 'gen2specialsplit',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
@@ -5552,7 +5552,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
         ],
-        
+
         mod: 'gen2abilities',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
@@ -5563,7 +5563,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
         ],
-        
+
         mod: 'gen2steeltypes',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
@@ -5574,7 +5574,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
         ],
-       
+
         mod: 'gen2hyperbeam',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
@@ -5585,7 +5585,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
         ],
-        
+
         mod: 'gen2calmmind',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
@@ -5596,7 +5596,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
         ],
-      
+
         mod: 'gen2dpp',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
@@ -5607,7 +5607,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
         ],
-        
+
         mod: 'gen2phazing',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
@@ -5695,7 +5695,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
         ],
-        
+
         mod: 'gen4',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
         banlist: ['Uber', 'Stealth Rock'],
@@ -5706,7 +5706,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
         ],
-        
+
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
         banlist: ['Uber'],
     },
@@ -5716,7 +5716,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
         ],
-        
+
         mod: 'gen4split',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
         banlist: ['Uber'],
@@ -5727,7 +5727,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
         ],
-        
+
         mod: 'gen4balloon',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
         banlist: ['Uber'],
@@ -5738,7 +5738,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
         ],
-        
+
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
         banlist: ['Uber', 'Choice Scarf', 'Choice Specs', 'Choice Band'],
     },
@@ -5748,7 +5748,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
         ],
-        
+
         mod: 'gen4weather',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
         banlist: ['Uber'],
@@ -5759,7 +5759,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
         ],
-        
+
         mod: 'gen4knockoff',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
         banlist: ['Uber'],
@@ -5770,7 +5770,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
         ],
-        
+
         mod: 'gen5fairy',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
         banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
@@ -5781,7 +5781,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
         ],
-        
+
         mod: 'gen5explosion',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
         banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
@@ -5792,7 +5792,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
         ],
-        
+
         mod: 'gen5evs',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
         banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
@@ -5803,7 +5803,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
         ],
-        
+
         mod: 'gen5gen6',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
         banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
@@ -5814,7 +5814,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
         ],
-        
+
         mod: 'gen5dreamworld',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
         banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
@@ -5825,7 +5825,7 @@ onBegin: function () {
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
             "&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
         ],
-        
+
         mod: 'gen5defog',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
         banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
