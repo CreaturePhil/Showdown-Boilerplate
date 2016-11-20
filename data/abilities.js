@@ -224,12 +224,12 @@ exports.BattleAbilities = {
 		num: 123,
 	},
 	"battery": {
-		shortDesc: "This Pokemon's allies have the power of their special attacks multiplied by 1.5.",
+		shortDesc: "This Pokemon's allies have the power of their special attacks multiplied by 1.3.",
 		onBasePowerPriority: 8,
 		onAllyBasePower: function (basePower, attacker, defender, move) {
 			if (attacker !== this.effectData.target && move.category === 'Special') {
 				this.debug('Battery boost');
-				return this.chainModify(1.5); // TODO: 1.3?
+				return this.chainModify([0x14CD, 0x1000]);
 			}
 		},
 		id: "battery",
@@ -2232,7 +2232,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage quartered.",
 		onPrepareHit: function (source, target, move) {
 			if (move.id in {iceball: 1, rollout: 1}) return;
-			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && !move.flags['charge'] && !move.spreadHit) {
+			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && !move.flags['charge'] && !move.spreadHit && !move.isZ) {
 				move.multihit = 2;
 				source.addVolatile('parentalbond');
 			}
@@ -2442,7 +2442,7 @@ exports.BattleAbilities = {
 		num: 223,
 	},
 	"prankster": {
-		shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1, but fail gainst Dark Pokémon.",
+		shortDesc: "This Pokemon's non-damaging moves have +1 priority, but fail gainst Dark Pokémon.",
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.category === 'Status') {
 				return priority + 1;
@@ -2976,23 +2976,37 @@ exports.BattleAbilities = {
 	"shieldsdown": {
 		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP at the end of a turn. If Minior's HP is above 1/2 of its maximum HP at the end of a turn, it changes back to Meteor Form.",
 		shortDesc: "If Minior, at end of turn changes forme to Core if at 1/2 max HP or less, else Meteor.",
-		onResidualOrder: 27,
-		onResidual: function (pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.baseTemplate.baseSpecies !== 'Minior' || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
+				if (pokemon.template.speciesid === 'minior') {
+					pokemon.formeChange('Minior-Meteor');
+					this.add('-formechange', pokemon, 'Minior-Meteor', '[msg]', '[from] ability: Shields Down');
+				}
+			} else {
 				if (pokemon.template.speciesid !== 'minior') {
 					pokemon.formeChange('Minior');
 					this.add('-formechange', pokemon, 'Minior', '[msg]', '[from] ability: Shields Down');
 				}
-			} else {
+			}
+		},
+		onResidualOrder: 27,
+		onResidual: function (pokemon) {
+			if (pokemon.baseTemplate.baseSpecies !== 'Minior' || pokemon.transformed) return;
+			if (pokemon.hp > pokemon.maxhp / 2) {
 				if (pokemon.template.speciesid === 'minior') {
-					pokemon.formeChange('Minior-Red');
-					this.add('-formechange', pokemon, 'Minior-Red', '[msg]', '[from] ability: Shields Down');
+					pokemon.formeChange('Minior-Meteor');
+					this.add('-formechange', pokemon, 'Minior-Meteor', '[msg]', '[from] ability: Shields Down');
+				}
+			} else {
+				if (pokemon.template.speciesid !== 'minior') {
+					pokemon.formeChange('Minior');
+					this.add('-formechange', pokemon, 'Minior', '[msg]', '[from] ability: Shields Down');
 				}
 			}
 		},
 		onSetStatus: function (status, target, source, effect) {
-			if (target.template.speciesid !== 'minior' || target.transformed) return;
+			if (target.template.speciesid !== 'miniormeteor' || target.transformed) return;
 			if (!effect || !effect.status) return false;
 			this.add('-immune', target, '[msg]', '[from] ability: Shields Down');
 			return false;
@@ -3935,11 +3949,12 @@ exports.BattleAbilities = {
 	},
 	"wimpout": {
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
-		onAfterDamage: function (damage, target, source) {
-			if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
-			if (target.hp <= target.maxhp / 2 && target.hp > 0 && target.hp + damage > target.maxhp / 2) {
+		onAfterMoveSecondary: function (target, source, move) {
+			if (!source || source === target || !target.hp || !move.totalDamage) return;
+			if (target.hp <= target.maxhp / 2 && target.hp + move.totalDamage > target.maxhp / 2) {
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 				target.switchFlag = true;
-				if (source) source.switchFlag = false;
+				source.switchFlag = false;
 				this.add('-activate', target, 'ability: Wimp Out');
 			}
 		},

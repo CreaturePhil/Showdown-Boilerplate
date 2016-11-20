@@ -133,8 +133,8 @@ class BattlePokemon {
 				this.baseMoveset.push({
 					move: move.name,
 					id: move.id,
-					pp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
-					maxpp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
+					pp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+					maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
 					target: move.target,
 					disabled: false,
 					disabledSource: '',
@@ -1726,10 +1726,11 @@ class BattleSide {
 
 	undoChoice(index) {
 		const decision = this.choiceData.decisions.splice(index, 1)[0];
-		if (Array.isArray(decision) && decision.length >= 2 && decision[1].choice === 'move') {
+		if (Array.isArray(decision) && decision[decision.length - 1].choice === 'move') {
+			const moveDecision = decision[decision.length - 1];
 			// It probably doesn't make sense anymore to have a separate `mega` choice in the decider...
-			if (decision[1].mega) this.choiceData.mega--;
-			if (decision[1].zmove) this.choiceData.zmove--;
+			if (moveDecision.mega) this.choiceData.mega--;
+			if (moveDecision.zmove) this.choiceData.zmove--;
 		}
 		if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
 			this.choiceData.enterIndices.delete(decision.target.position);
@@ -2068,7 +2069,13 @@ class Battle extends Tools.BattleDex {
 		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 		m = Math.floor(m);
 		n = Math.floor(n);
-		result = (m ? (n ? Math.floor(result * (n - m) / 0x100000000) + m : Math.floor(result * m / 0x100000000)) : result / 0x100000000);
+		if (!m) {
+			result = result / 0x100000000;
+		} else if (!n) {
+			result = Math.floor(result * m / 0x100000000);
+		} else {
+			result = Math.floor(result * (n - m) / 0x100000000) + m;
+		}
 		this.debug('randBW(' + (m ? (n ? m + ', ' + n : m) : '') + ') = ' + result);
 		return result;
 	}
