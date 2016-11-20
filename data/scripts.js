@@ -235,6 +235,13 @@ exports.BattleScripts = {
 		}
 		return true;
 	},
+	onBeforeMove(target, pokemon, move) {
+		if(move.isZ) {
+			let targetname = pokemon.name || pokemon.species;
+			this.add("-message",targetname+" surrounded itself with its Z-Power!");
+			this.add("-message",targetname+" unleashes its full-force Z-move!");
+		}
+	},
 	tryMoveHit: function (target, pokemon, move, spreadHit) {
 		if (move.selfdestruct && spreadHit) pokemon.hp = 0;
 
