@@ -235,7 +235,7 @@ exports.BattleScripts = {
 		}
 		return true;
 	},
-	onBeforeMove(target, pokemon, move) {
+	onBeforeMove: function(target, pokemon, move) {
 		if(move.isZ) {
 			let targetname = pokemon.name || pokemon.species;
 			this.add("-message",targetname+" surrounded itself with its Z-Power!");
