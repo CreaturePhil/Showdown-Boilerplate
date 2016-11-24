@@ -393,7 +393,7 @@ class CommandContext {
 		}
 	}
 	errorReply(message) {
-		if (this.pmTarget) {
+		if (this.pmTarget && this.pmTarget.getIdentity) {
 			let prefix = '|pm|' + this.user.getIdentity() + '|' + this.pmTarget.getIdentity() + '|/error ';
 			this.connection.send(prefix + message.replace(/\n/g, prefix));
 		} else {
