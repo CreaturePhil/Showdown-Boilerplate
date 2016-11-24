@@ -4880,6 +4880,154 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{
+		name: "Frantic Fusions[OMotM Version]",
+		desc: [
+	     		"&bullet; A non pet mod version of Fusion Evolution. <BR /> &bullet; The resultant Pokemon has the primary types of the parents, and the averaged stats.<br />&bullet;You can choose any ability from the original Pokemon, and you also get the primary ability of the second Pokemon (The one you put in the nickname). <br />&bullet; Use !fuse if needed.",
+	     	],
+		section: "Experimental Metas",
+		mod: 'francticfusions',
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
+ 		onBegin: function() {
+                        let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+                                if (pokemon.set.ability === toId(pokemon.set.species) || this.getAbility(pokemon.set.ability)) continue;
+				let crossTemplate = this.getTemplate(pokemon.ability);
+				if (!crossTemplate.exists) continue;
+				try {
+				let template = pokemon.baseTemplate;
+				let mixedTemplate = Object.assign({}, template);
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
+				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + crossTemplate.weightkg)/2)
+
+				mixedTemplate.baseStats = {};
+				for (let statid in template.baseStats) {
+					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + crossTemplate.baseStats[statid])/2;
+				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+
+				mixedTemplate.types = template.types.slice();
+                                if(mixedTemplate.types[0]!= crossTemplate.types[0]) mixedTemplate.types[1]=crossTemplate.types[0];
+                                else mixedTemplate.types.length = 1;
+				pokemon.baseTemplate = mixedTemplate;
+				pokemon.fusion = true;
+				pokemon.abilitwo = crossTemplate.abilities[0];
+				pokemon.ability = template.abilities['0'];
+				pokemon.baseAbility = template.abilities['0'];
+				pokemon.formeChange(mixedTemplate);
+				} catch (e) {
+					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
+				}
+			}
+		},
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+		        let types = pokemon.types;
+		        pokemon.fusetype = types;
+			if (pokemon.fusion) {
+				this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
+			}
+			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+			let sec = statusability[pokemon.abilitwo]? "other"+pokemon.abilitwo : pokemon.abilitwo;
+			pokemon.addVolatile(sec, pokemon);//Second Ability! YAYAYAY
+		},
+		onAfterMega: function(pokemon)
+		{
+		        pokemon.types = pokemon.fusetype;
+		        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+		onValidateSet: function(set, teamHas) {
+			let problems = [];
+		        if (this.getAbility(set.ability) || set.ability === set.species) return;
+		        let template = this.getTemplate(set.species);
+		        let crossTemplate = this.getTemplate(set.ability);
+			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
+			if (!crossTemplate.exists) return;
+			let canHaveAbility = false;
+			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
+			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
+			if(banlist[toId(crossTemplate.species)]) problems.push("Fusing with " + crossTemplate.species + " is banned. ("+template.species+" has nickname "+ crossTemplate.species + ")");
+			for (let a in template.abilities) {
+				if ((template.abilities[a] === set.ability) && !banlist[toId(template.abilities[a])]) {
+					canHaveAbility = true;
+				}
+			}
+			if (!canHaveAbility) return ["" + set.species + " cannot have " + set.ability + "."];
+			let added = {};
+			let movepool = [];
+			let prevo = template.isMega?this.getTemplate(template.species.substring(0,template.species.length-5)).prevo:template.prevo;
+
+			if(!this.data.Learnsets[toId(crossTemplate.species)])
+			{
+			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species.split("-")[0])].learnset;
+			}
+			else
+			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species)].learnset;
+			if(!template.learnset)
+			{
+			        template.learnset = this.data.Learnsets[toId(template.species.split("-")[0])].learnset;
+			}
+			else
+			        template.learnset = this.data.Learnsets[toId(template.species)].learnset;
+			do {
+				added[template.species] = true;
+				movepool = movepool.concat(Object.keys(template.learnset));
+				movepool = movepool.concat(Object.keys(crossTemplate.learnset))
+			} while (template && template.species && !added[template.species]);
+			while(prevo)
+			{
+			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
+			        prevo = this.getTemplate(prevo).prevo;
+			}
+			prevo = crossTemplate.isMega?this.getTemplate(crossTemplate.species.substring(0,crossTemplate.species.length-5)).prevo:crossTemplate.prevo;
+			while(prevo)
+			{
+			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
+			        prevo = this.getTemplate(prevo).prevo;
+			}
+			let moves = {};
+			for(let kek =0;kek<movepool.length;kek++) moves[movepool[kek]]=true;
+			for (let i in set.moves) {
+				let move = toId(set.moves[i]);
+				if (move.substr(0, 11) === 'hiddenpower') move = 'hiddenpower'; // Really big hack :(
+				if (!moves[move]) {
+					problems.push(set.species + " cannot learn " + set.moves[i] + ".");
+				}
+			}
+			if (problems) return problems;
+		},
+		validateSet: function(set, teamHas) {
+			let ability = set.item;
+			if(this.tools.getTemplate(toId(ability)))
+			{
+				set.ability = '';
+				let problems = this.validateSet(set, teamHas) || [];
+				let abilitwo = this.tools.getTemplate(toId(ability)).ability['0'];
+				let abilione = this.tools.getTemplate(toId(set.species)).ability['0'];
+				let bans = {'arenatrap': true, 'contrary': true, 'furcoat': true, 'hugepower': true, 'imposter': true, 'parentalbond': true, 'purepower': true, 'shadowtag': true, 'trace': true, 'simple': true, 'wonderguard': true, 'moody': true};
+				if(bans[toId(abilitwo)]) problems.push(set.species + "'s ability "+ abilitwo +" is banned by Multibility.");
+				if(bans[toId(abilione)]) problems.push(set.species + "'s ability "+ abilione +" is banned by Multibility.");
+				if(abilitwo === abilione) problems.push("You cannot have two of "+abilitwo+" on the same Pokemon.");
+				set.ability = ability;
+				return problems;
+			}
+		},
+		onValidateTeam: function (team) {
+			let nameTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let ability = team[i].ability;
+				if (ability) {
+					if (ability === toId(team[i].species)) continue;
+					if (nameTable[ability] && !(this.getAbility(ability))) {
+						return ["You can have only one of a fusion mon.", "(You have more than one " + ability + ")"];
+					}
+					nameTable[ability] = true;
+				}
+			}
+		},
+	},
+	{
 		    name: "Pokebilities",
 		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokebilities</a>"],
 		    section: "Experimental Metas",
