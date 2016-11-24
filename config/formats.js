@@ -4939,6 +4939,21 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 		onValidateSet: function(set, teamHas) {
 			let problems = [];
+			let ability = set.ability;
+			if(this.getTemplate(toId(ability)))
+			{
+				set.ability = '';
+				problems = this.validateSet(set, teamHas) || [];
+				console.log(Object.keys(this.tools.getTemplate(toId(ability))));
+				let abilitwo = this.tools.getTemplate(toId(ability)).abilities['0'];
+				let abilione = this.tools.getTemplate(set.species).abilities['0'];
+				let bans = {'arenatrap': true, 'contrary': true, 'furcoat': true, 'hugepower': true, 'imposter': true, 'parentalbond': true, 'purepower': true, 'shadowtag': true, 'trace': true, 'simple': true, 'wonderguard': true, 'moody': true};
+				if(bans[toId(abilitwo)]) problems.push(set.species + "'s ability "+ abilitwo +" is banned by Multibility.");
+				if(bans[toId(abilione)]) problems.push(set.species + "'s ability "+ abilione +" is banned by Multibility.");
+				if(abilitwo === abilione) problems.push("You cannot have two of "+abilitwo+" on the same Pokemon.");
+				set.ability = ability;
+				if(problems !== []) return problems;
+			}
 		        if (this.getAbility(set.ability) || set.ability === set.species) return;
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.ability);
@@ -4988,22 +5003,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				}
 			}
 			if (problems) return problems;
-		},
-		validateSet: function(set, teamHas) {
-			let ability = set.item;
-			if(this.tools.getTemplate(toId(ability)))
-			{
-				set.ability = '';
-				let problems = this.validateSet(set, teamHas) || [];
-				let abilitwo = this.tools.getTemplate(toId(ability)).ability['0'];
-				let abilione = this.tools.getTemplate(toId(set.species)).ability['0'];
-				let bans = {'arenatrap': true, 'contrary': true, 'furcoat': true, 'hugepower': true, 'imposter': true, 'parentalbond': true, 'purepower': true, 'shadowtag': true, 'trace': true, 'simple': true, 'wonderguard': true, 'moody': true};
-				if(bans[toId(abilitwo)]) problems.push(set.species + "'s ability "+ abilitwo +" is banned by Multibility.");
-				if(bans[toId(abilione)]) problems.push(set.species + "'s ability "+ abilione +" is banned by Multibility.");
-				if(abilitwo === abilione) problems.push("You cannot have two of "+abilitwo+" on the same Pokemon.");
-				set.ability = ability;
-				return problems;
-			}
 		},
 		onValidateTeam: function (team) {
 			let nameTable = {};
