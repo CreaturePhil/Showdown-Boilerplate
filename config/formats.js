@@ -4944,20 +4944,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        let crossTemplate = this.getTemplate(set.ability);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
 			if (!crossTemplate.exists) return;
-			let canHaveAbility = false;
 			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
 			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
 			if(banlist[toId(crossTemplate.species)]) problems.push("Fusing with " + crossTemplate.species + " is banned. ("+template.species+" has nickname "+ crossTemplate.species + ")");
-			for (let a in template.abilities) {
-				if ((template.abilities[a] === set.ability) && !banlist[toId(template.abilities[a])]) {
-					canHaveAbility = true;
-				}
-			}
-			if (!canHaveAbility) return ["" + set.species + " cannot have " + set.ability + "."];
 			let added = {};
 			let movepool = [];
 			let prevo = template.isMega?this.getTemplate(template.species.substring(0,template.species.length-5)).prevo:template.prevo;
-
 			if(!this.data.Learnsets[toId(crossTemplate.species)])
 			{
 			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species.split("-")[0])].learnset;
