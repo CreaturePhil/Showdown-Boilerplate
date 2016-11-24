@@ -1,3 +1,5 @@
+/* Tic Tac Toe Plugin By Digital Edge and Kewlstatics */
+
 if (!global.ttt) global.ttt = [{}, {}];
 var tttgames = global.ttt[0];
 var tttplayers = global.ttt[1];
