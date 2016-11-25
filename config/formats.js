@@ -4893,7 +4893,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
 				let pokemon = allPokemon[i];
                                 if (pokemon.set.ability === toId(pokemon.set.species) || this.getAbility(pokemon.set.ability)) continue;
-				let crossTemplate = this.getTemplate(pokemon.ability);
+				let crossTemplate = this.getTemplate(toId(pokemon.ability));
 				if (!crossTemplate.exists) continue;
 				try {
 				let template = pokemon.baseTemplate;
@@ -4912,7 +4912,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
                                 else mixedTemplate.types.length = 1;
 				pokemon.baseTemplate = mixedTemplate;
 				pokemon.fusion = true;
-				pokemon.abilitwo = crossTemplate.abilities[0];
+				pokemon.abilitwo = crossTemplate.abilities['0'];
 				pokemon.ability = template.abilities['0'];
 				pokemon.baseAbility = template.abilities['0'];
 				pokemon.formeChange(mixedTemplate);
