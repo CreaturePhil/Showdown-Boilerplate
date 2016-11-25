@@ -4892,9 +4892,15 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
                         let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
 				let pokemon = allPokemon[i];
-                                if (pokemon.set.ability === toId(pokemon.set.species) || this.getAbility(pokemon.set.ability)) continue;
+                                if (pokemon.set.ability === toId(pokemon.set.species) || this.getAbility(pokemon.set.ability)) { 
+					this.add("-hint","Skipping Fusion for "+pokemon.set.species+".");
+					continue;
+				}
 				let crossTemplate = this.getTemplate(toId(pokemon.ability));
-				if (!crossTemplate.exists) continue;
+				if (!crossTemplate.exists) { 
+					this.add("-message","Error: Cross Template does not exist.");
+					continue;
+				}
 				try {
 				let template = pokemon.baseTemplate;
 				let mixedTemplate = Object.assign({}, template);
