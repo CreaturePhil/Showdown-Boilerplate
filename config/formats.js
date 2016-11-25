@@ -4952,13 +4952,13 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(!this.tools.getTemplate(ability).id && !this.tools.getAbility(ability).id) return ["The ability/Pokemon "+ability+" does not exist."];  
 			if(this.tools.getTemplate(ability).id)
 			{
-				set.ability = this.getTemplate(set.species).abilities['0'];
+				set.ability = this.tools.getTemplate(set.species).abilities['0'];
 				problems = this.validateSet(set, teamHas) || [];
 				set.ability = ability;
 			}
-			if (this.getAbility(set.ability).id || set.ability === set.species) return;
-			let template = this.getTemplate(set.species);
-			let crossTemplate = this.getTemplate(set.ability);
+			if (this.tools.getAbility(set.ability).id || set.ability === set.species) return;
+			let template = this.tools.getTemplate(set.species);
+			let crossTemplate = this.tools.getTemplate(set.ability);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
 			if (!crossTemplate.exists) return;
 			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
@@ -4972,7 +4972,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if(bans[toId(abilitwo)]) problems.push(crossTemplate.species + "'s ability "+ abilitwo +" is banned by Multibility.");
 			if(bans[toId(abilione)]) problems.push(template.species + "'s ability "+ abilione +" is banned by Multibility.");
 			if(abilitwo === abilione) problems.push("You cannot have two of "+abilitwo+" on the same Pokemon.");
-			let prevo = template.isMega?this.getTemplate(template.species.substring(0,template.species.length-5)).prevo:template.prevo;
+			let prevo = template.isMega?this.tools.getTemplate(template.species.substring(0,template.species.length-5)).prevo:template.prevo;
 			if(!this.data.Learnsets[toId(crossTemplate.species)])
 			{
 			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species.split("-")[0])].learnset;
