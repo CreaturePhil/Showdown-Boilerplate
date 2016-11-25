@@ -4948,7 +4948,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 		onValidateSet: function(set, teamHas) {
 			let problems = [];
-			if (this.getAbility(set.ability) || set.ability === set.species) return;
+			if(!this.getAbility(set.ability).id && !this.getTemplate(set.ability).id) {
+				return ["The Pokemon/Ability "+set.ability+" does not exist."];
+			}
+			if (this.getAbility(set.ability).id || set.ability === set.species) return;
 			let template = this.getTemplate(set.species);
 			let crossTemplate = this.getTemplate(set.ability);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
