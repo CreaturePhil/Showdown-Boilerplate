@@ -4892,7 +4892,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
                         let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
 				let pokemon = allPokemon[i];
-                                if (pokemon.set.ability === toId(pokemon.set.species)) { 
+				let crossTemplate = this.getTemplate(toId(pokemon.ability));
+                                if (pokemon.set.ability === toId(pokemon.set.species) || !crossTemplate.exists) { 
 					this.add("-hint","Skipping Fusion for "+pokemon.set.species+".");
 					pokemon.set.ability = pokemon.baseTemplate.abilities[0];
 					pokemon.ability = pokemon.baseTemplate.abilities[0];
@@ -4901,11 +4902,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				}
                                 if (pokemon.set.ability === toId(pokemon.set.species) || !this.getAbility(pokemon.set.ability).name) { 
 					this.add("-hint","Skipping Fusion for "+pokemon.set.species+".");
-					continue;
-				}
-				let crossTemplate = this.getTemplate(toId(pokemon.ability));
-				if (!crossTemplate.exists) { 
-					this.add("-message","Error: Cross Template does not exist.");
 					continue;
 				}
 				try {
@@ -5010,7 +5006,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 		validateSet: function(set, teamHas) {
 			let ability = set.ability;
-			if(this.tools.getTemplate(toId(ability)))
+			if(this.tools.getTemplate(ability).id)
 			{
 				set.ability = '';
 				let problems = this.validateSet(set, teamHas) || [];
