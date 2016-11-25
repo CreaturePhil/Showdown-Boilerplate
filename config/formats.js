@@ -4948,6 +4948,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 		onValidateSet: function(set, teamHas) {
 			let problems = [];
+			let ability = set.ability;
+			if(!this.tools.getTemplate(ability).id && !this.tools.getAbility(ability).id) return ["The ability/Pokemon "+ability+" does not exist."];  
+			if(this.tools.getTemplate(ability).id)
+			{
+				set.ability = this.getTemplate(set.species).abilities['0'];
+				problems = this.validateSet(set, teamHas) || [];
+				set.ability = ability;
+			}
 			if (this.getAbility(set.ability).id || set.ability === set.species) return;
 			let template = this.getTemplate(set.species);
 			let crossTemplate = this.getTemplate(set.ability);
@@ -5004,7 +5012,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 			if (problems) return problems;
 		},
-		validateSet: function(set, teamHas) {
+		/*validateSet: function(set, teamHas) {
 			let ability = set.ability;
 			if(!this.tools.getTemplate(ability).id && !this.tools.getAbility(ability).id) return ["The ability/Pokemon "+ability+" does not exist."];  
 			if(this.tools.getTemplate(ability).id)
@@ -5014,7 +5022,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				set.ability = ability;
 				return problems;
 			}
-		},
+		},*/
 		onValidateTeam: function (team) {
 			let nameTable = {};
 			for (let i = 0; i < team.length; i++) {
