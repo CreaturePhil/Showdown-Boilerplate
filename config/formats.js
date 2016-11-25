@@ -4939,22 +4939,29 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 		onValidateSet: function(set, teamHas) {
 			let problems = [];
-		        if (this.getAbility(set.ability) || set.ability === set.species) return;
-		        let template = this.getTemplate(set.species);
-		        let crossTemplate = this.getTemplate(set.ability);
+			let ability = set.ability;
+			if(this.getTemplate(toId(ability)))
+			{
+				set.ability = '';
+				problems = this.validateSet(set, teamHas) || [];
+				set.ability = ability;
+			}
+	        if (this.getAbility(set.ability) || set.ability === set.species) return;
+	        let template = this.getTemplate(set.species);
+	        let crossTemplate = this.getTemplate(set.ability);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
 			if (!crossTemplate.exists) return;
 			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
 			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
 			if(banlist[toId(crossTemplate.species)]) problems.push("Fusing with " + crossTemplate.species + " is banned. ("+template.species+" has nickname "+ crossTemplate.species + ")");
+			let added = {};
+			let movepool = [];
 			let abilitwo = crossTemplate.abilities['0'];
 			let abilione = template.abilities['0'];
 			let bans = {'arenatrap': true, 'contrary': true, 'furcoat': true, 'hugepower': true, 'imposter': true, 'parentalbond': true, 'purepower': true, 'shadowtag': true, 'trace': true, 'simple': true, 'wonderguard': true, 'moody': true};
-			if(bans[toId(abilitwo)]) problems.push(set.species + "'s ability "+ abilitwo +" is banned by Multibility.");
-			if(bans[toId(abilione)]) problems.push(set.species + "'s ability "+ abilione +" is banned by Multibility.");
+			if(bans[toId(abilitwo)]) problems.push(crossTemplate.species + "'s ability "+ abilitwo +" is banned by Multibility.");
+			if(bans[toId(abilione)]) problems.push(template.species + "'s ability "+ abilione +" is banned by Multibility.");
 			if(abilitwo === abilione) problems.push("You cannot have two of "+abilitwo+" on the same Pokemon.");
-			let added = {};
-			let movepool = [];
 			let prevo = template.isMega?this.getTemplate(template.species.substring(0,template.species.length-5)).prevo:template.prevo;
 			if(!this.data.Learnsets[toId(crossTemplate.species)])
 			{
@@ -4995,16 +5002,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 			if (problems) return problems;
 		},
-		validateSet: function(set, teamHas) {
-			let ability = set.ability;
-			if(this.getTemplate(toId(ability)))
-			{
-				set.ability = '';
-				let problems = this.validateSet(set, teamHas) || [];
-				set.ability = ability;
-				return problems;
-			}
-		},
+		/*validateSet: function(set, teamHas) {
+			
+		},*/
 		onValidateTeam: function (team) {
 			let nameTable = {};
 			for (let i = 0; i < team.length; i++) {
