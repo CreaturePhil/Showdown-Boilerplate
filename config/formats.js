@@ -4946,7 +4946,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        pokemon.types = pokemon.fusetype;
 		        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
-		onValidateSet: function(set, teamHas) {
+		validateSet: function(set, teamHas) {
 			let problems = [];
 			let ability = set.ability;
 			if(!this.getTemplate(ability).id && !this.getAbility(ability).id) return ["The ability/Pokemon "+ability+" does not exist."];  
