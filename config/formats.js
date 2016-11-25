@@ -4939,16 +4939,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 		onValidateSet: function(set, teamHas) {
 			let problems = [];
-			let ability = set.ability;
-			if(this.getTemplate(toId(ability)))
-			{
-				set.ability = '';
-				problems = this.validateSet(set, teamHas) || [];
-				set.ability = ability;
-			}
-	        if (this.getAbility(set.ability) || set.ability === set.species) return;
-	        let template = this.getTemplate(set.species);
-	        let crossTemplate = this.getTemplate(set.ability);
+			if (this.getAbility(set.ability) || set.ability === set.species) return;
+			let template = this.getTemplate(set.species);
+			let crossTemplate = this.getTemplate(set.ability);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
 			if (!crossTemplate.exists) return;
 			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
@@ -5002,9 +4995,16 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 			if (problems) return problems;
 		},
-		/*validateSet: function(set, teamHas) {
-			
-		},*/
+		validateSet: function(set, teamHas) {
+			let ability = set.ability;
+			if(this.getTemplate(toId(ability)))
+			{
+				set.ability = '';
+				let problems = this.validateSet(set, teamHas) || [];
+				set.ability = ability;
+				return problems;
+			}
+		},
 		onValidateTeam: function (team) {
 			let nameTable = {};
 			for (let i = 0; i < team.length; i++) {
