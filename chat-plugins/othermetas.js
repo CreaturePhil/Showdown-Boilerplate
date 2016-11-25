@@ -1128,10 +1128,16 @@ exports.commands= {
                 baseStats['avespd'] = Math.floor((pokemen[name].baseStats.spd + pokemen[name2].baseStats.spd) / 2);
                 baseStats['avespe'] = Math.floor((pokemen[name].baseStats.spe + pokemen[name2].baseStats.spe) / 2);
                 let type = pokemen[name].types[0];
+		let ability = "";
+		for(let i in pokemen[name].abilities) {
+			ability+=pokemen[name].abilities[i]+"/";
+		}
+		ability = ability.substring(0,ability.length-1);
+		ability = ability+" + "+pokemen[name2].abilities['0'];
                 if (pokemen[name].types[0] != pokemen[name2].types[0])
                         type = type + '/' + pokemen[name2].types[0];
                 let bst = baseStats['avehp'] + baseStats['aveatk'] + baseStats['avedef'] + baseStats['avespa'] + baseStats['avespd'] + baseStats['avespe'];
-                text = "Stats: " + baseStats['avehp'] + "/" + baseStats['aveatk'] + "/" + baseStats['avedef'] + "/" + baseStats['avespa'] + "/" + baseStats['avespd'] + "/" + baseStats['avespe'] + " <b>BST</b>:" + bst + " <b>Type:</b> " + type;
+                text = "Stats: " + baseStats['avehp'] + "/" + baseStats['aveatk'] + "/" + baseStats['avedef'] + "/" + baseStats['avespa'] + "/" + baseStats['avespd'] + "/" + baseStats['avespe'] + " <b>BST</b>:" + bst + " <b>Type:</b> " + type + " <b>Abilities</b>: " +ability;
                 this.sendReplyBox(text);
         }
 },
