@@ -4892,7 +4892,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
                         let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
 				let pokemon = allPokemon[i];
-                                if (pokemon.set.ability === toId(pokemon.set.species) || this.getAbility(pokemon.set.ability)) { 
+                                if (pokemon.set.ability === toId(pokemon.set.species)) { 
+					this.add("-hint","Skipping Fusion for "+pokemon.set.species+".");
+					pokemon.set.ability = pokemon.baseTemplate.abilities[0];
+					pokemon.ability = pokemon.baseTemplate.abilities[0];
+					pokemon.baseAbility = pokemon.baseTemplate.abilities[0];
+					continue;
+				}
+                                if (pokemon.set.ability === toId(pokemon.set.species) || !this.getAbility(pokemon.set.ability).name) { 
 					this.add("-hint","Skipping Fusion for "+pokemon.set.species+".");
 					continue;
 				}
