@@ -4997,7 +4997,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 		validateSet: function(set, teamHas) {
 			let ability = set.ability;
-			if(this.getTemplate(toId(ability)))
+			if(this.tools.getTemplate(toId(ability)))
 			{
 				set.ability = '';
 				let problems = this.validateSet(set, teamHas) || [];
