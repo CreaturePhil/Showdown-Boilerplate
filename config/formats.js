@@ -5632,6 +5632,14 @@ onBegin: function () {
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
+		name: "[Aurora] OU",
+		column: 5,
+		mod: 'aurora',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Power Construct', 'Shadow Tag'],
+		requirePentagon: true,
+	},
+	{
 		section: "What If",
         	column: 5,
 	},
