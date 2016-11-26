@@ -39,7 +39,7 @@ Ratings and how they work:
 'use strict';
 
 exports.BattleAbilities = {
-	"waterbubble": {
+	"infernalscales": {
 		desc: "This Pokemon's Fire-type attacks have their power doubled, the power of Ice-type attacks against this Pokemon is halved, and this Pokemon cannot be frozen. Gaining this Ability while frozen cures it.",
 		shortDesc: "This Pokemon's Water power is 2x; it can't be burned; Fire power against it is halved.",
 		onBasePowerPriority: 7,
