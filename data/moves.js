@@ -16910,7 +16910,7 @@ exports.BattleMovedex = {
 			},
 			onBeforeMovePriority: 5,
 			onBeforeMove: function (attacker, defender, move) {
-				if (move.category === 'Status' && move.isZ) {
+				if (move.category === 'Status' && !move.isZ) {
 					this.add('cant', attacker, 'move: Taunt', move);
 					return false;
 				}
