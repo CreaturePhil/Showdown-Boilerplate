@@ -1,0 +1,99 @@
+/**
+ * Rn its just pm boxes xaa
+ */
+/*charizard8888*/
+.pm-window-charizard8888 h3 {
+  background: #fb9800 url("http://pldh.net/media/pokecons_action/006.gif") no-repeat !important;
+  background-position: 225px -8px !important;
+  color: #FFE697 !important;
+  text-shadow: 0px 0px 1px #4d2600 !important;
+  border-color: #ff0000 !important;
+}
+
+.pm-window-charizard8888 h3:hover, .pm-window-charizard8888.focused h3, .pm-window-charizard8888.focused h3:hover {
+  background: #fb9800 url("http://pldh.net/media/pokecons_action/006.gif") no-repeat !important;
+  background-position: 225px -8px !important;
+  color: #FFE697 !important;
+  text-shadow: 0px 0px 0px  !important;
+  border-color: #ff0000 !important;
+}
+
+.pm-window-charizard8888 h3 small, .pm-window-charizard8888 h3 .minimizebutton, .pm-window-charizard8888 h3 .closebutton, .pm-window-charizard8888 h3:hover .minimizebutton {
+  color: #ffe700 !important;
+}
+
+.pm-window-charizard8888 h3 .closebutton:hover + .minimizebutton.minimizebutton {
+  color: #ffe700 !important;
+}
+
+.pm-window-charizard8888 h3 .closebutton:hover {
+  color: #ffe700 !important;
+}
+
+.pm-window-charizard8888 h3 .minimizebutton:hover {
+  color: #ffe700 !important;
+}
+
+.pm-window-charizard8888 .pm-log, .pm-window-charizard8888.focused .pm-log {
+  background: rgba(255, 230, 151, 0.9) url("http://i.imgur.com/Of2r0d5.png") top right no-repeat !important;
+  border-color: #ff0000 !important;
+}
+
+.pm-window-charizard8888 .pm-log-add, .pm-window-charizard8888.focused .pm-log-add {
+  background: #fb9800 !important;
+  border-color: #ff0000 !important;
+}
+
+.pm-window-charizard8888 .pm-log-add .textbox {
+  border-color: #ff0000 !important;
+  background: rgba(255, 230 , 151, 0.95) !important;
+  color: #000 !important;
+}
+
+/*CHarizard8888-end*//* ICONS START */
+{
+background: rgba(255, 255, 255, 0.9)  url("http://www.poke-amph.com/black-2-white-2/sprites/small/580.png") no-repeat right
+}
+/* ICONS END */
+/* COLORS START */
+{
+color: #E33E51 !important;
+}
+.chat.chatmessage-therittz strong {
+color: #E33E51 !important;
+}
+{
+color: #6F60E0 !important;
+}
+.chat.chatmessage-halowhavoc strong {
+color: #6F60E0 !important;
+}
+{
+color: red !important;
+}
+.chat.chatmessage-pennygadget strong {
+color: red !important;
+}
+{
+color: e6e6e6 !important;
+}
+.chat.chatmessage-previewtherittz strong {
+color: e6e6e6 !important;
+}
+/* COLORS END */
+/* ICONS START */
+{
+background: rgba(255, 255, 255, 0.9)  url("http://www.poke-amph.com/black-2-white-2/sprites/small/580.png") no-repeat right
+}
+{
+background: rgba(255, 255, 255, 0.9)  url("http://pldh.net/media/pokexycons/094-mega.png") no-repeat right
+}
+/* ICONS END */
+/* ICONS START */
+{
+background: rgba(255, 255, 255, 0.9)  url("http://www.poke-amph.com/black-2-white-2/sprites/small/580.png") no-repeat right
+}
+{
+background: rgba(255, 255, 255, 0.9)  url("http://pldh.net/media/pokexycons/094-mega.png") no-repeat right
+}
+/* ICONS END */
