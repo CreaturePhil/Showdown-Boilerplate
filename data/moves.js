@@ -639,7 +639,7 @@ exports.BattleMovedex = {
 					let noAssist = {
 						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, skydrop:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1,
 					};
-					if (!noAssist[move] && !move.isZ) {
+					if (!noAssist[move] && !this.getMove(move).isZ) {
 						moves.push(move);
 					}
 				}
@@ -1107,7 +1107,7 @@ exports.BattleMovedex = {
 		name: "Beak Blast",
 		pp: 15,
 		priority: -3,
-		flags: {protect: 1},
+		flags: {bullet: 1, protect: 1},
 		beforeTurnCallback: function (pokemon) {
 			pokemon.addVolatile('beakblast');
 		},
@@ -1308,6 +1308,9 @@ exports.BattleMovedex = {
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
+			},
+			onMoveAborted: function (pokemon) {
+				pokemon.removeVolatile('bide');
 			},
 			onEnd: function (pokemon) {
 				this.add('-end', pokemon, 'move: Bide', '[silent]');
@@ -3202,10 +3205,7 @@ exports.BattleMovedex = {
 		flags: {authentic: 1},
 		volatileStatus: 'destinybond',
 		onPrepareHit: function (pokemon) {
-			return this.runEvent('StallMove', pokemon);
-		},
-		onHit: function (pokemon) {
-			pokemon.addVolatile('retaliationstall');
+			return !pokemon.removeVolatile('destinybond');
 		},
 		effect: {
 			onStart: function (pokemon) {
@@ -3218,9 +3218,13 @@ exports.BattleMovedex = {
 					source.faint();
 				}
 			},
-			onBeforeMovePriority: 100,
-			onBeforeMove: function (pokemon) {
+			onBeforeMovePriority: -1,
+			onBeforeMove: function (pokemon, target, move) {
+				if (move.id === 'destinybond') return;
 				this.debug('removing Destiny Bond before attack');
+				pokemon.removeVolatile('destinybond');
+			},
+			onMoveAborted: function (pokemon, target, move) {
 				pokemon.removeVolatile('destinybond');
 			},
 			onBeforeSwitchOutPriority: 1,
@@ -3567,6 +3571,7 @@ exports.BattleMovedex = {
 					accuracy: 100,
 					basePower: 140,
 					category: "Special",
+					priority: 0,
 					flags: {},
 					effectType: 'Move',
 					isFutureMove: true,
@@ -6111,6 +6116,7 @@ exports.BattleMovedex = {
 					accuracy: 100,
 					basePower: 120,
 					category: "Special",
+					priority: 0,
 					flags: {},
 					ignoreImmunity: false,
 					effectType: 'Move',
@@ -12532,7 +12538,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The target is cured if it has a major status condition. If the target was cured, the user restores 1/2 of its maximum HP, rounded half up.",
-		shortDesc: "Heals the target by 50% of its max HP.",
+		shortDesc: "Cures target's status; heals user 1/2 maxHP if so.",
 		id: "purify",
 		name: "Purify",
 		pp: 20,

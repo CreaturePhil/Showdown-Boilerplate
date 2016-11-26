@@ -328,6 +328,10 @@ exports.BattleAliases = {
 	"miniorviolet": "Minior",
 	"magearnaoriginal": "Magearna",
 
+	// abilities
+	"ph": "Poison Heal",
+	"stag": "Shadow Tag",
+
 	// items
 	"assvest": "Assault Vest",
 	"av": "Assault Vest",

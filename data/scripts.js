@@ -26,10 +26,7 @@ exports.BattleScripts = {
 			return;
 		} */
 		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
-			// Prevent invulnerability from persisting until the turn ends
-			pokemon.removeVolatile('twoturnmove');
-			// End Bide
-			pokemon.removeVolatile('bide');
+			this.runEvent('MoveAborted', pokemon, target, move);
 			// Prevent Pursuit from running again against a slower U-turn/Volt Switch/Parting Shot
 			pokemon.moveThisTurn = true;
 			this.clearActiveMove(true);
@@ -291,7 +288,7 @@ exports.BattleScripts = {
 			this.add('-immune', target, '[msg]');
 			return false;
 		}
-		if (this.gen >= 7 && move.pranksterBoosted && target !== pokemon && !this.getImmunity('prankster', target)) {
+		if (this.gen >= 7 && move.pranksterBoosted && target.side !== pokemon.side && !this.getImmunity('prankster', target)) {
 			this.debug('natural prankster immunity');
 			this.add('-immune', target, '[msg]');
 			return false;
@@ -766,8 +763,6 @@ exports.BattleScripts = {
 	runMegaEvo: function (pokemon) {
 		let template = this.getTemplate(pokemon.canMegaEvo);
 		let side = pokemon.side;
-
-		pokemon.willMega = false;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
 		let foeActive = side.foe.active;
