@@ -3776,132 +3776,96 @@ return problems;
 				 pokemon.types = pokemon.template.types = types;
 		 },
  },
-
     	{
 		name: "Cross Evolution",
-		desc: [
-	     		"&bullet; <a href=\"http://www.smogon.com/forums/threads/cross-evolution-playable-on-rom.3569577\">Cross Evolution</a>",
-	     ],
-		section: "New Other Metagames",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
+		section: "Other Metagames",
 
-		mod: 'crossevolution',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Unreleased', 'Ubers', 'Shadow Tag', 'Soul Dew'],
+		ruleset: ['Ubers', 'Baton Pass Clause'],
+		banlist: ['Rule:nicknameclause'],
 		onValidateTeam: function (team) {
 			let nameTable = {};
 			for (let i = 0; i < team.length; i++) {
 				let name = team[i].name;
 				if (name) {
-					if (name === team[i].species) continue;
-					// This also takes care of cross-evolving to the same target more than once
 					if (nameTable[name]) {
-						return ["Your Pok&eacute;mon must have different nicknames.", "(You have more than one " + name + ")"];
+						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
 					}
 					nameTable[name] = true;
 				}
 			}
 		},
-		onValidateSet: function (set) {
-			if (!set.name || set.name === set.species) return;
-			if (toId(set.name) === 'gyarados' || toId(set.name) === 'shedinja') return ["Cross evolution with " + set.name + " is banned."];
-			if (set.species === 'Scyther' || set.species === 'Sneasel' || set.species === 'Archen') return ["" + set.species + " cannot cross evolve."];
-
-			// That was the easy checks done
-			let template = this.getTemplate(set.species);
-			if (!template.evos.length) return ["" + set.species + " cannot cross evolve because it doesn't evolve."];
-			let crossTemplate = this.getTemplate(set.name);
-			if (!crossTemplate.exists) return;
-			let crossPrevoTemplate = this.getTemplate(crossTemplate.prevo);
-
-			// Figure out which stage evolution we're dealing with (how many pre-evolution stages are there)
-			let setStage = 1, crossStage = 1;
-			if (template.prevo) {
-				setStage++;
-				if (this.getTemplate(template.prevo).prevo) {
-					setStage++;
-				}
-			}
-			if (crossTemplate.prevo) {
-				crossStage++;
-				if (crossPrevoTemplate.prevo) {
-					crossStage++;
-				}
-			}
-			if (setStage + 1 !== crossStage) return ["Cross evolution must follow evolutionary stages.", "(" + set.species + " is Stage " + setStage + " and can only cross evolve to Stage " + (setStage + 1) + ")"];
+		validateSet: function (set, teamHas) {
+			let crossTemplate = this.tools.getTemplate(set.name);
+			if (!crossTemplate.exists) return this.validateSet(set, teamHas);
+			let template = this.tools.getTemplate(set.species);
+			if (!template.exists) return ["The Pokemon '" + set.species + "' does not exist."];
+			if (!template.evos.length) return ["" + template.species + " cannot cross evolve because it doesn't evolve."];
+			if (crossTemplate.species == 'Shedinja') return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it is banned."];
+			if (crossTemplate.battleOnly || !crossTemplate.prevo) return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it isn't an evolution."];
+			let crossPrevoTemplate = this.tools.getTemplate(crossTemplate.prevo);
+			if (!crossPrevoTemplate.prevo !== !template.prevo) return ["" + template.species + " cannot cross into " + crossTemplate.species + " because they are not consecutive evolutionary stages."];
 
 			// Make sure no stat is too high/low to cross evolve to
 			let stats = {'hp': 'HP', 'atk': 'Attack', 'def': 'Defense', 'spa': 'Special Attack', 'spd': 'Special Defense', 'spe': 'Speed'};
-			let statDelta = 0, evoStat = 0;
-			for (let statid in crossTemplate.baseStats) {
-				statDelta = crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
-				evoStat = template.baseStats[statid] + statDelta;
+			for (let statid in template.baseStats) {
+				let evoStat = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
 				if (evoStat < 1) {
-					return ["" + set.species + " cannot cross evolve to " + set.name + " because its " + stats[statid] + " is too low."];
+					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too low."];
 				} else if (evoStat > 255) {
-					return ["" + set.species + " cannot cross evolve to " + set.name + " because its " + stats[statid] + " is too high."];
+					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too high."];
 				}
 			}
 
+			let mixedTemplate = Object.assign({}, template);
 			// Ability test
-			let canHaveAbility = false;
-			for (let a in crossTemplate.abilities) {
-				if (crossTemplate.abilities[a] === set.ability) {
-					canHaveAbility = true;
-				}
-			}
-			let restrictedAbilities = ['Huge Power', 'Pure Power'];
-			for (let i = 0; i < restrictedAbilities.length; i++) {
-				let restrictedAbility = restrictedAbilities[i];
-				if (set.ability === restrictedAbility) {
-					// Retest for illegal ability
-					canHaveAbility = false;
-					let abilities = Object.keys(template.abilities);
-					for (let i in abilities) {
-						if (template.abilities[i] === restrictedAbility) {
-							canHaveAbility = true;
-						}
-					}
-				}
-			}
-			if (!canHaveAbility) return ["" + set.species + " cannot use " + set.ability + " when cross evolved."];
+			let ability = this.tools.getAbility(set.ability);
+			if (ability.name !== 'Huge Power' && ability.name !== 'Pure Power' && ability.name !== 'Shadow Tag') mixedTemplate.abilities = crossTemplate.abilities;
 
-			// Movepool (We can't rely on 'Illegal' learnset for the learnset test)
-			// This test isn't reliable for compability, but we can't rely on it anyway
-			// because ability incompabilities. So we end up with a fairly poor test that makes
-			// sure that the Pokemon at least learn the moves it doesn't inherit `sometime`.
-
-			let added = {};
-			// These will have loads of duplicates, but it's okay
-			let standardMovepool = [];
-			let crossMovepool = [];
-			do {
-
-				added[template.species] = true;
-				standardMovepool = standardMovepool.concat(Object.keys(template.learnset));
-				if (template.prevo) {
-					template = this.getTemplate(template.prevo);
-				}
-			} while (template && template.species && !added[template.species]);
-			do {
-				added[crossTemplate.species] = true;
-				crossMovepool = crossMovepool.concat(Object.keys(crossTemplate.learnset));
-				if (crossTemplate.prevo) {
-					crossTemplate = this.getTemplate(crossTemplate.prevo);
-				}
-			} while (crossTemplate && crossTemplate.species && !added[crossTemplate.species]);
-			let problems = [];
+			mixedTemplate.learnset = Object.assign({}, template.learnset);
 			let newMoves = 0;
 			for (let i in set.moves) {
 				let move = toId(set.moves[i]);
-				if (move.substr(0, 11) === 'hiddenpower') move = 'hiddenpower'; // Really big hack :(
-				if (crossMovepool.indexOf(move) >= 0 && standardMovepool.indexOf(move) < 0) {
-					newMoves++;
-				} else if (standardMovepool.indexOf(move) < 0) {
-					problems.push(set.species + " cannot learn " + set.moves[i] + ".");
+				if (!this.checkLearnset(move, template)) continue;
+				if (this.checkLearnset(move, crossTemplate)) continue;
+				if (++newMoves > 2) continue;
+				mixedTemplate.learnset[move] = ['6T'];
+			}
+			return this.validateSet(set, teamHas, mixedTemplate);
+		},
+		onBegin: function () {
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+                                if (pokemon.set.name === pokemon.set.species) continue;
+				let crossTemplate = this.getTemplate(pokemon.name);
+				if (!crossTemplate.exists) continue;
+				try {
+				let template = pokemon.baseTemplate;
+				let crossPrevoTemplate = this.getTemplate(crossTemplate.prevo);
+				let mixedTemplate = Object.assign({}, template);
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
+				mixedTemplate.weightkg = Math.max(0.1, template.weightkg + crossTemplate.weightkg - crossPrevoTemplate.weightkg);
+				mixedTemplate.nfe = false;
+
+				mixedTemplate.baseStats = {};
+				for (let statid in template.baseStats) {
+					mixedTemplate.baseStats[statid] = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
+				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+
+				mixedTemplate.types = template.types.slice();
+				if (crossTemplate.types[0] !== crossPrevoTemplate.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
+				if (crossTemplate.types[1] !== crossPrevoTemplate.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
+				if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
+
+				pokemon.baseTemplate = mixedTemplate;
+				pokemon.formeChange(mixedTemplate);
+				pokemon.crossEvolved = true;
+				} catch (e) {
+					this.add('-hint', 'Failed to cross evolve ' + pokemon.baseTemplate.species + ' to ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
 				}
 			}
-			if (newMoves > 2) return ["You can only gain 2 Moves from the cross evolution.", "(" + set.species + " has gained " + newMoves + " moves.)"];
-			if (problems) return problems;
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
