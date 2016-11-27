@@ -79,4 +79,7 @@ exports.BattleLearnsets = {
     darkpulse: ["7M"],
     confide: ["7M"],
     }},
+	detuoy: { learnset: {
+		explosion: ["7L1"],
+	}},
   };
