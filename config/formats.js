@@ -5637,7 +5637,6 @@ onBegin: function () {
 		mod: 'aurora',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
-		requirePentagon: true,
 	},
 	{
 		section: "What If",
