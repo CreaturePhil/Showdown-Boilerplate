@@ -1557,7 +1557,7 @@ class BattleSide {
 			let disabledSource = '';
 			for (let i = 0; i < moves.length; i++) {
 				if (moves[i].id !== moveid) continue;
-				if (!moves[i].disabled) {
+				if (!moves[i].disabled || moves[i].isZ) {
 					isEnabled = true;
 					break;
 				} else if (moves[i].disabledSource) {
