@@ -1,7 +1,7 @@
 'use strict';
 
 exports.BattlePokedex = {
-  		yddraig: {
+  	yddraig: {
 	      	num: 10001,
 	      	species: "Yddraig",
 	      	types: ["Dragon"],
@@ -11,5 +11,16 @@ exports.BattlePokedex = {
 	      	weightkg: 23,
 	      	color: "Red",
 	      	eggGroups: ["Dragon"],
+    	},
+	detuoy: {
+	      	num: 10002,
+	      	species: "Detuoy",
+	      	types: ["Steel", "Flying"],
+		      baseStats: {hp: 60, atk: 120, def: 150, spa: 30, spd: 120, spe: 30},
+	      	abilities: {0: "Aerilate"},
+	      	heightm: 1.8,
+	      	weightkg: 666,
+	      	color: "Gray",
+	      	eggGroups: ["Mineral"],
     	},
   };
