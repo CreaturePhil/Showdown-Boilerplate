@@ -5636,7 +5636,7 @@ onBegin: function () {
 		column: 5,
 		mod: 'aurora',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Power Construct', 'Shadow Tag'],
+		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
 		requirePentagon: true,
 	},
 	{
