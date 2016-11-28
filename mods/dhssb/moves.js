@@ -1,6 +1,22 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"bonecrushingdeathroll" : {
+		name: "Bone Crushing Death Roll",
+		id: "bonecrushingdeathroll",
+		category: 'Physical',
+		basePower: 120,
+		boosts: {
+			def: -1,
+			spd: -1,
+		},
+		pp: 10,
+		accuracy: 100,
+		type: 'Normal',
+		priority:0, 
+		flags: {contact: 1, protect: 1, mirror: 1},
+		target: 'normal',
+	}
 	"blizzard": {
 		num: 59,
 		accuracy: 70,
