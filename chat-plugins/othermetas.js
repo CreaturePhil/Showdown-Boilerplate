@@ -1135,10 +1135,13 @@ exports.commands= {
 		}
 		ability = ability.substring(0,ability.length-1);
 		ability = ability+" + "+pokemen[name2].abilities['0'];
-                if(separated[2] && toId(separated[2]) === "shiny" && pokemen[name2].types[1] && pokemen[name].types[0] !== pokemen[name2].types[1])
+                if(separated[2] && toId(separated[2]) === "shiny" && pokemen[name2].types[1])
                         type = type + '/' + pokemen[name2].types[1];
                 else if (pokemen[name].types[0] != pokemen[name2].types[0])
                         type = type + '/' + pokemen[name2].types[0];
+                if(type.split("/")[0] === type.split("/")[1]) {
+                        type = type.split("/")[0];
+                }
                 let bst = baseStats['avehp'] + baseStats['aveatk'] + baseStats['avedef'] + baseStats['avespa'] + baseStats['avespd'] + baseStats['avespe'];
                 text = "<b>Stats</b>: " + baseStats['avehp'] + "/" + baseStats['aveatk'] + "/" + baseStats['avedef'] + "/" + baseStats['avespa'] + "/" + baseStats['avespd'] + "/" + baseStats['avespe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
                 this.sendReplyBox(text);
