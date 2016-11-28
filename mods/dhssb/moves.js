@@ -1,6 +1,30 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"mythicform": {
+		category: "Status",
+		id: "mythicform",
+		name: "Mythic Form",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
+		effect: {
+			onStart: function (pokemon) {
+				if (pokemon.hasType('Dragon')) return false;
+				if (!target.addType('Dragon')) return false;
+				this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] move: Mythic Form');
+			},
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Recover", target);
+			this.add('-anim', source, "Wish", target);
+		},
+		secondary: false,
+		target: "self",
+		type: "Dragon",
+		contestType: "Clever",
+	},
 	"powerlick": {
 		accuracy: 100,
 		basePower: 90,
@@ -16,7 +40,7 @@ exports.BattleMovedex = {
 				source.trySetStatus(stat[this.random(2)], target);
 			}
 			if (this.random(10) < 3) {
-				stat = ['hp','atk','def','spa','spd','spe','evasion','accuracy']
+				stat = ['atk','def','spa','spd','spe','evasion','accuracy']
 				boostobj = {};
 				boostobj[stat[this.random(6)]] = 1;
 				this.boost(boostobj, source);

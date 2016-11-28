@@ -1,11 +1,30 @@
 "use strict";
 
 exports.BattleScripts = {
-        	
+     pokemon: {
+				isGrounded: function(negateImmunity) {
+					if ('gravity' in this.battle.pseudoWeather) return true;
+					if ('ingrain' in this.volatiles) return true;
+					if ('smackdown' in this.volatiles) return true;
+					let item = (this.ignoringItem() ? '' : this.item);
+					if (item === 'ironball') return true;
+					// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+					if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
+					if ((this.hasAbility('levitate') || this.volatiles['levitate']) && !this.battle.suppressingAttackEvents()) return null;
+					if ('magnetrise' in this.volatiles) return false;
+					if ('telekinesis' in this.volatiles) return false;
+					return item !== 'airballoon';
+				}
+     },
 	randomSeasonalMeleeTeam: function (side) {
 		let team = [];
 		let variant = (this.random(2) === 1);
 		let sets = {
+			'flufi' : {
+				species: 'Raichu', ability: 'Static Boost', item: 'Life Orb', gender: 'M',
+				moves: ['thunder', 'draco meteor', 'focus blast'],
+				signatureMove: "Mythic Form",evs: {hp:188, spa:252, spe:64}, nature: 'Modest',
+			},
             'BBgun999' : {
 				species: 'Goodra', ability: 'Big Bullet Gun', item: 'Rocky Helmet', gender: 'Male',
 				moves: ['draco meteor', 'overheat', 'close combat'],

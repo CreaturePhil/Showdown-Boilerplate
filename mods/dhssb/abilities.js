@@ -4,6 +4,7 @@ exports.BattleAbilities = {
 	"bigbulletgun": {
 		onStart: function (pokemon) {
 			this.boost({def:-2,spd:-2});
+			this.add('-ability', pokemon, 'Big Bullet Gun');
 		},
 		onModifyMovePriority: -2,
 		onModifyMove: function (move) {
@@ -18,6 +19,15 @@ exports.BattleAbilities = {
 		},
 		id:'bigbulletgun',
 		name:'Big Bullet Gun',
+	},
+	"staticboost": {
+		onStart: function (pokemon) {
+			this.addVolatile("levitate");
+			this.add('-ability', pokemon, 'Static Boost');
+			this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1, evasion:1});
+		},
+		id:'staticboost',
+		name:'Static Boost',
 	},
 	"aquify": {
 		onModifyMovePriority: -1,
