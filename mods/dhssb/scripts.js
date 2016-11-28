@@ -46,7 +46,7 @@ exports.BattleScripts = {
 				species: 'Giratina-Origin', ability: 'The Underlord', item: 'Griseous Orb', gender: 'M', shiny:true,
 				moves: ['willowisp', 'shadowball', 'dragonpulse'],
 				signatureMove: "The Loom Effect",
-				ivs: {hp:31, atk:0, def:31, spa:31, spd:31, spe:31}, nature: 'Modest',
+				evs: {hp:252, spa: 252, def:4}, nature: 'Modest',
 			},
 			'charizard8888': {
 				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
@@ -103,12 +103,12 @@ exports.BattleScripts = {
 			},
 			'Hydrostatics': {
 				species: 'Palkia', ability: 'Pressure Breaker', item: 'Leftovers', gender: 'M' , shiny:true,
-				moves: ['spacialrend', 'hydropump', 'flashcannon'],
+				moves: ['coreenforcer', 'hydropump', 'flashcannon'],
 				signatureMove: "Space Compress",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest',
 			},
 			'Digital Edge': {
-				species: 'Flareon', ability: 'Flair Hax', item: 'Focus Sash', shiny:true,
+				species: 'Flareon', ability: 'Flair Hax', item: 'Focus Sash', 
 				moves: ['iciclecrash', 'ironhead', 'uturn'],
 				signatureMove: "Sacred Hax",
 				evs: {atk:252, spd:4, spe:252}, nature: 'Adamant',
@@ -129,7 +129,7 @@ exports.BattleScripts = {
 				species: 'Kyurem-B', ability: 'Breakthrough', item: 'Life Orb', gender: 'M', shiny: true,
 				moves: ['outrage','icebeam','fusionbolt'], name: 'Eternal Mayhem',
 				signatureMove: "Dragon Symphony",
-				evs: {hp:248, spa:8, atk:252}, nature: 'Naughty',
+				evs: {spe:252, spa:4, atk:252}, nature: 'Naughty',
 			},
 			'Spandan': {
 			    species: 'Salamence', ability: 'Multiscale', item: 'Salamencite', gender: 'M',
@@ -138,7 +138,7 @@ exports.BattleScripts = {
 				evs: {hp: 252, atk:252, def:252, spa:252, spd:252, spe:252}, nature: 'Naive',
 			},
 			'SnakeXZero5': {
-			    species: 'Sneasel', ability: 'Knowledge', item: 'Liechi Berry', gender: 'M',
+			    species: 'Weavile', ability: 'Knowledge', item: 'Liechi Berry', gender: 'M',
 				moves: ['icepunch', 'knockoff', 'fakeout'],
 				signatureMove: "Logic Power",
 				evs: {atk:252, spd:6, spe:252}, nature: 'Adamant',
@@ -157,7 +157,7 @@ exports.BattleScripts = {
 			},
 			'XpRienzo ☑-☑': {
  				species: 'Reshiram', ability: 'Adaptability', item: 'Charcoal', gender: 'M',
- 				moves: ['fusionflare', 'spacialrend', 'voltswitch'],
+ 				moves: ['coreenforcer', 'psystrike', 'voltswitch'],
  				signatureMove: "blehflame",
  				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
  			},
@@ -174,7 +174,7 @@ exports.BattleScripts = {
  				evs: {spa:252, spd:4, spe:252}, nature: 'Jolly',
  			},
 			'FlareonDriod': {
- 				species: 'Flareon', ability: 'Slowchat', item: 'Charcoal', gender: 'F',
+ 				species: 'Flareon', ability: 'Slowchat', item: 'Charcoal', gender: 'F', shiny:true,
  				moves: ['vcreate', 'recover', 'bellydrum'],
  				signatureMove: "banhammah",
  				evs: {hp: 252, atk: 252, spe:252}, nature: 'Jolly',
