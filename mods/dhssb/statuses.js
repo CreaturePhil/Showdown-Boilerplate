@@ -9,6 +9,14 @@ exports.BattleStatuses = {
 			}
 		},
 	},
+	"levitate": {
+		desc: "This Pokemon is immune to Ground. Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
+		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it.",
+		// airborneness implemented in battle-engine.js:BattlePokemon#isGrounded
+		id: "levitate",
+		name: "Levitate",
+		effectType: "Ability",
+	},
 	russianwinter: {
 		effectType: 'Weather',
 		duration: 0,
