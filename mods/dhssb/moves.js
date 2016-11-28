@@ -16,7 +16,7 @@ exports.BattleMovedex = {
 		priority:0, 
 		flags: {contact: 1, protect: 1, mirror: 1},
 		target: 'normal',
-	}
+	},
 	"blizzard": {
 		num: 59,
 		accuracy: 70,
