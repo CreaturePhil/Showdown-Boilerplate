@@ -22,7 +22,7 @@ exports.BattleAbilities = {
 	},
 	"staticboost": {
 		onStart: function (pokemon) {
-			this.addVolatile("levitate");
+			pokemon.addVolatile("levitate");
 			this.add('-ability', pokemon, 'Static Boost');
 			this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1, evasion:1});
 		},
