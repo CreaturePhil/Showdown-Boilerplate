@@ -11,7 +11,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function (pokemon) {
 				if (pokemon.hasType('Dragon')) return false;
-				if (!target.addType('Dragon')) return false;
+				if (!pokemon.addType('Dragon')) return false;
 				this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] move: Mythic Form');
 			},
 		},
