@@ -9,9 +9,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		effect: {
 			onStart: function (pokemon) {
-				if (pokemon.hasType('Dragon')) return false;
-				pokemon.addType('Dragon');
-				this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] move: Mythic Form');
+				if (pokemon.side.pokemon[0].hasType('Dragon')) return false;
+				pokemon.side.pokemon[0].addType('Dragon');
+				this.add('-start', pokemon.side.pokemon[0], 'typeadd', 'Dragon', '[from] move: Mythic Form');
 			},
 		},
 		onPrepareHit: function (target, source) {
