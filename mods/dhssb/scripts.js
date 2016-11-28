@@ -6,6 +6,11 @@ exports.BattleScripts = {
 		let team = [];
 		let variant = (this.random(2) === 1);
 		let sets = {
+            'BBgun999' : {
+				species: 'Goodra', ability: 'Big Bullet Gun', item: 'Rocky Helmet', gender: 'Male',
+				moves: ['draco meteor', 'overheat', 'close combat'],
+				signatureMove: "Power Lick",evs: {hp: 252, def: 4, spd: 252}, nature: 'Naughty',
+			},
             'OriolesFan52': {
 				species: 'Feraligatr', ability: 'Aquify', item: 'Life Orb', gender: 'M', shiny:true, 
 				moves: ['extremespeed', 'dragondance', 'icepunch'],

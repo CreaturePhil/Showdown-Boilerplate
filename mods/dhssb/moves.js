@@ -1,6 +1,33 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"powerlick": {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		id: "powerlick",
+		name: "Power Lick",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onHit: function (target, source) {
+			if (this.random(10) < 1) {
+				stat = ['par','slp']
+				source.trySetStatus(stat[this.random(2)], target);
+			}
+			if (this.random(10) < 3) {
+				stat = ['hp','atk','def','spa','spd','spe','evasion','accuracy']
+				boostobj = {};
+				boostobj[stat[this.random(6)]] = 1;
+				this.boost(boostobj, source);
+			}
+		},
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
+		drain: [25, 200],
+		target: "normal",
+		type: "Ice",
+		contestType: "Beautiful",
+	},
 	"bonecrushingdeathroll" : {
 		name: "Bone Crushing Death Roll",
 		id: "bonecrushingdeathroll",

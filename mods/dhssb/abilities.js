@@ -1,6 +1,24 @@
 'use strict';
 
 exports.BattleAbilities = {
+	"bigbulletgun": {
+		onStart: function (pokemon) {
+			this.boost({def:-2,spd:-2});
+		},
+		onModifyMovePriority: -2,
+		onModifyMove: function (move) {
+			if (move.id === "closecombat") {
+				move.category = "Special";
+			}
+		},
+		onBoost: function (boost) {
+			for (let i in boost) {
+				boost[i] *= -1;
+			}
+		},
+		id:'bigbulletgun',
+		name:'Big Bullet Gun',
+	},
 	"aquify": {
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
