@@ -7,7 +7,6 @@ exports.BattleMovedex = {
 		name: "Mythic Form",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		effect: {
 			onStart: function (pokemon) {
 				if (pokemon.hasType('Dragon')) return false;
