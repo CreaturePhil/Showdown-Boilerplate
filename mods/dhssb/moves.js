@@ -25,11 +25,11 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"totalannhilation": {
-		accuracy: 100,
+		accuracy: true,
 		basePower: 300,
 		category: "Physical",
 		desc: "The user recovers the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
-		shortDesc: "User recovers 75% of the damage dealt.",
+		shortDesc: "User recovers the damage dealt.",
 		id: "totalannhilation",
 		isViable: true,
 		name: "Total Annhilation",
@@ -46,8 +46,6 @@ exports.BattleMovedex = {
 			},
 		},
 		drain: [4, 4],
-		secondary: false,
-		target: "any",
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "V-Create", target);
