@@ -649,7 +649,6 @@ exports.Formats = [
 				if (name=="diarmuidodyna")
 				{
 					pokemon.types[1]="Ice";
-					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 				}
 				for (let j = 0; j < pokemon.moveset.length; j++) {
 					let moveData = pokemon.moveset[j];
@@ -711,6 +710,7 @@ exports.Formats = [
 			}
 			if(name === 'diarmuidodyna') {
 				this.add('c|&Diarmuid O\'Dyna|OMG can i help yoU?');
+					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 			}
 			if(name === 'hydrostatics') {
 				this.add('c|+Hydrostatics|Gl, Hf Kid');
