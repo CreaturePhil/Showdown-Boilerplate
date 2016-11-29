@@ -18916,6 +18916,48 @@ exports.BattleMovedex = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
+	"zassist": {
+		num: 274,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Belch, Bestow, Bounce, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dig, Dive, Dragon Tail, Endure, Feint, Fly, Focus Punch, Follow Me, Helping Hand, Hold Hands, King's Shield, Mat Block, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Phantom Force, Protect, Rage Powder, Roar, Shadow Force, Sketch, Sky Drop, Sleep Talk, Snatch, Spiky Shield, Struggle, Switcheroo, Thief, Transform, Trick, or Whirlwind.",
+		shortDesc: "Uses a random move known by a team member.",
+		id: "zassist",
+		name: "Z-Assist",
+		pp: 20,
+		priority: 0,
+		flags: {},
+		onHit: function (target) {
+			let moves = [];
+			for (let j = 0; j < target.side.pokemon.length; j++) {
+				let pokemon = target.side.pokemon[j];
+				if (pokemon === target) continue;
+				for (let i = 0; i < pokemon.moveset.length; i++) {
+					let move = pokemon.moveset[i].id;
+					let noAssist = {
+						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, skydrop:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1,
+					};
+					if (!noAssist[move] && !this.getMove(move).isZ) {
+						moves.push(move);
+					}
+				}
+			}
+			let randomMove = '';
+			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (!randomMove) {
+				return false;
+			}
+			this.add("-message", target.name+" surrounded itself with its Z Power!");
+			this.add("-message", target.name+ " unleashes its full force Z Move!");
+			this.add("-message", target.name+ " will change "+randomMove.name+" chosen by Assist to its Z-Move!");
+			this.useMove(randomMove, target, this.getMove("assist"),  this.getZmove(randomMove, target, true));
+		},
+		secondary: false,
+		target: "self",
+		type: "Normal",
+		contestType: "Cute",
+	},
 	"magikarpsrevenge": {
 		accuracy: true,
 		basePower: 120,
