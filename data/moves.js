@@ -18948,10 +18948,32 @@ exports.BattleMovedex = {
 			if (!randomMove) {
 				return false;
 			}
+			let zMoveTable =  {
+				Poison: "Acid Downpour",
+				Fighting: "All-Out Pummeling",
+				Dark: "Black Hole Eclipse",
+				Grass: "Bloom Doom",
+				Normal: "Breakneck Blitz",
+				Rock: "Continental Crush",
+				Steel: "Corkscrew Crash",
+				Dragon: "Devastating Drake",
+				Electric: "Gigavolt Havoc",
+				Water: "Hydro Vortex",
+				Fire: "Inferno Overdrive",
+				Ghost: "Never-Ending Nightmare",
+				Bug: "Savage Spin-Out",
+				Psychic: "Shattered Psyche",
+				Ice: "Subzero Slammer",
+				Flying: "Supersonic Skystrike",
+				Ground: "Tectonic Rage",
+				Fairy: "Twinkle Tackle",
+			};
 			this.add("-message", target.name+" surrounded itself with its Z Power!");
 			this.add("-message", target.name+ " unleashes its full force Z Move!");
-			this.add("-message", target.name+ " will change "+randomMove.name+" chosen by Assist to its Z-Move!");
-			this.useMove(randomMove, target, this.getMove("assist"),  this.getZmove(randomMove, target, true));
+			this.add("-message", target.name+ " will change " + this.getMove(randomMove).name +" chosen by Assist to its Z-Move!");
+			let zMove = this.getMove(zMoveTable[this.getMove(randomMove).type]);
+			zMove.basePower = this.getMove(randomMove).zMovePower;
+			this.useMove(zMove, target);
 		},
 		secondary: false,
 		target: "self",
