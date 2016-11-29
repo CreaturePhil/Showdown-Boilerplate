@@ -1,6 +1,17 @@
 'use strict';
 
 exports.BattleAbilities = {
+	"ultratechnical": {
+		onBasePowerPriority: 8,
+		onBasePower: function (basePower, attacker, defender, move) {
+			if (basePower <= 90) {
+				this.debug('Technician boost');
+				return this.chainModify(1.5);
+			}
+		},
+		id: "ultratechnical",
+		name: "Ultra Technical",
+	},
 	"bigbulletgun": {
 		onStart: function (pokemon) {
 			this.boost({def:-2,spd:-2});
@@ -363,6 +374,7 @@ exports.BattleAbilities = {
 			}
 			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
+			
 			this.useMove(newMove, target, source);
 			return null;
 		},
