@@ -24,6 +24,41 @@ exports.BattleMovedex = {
 		type: "Dragon",
 		contestType: "Clever",
 	},
+	"totalannhilation": {
+		accuracy: 100,
+		basePower: 300,
+		category: "Physical",
+		desc: "The user recovers the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		shortDesc: "User recovers 75% of the damage dealt.",
+		id: "totalannhilation",
+		isViable: true,
+		name: "Total Annhilation",
+		pp: 1,
+		priority: 1,
+		flags: {protect: 1, mirror: 1, distance: 1, heal: 1, sound:1},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					def: 2,
+					spd: 2,
+				},
+			},
+		},
+		drain: [4, 4],
+		secondary: false,
+		target: "any",
+		onPrepareHit: function (target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "V-Create", target);
+			this.add('-anim', source, "Extreme Speed", target);
+			this.add('-anim', source, "Gigavolt Havoc", target);
+			this.add('-anim', source, "Explosion", target);
+			this.add("c|~Spandan|YOU DONT MESS WITH ME FAGGOT");
+		},
+		type: "Flying",
+		isZ: "salamencite",
+	},
 	"powerlick": {
 		accuracy: 100,
 		basePower: 90,
@@ -45,6 +80,10 @@ exports.BattleMovedex = {
 				this.boost(boostobj, source);
 			}
 		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Lick", target);
+		},
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
 		drain: [25, 200],
 		target: "normal",
@@ -59,6 +98,10 @@ exports.BattleMovedex = {
 		boosts: {
 			def: -1,
 			spd: -1,
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Breakneck Blitz", target);
 		},
 		pp: 10,
 		accuracy: 100,
@@ -168,6 +211,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'tailwind',
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Assurance", target);
+		},
 		effect: {
 			onStart: function (side) {
 				this.add('-sidestart', side, 'move: Forced Assistance');
@@ -298,10 +345,10 @@ exports.BattleMovedex = {
 		},
 		self: {
 	        chance: 50,
-		boosts: {
-			spe: 1,
+			boosts: {
+				spe: 1,
+			},
 		},
-	},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
                         if (source.name == 'Quiet Chimchar') this.add("c|@Quiet Chimchar|I like to Cha Cha");
@@ -310,7 +357,7 @@ exports.BattleMovedex = {
 		type: "Fire",
 		contestType: "Cool",
 	},
-        "rushb": {
+    "rushb": {
 		accuracy: 100,
 		basePower: 250,
 		category: "Special",
@@ -376,33 +423,6 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Flying"
-	},
-	llamadance: {
-		accuracy: 100,
-		basePower: 200,
-		category: "Physical",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
-		shortDesc: "User cannot move next turn.",
-		id: "llamadance",
-		name: "llamadance",
-		pp: 12,
-		priority: 0,
-		ohko: true,
-		flags: {recharge: 1, protect: 1, mirror: 1},
-		self: {
-			volatileStatus: 'mustrecharge',
-		},
-		onHit: function (target, source) {
-			if (source.name == 'iAlain') this.add("c|~iAlain|Let's llamadance");
-		},
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "earthquake", target);
-		},
-		secondary: false,
-		target: "normal",
-		type: "Dragon",
-		contestType: "Cool",
 	},
 	spacecompress: {
 		accuracy: 100,
@@ -485,28 +505,28 @@ exports.BattleMovedex = {
 		},
 	},
 	hyperspeedpunch: {
-	accuracy: 100,
-	basePower: 45,
-	category: "Physical",
-	id: "hyperspeedpunch",
-	isViable: true,
-	isNonstandard: true,
-	name: "Hyperspeed Punch",
-	pp: 10,
-	priority: 2,
-	flags: {protect: 1, mirror: 1},
-	onPrepareHit: function (target, source) {
-		this.attrLastMove('[still]');
-		this.add('-anim', source, "Mach Punch", target);
+		accuracy: 100,
+		basePower: 45,
+		category: "Physical",
+		id: "hyperspeedpunch",
+		isViable: true,
+		isNonstandard: true,
+		name: "Hyperspeed Punch",
+		pp: 10,
+		priority: 2,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Mach Punch", target);
+		},
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Bug",
 	},
-	secondary: {
-		chance: 20,
-		volatileStatus: 'flinch',
-	},
-	target: "normal",
-	type: "Bug",
-	},
-        garchompepicness: {
+    garchompepicness: {
 		accuracy: 100,
 		category: "Status",
 		id: "garchompepicness",
@@ -644,26 +664,27 @@ exports.BattleMovedex = {
 			status: 'par',
 		},
 		target: "any",
-		type: "Flying",
+		type: "dRAGON",
 	},
 	"yomammajoke": {
 		accuracy: 100,
-		basePower: 150,
+		basePower: 180,
 		category: "Physical",
 		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "User recovers 75% of the damage dealt.",
 		id: "yomammajoke",
 		isViable: true,
-		name: "Yo MaMMa Joke",
+		name: "Yo Mamma Joke",
 		pp: 10,
 		priority: 1,
-		flags: {protect: 1, mirror: 1, distance: 1, heal: 1},
+		flags: {protect: 1, mirror: 1, distance: 1, heal: 1, sound:1},
 		drain: [3, 4],
 		secondary: false,
 		target: "any",
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Taunt", target);
+			this.add('-anim', source, "Boomburst", target);
 			this.add('-anim', source, "Extreme Speed", target);
 			this.add("c|~Spandan|"+["Yo mama so stupid she got locked in a grocery store and starved!", "Yo mama so fat that the Richie Rich had to pay for her lipo-suction operation.","Yo mama so fat it took her four weeks to die from lethal injection.","Yo mama so fat she sat on an iPhone and turned it into an iPad","Yo mama so fat when she stepped on the scale, the doctor said \"Holy Crap, That's My Phone Number\"","Yo mama so fat she uses Google Earth to take a selfie.","Yo mama so stupid when the computer said \"Press any key to continue\", she couldn't find the \"Any\" key.","Yo mama so bald, I could polish her head and take her bowling.","Yo mama is so ugly, Bob the builder said: 'i can't fix that.'","Yo mama so ugleh, the Illuminati closed its eye.","Yo mama so ugleh, Hello Kitty said goodbye.","Yo mama so ugly, One direction went the other direction."][this.random(12)]);
 		},
