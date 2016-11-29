@@ -664,7 +664,7 @@ exports.BattleMovedex = {
 			status: 'par',
 		},
 		target: "any",
-		type: "dRAGON",
+		type: "Dragon",
 	},
 	"yomammajoke": {
 		accuracy: 100,
