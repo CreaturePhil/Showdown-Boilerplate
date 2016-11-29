@@ -4922,7 +4922,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
                 else mixedTemplate.types.length = 1;
 				pokemon.baseTemplate = mixedTemplate;
 				pokemon.fusion = true;
-				pokemon.abilitwo = crossTemplate.abilities[0];
+				pokemon.abilitwo = toId(crossTemplate.abilities[0]);
 				pokemon.formeChange(mixedTemplate);
 				} catch (e) {
 					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
