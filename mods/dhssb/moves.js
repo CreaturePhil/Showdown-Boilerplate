@@ -64,13 +64,15 @@ exports.BattleMovedex = {
 		priority: 3,
 		ignoreEvasion: true,
 		ignoreDefensive: true,
-		flags: {protect: 1, mirror: 1, distance: 1, heal: 1, sound:1},
+		flags: {protect: 1, distance: 1, heal: 1, sound:1},
 		secondary: {
 			chance: 100,
 			self: {
 				boosts: {
-					def: 1,
-					spd: 1,
+					def: -1,
+					spd: -1,
+					atk: -1,
+					spa: -1,
 				},
 			},
 		},
@@ -83,6 +85,9 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "Explosion", target);
 			this.add("c|~Spandan|YOU DONT MESS WITH ME FAGGOT");
 		},
+		onAfterMove: function(target, source, move) {
+			this.add("c|~Spandan|Huh im exhausted.")
+		}
 		type: "Flying",
 		isZ: "salamencite",
 	},
