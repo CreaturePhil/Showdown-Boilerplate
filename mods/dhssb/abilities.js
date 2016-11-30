@@ -360,7 +360,7 @@ exports.BattleAbilities = {
 		},
 		onSwitchOut: function(pokemon) {
 			pokemon.types = pokemon.baseTemplate.types;
-		}
+		},
 		id: "theunderlord",
 		name: "The Underlord",
 	},
