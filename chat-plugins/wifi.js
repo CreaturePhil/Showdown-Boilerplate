@@ -355,7 +355,7 @@ let commands = {
 	quiz: 'question',
 	qg: 'question',
 	question: function (target, room, user) {
-		if (room.id !== 'wifi' || !target) return false;
+		if (room.id !== 'lobby' || !target) return false;
 		if (room.giveaway) return this.errorReply("There is already a giveaway going on!");
 
 		let params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
@@ -372,7 +372,7 @@ let commands = {
 	},
 	changeanswer: 'changequestion',
 	changequestion: function (target, room, user, conn, cmd) {
-		if (room.id !== 'wifi') return false;
+		if (room.id !== 'lobby') return false;
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (room.giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
 
@@ -382,7 +382,7 @@ let commands = {
 	},
 	showanswer: 'viewanswer',
 	viewanswer: function (target, room, user) {
-		if (room.id !== 'wifi') return false;
+		if (room.id !== 'lobby') return false;
 		let giveaway = room.giveaway;
 		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
@@ -393,8 +393,8 @@ let commands = {
 	},
 	guessanswer: 'guess',
 	guess: function (target, room, user) {
-		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
-		if (!this.canTalk()) return;
+		if (room.id !== 'lobby') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (room.giveaway.type !== 'question') return this.errorReply("This is not a question giveaway.");
 		room.giveaway.guessAnswer(user, target);
@@ -404,7 +404,7 @@ let commands = {
 	lg: 'lottery',
 	lotto: 'lottery',
 	lottery: function (target, room, user) {
-		if (room.id !== 'wifi' || !target) return false;
+		if (room.id !== 'lobby' || !target) return false;
 		if (room.giveaway) return this.errorReply("There is already a giveaway going on!");
 
 		let params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
@@ -431,8 +431,8 @@ let commands = {
 	joinlotto: 'join',
 	joinlottery: 'join',
 	join: function (target, room, user, conn, cmd) {
-		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
-		if (!this.canTalk()) return;
+		if (room.id !== 'lobby') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		let giveaway = room.giveaway;
 		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (giveaway.type !== 'lottery') return this.errorReply("This is not a lottery giveaway.");
@@ -453,7 +453,7 @@ let commands = {
 	// general.
 	ban: function (target, room, user) {
 		if (!target) return false;
-		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (room.id !== 'lobby') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.can('warn', null, room)) return false;
 
 		target = this.splitTarget(target);
@@ -471,7 +471,7 @@ let commands = {
 	},
 	unban: function (target, room, user) {
 		if (!target) return false;
-		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (room.id !== 'lobby') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.can('warn', null, room)) return false;
 
 		this.splitTarget(target);
@@ -484,7 +484,7 @@ let commands = {
 	},
 	stop: 'end',
 	end: function (target, room, user) {
-		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (room.id !== 'lobby') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (!this.can('warn', null, room) && user.userid !== room.giveaway.host.userid) return false;
 
@@ -497,7 +497,7 @@ let commands = {
 	},
 	rm: 'remind',
 	remind: function (target, room, user) {
-		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (room.id !== 'lobby') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		let giveaway = room.giveaway;
 		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (!this.runBroadcast()) return;
@@ -510,7 +510,7 @@ let commands = {
 	},
 	'': 'help',
 	help: function (target, room, user) {
-		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (room.id !== 'lobby') return this.errorReply("This command can only be used in the Wi-Fi room.");
 
 		let reply = '';
 		switch (target) {
