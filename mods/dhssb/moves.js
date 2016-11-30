@@ -1,6 +1,33 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"heroicbeatdown": {
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		id: "heroicbeatdown",
+		isViable: true,
+		name: "Heroic Beatdown",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		self: {
+			boosts: {
+				def: 1,
+				spd: 1,
+				atk: 1,
+				spe: -1
+			},
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Close Combat", target);
+		},
+		secondary: false,
+		target: "normal",
+		type: "Fighting",
+		contestType: "Tough",
+	},
 	"mythicform": {
 		category: "Status",
 		id: "mythicform",
@@ -34,14 +61,16 @@ exports.BattleMovedex = {
 		isViable: true,
 		name: "Total Annhilation",
 		pp: 1,
-		priority: 1,
+		priority: 3,
+		ignoreEvasion: true,
+		ignoreDefensive: true,
 		flags: {protect: 1, mirror: 1, distance: 1, heal: 1, sound:1},
 		secondary: {
 			chance: 100,
 			self: {
 				boosts: {
-					def: 2,
-					spd: 2,
+					def: 1,
+					spd: 1,
 				},
 			},
 		},
