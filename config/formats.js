@@ -654,7 +654,7 @@ exports.Formats = [
 				{
 					pokemon.types[1]="Fighting";
 				}
-				if (name=="thetruefalcon")
+				if (name=="theswordbreaker")
 				{
 					pokemon.types=["Dragon"];
 				}
