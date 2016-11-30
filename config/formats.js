@@ -4766,7 +4766,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		section: "Experimental Metas",
 		mod: 'franticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
+		banlist: ["Uber", 'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
  		onBegin: function() {
                         let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
@@ -4791,7 +4791,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
                 else mixedTemplate.types.length = 1;
 				pokemon.baseTemplate = mixedTemplate;
 				pokemon.fusion = true;
-				pokemon.abilitwo = crossTemplate.abilities[0];
+				pokemon.abilitwo = toId(crossTemplate.abilities[0]);
 				pokemon.formeChange(mixedTemplate);
 				} catch (e) {
 					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
@@ -4820,7 +4820,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        let template = this.getTemplate(set.species);
 		        let crossTemplate = this.getTemplate(set.name);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
-			if (!crossTemplate.exists) return;
+			if (!crossTemplate.exists) return;let unobtainable = {'Darmanitan-Zen':true , 'Greninja-Ash':true , 'Zygarde-Complete':true, 'Meloetta-Pirouette':true, 'Castform-Snowy':true , 'Castform-Sunny':true , 'Castform-Rainy':true, 'Aegislash-Blade':true};
+			let types = Object.keys(this.data.TypeChart);
+			for(let i = 0; i < types.length; i++) {
+				unobtainable["Silvally-"+types[i]] = true;
+			}
+			if(unobtainable[crossTemplate.species]) problems.push("You cannot fuse with "+crossTemplate.species+" since it needs to have a specific ability or an item, or transforms inbattle.")
 			let canHaveAbility = false;
 			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
 			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
@@ -4952,6 +4957,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        let crossTemplate = this.getTemplate(set.name);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
 			if (!crossTemplate.exists) return;
+			let unobtainable = {'Darmanitan-Zen':true , 'Greninja-Ash':true , 'Zygarde-Complete':true, 'Meloetta-Pirouette':true, 'Castform-Snowy':true , 'Castform-Sunny':true , 'Castform-Rainy':true, 'Aegislash-Blade':true};
+			let types = Object.keys(this.data.TypeChart);
+			for(let i = 0; i < types.length; i++) {
+				unobtainable["Silvally-"+types[i]] = true;
+			}
+			if(unobtainable[crossTemplate.species]) problems.push("You cannot fuse with "+crossTemplate.species+" since it needs to have a specific ability or an item, or transforms inbattle.")
 			let canHaveAbility = false;
 			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
 			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
