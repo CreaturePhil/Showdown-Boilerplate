@@ -4772,29 +4772,29 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
 				let pokemon = allPokemon[i];
                                 if (pokemon.set.name === pokemon.set.species) continue;
-				let crossTemplate = this.getTemplate(pokemon.name);
-				if (!crossTemplate.exists) continue;
+				let fusionTemplate = this.getTemplate(pokemon.name);
+				if (!fusionTemplate.exists) continue;
 				try {
 				let template = pokemon.baseTemplate;
 				let mixedTemplate = Object.assign({}, template);
-				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
-				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + crossTemplate.weightkg)/2)
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + fusionTemplate.species;
+				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg)/2)
 
 				mixedTemplate.baseStats = {};
 				for (let statid in template.baseStats) {
-					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + crossTemplate.baseStats[statid])/2;
+					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid])/2;
 				}
 				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
 
 				mixedTemplate.types = template.types.slice();
-                if(mixedTemplate.types[0] !== crossTemplate.types[0]) mixedTemplate.types[1]=crossTemplate.types[0];
+                if(mixedTemplate.types[0] !== fusionTemplate.types[0]) mixedTemplate.types[1]=fusionTemplate.types[0];
                 else mixedTemplate.types.length = 1;
 				pokemon.baseTemplate = mixedTemplate;
 				pokemon.fusion = true;
-				pokemon.abilitwo = toId(crossTemplate.abilities[0]);
+				pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
 				pokemon.formeChange(mixedTemplate);
 				} catch (e) {
-					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
+					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
 				}
 			}
 		},
@@ -4818,18 +4818,18 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			let problems = [];
 		        if (!set.name || set.name === set.species) return;
 		        let template = this.getTemplate(set.species);
-		        let crossTemplate = this.getTemplate(set.name);
+		        let fusionTemplate = this.getTemplate(set.name);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
-			if (!crossTemplate.exists) return;let unobtainable = {'Darmanitan-Zen':true , 'Greninja-Ash':true , 'Zygarde-Complete':true, 'Meloetta-Pirouette':true, 'Castform-Snowy':true , 'Castform-Sunny':true , 'Castform-Rainy':true, 'Aegislash-Blade':true};
+			if (!fusionTemplate.exists) return;let unobtainable = {'Darmanitan-Zen':true , 'Greninja-Ash':true , 'Zygarde-Complete':true, 'Meloetta-Pirouette':true, 'Castform-Snowy':true , 'Castform-Sunny':true , 'Castform-Rainy':true, 'Aegislash-Blade':true};
 			let types = Object.keys(this.data.TypeChart);
 			for(let i = 0; i < types.length; i++) {
 				unobtainable["Silvally-"+types[i]] = true;
 			}
-			if(unobtainable[crossTemplate.species]) problems.push("You cannot fuse with "+crossTemplate.species+" since it needs to have a specific ability or an item, or transforms inbattle.")
+			if(unobtainable[fusionTemplate.species]) problems.push("You cannot fuse with "+fusionTemplate.species+" since it needs to have a specific ability or an item, or transforms inbattle.")
 			let canHaveAbility = false;
-			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
-			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
-			if(banlist[toId(crossTemplate.species)]) problems.push("Fusing with " + crossTemplate.species + " is banned. ("+template.species+" has nickname "+ crossTemplate.species + ")");
+			if(fusionTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
+			if(fusionTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+fusionTemplate.species+")");
+			if(banlist[toId(fusionTemplate.species)]) problems.push("Fusing with " + fusionTemplate.species + " is banned. ("+template.species+" has nickname "+ fusionTemplate.species + ")");
 			for (let a in template.abilities) {
 				if ((template.abilities[a] === set.ability) && !banlist[toId(template.abilities[a])]) {
 					canHaveAbility = true;
@@ -4840,12 +4840,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			let movepool = [];
 			let prevo = template.isMega?this.getTemplate(template.species.substring(0,template.species.length-5)).prevo:template.prevo;
 
-			if(!this.data.Learnsets[toId(crossTemplate.species)])
+			if(!this.data.Learnsets[toId(fusionTemplate.species)])
 			{
-			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species.split("-")[0])].learnset;
+			        fusionTemplate.learnset = this.data.Learnsets[toId(fusionTemplate.species.split("-")[0])].learnset;
 			}
 			else
-			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species)].learnset;
+			        fusionTemplate.learnset = this.data.Learnsets[toId(fusionTemplate.species)].learnset;
 			if(!template.learnset)
 			{
 			        template.learnset = this.data.Learnsets[toId(template.species.split("-")[0])].learnset;
@@ -4855,14 +4855,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			do {
 				added[template.species] = true;
 				movepool = movepool.concat(Object.keys(template.learnset));
-				movepool = movepool.concat(Object.keys(crossTemplate.learnset))
+				movepool = movepool.concat(Object.keys(fusionTemplate.learnset))
 			} while (template && template.species && !added[template.species]);
 			while(prevo)
 			{
 			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
 			        prevo = this.getTemplate(prevo).prevo;
 			}
-			prevo = crossTemplate.isMega?this.getTemplate(crossTemplate.species.substring(0,crossTemplate.species.length-5)).prevo:crossTemplate.prevo;
+			prevo = fusionTemplate.isMega?this.getTemplate(fusionTemplate.species.substring(0,fusionTemplate.species.length-5)).prevo:fusionTemplate.prevo;
 			while(prevo)
 			{
 			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
@@ -4907,30 +4907,30 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
 				let pokemon = allPokemon[i];
                                 if (pokemon.set.name === pokemon.set.species) continue;
-				let crossTemplate = this.getTemplate(pokemon.name);
-				if (!crossTemplate.exists) continue;
+				let fusionTemplate = this.getTemplate(pokemon.name);
+				if (!fusionTemplate.exists) continue;
 				try {
 				let template = pokemon.baseTemplate;
 				let mixedTemplate = Object.assign({}, template);
-				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
-				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + crossTemplate.weightkg)/2)
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + fusionTemplate.species;
+				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg)/2)
 
 				mixedTemplate.baseStats = {};
 				for (let statid in template.baseStats) {
-					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + crossTemplate.baseStats[statid])/2;
+					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid])/2;
 				}
 				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
 
 				mixedTemplate.types = template.types.slice();
-				let shiny = (pokemon.set.shiny && crossTemplate.types[1])? 1 : 0;
-                if(mixedTemplate.types[0] !== crossTemplate.types[shiny]) mixedTemplate.types[1]=crossTemplate.types[shiny];
+				let shiny = (pokemon.set.shiny && fusionTemplate.types[1])? 1 : 0;
+                if(mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1]=fusionTemplate.types[shiny];
                 else mixedTemplate.types.length = 1;
 				pokemon.baseTemplate = mixedTemplate;
 				pokemon.fusion = true;
-				pokemon.abilitwo = toId(crossTemplate.abilities[0]);
+				pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
 				pokemon.formeChange(mixedTemplate);
 				} catch (e) {
-					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
+					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
 				}
 			}
 		},
@@ -4954,19 +4954,19 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			let problems = [];
 		        if (!set.name || set.name === set.species) return;
 		        let template = this.getTemplate(set.species);
-		        let crossTemplate = this.getTemplate(set.name);
+		        let fusionTemplate = this.getTemplate(set.name);
 			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
-			if (!crossTemplate.exists) return;
+			if (!fusionTemplate.exists) return;
 			let unobtainable = {'Darmanitan-Zen':true , 'Greninja-Ash':true , 'Zygarde-Complete':true, 'Meloetta-Pirouette':true, 'Castform-Snowy':true , 'Castform-Sunny':true , 'Castform-Rainy':true, 'Aegislash-Blade':true};
 			let types = Object.keys(this.data.TypeChart);
 			for(let i = 0; i < types.length; i++) {
 				unobtainable["Silvally-"+types[i]] = true;
 			}
-			if(unobtainable[crossTemplate.species]) problems.push("You cannot fuse with "+crossTemplate.species+" since it needs to have a specific ability or an item, or transforms inbattle.")
+			if(unobtainable[fusionTemplate.species]) problems.push("You cannot fuse with "+fusionTemplate.species+" since it needs to have a specific ability or an item, or transforms inbattle.")
 			let canHaveAbility = false;
-			if(crossTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
-			if(crossTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+crossTemplate.species+")");
-			if(banlist[toId(crossTemplate.species)]) problems.push("Fusing with " + crossTemplate.species + " is banned. ("+template.species+" has nickname "+ crossTemplate.species + ")");
+			if(fusionTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
+			if(fusionTemplate.tier == "Uber") problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+fusionTemplate.species+")");
+			if(banlist[toId(fusionTemplate.species)]) problems.push("Fusing with " + fusionTemplate.species + " is banned. ("+template.species+" has nickname "+ fusionTemplate.species + ")");
 			for (let a in template.abilities) {
 				if ((template.abilities[a] === set.ability) && !banlist[toId(template.abilities[a])]) {
 					canHaveAbility = true;
@@ -4977,12 +4977,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			let movepool = [];
 			let prevo = template.isMega?this.getTemplate(template.species.substring(0,template.species.length-5)).prevo:template.prevo;
 
-			if(!this.data.Learnsets[toId(crossTemplate.species)])
+			if(!this.data.Learnsets[toId(fusionTemplate.species)])
 			{
-			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species.split("-")[0])].learnset;
+			        fusionTemplate.learnset = this.data.Learnsets[toId(fusionTemplate.species.split("-")[0])].learnset;
 			}
 			else
-			        crossTemplate.learnset = this.data.Learnsets[toId(crossTemplate.species)].learnset;
+			        fusionTemplate.learnset = this.data.Learnsets[toId(fusionTemplate.species)].learnset;
 			if(!template.learnset)
 			{
 			        template.learnset = this.data.Learnsets[toId(template.species.split("-")[0])].learnset;
@@ -4992,14 +4992,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			do {
 				added[template.species] = true;
 				movepool = movepool.concat(Object.keys(template.learnset));
-				movepool = movepool.concat(Object.keys(crossTemplate.learnset))
+				movepool = movepool.concat(Object.keys(fusionTemplate.learnset))
 			} while (template && template.species && !added[template.species]);
 			while(prevo)
 			{
 			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
 			        prevo = this.getTemplate(prevo).prevo;
 			}
-			prevo = crossTemplate.isMega?this.getTemplate(crossTemplate.species.substring(0,crossTemplate.species.length-5)).prevo:crossTemplate.prevo;
+			prevo = fusionTemplate.isMega?this.getTemplate(fusionTemplate.species.substring(0,fusionTemplate.species.length-5)).prevo:fusionTemplate.prevo;
 			while(prevo)
 			{
 			        movepool = movepool.concat(Object.keys(this.data.Learnsets[prevo].learnset));
