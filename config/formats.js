@@ -654,6 +654,10 @@ exports.Formats = [
 				{
 					pokemon.types[1]="Fighting";
 				}
+				if (name=="thetruefalcon")
+				{
+					pokemon.types=["Dragon"];
+				}
 				for (let j = 0; j < pokemon.moveset.length; j++) {
 					let moveData = pokemon.moveset[j];
 					if (globalRenamedMoves[moveData.id]) {
