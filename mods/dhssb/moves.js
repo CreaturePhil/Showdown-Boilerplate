@@ -17,12 +17,12 @@ exports.BattleMovedex = {
 		},
 		onBeforeMove: function (pokemon) {
 			// Ensure Meloetta goes back to standard form after using the move
-			if (pokemon.template.speciesid === 'rayquaza' && pokemon.formeChange('Rayquaza-Mega')) {
+			if (pokemon.species === 'Rayquaza' && pokemon.formeChange('Rayquaza-Mega')) {
 				this.add('-formechange', pokemon, 'Rayquaza-Mega', '[msg]');
 			}
 		},
 		onAfterMove: function (pokemon) {
-			if (pokemon.template.speciesid === 'rayquazamega' && pokemon.formeChange('Rayquaza')) {
+			if (pokemon.species === 'Rayquaza-Mega' && pokemon.formeChange('Rayquaza')) {
 				this.add('-formechange', pokemon, 'Rayquaza', '[msg]');
 			} 
 		},
