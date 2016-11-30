@@ -1,6 +1,35 @@
 "use strict";
 
 exports.BattleMovedex = {
+	zransei: {
+		accuracy: 100,
+		basePower: 300,
+		category: "Special",
+		id: "zransei",
+		isViable: true,
+		name: "Z-Ransei",
+		pp: 10,
+		priority: 1,
+		flags: {authentic: 1},
+		onTryHit: function (target, pokemon) {
+			this.attrLastMove('[still]');
+			this.add('-anim', pokemon, "Dragon Pulse", target);
+		},
+		onBeforeMove: function (pokemon) {
+			// Ensure Meloetta goes back to standard form after using the move
+			if (pokemon.template.speciesid === 'rayquaza' && pokemon.formeChange('Rayquaza-Mega')) {
+				this.add('-formechange', pokemon, 'Rayquaza-Mega', '[msg]');
+			}
+		},
+		onAfterMove: function (pokemon) {
+			if (pokemon.template.speciesid === 'rayquazamega' && pokemon.formeChange('Rayquaza')) {
+				this.add('-formechange', pokemon, 'Rayquaza', '[msg]');
+			} 
+		},
+		target: "allAdjacentFoes",
+		type: "Dragon",
+		isZ: "ransiumz",
+	},
 	"heroicbeatdown": {
 		accuracy: 100,
 		basePower: 120,
@@ -64,7 +93,7 @@ exports.BattleMovedex = {
 		priority: 3,
 		ignoreEvasion: true,
 		ignoreDefensive: true,
-		flags: {protect: 1, distance: 1, heal: 1, sound:1},
+		flags: {heal: 1, authentic:1},
 		secondary: {
 			chance: 100,
 			self: {
@@ -87,7 +116,7 @@ exports.BattleMovedex = {
 		},
 		onAfterMove: function(target, source, move) {
 			this.add("c|~Spandan|Huh im exhausted.")
-		}
+		},
 		type: "Flying",
 		isZ: "salamencite",
 	},
