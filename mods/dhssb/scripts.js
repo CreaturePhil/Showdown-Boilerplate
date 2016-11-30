@@ -113,7 +113,7 @@ exports.BattleScripts = {
 				evs: {atk:252, spd:4, spe:252}, nature: 'Adamant',
 			},
 			'Ransei': {
-				species: 'Rayquaza', ability: 'Wonder Breaker', item: 'Life Orb', gender: ['M'],shiny:true,
+				species: 'Rayquaza', ability: 'Wonder Breaker', item: 'Ransium Z', gender: ['M'],shiny:true,
 				moves: ['dragonpulse', 'tailglow', 'dracometeor'],
 				signatureMove: "Legend's Ambition",
 				evs: {hp:248, atk:252, spa:252, spe:252}, nature: 'Mild',

@@ -35,4 +35,13 @@ exports.BattleItems = {
                 },
                 desc: "If holder is Spandan, this item allows it to Mega Evolve in battle, and also use its special Z Move.",
         },
+        "ransiumz": {
+                id: "ransiumz",
+                name: "Ransium Z",
+                onTakeItem: false,
+                zMove: "Z-Ransei",
+                zMoveFrom: "Legend's Ambition",
+                zMoveUser: ["Rayquaza"],
+                desc: "If holder is Ransei it can use Z-Ransei",
+        },
 };
