@@ -355,10 +355,12 @@ exports.BattleAbilities = {
 				return false;
 			}
 			let randomType = possibleTypes[this.random(possibleTypes.length)];
-
-			if (!source.setType(randomType)) return false;
+			target.types = [].push(randomType);
 			this.add('-start', target, 'typechange', randomType);
 		},
+		onSwitchOut: function(pokemon) {
+			pokemon.types = pokemon.baseTemplate.types;
+		}
 		id: "theunderlord",
 		name: "The Underlord",
 	},

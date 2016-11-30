@@ -650,6 +650,10 @@ exports.Formats = [
 				{
 					pokemon.types[1]="Ice";
 				}
+				if (name=="thetruefalcon")
+				{
+					pokemon.types[1]="Fighting";
+				}
 				for (let j = 0; j < pokemon.moveset.length; j++) {
 					let moveData = pokemon.moveset[j];
 					if (globalRenamedMoves[moveData.id]) {
@@ -708,9 +712,12 @@ exports.Formats = [
 			if(name === 'spandan') {
 				this.add('c|~Spandan|o shit waddup!');
 			}
+			if(name === 'thetruefalcon') {
+				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+			}
 			if(name === 'diarmuidodyna') {
 				this.add('c|&Diarmuid O\'Dyna|OMG can i help yoU?');
-					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 			}
 			if(name === 'hydrostatics') {
 				this.add('c|+Hydrostatics|Gl, Hf Kid');
