@@ -5800,7 +5800,7 @@ onBegin: function () {
 	},
 	{
 		name: "[Istor] OU",
-		column: 6,
+		column: 5,
 		mod: 'aurora',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
