@@ -13,12 +13,9 @@ exports.BattleMovedex = {
 		flags: {authentic: 1},
 		onTryHit: function (target, pokemon) {
 			this.attrLastMove('[still]');
-			this.add('-anim', pokemon, "Dragon Pulse", target);
-		},
-		onBeforeMove: function (pokemon) {
-			// Ensure Meloetta goes back to standard form after using the move
 			pokemon.formeChange('Rayquaza-Mega')
 			this.add('-formechange', pokemon, 'Rayquaza-Mega', '[msg]');
+			this.add('-anim', pokemon, "Dragon Pulse", target);
 		},
 		onAfterMove: function (pokemon) {
 			pokemon.formeChange('Rayquaza')
