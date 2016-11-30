@@ -5795,22 +5795,20 @@ onBegin: function () {
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "[Aurora] OU",
+		section: "Istor",
+		column: 5,
+	},
+	{
+		name: "[Istor] OU",
 		column: 6,
 		mod: 'aurora',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
 	},
 	{
-		name: "[Aurora] Random Battle",
+		name: "[Istor] Random Battle",
+		
 		mod: 'aurora',
-		team: 'random',
-		searchShow: false,
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
-	},
-		{
-		name: "[Gen 6] Random Battle",
-
 		team: 'random',
 		searchShow: false,
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
