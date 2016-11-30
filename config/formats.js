@@ -5796,12 +5796,12 @@ onBegin: function () {
 	},
 	{
 		name: "[Aurora] OU",
-		column: 5,
+		column: 6,
 		mod: 'aurora',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
 	},
-	{
+	/*{
 		section: "What If",
         	column: 5,
 	},
@@ -5892,7 +5892,7 @@ onBegin: function () {
         mod: 'gen1jellicent',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
-    },/*
+    },
     {
         name: "[Gen 2] OU + No Special Split",
         desc: [
@@ -5903,7 +5903,7 @@ onBegin: function () {
         mod: 'gen2specialsplit',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
-    },*/
+    },
     {
         name: "[Gen 2] OU + Abilities",
         desc: [
@@ -5958,7 +5958,7 @@ onBegin: function () {
         mod: 'gen2dpp',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
-    },/*
+    },
     {
         name: "[Gen 2] OU + Predictable Phazing",
         desc: [
@@ -5969,7 +5969,7 @@ onBegin: function () {
         mod: 'gen2phazing',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber'],
-    },*/
+    },
     {
         name: "[Gen 3] OU + Gastrodon",
         desc: [
@@ -6013,7 +6013,7 @@ onBegin: function () {
         mod: 'gen3trickroom',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber', 'Smeargle + Ingrain'],
-    },/*
+    },
     {
         name: "[Gen 3] OU + Gen 2 Moves",
         desc: [
@@ -6024,7 +6024,7 @@ onBegin: function () {
         mod: 'gen3gen2',
         ruleset: ['Pokemon', 'Standard'],
         banlist: ['Uber', 'Smeargle + Ingrain'],
-    },*/
+    },
     {
         name: "[Gen 3] OU + Choice Scarf",
         desc: [
@@ -6143,7 +6143,7 @@ onBegin: function () {
         mod: 'gen5explosion',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
         banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
-    },/*
+    },
     {
         name: "[Gen 5] OU + No EVs & IVs",
         desc: [
@@ -6154,7 +6154,7 @@ onBegin: function () {
         mod: 'gen5evs',
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
         banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
-    },*/
+    },
     {
         name: "[Gen 5] OU + Gen 6 Steel-Types",
         desc: [
@@ -6188,7 +6188,7 @@ onBegin: function () {
         ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Team Preview'],
         banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
     },
-    /*{
+    {
         name: "[Gen 5] OU + Spikes",
         desc: [
             "&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
