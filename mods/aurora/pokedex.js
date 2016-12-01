@@ -74,7 +74,7 @@ exports.BattlePokedex = {
 		heightm: 1.8,
 		weightkg: 85.2,
 		color: "Brown",
-		prevo: "doduo",
+		prevo: "doduoistor",
 		evoLevel: 31,
 		eggGroups: ["Flying"],
 	},
