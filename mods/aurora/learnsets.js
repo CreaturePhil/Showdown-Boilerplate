@@ -82,9 +82,8 @@ exports.BattleLearnsets = {
 	detuoy: { learnset: {
 		explosion: ["7L1"],
 	}},
-	
-	doduo: {learnset: {
-		acupressure: ["7L33”],
+	doduoistor: {learnset: {
+		acupressure: ["7L33"],
 		aerialace: ["7M"],
 		agility: ["7L26"],
 		assurance: ["7E"],
@@ -132,7 +131,7 @@ exports.BattleLearnsets = {
 		heavyslam: ["7L29"],
 		workup: ["7M"],
 	}},
-	dodrio: {learnset: {
+	dodrioistor: {learnset: {
 		acupressure: ["7L34"],
 		aerialace: ["7M"],
 		agility: ["7L260"],
