@@ -9,4 +9,12 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["explosion"],
 		tier: "New",
 	},
+	doduo: {
+		randomBattleMoves: ["bravebird", "impalingfeather", "jumpkick", "roost", "swordsdance"],
+		tier: "LC",
+	},
+	dodrio: {
+		randomBattleMoves: ["bravebird", "impalingfeather", "swordsdance", "roost", "jumpkick"],
+		tier: "New",
+	},
 };
