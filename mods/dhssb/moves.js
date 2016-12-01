@@ -13,12 +13,12 @@ exports.BattleMovedex = {
 		flags: {authentic: 1},
 		onTryHit: function (target, pokemon) {
 			this.attrLastMove('[still]');
-			pokemon.formeChange('Rayquaza-Mega')
+			pokemon.formeChange('Rayquaza-Mega');
 			this.add('-formechange', pokemon, 'Rayquaza-Mega', '[msg]');
 			this.add('-anim', pokemon, "Dragon Pulse", target);
 		},
-		onAfterMove: function (pokemon) {
-			pokemon.formeChange('Rayquaza')
+		onAfterHit: function (pokemon) {
+			pokemon.formeChange('Rayquaza');
 			this.add('-formechange', pokemon, 'Rayquaza', '[msg]');
 		},
 		target: "allAdjacentFoes",

@@ -127,283 +127,6 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 
-	// ORAS Singles
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "ORAS Singles",
-	},
-	{
-		name: "OU",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3573990/\">OU Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571990/\">OU Viability Ranking</a>",
-		],
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
-	},
-	{
-		name: "Ubers",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3522911/\">Ubers Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3535106/\">Ubers Viability Ranking</a>",
-		],
-
-		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
-	},
-	{
-		name: "UU",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3582473/\">np: UU Stage 7.3</a>",
-			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555277/\">UU Viability Ranking</a>",
-		],
-
-		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Drizzle', 'Drought', 'Baton Pass'],
-	},
-	{
-		name: "RU",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3583022/\">np: RU Stage 19</a>",
-			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558546/\">RU Viability Ranking</a>",
-		],
-
-		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'UU', 'BL2', 'Drizzle', 'Drought'],
-	},
-	{
-		name: "NU",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3576747/\">np: NU Stage 15</a>",
-			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555650/\">NU Viability Ranking</a>",
-		],
-
-		ruleset: ['RU', 'Baton Pass Speed Clause'],
-		banlist: ['RU', 'BL3'],
-	},
-	{
-		name: "PU",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3578583/\">np: PU Stage 9</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>",
-		],
-
-		ruleset: ['RU'],
-		banlist: ['RU', 'BL3', 'NU', 'BL4', 'Chatter'],
-	},
-	{
-		name: "LC",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3505710/\">LC Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/dex/xy/formats/lc/\">LC Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547566/\">LC Viability Ranking</a>",
-		],
-
-		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
-	},
-	{
-		name: "CAP",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3537407/\">CAP Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/dex/xy/formats/cap/\">CAP Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545628/\">CAP Viability Ranking</a>",
-		],
-
-		ruleset: ['OU'],
-		banlist: ['Allow CAP'],
-	},
-	{
-		name: "Battle Spot Singles",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3527960/\">Battle Spot Singles Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554616/\">Battle Spot Singles Viability Ranking</a>",
-		],
-
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 3,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		requirePentagon: true,
-	},
-	{
-        name: "RU Theorymon",
-        desc: [
-            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3568052/\">np: RU Stage 15</a>",
-            "&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a>",
-            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3558546/\">RU Viability Ranking</a>",
-        ],
-
-        mod: 'rutheorymon',
-
-        ruleset: ['UU'],
-        banlist: ['UU', 'BL2'],
-  },
-	{
-		name: "[Gen 6] Random Battle",
-
-		team: 'random',
-		searchShow: false,
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
-	},
-	{
-		name: "Custom Game",
-
-
-		canUseRandomTeam: true,
-		debug: true,
-		maxLevel: 9999,
-		defaultLevel: 100,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod'],
-	},
-
-	// ORAS Doubles/Triples
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "ORAS Doubles/Triples",
-	},
-	{
-		name: "Doubles OU",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3580680/\">np: Doubles OU Stage 5</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles OU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3535930/\">Doubles OU Viability Ranking</a>",
-		],
-
-		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview'],
-		banlist: [
-			'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
-			'Palkia', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Salamencite', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom', 'Soul Dew',
-			'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
-		],
-	},
-	{
-		name: "Doubles Ubers",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3542746/\">Doubles Ubers</a>"],
-
-		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Unreleased', 'Dark Void'],
-	},
-	{
-		name: "Doubles UU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3542755/\">Doubles UU</a>"],
-
-		gameType: 'doubles',
-		ruleset: ['Doubles OU'],
-		banlist: [
-			'Aegislash', 'Amoonguss', 'Arcanine', 'Azumarill', 'Bisharp', 'Breloom', 'Charizard-Mega-Y', 'Charizardite Y',
-			'Conkeldurr', 'Cresselia', 'Diancie-Mega', 'Diancite', 'Ferrothorn', 'Garchomp', 'Gardevoir-Mega', 'Gardevoirite',
-			'Gastrodon', 'Gengar', 'Greninja', 'Heatran', 'Hitmontop', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi',
-			'Kangaskhan-Mega', 'Kangaskhanite', 'Keldeo', 'Kyurem-Black', 'Landorus-Therian', 'Latios', 'Ludicolo', 'Milotic',
-			'Politoed', 'Raichu', 'Rotom-Wash', 'Scizor', 'Scrafty', 'Shaymin-Sky', 'Suicune', 'Sylveon', 'Talonflame',
-			'Terrakion', 'Thundurus', 'Togekiss', 'Tyranitar', 'Venusaur', 'Volcanion', 'Weavile', 'Whimsicott', 'Zapdos',
-		],
-	},
-	{
-		name: "VGC 2016",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558332/\">VGC 2016 Rules</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3580592/\">VGC 2016 Viability Ranking</a>",
-		],
-
-		gameType: 'doubles',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
-		banlist: [
-			'Illegal', 'Unreleased', 'Mew', 'Celebi', 'Jirachi', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Phione', 'Manaphy', 'Darkrai',
-			'Shaymin', 'Shaymin-Sky', 'Arceus', 'Victini', 'Keldeo', 'Meloetta', 'Genesect', 'Diancie', 'Hoopa', 'Hoopa-Unbound', 'Volcanion', 'Soul Dew',
-		],
-		requirePentagon: true,
-		onValidateTeam: function (team) {
-			const legends = {'Mewtwo':1, 'Lugia':1, 'Ho-Oh':1, 'Kyogre':1, 'Groudon':1, 'Rayquaza':1, 'Dialga':1, 'Palkia':1, 'Giratina':1, 'Reshiram':1, 'Zekrom':1, 'Kyurem':1, 'Xerneas':1, 'Yveltal':1, 'Zygarde':1};
-			let n = 0;
-			for (let i = 0; i < team.length; i++) {
-				let template = this.getTemplate(team[i].species).baseSpecies;
-				if (template in legends) n++;
-				if (n > 2) return ["You can only use up to two legendary Pok\u00E9mon."];
-			}
-		},
-	},
-	{
-		name: "Battle Spot Doubles",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3560820/\">Battle Spot Doubles Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3560824/\">Battle Spot Doubles Viability Ranking</a>",
-		],
-
-		gameType: 'doubles',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		requirePentagon: true,
-	},
-	{
-		name: "[Gen 6] Random Doubles Battle",
-
-		gameType: 'doubles',
-		team: 'random',
-		searchShow: false,
-		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
-	},
-	{
-		name: "Doubles Custom Game",
-
-		gameType: 'doubles',
-
-		canUseRandomTeam: true,
-		maxLevel: 9999,
-		defaultLevel: 100,
-		debug: true,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod'],
-	},
-	{
-		name: "Battle Spot Triples",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3533914/\">Battle Spot Triples Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3549201/\">Battle Spot Triples Viability Ranking</a>",
-		],
-
-		gameType: 'triples',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [6, 6],
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		requirePentagon: true,
-	},
-	{
-		name: "Triples Custom Game",
-
-		gameType: 'triples',
-
-		canUseRandomTeam: true,
-		maxLevel: 9999,
-		defaultLevel: 100,
-		debug: true,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod'],
-	},
-
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
@@ -3051,6 +2774,112 @@ exports.Formats = [
 	    }
 	},
 	{
+        name: "Move Equality",
+        section: "Other Metagames",
+   
+        mod: "moveequality",
+        ruleset: ["OU"],
+        banlist: ["Greninja", "Dynamic Punch"]
+    },
+    	{
+		name: "Cross Evolution",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
+		section: "Other Metagames",
+
+		ruleset: ['Ubers', 'Baton Pass Clause'],
+		banlist: ['Rule:nicknameclause'],
+		onValidateTeam: function (team) {
+			let nameTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let name = team[i].name;
+				if (name) {
+					if (nameTable[name]) {
+						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
+					}
+					nameTable[name] = true;
+				}
+			}
+		},
+		validateSet: function (set, teamHas) {
+			let crossTemplate = this.tools.getTemplate(set.name);
+			if (!crossTemplate.exists) return this.validateSet(set, teamHas);
+			let template = this.tools.getTemplate(set.species);
+			if (!template.exists) return ["The Pokemon '" + set.species + "' does not exist."];
+			if (!template.evos.length) return ["" + template.species + " cannot cross evolve because it doesn't evolve."];
+			if (crossTemplate.species == 'Shedinja') return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it is banned."];
+			if (crossTemplate.battleOnly || !crossTemplate.prevo) return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it isn't an evolution."];
+			let crossPrevoTemplate = this.tools.getTemplate(crossTemplate.prevo);
+			if (!crossPrevoTemplate.prevo !== !template.prevo) return ["" + template.species + " cannot cross into " + crossTemplate.species + " because they are not consecutive evolutionary stages."];
+
+			// Make sure no stat is too high/low to cross evolve to
+			let stats = {'hp': 'HP', 'atk': 'Attack', 'def': 'Defense', 'spa': 'Special Attack', 'spd': 'Special Defense', 'spe': 'Speed'};
+			for (let statid in template.baseStats) {
+				let evoStat = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
+				if (evoStat < 1) {
+					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too low."];
+				} else if (evoStat > 255) {
+					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too high."];
+				}
+			}
+
+			let mixedTemplate = Object.assign({}, template);
+			// Ability test
+			let ability = this.tools.getAbility(set.ability);
+			if (ability.name !== 'Huge Power' && ability.name !== 'Pure Power' && ability.name !== 'Shadow Tag') mixedTemplate.abilities = crossTemplate.abilities;
+
+			mixedTemplate.learnset = Object.assign({}, template.learnset);
+			let newMoves = 0;
+			for (let i in set.moves) {
+				let move = toId(set.moves[i]);
+				if (!this.checkLearnset(move, template)) continue;
+				if (this.checkLearnset(move, crossTemplate)) continue;
+				if (++newMoves > 2) continue;
+				mixedTemplate.learnset[move] = ['6T'];
+			}
+			return this.validateSet(set, teamHas, mixedTemplate);
+		},
+		onBegin: function () {
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+                                if (pokemon.set.name === pokemon.set.species) continue;
+				let crossTemplate = this.getTemplate(pokemon.name);
+				if (!crossTemplate.exists) continue;
+				try {
+				let template = pokemon.baseTemplate;
+				let crossPrevoTemplate = this.getTemplate(crossTemplate.prevo);
+				let mixedTemplate = Object.assign({}, template);
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
+				mixedTemplate.weightkg = Math.max(0.1, template.weightkg + crossTemplate.weightkg - crossPrevoTemplate.weightkg);
+				mixedTemplate.nfe = false;
+
+				mixedTemplate.baseStats = {};
+				for (let statid in template.baseStats) {
+					mixedTemplate.baseStats[statid] = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
+				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+
+				mixedTemplate.types = template.types.slice();
+				if (crossTemplate.types[0] !== crossPrevoTemplate.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
+				if (crossTemplate.types[1] !== crossPrevoTemplate.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
+				if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
+
+				pokemon.baseTemplate = mixedTemplate;
+				pokemon.formeChange(mixedTemplate);
+				pokemon.crossEvolved = true;
+				} catch (e) {
+					this.add('-hint', 'Failed to cross evolve ' + pokemon.baseTemplate.species + ' to ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
+				}
+			}
+		},
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+			if (pokemon.crossEvolved) {
+				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+			}
+		},
+	},
+	{
 			name:"Partners in Crime",
 		        section: "Other Metagames",
 		        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/partners-in-crime.3559988/\">Partners in Crime</a>"],
@@ -3831,113 +3660,8 @@ exports.Formats = [
 				 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
 				 pokemon.types = pokemon.template.types = types;
 		 },
- },
-	{
-        name: "Move Equality",
-        section: "Other Metagames",
-   
-        mod: "moveequality",
-        ruleset: ["OU"],
-        banlist: ["Greninja", "Dynamic Punch"]
-    },
-    	{
-		name: "Cross Evolution",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
-		section: "Other Metagames",
-
-		ruleset: ['Ubers', 'Baton Pass Clause'],
-		banlist: ['Rule:nicknameclause'],
-		onValidateTeam: function (team) {
-			let nameTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let name = team[i].name;
-				if (name) {
-					if (nameTable[name]) {
-						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
-					}
-					nameTable[name] = true;
-				}
-			}
-		},
-		validateSet: function (set, teamHas) {
-			let crossTemplate = this.tools.getTemplate(set.name);
-			if (!crossTemplate.exists) return this.validateSet(set, teamHas);
-			let template = this.tools.getTemplate(set.species);
-			if (!template.exists) return ["The Pokemon '" + set.species + "' does not exist."];
-			if (!template.evos.length) return ["" + template.species + " cannot cross evolve because it doesn't evolve."];
-			if (crossTemplate.species == 'Shedinja') return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it is banned."];
-			if (crossTemplate.battleOnly || !crossTemplate.prevo) return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it isn't an evolution."];
-			let crossPrevoTemplate = this.tools.getTemplate(crossTemplate.prevo);
-			if (!crossPrevoTemplate.prevo !== !template.prevo) return ["" + template.species + " cannot cross into " + crossTemplate.species + " because they are not consecutive evolutionary stages."];
-
-			// Make sure no stat is too high/low to cross evolve to
-			let stats = {'hp': 'HP', 'atk': 'Attack', 'def': 'Defense', 'spa': 'Special Attack', 'spd': 'Special Defense', 'spe': 'Speed'};
-			for (let statid in template.baseStats) {
-				let evoStat = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
-				if (evoStat < 1) {
-					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too low."];
-				} else if (evoStat > 255) {
-					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too high."];
-				}
-			}
-
-			let mixedTemplate = Object.assign({}, template);
-			// Ability test
-			let ability = this.tools.getAbility(set.ability);
-			if (ability.name !== 'Huge Power' && ability.name !== 'Pure Power' && ability.name !== 'Shadow Tag') mixedTemplate.abilities = crossTemplate.abilities;
-
-			mixedTemplate.learnset = Object.assign({}, template.learnset);
-			let newMoves = 0;
-			for (let i in set.moves) {
-				let move = toId(set.moves[i]);
-				if (!this.checkLearnset(move, template)) continue;
-				if (this.checkLearnset(move, crossTemplate)) continue;
-				if (++newMoves > 2) continue;
-				mixedTemplate.learnset[move] = ['6T'];
-			}
-			return this.validateSet(set, teamHas, mixedTemplate);
-		},
-		onBegin: function () {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-                                if (pokemon.set.name === pokemon.set.species) continue;
-				let crossTemplate = this.getTemplate(pokemon.name);
-				if (!crossTemplate.exists) continue;
-				try {
-				let template = pokemon.baseTemplate;
-				let crossPrevoTemplate = this.getTemplate(crossTemplate.prevo);
-				let mixedTemplate = Object.assign({}, template);
-				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
-				mixedTemplate.weightkg = Math.max(0.1, template.weightkg + crossTemplate.weightkg - crossPrevoTemplate.weightkg);
-				mixedTemplate.nfe = false;
-
-				mixedTemplate.baseStats = {};
-				for (let statid in template.baseStats) {
-					mixedTemplate.baseStats[statid] = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
-				}
-				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
-
-				mixedTemplate.types = template.types.slice();
-				if (crossTemplate.types[0] !== crossPrevoTemplate.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
-				if (crossTemplate.types[1] !== crossPrevoTemplate.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
-				if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
-
-				pokemon.baseTemplate = mixedTemplate;
-				pokemon.formeChange(mixedTemplate);
-				pokemon.crossEvolved = true;
-				} catch (e) {
-					this.add('-hint', 'Failed to cross evolve ' + pokemon.baseTemplate.species + ' to ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
-				}
-			}
-		},
-		onSwitchInPriority: 1,
-		onSwitchIn: function (pokemon) {
-			if (pokemon.crossEvolved) {
-				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
-			}
-		},
-	},
+ 	},
+	
 	{
 	name:"Imprisoned",
 	section:"New Other Metagames",
@@ -5415,6 +5139,283 @@ onBegin: function () {
 		mod: 'gen3',
 		ruleset: ['[Gen 3] OU'],
 		banlist: ['OU', 'BL'],
+	},
+
+	// ORAS Singles
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "ORAS Singles",
+	},
+	{
+		name: "OU",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3573990/\">OU Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571990/\">OU Viability Ranking</a>",
+		],
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
+	},
+	{
+		name: "Ubers",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3522911/\">Ubers Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3535106/\">Ubers Viability Ranking</a>",
+		],
+
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
+	},
+	{
+		name: "UU",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3582473/\">np: UU Stage 7.3</a>",
+			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555277/\">UU Viability Ranking</a>",
+		],
+
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'Drizzle', 'Drought', 'Baton Pass'],
+	},
+	{
+		name: "RU",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3583022/\">np: RU Stage 19</a>",
+			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558546/\">RU Viability Ranking</a>",
+		],
+
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'UU', 'BL2', 'Drizzle', 'Drought'],
+	},
+	{
+		name: "NU",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3576747/\">np: NU Stage 15</a>",
+			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555650/\">NU Viability Ranking</a>",
+		],
+
+		ruleset: ['RU', 'Baton Pass Speed Clause'],
+		banlist: ['RU', 'BL3'],
+	},
+	{
+		name: "PU",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3578583/\">np: PU Stage 9</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>",
+		],
+
+		ruleset: ['RU'],
+		banlist: ['RU', 'BL3', 'NU', 'BL4', 'Chatter'],
+	},
+	{
+		name: "LC",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3505710/\">LC Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/dex/xy/formats/lc/\">LC Banlist</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547566/\">LC Viability Ranking</a>",
+		],
+
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
+	},
+	{
+		name: "CAP",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3537407/\">CAP Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/dex/xy/formats/cap/\">CAP Banlist</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545628/\">CAP Viability Ranking</a>",
+		],
+
+		ruleset: ['OU'],
+		banlist: ['Allow CAP'],
+	},
+	{
+		name: "Battle Spot Singles",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3527960/\">Battle Spot Singles Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554616/\">Battle Spot Singles Viability Ranking</a>",
+		],
+
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		requirePentagon: true,
+	},
+	{
+        name: "RU Theorymon",
+        desc: [
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3568052/\">np: RU Stage 15</a>",
+            "&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a>",
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3558546/\">RU Viability Ranking</a>",
+        ],
+
+        mod: 'rutheorymon',
+
+        ruleset: ['UU'],
+        banlist: ['UU', 'BL2'],
+  },
+	{
+		name: "[Gen 6] Random Battle",
+
+		team: 'random',
+		searchShow: false,
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "Custom Game",
+
+
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 9999,
+		defaultLevel: 100,
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Cancel Mod'],
+	},
+
+	// ORAS Doubles/Triples
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "ORAS Doubles/Triples",
+	},
+	{
+		name: "Doubles OU",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3580680/\">np: Doubles OU Stage 5</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles OU Banlist</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3535930/\">Doubles OU Viability Ranking</a>",
+		],
+
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview'],
+		banlist: [
+			'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
+			'Palkia', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Salamencite', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom', 'Soul Dew',
+			'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
+		],
+	},
+	{
+		name: "Doubles Ubers",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3542746/\">Doubles Ubers</a>"],
+
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: ['Illegal', 'Unreleased', 'Dark Void'],
+	},
+	{
+		name: "Doubles UU",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3542755/\">Doubles UU</a>"],
+
+		gameType: 'doubles',
+		ruleset: ['Doubles OU'],
+		banlist: [
+			'Aegislash', 'Amoonguss', 'Arcanine', 'Azumarill', 'Bisharp', 'Breloom', 'Charizard-Mega-Y', 'Charizardite Y',
+			'Conkeldurr', 'Cresselia', 'Diancie-Mega', 'Diancite', 'Ferrothorn', 'Garchomp', 'Gardevoir-Mega', 'Gardevoirite',
+			'Gastrodon', 'Gengar', 'Greninja', 'Heatran', 'Hitmontop', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi',
+			'Kangaskhan-Mega', 'Kangaskhanite', 'Keldeo', 'Kyurem-Black', 'Landorus-Therian', 'Latios', 'Ludicolo', 'Milotic',
+			'Politoed', 'Raichu', 'Rotom-Wash', 'Scizor', 'Scrafty', 'Shaymin-Sky', 'Suicune', 'Sylveon', 'Talonflame',
+			'Terrakion', 'Thundurus', 'Togekiss', 'Tyranitar', 'Venusaur', 'Volcanion', 'Weavile', 'Whimsicott', 'Zapdos',
+		],
+	},
+	{
+		name: "VGC 2016",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558332/\">VGC 2016 Rules</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3580592/\">VGC 2016 Viability Ranking</a>",
+		],
+
+		gameType: 'doubles',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
+		banlist: [
+			'Illegal', 'Unreleased', 'Mew', 'Celebi', 'Jirachi', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Phione', 'Manaphy', 'Darkrai',
+			'Shaymin', 'Shaymin-Sky', 'Arceus', 'Victini', 'Keldeo', 'Meloetta', 'Genesect', 'Diancie', 'Hoopa', 'Hoopa-Unbound', 'Volcanion', 'Soul Dew',
+		],
+		requirePentagon: true,
+		onValidateTeam: function (team) {
+			const legends = {'Mewtwo':1, 'Lugia':1, 'Ho-Oh':1, 'Kyogre':1, 'Groudon':1, 'Rayquaza':1, 'Dialga':1, 'Palkia':1, 'Giratina':1, 'Reshiram':1, 'Zekrom':1, 'Kyurem':1, 'Xerneas':1, 'Yveltal':1, 'Zygarde':1};
+			let n = 0;
+			for (let i = 0; i < team.length; i++) {
+				let template = this.getTemplate(team[i].species).baseSpecies;
+				if (template in legends) n++;
+				if (n > 2) return ["You can only use up to two legendary Pok\u00E9mon."];
+			}
+		},
+	},
+	{
+		name: "Battle Spot Doubles",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3560820/\">Battle Spot Doubles Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3560824/\">Battle Spot Doubles Viability Ranking</a>",
+		],
+
+		gameType: 'doubles',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		requirePentagon: true,
+	},
+	{
+		name: "[Gen 6] Random Doubles Battle",
+
+		gameType: 'doubles',
+		team: 'random',
+		searchShow: false,
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "Doubles Custom Game",
+
+		gameType: 'doubles',
+
+		canUseRandomTeam: true,
+		maxLevel: 9999,
+		defaultLevel: 100,
+		debug: true,
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Cancel Mod'],
+	},
+	{
+		name: "Battle Spot Triples",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3533914/\">Battle Spot Triples Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3549201/\">Battle Spot Triples Viability Ranking</a>",
+		],
+
+		gameType: 'triples',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [6, 6],
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		requirePentagon: true,
+	},
+	{
+		name: "Triples Custom Game",
+
+		gameType: 'triples',
+
+		canUseRandomTeam: true,
+		maxLevel: 9999,
+		defaultLevel: 100,
+		debug: true,
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
 
 	// BW2 Singles
