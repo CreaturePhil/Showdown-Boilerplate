@@ -3832,6 +3832,14 @@ exports.Formats = [
 				 pokemon.types = pokemon.template.types = types;
 		 },
  },
+	{
+        name: "Move Equality",
+        section: "Other Metagames",
+   
+        mod: "moveequality",
+        ruleset: ["OU"],
+        banlist: ["Greninja", "Dynamic Punch"]
+    },
     	{
 		name: "Cross Evolution",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
