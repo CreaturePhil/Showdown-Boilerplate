@@ -172,7 +172,7 @@ exports.BattleLearnsets = {
 		round: ["7M"],
 		sleeptalk: ["7M"],
 		smartstrike: ["7M"],
-		steelwing: ["7M", "7L8", “7L1”],
+		steelwing: ["7M", "7L8", "7L1"],
 		substitute: ["7M"],
 		sunnyday: ["7M"],
 		supersonic: ["7E"],
