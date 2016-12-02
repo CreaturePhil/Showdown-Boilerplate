@@ -168,6 +168,13 @@ exports.Formats = [
 			this.win(this[p]);
 		},
 	},
+
+	{
+		name: "Benjamin Butterfree",
+		mod: 'bb',
+		team: 'random',
+		ruleset: ['Random Battle', "Team Preview"],
+	},
 	{
                 name: "[Experimental] School",
                 section: "Randomized Metas",
