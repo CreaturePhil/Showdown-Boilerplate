@@ -2781,6 +2781,14 @@ exports.Formats = [
         ruleset: ["OU"],
         banlist: ["Greninja", "Dynamic Punch"]
     },
+	{
+        name: "Mega Mania",
+        section: "Other Metagames",
+
+        mod: "megamania",
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Mega Mania'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Regigigas', 'Slaking', 'Ignore Illegal Abilities']
+    },
     	{
 		name: "Cross Evolution",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
