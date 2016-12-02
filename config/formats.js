@@ -2814,6 +2814,26 @@ exports.Formats = [
        }
    },
 },
+	    {
+        name: "Immunimons",
+        section: "Other Metagames",
+
+        ruleset: ['OU'],
+        banlist: [],
+        onTryHit: function (target, source, move) {
+            if (target === source || move.type === '???' || move.id === 'struggle') return;
+            if (target.hasType(move.type)) {
+                this.add('-debug','immunimons immunity [' + move.id + ']');
+                return null;
+            }
+        },
+        onDamage: function (damage, target, source, effect) {
+            if ((source.hasType('Rock') && effect.id === 'stealthrock') || (source.hasType('Ground') && effect.id === 'spikes')) {
+                this.add('-debug','immunimons immunity [' + effect.id + ']');
+                return false;
+            }
+        },
+    },
 	
     	{
 		name: "Cross Evolution",
