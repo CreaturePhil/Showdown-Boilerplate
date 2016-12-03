@@ -9,7 +9,7 @@ exports.BattleScripts = {
 			this.hp -= d;
 			if (this.hp <= 0) {
 				d += this.hp;
-				if (this.baseTemplate.prevo && !this.transformed) {
+				if (this.battle.getTemplate(this.baseTemplate.baseSpecies).prevo && !this.transformed) {
 					this.willDevolve = true;
 					return this.hp;
 				}
