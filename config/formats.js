@@ -168,17 +168,15 @@ exports.Formats = [
 			this.win(this[p]);
 		},
 	},
-
 	{
 		name: "Benjamin Butterfree",
 		mod: 'bb',
 		team: 'random',
 		ruleset: ['Random Battle', "Team Preview"],
 	    onAfterDamage: function(damage, target, source, move) {
-			if (!target.baseTemplate.prevo || target.transformed) return;
-			if (target.hp > 0) return;
-			this.add('-message', "You sense the presence of many! (placeholder)");
+	    	if(!target.willDevolve) return;
 			let template = this.getTemplate(target.baseTemplate.prevo);
+			target.willDevolve = false;
 			target.formeChange(template);
 			target.baseTemplate = template;
 			target.details = template.species + (target.level === 100 ? '' : ', L' + target.level) + (target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
@@ -189,8 +187,25 @@ exports.Formats = [
 			let newHP = Math.floor(Math.floor(2 * target.template.baseStats['hp'] + target.set.ivs['hp'] + Math.floor(target.set.evs['hp'] / 4) + 100) * target.level / 100 + 10);
 			target.hp = newHP;
 			target.maxhp = newHP;
-			targer.devolvedThisTurn = true;
 			this.add('-heal', target, target.getHealth, '[silent]');
+			this.heal(target.maxhp, target, source, 'devolution', '[silent]');
+			let movepool = template.learnset;
+			let prevo = template.prevo;
+			while(prevo) {
+				let learnset = this.getTemplate(prevo).learnset;
+				for(let i in learnset) {
+					movepool[i] = learnset[i];
+				}
+			}
+			let newmoves = [], newbasemoves= [];
+			for(let i=0;i<target.baseMoveset.length; i++) {
+				if(movepool[target.baseMoveset[i].id]) {
+				 	newbasemoves.push(target.baseMoveset[i]);
+				 	newmoves.push(target.moveset[i]);
+				}
+			}
+			target.baseMoveset = newbasemoves;
+			target.moveset = newmoves;
 		},
 	},
 	{

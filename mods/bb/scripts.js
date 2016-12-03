@@ -1,21 +1,22 @@
 exports.BattleScripts = {
 	pokemon: {
-		faint: function(source, effect) {
-			if (this.fainted || this.faintQueued) return 0;
-			if (this.devolvedThisTurn) {
-				this.devolvedThisTurn =false;
-				return;
+		damage(d, source, effect) {
+			if (!this.hp) return 0;
+			if (d < 1 && d > 0) d = 1;
+			d = Math.floor(d);
+			if (isNaN(d)) return 0;
+			if (d <= 0) return 0;
+			this.hp -= d;
+			if (this.hp <= 0) {
+				d += this.hp;
+				if (this.baseTemplate.prevo && !this.transformed) {
+					this.willDevolve = true;
+					return this.hp;
+				}
+				else
+					this.faint(source, effect);
 			}
-			let d = this.hp;
-			this.hp = 0;
-			this.switchFlag = false;
-			this.faintQueued = true;
-			this.battle.faintQueue.push({
-				target: this,
-				source: source,
-				effect: effect,
-			});
 			return d;
-		}
+		},
 	}
 };
