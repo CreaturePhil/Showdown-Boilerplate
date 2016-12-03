@@ -174,6 +174,24 @@ exports.Formats = [
 		mod: 'bb',
 		team: 'random',
 		ruleset: ['Random Battle', "Team Preview"],
+	    onAfterDamage: function(damage, target, source, move) {
+			if (!target.baseTemplate.prevo || target.transformed) return;
+			if (target.hp > 0) return;
+			this.add('-message', "You sense the presence of many! (placeholder)");
+			let template = this.getTemplate(target.baseTemplate.prevo);
+			target.formeChange(template);
+			target.baseTemplate = template;
+			target.details = template.species + (target.level === 100 ? '' : ', L' + target.level) + (target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
+			this.add('detailschange', target, target.details);
+			this.add('-message', "" + target.name + " has de-volved into "+template.name+"!");
+			target.setAbility(template.abilities['0']);
+			target.baseAbility = target.ability;
+			let newHP = Math.floor(Math.floor(2 * target.template.baseStats['hp'] + target.set.ivs['hp'] + Math.floor(target.set.evs['hp'] / 4) + 100) * target.level / 100 + 10);
+			target.hp = newHP;
+			target.maxhp = newHP;
+			targer.devolvedThisTurn = true;
+			this.add('-heal', target, target.getHealth, '[silent]');
+		},
 	},
 	{
                 name: "[Experimental] School",
