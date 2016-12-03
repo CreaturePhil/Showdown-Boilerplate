@@ -207,6 +207,9 @@ exports.Formats = [
 			}
 			target.baseMoveset = newbasemoves;
 			target.moveset = newmoves;
+			target.clearBoosts();
+			target.species = target.template.species;
+			this.add('-curestatus', target, target.status, '[from] de-volution','[silent]');
 		},
 	},
 	{
