@@ -175,7 +175,7 @@ exports.Formats = [
 		ruleset: ['Random Battle', "Team Preview"],
 	    onAfterDamage: function(damage, target, source, move) {
 	    	if(!target.willDevolve) return;
-			let template = this.getTemplate(target.baseTemplate.baseSpecies);
+			let template = this.getTemplate(this.getTemplate(target.baseTemplate.baseSpecies).prevo);
 			target.willDevolve = false;
 			target.formeChange(template);
 			target.baseTemplate = template;
