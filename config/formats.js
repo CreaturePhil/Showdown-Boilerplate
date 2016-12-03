@@ -210,7 +210,8 @@ exports.Formats = [
 			target.clearBoosts();
 			this.add('-clearboost', this.p1.pokemon[0], "[silent]");
 			target.species = target.template.species;
-			this.add('-curestatus', target, target.status, '[from] de-volution','[silent]');
+			target.canMegaEvo = false;
+			this.p2.active[0].cureStatus('[silent]');
 		},
 	},
 	{
