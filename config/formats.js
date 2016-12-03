@@ -208,7 +208,7 @@ exports.Formats = [
 			target.baseMoveset = newbasemoves;
 			target.moveset = newmoves;
 			target.clearBoosts();
-			this.add('-clearboost', this.p1.pokemon[0], "[silent]");
+			this.add('-clearboost', target, "[silent]");
 			target.species = target.template.species;
 			target.canMegaEvo = false;
 			this.p2.active[0].cureStatus('[silent]');
