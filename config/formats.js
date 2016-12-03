@@ -196,6 +196,7 @@ exports.Formats = [
 				for(let i in learnset) {
 					movepool[i] = learnset[i];
 				}
+				prevo = this.getTemplate(prevo).prevo;
 			}
 			let newmoves = [], newbasemoves= [];
 			for(let i=0;i<target.baseMoveset.length; i++) {
