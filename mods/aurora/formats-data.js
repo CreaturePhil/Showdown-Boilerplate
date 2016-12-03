@@ -10,11 +10,11 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	mycelore: {
-		randomBattleMoves: ["sludge bomb", "moonblast", "spore", "moonlight", "toxic spikes"],
+		randomBattleMoves: ["sludge bomb", "moonblast", "spore", "moonlight", "toxic spikes", "leech seed"],
 		tier: "LC",
 	},
 	muceptio: {
-		randomBattleMoves: ["sludge bomb", "moonblast", "spore", "moonlight", "toxic spikes"],
+		randomBattleMoves: ["sludge bomb", "moonblast", "spore", "moonlight", "toxic spikes", "leech seed"],
 		tier: "NFE",
 	},
 	malifery: {
