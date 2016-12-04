@@ -172,7 +172,7 @@ exports.Formats = [
 		name: "Benjamin Butterfree",
 		mod: 'bb',
 		team: 'random',
-		ruleset: ['Random Battle', "Team Preview"],
+		ruleset: ['Random Battle', "Team Preview", "Percentage Mod"],
 	    onAfterDamage: function(damage, target, source, move) {
 	    	if(!target.willDevolve) return;
 			let template = this.getTemplate(this.getTemplate(target.baseTemplate.baseSpecies).prevo);
