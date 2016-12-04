@@ -212,6 +212,7 @@ exports.Formats = [
 			target.species = target.template.species;
 			target.canMegaEvo = false;
 			target.cureStatus('[silent]');
+			target.volatiles = {};
 		},
 	},
 	{
