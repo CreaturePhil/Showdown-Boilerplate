@@ -2486,7 +2486,7 @@ exports.Formats = [
 
 		},*/
 	},
-	       {
+	{
 		    name: "Random Pokebilities",
 		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokebilities</a>"],
 		    section: "Randomized Metas",
@@ -3723,6 +3723,44 @@ exports.Formats = [
             return problems;
         }
     },
+    {
+		    name: "Pokebilities",
+		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pokébilities.3588652\">Pokebilities</a>"],
+		    section: "Experimental Metas",
+		    mod: 'pokebilities',
+		    ruleset: ["OU"],
+		    onSwitchInPriority: 1,
+		    onBegin: function() {
+			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+		        for (let p = 0; p < this.sides.length; p++) {
+		            for (let i = 0; i < this.sides[p].pokemon.length; i++) {
+		                let pokemon = this.sides[p].pokemon[i];
+		                let template = this.getTemplate(pokemon.species);
+		                this.sides[p].pokemon[i].innates = [];
+		                for (let a in template.abilities) {
+		                    if (toId(template.abilities[a]) != pokemon.ability)
+				    {
+					if(statusability[toId(template.abilities[a])])
+		                        this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
+					else
+		                        this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+				    }
+		                }
+		            }
+		        }
+		    },
+		    onSwitchIn: function(pokemon) {
+		        for (let i = 0; i < pokemon.innates.length; i++) {
+		            if (!pokemon.volatiles[pokemon.innates[i]])
+		                pokemon.addVolatile(pokemon.innates[i]);
+		        }
+		    },
+		    onAfterMega: function(pokemon) {
+		        for (let i = 0; i < pokemon.innates.length; i++) {
+		            pokemon.removeVolatile(pokemon.innates[i]);
+		        }
+		    },
+	},
     {
     	 name: "Baton Pass Marathon",
     	 desc:["&bullet; <a href=\"http://www.smogon.com/forums/threads/baton-pass-marathon-coded-looking-for-a-server.3517800\">Baton Pass Marathon</a>",],
@@ -5040,44 +5078,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		}
 	    },
 	},*/
-	{
-		    name: "Pokebilities",
-		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokebilities</a>"],
-		    section: "Experimental Metas",
-		    mod: 'pokebilities',
-		    ruleset: ["OU"],
-		    onSwitchInPriority: 1,
-		    onBegin: function() {
-			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
-		        for (let p = 0; p < this.sides.length; p++) {
-		            for (let i = 0; i < this.sides[p].pokemon.length; i++) {
-		                let pokemon = this.sides[p].pokemon[i];
-		                let template = this.getTemplate(pokemon.species);
-		                this.sides[p].pokemon[i].innates = [];
-		                for (let a in template.abilities) {
-		                    if (toId(template.abilities[a]) != pokemon.ability)
-				    {
-					if(statusability[toId(template.abilities[a])])
-		                        this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
-					else
-		                        this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
-				    }
-		                }
-		            }
-		        }
-		    },
-		    onSwitchIn: function(pokemon) {
-		        for (let i = 0; i < pokemon.innates.length; i++) {
-		            if (!pokemon.volatiles[pokemon.innates[i]])
-		                pokemon.addVolatile(pokemon.innates[i]);
-		        }
-		    },
-		    onAfterMega: function(pokemon) {
-		        for (let i = 0; i < pokemon.innates.length; i++) {
-		            pokemon.removeVolatile(pokemon.innates[i]);
-		        }
-		    },
-	},
 	{
 		name: "Trademarked Enchantment",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a> + <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>."],
