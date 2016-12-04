@@ -3726,7 +3726,7 @@ exports.Formats = [
     {
 		    name: "Pokebilities",
 		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pokébilities.3588652\">Pokebilities</a>"],
-		    section: "Experimental Metas",
+		    section: "New Other Metagames",
 		    mod: 'pokebilities',
 		    ruleset: ["OU"],
 		    onSwitchInPriority: 1,
@@ -4458,6 +4458,23 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				if(pokemon.types[0] === pokemon.types[1]) pokemon.types.length = 1;
 			}
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+	},
+	{
+		name: "Beastly Terrain",
+		ruleset: ['OU'],
+		onSourceFaint: function (target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				let stat = 'atk';
+				let bestStat = 0;
+				for (let i in source.stats) {
+					if (source.stats[i] > bestStat) {
+						stat = i;
+						bestStat = source.stats[i];
+					}
+				}
+				this.boost({[stat]:1}, source);
+			}
 		},
 	},
 	{
