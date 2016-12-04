@@ -4461,7 +4461,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{
-		name: "Beastly Terrain",
+		name: "Beastmode",
 		mod: "franticfusions",
 		ruleset: ['[Gen 7] Pokebank OU'],
 		onSwitchIn: function (pokemon) {
