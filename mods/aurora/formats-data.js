@@ -21,6 +21,14 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["sludge bomb", "moonblast", "spore", "moonlight", "toxic spikes"],
 		tier: "New",
 	},
+	canos: {
+		randomBattleMoves: ["return", "bonerush", "crunch", "howl"],
+		tier: "LC",
+	},
+	mortos: {
+		randomBattleMoves: ["return", "bonerush", "shadowbone", "howl"],
+		tier: "New",
+	},
 	doduoistor: {
 		randomBattleMoves: ["bravebird", "impalingfeather", "jumpkick", "roost", "swordsdance"],
 		tier: "LC",

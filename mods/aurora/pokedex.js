@@ -60,10 +60,34 @@ exports.BattlePokedex = {
 		prevo: "muceptio",
 		eggGroups: ["Grass", "Amorphous"],
 	},
+	canos: {
+		num: 10006,
+		species: "Canos",
+		types: ["Normal"],
+		baseStats: {hp: 35, atk: 50, def: 30, spa: 35, spd: 40, spe: 40},
+		abilities: {0: "Run Away", 1: "Quick Feet", H: "Pick Up"},
+		heightm: 0.5,
+		weightkg: 6.8,
+		color: "Brown",
+		evos: ["Mortos"],
+		eggGroups: ["Field"],
+	},
+	mortos: {
+		num: 10007,
+		species: "Mortos",
+		types: ["Normal", "Ghost"],
+		baseStats: {hp: 70, atk: 100, def: 60, spa: 70, spd: 80, spe: 80},
+		abilities: {0: "Run Away", 1: "Quick Feet", H: "Pick Up"},
+		heightm: 1.0,
+		weightkg: 20.2,
+		color: "Gray",
+		prevo: "canos",
+		eggGroups: ["Field"],
+	},
 	
 	/* Istori Forms */
 	
-	doduoistor: {
+	doduo: {
 		num: 84,
 		species: "Doduo",
 		types: ["Normal", "Flying"],
