@@ -4462,7 +4462,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	},
 	{
 		name: "Beastly Terrain",
-		ruleset: ['OU'],
+		ruleset: ['Random Battle'],
+		team: 'random',
 		onSourceFaint: function (target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				let stat = 'atk';
