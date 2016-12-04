@@ -2488,7 +2488,7 @@ exports.Formats = [
 	},
 	{
 		    name: "Random Pokebilities",
-		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokebilities</a>"],
+		    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pokébilities.3588652\">Pokebilities</a>"],
 		    section: "Randomized Metas",
 		    mod: 'pokebilities',
 		    ruleset: ["Random Battle"],
