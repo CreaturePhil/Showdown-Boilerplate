@@ -2515,7 +2515,7 @@ exports.Formats = [
 	                                  this.sides[p].pokemon[i].innates = [];
 	                                  for (let a in template.abilities) {
 	                                          if (toId(a) == 'h' && template.unreleasedHidden) continue;
-	                                          if (toId(template.abilities[a]) != pokemon.ability) continue;
+	                                          if (toId(template.abilities[a]) == pokemon.ability) continue;
 	                                          if (statusability[toId(template.abilities[a])])
 	                                            this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
 	                                          else
