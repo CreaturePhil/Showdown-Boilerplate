@@ -175,7 +175,7 @@ exports.Formats = [
 		ruleset: ['Random Battle', "Team Preview", "Percentage Mod"],
 	    onAfterDamage: function(damage, target, source, move) {
 	    	if(!target.willDevolve) return;
-			let template = target.isMega ? this.getTemplate(this.getTemplate(target.baseTemplate.baseSpecies).prevo) : this.getTemplate(target.template.prevo);
+			let template = target.template.isMega ? this.getTemplate(this.getTemplate(target.template.baseSpecies).prevo) : this.getTemplate(target.template.prevo);
 			target.willDevolve = false;
 			target.formeChange(template);
 			target.baseTemplate = template;
@@ -211,7 +211,7 @@ exports.Formats = [
 			this.add('-clearboost', target, "[silent]");
 			target.species = target.template.species;
 			target.canMegaEvo = false;
-			this.p2.active[0].cureStatus('[silent]');
+			target.cureStatus('[silent]');
 		},
 	},
 	{
