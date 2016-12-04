@@ -3797,6 +3797,7 @@ exports.Formats = [
 	},
 
 	{
+
 		 name: "Camomons",
 		 desc: [
 				 "Pok&eacute;mon change type to match their first two moves.",
@@ -3810,18 +3811,22 @@ exports.Formats = [
 				 for (let i = 0, len = allPokemon.length; i < len; i++) {
 						 let pokemon = allPokemon[i];
 						 let types = [this.getMove(pokemon.moves[0]).type];
-						 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
+						 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0])          types.push(this.getMove(pokemon.moves[1]).type);
 						 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
 						 pokemon.types = pokemon.template.types = types;
 				 }
 		 },
+                 this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		 onAfterMega: function (pokemon) {
 				 let types = [this.getMove(pokemon.moves[0]).type];
 				 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
 				 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
 				 pokemon.types = pokemon.template.types = types;
 		 },
- 	},
+                 onSwitchIn: function (pokemon) {
+                                 this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+                 },
+},
 	
 	{
 	name:"Imprisoned",
