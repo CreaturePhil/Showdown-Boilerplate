@@ -2486,56 +2486,56 @@ exports.Formats = [
 
 		},*/
 	},
-	      {
-	          name: "Random Pokebilities",
-	          desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pokébilities.3588652\">Pokebilities</a>"],
-	          section: "Randomized Metas",
-	          mod: 'pokebilities',
-	          ruleset: ["Random Battle"],
-	          team: 'random',
-	          onSwitchInPriority: 1,
-	          onBegin: function() {
-	                  let statusability = {
-	                          "aerilate": true,
-	                          "aurabreak": true,
-	                          "flashfire": true,
-	                          "parentalbond": true,
-	                          "pixilate": true,
-	                          "refrigerate": true,
-	                          "sheerforce": true,
-	                          "slowstart": true,
-	                          "truant": true,
-	                          "unburden": true,
-	                          "zenmode": true
-	                  };
-	                  for (let p = 0; p < this.sides.length; p++) {
-	                          for (let i = 0; i < this.sides[p].pokemon.length; i++) {
-	                                  let pokemon = this.sides[p].pokemon[i];
-	                                  let template = this.getTemplate(pokemon.species);
-	                                  this.sides[p].pokemon[i].innates = [];
-	                                  for (let a in template.abilities) {
-	                                          if (toId(a) == 'h' && template.unreleasedHidden) continue;
-	                                          if (toId(template.abilities[a]) == pokemon.ability) continue;
-	                                          if (statusability[toId(template.abilities[a])])
-	                                            this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
-	                                          else
-	                                            this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
-	                                  }
-	                          }
-	                  }
-	          },
-	          onSwitchIn: function(pokemon) {
-	                  for (let i = 0; i < pokemon.innates.length; i++) {
-	                          if (!pokemon.volatiles[pokemon.innates[i]])
-	                                  pokemon.addVolatile(pokemon.innates[i]);
-	                  }
-	          },
-	          onAfterMega: function(pokemon) {
-	                  for (let i = 0; i < pokemon.innates.length; i++) {
-	                          pokemon.removeVolatile(pokemon.innates[i]);
-	                  }
-	          },
-	  },
+		{
+	        name: "Random Pokebilities",
+	        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pokébilities.3588652\">Pokebilities</a>: A Pokemon can have all of its abilities at the same time."],
+	        ruleset: ["Random Battle"],
+	        team: 'random',
+	        mod: 'pokebilities',
+	        ruleset: ["Random Battle"],
+	        onSwitchInPriority: 1,
+	        onBegin: function() {
+	                let statusability = {
+	                        "aerilate": true,
+	                        "aurabreak": true,
+	                        "flashfire": true,
+	                        "parentalbond": true,
+	                        "pixilate": true,
+	                        "refrigerate": true,
+	                        "sheerforce": true,
+	                        "slowstart": true,
+	                        "truant": true,
+	                        "unburden": true,
+	                        "zenmode": true
+	                };
+	                for (let p = 0; p < this.sides.length; p++) {
+	                        for (let i = 0; i < this.sides[p].pokemon.length; i++) {
+	                                let pokemon = this.sides[p].pokemon[i];
+	                                let template = this.getTemplate(pokemon.species);
+	                                this.sides[p].pokemon[i].innates = [];
+	                                for (let a in template.abilities) {
+	                                        if (toId(a) == 'h' && template.unreleasedHidden) continue;
+	                                        if (toId(template.abilities[a]) == pokemon.ability) continue;
+	                                        if (statusability[toId(template.abilities[a])])
+	                                                this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
+	                                        else
+	                                                this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+	                                }
+	                        }
+	                }
+	        },
+	        onSwitchIn: function(pokemon) {
+	                for (let i = 0; i < pokemon.innates.length; i++) {
+	                        if (!pokemon.volatiles[pokemon.innates[i]])
+	                                pokemon.addVolatile(pokemon.innates[i]);
+	                }
+	        },
+	        onAfterMega: function(pokemon) {
+	                for (let i = 0; i < pokemon.innates.length; i++) {
+	                        pokemon.removeVolatile(pokemon.innates[i]);
+	                }
+	        },
+		},
 	{
 		section: "Other Metagames",
 		column: 2,
