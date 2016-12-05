@@ -2,8 +2,16 @@
 
 exports.BattleScripts = {
 	suppressingAttackEvents() {
-		return (this.activePokemon && this.activePokemon.isActive && (!this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents) || (this.activeMove && this.activeMove.ignoreAbility));
-	}
+		let bool = this.activePokemon.getAbility().stopAttackEvents;
+		for(let i in this.activePokemon.volatiles)
+		{
+			if(this.activePokemon.battle.data.Statuses[i].stopAttackEvents) {
+				bool = true;
+				break;
+			} 
+		}
+		return (this.activePokemon && this.activePokemon.isActive && (!this.activePokemon.ignoringAbility() && bool || (this.activeMove && this.activeMove.ignoreAbility));	
+	},
 	init: function()
 	{
 			Object.values(this.data.Abilities).forEach(ability => {
