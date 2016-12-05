@@ -21,7 +21,7 @@ exports.BattleScripts = {
 					this.data.Statuses[ability.id].effectType = "Ability";
 					this.data.Statuses[ability.id].noCopy = true;
 				}
-				this.data.Statuses.moldbreaker.onModifyMove = function(move) {
+				this.data.Statuses.["moldbreaker"].onModifyMove = function(move) {
 					move.ignoreAbility = true;
 				} 
 				this.data.Statuses.trace = {
