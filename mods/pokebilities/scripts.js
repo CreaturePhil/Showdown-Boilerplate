@@ -2,6 +2,7 @@
 
 exports.BattleScripts = {
 	suppressingAttackEvents() {
+		if(!(this.activePokemon && this.activePokemon.isActive)) return false;
 		let bool = this.activePokemon.getAbility().stopAttackEvents;
 		for(let i in this.activePokemon.volatiles)
 		{
@@ -10,7 +11,7 @@ exports.BattleScripts = {
 				break;
 			} 
 		}
-		return (this.activePokemon && this.activePokemon.isActive && (!this.activePokemon.ignoringAbility() && bool || (this.activeMove && this.activeMove.ignoreAbility));	
+		return (!this.activePokemon.ignoringAbility() && bool || (this.activeMove && this.activeMove.ignoreAbility));
 	},
 	init: function()
 	{
