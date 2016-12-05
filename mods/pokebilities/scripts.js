@@ -21,6 +21,9 @@ exports.BattleScripts = {
 					this.data.Statuses[ability.id].effectType = "Ability";
 					this.data.Statuses[ability.id].noCopy = true;
 				}
+				this.data.Statuses.moldbreaker.onModifyMove = function(move) {
+					move.ignoreAbility = true;
+				} 
 				this.data.Statuses.trace = {
 					desc: "On switch-in, this Pokemon copies a random adjacent opposing Pokemon's Ability. If there is no Ability that can be copied at that time, this Ability will activate as soon as an Ability can be copied. Abilities that cannot be copied are Flower Gift, Forecast, Illusion, Imposter, Multitype, Stance Change, Trace, and Zen Mode.",
 					shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
