@@ -203,7 +203,7 @@ exports.BattleFormats = {
 			let battleForme = template.battleOnly && template.species;
 			if (battleForme) {
 				if (template.requiredAbility && set.ability !== template.requiredAbility) {
-					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen, Greninja-Ash, Zygarde-Complete
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen, Zygarde-Complete
 				}
 				if (template.requiredItems && !template.requiredItems.includes(item.name)) {
 					problems.push("" + template.species + " transforms in-battle with " + Chat.plural(template.requiredItems.length, "either ") + template.requiredItems.join(" or ") + '.'); // Mega or Primal
@@ -447,6 +447,22 @@ exports.BattleFormats = {
 		onStart: function () {
 			this.add('rule', 'Evasion Moves Clause: Evasion moves are banned');
 		},
+		onValidateSet: function (set, format, setHas) {
+			let item = this.getItem(set.item);
+			if (!item.zMove) return;
+			let evasionBoosted = false;
+			for (let i = 0; i < set.moves.length; i++) {
+				let move = this.getMove(set.moves[i]);
+				if (move.type === item.zMoveType) {
+					if (move.zMoveBoost && move.zMoveBoost.evasion > 0) {
+						evasionBoosted = true;
+						break;
+					}
+				}
+			}
+			if (!evasionBoosted) return;
+			return [(set.name || set.species) + " can boost Evasion, which is banned by Evasion Clause."];
+		},
 	},
 	endlessbattleclause: {
 		effectType: 'Rule',
@@ -512,6 +528,7 @@ exports.BattleFormats = {
 				speedBoosted = true;
 				nonSpeedBoosted = true;
 			}
+			let item = this.getItem(set.item);
 			for (let i = 0; i < set.moves.length; i++) {
 				let move = this.getMove(set.moves[i]);
 				if (move.boosts && move.boosts.spe > 0) {
@@ -519,6 +536,14 @@ exports.BattleFormats = {
 				}
 				if (move.boosts && (move.boosts.atk > 0 || move.boosts.def > 0 || move.boosts.spa > 0 || move.boosts.spd > 0)) {
 					nonSpeedBoosted = true;
+				}
+				if (item.zMove && move.type === item.zMoveType) {
+					if (move.zMoveBoost && move.zMoveBoost.spe > 0) {
+						speedBoosted = true;
+					}
+					if (move.zMoveBoost && (move.zMoveBoost.atk > 0 || move.zMoveBoost.def > 0 || move.zMoveBoost.spa > 0 || move.zMoveBoost.spd > 0)) {
+						nonSpeedBoosted = true;
+					}
 				}
 			}
 
@@ -565,10 +590,16 @@ exports.BattleFormats = {
 			if (toId(set.item) === 'eeviumz') {
 				speedBoosted = true;
 			}
+			let item = this.getItem(set.item);
 			for (let i = 0; i < set.moves.length; i++) {
 				let move = this.getMove(set.moves[i]);
 				if (move.boosts && move.boosts.spe > 0) {
 					speedBoosted = true;
+				}
+				if (item.zMove && move.type === item.zMoveType) {
+					if (move.zMoveBoost && move.zMoveBoost.spe > 0) {
+						speedBoosted = true;
+					}
 				}
 			}
 
@@ -613,6 +644,7 @@ exports.BattleFormats = {
 	sleepclausemod: {
 		effectType: 'Rule',
 		name: 'Sleep Clause Mod',
+		banlist: ['Hypnosis + Gengarite'],
 		onStart: function () {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
@@ -660,16 +692,21 @@ exports.BattleFormats = {
 		onStart: function () {
 			this.add('rule', 'Same Type Clause: Pokémon in a team must share a type');
 		},
-		onValidateTeam: function (team, format, teamHas) {
-			if (!team[0]) return;
-			let template = this.getTemplate(team[0].species);
-			let typeTable = template.types;
-			if (!typeTable) return ["Your team must share a type."];
-			for (let i = 1; i < team.length; i++) {
-				template = this.getTemplate(team[i].species);
+		onValidateTeam: function (team) {
+			let typeTable;
+			for (let i = 0; i < team.length; i++) {
+				let template = this.getTemplate(team[i].species);
 				if (!template.types) return ["Your team must share a type."];
-
-				typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+				if (i === 0) {
+					typeTable = template.types;
+				} else {
+					typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+				}
+				let item = this.getItem(team[i].item);
+				if (item.megaStone && template.species === item.megaEvolves) {
+					template = this.getTemplate(item.megaStone);
+					typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+				}
 				if (!typeTable.length) return ["Your team must share a type."];
 			}
 		},

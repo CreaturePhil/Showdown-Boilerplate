@@ -522,7 +522,7 @@ class CommandContext {
 
 		if (room && room.id === 'global') {
 			// should never happen
-			console.log(`Command tried to write to global: ${user.name}: ${message}`);
+			// console.log(`Command tried to write to global: ${user.name}: ${message}`);
 			return false;
 		}
 		if (!user.named) {
@@ -932,9 +932,10 @@ Chat.toDurationString = function (number, options) {
 	const parts = [date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()];
 	const unitNames = ["second", "minute", "hour", "day", "month", "year"];
 	const positiveIndex = parts.findIndex(elem => elem > 0);
+	const precision = (options && options.precision ? options.precision : parts.length);
 	if (options && options.hhmmss) {
 		let string = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
 		return string.length === 2 ? "00:" + string : string;
 	}
-	return parts.slice(positiveIndex).reverse().map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "").reverse().join(" ").trim();
+	return parts.slice(positiveIndex).reverse().map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "").reverse().slice(0, precision).join(" ").trim();
 };

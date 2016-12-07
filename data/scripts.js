@@ -757,9 +757,14 @@ exports.BattleScripts = {
 		let zMoves = [];
 		for (let i = 0; i < pokemon.moves.length; i++) {
 			let move = this.getMove(pokemon.moves[i]);
-			let zMove = this.getZMove(move, pokemon, true) || '';
-			zMoves.push(zMove);
-			if (zMove) atLeastOne = true;
+			let zMoveName = this.getZMove(move, pokemon, true) || '';
+			if (zMoveName) {
+				let zMove = this.getMove(zMoveName);
+				zMoves.push({move: zMoveName, target: zMove.target});
+			} else {
+				zMoves.push(null);
+			}
+			if (zMoveName) atLeastOne = true;
 		}
 		if (atLeastOne) return zMoves;
 	},
@@ -1613,6 +1618,9 @@ exports.BattleScripts = {
 				case 'airslash': case 'oblivionwing':
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
 					break;
+				case 'shadowball':
+					if (hasMove['hex'] && hasMove['willowisp']) rejected = true;
+					break;
 				case 'shadowclaw':
 					if (hasMove['phantomforce'] || (hasMove['shadowball'] && counter.setupType !== 'Physical') || hasMove['shadowsneak']) rejected = true;
 					break;
@@ -1903,12 +1911,16 @@ exports.BattleScripts = {
 				rejectAbility = !counter['inaccurate'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
-			} else if (ability === 'Gluttony' || ability === 'Moody') {
-				rejectAbility = true;
+			} else if (ability === 'Gluttony') {
+				rejectAbility = !hasMove['bellydrum'];
 			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.includes('Ground');
 			} else if (ability === 'Limber') {
 				rejectAbility = template.types.includes('Electric');
+			} else if (ability === 'Liquid Voice') {
+				rejectAbility = !hasMove['hypervoice'];
+			} else if (ability === 'Moody') {
+				rejectAbility = true;
 			} else if (ability === 'Overgrow') {
 				rejectAbility = !counter['Grass'];
 			} else if (ability === 'Poison Heal') {
@@ -1944,7 +1956,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Torrent') {
 				rejectAbility = !counter['Water'];
 			} else if (ability === 'Unburden') {
-				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
+				rejectAbility = !counter.setupType && !hasMove['acrobatics'];
 			}
 
 			if (rejectAbility) {
@@ -2004,6 +2016,9 @@ exports.BattleScripts = {
 		if (hasMove['rockclimb'] && ability !== 'Sheer Force') {
 			moves[moves.indexOf('rockclimb')] = 'doubleedge';
 		}
+		if (hasMove['thunderpunch'] && ability === 'Galvanize') {
+			moves[moves.indexOf('thunderpunch')] = 'return';
+		}
 
 		if (hasMove['thunderpunch'] && ability === 'Galvanize') {
 			moves[moves.indexOf('thunderpunch')] = 'return';
@@ -2013,8 +2028,7 @@ exports.BattleScripts = {
 		if (template.requiredItems) {
 			if (template.baseSpecies === 'Arceus' && hasMove['judgment']) {
 				// Judgment doesn't change type with Z-Crystals
-				let items = template.requiredItems.filter(item => item.endsWith('Plate'));
-				item = items[this.random(items.length)];
+				item = template.requiredItems[0];
 			} else {
 				item = template.requiredItems[this.random(template.requiredItems.length)];
 			}
@@ -2065,7 +2079,13 @@ exports.BattleScripts = {
 		} else if (template.evos.length) {
 			item = (ability === 'Technician' && counter.Physical >= 4) ? 'Choice Band' : 'Eviolite';
 		} else if (hasMove['bellydrum']) {
-			item = (template.baseStats.spe <= 50 && !teamDetails.zMove && this.random(2)) ? 'Normalium Z' : 'Sitrus Berry';
+			if (ability === 'Gluttony') {
+				item = ['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'][this.random(5)] + ' Berry';
+			} else if (template.baseStats.spe <= 50 && !teamDetails.zMove && this.random(2)) {
+				item = 'Normalium Z';
+			} else {
+				item = 'Sitrus Berry';
+			}
 		} else if (hasMove['shellsmash']) {
 			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';
 		} else if (ability === 'Harvest') {
@@ -2082,27 +2102,16 @@ exports.BattleScripts = {
 			item = (ability === 'Chlorophyll' && counter.Status < 2) ? 'Life Orb' : 'Heat Rock';
 		} else if (hasMove['lightscreen'] && hasMove['reflect']) {
 			item = 'Light Clay';
-		} else if (hasMove['acrobatics']) {
-			item = 'Flying Gem';
 		} else if ((ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
 			item = (hasType['Fire'] || ability === 'Quick Feet') ? 'Toxic Orb' : 'Flame Orb';
 		} else if (ability === 'Unburden') {
 			if (hasMove['fakeout']) {
 				item = 'Normal Gem';
-			} else if (hasMove['dracometeor'] || hasMove['leafstorm'] || hasMove['overheat']) {
-				item = 'White Herb';
-			} else if (hasMove['substitute'] || counter.setupType) {
-				item = 'Sitrus Berry';
 			} else {
-				item = 'Red Card';
-				for (let m in moves) {
-					let move = this.getMove(moves[m]);
-					if (hasType[move.type] && move.basePower >= 90) {
-						item = move.type + ' Gem';
-						break;
-					}
-				}
+				item = 'Sitrus Berry';
 			}
+		} else if (hasMove['acrobatics']) {
+			item = '';
 
 		// Medium priority
 		} else if (((ability === 'Speed Boost' && !hasMove['substitute']) || (ability === 'Stance Change')) && counter.Physical + counter.Special > 2) {
@@ -2184,6 +2193,7 @@ exports.BattleScripts = {
 			Unreleased: 75,
 			CAP: 75,
 			Uber: 73,
+			'Bank-Uber': 73,
 			AG: 71,
 		};
 		let customScale = {
@@ -2263,7 +2273,7 @@ exports.BattleScripts = {
 		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1, 'Togetic':1};
 
 		// For Monotype
-		let isMonotype = this.format === 'monotyperandombattle';
+		let isMonotype = this.format === 'gen7monotyperandombattle';
 		let typePool = Object.keys(this.data.TypeChart);
 		let type = typePool[this.random(typePool.length)];
 
@@ -2436,14 +2446,14 @@ exports.BattleScripts = {
 			require('../crashlogger')(err, 'The doubles randbat set generator');
 		}
 
-		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};
+		if (typeof teamDetails !== 'object') teamDetails = {megaStone: teamDetails};
 
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
 			species = template.baseSpecies;
 		}
 		let battleForme = this.checkBattleForme(template);
-		if (battleForme && (battleForme.isMega ? !teamDetails.megaCount : this.random(2))) {
+		if (battleForme && (battleForme.isMega ? !teamDetails.megaStone : this.random(2))) {
 			template = this.getTemplate(template.otherFormes.length >= 2 ? template.otherFormes[this.random(template.otherFormes.length)] : template.otherFormes[0]);
 		}
 
@@ -2808,14 +2818,6 @@ exports.BattleScripts = {
 					moves.splice(k, 1);
 					break;
 				}
-
-				// Handle HP IVs
-				if (move.id === 'hiddenpower') {
-					let HPivs = this.getType(move.type).HPivs;
-					for (let iv in HPivs) {
-						ivs[iv] = HPivs[iv];
-					}
-				}
 			}
 			if (movePool.length && moves.length === 4 && !hasMove['judgment']) {
 				// Move post-processing:
@@ -2908,18 +2910,6 @@ exports.BattleScripts = {
 
 		// Re-query in case a moveset modification occurred
 		if (changedMove) counter = this.queryMoves(moves, hasType, hasAbility);
-
-		// If Hidden Power has been removed, reset the IVs
-		if (!hasMove['hiddenpower']) {
-			ivs = {
-				hp: 31,
-				atk: 31,
-				def: 31,
-				spa: 31,
-				spd: 31,
-				spe: 31,
-			};
-		}
 
 		let abilities = Object.values(baseTemplate.abilities);
 		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);

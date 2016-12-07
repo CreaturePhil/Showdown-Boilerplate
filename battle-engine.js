@@ -412,7 +412,7 @@ class BattlePokemon {
 		return targets;
 	}
 	ignoringAbility() {
-		return !!((this.battle.gen >= 5 && !this.isActive) || this.volatiles['gastroacid']);
+		return !!((this.battle.gen >= 5 && !this.isActive) || (this.volatiles['gastroacid'] && !(this.ability in {comatose:1, multitype:1, schooling:1, stancechange:1})));
 	}
 	ignoringItem() {
 		return !!((this.battle.gen >= 5 && !this.isActive) || this.hasAbility('klutz') || this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
@@ -1097,6 +1097,7 @@ class BattlePokemon {
 		let result;
 		status = this.battle.getEffect(status);
 		if (!this.hp && !status.affectsFainted) return false;
+		if (linkedStatus && !source.hp) return false;
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
 			if (!sourceEffect) sourceEffect = this.battle.effect;
@@ -1517,7 +1518,7 @@ class BattleSide {
 		}
 
 		let move = this.battle.getMove(moveid);
-		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon, false, true) : '';
+		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon, false, true) : undefined;
 		if (megaOrZ === 'zmove') {
 			if (!zMove || this.choiceData.zmove) {
 				this.emitCallback('cantz', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
@@ -1616,7 +1617,7 @@ class BattleSide {
 			targetLoc: targetLoc,
 			move: moveid,
 			mega: megaOrZ === 'mega',
-			zmove: megaOrZ === 'zmove',
+			zmove: zMove,
 		});
 
 		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (megaOrZ ? ' ' + megaOrZ : ''));
@@ -2311,7 +2312,7 @@ class Battle extends Tools.BattleDex {
 		return true;
 	}
 	suppressingAttackEvents() {
-		return (this.activePokemon && this.activePokemon.isActive && (!this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents) || (this.activeMove && this.activeMove.ignoreAbility));
+		return this.activePokemon && this.activePokemon.isActive && this.activeMove && this.activeMove.ignoreAbility;
 	}
 	suppressingWeather() {
 		let pokemon;
@@ -3996,7 +3997,7 @@ class Battle extends Tools.BattleDex {
 		return this.validTargetLoc(this.getTargetLoc(target, source), source, targetType);
 	}
 	getTarget(decision) {
-		let move = this.getMove(decision.move);
+		let move = this.getMove(decision.zmove || decision.move);
 		let target;
 		if ((move.target !== 'randomNormal') &&
 				this.validTargetLoc(decision.targetLoc, decision.pokemon, move.target)) {
@@ -4017,7 +4018,7 @@ class Battle extends Tools.BattleDex {
 			// chosen target not valid, retarget randomly with resolveTarget
 		}
 		if (!decision.targetPosition || !decision.targetSide) {
-			target = this.resolveTarget(decision.pokemon, decision.move);
+			target = this.resolveTarget(decision.pokemon, decision.zmove || decision.move);
 			decision.targetSide = target.side;
 			decision.targetPosition = target.position;
 		}
@@ -4456,6 +4457,7 @@ class Battle extends Tools.BattleDex {
 			this.clearActiveMove(true);
 			this.updateSpeed();
 			this.residualEvent('Residual');
+			this.add('upkeep');
 			break;
 
 		case 'skip':
