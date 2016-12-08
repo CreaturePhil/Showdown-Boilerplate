@@ -1,18 +1,6 @@
 'use strict';
 
 exports.BattleScripts = {
-	suppressingAttackEvents() {
-		if(!(this.activePokemon && this.activePokemon.isActive)) return false;
-		let bool = this.activePokemon.getAbility().stopAttackEvents;
-		for(let i in this.activePokemon.volatiles)
-		{
-			if(this.activePokemon.battle.data.Statuses[i].stopAttackEvents) {
-				bool = true;
-				break;
-			} 
-		}
-		return (!this.activePokemon.ignoringAbility() && bool || (this.activeMove && this.activeMove.ignoreAbility));
-	},
 	init: function()
 	{
 			Object.values(this.data.Abilities).forEach(ability => {
