@@ -68,6 +68,39 @@ exports.BattleAbilities = {
 		id: "infernalscales",
 		name: "Infernal Scales",
 		rating: 3.5,
-		num: 10199,
+		num: 10001,
+	},
+	"magicalemanation": {
+		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
+		onStart: function (source) {
+			}
+			this.addPseudoWeather('magicroom', source, effect, '[of] ' + source);
+		},
+		id: "magicalemanation",
+		name: "Magical Emanation",
+		rating: 4.5,
+		num: 10002,
+	},
+	"trickyemanation": {
+		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
+		onStart: function (source) {
+			}
+			this.addPseudoWeather('trickroom', source, effect, '[of] ' + source);
+		},
+		id: "trickyemanation",
+		name: "Tricky Emanation",
+		rating: 4.5,
+		num: 10003,
+	},
+	"wondrousmanation": {
+		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
+		onStart: function (source) {
+			}
+			this.addPseudoWeather('wonderroom', source, effect, '[of] ' + source);
+		},
+		id: "wondrousemanation",
+		name: "Wondrous Emanation",
+		rating: 4.5,
+		num: 10004,
 	},
 };
