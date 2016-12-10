@@ -29,6 +29,18 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["return", "bonerush", "shadowbone", "howl"],
 		tier: "New",
 	},
+	uisge: {
+		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
+		tier: "New",
+	},
+	talamh: {
+		randomBattleMoves: ["earthquake", "u-turn", "recover", "stoneedge"],
+		tier: "New",
+	},
+	adhair: {
+		randomBattleMoves: ["hurricane", "psyshock", "u-turn", "recover"],
+		tier: "New",
+	},
 	doduoistor: {
 		randomBattleMoves: ["bravebird", "impalingfeather", "jumpkick", "roost", "swordsdance"],
 		tier: "LC",
