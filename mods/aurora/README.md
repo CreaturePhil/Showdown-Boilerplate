@@ -88,3 +88,17 @@ Snarl
 Nature Power     
 Dark Pulse    
 Confide     	
+
+##Detuoy	
+Dex: 10002	
+![Steel Type](http://play.pokemonshowdown.com/sprites/types/Steel.png)
+![Flying Type](http://play.pokemonshowdown.com/sprites/types/Flying.png)
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 60 | 120 | 150 | 30  | 120 | 30  |
+
+Abilities: Aerilate<br/>
+Height: 1.8 m	Weight: 666 Kg	Color: Gray	Egg Groups: Mineral	
+###Learnset	
+Explosion
