@@ -72,8 +72,7 @@ exports.BattleAbilities = {
 	},
 	"magicalemanation": {
 		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
-		onStart: function (source) {
-			}
+		onStart: function (source, effect) {
 			this.addPseudoWeather('magicroom', source, effect, '[of] ' + source);
 		},
 		id: "magicalemanation",
@@ -83,8 +82,7 @@ exports.BattleAbilities = {
 	},
 	"trickyemanation": {
 		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
-		onStart: function (source) {
-			}
+		onStart: function (source, effect) {
 			this.addPseudoWeather('trickroom', source, effect, '[of] ' + source);
 		},
 		id: "trickyemanation",
@@ -94,8 +92,7 @@ exports.BattleAbilities = {
 	},
 	"wondrousmanation": {
 		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
-		onStart: function (source) {
-			}
+		onStart: function (source, effect) {
 			this.addPseudoWeather('wonderroom', source, effect, '[of] ' + source);
 		},
 		id: "wondrousemanation",
