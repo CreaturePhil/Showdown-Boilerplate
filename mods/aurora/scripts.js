@@ -8,6 +8,6 @@ exports.BattleScripts = {
 			if(cat === "Special") return "Physical";
 			if(cat === "Physical") return "Special";
 		}
-		return category || 'Physical';
+		return cat || 'Physical';
 	}
 };
