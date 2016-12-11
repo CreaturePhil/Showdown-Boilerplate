@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleScripts = {
 	getCategory(move) {
 		move = this.getMove(move);
