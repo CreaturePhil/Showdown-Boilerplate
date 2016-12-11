@@ -90,7 +90,7 @@ exports.BattleAbilities = {
 		rating: 4.5,
 		num: 10003,
 	},
-	"wondrousmanation": {
+	"wondrousemanation": {
 		shortDesc: "On switch-in, this Pokemon summons Wonder Room.",
 		onStart: function (source, effect) {
 			this.addPseudoWeather('wonderroom', source, effect, '[of] ' + source);
