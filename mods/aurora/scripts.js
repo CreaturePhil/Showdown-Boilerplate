@@ -1,5 +1,5 @@
 exports.BattleScripts = {
-	getCategory: function(move) {
+	getCategory(move) {
 		move = this.getMove(move);
 		let cat = move.category;
 		if(this.pseudoWeather["wonderroom"]) {
