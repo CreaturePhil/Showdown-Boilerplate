@@ -230,7 +230,6 @@ exports.commands = {
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',
-	g6learn: 'learn',
 	rbylearn: 'learn',
 	gsclearn: 'learn',
 	advlearn: 'learn',
@@ -255,8 +254,12 @@ exports.commands = {
 			this.update();
 		});
 	},
-	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pok\u00e9mon can learn the given moves, if it can at all.",
-		"!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ * # & ~"],
+	learnhelp: ["/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.",
+		"!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ * # & ~",
+		"Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or 'pentagon'. A value of 'pentagon' indicates that trading from previous generations is not allowed.",
+		"/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.",
+		"/learnall displays all of the possible fathers for egg moves.",
+		"/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras"],
 };
 
 if (process.send && module === process.mainModule) {
@@ -653,7 +656,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			let lsetData = {fastCheck: true, set: {}};
 			for (let group = 0; group < moveGroups.length; group++) {
 				for (let i = 0; i < moveGroups[group].length; i++) {
-					let problem = TeamValidator('anythinggoes').checkLearnset(moveGroups[group][i], mon, lsetData);
+					let problem = TeamValidator('gen7ou').checkLearnset(moveGroups[group][i], mon, lsetData);
 					if (!problem) break;
 					if (i === moveGroups[group].length - 1) return false;
 				}
@@ -666,7 +669,7 @@ function runDexsearch(target, cmd, canAll, message) {
 		results = Tools.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br>");
+	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
 	if (results.length > 1) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
@@ -1020,9 +1023,9 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	let resultsStr = "";
 	if (targetMon) {
-		resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>";
+		resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br />";
 	} else {
-		resultsStr += (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br>");
+		resultsStr += (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
 	}
 	if (results.length > 0) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
@@ -1238,7 +1241,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		}
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br>");
+	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
 	if (foundItems.length > 0) {
 		if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
 			foundItems.sort();
@@ -1253,16 +1256,46 @@ function runItemsearch(target, cmd, canAll, message) {
 }
 
 function runLearn(target, cmd) {
-	let lsetData = {set:{}};
+	let format = {};
 	let targets = target.split(',');
+	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5, oras:6}[cmd.slice(0, -5)] || 7);
+	let formatid;
+	let formatName;
+
+	while (targets.length) {
+		let targetid = toId(targets[0]);
+		if (Tools.getFormat(targetid).exists) {
+			if (format.requirePentagon) {
+				return {error: "'pentagon' can't be used with formats."};
+			}
+			format = Tools.getFormat(targetid);
+			formatid = targetid;
+			formatName = format.name;
+		}
+		if (targetid.startsWith('gen') && parseInt(targetid.charAt(3))) {
+			gen = parseInt(targetid.slice(3));
+			targets.shift();
+			continue;
+		}
+		if (targetid === 'pentagon') {
+			if (formatid) {
+				return {error: "'pentagon' can't be used with formats."};
+			}
+			format.requirePentagon = true;
+			targets.shift();
+			continue;
+		}
+		break;
+	}
+	if (!formatid) formatid = 'gen' + gen + 'ou';
+	if (!formatName) formatName = 'Gen ' + gen;
+	let lsetData = {set: {}, format: format};
+
 	let template = Tools.getTemplate(targets[0]);
 	let move = {};
 	let problem;
-	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5, oras:6}[cmd.slice(0, -5)] || 7);
-	let format = 'gen' + gen + 'ou';
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
-	if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
 	if (!template.exists || template.id === 'missingno') {
 		return {error: "Pok\u00e9mon '" + template.id + "' not found."};
@@ -1284,11 +1317,10 @@ function runLearn(target, cmd) {
 		if (move.gen > gen) {
 			return {error: move.name + " didn't exist yet in generation " + gen + "."};
 		}
-		problem = TeamValidator(format).checkLearnset(move, template.species, lsetData);
+		problem = TeamValidator(formatid).checkLearnset(move, template.species, lsetData);
 		if (problem) break;
 	}
-	let buffer = "";
-	if (format) buffer += "In Gen " + gen + ", ";
+	let buffer = "In " + formatName + ", ";
 	buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
 	if (!problem) {
 		let sourceNames = {E:"egg", S:"event", D:"dream world", X:"egg, traded back", Y: "event, traded back"};
@@ -1309,11 +1341,12 @@ function runLearn(target, cmd) {
 			let prevSourceCount = 0;
 			for (let i = 0, len = sources.length; i < len; ++i) {
 				let source = sources[i];
+				let hatchAs = ['6E', '7E'].includes(source.substr(0, 2)) ? 'hatched as ' : '';
 				if (source.substr(0, 2) === prevSourceType) {
 					if (prevSourceCount < 0) {
-						buffer += ": " + source.substr(2);
+						buffer += ": " + hatchAs + source.substr(2);
 					} else if (all || prevSourceCount < 3) {
-						buffer += ", " + source.substr(2);
+						buffer += ", " + hatchAs + source.substr(2);
 					} else if (prevSourceCount === 3) {
 						buffer += ", ...";
 					}
@@ -1324,7 +1357,7 @@ function runLearn(target, cmd) {
 				prevSourceCount = source.substr(2) ? 0 : -1;
 				buffer += "<li>gen " + source.charAt(0) + " " + sourceNames[source.charAt(1)];
 				if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
-				if (source.substr(2)) buffer += ": " + source.substr(2);
+				if (source.substr(2)) buffer += ": " + hatchAs + source.substr(2);
 			}
 		}
 		if (sourcesBefore) {

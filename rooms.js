@@ -199,6 +199,9 @@ class Room {
 		this.runMuteTimer();
 
 		user.updateIdentity(this.id);
+
+		if (!(this.isPrivate === true || this.isPersonal || this.battle)) Punishments.monitorRoomPunishments(user);
+
 		return userid;
 	}
 	unmute(userid, notifyText) {
@@ -424,12 +427,14 @@ class GlobalRoom {
 	getRoomList(filter) {
 		let rooms = [];
 		let skipCount = 0;
-		if (this.battleCount > 150 && !filter) {
+		let [formatFilter, eloFilter] = filter.split(',');
+		if (this.battleCount > 150 && !formatFilter && !eloFilter) {
 			skipCount = this.battleCount - 150;
 		}
 		Rooms.rooms.forEach(room => {
 			if (!room || !room.active || room.isPrivate) return;
-			if (filter && filter !== room.format && filter !== true) return;
+			if (formatFilter && formatFilter !== room.format) return;
+			if (eloFilter && (!room.rated || room.rated < eloFilter)) return;
 			if (skipCount && skipCount--) return;
 
 			rooms.push(room);
@@ -618,7 +623,7 @@ class GlobalRoom {
 	}
 	addChatRoom(title) {
 		let id = toId(title);
-		if (id === 'battles' || id === 'rooms' || id === 'ladder' || id === 'teambuilder') return false;
+		if (id === 'battles' || id === 'rooms' || id === 'ladder' || id === 'teambuilder' || id === 'home') return false;
 		if (Rooms.rooms.has(id)) return false;
 
 		let chatRoomData = {

@@ -203,8 +203,12 @@ exports.BattleStatuses = {
 		noCopy: true,
 	},
 	crit1: {
-		onStart: function (pokemon) {
-			this.add('-start', pokemon, 'move: Focus Energy');
+		onStart: function (target, source, effect) {
+			if (effect && effect.id === 'zpower') {
+				this.add('-start', target, 'move: Focus Energy', '[zeffect]');
+			} else {
+				this.add('-start', target, 'move: Focus Energy');
+			}
 		},
 		onModifyCritRatio: function (critRatio) {
 			return critRatio + 1;
@@ -378,7 +382,6 @@ exports.BattleStatuses = {
 			this.effectData.counter = 3;
 		},
 		onStallMove: function () {
-			if (this.activeMove.id === 'destinybond') return true;
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			let counter = this.effectData.counter || 1;

@@ -118,7 +118,7 @@ exports.BattleItems = {
 			type: "Dragon",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -381,6 +381,7 @@ exports.BattleItems = {
 	"belueberry": {
 		id: "belueberry",
 		name: "Belue Berry",
+		isUnreleased: true,
 		spritenum: 21,
 		isBerry: true,
 		naturalGift: {
@@ -998,6 +999,7 @@ exports.BattleItems = {
 	"cornnberry": {
 		id: "cornnberry",
 		name: "Cornn Berry",
+		isUnreleased: true,
 		spritenum: 81,
 		isBerry: true,
 		naturalGift: {
@@ -1023,6 +1025,7 @@ exports.BattleItems = {
 	"custapberry": {
 		id: "custapberry",
 		name: "Custap Berry",
+		isUnreleased: true,
 		spritenum: 86,
 		isBerry: true,
 		naturalGift: {
@@ -1336,6 +1339,7 @@ exports.BattleItems = {
 	"durinberry": {
 		id: "durinberry",
 		name: "Durin Berry",
+		isUnreleased: true,
 		spritenum: 114,
 		isBerry: true,
 		naturalGift: {
@@ -1499,6 +1503,7 @@ exports.BattleItems = {
 	"enigmaberry": {
 		id: "enigmaberry",
 		name: "Enigma Berry",
+		isUnreleased: true,
 		spritenum: 124,
 		isBerry: true,
 		naturalGift: {
@@ -1673,7 +1678,7 @@ exports.BattleItems = {
 			type: "Bug",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2375,7 +2380,7 @@ exports.BattleItems = {
 			type: "Dark",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2551,6 +2556,7 @@ exports.BattleItems = {
 	"jabocaberry": {
 		id: "jabocaberry",
 		name: "Jaboca Berry",
+		isUnreleased: true,
 		spritenum: 230,
 		isBerry: true,
 		naturalGift: {
@@ -2560,7 +2566,7 @@ exports.BattleItems = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.category === 'Physical') {
 				if (target.eatItem()) {
-					this.damage(source.maxhp / 8, source, target, null, true);
+					this.damage(source.maxhp / 8, source, target);
 				}
 			}
 		},
@@ -3049,6 +3055,7 @@ exports.BattleItems = {
 	"machobrace": {
 		id: "machobrace",
 		name: "Macho Brace",
+		isUnreleased: true,
 		spritenum: 269,
 		fling: {
 			basePower: 60,
@@ -3087,7 +3094,7 @@ exports.BattleItems = {
 			type: "Ghost",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3107,6 +3114,7 @@ exports.BattleItems = {
 	"magostberry": {
 		id: "magostberry",
 		name: "Magost Berry",
+		isUnreleased: true,
 		spritenum: 275,
 		isBerry: true,
 		naturalGift: {
@@ -3410,6 +3418,7 @@ exports.BattleItems = {
 	"micleberry": {
 		id: "micleberry",
 		name: "Micle Berry",
+		isUnreleased: true,
 		spritenum: 290,
 		isBerry: true,
 		naturalGift: {
@@ -3538,6 +3547,7 @@ exports.BattleItems = {
 	"nanabberry": {
 		id: "nanabberry",
 		name: "Nanab Berry",
+		isUnreleased: true,
 		spritenum: 302,
 		isBerry: true,
 		naturalGift: {
@@ -3585,6 +3595,7 @@ exports.BattleItems = {
 	"nomelberry": {
 		id: "nomelberry",
 		name: "Nomel Berry",
+		isUnreleased: true,
 		spritenum: 306,
 		isBerry: true,
 		naturalGift: {
@@ -3703,6 +3714,7 @@ exports.BattleItems = {
 	"pamtreberry": {
 		id: "pamtreberry",
 		name: "Pamtre Berry",
+		isUnreleased: true,
 		spritenum: 323,
 		isBerry: true,
 		naturalGift: {
@@ -4196,6 +4208,7 @@ exports.BattleItems = {
 	"rabutaberry": {
 		id: "rabutaberry",
 		name: "Rabuta Berry",
+		isUnreleased: true,
 		spritenum: 375,
 		isBerry: true,
 		naturalGift: {
@@ -4283,6 +4296,7 @@ exports.BattleItems = {
 	"razzberry": {
 		id: "razzberry",
 		name: "Razz Berry",
+		isUnreleased: true,
 		spritenum: 384,
 		isBerry: true,
 		naturalGift: {
@@ -4526,6 +4540,7 @@ exports.BattleItems = {
 	"rowapberry": {
 		id: "rowapberry",
 		name: "Rowap Berry",
+		isUnreleased: true,
 		spritenum: 420,
 		isBerry: true,
 		naturalGift: {
@@ -4535,7 +4550,7 @@ exports.BattleItems = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.category === 'Special') {
 				if (target.eatItem()) {
-					this.damage(source.maxhp / 8, source, target, null, true);
+					this.damage(source.maxhp / 8, source, target);
 				}
 			}
 		},
@@ -4981,6 +4996,7 @@ exports.BattleItems = {
 	"spelonberry": {
 		id: "spelonberry",
 		name: "Spelon Berry",
+		isUnreleased: true,
 		spritenum: 462,
 		isBerry: true,
 		naturalGift: {
@@ -5467,6 +5483,7 @@ exports.BattleItems = {
 	"watmelberry": {
 		id: "watmelberry",
 		name: "Watmel Berry",
+		isUnreleased: true,
 		spritenum: 530,
 		isBerry: true,
 		naturalGift: {
@@ -5514,6 +5531,7 @@ exports.BattleItems = {
 	"wepearberry": {
 		id: "wepearberry",
 		name: "Wepear Berry",
+		isUnreleased: true,
 		spritenum: 533,
 		isBerry: true,
 		naturalGift: {
@@ -5589,7 +5607,7 @@ exports.BattleItems = {
 			type: "Rock",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
