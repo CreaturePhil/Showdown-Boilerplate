@@ -104,7 +104,6 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'llamaconfuse':'http://orig01.deviantart.net/7863/f/2013/347/1/6/llama_emoji_38__confused___v2__by_jerikuto-d6uwuuu.gif',
 		'xoxo':'http://i.imgur.com/Yyw9ICj.png',
 		'feelsxp': 'http://i.imgur.com/sTXEtjS.jpg',
-		'feels13': "http://i.imgur.com/eWQDphf.jpg",
 	});
 }
 
