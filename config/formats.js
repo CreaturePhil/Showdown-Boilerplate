@@ -4491,11 +4491,11 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{
-		name: "Beastmode",
+		name: "Beast Mode",
 		mod: "franticfusions",
 		ruleset: ['[Gen 7] Pokebank OU'],
 		onSwitchIn: function (pokemon) {
-			pokemon.addVolatile("beastboost");
+			if(!toId(pokemon.ability) === "beastboost") pokemon.addVolatile("beastboost");
 		},
 	},
 	{
