@@ -67,7 +67,7 @@ exports.BattleAbilities = {
 		},
 		id: "infernalscales",
 		name: "Infernal Scales",
-		rating: 3.5,
+		rating: 4,
 		num: 10001,
 	},
 	"magicalemanation": {
