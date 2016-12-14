@@ -53,7 +53,7 @@ function generateCSS(name, icon) {
 		rooms.push('#' + id + '-userlist-user-' + name);
 	});
 	css = rooms.join(', ');
-	css += '{\nbackground: url("' + icon + '") no-repeat right\n}\n';
+	css += '{\nbackground : rgba(244, 244, 244, 0.8) url("' + icon + '") no-repeat right\n}\n';
 	return css;
 }
 
