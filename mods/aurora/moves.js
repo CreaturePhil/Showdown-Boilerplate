@@ -44,7 +44,7 @@ exports.BattleMovedex = {
 		zMovePower: 120,
 		contestType: "Beautiful",
 	},
-	"Divertissement": {
+	"divertissement": {
 		num: 10003,
 		accuracy: 100,
 		basePower: 40,
