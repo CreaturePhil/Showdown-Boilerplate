@@ -1,7 +1,6 @@
 /* 
 * Credits - Lord Haji, HoeenCoder
 */
-
 'use strict';
 
 const fs = require('fs');
@@ -84,25 +83,25 @@ exports.commands = {
 			if (Shop.closed) return this.sendReply('The shop is closed, come back later.');
 			if (!Shop[toId(target)]) return this.errorReply('Item ' + target + ' not found.');
 			let item = Shop[toId(target)];
-			if(item.price > Db('money').get(user.userid)) return this.errorReply("You don't have you enough money for this. You need " + (item.price - Db('money').get(user.userid)) + " more to buy this.");
+			if (item.price > Db('money').get(user.userid)) return this.errorReply("You don't have you enough money for this. You need " + (item.price - Db('money').get(user.userid)) + " more to buy this.");
 			Db('money').set(user.userid, Db('money').get(user.userid) - item.price);
 			logMoney(user.name + " has purchased " + item.name + " from the shop for " + item.price + " and " + user.name + " now has " + Db('money').get(user.userid) + ".");
-						switch (item.id) {
-						case 'symbol':
-						case 'customsymbol':
-							user.canCustomSymbol = true;
-							break;
-						default:
-							let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + " and now has " + Db('money').get(user.userid) + ".";
-							Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
-							Rooms.rooms.get("staff").update();
-							Users.users.forEach(function (user) {
-							if (user.group === '~' || user.group === '&') {
-							user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
-							}
-						})
-						user.sendTo(room, "|uhtmlchange|shop" + user.userid + "|<div style='max-height:300px'><table style='border:2px solid #000000; border-radius: 5px'><tr><th colspan='3' style='border: 2px solid #000000; border-radius: 5px'>Server Shop</th></tr><tr><td style='colspan: 3; border: 2px solid #000000; border-radius: 5px'><center>You have purchased a " + item.name + ". " + (item.id === 'customsymbol' ? "You may now use /customsymbol [symbol] to change your symbol." : "Upper staff have been notified of your purchase and will contact you shortly.") + "</center></td></tr><tr><td colspan='3' style='text-align:center'><button class='button' name='send' value='/shop reopen'>Return to Shop</button></td></tr></table>");
-					};
+			switch (item.id) {
+				case 'symbol':
+				case 'customsymbol':
+					user.canCustomSymbol = true;
+					break;
+				default:
+					let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + " and now has " + Db('money').get(user.userid) + ".";
+					Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
+					Rooms.rooms.get("staff").update();
+					Users.users.forEach(function (user) {
+					if (user.group === '~' || user.group === '&') {
+					user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
+					}
+				})
+				user.sendTo(room, "|uhtmlchange|shop" + user.userid + "|<div style='max-height:300px'><table style='border:2px solid #000000; border-radius: 5px'><tr><th colspan='3' style='border: 2px solid #000000; border-radius: 5px'>Server Shop</th></tr><tr><td style='colspan: 3; border: 2px solid #000000; border-radius: 5px'><center>You have purchased a " + item.name + ". " + (item.id === 'customsymbol' ? "You may now use /customsymbol [symbol] to change your symbol." : "Upper staff have been notified of your purchase and will contact you shortly.") + "</center></td></tr><tr><td colspan='3' style='text-align:center'><button class='button' name='send' value='/shop reopen'>Return to Shop</button></td></tr></table>");
+			};
 		},
 		help: function (target, room, user, connection, cmd, message) {
 			let reply = '<b>Shop commands</b><br/>';
