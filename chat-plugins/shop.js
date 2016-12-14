@@ -23,7 +23,7 @@ function logMoney(message) {
 	fs.appendFile(file, date + msg);
 }
 
-function writShop() {
+function writeShop() {
 	if (!writeJSON) return false; //Prevent corruptions
 	fs.writeFile('config/Shop.json', JSON.stringify(Shop));
 }
@@ -66,7 +66,7 @@ exports.commands = {
 			if (Shop[toId(target[0])]) return this.errorReply(target[0] + ' is already in the shop.');
 			if (isNaN(Number(target[2]))) return this.parse('/shop help');
 			Shop[toId(target[0])] = new NewItem(target[0], target[1], target[2]);
-			writShop();
+			writeShop();
 			return this.sendReply('The item ' + target[0] + ' was added.');
 		},
 		remove: function (target, room, user, connection, cmd, message) {
@@ -75,7 +75,7 @@ exports.commands = {
 			if (!target) return this.parse('/shop help');
 			if (!Shop[toId(target)]) return this.errorReply(target + ' is not in the shop.');
 			delete Shop[toId(target)];
-			writShop();
+			writeShop();
 			return this.sendReply('The item ' + target + ' was removed.');
 		},
 		buy: function (target, room, user, connection, cmd, message) {
