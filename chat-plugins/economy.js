@@ -4,19 +4,6 @@ let color = require('../config/color');
 let fs = require('fs');
 let path = require('path');
 
-let shop = [
-	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
-	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
-	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
-	['League Room', 'Purchases a room at a reduced rate for use with a league.  A roster must be supplied with at least 10 members for this room.', 25],
-	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 40],
-	['Staff Help', 'Staff member will help set up roomintros and anything else needed in a room. Response may not be immediate.', 50],
-	['Icon', 'Buy a custom icon that can be applied to the rooms you want. You must take into account that the provided image should be 32 x 32', 75],
-	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100],
-];
-
-let shopDisplay = getShopDisplay(shop);
-
 /**
  * Gets an amount and returns the amount with the name of the currency.
  *
@@ -58,80 +45,6 @@ function logMoney(message) {
 	let date = "[" + new Date().toUTCString() + "] ";
 	let msg = message + "\n";
 	fs.appendFile(file, date + msg);
-}
-
-/**
- * Displays the shop
- *
- * @param {Array} shop
- * @return {String} display
- */
-function getShopDisplay(shop) {
-	let display = "<table border='1' cellspacing='0' cellpadding='5' width='100%'>" +
-					"<tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>";
-	let start = 0;
-	while (start < shop.length) {
-		display += "<tr>" +
-						"<td align='center'><button name='send' value='/buy " + shop[start][0] + "'><b>" + shop[start][0] + "</b></button>" + "</td>" +
-						"<td align='center'>" + shop[start][1] + "</td>" +
-						"<td align='center'>" + shop[start][2] + "</td>" +
-					"</tr>";
-		start++;
-	}
-	display += "</tbody></table><center>To buy an item from the shop, use /buy <em>command</em>.</center>";
-	return display;
-}
-
-
-/**
- * Find the item in the shop.
- *
- * @param {String} item
- * @param {Number} money
- * @return {Object}
- */
-function findItem(item, money) {
-	let len = shop.length;
-	let price = 0;
-	let amount = 0;
-	while (len--) {
-		if (item.toLowerCase() !== shop[len][0].toLowerCase()) continue;
-		price = shop[len][2];
-		if (price > money) {
-			amount = price - money;
-			this.errorReply("You don't have you enough money for this. You need " + amount + currencyName(amount) + " more to buy " + item + ".");
-			return false;
-		}
-		return price;
-	}
-	this.errorReply(item + " not found in shop.");
-}
-
-/**
- * Handling the bought item from the shop.
- *
- * @param {String} item
- * @param {Object} user
- * @param {Number} cost - for lottery
- */
-function handleBoughtItem(item, user, cost) {
-	if (item === 'symbol') {
-		user.canCustomSymbol = true;
-		this.sendReply("You have purchased a custom symbol. You can use /customsymbol to get your custom symbol.");
-		this.sendReply("You will have this until you log off for more than an hour.");
-		this.sendReply("If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.");
-	} else if (item === 'icon') {
-		this.sendReply('You purchased an icon, contact an administrator to obtain the article.');
-	} else {
-		let msg = '**' + user.name + " has bought " + item + ".**";
-		Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
-		Rooms.rooms.get("staff").update();
-		Users.users.forEach(function (user) {
-			if (user.group === '~' || user.group === '&') {
-				user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
-			}
-		});
-	}
 }
 
 exports.commands = {
@@ -228,49 +141,6 @@ exports.commands = {
 		logMoney(user.name + " transferred " + amount + " to " + username + ". " + user.name + " now has " + userTotal + " and " + username + " now has " + targetTotal + ".");
 	},
 	transfermoneyhelp: ["/transfer [user], [amount] - Transfer a certain amount of money to a user."],
-
-	store: 'shop',
-	shop: function (target, room, user) {
-		if (!this.runBroadcast()) return;
-		return this.sendReply("|raw|" + shopDisplay);
-	},
-	shophelp: ["/shop - Display items you can buy with money."],
-
-	buy: function (target, room, user) {
-		if (!target) return this.parse('/help buy');
-		let amount = Db('money').get(user.userid, 0);
-		let cost = findItem.call(this, target, amount);
-		if (!cost) return;
-		let total = Db('money').set(user.userid, amount - cost).get(user.userid);
-		this.sendReply("You have bought " + target + " for " + cost + currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
-		room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
-		logMoney(user.name + " has bought " + target + " from the shop. This user now has " + total + currencyName(total) + ".");
-		handleBoughtItem.call(this, target.toLowerCase(), user, cost);
-	},
-	buyhelp: ["/buy [command] - Buys an item from the shop."],
-
-	customsymbol: function (target, room, user) {
-		if (!user.canCustomSymbol && user.id !== user.userid) return this.errorReply("You need to buy this item from the shop.");
-		if (!target || target.length > 1) return this.parse('/help customsymbol');
-		if (target.match(/[A-Za-z\d]+/g) || '|?!+$%@\u2605=&~#\u03c4\u00a3\u03dd\u03b2\u039e\u03a9\u0398\u03a3\u00a9'.indexOf(target) >= 0) {
-			return this.errorReply("Sorry, but you cannot change your symbol to this for safety/stability reasons.");
-		}
-		user.customSymbol = target;
-		user.updateIdentity();
-		user.canCustomSymbol = false;
-		user.hasCustomSymbol = true;
-	},
-	customsymbolhelp: ["/customsymbol [symbol] - Get a custom symbol."],
-
-	resetcustomsymbol: 'resetsymbol',
-	resetsymbol: function (target, room, user) {
-		if (!user.hasCustomSymbol) return this.errorReply("You don't have a custom symbol.");
-		user.customSymbol = null;
-		user.updateIdentity();
-		user.hasCustomSymbol = false;
-		this.sendReply("Your symbol has been reset.");
-	},
-	resetsymbolhelp: ["/resetsymbol - Resets your custom symbol."],
 
 	moneylog: function (target, room, user, connection) {
 		if (!this.can('modlog')) return;
