@@ -15,10 +15,10 @@ let path = require('path');
  * @param {Number} amount
  * @returns {String}
  */
-global.currencyName = function(amount) {
+global.currencyName = function (amount) {
 	let name = " buck";
 	return amount === 1 ? name : name + "s";
-}
+};
 
 /**
  * Checks if the money input is actually money.
@@ -39,13 +39,13 @@ function isMoney(money) {
  *
  * @param {String} message
  */
-global.logMoney = function(message) {
+global.logMoney = function (message) {
 	if (!message) return;
 	let file = path.join(__dirname, '../logs/money.txt');
 	let date = "[" + new Date().toUTCString() + "] ";
 	let msg = message + "\n";
 	fs.appendFile(file, date + msg);
-}
+};
 
 exports.commands = {
 	atm: 'wallet',
@@ -56,7 +56,7 @@ exports.commands = {
 
 		const amount = Db('money').get(toId(target), 0);
 		let group = user.getIdentity().charAt(0);
-		this.sendReplyBox("<font color=#948A88>" + group +  "</font><font color=" + color(user.userid) + "><b>" + Chat.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
+		this.sendReplyBox("<font color=#948A88>" + group + "</font><font color=" + color(user.userid) + "><b>" + Chat.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 
