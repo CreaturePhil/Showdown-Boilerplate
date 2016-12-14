@@ -49,4 +49,13 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["bravebird", "impalingfeather", "swordsdance", "roost", "jumpkick"],
 		tier: "New",
 	},
+	/* Editing Old Movesets */
+	mrmime: {
+		randomBattleMoves: ["nastyplot", "psychic", "psyshock", "dazzlinggleam", "shadowball", "batonpass", "focusblast", "healingwish", "encore", "divertissement"],
+		randomDoubleBattleMoves: ["fakeout", "thunderwave", "hiddenpowerfighting", "teeterdance", "thunderbolt", "encore", "icywind", "protect", "wideguard", "dazzlinggleam", "divertissement"],
+		eventPokemon: [
+			{"generation": 3, "level": 42, "abilities":["soundproof"], "moves":["followme", "psychic", "encore", "thunderpunch"]},
+		],
+		tier: "Bank",
+	},
 };
