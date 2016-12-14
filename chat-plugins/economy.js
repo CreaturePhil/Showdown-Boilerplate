@@ -15,7 +15,7 @@ let path = require('path');
  * @param {Number} amount
  * @returns {String}
  */
-function currencyName(amount) {
+global.currencyName = function(amount) {
 	let name = " buck";
 	return amount === 1 ? name : name + "s";
 }
@@ -39,7 +39,7 @@ function isMoney(money) {
  *
  * @param {String} message
  */
-function logMoney(message) {
+global.logMoney = function(message) {
 	if (!message) return;
 	let file = path.join(__dirname, '../logs/money.txt');
 	let date = "[" + new Date().toUTCString() + "] ";
