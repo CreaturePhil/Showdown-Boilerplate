@@ -39,9 +39,9 @@ function reloadCSS() {
 		port: 80,
 		path: '/customcss.php?server=' + Config.serverid,
 		method: 'GET',
-	}
+	};
 	http.get(options);
-};
+}
 
 function generateCSS(name, icon) {
 	let css = '';
