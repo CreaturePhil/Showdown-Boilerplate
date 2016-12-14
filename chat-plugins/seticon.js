@@ -33,11 +33,11 @@ exports.commands = {
 		args.forEach(function (room) {
 			selectors += ', #' + toId(room) + '-userlist-user-' + username;
 		});
-		selectors += ' { \n' + '    ' + image +  '\n  }';
+		selectors += '{ \n' + '    ' + image +  '\n  }';
 
 		logMoney(user.name + " has set an icon to " + username + ".");
 		this.privateModCommand("(" + user.name + " has set an icon to  " + username + ")");
-		Rooms('staff').add('|raw|' + user.name + " has set an icon to " + username +  ".").update();
+		Rooms('staff').add('|raw|' + user.name + " has set an icon to " + username + ".").update();
 		writeIconCSS();
 	},
 	seticonhelp: ["/seticon [username], [image], [room 1], [room 2], etc. - Sets an icon to a user in chosen rooms."],
