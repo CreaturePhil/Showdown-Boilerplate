@@ -29,7 +29,7 @@ function writShop() {
 }
 
 function shopDisplay() {
-	let output = '<div style="max-height:300px; width: 100%; overflow: scroll"><table style="border:2px solid #000000; border-radius: 5px; width: 100%;"><tr><th colspan="3" style="border: 2px solid #070e96; border-radius: 5px">Server Shop</th></tr>';
+	let output = '<div style="max-height:300px; width: 100%; overflow: scroll"><table style="border:2px solid #000000; border-radius: 5px; width: 100%;"><tr><th colspan="3" style="border: 2px solid #000000; border-radius: 5px">Server Shop</th></tr>';
 	for (let i in Shop) {
 		if (!Shop[i]) continue;
 		output += '<tr><td style="border: 2px solid #000000; width: 20%; text-align: center"><button class="button" name="send" value="/Shop buy ' + Shop[i].id + '">' + Shop[i].name + '</button></td><td style="border: 2px solid #000000; width: 70%; text-align: center">' + Shop[i].desc + '</td><td style="border: 2px solid #000000; width: 10%; text-align: center">' + Shop[i].price + '</td></tr>';
@@ -62,9 +62,9 @@ exports.commands = {
 			if (!this.can('roomowner')) return false;
 			if (Shop.closed) return this.sendReply('An error closed the shop.');
 			target = target.split(',');
-			if (!target[2]) return this.parse('/Shop help');
+			if (!target[2]) return this.parse('/shop help');
 			if (Shop[toId(target[0])]) return this.errorReply(target[0] + ' is already in the shop.');
-			if (isNaN(Number(target[2]))) return this.parse('/Shop help');
+			if (isNaN(Number(target[2]))) return this.parse('/shop help');
 			Shop[toId(target[0])] = new NewItem(target[0], target[1], target[2]);
 			writShop();
 			return this.sendReply('The item ' + target[0] + ' was added.');
@@ -72,7 +72,7 @@ exports.commands = {
 		remove: function (target, room, user, connection, cmd, message) {
 			if (!this.can('roomowner')) return false;
 			if (Shop.closed) return this.sendReply('An error closed the shop.');
-			if (!target) return this.parse('/Shop help');
+			if (!target) return this.parse('/shop help');
 			if (!Shop[toId(target)]) return this.errorReply(target + ' is not in the shop.');
 			delete Shop[toId(target)];
 			writShop();
@@ -92,7 +92,7 @@ exports.commands = {
 				user.canCustomSymbol = true;
 				break;
 			default:
-				let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + " and now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".";
+				let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + currencyName(item.price) + " and now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".";
 				Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
 				Rooms.rooms.get("staff").update();
 				Users.users.forEach(function (user) {
