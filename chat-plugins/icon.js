@@ -6,6 +6,8 @@
 
 let icons = {};
 const fs = require('fs');
+const color = require('../config/color');
+let http = require('http');
 
 function load() {
 	fs.readFile('config/icons.json', 'utf8', function (err, file) {
@@ -28,7 +30,7 @@ function updateIcons() {
 	let file = fs.readFileSync('config/custom.css', 'utf8').split('\n');
 	if (~file.indexOf('/* ICONS START */')) file.splice(file.indexOf('/* ICONS START */'), (file.indexOf('/* ICONS END */') - file.indexOf('/* ICONS START */')) + 1);
 	fs.writeFileSync('config/custom.css', file.join('\n') + newCss);
-	Gold.reloadCSS();
+	reloadCSS();
 }
 
 function reloadCSS() {
@@ -37,7 +39,7 @@ function reloadCSS() {
 		port: 80,
 		path: '/customcss.php?server=' + Config.serverid,
 		method: 'GET',
-	};
+	}
 	http.get(options);
 };
 
