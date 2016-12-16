@@ -170,6 +170,7 @@ exports.Formats = [
 	},
 	{
 		name: "Benjamin Butterfree",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/benjamin-butterfree-aka-pokemon-deevolution.3581895/\">Benjamin Butterfee (Pokemon DeEvolution)</a>"],
 		mod: 'bb',
 		team: 'random',
 		ruleset: ['Random Battle', "Team Preview", "Percentage Mod"],
@@ -394,7 +395,7 @@ exports.Formats = [
 	},
 	{
 		name: "Dragon Heaven Super Staff Bros [Beta]",
-		desc: ["&bullet; The staff here becomes a Pokemon and battles!"],
+		desc: ["&bullet; The staff here becomes a Pokemon and battles! <br> &bullet; <a href=\"https://github.com/XpRienzo/DragonHeaven/blob/master/mods/dhssb/README.md\">Movesets</a>"],
 		section: "Randomized Metas",
 		mod: 'dhssb',
 		team: 'randomSeasonalMelee',
@@ -2836,6 +2837,7 @@ exports.Formats = [
 	},
 	{
         name: "Move Equality",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-equality-playable-whirlpool-fire-spin-infestation-sand-tomb-are-now-banned-see-post-193.3539145/\">Move Equality</a>"],
         section: "Other Metagames",
         ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
         banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Metagrossite', 'Landorus', 'Mud Slap', 'Keldeo'],
@@ -2855,6 +2857,7 @@ exports.Formats = [
     },
 	{
         name: "Move Equality 1v1",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-equality-playable-whirlpool-fire-spin-infestation-sand-tomb-are-now-banned-see-post-193.3539145/\">Move Equality</a>"],
         section: "Other Metagames",
         ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
         banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Metagrossite', 'Landorus', 'Mud Slap', 'Keldeo'],
@@ -2883,6 +2886,7 @@ exports.Formats = [
     },
 	{
         name: "Mega Mania",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mega-mania-playable-on-aqua.3525444/\">Mega Mania</a>"],
         section: "Other Metagames",
 
         mod: "megamania",
@@ -2891,6 +2895,7 @@ exports.Formats = [
     },
 	{
   name: "Technician Tower",
+  desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/technician-tower-2-0-now-playable-on-the-aqua-server.3521635/\">Technician Tower</a>"],
   section: "Other Metagames",
 
   mod:'technichiantower',
@@ -2916,6 +2921,7 @@ exports.Formats = [
 },
 	    {
         name: "Immunimons",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/immunimons.3516996/\">Immunimons</a>"],
         section: "Other Metagames",
 
         ruleset: ['OU'],
@@ -3659,6 +3665,7 @@ exports.Formats = [
 	},
 	 {
         name: "No Status",
+	desc: ["&bullet; All Status moves are banned <br> &bullet; <a href=\"http://www.smogon.com/forums/threads/no-status.3542555/\">No Status</a>"],
         section: "Old OMotMs",
         ruleset: ['OU'],
         validateSet: function (set) {
@@ -3722,6 +3729,7 @@ exports.Formats = [
 
    	{
         name: "Balanced Hackmons Plus",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/bh-plus.3539550/\">Balanced Hackmons Plus</a>"],
         section: "New Other Metagames",
 
         mod: 'bhplus',
