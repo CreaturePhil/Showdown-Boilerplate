@@ -226,8 +226,7 @@ exports.commands = {
 			logMoney(user.name + " has purchased " + item.name + " from the shop for " + item.price + " and " + user.name + " now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".");
 			if (item.id === 'customsymbol') {
 				user.canCustomSymbol = true;
-			}
-			else {
+			} else {
 				let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + currencyName(item.price) + " and now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".";
 				Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
 				Rooms.rooms.get("staff").update();
