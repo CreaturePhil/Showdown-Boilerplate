@@ -224,7 +224,7 @@ exports.commands = {
 			if (item.price > Db('money').get(user.userid)) return this.errorReply("You don't have you enough money for this. You need " + (item.price - Db('money').get(user.userid)) + currencyName((item.price - Db('money').get(user.userid))) + " more to buy this.");
 			Db('money').set(user.userid, Db('money').get(user.userid) - item.price);
 			logMoney(user.name + " has purchased " + item.name + " from the shop for " + item.price + " and " + user.name + " now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".");
-			if (item.name === 'Custom Symbol') {
+			if (item.id === 'customsymbol') {
 				user.canCustomSymbol = true;
 			}
 			else {
@@ -257,6 +257,7 @@ exports.commands = {
 			return user.sendTo(room, '|uhtml|Shop' + user.userid + '|' + shopDisplay());
 		},
 	},
+
 	customsymbol: function (target, room, user) {
 		let bannedSymbols = ['!', '|', '‽', '\u2030', '\u534D', '\u5350', '\u223C'];
 		for (let u in Config.groups) if (Config.groups[u].symbol) bannedSymbols.push(Config.groups[u].symbol);
@@ -271,7 +272,7 @@ exports.commands = {
 		this.sendReply('Your symbol is now ' + target + '. It will be saved until you log off for more than an hour, or the server restarts. You can remove it with /resetsymbol');
 	},
 	customsymbolhelp: ["/customsymbol [symbol] - Get a custom symbol."],
-	
+
 	removesymbol: 'resetsymbol',
 	resetsymbol: function (target, room, user) {
 		if (!user.customSymbol) return this.errorReply("You don't have a custom symbol!");
@@ -280,7 +281,7 @@ exports.commands = {
 		this.sendReply('Your symbol has been removed.');
 	},
 	resetsymbolhelp: ["/resetsymbol - Resets your custom symbol."],
-	
+
 	moneylog: function (target, room, user, connection) {
 		if (!this.can('modlog')) return;
 		target = toId(target);
