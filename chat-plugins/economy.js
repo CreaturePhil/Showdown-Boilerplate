@@ -99,8 +99,6 @@ try {
 * Shop functions end
 */
 
-
-
 exports.commands = {
 	atm: 'wallet',
 	purse: 'wallet',
