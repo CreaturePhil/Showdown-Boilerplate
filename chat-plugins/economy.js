@@ -224,7 +224,9 @@ exports.commands = {
 			if (item.price > Db('money').get(user.userid)) return this.errorReply("You don't have you enough money for this. You need " + (item.price - Db('money').get(user.userid)) + currencyName((item.price - Db('money').get(user.userid))) + " more to buy this.");
 			Db('money').set(user.userid, Db('money').get(user.userid) - item.price);
 			logMoney(user.name + " has purchased " + item.name + " from the shop for " + item.price + " and " + user.name + " now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".");
-			if(item.name === 'Custom Symbol') user.canCustomSymbol = true;
+			if (item.name === 'Custom Symbol') {
+				user.canCustomSymbol = true;
+			}
 			else {
 				let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + currencyName(item.price) + " and now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".";
 				Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
