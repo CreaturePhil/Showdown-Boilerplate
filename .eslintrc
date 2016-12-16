@@ -15,7 +15,7 @@
 		"Config": false, "Monitor": false, "toId": false, "Tools": false, "LoginServer": false,
 		"Users": false, "Punishments": false, "Rooms": false, "Verifier": false, "Chat": false,
 		"Tournaments": false, "Dnsbl": false, "Sockets": false, "TeamValidator": false, "Ladders": false,
-		"Db": false, "Tells": false
+		"Db": false, "Tells": false, "currencyName": false, "logMoney": false
 	},
 	"extends": "eslint:recommended",
 	"rules": {
