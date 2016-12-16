@@ -13,9 +13,9 @@ Ability: Adaptability + Levitate
 EVs: 252 SpA / 252 Spe / 4 SpD 
 
 Timid Nature   
-- Spacial Rend  
+- Core Enforcer  
 - Volt Switch  
-- Boomburst
+- Psystrike
 - Bleh Flame
 
 Bleh Flame: Accuracy: 100 Base Power: 100 | Special Attack| 40% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage
@@ -145,7 +145,7 @@ Ability: Pressure + Mold Breaker
 EVs: 252 SpA / 252 Spe / 4 HP
 
 Modest Nature
-- Spacial Rend  
+- Core Enforcer  
 - Hydro Pump  
 - Flash Cannon  
 - Space Compress
@@ -393,3 +393,22 @@ Jolly Nature
 Dragon Fury: 
 
 Raging Lake:
+
+### flufi 
+
+![flufi](http://www.smogon.com/dex/media/sprites/xy/raichu.gif)
+
+Ability: Static Boost
+
+EVs: 188 hp / 252 spa / 64 spe
+
+Modest Nature
+
+- Thunder
+- Draco Meteor
+- Focus Blast
+- Mythic Form 
+
+Static Boost:on switch-in, raichu gains the ability of magnet rise and gets +1 in every stat including accuracy and evasion  
+
+Mythic Form:custom attack: mythic form type: dragon status move accuracy: null power: null adds dragon to raichu's type, so it should be electric/dragon after gains +1 speed
