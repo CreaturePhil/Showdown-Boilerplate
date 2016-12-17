@@ -30,7 +30,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	narwander: {
-		randomBattleMoves: ["drillrun", "waterfall", "iciclecrash", "ironhead"],
+		randomBattleMoves: ["drillrun", "waterfall", "iciclecrash", "rotarydrill"],
 		tier: "LC",
 	},
 	ortuska: {
