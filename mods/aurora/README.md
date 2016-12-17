@@ -1,4 +1,80 @@
 #Istor
+
+Yddraig
+![Dragon](http://play.pokemonshowdown.com/sprites/types/Dragon.png)
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 60 | 60  | 55  | 75  | 55  | 85  |
+Detuoy
+![Steel](http://play.pokemonshowdown.com/sprites/types/Steel.png)
+![Flying](http://play.pokemonshowdown.com/sprites/types/Flying.png) 
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 60 | 120 | 150 | 30  | 120 | 30  |
+Mycelore ![Poison](http://play.pokemonshowdown.com/sprites/types/Poison.png)
+![Fairy](http://play.pokemonshowdown.com/sprites/types/Fairy.png)
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 45 | 31  | 21  | 86  | 106  | 31  |
+Muceptio ![Poison](http://play.pokemonshowdown.com/sprites/types/Poison.png)
+![Fairy](http://play.pokemonshowdown.com/sprites/types/Fairy.png) 
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 60 | 46  | 36  | 101  | 121  | 61  |
+Malifery  ![Poison](http://play.pokemonshowdown.com/sprites/types/Poison.png)
+![Fairy](http://play.pokemonshowdown.com/sprites/types/Fairy.png) 
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 75 | 61  | 51  | 116  | 136  | 91  |
+Doduo-Istor ![Steel](http://play.pokemonshowdown.com/sprites/types/Steel.png)
+![Flying](http://play.pokemonshowdown.com/sprites/types/Flying.png)  
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 35 | 85  | 45  | 35  | 35  | 75  |
+Dodrio-Istor  ![Steel](http://play.pokemonshowdown.com/sprites/types/Steel.png)
+![Flying](http://play.pokemonshowdown.com/sprites/types/Flying.png)    
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 60 | 110  | 70  | 60  | 60  | 110  |
+Canos ![Normal](http://play.pokemonshowdown.com/sprites/types/Normal.png)
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 35 | 50  | 30  | 35  | 40  | 40  |
+Mortos  ![Normal](http://play.pokemonshowdown.com/sprites/types/Normal.png)
+![Ghost](http://play.pokemonshowdown.com/sprites/types/Ghost.png)  
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 70 | 100  | 60  | 70  | 80  | 80  |
+Uisge ![Water](http://play.pokemonshowdown.com/sprites/types/Water.png)
+![Psychic](http://play.pokemonshowdown.com/sprites/types/Psychic.png)  
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 90 | 70  | 110  | 135  | 70  | 105  |
+Talamh  ![Ground](http://play.pokemonshowdown.com/sprites/types/Ground.png)
+![Psychic](http://play.pokemonshowdown.com/sprites/types/Psychic.png)  
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 90 | 105  | 135  | 70  | 110  | 70  |
+Adhair  ![Flying](http://play.pokemonshowdown.com/sprites/types/Flying.png)
+![Psychic](http://play.pokemonshowdown.com/sprites/types/Psychic.png)  
+
+| HP | Atk | Def | SpA | SpD | Spe |
+|----|-----|-----|-----|-----|-----|
+| 90 | 110  | 70  | 105  | 70  | 135  |
+
+For more info (including movesets) type /(pokemon). For Example /Detuoy.
+
 ##Yddraig  
 Dex: 1001   
 ![Dragon Type](http://play.pokemonshowdown.com/sprites/types/Dragon.png)  
