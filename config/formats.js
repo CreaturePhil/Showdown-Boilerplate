@@ -2834,6 +2834,7 @@ exports.Formats = [
 		    this.win(target.side.foe);
 		}
 	    }
+		
 	},
 	{
         name: "Move Equality",
@@ -2940,6 +2941,20 @@ exports.Formats = [
             }
         },
     },
+	 {
+        name: "Acid Rain",
+        section: "Other Metagames",
+     
+        mod: 'acidrain',
+        onBegin: function() {
+            this.setWeather('raindance');
+            delete this.weatherData.duration;
+            this.add('-message', "Eh, close enough.");
+        },
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Weather Ball', 'Castform']
+    },
+	
 	
     	{
 		name: "Cross Evolution",
