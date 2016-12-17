@@ -2943,6 +2943,7 @@ exports.Formats = [
     },
 	 {
         name: "Acid Rain",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/acid-rain.3518506/\">Acid Rain</a>"],
         section: "Other Metagames",
      
         mod: 'acidrain',
