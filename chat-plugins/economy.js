@@ -186,7 +186,7 @@ class Dice {
 			this.room.add('|uhtmlchange|' + this.room.diceCount + '|<div class="infobox"><center>' + players + ' have joined the game!<br /><br />' +
 				'The game has been started! Rolling the dice...<br />' +
 				'<img src = "' + diceImg(roll1) + '" align = "left" title = "' + Chat.escapeHTML(p1.name) + '\'s roll"><img src = "' + diceImg(roll2) + '" align = "right" title = "' + p2.name + '\'s roll"><br />' +
-				'<b><font color="' + color(p1.name) + '">' +  Chat.escapeHTML(p1.name) + '</font></b> rolled ' + (roll1 + 1) + '!<br />' +
+				'<b><font color="' + color(p1.name) + '">' + Chat.escapeHTML(p1.name) + '</font></b> rolled ' + (roll1 + 1) + '!<br />' +
 				'<b><font color="' + color(p2.name) + '">' + Chat.escapeHTML(p2.name) + '</font></b> rolled ' + (roll2 + 1) + '!<br />' +
 				'<b><font color="' + color(winner.name) + '">' + Chat.escapeHTML(winner.name) + '</font></b> has won <b style="color:red">' + (this.bet) + '</b> ' + currencyName(this.bet) + '!<br />' +
 				'Better luck next time, <b><font color="' + color(loser.name) + '">' + Chat.escapeHTML(loser.name) + '</font></b>!'
