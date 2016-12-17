@@ -7,31 +7,26 @@
     background: #EEE url("http://i.imgur.com/LuwHvfZ.png") no-repeat left fixed;
   }
 
-.button{color:black;background:#ff9966!important;border:solid 1px black!important}.menugroup
+.button{color:black;background:#d4e1f4!important;border:solid 1px black!important}.menugroup
 
 .button:hover,.menugroup
 
-.button:active{color:white;background:#ff9966!important;border:solid 1px black!important
+.button:active{color:black;background:#d4e1f4!important;border:solid 1px black!important
 }
-
-
 
   .astext{
     border: none;
     background: none;
-    padding:0;
-    height: -20em;
-    font-family:Verdana,sans-serif;
-    font-size: 12px;
-    cursor: pointer;
   }
 
   .broadcast-blue {
-    background-color: #cccccc;
+    background-image: url(http://azmind.com/wp-content/uploads/2011/12/blue-snowflakes-christmas-background.jpg);
     border: 5px solid #FFA000;
-    color: #000000;
+    font-size:24px;
+    color: #846907;
+    font-weight:bold;
     font-family: sans-serif;
-    padding: 5px;
+    padding: 50px;
     text-align: center;
     margin: 5px;
     text-shadow: 0px -1px 0px #e6e6e6;
@@ -71,6 +66,11 @@
     color: #19610B;
   }
 
+   .message-announce {
+	background-color:#d4e1f4;
+	color:black;
+	font-weight:bold;
+}
   .textbox, .textbox:hover, .textbox:focus {
     border: 1px solid #252F3F;
     box-shadow: none !important;
@@ -355,7 +355,7 @@
 /*Battle CSS*/
 
   .backdrop {
-    background: url(../fx/bg-beach.png) !important;
+    background: url(http://wall.wallrage.com/wp-content/uploads/Winter-Christmas-HD-Wallpapers-728x450.jpg) !important;
         opacity: 0.6;
 }
 
