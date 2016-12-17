@@ -109,6 +109,13 @@
     color: orange;
     background: white;
   }
+.dark a.roomtab.button.closable {
+	color:black;
+}
+.dark a.roomtab.button.cur {
+	color:black;
+}
+
 
 
 
@@ -129,6 +136,7 @@
     color: #000000;
     border: 1px solid #ffa500;
   }
+
 button.button.mainmenu1{
 	color:#373b3d;
 }
@@ -142,6 +150,9 @@ button.button.mainmenu4{
 	color:black;
 }
 button.button.mainmenu5{
+	color:black;
+}
+.dark button.button {
 	color:black;
 }
 
