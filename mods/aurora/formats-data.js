@@ -29,6 +29,14 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["return", "bonerush", "shadowbone", "howl"],
 		tier: "New",
 	},
+	narwander: {
+		randomBattleMoves: ["drillrun", "waterfall", "iciclecrash", "ironhead"],
+		tier: "LC",
+	},
+	ortuska: {
+		randomBattleMoves: ["rest", "sleeptalk", "bulkup", "waterfall"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
