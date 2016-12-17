@@ -46,6 +46,7 @@ exports.BattlePokedex = {
 		color: "Purple",
 		prevo: "mycelore",
 		evos: ["Malifery"],
+		evoLevel: 18,
 		eggGroups: ["Grass", "Amorphous"],
 	},
 	malifery: {
@@ -58,6 +59,7 @@ exports.BattlePokedex = {
 		weightkg: 23.8,
 		color: "Purple",
 		prevo: "muceptio",
+		evoLevel: 19, /* Shiny Stone */
 		eggGroups: ["Grass", "Amorphous"],
 	},
 	canos: {
@@ -82,6 +84,7 @@ exports.BattlePokedex = {
 		weightkg: 20.2,
 		color: "Gray",
 		prevo: "canos",
+		evoLevel: 18,
 		eggGroups: ["Field"],
 	},
 	narwander: {
@@ -106,6 +109,7 @@ exports.BattlePokedex = {
 		weightkg: 783.4,
 		color: "Gray",
 		prevo: "narwander",
+		evoLevel: 2, /* Ice Rock Level-Up */
 		eggGroups: ["Field", "Water 2"],
 	},
 	uisge: {
