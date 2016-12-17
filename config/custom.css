@@ -129,6 +129,10 @@
     color: #000000;
     border: 1px solid #ffa500;
   }
+.roomtab.button.notifying.closable {
+	color:#FFA000;
+	
+}
 button.button.mainmenu1{
 	color:#373b3d;
 }
@@ -215,7 +219,7 @@ button.button.mainmenu5{
 }
 
   .maintabbarbottom {
-    background: #ff9966;
+    background: #d4e1f4;
     border: 1px solid #808080;
   }
 
@@ -363,7 +367,7 @@ button.button.mainmenu5{
   }
 
   .battle-log {
-    background: url("");
+    background-color:#848e8e;
     border-color: #413B45;
   }
 
