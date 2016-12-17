@@ -222,14 +222,14 @@ button.button.mainmenu5{
   .tabbar a.button.notifying {
     background: #00E2DB;
     border-color: #00FFFF;
-    color: #00FFFF;
+    color: #FFA000;
     text-shadow: none;
   }
 
   .tabbar a.button.notifying:hover {
     background: #00DAD2;
     border-color: #00FFFF;
-    color: #00FFFF;
+    color: black;
   }
 
   .tabbar a.button.cur, .tabbar a.button.cur:hover {
