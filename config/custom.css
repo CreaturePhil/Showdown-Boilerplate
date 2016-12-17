@@ -123,6 +123,27 @@
     color: #000000;
     border: 1px solid #ffa500;
   }
+  button {
+    background:#ffa500;
+    border-radius: 5px;
+    color: #000000;
+    border: 1px solid #ffa500;
+  }
+button.button.mainmenu1{
+	color:black;
+}
+button.button.mainmenu2{
+	color:black;
+}
+button.button.mainmenu3{
+	color:black;
+}
+button.button.mainmenu4{
+	color:black;
+}
+button.button.mainmenu5{
+	color:black;
+}
 
   .infobox {
     border: 1px solid #0B1361;
