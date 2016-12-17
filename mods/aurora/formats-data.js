@@ -49,6 +49,14 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["bravebird", "impalingfeather", "swordsdance", "roost", "jumpkick"],
 		tier: "New",
 	},
+	rioluistor: {
+		randomBattleMoves: ["highjumpkick", "playrough", "copycat", "swordsdance"],
+		tier: "LC",
+	},
+	lucarioistor: {
+		randomBattleMoves: ["nastyplot", "divertissement", "hypervoice", "aurasphere", "psychic"],
+		tier: "New",
+	},
 	/* Editing Old Movesets */
 	mrmime: {
 		randomBattleMoves: ["nastyplot", "psychic", "psyshock", "dazzlinggleam", "shadowball", "batonpass", "focusblast", "healingwish", "encore", "divertissement"],
