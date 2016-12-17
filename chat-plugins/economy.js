@@ -226,18 +226,17 @@ exports.commands = {
 			logMoney(user.name + " has purchased " + item.name + " from the shop for " + item.price + " and " + user.name + " now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".");
 			if (item.id === 'customsymbol') {
 				user.canCustomSymbol = true;
-			} else {
-				let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + currencyName(item.price) + " and now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".";
-				Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
-				Rooms.rooms.get("staff").update();
-				Users.users.forEach(function (user) {
-					if (user.group === '~' || user.group === '&') {
-						user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
-					}
-				});
-				this.sendReply(item.id);
-				user.sendTo(room, "|uhtmlchange|shop" + user.userid + "|<div style='max-height:300px'><table style='border:2px solid #000000; border-radius: 5px'><tr><th colspan='3' style='border: 2px solid #000000; border-radius: 5px'>Server Shop</th></tr><tr><td style='colspan: 3; border: 2px solid #000000; border-radius: 5px'><center>You have purchased a " + item.name + ". " + (item.id === 'customsymbol' ? "You may now use /customsymbol [symbol] to change your symbol." : "Upper staff have been notified of your purchase and will contact you shortly.") + "</center></td></tr><tr><td colspan='3' style='text-align:center'><button class='button' name='send' value='/shop reopen'>Return to Shop</button></td></tr></table>");
 			}
+			let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + currencyName(item.price) + " and now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".";
+			Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
+			Rooms.rooms.get("staff").update();
+			Users.users.forEach(function (user) {
+				if (user.group === '~' || user.group === '&') {
+					user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
+				}
+			});
+			this.sendReply(item.id);
+			user.sendTo(room, "|uhtmlchange|shop" + user.userid + "|<div style='max-height:300px'><table style='border:2px solid #000000; border-radius: 5px'><tr><th colspan='3' style='border: 2px solid #000000; border-radius: 5px'>Server Shop</th></tr><tr><td style='colspan: 3; border: 2px solid #000000; border-radius: 5px'><center>You have purchased a " + item.name + ". " + (item.id === 'customsymbol' ? "You may now use /customsymbol [symbol] to change your symbol." : "Upper staff have been notified of your purchase and will contact you shortly.") + "</center></td></tr><tr><td colspan='3' style='text-align:center'><button class='button' name='send' value='/shop reopen'>Return to Shop</button></td></tr></table>");
 		},
 		help: function (target, room, user, connection, cmd, message) {
 			let reply = '<b>Shop commands</b><br/>';
@@ -253,7 +252,7 @@ exports.commands = {
 		reopen: '',
 		'': function (target, room, user, connection, cmd, message) {
 			if (cmd === 'reopen') return user.sendTo(room, '|uhtmlchange|Shop' + user.userid + '|' + shopDisplay());
-			return user.sendTo(room, '|uhtml|Shop' + user.userid + '|' + shopDisplay());
+			return user.sendTo(room, '|uhtml|shop' + user.userid + '|' + shopDisplay());
 		},
 	},
 
