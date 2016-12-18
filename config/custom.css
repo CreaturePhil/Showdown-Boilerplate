@@ -229,6 +229,10 @@ button.button.mainmenu5{
     background: #d4e1f4;
     border: 1px solid #808080;
   }
+.dark .maintabbarbottom {
+    background: #d4e1f4;
+    border: 1px solid #808080;
+  }
 
   .tabbar a.button.notifying {
     background: #00E2DB;
