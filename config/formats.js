@@ -318,9 +318,9 @@ exports.Formats = [
 		team: 'randomRPS',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
-			this.add('message', "ROCK!");
-			this.add('message', "PAPER!");
-			this.add('message', "SCISSORS!");
+			this.add('-message', "ROCK!");
+			this.add('-message', "PAPER!");
+			this.add('-message', "SCISSORS!");
 
 			let globalRenamedMoves = {};
 			let customRenamedMoves = {};

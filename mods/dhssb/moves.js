@@ -17,7 +17,7 @@ exports.BattleMovedex = {
 			this.add('-formechange', pokemon, 'Rayquaza-Mega', '[msg]');
 			this.add('-anim', pokemon, "Dragon Pulse", target);
 		},
-		onAfterHit: function (pokemon) {
+		onAfterHit: function (target, pokemon) {
 			pokemon.formeChange('Rayquaza');
 			this.add('-formechange', pokemon, 'Rayquaza', '[msg]');
 		},
