@@ -3428,7 +3428,7 @@ exports.Formats = [
 	 },
     {
        name: "Pokebilities",
-       desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokebilities</a>: A Pokemon has all of its abilities active at the same time."],
+       desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3588652/\">Pokebilities</a>: A Pokemon has all of its abilities active at the same time."],
        mod: 'pokebilities',
        ruleset: ["OU"],
        onSwitchInPriority: 1,
