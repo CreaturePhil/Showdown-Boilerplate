@@ -3427,7 +3427,7 @@ exports.Formats = [
 			 banlist: ['Eviolite', 'Huge Power', 'Pure Power']
 	 },
     {
-       name: "Pokebilities",
+       name: "[Gen 7] Pokebilities",
        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3588652/\">Pokebilities</a>: A Pokemon has all of its abilities active at the same time."],
        mod: 'pokebilities',
        ruleset: ["OU"],
