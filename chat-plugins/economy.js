@@ -213,11 +213,10 @@ exports.commands = {
 	purse: 'wallet',
 	wallet: function (target, room, user) {
 		if (!this.runBroadcast()) return;
+		target = toId(target);
 		if (!target) target = user.name;
-
 		const amount = Db('money').get(toId(target), 0);
-		let group = user.getIdentity().charAt(0);
-		this.sendReplyBox("<font color=#948A88>" + group + "</font><font color=" + color(user.userid) + "><b>" + Chat.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
+		this.sendReplyBox"<font color=" + color(target) + "><b>" + Chat.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 
