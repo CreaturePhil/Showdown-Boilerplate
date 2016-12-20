@@ -4198,6 +4198,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				if(toId(ability) === "adaptability") {
 					if(template.types.includes(move.type)) {
 						template.learnset[move.id] = [].push("7T");
+						return ["Success!"]
 					}
 				}
 				else if(toId(ability) === "anticipation" || toId(ability) === "solidrock" || toId(ability) === "filter" || toId(ability) === "prismarmor") {
