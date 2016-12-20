@@ -4197,8 +4197,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				let move = this.tools.getMove(set.moves[i]);
 				if(this.checkLearnset(move.id, template)) continue;
 				if(toId(ability) === "adaptability") {
+					return ["Success!"]; //f
 					if(template.types.includes(move.type)) {
-						return ["Success!"]; //template.learnset[move.id] = [].push("7T");
+						template.learnset[move.id] = [].push("7T");
 					}
 				}
 				else if(toId(ability) === "anticipation" || toId(ability) === "solidrock" || toId(ability) === "filter" || toId(ability) === "prismarmor") {
