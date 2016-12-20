@@ -4192,7 +4192,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			if (!this.validateSet(set, teamHas).length) return [];
 			let ability = this.tools.getAbility(set.ability);
 			let template = this.tools.getTemplate(set.species);
-			template = Object.assign({}, template);
 			for(let i=0;i<set.moves.length;i++) {
 				let move = this.tools.getMove(set.moves[i]);
 				if(ability.id == "adaptability") {
