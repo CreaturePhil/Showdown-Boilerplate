@@ -4184,6 +4184,46 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{
+		name: "Move Mastery",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-mastery.3590075/\">Move Mastery</a>"],
+		ruleset: ['OU'],
+		validateSet: function (set, teamHas) {
+			if (!this.validateSet(set, teamHas).length) return [];
+			let ability = set.ability;
+			let template = this.tools.getTemplate(set.species);
+			template = Object.assign({}, template);
+			for(let i=0;i<set.moves.length;i++) {
+				let move = this.tools.getMove(set.move[i]);
+				if(toId(ability) === "adaptability") {
+					if(template.types.includes(this.tools.getMove(move.id).type) && !this.checkLearnset(move.id, template)) {
+						template.learnset[move.id] = ["7T"];
+					}
+				}
+				else if(toId(ability) === "anticipation" || toId(ability) === "solidrock" || toId(ability) === "filter" || toId(ability) === "prismarmor") {
+					if(this.tools.getImmunity(move, template) && this.tools.getEffectiveness(move, template) > 0) {
+						template.learnset[move.id] = ["7T"];
+					}
+				}
+				else if(toId(ability) === "tintedlens") {
+					if(this.tools.getEffectiveness(move, template) < 1) {
+						template.learnset[move.id] = ["7T"];
+					}
+				}
+				else if(toId(ability) === "compoundeyes") {
+					if(move.accuracy < 100) {
+						template.learnset[move.id] = ["7T"];
+					}
+				}
+				else if(toId(ability) === "technician") {
+					if(move.basePower <= 60) {
+						template.learnset[move.id] = ["7T"];
+					}
+				}
+			}
+			return this.validateSet(set, teamHas, template);
+		},
+	},
+	{
 		name: "Beast Mode",
 		mod: "franticfusions",
 		ruleset: ['[Gen 7] Pokebank OU'],
