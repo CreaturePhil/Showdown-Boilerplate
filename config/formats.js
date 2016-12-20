@@ -4186,7 +4186,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	{
 		name: "Move Mastery",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-mastery.3590075/\">Move Mastery</a>"],
-		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OKHO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
         banlist: ['Unreleased', 'Illegal'],
 		validateSet: function (set, teamHas) {
 			if (!this.validateSet(set, teamHas).length) return [];
@@ -4195,10 +4195,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			template = Object.assign({}, template);
 			for(let i=0;i<set.moves.length;i++) {
 				let move = this.tools.getMove(set.moves[i]);
-				if(this.checkLearnset(move.id, template)) continue;
+				return ["Success!"]; //if(this.checkLearnset(move.id, template)) continue;
 				if(toId(ability) === "adaptability") {
 					if(template.types.includes(move.type)) {
-						template.learnset[move.id] = [].push("7T");
+						return ["Success!"]; //template.learnset[move.id] = [].push("7T");
 					}
 				}
 				else if(toId(ability) === "anticipation" || toId(ability) === "solidrock" || toId(ability) === "filter" || toId(ability) === "prismarmor") {
