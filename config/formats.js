@@ -4194,29 +4194,30 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			template = Object.assign({}, template);
 			for(let i=0;i<set.moves.length;i++) {
 				let move = this.tools.getMove(set.moves[i]);
+				if(this.checkLearnset(move.id, template)) continue;
 				if(toId(ability) === "adaptability") {
 					if(template.types.includes(move.type)) {
-						template.learnset[move.id] = ["7T"];
+						template.learnset[move.id] = [].push("7T");
 					}
 				}
 				else if(toId(ability) === "anticipation" || toId(ability) === "solidrock" || toId(ability) === "filter" || toId(ability) === "prismarmor") {
 					if(this.tools.getImmunity(move, template) && this.tools.getEffectiveness(move, template) > 0) {
-						template.learnset[move.id] = ["7T"];
+						template.learnset[move.id] = [].push("7T");
 					}
 				}
 				else if(toId(ability) === "tintedlens") {
 					if(this.tools.getEffectiveness(move, template) < 1) {
-						template.learnset[move.id] = ["7T"];
+						template.learnset[move.id] = [].push("7T");
 					}
 				}
 				else if(toId(ability) === "compoundeyes") {
 					if(move.accuracy < 100) {
-						template.learnset[move.id] = ["7T"];
+						template.learnset[move.id] = [].push("7T");
 					}
 				}
 				else if(toId(ability) === "technician") {
 					if(move.basePower <= 60) {
-						template.learnset[move.id] = ["7T"];
+						template.learnset[move.id] = [].push("7T");
 					}
 				}
 			}
