@@ -4199,22 +4199,22 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 						template.learnset[move.id] = [].push("7T");
 					}
 				}
-				else if(ability.id == "anticipation" || toId(ability) === "solidrock" || toId(ability) === "filter" || toId(ability) === "prismarmor") {
+				else if(ability.id == "anticipation" || ability.id === "solidrock" || ability.id === "filter" || ability.id === "prismarmor") {
 					if(this.tools.getImmunity(move, template) && this.tools.getEffectiveness(move, template) > 0) {
 						template.learnset[move.id] = [].push("7T");
 					}
 				}
-				else if(toId(ability) == "tintedlens") {
+				else if(ability.id == "tintedlens") {
 					if(this.tools.getEffectiveness(move, template) < 1) {
 						template.learnset[move.id] = [].push("7T");
 					}
 				}
-				else if(toId(ability) == "compoundeyes") {
+				else if(ability.id == "compoundeyes") {
 					if(move.accuracy < 100) {
 						template.learnset[move.id] = [].push("7T");
 					}
 				}
-				else if(toId(ability) == "technician") {
+				else if(ability.id == "technician") {
 					if(move.basePower <= 60) {
 						template.learnset[move.id] = [].push("7T");
 					}
