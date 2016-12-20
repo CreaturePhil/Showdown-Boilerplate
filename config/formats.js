@@ -4195,7 +4195,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			for(let i=0;i<set.moves.length;i++) {
 				let move = this.tools.getMove(set.move[i]);
 				if(toId(ability) === "adaptability") {
-					if(template.types.includes(this.tools.getMove(move.id).type) && !this.checkLearnset(move.id, template)) {
+					if(template.types.includes(move.type) && !this.tools.checkLearnset(move.id, template)) {
 						template.learnset[move.id] = ["7T"];
 					}
 				}
