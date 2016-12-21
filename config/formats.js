@@ -3129,7 +3129,7 @@ exports.Formats = [
                                 problems = ["The ability " + this.tools.getAbility(abilityId).name + " is banned from being passed down."];
                                 continue;
                         }
-                        set.species = set.donorSpecies = donorTemplate.species;
+                        set.species = donorTemplate.species;
                         if (donorTemplate.species !== template.species && donorTemplate.requiredItem) {
                                 // Bypass forme validation. Relevant to inherit from Giratina-O, and Mega/Primal formes.
                                 set.item = donorTemplate.requiredItem;
@@ -3145,6 +3145,7 @@ exports.Formats = [
                         }
                 }
                 // Restore the intended species, name and item.
+                set.donorSpecies = set.species;
                 set.species = template.species;
                 set.name = (name === set.species ? "" : name);
                 set.item = item.name;
