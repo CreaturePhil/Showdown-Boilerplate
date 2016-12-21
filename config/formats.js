@@ -4184,17 +4184,19 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{
-	name: "Move Mastery",
-	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-mastery.3590075/\">Move Mastery</a>"],
-	ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-	banlist: ['Unreleased', 'Illegal'],
-	mod: 'gen7',
-	validateSet: function(set, teamHas) {
-		if (!this.validateSet(set, teamHas).length) return [];
-		let ability = this.tools.getAbility(set.ability);
-		let template = this.tools.getTemplate(set.species);
-		let movemasters = {
+		name: "Move Mastery",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-mastery.3590075/\">Move Mastery</a>"],
+		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+		banlist: ['Unreleased', 'Illegal'],
+		mod: 'gen7',
+		validateSet: function(set, teamHas) {
+			if (!this.validateSet(set, teamHas).length) return [];
+			let ability = this.tools.getAbility(set.ability);
+			let template = this.tools.getTemplate(set.species);
+			let movemasters = {
+				adaptability: [],
 				angerpoint: ["Frost Breath", "Storm Throw"],
+				anticipation: [],
 				aromaveil: ["Taunt", "Torment", "Encore", "Disable", "Heal Block", "Attract"],
 				battlearmor: ["Frost Breath", "Storm Throw"],
 				bigpecks: ["Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech"],
@@ -4204,12 +4206,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				clearbody: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
 				comatose: ["Hex", "Wake-Up Slap", "Sleep Talk", "Snore", "Uproar", "Rest"],
 				competitive: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
+				compundeyes: [],
 				corrosion: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic"],
 				damp: ["Self-Destruct", "Explosion"],
 				dancer: ["Feather Dance", "Fiery Dance", "Dragon Dance", "Lunar Dance", "Petal Dance", "Revelation Dance", "Quiver Dance", "Swords Dance", "Teeter Dance"],
 				dazzling: ["Fake Out", "Extreme Speed", "Feint", "First Impression", "Accelerock", "Aqua Jet", "Baby-Doll Eyes", "Bullet Punch", "Ice Shard", "Ion Deluge", "Mach Punch", "Powder", "Quick Attack", "Shadow Sneak", "Sucker Punch", "Vacuum Wave", "Water Shuriken"],
 				defiant: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
 				dryskin: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool", "Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
+				filter: [],
 				flareboost: ["Beak Blast", "Blaze Kick", "Blue Flare", "Ember", "Fire Blast", "Fire Fang", "Fire Punch", "Flamethrower", "Flame Wheel", "Flare Blitz", "Fling", "Heat Wave", "Ice Burn", "Inferno", "Lava Plume", "Sacred Fire", "Scald", "Searing Shot", "Steam Eruption", "Tri Attack", "Will-O-Wisp"],
 				flashfire: ["Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create", "Will-O-Wisp"],
 				flowergift: ["Sunny Day"],
@@ -4245,6 +4249,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				owntempo: ["Chatter", "Confuse Ray", "Confusion", "Dizzy Punch", "Dynamic Punch", "Flatter", "Hurricane", "Psybeam", "Rock Climb", "Signal Beam", "Supersonic", "Swagger", "Sweet Kiss", "Teeter Dance", "Water Pulse"],
 				plus: ["Magnetic Flux", "Gear Up"],
 				poisonheal: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
+				prismarmor: [],
 				raindish: ["Rain Dance"],
 				rattled: ["Attack Order", "Bug Bite", "Bug Buzz", "Fell Stinger", "First Impression", "Fury Cutter", "Infestation", "Leech Life", "Lunge", "Megahorn", "Pin Missile", "Pollen Puff", "Signal Beam", "Silver Wind", "Steamroller", "Struggle Bug", "Twineedle", "U-turn", "X-Scissor", "Assurance", "Beat Up", "Bite", "Brutal Swing", "Crunch", "Dark Pulse", "Darkest Lariat", "Feint Attack", "Fling", "Foul Play", "Hyperspace Fury", "Knock Off", "Night Daze", "Night Slash", "Payback", "Power Trip", "Punishment", "Pursuit", "Snarl", "Sucker Punch", "Thief", "Throat Chop", "Astonish", "Hex", "Lick", "Moongeist Beam", "Night Shade", "Ominous Wind", "Phantom Force", "Shadow Ball", "Shadow Bone", "Shadow Claw", "Shadow Force", "Shadow Punch", "Shadow Sneak", "Spirit Shackle"],
 				reckless: ["Take Down", "Double-Edge", "Submission", "Volt Tackle", "Flare Blitz", "Brave Bird", "Wood Hammer", "Head Smash", "Wild Charge", "Head Charge", "High Jump Kick"],
@@ -4264,6 +4269,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				sniper: ["Frost Breath", "Storm Throw"],
 				snowcloak: ["Hail"],
 				solarpower: ["Sunny Day"],
+				solidrock: [],
 				soulheart: ["Self-Destruct", "Explosion", "Healing Wish", "Lunar Dance", "Memento"],
 				soundproof: ["Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Confide", "Disarming Voice", "Echoed Voice", "Grass Whistle", "Growl", "Heal Bell", "Hyper Voice", "Metal Sound", "Noble Roar", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar"],
 				stakeout: ["Volt Switch", "U-turn", "Parting Shot", "Baton Pass", "Roar", "Whirlwind", "Dragon Tail", "Circle Throw"],
@@ -4278,7 +4284,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				sweetveil: ["Dark Void", "Grass Whistle", "Hypnosis", "Lovely Kiss", "Relic Song", "Rest", "Sing", "Sleep Powder", "Spore", "Yawn"],
 				swiftswim: ["Rain Dance"],
 				tangledfeet: ["Chatter", "Confuse Ray", "Confusion", "Dizzy Punch", "Dynamic Punch", "Flatter", "Hurricane", "Psybeam", "Rock Climb", "Signal Beam", "Supersonic", "Swagger", "Sweet Kiss", "Teeter Dance", "Water Pulse"],
+				technician: [],
 				thickfat: ["Aurora Beam", "Avalanche", "Blizzard", "Freeze-Dry", "Freeze Shock", "Frost Breath", "Glaciate", "Ice Ball", "Ice Beam", "Ice Burn", "Ice Fang", "Ice Hammer", "Ice Punch", "Ice Shard", "Icicle Crash", "Icicle Spear", "Icy Wind", "Powder Snow", "Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
+				tintedlens: [],
 				torrent: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
 				toxicboost: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
 				triage: ["Aqua Ring", "Floral Healing", "Grassy Terrain", "Heal Pulse", "Healing Wish", "Ingrain", "Leech Seed", "Pain Split", "Present", "Purify", "Strength Sap", "Wish", "Heal Order", "Milk Drink", "Moonlight", "Morning Sun", "Recover", "Rest", "Roost", "Shore Up", "Slack Off", "Soft-Boiled", "Synthesis", "Absorb", "Drain Punch", "Draining Kiss", "Dream Eater", "Giga Drain", "Horn Leech", "Leech Life", "Leech Seed", "Mega Drain", "Oblivion Wing", "Parabolic Charge"],
@@ -4291,10 +4299,31 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				watercompaction: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
 				waterveil: ["Beak Blast", "Blaze Kick", "Blue Flare", "Ember", "Fire Blast", "Fire Fang", "Fire Punch", "Flamethrower", "Flame Wheel", "Flare Blitz", "Fling", "Heat Wave", "Ice Burn", "Inferno", "Lava Plume", "Sacred Fire", "Scald", "Searing Shot", "Steam Eruption", "Tri Attack", "Will-O-Wisp"],
 				whitesmoke: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
-		};
-		for(let i in movemasters) {
-			if(i === ability.id) {
-				let moves = movemasters[i];
+			};
+			let allMoves = this.tools.data.Movedex;
+			for(let i in allMoves) {
+				let move = allMoves[i];
+				if (template.types.includes(move.type)) {
+						movemasters.adaptability.push(move.id);
+				}
+				if (this.tools.getImmunity(move, template) && this.tools.getEffectiveness(move, template) > 0) {
+						movemasters.anticipation.push(move.id);
+						movemasters.solidrock.push(move.id);
+						movemasters.filter.push(move.id);
+						movemasters.prismarmor.push(move.id);
+				}
+				if (this.tools.getEffectiveness(move, template) < 1) {
+						movemasters.tintedlens.push(move.id);
+				}
+				if (move.basePower <= 60) {
+						movemasters.technician.push(move.id);
+				}
+				if (move.accuracy < 100) {
+						movemasters.compoundeyes.push(move.id);
+				}
+			}
+			if(movemasters[ability.id]) {
+				let moves = movemasters[ability.id];
 				for(let j=0;j<moves.length;j++) {
 					if(template.learnset[toId(moves[j])]) continue;
 					template.learnset[toId(moves[j])] = ["7T"];
@@ -4302,41 +4331,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				return this.validateSet(set, teamHas, template);
 			}
 		}
-		for (let i = 0; i < set.moves.length; i++) {
-			let move = this.tools.getMove(set.moves[i]);
-			if (ability.id == "adaptability") {
-				if (template.types.includes(move.type)) {
-					template.learnset[move.id] = [].push("7T");
-					continue;
-				}
-			}
-			if (ability.id == "anticipation" || ability.id === "solidrock" || ability.id === "filter" || ability.id === "prismarmor") {
-				if (this.tools.getImmunity(move, template) && this.tools.getEffectiveness(move, template) > 0) {
-					template.learnset[move.id] = [].push("7T");
-					continue;
-				}
-			}
-			if (ability.id == "tintedlens") {
-				if (this.tools.getEffectiveness(move, template) < 1) {
-					template.learnset[move.id] = [].push("7T");
-					continue;
-				}
-			}
-			if (ability.id == "compoundeyes") {
-				if (move.accuracy < 100) {
-					template.learnset[move.id] = [].push("7T");
-					continue;
-				}
-			}
-			if (ability.id == "technician") {
-				if (move.basePower <= 60) {
-					template.learnset[move.id] = [].push("7T");
-					continue;
-				}
-			}
-		}
-		return this.validateSet(set, teamHas, template);
-	}
 	},
 	{
 		name: "Beast Mode",
