@@ -4188,6 +4188,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-mastery.3590075/\">Move Mastery</a>"],
 	ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 	banlist: ['Unreleased', 'Illegal'],
+	mod: 'gen7',
 	validateSet: function(set, teamHas) {
 		if (!this.validateSet(set, teamHas).length) return [];
 		let ability = this.tools.getAbility(set.ability);
