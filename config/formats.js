@@ -3130,6 +3130,7 @@ exports.Formats = [
                                 continue;
                         }
                         set.species = donorTemplate.species;
+                		set.donorSpecies = set.species;
                         if (donorTemplate.species !== template.species && donorTemplate.requiredItem) {
                                 // Bypass forme validation. Relevant to inherit from Giratina-O, and Mega/Primal formes.
                                 set.item = donorTemplate.requiredItem;
@@ -3144,7 +3145,6 @@ exports.Formats = [
                                 break;
                         }
                 }
-
                 // Restore the intended species, name and item.
                 set.species = template.species;
                 set.name = (name === set.species ? "" : name);
@@ -3157,6 +3157,9 @@ exports.Formats = [
                         problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.tools.getTemplate(pokemonWithAbility[0]).name);
                         return problems;
                 }
+        },
+        onSwitchIn: function(pokemon) {
+				this.add('-start', pokemon, pokemon.set.donorSpecies || pokemon.species, '[silent]');
         }
 	},
 	{
