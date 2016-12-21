@@ -4335,6 +4335,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 		}
 		return this.validateSet(set, teamHas, template);
+	}
 	},
 	{
 		name: "Beast Mode",
