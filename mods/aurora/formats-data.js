@@ -57,6 +57,10 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["bravebird", "impalingfeather", "swordsdance", "roost", "jumpkick"],
 		tier: "New",
 	},
+	laprasistor: {
+		randomBattleMoves: ["auroraveil", "blizzard", "cleansedmind", "thunderbolt"],
+		tier: "New",
+	},
 	rioluistor: {
 		randomBattleMoves: ["highjumpkick", "playrough", "copycat", "swordsdance"],
 		tier: "LC",
