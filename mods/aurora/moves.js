@@ -82,4 +82,66 @@ exports.BattleMovedex = {
 		zMovePower: 180,
 		contestType: "Tough",
 	},
+	"cleansedsoul": {
+		num: 10005,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move.",
+		shortDesc: "Fails if the user takes damage before it hits.",
+		id: "cleansedsoul",
+		name: "Cleansed Soul",
+		pp: 20,
+		priority: -3,
+		flags: {snatch: 1},
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('cleansedsoul');
+		},
+		beforeMoveCallback: function (pokemon) {
+			if (pokemon.volatiles['cleansedsoul'] && pokemon.volatiles['cleansedsoul'].lostFocus) {
+				this.add('cant', pokemon, 'Cleansed Soul', 'Cleansed Soul');
+				return true;
+			}
+		},
+		effect: {
+			duration: 1,
+			onStart: function (pokemon) {
+				this.add('-singleturn', pokemon, 'move: Cleansed Soul');
+			},
+			onHit: function (pokemon, source, move) {
+				if (move.category !== 'Status') {
+					pokemon.volatiles['cleansedsoul'].lostFocus = true;
+				}
+				if (pokemon.status in {'': 1, 'slp': 1, 'frz': 1}) return false;
+				pokemon.cureStatus();
+			},
+		},
+		heal: [1, 2],
+		secondary: false,
+		target: "normal",
+		type: "Ghost",
+		zMoveEffect: 'clearnegativeboost',
+		contestType: "Beautiful",
+	},
+	"dimensionalrift": {
+		num: 10006,
+		accuracy: 90,
+		basePower: 150,
+		category: "Special",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move.",
+		shortDesc: "User cannot move next turn.",
+		id: "dimensionalrift",
+		name: "Dimensional Rift",
+		pp: 5,
+		priority: 0,
+		flags: {recharge: 1, protect: 1, mirror: 1},
+		self: {
+			volatileStatus: 'mustrecharge',
+		},
+		secondary: false,
+		target: "any",
+		type: "Ghost",
+		zMovePower: 200,
+		contestType: "Tough",
+	},
 };
