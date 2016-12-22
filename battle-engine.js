@@ -3467,9 +3467,10 @@ class Battle extends Tools.BattleDex {
 			// need two players to start
 			return;
 		}
-
-		let desc = this.data.Formats[this.formatData.id].desc.join("<br />");
-		this.add("raw|<div class=\"infobox\">"+desc+"</div>");
+		if(this.data.Formats[this.formatData.id].desc) {	
+			let desc = this.data.Formats[this.formatData.id].desc.join("<br />");
+			this.add("raw|<div class=\"infobox\">"+desc+"</div>");
+		}
 		if (this.started) {
 			this.makeRequest();
 			this.isActive = true;
