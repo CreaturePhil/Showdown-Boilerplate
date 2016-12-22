@@ -37,6 +37,26 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["rest", "sleeptalk", "bulkup", "waterfall"],
 		tier: "New",
 	},
+	burnabee: {
+		randomBattleMoves: ["honeyblaze", "bugbuzz", "roost", "fireblast"],
+		tier: "New",
+	},
+	freezabee: {
+		randomBattleMoves: ["honeychill", "bugbuzz", "roost", "icebeam"],
+		tier: "New",
+	},
+	parabee: {
+		randomBattleMoves: ["honeystun", "bugbuzz", "roost", "thunderbolt"],
+		tier: "New",
+	},
+	drowzabee: {
+		randomBattleMoves: ["honeytrance", "bugbuzz", "roost", "psyshock"],
+		tier: "New",
+	},
+	toxabee: {
+		randomBattleMoves: ["honeyvirus", "bugbuzz", "roost", "venoshock"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
