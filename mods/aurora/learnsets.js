@@ -485,7 +485,7 @@ exports.BattleLearnsets = {
 		heavyslam: ["7L29"],
 		workup: ["7M"],
 	}},
-	lapras: {learnset: {
+	laprasistor: {learnset: {
 		ancientpower: ["7E", "6E", "5E", "4T", "4E"],
 		attract: ["7M", "6M", "5M", "4M", "3M"],
 		auroraveil: ["7L27", "7M"],
