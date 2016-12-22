@@ -58,7 +58,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	laprasistor: {
-		randomBattleMoves: ["auroraveil", "blizzard", "cleansedmind", "thunderbolt"],
+		randomBattleMoves: ["auroraveil", "blizzard", "cleansedmind", "thunderbolt", "icebeam", "toxic"],
 		tier: "New",
 	},
 	rioluistor: {
