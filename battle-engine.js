@@ -4961,7 +4961,7 @@ class Battle extends Tools.BattleDex {
 	join(slot, name, avatar, team) {
 		if (this.p1 && this.p1.isActive && this.p2 && this.p2.isActive) return false;
 		if ((this.p1 && this.p1.isActive && this.p1.name === name) || (this.p2 && this.p2.isActive && this.p2.name === name)) return false;
-
+		this.add("raw|<div class=\"infobox\">"+this.data.Formats[this.formatData.id].desc+"</div>");
 		let player = null;
 		if (this.p1 && this.p1.isActive || slot === 'p2') {
 			if (this.started) {
