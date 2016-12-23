@@ -233,7 +233,7 @@ exports.Formats = [
 		section: "Randomized Metas",
 		mod: 'dhssb',
 		team: 'randomSeasonalMelee',
-		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['PotD', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.add("raw|Dragon Heaven Super Staff Bros. <b>RAWWWWWWWWWWWWWR!!!!</b>");
 			this.add('message', "SURVIVAL! GET READY FOR THE NEXT BATTLE!");
