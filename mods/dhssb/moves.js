@@ -107,7 +107,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "Extreme Speed", target);
 			this.add('-anim', source, "Gigavolt Havoc", target);
 			this.add('-anim', source, "Explosion", target);
-			this.add("c|~Spandan|YOU DONT MESS WITH ME FAGGOT");
+			this.add("c|~Spandan|YOU DONT MESS WITH ME IDIOT");
 		},
 		onAfterMove: function(target, source, move) {
 			this.add("c|~Spandan|Huh im exhausted.")
