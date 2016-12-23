@@ -244,4 +244,45 @@ exports.BattleMovedex = {
 		zMoveBoost: {atk: 1, spa: 1, spe: 1},
 		contestType: "Beautiful",
 	},
+	"burrow": {
+		num: 10012,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "If the user is hit by a contact move this turn before it can execute this move, the attacker is burned.",
+		shortDesc: "Burns on contact with the user before it moves.",
+		id: "burrow",
+		isViable: true,
+		name: "Burrow",
+		pp: 15,
+		priority: -3,
+		flags: {snatch: 1, heal: 1},
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('beakblast');
+		},
+		effect: {
+			duration: 1,
+			onStart: function (pokemon) {
+				this.add('-singleturn', pokemon, 'move: Beak Blast');
+			},
+			onAnyModifyDamage: function (damage, source, target, move) {
+				if (target !== source && target.side === this.effectData.target) {
+					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+					return this.chainModify(0.5);
+				}
+			},
+		},
+		onMoveAborted: function (pokemon) {
+			pokemon.removeVolatile('beakblast');
+		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('beakblast');
+		},
+		secondary: false,
+		heal: [1, 3],
+		target: "normal",
+		type: "Flying",
+		zMovePower: 180,
+		contestType: "Cool",
+	},
 };
