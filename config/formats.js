@@ -4567,7 +4567,9 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
 	        let types = pokemon.types;
-	        pokemon.fusetype = types;
+	        if(!pokemon.fusetype) pokemon.fusetype = types;
+	        else 
+		        pokemon.types = pokemon.fusetype;
 			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			let sec = (statusability[pokemon.abilitwo])? ("other"+pokemon.abilitwo) : (pokemon.abilitwo);
 			pokemon.addVolatile(sec);//Second Ability! YAYAYAY
