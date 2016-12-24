@@ -442,7 +442,7 @@ exports.BattleFormatsData = {
 		tier: "Bank",
 	},
 	ninetalesalola: {
-		randomBattleMoves: ["nastyplot", "blizzard", "moonblast", "substitute", "hiddenpowerfire"],
+		randomBattleMoves: ["nastyplot", "blizzard", "moonblast", "substitute", "hiddenpowerfire", "auroraveil"],
 		tier: "New",
 	},
 	igglybuff: {
