@@ -37,6 +37,10 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["rest", "sleeptalk", "bulkup", "waterfall"],
 		tier: "New",
 	},
+	larvary: {
+		randomBattleMoves: ["bugbite", "irondefense", "protect"],
+ 		tier: "LC",
+ 	},
 	burnabee: {
 		randomBattleMoves: ["honeyblaze", "bugbuzz", "roost", "fireblast"],
 		tier: "New",
