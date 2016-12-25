@@ -189,6 +189,17 @@ exports.BattlePokedex = {
 		evoLevel: 2, /* Poisoned Level-Up */
 		eggGroups: ["Bug"],
 	},
+	molaxy: {
+		num: 10016,
+		species: "Molaxy",
+		types: ["Ground", "Psychic"],
+		baseStats: {hp: 96, atk: 40, def: 86, spa: 95, spd: 116, spe: 24},
+		abilities: {0: "Forewarn", 1: "Telepathy", H: "Arena Trap"},
+		heightm: 1.3,
+		weightkg: 40.8,
+		color: "Brown",
+		eggGroups: ["Field"],
+	},
 	uisge: {
 		num: 11001,
 		species: "Uisge",
