@@ -266,8 +266,8 @@ exports.BattleMovedex = {
 				this.add('-singleturn', pokemon, 'move: Burrow');
 			},
 			onAnyModifyDamage: function (damage, source, target, move) {
-				if (target !== source && target.side === this.effectData.target) {
-					if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+				if (target !== source && source.side === this.effectData.target) {
+					if (source.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 					return this.chainModify(0.5);
 				}
 			},
