@@ -5,7 +5,7 @@ exports.BattleScripts = {
 	{
 			Object.values(this.data.Abilities).forEach(ability => {
 				let abi = {};
-				let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+				let statusability = {"aerilate":true, "aurabreak":true, "galvanize":true, "flashfire":true, "parentalbond":true, "pixilate":true, "refrigerate":true, "sheerforce":true, "slowstart":true, "truant":true, "unburden":true, "zenmode":true};
 				for(let i in ability) abi[i] = ability[i];
 				if(statusability[abi.id])
 				{
