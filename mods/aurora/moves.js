@@ -118,7 +118,7 @@ exports.BattleMovedex = {
 		},
 		heal: [1, 2],
 		secondary: false,
-		target: "normal",
+		target: "self",
 		type: "Ghost",
 		zMoveEffect: 'clearnegativeboost',
 		contestType: "Beautiful",
@@ -258,12 +258,12 @@ exports.BattleMovedex = {
 		priority: -3,
 		flags: {snatch: 1, heal: 1},
 		beforeTurnCallback: function (pokemon) {
-			pokemon.addVolatile('beakblast');
+			pokemon.addVolatile('burrow');
 		},
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
-				this.add('-singleturn', pokemon, 'move: Beak Blast');
+				this.add('-singleturn', pokemon, 'move: Burrow');
 			},
 			onAnyModifyDamage: function (damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target) {
@@ -273,16 +273,16 @@ exports.BattleMovedex = {
 			},
 		},
 		onMoveAborted: function (pokemon) {
-			pokemon.removeVolatile('beakblast');
+			pokemon.removeVolatile('burrow');
 		},
 		onAfterMove: function (pokemon) {
-			pokemon.removeVolatile('beakblast');
+			pokemon.removeVolatile('burrow');
 		},
 		secondary: false,
 		heal: [1, 3],
-		target: "normal",
-		type: "Flying",
-		zMovePower: 180,
-		contestType: "Cool",
+		target: "self",
+		type: "Ground",
+		zMoveBoost: {def: 1, spd: 1},
+		contestType: "Smart",
 	},
 };
