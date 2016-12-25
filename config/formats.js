@@ -380,6 +380,7 @@ exports.Formats = [
 			}
 			if(name === 'theswordbreaker') {
 				this.add('c|@Theswordbreaker|It\'s time to break some blades >:)');
+				pokemon.types = ["Dragon"];
 			}
 			if(name === 'ransei') {
 				this.add('c|~Ransei|yo');
@@ -4185,6 +4186,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
+	},
+	{
+		name: "1vI's meta",
+		desc: ['Pokemon ']
 	},
 	{
 		name: "Move Mastery",
