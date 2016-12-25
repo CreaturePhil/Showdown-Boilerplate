@@ -233,6 +233,28 @@ exports.BattlePokedex = {
 		color: "White",
 		eggGroups: ["Undiscovered"],
 	},
+	infineer: {
+		num: 11004,
+		species: "Infineer",
+		types: ["Electric", "Psychic"],
+		baseStats: {hp: 96, atk: 142, def: 91, spa: 142, spd: 91, spe: 118},
+		abilities: {0: "Innovate"},
+		heightm: 6.3,
+		weightkg: 101.0,
+		color: "White",
+		eggGroups: ["Undiscovered"],
+	},
+	remordial: {
+		num: 11005,
+		species: "Remordial",
+		types: ["Rock", "Grass"],
+		baseStats: {hp: 96, atk: 91, def: 142, spa: 91, spd: 142, spe: 118},
+		abilities: {0: "Conservate"},
+		heightm: 6.3,
+		weightkg: 101.0,
+		color: "Brown",
+		eggGroups: ["Undiscovered"],
+	},
 	
 	/* Istori Forms */
 	
