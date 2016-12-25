@@ -77,6 +77,14 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["hurricane", "psyshock", "u-turn", "recover"],
 		tier: "New",
 	},
+	infineer: {
+		randomBattleMoves: ["thunderbolt", "psyshock", "u-turn", "earthpower"],
+		tier: "Uber",
+	},
+	remordial: {
+		randomBattleMoves: ["synthesis", "leechseed", "stealthrock", "gigadrain"],
+		tier: "Uber",
+	},
 	doduoistor: {
 		randomBattleMoves: ["bravebird", "impalingfeather", "jumpkick", "roost", "swordsdance"],
 		tier: "LC",
