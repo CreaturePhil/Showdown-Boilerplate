@@ -61,6 +61,10 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["honeyvirus", "bugbuzz", "roost", "venoshock"],
 		tier: "New",
 	},
+	molaxy: {
+		randomBattleMoves: ["burrow", "psyshock", "earthpower", "toxic"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
