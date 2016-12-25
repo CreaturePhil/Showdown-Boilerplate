@@ -106,7 +106,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'feelsxp': 'http://i.imgur.com/sTXEtjS.jpg',
 		'feelsfab': 'http://i.imgur.com/vCPgsQA.jpg',
 		'eeveelutions!':'http://2.media.dorkly.cvcdn.com/25/38/4d9df0e6985ab9e9218f3874ccf9649d.gif',
-		'feelslucario':'http://i.imgur.com/ZQbYp9l.gif',
+		'feelsluke':'http://i.imgur.com/ZQbYp9l.gif',
 		
 	});
 }
