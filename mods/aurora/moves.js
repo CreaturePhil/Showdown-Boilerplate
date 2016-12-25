@@ -265,10 +265,9 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-singleturn', pokemon, 'move: Burrow');
 			},
-			onAnyModifyDamage: function (damage, source, target, move) {
-				if (target !== source && source.side === this.effectData.target) {
-					if (source.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
-					return this.chainModify(0.5);
+			onTryHit: function (pokemon, source, move) {
+				if(move.basePower) {
+					move.basePower*=0.5;
 				}
 			},
 		},
