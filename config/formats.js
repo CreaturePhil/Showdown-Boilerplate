@@ -3054,14 +3054,12 @@ exports.Formats = [
                 let pokemonWithAbility = this.format.abilityMap[abilityId];
                 if (!pokemonWithAbility) return ["" + set.ability + " is an invalid ability."];
                 let isBaseAbility = Object.values(template.abilities).map(toId).indexOf(abilityId) >= 0;
-                if (!isBaseAbility && abilityId in this.format.customBans.inheritedAbilities) return ["" + set.ability + " is banned from being passed down."];
 
                 // Items must be fully validated here since we may pass a different item to the base set validator.
                 let item = this.tools.getItem(set.item);
                 if (item.id) {
                         if (!item.exists) return ["" + set.item + " is an invalid item."];
                         if (item.isUnreleased) return ["" + (set.name || set.species) + "'s item " + item.name + " is unreleased."];
-                        if (item.id in this.format.customBans.items) return ["" + item.name + " is banned."];
                 }
 
                 let validSources = set.abilitySources = []; // evolutionary families
@@ -3077,16 +3075,14 @@ exports.Formats = [
                         }
 
                         if (set.name === set.species) delete set.name;
-                        if (donorTemplate.species !== set.species && toId(donorTemplate.species) in this.format.customBans.donor) {
-                                problems = ["" + donorTemplate.species + " is banned from passing abilities down."];
-                                continue;
-                        } else if (donorTemplate.species !== set.species && abilityId in this.format.customBans.inheritedAbilities) {
-                                problems = ["The ability " + this.tools.getAbility(abilityId).name + " is banned from being passed down."];
-                                continue;
-                        } else if (donorTemplate.species !== set.species && donorTemplate.isMega) {
+                        else if (toId(donorTemplate.species) !== toId(set.species) && donorTemplate.isMega) {
                                 problems = [template.species+" is inheriting from a Mega Pokemon, which is banned."];
                                 continue;
                         } else if (donorTemplate.tier === "Uber" || donorTemplate.tier === "Bank-Uber") {
+                                problems = [template.species+" is inheriting from an Uber, which is banned."];
+                                continue;
+                        }
+                        else if (toId(donorTemplate.species) !== (set.species) && toId(donorTemplate.speciesid ) in this.format.customBans.receiver) {
                                 problems = [template.species+" is inheriting from an Uber, which is banned."];
                                 continue;
                         }
