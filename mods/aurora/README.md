@@ -102,6 +102,15 @@ Abilities: Honey Gather
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 60 | 70 | 75 | 95 | 75 | 80 | 455 | 
 
+Freezabee 
+![Bug](http://play.pokemonshowdown.com/sprites/types/Bug.png) 
+![Ice](http://play.pokemonshowdown.com/sprites/types/Ice.png) 
+
+Abilities: Honey Gather 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 60 | 70 | 75 | 95 | 75 | 80 | 455 | 
 
 For more info (including movesets) type /(pokemon). For Example /Detuoy.
 
