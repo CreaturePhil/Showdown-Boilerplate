@@ -3016,7 +3016,7 @@ exports.Formats = [
                         let abilityMap = Object.create(null);
                         for (let speciesid in this.tools.data.Pokedex) {
                                 let pokemon = this.tools.data.Pokedex[speciesid];
-                                if (pokemon.num < 1 || pokemon.num > 720) continue;
+                                if (pokemon.num < 1 || pokemon.num > 802) continue;
                                 for (let key in pokemon.abilities) {
                                         let abilityId = toId(pokemon.abilities[key]);
                                         if (abilityMap[abilityId]) {
