@@ -3130,10 +3130,10 @@ exports.Formats = [
                                 problems = ["The ability " + this.tools.getAbility(abilityId).name + " is banned from being passed down."];
                                 continue;
                         } else if (donorTemplate.species !== set.species && donorTemplate.isMega) {
-                                problems = [set.species+" is inheriting from a Mega Pokemon, which is banned."];
+                                problems = [template.species+" is inheriting from a Mega Pokemon, which is banned."];
                                 continue;
                         } else if (donorTemplate.tier === "Uber" || donorTemplate.tier === "Bank-Uber") {
-                                problems = [set.species+" is inheriting from an Uber, which is banned."];
+                                problems = [template.species+" is inheriting from an Uber, which is banned."];
                                 continue;
                         }
                         set.species = donorTemplate.species;
