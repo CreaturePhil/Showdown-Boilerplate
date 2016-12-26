@@ -3132,7 +3132,6 @@ exports.Formats = [
                         } else if (donorTemplate.species !== set.species && donorTemplate.isMega) {
                                 problems = [set.species+" is inheriting from a Mega Pokemon, which is banned."];
                                 continue;
-                        }
                         } else if (donorTemplate.tier === "Uber" || donorTemplate.tier === "Bank-Uber") {
                                 problems = [set.species+" is inheriting from an Uber, which is banned."];
                                 continue;
@@ -3152,7 +3151,7 @@ exports.Formats = [
                                 break;
                         }
                 }
-                
+
                 // Restore the intended species, name and item.
                 set.donorSpecies = set.species;
                 set.species = template.species;
