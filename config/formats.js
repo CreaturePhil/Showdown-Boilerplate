@@ -5403,7 +5403,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod' , 'Freeze Clause Mod'],
 	},
 	{
-		name: "Random Doubles Battle",
+		name: "[Istor] Random Doubles Battle",
 
 		mod: 'istor',
 		gameType: 'doubles',
@@ -5411,7 +5411,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "[Gen 7] Balanced Hackmons",
+		name: "[Istor] Balanced Hackmons",
 
 		mod: 'aurora',
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
