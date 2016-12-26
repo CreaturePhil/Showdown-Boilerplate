@@ -5380,14 +5380,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	{
 		name: "[Istor] OU",
 		column: 5,
-		mod: 'aurora',
+		mod: 'istor',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause' , 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
 	},
 	{
 		name: "[Istor] Doubles OU",
 
-		mod: 'aurora',
+		mod: 'istor',
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview' , 'Freeze Clause Mod'],
 		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
@@ -5398,7 +5398,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	{
 		name: "[Istor] Random Battle",
 		
-		mod: 'aurora',
+		mod: 'istor',
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod' , 'Freeze Clause Mod'],
 	},
