@@ -2971,8 +2971,7 @@ exports.Formats = [
                 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3529252/\">Inheritance</a>",
         ],
         mod: 'gen7',
-        ruleset: ['[Gen 7] OU'],
-        banlist: ['Unreleased', 'Illegal', 'Assist', 'Chatter'],
+        ruleset: ['[Gen 7] Pokebank OU'],
         customBans: {
                 receiver: {
                         regigigas: 1,
