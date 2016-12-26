@@ -112,6 +112,76 @@ Abilities: Honey Gather
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 60 | 70 | 75 | 95 | 75 | 80 | 455 | 
 
+Parabee 
+![Bug](http://play.pokemonshowdown.com/sprites/types/Bug.png) 
+![Electric](http://play.pokemonshowdown.com/sprites/types/Electric.png) 
+
+Abilities: Honey Gather 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 60 | 70 | 75 | 95 | 75 | 80 | 455 | 
+
+Drowzabee 
+![Bug](http://play.pokemonshowdown.com/sprites/types/Bug.png) 
+![Psychic](http://play.pokemonshowdown.com/sprites/types/Psychic.png) 
+
+Abilities: Honey Gather 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 60 | 70 | 75 | 95 | 75 | 80 | 455 | 
+
+Toxabee 
+![Bug](http://play.pokemonshowdown.com/sprites/types/Bug.png) 
+![Poison](http://play.pokemonshowdown.com/sprites/types/Poison.png) 
+
+Abilities: Honey Gather 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 60 | 70 | 75 | 95 | 75 | 80 | 455 | 
+
+Molaxy 
+![Ground](http://play.pokemonshowdown.com/sprites/types/Ground.png) 
+![Psychic](http://play.pokemonshowdown.com/sprites/types/Psychic.png) 
+
+Abilities: Forewarm , Telepathy, Arena Trap 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 96 | 40 | 86 | 95 | 116 | 24 | 457 | 
+
+Lapras-Istor 
+![Ghost](http://play.pokemonshowdown.com/sprites/types/Ghost.png) 
+![Ice](http://play.pokemonshowdown.com/sprites/types/Ice.png) 
+
+Abilities: Snow Warning , , Water Absorb 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 130 | 65 | 90 | 105 | 95 | 50 | 535 | 
+
+Riolu-Istor 
+![Fighting](http://play.pokemonshowdown.com/sprites/types/Fighting.png) 
+![Fairy](http://play.pokemonshowdown.com/sprites/types/Fairy.png) 
+
+Abilities: Pixilate , Technician, Prankster 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 40 | 70 | 40 | 35 | 40 | 60 | 285 | 
+
+Lucario-Istor 
+![Fighting](http://play.pokemonshowdown.com/sprites/types/Fighting.png) 
+![Fairy](http://play.pokemonshowdown.com/sprites/types/Fairy.png) 
+
+Abilities: Pixilate , Technician, Dazzling 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 80 | 80 | 70 | 125 | 80 | 90 | 525 | 
+
 For more info (including movesets) type /(pokemon). For Example /Detuoy.
 
 ##Yddraig  
