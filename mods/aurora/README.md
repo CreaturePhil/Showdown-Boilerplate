@@ -92,6 +92,17 @@ Abilities: Adaptibility
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 60 | 15 | 65 | 15 | 65 | 10 | 230 |
 
+Burnabee 
+![Bug](http://play.pokemonshowdown.com/sprites/types/Bug.png) 
+![Fire](http://play.pokemonshowdown.com/sprites/types/Fire.png) 
+
+Abilities: Honey Gather  
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 60 | 70 | 75 | 95 | 75 | 80 | 455 | 
+
+
 For more info (including movesets) type /(pokemon). For Example /Detuoy.
 
 ##Yddraig  
