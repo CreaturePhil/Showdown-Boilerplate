@@ -73,6 +73,17 @@ Adhair  ![Flying](http://play.pokemonshowdown.com/sprites/types/Flying.png)
 |----|-----|-----|-----|-----|-----|
 | 90 | 110  | 70  | 105  | 70  | 135  |
 
+Ortuska 
+![Water](http://play.pokemonshowdown.com/sprites/types/Water.png) 
+![Steel](http://play.pokemonshowdown.com/sprites/types/Steel.png) 
+
+Abilities: Thick Fat , Snow Cloak, Mold Breaker 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 164 | 136 | 60 | 50 | 60 | 85 | 555 | 
+
+
 For more info (including movesets) type /(pokemon). For Example /Detuoy.
 
 ##Yddraig  
