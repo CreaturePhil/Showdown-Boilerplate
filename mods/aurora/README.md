@@ -83,6 +83,14 @@ Abilities: Thick Fat , Snow Cloak, Mold Breaker
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 164 | 136 | 60 | 50 | 60 | 85 | 555 | 
 
+Larvary 
+![Bug](http://play.pokemonshowdown.com/sprites/types/Bug.png) 
+
+Abilities: Adaptibility
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 60 | 15 | 65 | 15 | 65 | 10 | 230 |
 
 For more info (including movesets) type /(pokemon). For Example /Detuoy.
 
