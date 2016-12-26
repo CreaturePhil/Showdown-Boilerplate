@@ -2970,8 +2970,8 @@ exports.Formats = [
                 "Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
                 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3529252/\">Inheritance</a>",
         ],
-
-        ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OKHO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+        mod: 'gen7',
+        ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
         banlist: ['Unreleased', 'Illegal', 'Assist', 'Chatter'],
         customBans: {
                 receiver: {
@@ -3129,6 +3129,13 @@ exports.Formats = [
                         } else if (donorTemplate.species !== set.species && abilityId in this.format.customBans.inheritedAbilities) {
                                 problems = ["The ability " + this.tools.getAbility(abilityId).name + " is banned from being passed down."];
                                 continue;
+                        } else if (donorTemplate.species !== set.species && donorTemplate.isMega) {
+                                problems = [set.species+" is inheriting from a Mega Pokemon, which is banned."];
+                                continue;
+                        }
+                        } else if (donorTemplate.tier === "Uber" || donorTemplate.tier === "Bank-Uber") {
+                                problems = [set.species+" is inheriting from an Uber, which is banned."];
+                                continue;
                         }
                         set.species = donorTemplate.species;
                         if (donorTemplate.species !== template.species && donorTemplate.requiredItem) {
@@ -3145,6 +3152,7 @@ exports.Formats = [
                                 break;
                         }
                 }
+                
                 // Restore the intended species, name and item.
                 set.donorSpecies = set.species;
                 set.species = template.species;
