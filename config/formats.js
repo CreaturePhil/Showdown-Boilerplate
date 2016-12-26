@@ -2965,68 +2965,23 @@ exports.Formats = [
 		}
 	},
 	{
-        name: "Inheritance",
+        name: "[Gen7] Inheritance",
         desc: [
                 "Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
                 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3529252/\">Inheritance</a>",
         ],
         mod: 'gen7',
-        ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+        ruleset: ['[Gen 7] OU'],
         banlist: ['Unreleased', 'Illegal', 'Assist', 'Chatter'],
         customBans: {
                 receiver: {
-                        arceus: 1,
-                        archeops: 1,
-                        darkrai: 1,
-                        deoxys: 1,
-                        deoxysattack: 1,
-                        deoxysspeed: 1,
-                        dialga: 1,
-                        giratina: 1,
-                        giratinaorigin: 1,
-                        groudon: 1,
-                        hooh: 1,
-                        hoopaunbound: 1,
-                        keldeo: 1,
-                        kyogre: 1,
-                        kyuremblack: 1,
-                        kyuremwhite: 1,
-                        lugia: 1,
-                        mewtwo: 1,
-                        palkia: 1,
-                        rayquaza: 1,
                         regigigas: 1,
-                        reshiram: 1,
-                        shayminsky: 1,
-                        shedinja: 1,
                         slaking: 1,
-                        xerneas: 1,
-                        yveltal: 1,
-                        zekrom: 1
                 },
                 donor: {
-                        masquerain: 1,
-                        sableye: 1,
+                        araquanid: 1,
                         smeargle: 1
                 },
-                inheritedAbilities: {
-                        arenatrap: 1,
-                        galewings: 1,
-                        hugepower: 1,
-                        imposter: 1,
-                        parentalbond: 1,
-                        purepower: 1,
-                        shadowtag: 1,
-                        wonderguard: 1
-                },
-                items: {
-                        blazikenite: 1,
-                        gengarite: 1,
-                        kangaskhanite: 1,
-                        mawilite: 1,
-                        salamencite: 1,
-                        souldew: 1
-                }
         },
         noChangeForme: true,
         noChangeAbility: true,
@@ -3162,7 +3117,7 @@ exports.Formats = [
                         return ["" + (set.name || set.species) + " set is illegal."];
                 }
                 if (!validSources.length) {
-                        problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.tools.getTemplate(pokemonWithAbility[0]).name);
+                        problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.tools.getTemplate(pokemonWithAbility[0]).name+'.');
                         return problems;
                 }
         },
