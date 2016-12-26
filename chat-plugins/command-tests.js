@@ -30,7 +30,7 @@ exports.commands = {
 		this.parse('/moneyladder');
 		this.parse(`/givemoney ${user.name}, 5`);
 		this.parse('/dicegame 5');
-		this.parse('/endgame');
+		this.parse('/enddice');
 		this.parse(`/takemoney ${user.name}, 5`);
 		this.parse('/bucks');
 	},
