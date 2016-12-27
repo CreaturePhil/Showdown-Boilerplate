@@ -407,7 +407,6 @@ exports.BattlePokedex = {
 	riolu: {
 		num: 447,
 		species: "Riolu",
-		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Fighting"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 40, atk: 70, def: 40, spa: 35, spd: 40, spe: 60},
@@ -422,7 +421,6 @@ exports.BattlePokedex = {
 	lucario: {
 		num: 448,
 		species: "Lucario",
-		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Fighting", "Steel"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 70, atk: 110, def: 70, spa: 115, spd: 70, spe: 90},
@@ -438,7 +436,6 @@ exports.BattlePokedex = {
 	rioluistor: {
 		num: 447,
 		species: "Riolu-Istor",
-		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Fighting", "Fairy"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 40, atk: 70, def: 40, spa: 35, spd: 40, spe: 60},
@@ -453,7 +450,6 @@ exports.BattlePokedex = {
 	lucarioistor: {
 		num: 448,
 		species: "Lucario-Istor",
-		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Fighting", "Fairy"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 80, atk: 80, def: 70, spa: 125, spd: 80, spe: 90},
