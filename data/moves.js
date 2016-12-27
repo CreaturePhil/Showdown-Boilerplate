@@ -227,7 +227,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "adjacentAllyOrSelf",
 		type: "Normal",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Tough",
 	},
 	"aerialace": {
@@ -2000,6 +2000,7 @@ exports.BattleMovedex = {
 		self: {
 			onHit: function (pokemon) {
 				pokemon.setType(pokemon.getTypes(true).map(type => type === "Fire" ? "???" : type));
+				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Burn Up');
 			},
 		},
 		secondary: false,
@@ -3051,12 +3052,12 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		status: 'slp',
-		onTry: function (pokemon) {
-			if (pokemon.template.species === 'Darkrai') {
+		onTry: function (pokemon, target, move) {
+			if (pokemon.template.species === 'Darkrai' || move.hasBounced) {
 				return;
 			}
+			this.add('-fail', pokemon, 'move: Dark Void');
 			this.add('-hint', "Only a Pokemon whose form is Darkrai can use this move.");
-			this.add('-fail', pokemon, 'move: Dark Void'); // TODO: client-side
 			return null;
 		},
 		secondary: false,
@@ -3399,7 +3400,7 @@ exports.BattleMovedex = {
 						}
 					}
 				}
-				this.debug('Move doesn\'t exist ???');
+				// this can happen if Disable works on a Z-move
 				return false;
 			},
 			onResidualOrder: 14,
@@ -5643,8 +5644,12 @@ exports.BattleMovedex = {
 		flags: {snatch: 1},
 		volatileStatus: 'focusenergy',
 		effect: {
-			onStart: function (pokemon) {
-				this.add('-start', pokemon, 'move: Focus Energy');
+			onStart: function (target, source, effect) {
+				if (effect && effect.id === 'zpower') {
+					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
+				} else {
+					this.add('-start', target, 'move: Focus Energy');
+				}
 			},
 			onModifyCritRatio: function (critRatio) {
 				return critRatio + 2;
@@ -5787,7 +5792,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Clever",
 	},
 	"forestscurse": {
@@ -7314,7 +7319,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Psychic",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Clever",
 	},
 	"heatcrash": {
@@ -7396,7 +7401,7 @@ exports.BattleMovedex = {
 			return 40;
 		},
 		category: "Physical",
-		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less.",
+		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		shortDesc: "More power the heavier the user than the target.",
 		id: "heavyslam",
 		isViable: true,
@@ -8591,13 +8596,13 @@ exports.BattleMovedex = {
 			if (!target.lastMove) return false;
 			let lastMove = this.getMove(target.lastMove);
 			let noInstruct = {
-				instruct:1, outrage:1, petaldance:1, thrash:1, // TODO: fill this up
+				beakblast:1, copycat:1, focuspunch:1, instruct:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, outrage:1, petaldance:1, shelltrap:1, thrash:1, // TODO: fill this up
 			};
-			if (noInstruct[lastMove.id] || lastMove.isZ || lastMove.flags['charge'] || lastMove.flags['recharge']) {
+			if (noInstruct[lastMove.id] || lastMove.isZ || lastMove.flags['charge'] || lastMove.flags['recharge'] || target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap']) {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
-			this.useMove(target.lastMove, target);
+			this.runMove(target.lastMove, target, target.lastMoveTargetLoc);
 		},
 		secondary: false,
 		target: "normal",
@@ -10272,7 +10277,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
+		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Heavy Slam, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
 		shortDesc: "Raises the user's evasiveness by 2.",
 		id: "minimize",
 		name: "Minimize",
@@ -10283,12 +10288,12 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onSourceModifyDamage: function (damage, source, target, move) {
-				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1}) {
+				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1, 'heavyslam':1}) {
 					return this.chainModify(2);
 				}
 			},
 			onAccuracy: function (accuracy, target, source, move) {
-				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1}) {
+				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1, 'heavyslam':1}) {
 					return true;
 				}
 				return accuracy;
@@ -12616,7 +12621,7 @@ exports.BattleMovedex = {
 							}
 						}
 					}
-					this.runMove('pursuit', sources[i], pokemon);
+					this.runMove('pursuit', sources[i], this.getTargetLoc(pokemon, sources[i]));
 				}
 			},
 		},
@@ -13216,7 +13221,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove: function (move, pokemon) {
-			move.type = pokemon.types[0]; // TODO: test with users other than Oricorio
+			let type = pokemon.types[0];
+			if (type === "Bird") type = "???";
+			move.type = type;
 		},
 		secondary: false,
 		target: "normal",
@@ -13339,7 +13346,7 @@ exports.BattleMovedex = {
 		name: "Rock Blast",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {bullet: 1, protect: 1, mirror: 1},
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -14969,10 +14976,10 @@ exports.BattleMovedex = {
 			let moves = [];
 			for (let i = 0; i < pokemon.moveset.length; i++) {
 				let move = pokemon.moveset[i].id;
-				let NoSleepTalk = {
-					assist:1, belch:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, sketch:1, sleeptalk:1, uproar:1,
+				let noSleepTalk = {
+					assist:1, beakblast:1, belch:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, shelltrap:1, sketch:1, sleeptalk:1, uproar:1,
 				};
-				if (move && !(NoSleepTalk[move] || this.getMove(move).flags['charge'])) {
+				if (move && !(noSleepTalk[move] || this.getMove(move).flags['charge'] || (this.getMove(move).isZ && this.getMove(move).basePower !== 1))) {
 					moves.push(move);
 				}
 			}
@@ -14986,7 +14993,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Cute",
 	},
 	"sludge": {
@@ -16862,7 +16869,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "allySide",
 		type: "Flying",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Cool",
 	},
 	"takedown": {
@@ -17652,8 +17659,6 @@ exports.BattleMovedex = {
 				const decision = this.willMove(target);
 				if (decision && decision.move.id === 'curse') {
 					decision.targetLoc = -1;
-					decision.targetSide = target.side;
-					decision.targetPosition = 0;
 				}
 			}
 		},
@@ -18454,8 +18459,8 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
-		shortDesc: "Protects allies from multi-target hits this turn.",
+		desc: "The user and its party members are protected from moves made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails or if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
+		shortDesc: "Protects allies from multi-target moves this turn.",
 		id: "wideguard",
 		name: "Wide Guard",
 		pp: 10,
@@ -18475,8 +18480,8 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 4,
 			onTryHit: function (target, source, effect) {
-				// Wide Guard blocks damaging spread moves
-				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))) {
+				// Wide Guard blocks all spread moves
+				if (effect && effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes') {
 					return;
 				}
 				this.add('-activate', target, 'move: Wide Guard');

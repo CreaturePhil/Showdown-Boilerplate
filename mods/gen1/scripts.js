@@ -70,7 +70,8 @@ exports.BattleScripts = {
 	// It deals with the beforeMove and AfterMoveSelf events.
 	// This leads with partial trapping moves shennanigans after the move has been used.
 	// It also deals with how PP reduction works on gen 1.
-	runMove: function (move, pokemon, target, sourceEffect) {
+	runMove: function (move, pokemon, targetLoc, sourceEffect) {
+		let target = this.getTarget(pokemon, move, targetLoc);
 		move = this.getMove(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
 		if (target.subFainted) delete target.subFainted;
@@ -1018,7 +1019,10 @@ exports.BattleScripts = {
 			let moves;
 			let pool = [];
 			for (let move in template.learnset) {
-				if (this.getMove(move).gen === 1) pool.push(move);
+				if (this.getMove(move).gen !== 1) continue;
+				if (template.learnset[move].some(learned => learned[0] === '1')) {
+					pool.push(move);
+				}
 			}
 			if (pool.length <= 4) {
 				moves = pool;

@@ -119,8 +119,8 @@ class Giveaway {
 				}
 				if (value.otherFormes) {
 					for (let i = 0; i < value.otherFormes.length; i++) {
-						// Hardcore alola formes.
-						if (value.otherFormes[i].endsWith('alola')) {
+						// Hardcore Alolan formes.
+						if (value.otherFormes[i].endsWith('alolan')) {
 							if (/alolan?/.test(text)) {
 								spriteid += '-alolan';
 								break;
@@ -135,7 +135,7 @@ class Giveaway {
 				if (mons.size > 1) {
 					let top = Math.floor(value.num / 12) * 30;
 					let left = (value.num % 12) * 40;
-					output += `<div style="display:inline-block;width:40px;height:30px;background:transparent url('/sprites/xyicons-sheet.png?a1') no-repeat scroll -${left}px -${top}px'"></div>`;
+					output += `<div style="display:inline-block;width:40px;height:30px;background:transparent url('/sprites/smicons-sheet.png?a1') no-repeat scroll -${left}px -${top}px'"></div>`;
 				} else {
 					let shiny = (text.includes("shiny") && !text.includes("shinystone") ? '-shiny' : '');
 					output += `<img src="/sprites/xyani${shiny}/${spriteid}.gif">`;

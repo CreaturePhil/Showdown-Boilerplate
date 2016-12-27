@@ -345,6 +345,12 @@ class Validator {
 						}
 						problems.push(problemString);
 					}
+					if (move.id === 'hiddenpower' && move.type === 'Fighting') {
+						if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
+							// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
+							problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
+						}
+					}
 				}
 			}
 
@@ -523,6 +529,9 @@ class Validator {
 			};
 			if (!(template.baseSpecies in alolaDex) && !(template.species in alolaDex) && !islandScanList.includes(template.baseSpecies)) {
 				problems.push(template.baseSpecies + " is unreleased in gen 7. (It's not possible to transfer Pokemon to Sun/Moon yet)");
+			}
+			if (isHidden && islandScanList.includes(template.baseSpecies)) {
+				problems.push(template.baseSpecies + "'s hidden ability is unreleased in gen 7. (It's not possible to transfer Pokemon to Sun/Moon yet)");
 			}
 			if (template.species === 'Greninja' && ability.id !== 'battlebond') {
 				problems.push("Regular Greninja is unreleased in gen 7; only Battle Bond Greninja is available. (It's not possible to transfer Pokemon to Sun/Moon yet)");
@@ -703,7 +712,7 @@ class Validator {
 			alreadyChecked[template.speciesid] = true;
 			if (tools.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(moveid in {'acupressure':1, 'chatter':1, 'geomancy':1, 'shellsmash':1, 'shiftgear':1, 'thousandarrows':1}) && !move.isZ) {
+			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(moveid in {'acupressure':1, 'bellydrum':1, 'chatter':1, 'geomancy':1, 'shellsmash':1, 'shiftgear':1, 'thousandarrows':1}) && !move.isZ) {
 				let types = template.types;
 				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
 				if (template.baseSpecies === 'Shaymin') types = ['Grass', 'Flying'];

@@ -240,8 +240,6 @@ class Trivia extends Rooms.RoomGame {
 	}
 
 	destroy() {
-		clearTimeout(this.phaseTimeout);
-		this.phaseTimeout = null;
 		this.kickedUsers.clear();
 
 		let room = this.room;
@@ -326,6 +324,8 @@ class Trivia extends Rooms.RoomGame {
 	// a timeout to tally the answers received.
 	askQuestion() {
 		if (!this.questions.length) {
+			clearTimeout(this.phaseTimeout);
+			this.phaseTimeout = null;
 			this.broadcast(
 				'No questions are left!',
 				'The game has reached a stalemate. Nobody gained any points on the leaderboard.'
@@ -375,6 +375,9 @@ class Trivia extends Rooms.RoomGame {
 	// FIXME: this class and trivia database logic don't belong in bed with
 	// each other! Abstract all that away from this method as soon as possible.
 	win(winner, buffer) {
+		clearTimeout(this.phaseTimeout);
+		this.phaseTimeout = null;
+
 		buffer += Chat.escapeHTML(winner.name) + ' won the game with a final score of <strong>' + winner.points + '</strong>, ' +
 			'and their leaderboard score has increased by <strong>' + this.prize + '</strong> points!';
 		this.broadcast('The answering period has ended!', buffer);
@@ -392,7 +395,7 @@ class Trivia extends Rooms.RoomGame {
 				leaderboard[i] = [0, player.points, player.correctAnswers];
 			}
 
-			if (triviaData.ugm) {
+			if (triviaData.ugm && this.category === 'Ultimate Gaming Month') {
 				let ugmPoints = player.points / 5 | 0;
 				if (winner && winner.userid === i) ugmPoints *= 2;
 				triviaData.ugm[i] += ugmPoints;
@@ -453,6 +456,8 @@ class Trivia extends Rooms.RoomGame {
 
 	// Forcibly ends a trivia game.
 	end(user) {
+		clearTimeout(this.phaseTimeout);
+		this.phaseTimeout = null;
 		this.broadcast('The trivia game was forcibly ended by ' + Chat.escapeHTML(user.name) + '.');
 		this.destroy();
 	}
