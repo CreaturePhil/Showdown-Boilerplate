@@ -271,7 +271,7 @@ exports.BattlePokedex = {
 		color: "Brown",
 		eggGroups: ["Undiscovered"],
 	},
-	remordialspecial: {
+	remordialspc: {
 		num: 11005,
 		species: "Remordial-Special",
 		baseSpecies: "Remordial",
