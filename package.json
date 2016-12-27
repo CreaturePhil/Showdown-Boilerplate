@@ -5,16 +5,16 @@
   "version": "0.11.0",
   "dependencies": {
     "dem-feels": "^1.6.0",
-    "moment": "2.11.2",
-    "origindb": "2.5.2",
-    "request": "2.74.0",
+    "moment": "2.17.1",
+    "origindb": "2.6.1",
+    "request": "2.79.0",
     "sockjs": "0.3.18"
   },
   "optionalDependencies": {
-    "cloud-env": "0.1.1",
-    "http-proxy": "0.10.0",
-    "nodemailer": "1.4.0",
-    "node-static": "0.7.7"
+    "cloud-env": "0.2.2",
+    "http-proxy": "0.16.2",
+    "nodemailer": "2.7.0",
+    "node-static": "0.7.9"
   },
   "nonDefaultDependencies": {
     "ofe": "0.1.2"
