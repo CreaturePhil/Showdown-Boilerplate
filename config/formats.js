@@ -3061,10 +3061,11 @@ exports.Formats = [
                         if (!item.exists) return ["" + set.item + " is an invalid item."];
                         if (item.isUnreleased) return ["" + (set.name || set.species) + "'s item " + item.name + " is unreleased."];
                 }
+                        let donorTemplate = {};
 
                 let validSources = set.abilitySources = []; // evolutionary families
                 for (let i = 0; i < pokemonWithAbility.length; i++) {
-                        let donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
+                        donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
                         let evoFamily = this.format.getEvoFamily(donorTemplate);
 
                         if (validSources.indexOf(evoFamily) >= 0) {
@@ -3104,10 +3105,10 @@ exports.Formats = [
                 }
 
                 // Restore the intended species, name and item.
-                set.donorSpecies = ""+set.species;
+                set.donorSpecies = ""+donorTemplate.species;
+                set.inhMon = ""+donorTemplate.species;
                 set.species = template.species;
                 set.name = (name === set.species ? "" : name);
-                set.name = set.name+"&"+this.tools.getTemplate(set.donorSpecies).num;
                 set.item = item.name;
                 if (!validSources.length && pokemonWithAbility.length > 1) {
                         return ["" + (set.name || set.species) + " set is illegal."];
@@ -3117,23 +3118,8 @@ exports.Formats = [
                         return problems;
                 }
         },
-        onBegin: function () {
-        	for(let i=0;i<this.sides.length;i++) {
-        		for(let j=0;j<this.sides[i].pokemon.length;j++) {
-		        	let pokemon = this.sides[i].pokemon[j];
-		        	for(let k in this.data.Pokedex) {
-		        		if(this.data.Pokedex[k].num === pokemon.name.split("&")[1]) {
-		        			inhMon = this.data.Pokedex[k].species;
-		        			pokemon.name = pokemon.name.split("&")[0] || pokemon.species;
-		        			break;
-		        		}
-		        	}
-		        	this.sides[i].pokemon[j] = pokemon;
-        		}
-        	}
-        },
         onSwitchIn: function(pokemon) {
-			this.add('-start', pokemon, (pokemon.inhMon || pokemon.set.donorSpecies) || pokemon.species, '[silent]');
+			this.add('-start', pokemon, (pokemon.set.inhMon || pokemon.set.donorSpecies) || pokemon.species, '[silent]');
         }
 	},
 	{
