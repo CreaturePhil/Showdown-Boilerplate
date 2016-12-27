@@ -4533,13 +4533,18 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        pokemon.types = pokemon.fusetype;
 			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			let sec = (statusability[pokemon.abilitwo])? ("other"+pokemon.abilitwo) : (pokemon.abilitwo);
-			pokemon.addVolatile(sec);//Second Ability! YAYAYAY
+			if(pokemon.abilitwo !== pokemon.ability) pokemon.addVolatile(sec);//Second Ability! YAYAYAY
 			if (pokemon.fusion && !pokemon.hasAbility("illusion")) {
 				this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
 			}
 		},
 		onAfterMega: function(pokemon)
 		{
+				if(pokemon.abilitwo !== pokemon.ability) {
+					let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
+					let sec = (statusability[pokemon.abilitwo])? ("other"+pokemon.abilitwo) : (pokemon.abilitwo);
+					pokemon.removeVolatile(sec);
+				}
 		        pokemon.types = pokemon.fusetype;
 		        this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
