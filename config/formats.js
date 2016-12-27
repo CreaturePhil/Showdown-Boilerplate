@@ -3061,11 +3061,10 @@ exports.Formats = [
                         if (!item.exists) return ["" + set.item + " is an invalid item."];
                         if (item.isUnreleased) return ["" + (set.name || set.species) + "'s item " + item.name + " is unreleased."];
                 }
-                        let donorTemplate = {};
 
                 let validSources = set.abilitySources = []; // evolutionary families
                 for (let i = 0; i < pokemonWithAbility.length; i++) {
-                        donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
+                        let donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
                         let evoFamily = this.format.getEvoFamily(donorTemplate);
 
                         if (validSources.indexOf(evoFamily) >= 0) {
@@ -3105,9 +3104,9 @@ exports.Formats = [
                 }
 
                 // Restore the intended species, name and item.
-                set.donorSpecies = ""+donorTemplate.species;
+                set.donorSpecies = set.species;
                 set.species = template.species;
-                set.name = (name === set.species ? "" : name)+"("+donorTemplate.species+")";
+                set.name = (name === set.species ? "" : name)+"("+set.donorSpecies+")";
                 set.item = item.name;
                 if (!validSources.length && pokemonWithAbility.length > 1) {
                         return ["" + (set.name || set.species) + " set is illegal."];
@@ -3118,7 +3117,7 @@ exports.Formats = [
                 }
         },
         onSwitchIn: function(pokemon) {
-			this.add('-start', pokemon, pokemon.inhMon, '[silent]');
+			this.add('-start', pokemon, pokemon.inhMon || pokemon.species, '[silent]');
         }
 	},
 	{
