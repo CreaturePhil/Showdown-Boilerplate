@@ -66,7 +66,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	magnalith: {
-		randomBattleMoves: ["thunderbolt", "wildcharge", "accelerock", "voltswitch", "powergem", "earthpower", "surf", "energyball", "overheat", "extremespeed", "stoneedge"],
+		randomBattleMoves: ["thunderbolt", "wildcharge", "accelerock", "voltswitch", "powergem", "earthpower", "surf", "energyball", "focusblast", "extremespeed", "stoneedge"],
 		tier: "New",
 	},
 	uisge: {
