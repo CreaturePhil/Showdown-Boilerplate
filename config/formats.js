@@ -4564,6 +4564,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			let canHaveAbility = false;
 			if(fusionTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
 			if(toId(fusionTemplate.tier).includes("uber")) problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+fusionTemplate.species+")");
+			if(toId(fusionTemplate.tier) === "cap") problems.push("You cannot fuse with an fake Pokemon. ("+template.species+" has nickname "+fusionTemplate.species+")");
 			if(banlist[toId(fusionTemplate.species)]) problems.push("Fusing with " + fusionTemplate.species + " is banned. ("+template.species+" has nickname "+ fusionTemplate.species + ")");
 			for (let a in template.abilities) {
 				if ((template.abilities[a] === set.ability) && !banlist[toId(template.abilities[a])]) {
