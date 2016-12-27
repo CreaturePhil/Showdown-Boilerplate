@@ -3117,16 +3117,23 @@ exports.Formats = [
                         return problems;
                 }
         },
-        onSwitchIn: function(pokemon) {
-        	let inhMon = "";
-        	for(let i in this.data.Pokedex) {
-        		if(this.data.Pokedex[i].num === pokemon.name.split("&")[1]) {
-        			inhMon = this.data.Pokedex[i].species;
-        			pokemon.name = pokemon.name.split("&")[0] || pokemon.species;
-        			break;
+        onBegin: function () {
+        	for(let i=0;i<this.sides.length;i++) {
+        		for(let j=0;j<this.sides[i].pokemon.length;j++) {
+		        	let pokemon = this.sides[i].pokemon[j];
+		        	for(let k in this.data.Pokedex) {
+		        		if(this.data.Pokedex[k].num === pokemon.name.split("&")[1]) {
+		        			inhMon = this.data.Pokedex[k].species;
+		        			pokemon.name = pokemon.name.split("&")[0] || pokemon.species;
+		        			break;
+		        		}
+		        	}
+		        	this.sides[i].pokemon[j] = pokemon;
         		}
         	}
-			this.add('-start', pokemon, inhMon || pokemon.species, '[silent]');
+        },
+        onSwitchIn: function(pokemon) {
+			this.add('-start', pokemon, (pokemon.inhMon || pokemon.set.donorSpecies) || pokemon.species, '[silent]');
         }
 	},
 	{
