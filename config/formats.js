@@ -3107,7 +3107,7 @@ exports.Formats = [
                 // Restore the intended species, name and item.
                 set.donorSpecies = ""+donorTemplate.species;
                 set.species = template.species;
-                set.name = (name === set.species ? "" : name);
+                set.name = (name === set.species ? "" : name)+"("+donorTemplate.species+")";
                 set.item = item.name;
                 if (!validSources.length && pokemonWithAbility.length > 1) {
                         return ["" + (set.name || set.species) + " set is illegal."];
@@ -3118,7 +3118,7 @@ exports.Formats = [
                 }
         },
         onSwitchIn: function(pokemon) {
-			this.add('-start', pokemon, pokemon.inhMon || pokemon.species, '[silent]');
+			this.add('-start', pokemon, pokemon.inhMon, '[silent]');
         }
 	},
 	{
