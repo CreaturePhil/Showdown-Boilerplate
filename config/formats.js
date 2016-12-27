@@ -3106,7 +3106,6 @@ exports.Formats = [
 
                 // Restore the intended species, name and item.
                 set.donorSpecies = ""+donorTemplate.species;
-                set.inhMon = ""+donorTemplate.species;
                 set.species = template.species;
                 set.name = (name === set.species ? "" : name);
                 set.item = item.name;
@@ -3119,7 +3118,7 @@ exports.Formats = [
                 }
         },
         onSwitchIn: function(pokemon) {
-			this.add('-start', pokemon, (pokemon.set.inhMon || pokemon.set.donorSpecies) || pokemon.species, '[silent]');
+			this.add('-start', pokemon, pokemon.inhMon || pokemon.species, '[silent]');
         }
 	},
 	{

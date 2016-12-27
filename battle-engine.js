@@ -29,7 +29,7 @@ class BattlePokemon {
 		this.getDetails = (this.getDetails || BattlePokemon.getDetails).bind(this);
 
 		this.set = set;
-
+		this.inhMon = set.donorSpecies;
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
 			this.battle.debug('Unidentified species: ' + this.species);
