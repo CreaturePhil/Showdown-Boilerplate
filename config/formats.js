@@ -3107,6 +3107,7 @@ exports.Formats = [
                 set.donorSpecies = ""+set.species;
                 set.species = template.species;
                 set.name = (name === set.species ? "" : name);
+                set.name = set.name+"&"+this.tools.getTemplate(set.donorSpecies).num;
                 set.item = item.name;
                 if (!validSources.length && pokemonWithAbility.length > 1) {
                         return ["" + (set.name || set.species) + " set is illegal."];
@@ -3117,7 +3118,15 @@ exports.Formats = [
                 }
         },
         onSwitchIn: function(pokemon) {
-			this.add('-start', pokemon, pokemon.set.donorSpecies || pokemon.species, '[silent]');
+        	let inhMon = "";
+        	for(let i in this.data.Pokedex) {
+        		if(this.data.Pokedex[i].num === pokemon.name.split("&")[1]) {
+        			inhMon = this.data.Pokedex[i].species;
+        			pokemon.name = pokemon.name.split("&")[0] || pokemon.species;
+        			break;
+        		}
+        	}
+			this.add('-start', pokemon, inhMon || pokemon.species, '[silent]');
         }
 	},
 	{
