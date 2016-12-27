@@ -3116,7 +3116,7 @@ exports.Formats = [
                 }
         },
         onSwitchIn: function(pokemon) {
-			this.add('-start', pokemon, pokemon.inhMon || pokemon.species, '[silent]');
+			this.add('-start', pokemon, pokemon.donorSpecies || pokemon.species, '[silent]');
         }
 	},
 	{
