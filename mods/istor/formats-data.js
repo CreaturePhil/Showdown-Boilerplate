@@ -65,6 +65,10 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["burrow", "psyshock", "earthpower", "toxic"],
 		tier: "New",
 	},
+	magnalith: {
+		randomBattleMoves: ["thunderbolt", "wildcharge", "accelerock", "voltswitch", "powergem", "earthpower", "surf", "energyball", "overheat", "extremespeed", "stoneedge"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
