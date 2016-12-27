@@ -5,7 +5,8 @@ exports.BattlePokedex = {
 	      	num: 10001,
 	      	species: "Yddraig",
 	      	types: ["Dragon"],
-		      baseStats: {hp: 60, atk: 60, def: 55, spa: 75, spd: 55, spe: 85},
+		genderRatio: {M: 0.5, F: 0.5},
+		baseStats: {hp: 60, atk: 60, def: 55, spa: 75, spd: 55, spe: 85},
 	      	abilities: {0: "Infernal Scales", H: "Shed Skin"},
 	      	heightm: 1.1,
 	      	weightkg: 23,
@@ -15,8 +16,9 @@ exports.BattlePokedex = {
 	detuoy: {
 	      	num: 10002,
 	      	species: "Detuoy",
+		gender: "N",
 	      	types: ["Steel", "Flying"],
-		      baseStats: {hp: 60, atk: 120, def: 150, spa: 30, spd: 120, spe: 30},
+		baseStats: {hp: 60, atk: 120, def: 150, spa: 30, spd: 120, spe: 30},
 	      	abilities: {0: "Aerilate"},
 	      	heightm: 1.8,
 	      	weightkg: 666,
@@ -26,6 +28,7 @@ exports.BattlePokedex = {
 	mycelore: {
 		num: 10003,
 		species: "Mycelore",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Poison", "Fairy"],
 		baseStats: {hp: 45, atk: 31, def: 21, spa: 86, spd: 106, spe: 31},
 		abilities: {0: "Serene Grace", 1: "Effect Spore", H: "Wonder Skin"},
@@ -38,6 +41,7 @@ exports.BattlePokedex = {
 	muceptio: {
 		num: 10004,
 		species: "Muceptio",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Poison", "Fairy"],
 		baseStats: {hp: 60, atk: 46, def: 36, spa: 101, spd: 121, spe: 61},
 		abilities: {0: "Serene Grace", 1: "Effect Spore", H: "Wonder Skin"},
@@ -52,6 +56,7 @@ exports.BattlePokedex = {
 	malifery: {
 		num: 10005,
 		species: "Malifery",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Poison", "Fairy"],
 		baseStats: {hp: 75, atk: 61, def: 51, spa: 116, spd: 136, spe: 91},
 		abilities: {0: "Serene Grace", 1: "Effect Spore", H: "Wonder Skin"},
@@ -65,6 +70,7 @@ exports.BattlePokedex = {
 	canos: {
 		num: 10006,
 		species: "Canos",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Normal"],
 		baseStats: {hp: 35, atk: 50, def: 30, spa: 35, spd: 40, spe: 40},
 		abilities: {0: "Run Away", 1: "Quick Feet", H: "Pick Up"},
@@ -77,6 +83,7 @@ exports.BattlePokedex = {
 	mortos: {
 		num: 10007,
 		species: "Mortos",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Normal", "Ghost"],
 		baseStats: {hp: 70, atk: 100, def: 60, spa: 70, spd: 80, spe: 80},
 		abilities: {0: "Run Away", 1: "Quick Feet", H: "Pick Up"},
@@ -90,6 +97,7 @@ exports.BattlePokedex = {
 	narwander: {
 		num: 10008,
 		species: "Narwander",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Water", "Steel"],
 		baseStats: {hp: 64, atk: 86, def: 40, spa: 40, spd: 40, spe: 65},
 		abilities: {0: "Thick Fat", 1: "Snow Cloak", H: "Mold Breaker"},
@@ -102,6 +110,7 @@ exports.BattlePokedex = {
 	ortuska: {
 		num: 10009,
 		species: "Ortuska",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Water", "Steel"],
 		baseStats: {hp: 164, atk: 136, def: 60, spa: 50, spd: 60, spe: 85},
 		abilities: {0: "Thick Fat", 1: "Snow Cloak", H: "Mold Breaker"},
@@ -115,6 +124,7 @@ exports.BattlePokedex = {
 	larvary: {
 		num: 10010,
 		species: "Larvary",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Bug"],
 		baseStats: {hp: 60, atk: 15, def: 65, spa: 15, spd: 65, spe: 10},
 		abilities: {0: "Adaptability"},
@@ -127,6 +137,7 @@ exports.BattlePokedex = {
 	burnabee: {
 		num: 10011,
 		species: "Burnabee",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Bug", "Fire"],
 		baseStats: {hp: 60, atk: 70, def: 75, spa: 95, spd: 75, spe: 80},
 		abilities: {0: "Honey Gather"},
@@ -140,6 +151,7 @@ exports.BattlePokedex = {
 	freezabee: {
 		num: 10012,
 		species: "Freezabee",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Bug", "Ice"],
 		baseStats: {hp: 60, atk: 70, def: 75, spa: 95, spd: 75, spe: 80},
 		abilities: {0: "Honey Gather"},
@@ -153,6 +165,7 @@ exports.BattlePokedex = {
 	parabee: {
 		num: 10013,
 		species: "Parabee",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Bug", "Electric"],
 		baseStats: {hp: 60, atk: 70, def: 75, spa: 95, spd: 75, spe: 80},
 		abilities: {0: "Honey Gather"},
@@ -166,6 +179,7 @@ exports.BattlePokedex = {
 	drowzabee: {
 		num: 10014,
 		species: "Drowzabee",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Bug", "Psychic"],
 		baseStats: {hp: 60, atk: 70, def: 75, spa: 95, spd: 75, spe: 80},
 		abilities: {0: "Honey Gather"},
@@ -179,6 +193,7 @@ exports.BattlePokedex = {
 	toxabee: {
 		num: 10015,
 		species: "Toxabee",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Bug", "Poison"],
 		baseStats: {hp: 60, atk: 70, def: 75, spa: 95, spd: 75, spe: 80},
 		abilities: {0: "Honey Gather"},
@@ -192,6 +207,7 @@ exports.BattlePokedex = {
 	molaxy: {
 		num: 10016,
 		species: "Molaxy",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Ground", "Psychic"],
 		baseStats: {hp: 96, atk: 40, def: 86, spa: 95, spd: 116, spe: 24},
 		abilities: {0: "Forewarn", 1: "Telepathy", H: "Arena Trap"},
@@ -200,9 +216,22 @@ exports.BattlePokedex = {
 		color: "Brown",
 		eggGroups: ["Field"],
 	},
+	magnalith: {
+		num: 10017,
+		species: "Magnalith",
+		genderRatio: {M: 0.5, F: 0.5},
+		types: ["Rock"],
+		baseStats: {hp: 58, atk: 87, def: 82, spa: 97, spd: 62, spe: 114},
+		abilities: {0: "Levitate", H: "Surge Surfer"},
+		heightm: 1.5,
+		weightkg: 52.7,
+		color: "Brown",
+		eggGroups: ["Mineral"],
+	},
 	uisge: {
 		num: 11001,
 		species: "Uisge",
+		gender: "N",
 		types: ["Water", "Psychic"],
 		baseStats: {hp: 90, atk: 70, def: 110, spa: 135, spd: 70, spe: 105},
 		abilities: {0: "Magical Emanation"},
@@ -214,6 +243,7 @@ exports.BattlePokedex = {
 	talamh: {
 		num: 11002,
 		species: "Talamh",
+		gender: "N",
 		types: ["Ground", "Psychic"],
 		baseStats: {hp: 90, atk: 105, def: 135, spa: 70, spd: 110, spe: 70},
 		abilities: {0: "Tricky Emanation"},
@@ -225,6 +255,7 @@ exports.BattlePokedex = {
 	adhair: {
 		num: 11003,
 		species: "Adhair",
+		gender: "N",
 		types: ["Flying", "Psychic"],
 		baseStats: {hp: 90, atk: 110, def: 70, spa: 105, spd: 70, spe: 135},
 		abilities: {0: "Wondrous Emanation"},
@@ -237,6 +268,7 @@ exports.BattlePokedex = {
 		num: 11004,
 		species: "Infineer",
 		baseForme: "Physical",
+		gender: "N",
 		types: ["Electric", "Psychic"],
 		baseStats: {hp: 96, atk: 142, def: 91, spa: 142, spd: 91, spe: 118},
 		abilities: {0: "Innovate"},
@@ -251,6 +283,7 @@ exports.BattlePokedex = {
 		baseSpecies: "Infineer",
 		forme: "Special",
 		formeLetter: "S",
+		gender: "N",
 		types: ["Electric", "Psychic"],
 		baseStats: {hp: 96, atk: 142, def: 91, spa: 142, spd: 91, spe: 118},
 		abilities: {0: "Innovate"},
@@ -263,6 +296,7 @@ exports.BattlePokedex = {
 		num: 11005,
 		species: "Remordial",
 		baseForme: "Physical",
+		gender: "N",
 		types: ["Rock", "Grass"],
 		baseStats: {hp: 96, atk: 91, def: 142, spa: 91, spd: 142, spe: 118},
 		abilities: {0: "Conservate"},
@@ -277,6 +311,7 @@ exports.BattlePokedex = {
 		baseSpecies: "Remordial",
 		forme: "Special",
 		formeLetter: "S",
+		gender: "N",
 		types: ["Rock", "Grass"],
 		baseStats: {hp: 96, atk: 91, def: 142, spa: 91, spd: 142, spe: 118},
 		abilities: {0: "Conservate"},
@@ -291,6 +326,7 @@ exports.BattlePokedex = {
 	doduo: {
 		num: 84,
 		species: "Doduo",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Normal", "Flying"],
 		baseStats: {hp: 35, atk: 85, def: 45, spa: 35, spd: 35, spe: 75},
 		abilities: {0: "Run Away", 1: "Early Bird", H: "Tangled Feet"},
@@ -304,6 +340,7 @@ exports.BattlePokedex = {
 	dodrio: {
 		num: 85,
 		species: "Dodrio",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Normal", "Flying"],
 		baseStats: {hp: 60, atk: 110, def: 70, spa: 60, spd: 60, spe: 110},
 		abilities: {0: "Run Away", 1: "Early Bird", H: "Tangled Feet"},
@@ -318,6 +355,7 @@ exports.BattlePokedex = {
 	doduoistor: {
 		num: 84,
 		species: "Doduo-Istor",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Steel", "Flying"],
 		baseStats: {hp: 35, atk: 85, def: 45, spa: 35, spd: 35, spe: 75},
 		abilities: {0: "Pressure", 1: "Early Bird", H: "Tangled Feet"},
@@ -330,6 +368,7 @@ exports.BattlePokedex = {
 	dodrioistor: {
 		num: 85,
 		species: "Dodrio-Istor",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Steel", "Flying"],
 		baseStats: {hp: 60, atk: 110, def: 70, spa: 60, spd: 60, spe: 110},
 		abilities: {0: "Pressure", 1: "Early Bird", H: "Tangled Feet"},
@@ -343,6 +382,7 @@ exports.BattlePokedex = {
 	lapras: {
 		num: 131,
 		species: "Lapras",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Water", "Ice"],
 		baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
 		abilities: {0: "Water Absorb", 1: "Shell Armor", H: "Hydration"},
@@ -355,6 +395,7 @@ exports.BattlePokedex = {
 	laprasistor: {
 		num: 131,
 		species: "Lapras-Istor",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Ghost", "Ice"],
 		baseStats: {hp: 130, atk: 65, def: 90, spa: 105, spd: 95, spe: 50},
 		abilities: {0: "Snow Warning", H: "Water Absorb"},
@@ -366,6 +407,7 @@ exports.BattlePokedex = {
 	riolu: {
 		num: 447,
 		species: "Riolu",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Fighting"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 40, atk: 70, def: 40, spa: 35, spd: 40, spe: 60},
@@ -380,6 +422,7 @@ exports.BattlePokedex = {
 	lucario: {
 		num: 448,
 		species: "Lucario",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Fighting", "Steel"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 70, atk: 110, def: 70, spa: 115, spd: 70, spe: 90},
@@ -395,6 +438,7 @@ exports.BattlePokedex = {
 	rioluistor: {
 		num: 447,
 		species: "Riolu-Istor",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Fighting", "Fairy"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 40, atk: 70, def: 40, spa: 35, spd: 40, spe: 60},
@@ -409,6 +453,7 @@ exports.BattlePokedex = {
 	lucarioistor: {
 		num: 448,
 		species: "Lucario-Istor",
+		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Fighting", "Fairy"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 80, atk: 80, def: 70, spa: 125, spd: 80, spe: 90},
