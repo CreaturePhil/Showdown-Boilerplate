@@ -219,7 +219,7 @@ exports.BattlePokedex = {
 	magnalith: {
 		num: 10017,
 		species: "Magnalith",
-		genderRatio: {M: 0.5, F: 0.5},
+		gender: "M",
 		types: ["Rock"],
 		baseStats: {hp: 58, atk: 87, def: 82, spa: 97, spd: 62, spe: 114},
 		abilities: {0: "Levitate", H: "Surge Surfer"},
