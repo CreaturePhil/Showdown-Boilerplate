@@ -3116,8 +3116,63 @@ exports.Formats = [
                         return problems;
                 }
         },
-        onSwitchIn: function(pokemon) {
-				this.add('-start', pokemon, pokemon.set.donorSpecies || pokemon.species, '[silent]');
+        onSwitchIn: function(pokemon) {//Will have to REDO this :(
+        	let set = Object.assign({}, pokemon.set);
+        	let donorSpecies = "";
+        	let problems = [];
+                let species = toId(set.species);
+                let template = this.getTemplate(species);
+
+                let name = set.name;
+
+                let abilityId = toId(set.ability);
+                let pokemonWithAbility = this.data.Formats[this.format].abilityMap[abilityId];
+                let isBaseAbility = Object.values(template.abilities).map(toId).indexOf(abilityId) >= 0;
+
+                let validSources = set.abilitySources = []; // evolutionary families
+                for (let i = 0; i < pokemonWithAbility.length; i++) {
+                        let donorTemplate = this.getTemplate(pokemonWithAbility[i]);
+                        let evoFamily = this.data.Formats[this.format].getEvoFamily(donorTemplate);
+
+                        if (validSources.indexOf(evoFamily) >= 0) {
+                                // The existence of a legal set has already been established.
+                                // We only keep iterating to find all legal donor families (Donor Clause).
+                                // Skip this redundant iteration.
+                                continue;
+                        }
+
+                        if (set.name === set.species) delete set.name;
+                        else if (toId(donorTemplate.species) !== toId(set.species) && donorTemplate.isMega) {
+                                problems = [template.species+" is inheriting from a Mega Pokemon, which is banned."];
+                                continue;
+                        } else if (donorTemplate.tier === "Uber" || donorTemplate.tier === "Bank-Uber") {
+                                problems = [template.species+" is inheriting from an Uber, which is banned."];
+                                continue;
+                        }
+                        else if (toId(donorTemplate.species) !== (set.species) && toId(donorTemplate.speciesid ) in this.format.customBans.receiver) {
+                                problems = [template.species+" is inheriting from an Uber, which is banned."];
+                                continue;
+                        }
+                        set.species = donorTemplate.species;
+                        if (donorTemplate.species !== template.species && donorTemplate.requiredItem) {
+                                // Bypass forme validation. Relevant to inherit from Giratina-O, and Mega/Primal formes.
+                                set.item = donorTemplate.requiredItem;
+                        }
+                        problems = this.data.Formats[this.format].validateSet(set, teamHas) || [];
+                        if (!problems.length) {
+                                validSources.push(evoFamily);
+                        }
+                        if (validSources.length > 1) {
+                                // This is an optimization only valid for the current basic implementation of Donor Clause.
+                                // Remove if the FIXME? above actually gets fixed.
+                                break;
+                        }
+                }
+
+                // Restore the intended species, name and item.
+                donorSpecies = set.species;
+
+			this.add('-start', pokemon, donorSpecies || pokemon.species, '[silent]');
         }
 	},
 	{
