@@ -39,6 +39,7 @@ Ratings and how they work:
 'use strict';
 
 exports.BattleAbilities = {
+	
 	"infernalscales": {
 		desc: "This Pokemon's Fire-type attacks have their power doubled, the power of Ice-type attacks against this Pokemon is halved, and this Pokemon cannot be frozen. Gaining this Ability while frozen cures it.",
 		shortDesc: "This Pokemon's Water power is 2x; it can't be burned; Fire power against it is halved.",
@@ -70,6 +71,21 @@ exports.BattleAbilities = {
 		rating: 4,
 		num: 10001,
 	},
+	"antigravity": {
+		desc: "This Pokemon disables Ground-type attacks from being used.",
+		shortDesc: "This Pokemon disables Ground-type attacks from being used.",
+		onTryMove: function (target, source, effect) {
+			if (effect.type === 'Ground') {
+				this.debug('Anti-Gravity Ground supress');
+				this.add('-fail', source, effect, '[from] Anti-Gravity');
+				return null;
+			}
+		},
+		id: "antigravity",
+		name: "Anti-Gravity",
+		rating: 4,
+		num: 10002,
+	},
 	"magicalemanation": {
 		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
 		onStart: function (source, effect) {
@@ -78,7 +94,7 @@ exports.BattleAbilities = {
 		id: "magicalemanation",
 		name: "Magical Emanation",
 		rating: 4.5,
-		num: 10002,
+		num: 11002,
 	},
 	"trickyemanation": {
 		shortDesc: "On switch-in, this Pokemon summons Trick Room.",
@@ -88,7 +104,7 @@ exports.BattleAbilities = {
 		id: "trickyemanation",
 		name: "Tricky Emanation",
 		rating: 4.5,
-		num: 10003,
+		num: 11003,
 	},
 	"wondrousemanation": {
 		shortDesc: "On switch-in, this Pokemon summons Wonder Room.",
@@ -98,6 +114,6 @@ exports.BattleAbilities = {
 		id: "wondrousemanation",
 		name: "Wondrous Emanation",
 		rating: 4.5,
-		num: 10004,
+		num: 11004,
 	},
 };
