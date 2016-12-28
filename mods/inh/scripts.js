@@ -1,8 +1,7 @@
 'use strict';
 exports.BattleScripts = {
 	init: function() {
-		this.prototype.BattlePokemon {
-			constructor: function(set, side) {
+		this.prototype.BattlePokemon.constructor = function(set, side) {
 			this.side = side;
 			this.battle = side.battle;
 			let pokemonScripts = this.battle.data.Scripts.pokemon;
@@ -241,7 +240,6 @@ exports.BattleScripts = {
 			this.baseHpType = this.hpType;
 			this.baseHpPower = this.hpPower;
 			this.clearVolatile(true);
-		}
-		}
+		};
 	},
 };
