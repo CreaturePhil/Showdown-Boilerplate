@@ -863,6 +863,7 @@ exports.BattleLearnsets = {
 			naturepower: ["7M"],
 			darkpulse: ["7M"],
 			confide: ["7M"],
+			}
 		},
 		mortos: {
 			learnset: {
@@ -930,6 +931,7 @@ exports.BattleLearnsets = {
 				naturepower: ["7M"],
 				darkpulse: ["7M"],
 				confide: ["7M"],
+				}	
 			},
 			dodrioistor: {
 				learnset: {
@@ -1975,6 +1977,4 @@ exports.BattleLearnsets = {
 					zenheadbutt: ["6T", "5T", "4T"],
 				}
 			},
-		}
-	}
 };
