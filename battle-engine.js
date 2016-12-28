@@ -43,7 +43,7 @@ class BattlePokemon {
 			this.name = set.name.split(" (")[0].substr(0, 20);
 		}
 		else*/
-			this.name = set.name.substr(0, 20);
+		this.name = set.name.substr(0, 20);
 		this.speciesid = toId(this.species);
 		this.template = this.baseTemplate;
 		this.moves = [];
