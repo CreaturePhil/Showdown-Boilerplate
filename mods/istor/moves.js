@@ -284,4 +284,43 @@ exports.BattleMovedex = {
 		zMoveBoost: {def: 1, spd: 1},
 		contestType: "Smart",
 	},
+	"rockrequite": {
+		num: 10013,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		desc: "If the user is hit by a contact move this turn before it can execute this move, the attacker is burned.",
+		shortDesc: "Burns on contact with the user before it moves.",
+		id: "rockrequite",
+		isViable: true,
+		name: "Rock Requite",
+		pp: 15,
+		priority: -3,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('rockrequite');
+		},
+		effect: {
+			duration: 1,
+			onStart: function (pokemon) {
+				this.add('-singleturn', pokemon, 'move: Rock Requite');
+			},
+			onTryHit: function (pokemon, source, move) {
+				if(move.basePower) {
+					move.basePower*=0.5;
+				}
+			},
+		},
+		onMoveAborted: function (pokemon) {
+			pokemon.removeVolatile('rockrequite');
+		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('rockrequite');
+		},
+		secondary: false,
+		target: "normal",
+		type: "Rock",
+		zMovePower: 140,
+		contestType: "Tough",
+	},
 };
