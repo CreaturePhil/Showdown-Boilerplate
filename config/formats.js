@@ -2970,7 +2970,7 @@ exports.Formats = [
                 "Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
                 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3529252/\">Inheritance</a>",
         ],
-        mod: 'gen7',
+        mod: 'inh',
         ruleset: ['[Gen 7] Pokebank OU'],
         customBans: {
                 receiver: {
