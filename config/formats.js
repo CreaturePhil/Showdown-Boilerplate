@@ -3115,8 +3115,18 @@ exports.Formats = [
                         return problems;
                 }
         },
+        onBegin: function() {
+        	for(let i=0;i<this.sides.length;i++) {
+        		for(let j=0;j<this.sides[i].pokemon.length;j++) {
+        			let pokemon = this.sides[i].pokemon[j];
+        			pokemon.donorSpecies = this.getTemplate(toId(pokemon.set.name.split(" (")[1])).species;
+        			pokemon.name = pokemon.species;
+        			pokemon.set.name = pokemon.species;
+        		}
+        	}
+        },
         onSwitchIn: function(pokemon) {
-			this.add('-start', pokemon, pokemon.set.donorSpecies || pokemon.species, '[silent]');
+			this.add('-start', pokemon, pokemon.donorSpecies || pokemon.species, '[silent]');
         }
 	},
 	{
