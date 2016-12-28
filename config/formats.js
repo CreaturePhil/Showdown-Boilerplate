@@ -3087,7 +3087,6 @@ exports.Formats = [
                                 continue;
                         }
                         set.species = donorTemplate.species;
-                        set.donorSpecies = donorTemplate.species;
                         if (donorTemplate.species !== template.species && donorTemplate.requiredItem) {
                                 // Bypass forme validation. Relevant to inherit from Giratina-O, and Mega/Primal formes.
                                 set.item = donorTemplate.requiredItem;
@@ -3095,6 +3094,7 @@ exports.Formats = [
                         problems = this.validateSet(set, teamHas) || [];
                         if (!problems.length) {
                                 validSources.push(evoFamily);
+                        		set.donorSpecies = donorTemplate.species;
                         }
                         if (validSources.length > 1) {
                                 // This is an optimization only valid for the current basic implementation of Donor Clause.
@@ -3104,9 +3104,8 @@ exports.Formats = [
                 }
 
                 // Restore the intended species, name and item.
-                let donor = set.species;
                 set.species = template.species;
-                set.name = (name === set.species ? (name+" ("+donor+")") : set.species+" ("+donor+")");
+                set.name = (name === set.species ? (name+" ("+donorSpecies+")") : set.species+" ("+donorSpecies+")");
                 set.item = item.name;
                 if (!validSources.length && pokemonWithAbility.length > 1) {
                         return ["" + (set.name || set.species) + " set is illegal."];
