@@ -719,7 +719,7 @@ exports.BattleLearnsets = {
 		wildcharge: ["7M"],
 		surf: ["7M"],
 		confide: ["7M"],
-	},
+	}},
 	doduoistor: {learnset: {
 		acupressure: ["7L33"],
 		aerialace: ["7M"],
