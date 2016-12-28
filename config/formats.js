@@ -3104,8 +3104,9 @@ exports.Formats = [
                 }
 
                 // Restore the intended species, name and item.
+                let donor = set.species;
                 set.species = template.species;
-                set.name = (name === set.species ? "" : name);
+                set.name = (name === set.species ? (name+" ("+donor+")") : set.species+" ("+donor+")");
                 set.item = item.name;
                 if (!validSources.length && pokemonWithAbility.length > 1) {
                         return ["" + (set.name || set.species) + " set is illegal."];
