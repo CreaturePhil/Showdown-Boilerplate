@@ -1,6 +1,6 @@
 'use strict';
 exports.BattleScripts = {
-	pokemon: {
+	BattlePokemon: {
 		constructor: function(set, side) {
 			this.side = side;
 			this.battle = side.battle;
