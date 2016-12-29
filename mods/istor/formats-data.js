@@ -69,6 +69,18 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["thunderbolt", "wildcharge", "accelerock", "voltswitch", "powergem", "earthpower", "surf", "energyball", "focusblast", "extremespeed", "stoneedge"],
 		tier: "New",
 	},
+	panoir: {
+		randomBattleMoves: ["stoneedge", "bravebird", "roost", "stealthrock", "bulkup"],
+		tier: "LC",
+	},
+	warkoal: {
+		randomBattleMoves: ["stoneedge", "bravebird", "roost", "stealthrock", "bulkup"],
+		tier: "NFE",
+	},
+	frigalt: {
+		randomBattleMoves: ["stoneedge", "bravebird", "roost", "stealthrock", "bulkup", "rockrequite"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
