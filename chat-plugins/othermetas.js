@@ -1176,7 +1176,7 @@ exports.commands= {
                 if (!this.runBroadcast()) return;
                 if(!target || toId(target) === '') return this.sendReply("/learnistor: Shows the whether a Pokemon can learn a move, including Pokemon and Moves from istor.");
                 let learn = Tools.dexes.istor.data.Learnsets, moves = Tools.dexes.istor.data.Movedex, dex= Tools.dexes.istor.data.Pokedex;
-                let targets = target.split(','), mon = target[0], move = target[1];
+                let targets = target.split(','), mon = targets[0], move = targets[1];
                 if(!mon || !dex[toId(mon)]) return this.errorReply("Error: Pokemon not found");
                 if(!move || !moves[toId(move)]) return this.errorReply("Error: Move not found");
                 mon = dex[toId(mon)];
