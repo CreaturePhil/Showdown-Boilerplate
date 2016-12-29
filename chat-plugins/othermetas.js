@@ -1178,6 +1178,7 @@ exports.commands= {
                 if(!target || toId(target) === '') return this.sendReply("/learnistor: Shows the whether a Pokemon can learn a move, including Pokemon and Moves from istor.");
                 let targets = target.split(','), mon = targets[0], move = targets[1];
                 if(!mon || !dexstor[toId(mon)]) return this.errorReply("Error: Pokemon not found");
+                if(!learnstor[toId(mon)]) return this.errorReply("Error: Learnset not found");
                 if(!move || !movestor[toId(move)]) return this.errorReply("Error: Move not found");
                 mon = dexstor[toId(mon)];
                 move = movestor[toId(move)];
