@@ -241,7 +241,7 @@ let natures = {
                 minus: 'atk'
         },
 };
-//let learnstor = Tools.dexes.istor.data.Learnsets, movestor = Tools.dexes.istor.data.Movedex, dexstor= Tools.dexes.istor.data.Pokedex;
+let learnstor = Tools.dexes.istor.data.Learnsets, movestor = Tools.dexes.istor.data.Movedex, dexstor= Tools.dexes.istor.data.Pokedex;
 exports.commands= {
 	mixandmega: 'mnm',
         mnm: function(target, room, user) {
@@ -1148,7 +1148,7 @@ exports.commands= {
                 this.sendReplyBox(text);
         }
 },
-	/*di: 'distor',
+	di: 'distor',
 	dataistor: 'distor',
 	distor: function(target, room, user) {
         	 if (!this.runBroadcast()) return;
@@ -1188,5 +1188,5 @@ exports.commands= {
                         return this.sendReplyBox("In Istor, "+mon.species+' <font color="green"><u><b>can<b><u></font> learn '+move.name);
                 }
                 return this.sendReplyBox("In Istor, "+mon.species+' <font color="red"><u><b>can\'t<b><u></font> learn '+move.name);
-        },*/
+        },
 };
