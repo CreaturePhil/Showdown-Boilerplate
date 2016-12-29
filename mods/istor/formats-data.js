@@ -125,11 +125,11 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["psychic", "nuclearray", "recover", "calmmind", "trickroom"],
 		tier: "LC",
 	},
-	lucarioistor: {
+	duosionistor: {
 		randomBattleMoves: ["psychic", "nuclearray", "recover", "calmmind", "trickroom"],
 		tier: "NFE",
 	},
-	lucarioistor: {
+	reuniclusistor: {
 		randomBattleMoves: ["psychic", "nuclearray", "recover", "calmmind", "trickroom"],
 		tier: "New",
 	},
