@@ -323,4 +323,29 @@ exports.BattleMovedex = {
 		zMovePower: 140,
 		contestType: "Tough",
 	},
+	"nuclearray": {
+		num: 10014,
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		desc: "Has a 10% chance to burn the target. This move's type effectiveness against Steel is changed to be super effective no matter what this move's type is.",
+		shortDesc: "10% chance to burn. Super effective on Steel.",
+		id: "freezedry",
+		isViable: true,
+		name: "Freeze-Dry",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onEffectiveness: function (typeMod, type) {
+			if (type === 'Steel') return 1;
+		},
+		secondary: {
+			chance: 10,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Poison",
+		zMovePower: 140,
+		contestType: "Beautiful",
+	},
 };
