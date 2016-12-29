@@ -1181,7 +1181,7 @@ exports.commands= {
                 if(!move || !moves[toId(move)]) return this.errorReply("Error: Move not found");
                 mon = dex[toId(mon)];
                 move = moves[toId(move)];
-                if(learn[toId(mon)].learnset[toId(move)]) {
+                if(learn[toId(mon.species)].learnset[toId(move.name)]) {
                         return this.sendReplyBox("In Istor, "+mon.species+' <font color="green"><u><b>can<b><u></font> learn '+move.name);
                 }
                 return this.sendReplyBox("In Istor, "+mon.species+' <font color="red"><u><b>can\'t<b><u></font> learn '+move.name);
