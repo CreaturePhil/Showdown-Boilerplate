@@ -121,6 +121,18 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["nastyplot", "divertissement", "hypervoice", "aurasphere", "psychic"],
 		tier: "New",
 	},
+	solosisistor: {
+		randomBattleMoves: ["psychic", "nuclearray", "recover", "calmmind", "trickroom"],
+		tier: "LC",
+	},
+	lucarioistor: {
+		randomBattleMoves: ["psychic", "nuclearray", "recover", "calmmind", "trickroom"],
+		tier: "NFE",
+	},
+	lucarioistor: {
+		randomBattleMoves: ["psychic", "nuclearray", "recover", "calmmind", "trickroom"],
+		tier: "New",
+	},
 	/* Editing Old Movesets */
 	mrmime: {
 		randomBattleMoves: ["nastyplot", "psychic", "psyshock", "dazzlinggleam", "shadowball", "batonpass", "focusblast", "healingwish", "encore", "divertissement"],
