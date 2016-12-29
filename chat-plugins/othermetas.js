@@ -1150,7 +1150,7 @@ exports.commands= {
 },
 	distor: function(target, room, user) {
         	 if (!this.runBroadcast()) return;
-                 if(!target || toId(target) === '') return this.add("|c|~|/distor: Shows the data for a Pokemon, including ones from istor.");
+                 if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon, including ones from istor.");
 		let name = toId(target);
 		let pokemen=Tools.dexes.istor.data.Pokedex;
 		if (!pokemen[name])
