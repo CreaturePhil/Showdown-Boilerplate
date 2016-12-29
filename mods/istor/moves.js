@@ -343,6 +343,7 @@ exports.BattleMovedex = {
 			chance: 10,
 			status: 'brn',
 		},
+		ignoreImmunity: {'Poison': true},
 		target: "normal",
 		type: "Poison",
 		zMovePower: 140,
