@@ -1148,7 +1148,8 @@ exports.commands= {
         }
 },
 	distor: function(target, room, user) {
-		 if (!this.runBroadcast()) return;
+        	 if (!this.runBroadcast()) return;
+                 if(!target || toId(target) === '') return this.add("|c|~|/distor: Shows the data for a Pokemon, including ones from istor.");
 		let name = toId(target);
 		let pokemen=Tools.dexes.istor.data.Pokedex;
 		if (!pokemen[name])
@@ -1170,4 +1171,19 @@ exports.commands= {
 		let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
 		this.sendReplyBox(text);
 	},
+
+        learnistor: function(target, room, user) {
+                if (!this.runBroadcast()) return;
+                if(!target || toId(target) === '') return this.sendReply("/learnistor: Shows the whether a Pokemon can learn a move, including Pokemon and Moves from istor.");
+                let learn = Tools.dexes.istor.data.Learnsets, moves = Tools.dexes.istor.data.Movedex, dex= Tools.dexes.istor.data.Pokedex;
+                let targets = target.split(','), mon = target[0], move = target[1];
+                if(!mon || !dex[toId(mon)]) return this.errorReply("Error: Pokemon not found");
+                if(!move || !moves[toId(move)]) return this.errorReply("Error: Move not found");
+                mon = dex[toId(mon)];
+                move = moves[toId(move)];
+                if(learn[toId(mon)].learnset[toId(move)]) {
+                        return this.sendReplyBox("In Istor, "+mon.species+' <font color="green"><u><b>can<b><u></font> learn '+move.name);
+                }
+                return this.sendReplyBox("In Istor, "+mon.species+' <font color="red"><u><b>can\'t<b><u></font> learn '+move.name);
+        },
 };
