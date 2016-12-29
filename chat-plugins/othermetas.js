@@ -1148,6 +1148,8 @@ exports.commands= {
                 this.sendReplyBox(text);
         }
 },
+	di: 'distor',
+	dataistor: 'distor',
 	distor: function(target, room, user) {
         	 if (!this.runBroadcast()) return;
                  if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon, including ones from istor.");
