@@ -747,57 +747,6 @@ exports.BattleLearnsets = {
 			confide: ["7M"],
 		}
 	},
-	doduoistor: {
-		learnset: {
-			acupressure: ["7L33"],
-			aerialace: ["7M"],
-			agility: ["7L26"],
-			assurance: ["7E"],
-			attract: ["7M"],
-			bravebird: ["7E"],
-			confide: ["7M"],
-			doublehit: ["7L22"],
-			doubleteam: ["7M"],
-			drillpeck: ["7L43"],
-			echoedvoice: ["7M"],
-			endeavor: ["7L47", "7E"],
-			facade: ["7M"],
-			feintattack: ["7E"],
-			flail: ["7E"],
-			flashcannon: ["7M"],
-			fly: ["7M"],
-			frustration: ["7M"],
-			furyattack: ["7L12"],
-			growl: ["7L1"],
-			hiddenpower: ["7M"],
-			irondefense: ["7E"],
-			ironhead: ["7E"],
-			jumpkick: ["7L40"],
-			mirrormove: ["7E"],
-			naturalgift: ["7E"],
-			peck: ["7L1"],
-			pluck: ["7L19"],
-			protect: ["7M"],
-			pursuit: ["7L15"],
-			quickattack: ["7L5"],
-			rest: ["7M"],
-			return: ["7M"],
-			roost: ["7M"],
-			round: ["7M"],
-			sleeptalk: ["7M"],
-			steelwing: ["7M", "7L9"],
-			smartstrike: ["7M"],
-			substitute: ["7M"],
-			sunnyday: ["7M"],
-			swagger: ["7M"],
-			swordsdance: ["7M", "7L36"],
-			thief: ["7M"],
-			impalingfeather: ["7L50"],
-			toxic: ["7M"],
-			heavyslam: ["7L29"],
-			workup: ["7M"],
-		}
-	},
 	canos: {
 		learnset: {
 			tackle: ["7L1"],
@@ -933,6 +882,93 @@ exports.BattleLearnsets = {
 				confide: ["7M"],
 				}	
 			},
+	molaxy: {
+		learnset: {
+		}
+	},
+	panoir: {
+		learnset: {
+		}
+	},
+	warkoal: {
+		learnset: {
+		}
+	},
+	frigalt: {
+		learnset: {
+		}
+	},
+	uisge: {
+		learnset: {
+		}
+	},
+	talamh: {
+		learnset: {
+		}
+	},
+	adhair: {
+		learnset: {
+		}
+	},
+	infineer: {
+		learnset: {
+		}
+	},
+	remordial: {
+		learnset: {
+		}
+	},
+	doduoistor: {
+		learnset: {
+			acupressure: ["7L33"],
+			aerialace: ["7M"],
+			agility: ["7L26"],
+			assurance: ["7E"],
+			attract: ["7M"],
+			bravebird: ["7E"],
+			confide: ["7M"],
+			doublehit: ["7L22"],
+			doubleteam: ["7M"],
+			drillpeck: ["7L43"],
+			echoedvoice: ["7M"],
+			endeavor: ["7L47", "7E"],
+			facade: ["7M"],
+			feintattack: ["7E"],
+			flail: ["7E"],
+			flashcannon: ["7M"],
+			fly: ["7M"],
+			frustration: ["7M"],
+			furyattack: ["7L12"],
+			growl: ["7L1"],
+			hiddenpower: ["7M"],
+			irondefense: ["7E"],
+			ironhead: ["7E"],
+			jumpkick: ["7L40"],
+			mirrormove: ["7E"],
+			naturalgift: ["7E"],
+			peck: ["7L1"],
+			pluck: ["7L19"],
+			protect: ["7M"],
+			pursuit: ["7L15"],
+			quickattack: ["7L5"],
+			rest: ["7M"],
+			return: ["7M"],
+			roost: ["7M"],
+			round: ["7M"],
+			sleeptalk: ["7M"],
+			steelwing: ["7M", "7L9"],
+			smartstrike: ["7M"],
+			substitute: ["7M"],
+			sunnyday: ["7M"],
+			swagger: ["7M"],
+			swordsdance: ["7M", "7L36"],
+			thief: ["7M"],
+			impalingfeather: ["7L50"],
+			toxic: ["7M"],
+			heavyslam: ["7L29"],
+			workup: ["7M"],
+		}
+	},
 			dodrioistor: {
 				learnset: {
 					acupressure: ["7L34"],
@@ -1977,4 +2013,16 @@ exports.BattleLearnsets = {
 					zenheadbutt: ["6T", "5T", "4T"],
 				}
 			},
+	solosisistor: {
+		learnset: {
+		}
+	},
+	duosionistor: {
+		learnset: {
+		}
+	},
+	reuniclusistor: {
+		learnset: {
+		}
+	},
 };
