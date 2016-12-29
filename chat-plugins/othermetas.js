@@ -1154,7 +1154,12 @@ exports.commands= {
 		if (!pokemen[name])
 			return this.errorReply("Error: Pokemon not found");
 		let baseStats = pokemen[name].baseStats;
-		let type = pokemen[name].types.join('/');
+		let types = pokemen[name].types;
+		let type = '<span class="col typecol">';
+		for(let i = 0; i<types.length;i++) {
+			type = type+ '<img src="https://play.pokemonshowdown.com/sprites/types/'+types[i]+'.png" alt="'+types[i]+'" height="14" width="32">';
+		}
+		type = type+"</span>";
 		let ability = "";
 		let weight = pokemen[name].weightkg;
 		for(let i in pokemen[name].abilities) {
