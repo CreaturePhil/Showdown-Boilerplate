@@ -1147,4 +1147,22 @@ exports.commands= {
                 this.sendReplyBox(text);
         }
 },
+	distor: function(target, room, user) {
+		 if (!this.runBroadcast()) return;
+		let name = toId(target);
+		let pokemen=Tools.dexes.istor.data.Pokedex;
+		if (!pokemen[name])
+			return this.errorReply("Error: Pokemon not found");
+		let baseStats = pokemen[name].baseStats;
+		let type = pokemen[name].types.join('/');
+		let ability = "";
+		let weight = pokemen[name].weightkg;
+		for(let i in pokemen[name].abilities) {
+			ability+=pokemen[name].abilities[i]+"/";
+		}
+		ability = ability.substring(0,ability.length-1);
+		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
+		let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
+		this.sendReplyBox(text);
+	},
 };
