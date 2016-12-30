@@ -898,6 +898,14 @@ exports.BattleLearnsets = {
 		learnset: {
 		}
 	},
+	manakley: {
+		learnset: {
+		}
+	},
+	maniakley: {
+		learnset: {
+		}
+	},
 	uisge: {
 		learnset: {
 		}
