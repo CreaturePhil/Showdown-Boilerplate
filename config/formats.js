@@ -2432,7 +2432,7 @@ exports.Formats = [
 					baseStats[statName] = this.clampIntRange(template.baseStats[statName] + boost, 1, 255);
 				}
 				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
-				pokemon.baseTemplate = template;
+				pokemon.template = template;
 				pokemon.formeChange(template);
 			}
 		},
