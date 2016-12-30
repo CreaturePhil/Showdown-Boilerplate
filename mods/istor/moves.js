@@ -349,4 +349,28 @@ exports.BattleMovedex = {
 		zMovePower: 140,
 		contestType: "Beautiful",
 	},
+	"shackleswing": {
+		num: 10015,
+		accuracy: 90,
+		basePower: 100,
+		category: "Physical",
+		desc: "Lowers the user's Speed by 1 stage.",
+		shortDesc: "Lowers the user's Speed by 1.",
+		id: "shackleswing",
+		isViable: true,
+		name: "Shackle Swing",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
+		self: {
+			boosts: {
+				spe: -1,
+			},
+		},
+		secondary: false,
+		target: "normal",
+		type: "Steel",
+		zMovePower: 180,
+		contestType: "Tough",
+	},
 };
