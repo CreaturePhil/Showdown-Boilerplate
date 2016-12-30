@@ -2403,14 +2403,40 @@ exports.Formats = [
 	},
 	{
 		name: "Tier Shift",
-		desc: [
-			"Pok&eacute;mon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, NU/BL4 get +15, and PU or lower get +20.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554765/\">Tier Shift</a>",
-		],
-
-		mod: 'tiershift',
+		onBegin: function () {
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			let boosts = {
+				'UU': 5,
+				'BL2': 5,
+				'RU': 10,
+				'BL3': 10,
+				'NU': 15,
+				'BL4': 15,
+				'PU': 20,
+				'NFE': 20,
+				'LC Uber': 20,
+				'LC': 20,
+			};
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				let template = pokemon.baseTemplate;
+				let tier = template.tier;
+				if (pokemon.set.item) {
+					let item = this.getItem(pokemon.set.item);
+					if (item.megaEvolves === template.species) tier = this.getTemplate(item.megaStone).tier;
+				}
+				if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+				let boost = (tier in boosts) ? boosts[tier] : 0;
+				let baseStats = {};
+				for (let statName in template.baseStats) {
+					baseStats[statName] = this.clampIntRange(template.baseStats[statName] + boost, 1, 255);
+				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+				pokemon.baseTemplate = template;
+				pokemon.formeChange(template);
+			}
+		},
 		ruleset: ['OU'],
-		banlist: ['Damp Rock'],
 	},
 	{
 		name: "Inverse Battle",
