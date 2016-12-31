@@ -249,7 +249,7 @@ exports.Formats = [
 		banlist: ['Ignore STAB Moves',
 			'Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Dialga', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
 			'Landorus-Base', 'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Power Construct', 'Shadow Tag', 'Gengarite', 'Kangaskhanite', "King's Rock", 'Lucarionite', 'Metagrossite', 'Razor Fang', 'Salamencite',
+			'Power Construct', 'Shadow Tag', 'Aerodactylite', 'Gengarite', 'Kangaskhanite', "King's Rock", 'Lucarionite', 'Metagrossite', 'Razor Fang', 'Salamencite',
 		],
 	},
 	{
@@ -277,7 +277,7 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Balanced Hackmons",
+		name: "[Gen 7] Balanced Hackmons (suspect test)",
 		desc: [
 			"Anything that can be hacked in-game and is usable in local battles is allowed.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587475/\">Balanced Hackmons</a>",
@@ -319,11 +319,11 @@ exports.Formats = [
 		banlist: [
 			'Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-White',
 			'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Tapu Lele', 'Xerneas', 'Yveltal', 'Zekrom', 'Zygarde',
-			'Damp Rock', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Smooth Rock', 'Terrain Extender',
+			'Battle Bond', 'Damp Rock', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Smooth Rock', 'Terrain Extender',
 		],
 	},
 	{
-		name: "[Gen 7] Mix and Mega (suspect test)",
+		name: "[Gen 7] Mix and Mega",
 		desc: [
 			"Mega Stones and Primal Orbs can be used on almost any fully evolved Pok&eacute;mon with no Mega Evolution limit.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587740/\">Mix and Mega</a>",

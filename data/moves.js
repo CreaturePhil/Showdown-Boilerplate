@@ -8596,7 +8596,7 @@ exports.BattleMovedex = {
 			if (!target.lastMove) return false;
 			let lastMove = this.getMove(target.lastMove);
 			let noInstruct = {
-				beakblast:1, copycat:1, focuspunch:1, instruct:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, outrage:1, petaldance:1, shelltrap:1, thrash:1, // TODO: fill this up
+				beakblast:1, bide:1, copycat:1, focuspunch:1, iceball:1, instruct:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, outrage:1, petaldance:1, rollout:1, shelltrap:1, sleeptalk:1, thrash:1, // TODO: fill this up
 			};
 			if (noInstruct[lastMove.id] || lastMove.isZ || lastMove.flags['charge'] || lastMove.flags['recharge'] || target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap']) {
 				return false;
@@ -14372,7 +14372,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 150,
 		category: "Special",
-		desc: "Fails unless the user is hit by a physical attack this turn before it can execute the move.",
+		desc: "Fails unless the user is hit by a physical attack from an opponent this turn before it can execute the move.",
 		shortDesc: "User must take physical damage before moving.",
 		id: "shelltrap",
 		name: "Shell Trap",
@@ -14394,7 +14394,7 @@ exports.BattleMovedex = {
 				this.add('-singleturn', pokemon, 'move: Shell Trap');
 			},
 			onHit: function (pokemon, source, move) {
-				if (move.category === 'Physical') {
+				if (pokemon.side !== source.side && move.category === 'Physical') {
 					pokemon.volatiles['shelltrap'].gotHit = true;
 				}
 			},
@@ -16927,7 +16927,7 @@ exports.BattleMovedex = {
 			},
 			onBeforeMovePriority: 5,
 			onBeforeMove: function (attacker, defender, move) {
-				if (move.category === 'Status') {
+				if (!move.isZ && move.category === 'Status') {
 					this.add('cant', attacker, 'move: Taunt', move);
 					return false;
 				}

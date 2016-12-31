@@ -14,7 +14,7 @@ exports.BattleScripts = {
 			}
 		}
 		let baseMove = this.getMove(move);
-		move = this.getMove(zMove || move);
+		move = zMove ? this.getZMoveCopy(move, pokemon) : baseMove;
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		this.setActiveMove(move, pokemon, target);
@@ -1681,6 +1681,7 @@ exports.BattleScripts = {
 					break;
 				case 'hypervoice':
 					if (hasMove['naturepower'] || hasMove['return']) rejected = true;
+					if (hasAbility['Liquid Voice'] && hasMove['scald']) rejected = true;
 					break;
 				case 'judgment':
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;

@@ -119,10 +119,10 @@ class Giveaway {
 				}
 				if (value.otherFormes) {
 					for (let i = 0; i < value.otherFormes.length; i++) {
-						// Hardcore Alolan formes.
-						if (value.otherFormes[i].endsWith('alolan')) {
+						// Allow "alolan <name>" to match as well.
+						if (value.otherFormes[i].endsWith('alola')) {
 							if (/alolan?/.test(text)) {
-								spriteid += '-alolan';
+								spriteid += '-alola';
 								break;
 							}
 						}
