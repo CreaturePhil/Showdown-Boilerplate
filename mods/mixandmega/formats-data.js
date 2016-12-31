@@ -9,6 +9,10 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "OU",
 	},
+	cresselia: {
+		inherit: true,
+		tier: "Uber",
+	},
 	darkrai: {
 		inherit: true,
 		tier: "OU",
@@ -18,6 +22,10 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	deoxysspeed: {
+		inherit: true,
+		tier: "OU",
+	},
+	landorus: {
 		inherit: true,
 		tier: "OU",
 	},

@@ -128,6 +128,7 @@ exports.commands = {
 		}
 		if ((user.can('ip', targetUser) || user === targetUser)) {
 			let ips = Object.keys(targetUser.ips);
+			ips = ips.map(ip => ip + (Punishments.sharedIps.has(ip) ? ' (shared)' : ''));
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
 			if (user.group !== ' ' && targetUser.latestHost) {
 				buf += Chat.html`<br />Host: ${targetUser.latestHost}`;
@@ -408,7 +409,7 @@ exports.commands = {
 				} else if (move.zMoveEffect) {
 					details["Z-Effect"] = {
 						'clearnegativeboost': "Restores negative stat stages to 0",
-						'crit1': "Crit ratio +1",
+						'crit2': "Crit ratio +2",
 						'heal': "Restores HP 100%",
 						'curse': "Restores HP 100% if user is Ghost type, otherwise Attack +1",
 						'redirect': "Redirects opposing attacks to user",
@@ -1037,6 +1038,13 @@ exports.commands = {
 		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
 	},
 
+	'!servertime': true,
+	servertime: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		let servertime = new Date();
+		this.sendReplyBox(`Server time: <b>${servertime.toLocaleString()}</b>`);
+	},
+
 	'!groups': true,
 	groups: function (target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1210,8 +1218,8 @@ exports.commands = {
 		}
 
 		if (!target || target === 'all') {
-			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames.206/\">Other Metagames Forum</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames-analyses.310/\">Other Metagames Analyses</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames.394/\">Other Metagames Forum</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/om-analyses.416/\">Other Metagames Analyses</a><br />";
 			if (!target) return this.sendReplyBox(buffer);
 		}
 		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
@@ -1272,7 +1280,9 @@ exports.commands = {
 		for (let i = 0; i < formatList.length; i++) {
 			let format = Tools.getFormat(formatList[i]);
 			let sectionId = toId(format.section);
-			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && format.id === formatList[i] && !format.id.startsWith(targetId)) continue;
+			let formatId = format.id;
+			if (!/^gen\d+/.test(targetId)) formatId = formatId.replace(/^gen\d+/, ''); // skip generation prefix if it wasn't provided
+			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && format.id === formatList[i] && !formatId.startsWith(targetId)) continue;
 			if (isOMSearch && format.id.startsWith('gen') && ['ou', 'uu', 'ru', 'ubers', 'lc', 'customgame', 'doublescustomgame', 'gbusingles', 'gbudoubles'].includes(format.id.slice(4))) continue;
 			if (isOMSearch && (format.id === 'gen5nu')) continue;
 			totalMatches++;

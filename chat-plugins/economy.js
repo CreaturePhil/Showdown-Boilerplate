@@ -1,21 +1,16 @@
+/*
+* economy.js by CreaturePhil
+* Shop Code Credits - Lord Haji, HoeenCoder
+* Dice Game Credits - Lord Haji, SilverTactic (Silveee)
+*/
 'use strict';
 
 let color = require('../config/color');
 let fs = require('fs');
 let path = require('path');
-
-let shop = [
-	['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
-	['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
-	['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
-	['League Room', 'Purchases a room at a reduced rate for use with a league.  A roster must be supplied with at least 10 members for this room.', 25],
-	['Trainer', 'Buys a trainer card which shows information through a command. (You supply, can be refused)', 40],
-	['Staff Help', 'Staff member will help set up roomintros and anything else needed in a room. Response may not be immediate.', 50],
-	['Icon', 'Buy a custom icon that can be applied to the rooms you want. You must take into account that the provided image should be 32 x 32', 75],
-	['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100],
-];
-
-let shopDisplay = getShopDisplay(shop);
+let writeJSON = true;
+let Shop = {};
+const INACTIVE_END_TIME = 1 * 60 * 1000; // 1 minute
 
 /**
  * Gets an amount and returns the amount with the name of the currency.
@@ -59,91 +54,169 @@ function logMoney(message) {
 	let msg = message + "\n";
 	fs.appendFile(file, date + msg);
 }
+/*
+* Shop start
+*/
 
-/**
- * Displays the shop
- *
- * @param {Array} shop
- * @return {String} display
- */
-function getShopDisplay(shop) {
-	let display = "<table border='1' cellspacing='0' cellpadding='5' width='100%'>" +
-					"<tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>";
-	let start = 0;
-	while (start < shop.length) {
-		display += "<tr>" +
-						"<td align='center'><button name='send' value='/buy " + shop[start][0] + "'><b>" + shop[start][0] + "</b></button>" + "</td>" +
-						"<td align='center'>" + shop[start][1] + "</td>" +
-						"<td align='center'>" + shop[start][2] + "</td>" +
-					"</tr>";
-		start++;
-	}
-	display += "</tbody></table><center>To buy an item from the shop, use /buy <em>command</em>.</center>";
-	return display;
+function NewItem(name, desc, price) {
+	this.name = name;
+	this.id = toId(name);
+	this.desc = Chat.escapeHTML(desc);
+	this.price = Number(price);
 }
 
+function writeShop() {
+	if (!writeJSON) return false; //Prevent corruptions
+	fs.writeFile('config/Shop.json', JSON.stringify(Shop));
+}
 
-/**
- * Find the item in the shop.
- *
- * @param {String} item
- * @param {Number} money
- * @return {Object}
- */
-function findItem(item, money) {
-	let len = shop.length;
-	let price = 0;
-	let amount = 0;
-	while (len--) {
-		if (item.toLowerCase() !== shop[len][0].toLowerCase()) continue;
-		price = shop[len][2];
-		if (price > money) {
-			amount = price - money;
-			this.errorReply("You don't have you enough money for this. You need " + amount + currencyName(amount) + " more to buy " + item + ".");
-			return false;
+function shopDisplay() {
+	let output = '<div style="max-height:300px; width: 100%; overflow: scroll"><table style="border:2px solid #000000; border-radius: 5px; width: 100%;"><tr><th colspan="3" style="border: 2px solid #000000; border-radius: 5px">Server Shop</th></tr>';
+	for (let i in Shop) {
+		if (!Shop[i]) continue;
+		output += '<tr><td style="border: 2px solid #000000; width: 20%; text-align: center"><button class="button" name="send" value="/Shop buy ' + Shop[i].id + '">' + Shop[i].name + '</button></td><td style="border: 2px solid #000000; width: 70%; text-align: center">' + Shop[i].desc + '</td><td style="border: 2px solid #000000; width: 10%; text-align: center">' + Shop[i].price + '</td></tr>';
+	}
+	output += '</table></div>';
+	return output;
+}
+
+try {
+	fs.accessSync('config/Shop.json', fs.F_OK);
+	let raw = JSON.parse(fs.readFileSync('config/Shop.json', 'utf8'));
+	Shop = raw;
+} catch (e) {
+	fs.writeFile('config/Shop.json', "{}", function (err) {
+		if (err) {
+			console.error('Error while loading Shop: ' + err);
+			Shop = {
+				closed: true,
+			};
+			writeJSON = false;
+		} else {
+			console.log("config/Shop.json not found, creating a new one...");
 		}
-		return price;
-	}
-	this.errorReply(item + " not found in shop.");
+	});
 }
 
-/**
- * Handling the bought item from the shop.
- *
- * @param {String} item
- * @param {Object} user
- * @param {Number} cost - for lottery
- */
-function handleBoughtItem(item, user, cost) {
-	if (item === 'symbol') {
-		user.canCustomSymbol = true;
-		this.sendReply("You have purchased a custom symbol. You can use /customsymbol to get your custom symbol.");
-		this.sendReply("You will have this until you log off for more than an hour.");
-		this.sendReply("If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.");
-	} else if (item === 'icon') {
-		this.sendReply('You purchased an icon, contact an administrator to obtain the article.');
-	} else {
-		let msg = '**' + user.name + " has bought " + item + ".**";
-		Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
-		Rooms.rooms.get("staff").update();
-		Users.users.forEach(function (user) {
-			if (user.group === '~' || user.group === '&') {
-				user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
-			}
-		});
+/*
+* Shop end
+*/
+
+/*
+* Dice start
+*/
+
+function diceImg(num) {
+	switch (num) {
+	case 0:
+		return "http://i.imgur.com/nUbpLTD.png";
+	case 1:
+		return "http://i.imgur.com/BSt9nfV.png";
+	case 2:
+		return "http://i.imgur.com/eTQMVhY.png";
+	case 3:
+		return "http://i.imgur.com/3Y2hCAJ.png";
+	case 4:
+		return "http://i.imgur.com/KP3Za7O.png";
+	case 5:
+		return "http://i.imgur.com/lvi2ZZe.png";
 	}
 }
+
+class Dice {
+	constructor(room, amount, starter) {
+		this.room = room;
+		if (!this.room.diceCount) this.room.diceCount = 0;
+		this.bet = amount;
+		this.players = [];
+		this.timer = setTimeout(() => {
+			this.room.add('|uhtmlchange|' + this.room.diceCount + '|<div class = "infobox">(This game of dice has been ended due to inactivity.)</div>').update();
+			delete this.room.dice;
+		}, INACTIVE_END_TIME);
+
+		this.startMessage = '<div class="infobox"><b style="font-size: 14pt; color: #24678d"><center><span style="color: ' + color(starter) + '">' + Chat.escapeHTML(starter) + '</span> has started a game of dice for <span style = "color: green">' + amount + '</span> ' + currencyName(amount) + '!</center></b><br>' +
+			'<center><img style="margin-right: 30px;" src = "http://i.imgur.com/eywnpqX.png" width="80" height="80">' +
+			'<img style="transform:rotateY(180deg); margin-left: 30px;" src="http://i.imgur.com/eywnpqX.png" width="80" height="80"><br>' +
+			'<button name="send" value="/joindice">Click to join!</button></center>';
+		this.room.add('|uhtml|' + (++this.room.diceCount) + '|' + this.startMessage + '</div>').update();
+	}
+
+	join(user, self) {
+		if (this.players.length === 2) return self.errorReply("Two users have already joined this game of dice.");
+		if (Db('money').get(user.userid, 0) < this.bet) return self.errorReply('You don\'t have enough money for this game of dice.');
+		if (this.players.includes(user)) return self.sendReply('You have already joined this game of dice.');
+		//if (this.players.length && this.players[0].latestIp === user.latestIp) return self.errorReply("You have already joined this game of dice under the alt '" + this.players[0].name + "'.");
+
+		this.players.push(user);
+		this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '<center><b><font color ="' + color(user.name) + '">' + Chat.escapeHTML(user.name) + '</font></b> has joined the game!</center></div>').update();
+		if (this.players.length === 2) this.play();
+	}
+
+	leave(user, self) {
+		if (!this.players.includes(user)) return self.sendReply('You haven\'t joined the game of dice yet.');
+		this.players.remove(user);
+		this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '</div>');
+	}
+
+	play() {
+		let p1 = this.players[0], p2 = this.players[1];
+		let money1 = Db('money').get(p1.userid, 0);
+		let money2 = Db('money').get(p2.userid, 0);
+
+		if (money1 < this.bet || money2 < this.bet) {
+			let user = (money1 < this.bet ? p1 : p2);
+			let other = (user === p1 ? p2 : p1);
+			user.sendTo(this.room, 'You have been removed from this game of dice, as you do not have enough money.');
+			other.sendTo(this.room, user.name + ' has been removed from this game of dice, as they do not have enough money. Wait for another user to join.');
+			this.players.remove(user);
+			this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '<center>' + this.players.map(user => "<b><font color='" + color(user.name) + "'>" + Chat.escapeHTML(user.name) + "</font></b>") + ' has joined the game!</center>').update();
+			return;
+		}
+		let players = this.players.map(user => "<b><font color='" + color(user.name) + "'>" + Chat.escapeHTML(user.name) + "</font></b>").join(' and ');
+		this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '<center>' + players + ' have joined the game!</center></div>').update();
+		let roll1, roll2;
+		do {
+			roll1 = Math.floor(Math.random() * 6);
+			roll2 = Math.floor(Math.random() * 6);
+		} while (roll1 === roll2);
+		if (roll2 > roll1) this.players.reverse();
+		let winner = this.players[0], loser = this.players[1];
+
+		setTimeout(() => {
+			this.room.add('|uhtmlchange|' + this.room.diceCount + '|<div class="infobox"><center>' + players + ' have joined the game!<br /><br />' +
+				'The game has been started! Rolling the dice...<br />' +
+				'<img src = "' + diceImg(roll1) + '" align = "left" title = "' + Chat.escapeHTML(p1.name) + '\'s roll"><img src = "' + diceImg(roll2) + '" align = "right" title = "' + p2.name + '\'s roll"><br />' +
+				'<b><font color="' + color(p1.name) + '">' + Chat.escapeHTML(p1.name) + '</font></b> rolled ' + (roll1 + 1) + '!<br />' +
+				'<b><font color="' + color(p2.name) + '">' + Chat.escapeHTML(p2.name) + '</font></b> rolled ' + (roll2 + 1) + '!<br />' +
+				'<b><font color="' + color(winner.name) + '">' + Chat.escapeHTML(winner.name) + '</font></b> has won <b style="color:red">' + (this.bet) + '</b> ' + currencyName(this.bet) + '!<br />' +
+				'Better luck next time, <b><font color="' + color(loser.name) + '">' + Chat.escapeHTML(loser.name) + '</font></b>!'
+			).update();
+			Db('money').set(winner.userid, Db('money').get(winner.userid) + this.bet);
+			Db('money').set(loser.userid, Db('money').get(loser.userid) - this.bet);
+			this.end();
+		}, 800);
+	}
+
+	end(user) {
+		if (user) this.room.add('|uhtmlchange|' + this.room.diceCount + '|<div class = "infobox">(This game of dice has been forcibly ended by ' + Chat.escapeHTML(user.name) + '.)</div>').update();
+		clearTimeout(this.timer);
+		delete this.room.dice;
+	}
+}
+
+/*
+* Dice end
+*/
 
 exports.commands = {
 	atm: 'wallet',
 	purse: 'wallet',
 	wallet: function (target, room, user) {
 		if (!this.runBroadcast()) return;
+		target = toId(target);
 		if (!target) target = user.name;
-
 		const amount = Db('money').get(toId(target), 0);
-		let group = user.getIdentity().charAt(0);
-		this.sendReplyBox("<font color=#948A88>" + group +  "</font><font color=" + color(user.userid) + "><b>" + Chat.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
+		this.sendReplyBox("<font color=" + color(target) + "><b>" + Chat.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 
@@ -229,46 +302,88 @@ exports.commands = {
 	},
 	transfermoneyhelp: ["/transfer [user], [amount] - Transfer a certain amount of money to a user."],
 
-	store: 'shop',
-	shop: function (target, room, user) {
-		if (!this.runBroadcast()) return;
-		return this.sendReply("|raw|" + shopDisplay);
+	shop: {
+		add: function (target, room, user, connection, cmd, message) {
+			if (!this.can('roomowner')) return false;
+			if (Shop.closed) return this.sendReply('An error closed the shop.');
+			target = target.split(',');
+			if (!target[2]) return this.parse('/shop help');
+			if (Shop[toId(target[0])]) return this.errorReply(target[0] + ' is already in the shop.');
+			if (isNaN(Number(target[2]))) return this.parse('/shop help');
+			Shop[toId(target[0])] = new NewItem(target[0], target[1], target[2]);
+			writeShop();
+			return this.sendReply('The item ' + target[0] + ' was added.');
+		},
+		delete: 'remove',
+		remove: function (target, room, user, connection, cmd, message) {
+			if (!this.can('roomowner')) return false;
+			if (Shop.closed) return this.sendReply('An error closed the shop.');
+			if (!target) return this.parse('/shop help');
+			if (!Shop[toId(target)]) return this.errorReply(target + ' is not in the shop.');
+			delete Shop[toId(target)];
+			writeShop();
+			return this.sendReply('The item ' + target + ' was removed.');
+		},
+		buy: function (target, room, user, connection, cmd, message) {
+			if (!target) return this.parse('/shop help buy');
+			if (Shop.closed) return this.sendReply('The shop is closed, come back later.');
+			if (!Shop[toId(target)]) return this.errorReply('Item ' + target + ' not found.');
+			let item = Shop[toId(target)];
+			if (item.price > Db('money').get(user.userid)) return this.errorReply("You don't have you enough money for this. You need " + (item.price - Db('money').get(user.userid)) + currencyName((item.price - Db('money').get(user.userid))) + " more to buy this.");
+			Db('money').set(user.userid, Db('money').get(user.userid) - item.price);
+			logMoney(user.name + " has purchased " + item.name + " from the shop for " + item.price + " and " + user.name + " now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".");
+			if (item.id === 'customsymbol') {
+				user.canCustomSymbol = true;
+			}
+			let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + currencyName(item.price) + " and now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".";
+			Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
+			Rooms.rooms.get("staff").update();
+			Users.users.forEach(function (user) {
+				if (user.group === '~' || user.group === '&') {
+					user.send('|pm|~Shop Alert|' + user.getIdentity() + '|' + msg);
+				}
+			});
+			user.sendTo(room, "|uhtmlchange|shop" + user.userid + "|<div style='max-height:300px'><table style='border:2px solid #000000; border-radius: 5px'><tr><th colspan='3' style='border: 2px solid #000000; border-radius: 5px'>Server Shop</th></tr><tr><td style='colspan: 3; border: 2px solid #000000; border-radius: 5px'><center>You have purchased a " + item.name + ". " + (item.id === 'customsymbol' ? "You may now use /customsymbol [symbol] to change your symbol." : "Upper staff have been notified of your purchase and will contact you shortly.") + "</center></td></tr><tr><td colspan='3' style='text-align:center'><button class='button' name='send' value='/shop reopen'>Return to Shop</button></td></tr></table>");
+		},
+		help: function (target, room, user, connection, cmd, message) {
+			let reply = '<b>Shop commands</b><br/>';
+			reply += '/shop - Load the shop screen.<br/>';
+			reply += '/shop buy [item] - Buy an item from the shop.<br/>';
+			if (user.can('roomowner')) {
+				reply += '<b>Administrative shop commands:</b><br/>';
+				reply += '/shop add [item name], [description], [price] - Adds a item to the shop.<br/>';
+				reply += '/shop remove [item] - removes a item from the shop.<br/>';
+			}
+			return this.sendReplyBox(reply);
+		},
+		reopen: '',
+		'': function (target, room, user, connection, cmd, message) {
+			if (cmd === 'reopen') return user.sendTo(room, '|uhtmlchange|Shop' + user.userid + '|' + shopDisplay());
+			return user.sendTo(room, '|uhtml|shop' + user.userid + '|' + shopDisplay());
+		},
 	},
-	shophelp: ["/shop - Display items you can buy with money."],
-
-	buy: function (target, room, user) {
-		if (!target) return this.parse('/help buy');
-		let amount = Db('money').get(user.userid, 0);
-		let cost = findItem.call(this, target, amount);
-		if (!cost) return;
-		let total = Db('money').set(user.userid, amount - cost).get(user.userid);
-		this.sendReply("You have bought " + target + " for " + cost + currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
-		room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
-		logMoney(user.name + " has bought " + target + " from the shop. This user now has " + total + currencyName(total) + ".");
-		handleBoughtItem.call(this, target.toLowerCase(), user, cost);
-	},
-	buyhelp: ["/buy [command] - Buys an item from the shop."],
 
 	customsymbol: function (target, room, user) {
-		if (!user.canCustomSymbol && user.id !== user.userid) return this.errorReply("You need to buy this item from the shop.");
-		if (!target || target.length > 1) return this.parse('/help customsymbol');
-		if (target.match(/[A-Za-z\d]+/g) || '|?!+$%@\u2605=&~#\u03c4\u00a3\u03dd\u03b2\u039e\u03a9\u0398\u03a3\u00a9'.indexOf(target) >= 0) {
-			return this.errorReply("Sorry, but you cannot change your symbol to this for safety/stability reasons.");
+		let bannedSymbols = ['!', '|', '‽', '\u2030', '\u534D', '\u5350', '\u223C'];
+		for (let u in Config.groups) if (Config.groups[u].symbol) bannedSymbols.push(Config.groups[u].symbol);
+		if (!user.canCustomSymbol) return this.errorReply('You need to buy this item from the shop to use.');
+		if (!target || target.length > 1) return this.sendReply('/customsymbol [symbol] - changes your symbol (usergroup) to the specified symbol. The symbol can only be one character');
+		if (target.match(/([a-zA-Z ^0-9])/g) || bannedSymbols.indexOf(target) >= 0) {
+			return this.sendReply('Sorry, but you cannot change your symbol to this for safety/stability reasons.');
 		}
 		user.customSymbol = target;
 		user.updateIdentity();
 		user.canCustomSymbol = false;
-		user.hasCustomSymbol = true;
+		this.sendReply('Your symbol is now ' + target + '. It will be saved until you log off for more than an hour, or the server restarts. You can remove it with /resetsymbol');
 	},
 	customsymbolhelp: ["/customsymbol [symbol] - Get a custom symbol."],
 
-	resetcustomsymbol: 'resetsymbol',
+	removesymbol: 'resetsymbol',
 	resetsymbol: function (target, room, user) {
-		if (!user.hasCustomSymbol) return this.errorReply("You don't have a custom symbol.");
-		user.customSymbol = null;
+		if (!user.customSymbol) return this.errorReply("You don't have a custom symbol!");
+		delete user.customSymbol;
 		user.updateIdentity();
-		user.hasCustomSymbol = false;
-		this.sendReply("Your symbol has been reset.");
+		this.sendReply('Your symbol has been removed.');
 	},
 	resetsymbolhelp: ["/resetsymbol - Resets your custom symbol."],
 
@@ -317,66 +432,51 @@ exports.commands = {
 		this.sendReply("|raw|" + display);
 	},
 
-	dicegame: 'startdice',
-	dicestart: 'startdice',
-	startdice: function (target, room, user) {
-		if (!this.can('broadcast', null, room)) return false;
-		if (!target) return this.parse('/help startdice');
-		if (!this.canTalk()) return this.errorReply("You can not start dice games while unable to speak.");
+	startdice: 'dicegame',
+	dicegame: function (target, room, user) {
+		if (room.id === 'lobby') return this.errorReply("This command cannot be used in the Lobby.");
+		if (!user.can('broadcast', null, room) && room.id !== 'casino' && room.id !== 'coldfrontcasino') return this.errorReply("You must be ranked + or higher in this room to start a game of dice outside the Casino.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.errorReply("You cannot use this command while unable to talk.");
+		if (room.dice) return this.errorReply("There is already a game of dice going on in this room.");
 
-		let amount = isMoney(target);
-
-		if (typeof amount === 'string') return this.errorReply(amount);
-		if (!room.dice) room.dice = {};
-		if (room.dice.started) return this.errorReply("A dice game has already started in this room.");
-
-		room.dice.started = true;
-		room.dice.bet = amount;
-		// Prevent ending a dice game too early.
-		room.dice.startTime = Date.now();
-
-		room.addRaw("<div class='infobox'><h2><center><font color=#24678d>" + user.name + " has started a dice game for </font><font color=red>" + amount + "</font><font color=#24678d>" + currencyName(amount) + ".</font><br><button name='send' value='/joindice'>Click to join.</button></center></h2></div>");
+		let amount = Number(target) || 1;
+		if (isNaN(target)) return this.errorReply('"' + target + '" isn\'t a valid number.');
+		if (target.includes('.') || amount < 1 || amount > 5000) return this.sendReply('The number of bucks must be between 1 and 5,000 and cannot contain a decimal.');
+		if (Db('money').get(user.userid, 0) < amount) return this.sendReply("You don't have " + amount + " " + currencyName(amount) + ".");
+		room.dice = new Dice(room, amount, user.name);
+		this.parse("/joindice");
 	},
-	startdicehelp: ["/startdice [bet] - Start a dice game to gamble for money."],
+	startdicehelp: ["/startdice or /dicegame [bet] - Start a dice game to gamble for money."],
 
+	dicejoin: 'joindice',
 	joindice: function (target, room, user) {
-		if (!room.dice || (room.dice.p1 && room.dice.p2)) return this.errorReply("There is no dice game in it's signup phase in this room.");
-		if (!this.canTalk()) return this.errorReply("You may not join dice games while unable to speak.");
-		if (room.dice.p1 === user.userid) return this.errorReply("You already entered this dice game.");
-		if (Db('money').get(user.userid, 0) < room.dice.bet) return this.errorReply("You don't have enough bucks to join this game.");
-		Db('money').set(user.userid, Db('money').get(user.userid) - room.dice.bet);
-		if (!room.dice.p1) {
-			room.dice.p1 = user.userid;
-			room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
-			return;
-		}
-		room.dice.p2 = user.userid;
-		room.addRaw("<b>" + user.name + " has joined the dice game.</b>");
-		let p1Number = Math.floor(6 * Math.random()) + 1;
-		let p2Number = Math.floor(6 * Math.random()) + 1;
-		let output = "<div class='infobox'>Game has two players, starting now.<br>Rolling the dice.<br>" + room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
-		while (p1Number === p2Number) {
-			output += "Tie... rolling again.<br>";
-			p1Number = Math.floor(6 * Math.random()) + 1;
-			p2Number = Math.floor(6 * Math.random()) + 1;
-			output += room.dice.p1 + " has rolled a " + p1Number + ".<br>" + room.dice.p2 + " has rolled a " + p2Number + ".<br>";
-		}
-		let winner = room.dice[p1Number > p2Number ? 'p1' : 'p2'];
-		output += "<font color=#24678d><b>" + winner + "</b></font> has won <font color=#24678d><b>" + room.dice.bet + "</b></font>" + currencyName(room.dice.bet) + ".<br>Better luck next time " + room.dice[p1Number < p2Number ? 'p1' : 'p2'] + "!</div>";
-		room.addRaw(output);
-		Db('money').set(winner, Db('money').get(winner, 0) + room.dice.bet * 2);
-		delete room.dice;
-	},
+		if (room.id === 'lobby') return this.errorReply("This command cannot be used in the Lobby.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot use this command while unable to talk.");
+		if (!room.dice) return this.errorReply('There is no game of dice going on in this room.');
 
-	enddice: function (target, room, user) {
-		if (!user.can('broadcast', null, room)) return false;
-		if (!room.dice) return this.errorReply("There is no dice game in this room.");
-		if ((Date.now() - room.dice.startTime) < 15000 && !user.can('broadcast', null, room)) return this.errorReply("Regular users may not end a dice game within the first minute of it starting.");
-		if (room.dice.p2) return this.errorReply("Dice game has already started.");
-		if (room.dice.p1) Db('money').set(room.dice.p1, Db('money').get(room.dice.p1, 0) + room.dice.bet);
-		room.addRaw("<b>" + user.name + " ended the dice game.</b>");
-		delete room.dice;
+		room.dice.join(user, this);
 	},
+	joindicehelp: ["/joindice or /dicejoin - Joins ongoing dice game in the room."],
+
+	diceleave: 'leavedice',
+	leavedice: function (target, room, user) {
+		if (room.id === 'lobby') return this.errorReply("This command cannot be used in the Lobby.");
+		if (!room.dice) return this.errorReply('There is no game of dice going on in this room.');
+
+		room.dice.leave(user, this);
+	},
+	leavedicehelp: ["/leavedice or /diceleave - Leaves currently joined dice game in the room."],
+
+	diceend: 'enddice',
+	enddice: function (target, room, user) {
+		if (room.id === 'lobby') return this.errorReply("This command cannot be used in the Lobby.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot use this command while unable to talk.");
+		if (!room.dice) return this.errorReply('There is no game of dice going on in this room.');
+		if (!user.can('broadcast', null, room) && !room.dice.players.includes(user)) return this.errorReply("You must be ranked + or higher in this room to end a game of dice.");
+
+		room.dice.end(user);
+	},
+	enddicehelp: ["/enddice or /diceend - Ends ongoing dice game in the room."],
 
 	bucks: 'economystats',
 	economystats: function (target, room, user) {

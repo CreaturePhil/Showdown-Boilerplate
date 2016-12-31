@@ -22,7 +22,7 @@ exports.commands = {
 		this.parse(`/givemoney ${user.name}, 2`);
 		this.parse('/shop');
 		this.parse(`/givemoney ${user.name}, 5`);
-		this.parse('/buy symbol');
+		this.parse('/shop buy customsymbol');
 		this.parse('/customsymbol @');
 		this.parse('/customsymbol ^');
 		this.parse('/resetsymbol');
@@ -30,7 +30,7 @@ exports.commands = {
 		this.parse('/moneyladder');
 		this.parse(`/givemoney ${user.name}, 5`);
 		this.parse('/dicegame 5');
-		this.parse('/endgame');
+		this.parse('/endddice');
 		this.parse(`/takemoney ${user.name}, 5`);
 		this.parse('/bucks');
 	},

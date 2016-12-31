@@ -107,8 +107,9 @@ exports.commands = {
 		});
 	},
 
-	dexsearchhelp: ["/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
-		"Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat.",
+	dexsearchhelp: [
+		"/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
+		"Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat, egg group.",
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
 		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/BL4/PU/NFE/LC/CAP.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
@@ -117,7 +118,8 @@ exports.commands = {
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
 		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.",
 		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.",
-		"The order of the parameters does not matter."],
+		"The order of the parameters does not matter.",
+	],
 
 	'!randompokemon': true,
 	rollpokemon: 'randompokemon',
@@ -158,9 +160,11 @@ exports.commands = {
 			this.update();
 		});
 	},
-	randompokemonhelp: ["/randompokemon - Generates random Pok\u00e9mon based on given search conditions.",
+	randompokemonhelp: [
+		"/randompokemon - Generates random Pok\u00e9mon based on given search conditions.",
 		"/randompokemon uses the same parameters as /dexsearch (see '/help ds').",
-		"Adding a number as a parameter returns that many random Pok\u00e9mon, e.g., '/randpoke 6' returns 6 random Pok\u00e9mon."],
+		"Adding a number as a parameter returns that many random Pok\u00e9mon, e.g., '/randpoke 6' returns 6 random Pok\u00e9mon.",
+	],
 
 	'!movesearch': true,
 	ms: 'movesearch',
@@ -186,7 +190,8 @@ exports.commands = {
 			this.update();
 		});
 	},
-	movesearchhelp: ["/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
+	movesearchhelp: [
+		"/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
 		"Search categories are: type, category, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
 		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
@@ -194,7 +199,8 @@ exports.commands = {
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
 		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, and sound.",
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.",
-		"The order of the parameters does not matter."],
+		"The order of the parameters does not matter.",
+	],
 
 	'!itemsearch': true,
 	isearch: 'itemsearch',
@@ -254,12 +260,14 @@ exports.commands = {
 			this.update();
 		});
 	},
-	learnhelp: ["/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.",
+	learnhelp: [
+		"/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.",
 		"!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ * # & ~",
 		"Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or 'pentagon'. A value of 'pentagon' indicates that trading from previous generations is not allowed.",
 		"/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.",
 		"/learnall displays all of the possible fathers for egg moves.",
-		"/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras"],
+		"/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras",
+	],
 };
 
 if (process.send && module === process.mainModule) {
@@ -288,6 +296,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
 	let allTiers = {'uber':'Uber', 'ou':'OU', 'bl':"BL", 'uu':'UU', 'bl2':"BL2", 'ru':'RU', 'bl3':"BL3", 'nu':'NU', 'bl4':"BL4", 'pu':'PU', 'nfe':'NFE', 'lc uber':"LC Uber", 'lc':'LC', 'cap':"CAP"};
 	let allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
+	let allEggGroups = {'amorphous':'Amorphous', 'bug':'Bug', 'ditto':'Ditto', 'dragon':'Dragon', 'fairy':'Fairy', 'field':'Field', 'flying':'Flying', 'grass':'Grass', 'humanlike':'Human-Like', 'mineral':'Mineral', 'monster':'Monster', 'undiscovered':'Undiscovered', 'water1':'Water 1', 'water2':'Water 2', 'water3':'Water 3'};
 	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1};
 	let showAll = false;
 	let megaSearch = null;
@@ -318,7 +327,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 	let andGroups = target.split(',');
 	for (let i = 0; i < andGroups.length; i++) {
-		let orGroup = {abilities: {}, tiers: {}, colors: {}, gens: {}, moves: {}, types: {}, resists: {}, stats: {}, skip: false};
+		let orGroup = {abilities: {}, tiers: {}, colors: {}, 'egg groups': {}, gens: {}, moves: {}, types: {}, resists: {}, stats: {}, skip: false};
 		let parameters = andGroups[i].split("|");
 		if (parameters.length > 3) return {reply: "No more than 3 alternatives for each parameter may be used."};
 		for (let j = 0; j < parameters.length; j++) {
@@ -355,6 +364,14 @@ function runDexsearch(target, cmd, canAll, message) {
 				let invalid = validParameter("colors", target, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup.colors[target] = !isNotSearch;
+				continue;
+			}
+
+			if (toId(target) in allEggGroups) {
+				target = allEggGroups[toId(target)];
+				let invalid = validParameter("egg groups", target, isNotSearch, target);
+				if (invalid) return {reply: invalid};
+				orGroup['egg groups'][target] = !isNotSearch;
 				continue;
 			}
 
@@ -524,9 +541,6 @@ function runDexsearch(target, cmd, canAll, message) {
 			dex[pokemon] = template;
 		}
 	}
-	dex = JSON.parse(JSON.stringify(dex)); // Don't modify the original template (when compiling learnsets)
-
-	let learnSetsCompiled = false;
 
 	// Prioritize searches with the least alternatives.
 	const accumulateKeyCount = (count, searchData) => count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
@@ -545,6 +559,13 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (alts.colors && Object.keys(alts.colors).length) {
 				if (alts.colors[dex[mon].color]) continue;
 				if (Object.values(alts.colors).includes(false) && alts.colors[dex[mon].color] !== false) continue;
+			}
+
+			for (let eggGroup in alts['egg groups']) {
+				if (dex[mon].eggGroups.includes(eggGroup) === alts['egg groups'][eggGroup]) {
+					matched = true;
+					break;
+				}
 			}
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
@@ -612,26 +633,9 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (matched) continue;
 
-			if (!learnSetsCompiled) {
-				for (let mon2 in dex) {
-					let template = dex[mon2];
-					if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-					if (!template.learnset) continue;
-					let fullLearnset = template.learnset;
-					while (template.prevo) {
-						template = Tools.getTemplate(template.prevo);
-						for (let move in template.learnset) {
-							if (!fullLearnset[move]) fullLearnset[move] = template.learnset[move];
-						}
-					}
-					dex[mon2].learnset = fullLearnset;
-				}
-				learnSetsCompiled = true;
-			}
-
 			for (let move in alts.moves) {
-				let canLearn = (dex[mon].learnset.sketch && !['chatter', 'struggle', 'magikarpsrevenge'].includes(move)) || dex[mon].learnset[move];
-				if ((canLearn && alts.moves[move]) || (alts.moves[move] === false && !canLearn)) {
+				let lsetData = {fastCheck: true, set: {}};
+				if (!TeamValidator('gen7ou').checkLearnset(move, mon, lsetData) === alts.moves[move]) {
 					matched = true;
 					break;
 				}
@@ -648,34 +652,17 @@ function runDexsearch(target, cmd, canAll, message) {
 		results.push(dex[mon].species);
 	}
 
-	let moveGroups = searches
-		.filter(alts => alts.moves && Object.keys(alts.moves).some(move => alts.moves[move]))
-		.map(alts => Object.keys(alts.moves));
-	if (moveGroups.length >= 2) {
-		results = results.filter(mon => {
-			let lsetData = {fastCheck: true, set: {}};
-			for (let group = 0; group < moveGroups.length; group++) {
-				for (let i = 0; i < moveGroups[group].length; i++) {
-					let problem = TeamValidator('gen7ou').checkLearnset(moveGroups[group][i], mon, lsetData);
-					if (!problem) break;
-					if (i === moveGroups[group].length - 1) return false;
-				}
-			}
-			return true;
-		});
-	}
-
 	if (randomOutput && randomOutput < results.length) {
 		results = Tools.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
+	let resultsStr = (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
 	if (results.length > 1) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
 			resultsStr += results.join(", ");
 		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
 		}
 	} else if (results.length === 1) {
 		return {dt: results[0]};
@@ -760,7 +747,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		if (template.exists) {
 			if (Object.keys(lsetData).length) return {reply: "A search can only include one Pok\u00e9mon learnset."};
 			if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-			lsetData = template.learnset;
+			lsetData = Object.assign({}, template.learnset);
 			targetMon = template.name;
 			while (template.prevo) {
 				template = Tools.getTemplate(template.prevo);
@@ -1023,16 +1010,16 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	let resultsStr = "";
 	if (targetMon) {
-		resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br />";
+		resultsStr += "<span style=\"color:#999999;\">Matching moves found in learnset for</span> " + targetMon + ":<br />";
 	} else {
-		resultsStr += (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
+		resultsStr += (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
 	}
 	if (results.length > 0) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
 			resultsStr += results.join(", ");
 		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
 		}
 	} else {
 		resultsStr += "No moves found.";
@@ -1241,13 +1228,13 @@ function runItemsearch(target, cmd, canAll, message) {
 		}
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
+	let resultsStr = (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
 	if (foundItems.length > 0) {
 		if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
 			foundItems.sort();
 			resultsStr += foundItems.join(", ");
 		} else {
-			resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with ', all' at the end to show all results.</font>";
+			resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with ', all' at the end to show all results.</span>";
 		}
 	} else {
 		resultsStr += "No items found. Try a more general search";
