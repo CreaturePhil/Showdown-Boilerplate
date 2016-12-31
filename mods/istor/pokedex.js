@@ -272,7 +272,7 @@ exports.BattlePokedex = {
 	},
 	manakley: {
 		num: 10021,
-		species: "Maniakey",
+		species: "Manakley",
 		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Steel", "Normal"],
 		baseStats: {hp: 46, atk: 41, def: 96, spa: 30, spd: 36, spe: 1},
