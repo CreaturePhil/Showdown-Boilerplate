@@ -14,7 +14,8 @@ exports.BattleScripts = {
 			let arr = team[i].set.name.split(" ("), name  = "";
 			team[i].donorSpecies = this.getTemplate(toId(arr[1])).species;
 			name = name+arr[0];
-			team[i].name = team[i].set.name = name.substr(0, 20);
+			team[i].name = name;
+			team[i].set.name = name;
 		}
 		return team;
 	},
