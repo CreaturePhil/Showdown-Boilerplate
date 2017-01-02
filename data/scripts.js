@@ -14,7 +14,7 @@ exports.BattleScripts = {
 			}
 		}
 		let baseMove = this.getMove(move);
-		move = this.getMove(zMove || move);
+		move = zMove ? this.getZMoveCopy(move, pokemon) : baseMove;
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		this.setActiveMove(move, pokemon, target);
@@ -1541,6 +1541,9 @@ exports.BattleScripts = {
 				case 'bugbite': case 'bugbuzz': case 'signalbeam':
 					if (hasMove['uturn'] && !counter.setupType) rejected = true;
 					break;
+				case 'lunge':
+					if (hasMove['leechlife']) rejected = true;
+					break;
 				case 'darkpulse':
 					if (hasMove['shadowball']) rejected = true;
 					if ((hasMove['crunch'] || hasMove['hyperspacefury']) && counter.setupType !== 'Special') rejected = true;
@@ -1681,6 +1684,7 @@ exports.BattleScripts = {
 					break;
 				case 'hypervoice':
 					if (hasMove['naturepower'] || hasMove['return']) rejected = true;
+					if (hasAbility['Liquid Voice'] && hasMove['scald']) rejected = true;
 					break;
 				case 'judgment':
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
@@ -1734,7 +1738,7 @@ exports.BattleScripts = {
 					if (hasMove['hydropump'] || hasMove['scald']) rejected = true;
 					break;
 				case 'scald':
-					if (hasMove['waterfall'] || hasMove['waterpulse']) rejected = true;
+					if (hasMove['liquidation'] || hasMove['waterfall'] || hasMove['waterpulse']) rejected = true;
 					break;
 
 				// Status:
@@ -1819,10 +1823,14 @@ exports.BattleScripts = {
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal']) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Dark Aura'] && !counter['Dark']) ||
+					(hasAbility['Electric Surge'] && !counter['Electric']) ||
 					(hasAbility['Gale Wings'] && !counter['Flying']) ||
+					(hasAbility['Grassy Surge'] && !counter['Grass']) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
+					(hasAbility['Psychic Surge'] && !counter['Psychic']) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
+					(hasAbility['Water Bubble'] && !counter['Water']) ||
 					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
@@ -1992,6 +2000,9 @@ exports.BattleScripts = {
 			}
 			if (abilities.includes('Unburden') && hasMove['acrobatics']) {
 				ability = 'Unburden';
+			}
+			if (abilities.includes('Water Bubble') && counter['Water']) {
+				ability = 'Water Bubble';
 			}
 			if (template.id === 'ambipom' && !counter['technician']) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it

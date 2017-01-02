@@ -86,7 +86,7 @@ exports.Formats = [
 		mod: 'gen7',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Little Cup'],
-		banlist: ['Cutiefly', 'Gligar', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Yanma', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
+		banlist: ['Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Yanma', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
 	},
 	{
 		name: "[Gen 7] Pokebank Anything Goes",
@@ -238,46 +238,53 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] STABmons",
+		name: "[Gen 7] Pokébilities",
 		desc: [
-			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587949/\">STABmons</a>",
+			"Pok&eacute;mon have all their natural abilities at the same time.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3588652/\">Pokébilities</a>",
 		],
 
-		mod: 'gen7',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
-		banlist: ['Ignore STAB Moves',
-			'Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Dialga', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
-			'Landorus-Base', 'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Power Construct', 'Shadow Tag', 'Gengarite', 'Kangaskhanite', "King's Rock", 'Lucarionite', 'Metagrossite', 'Razor Fang', 'Salamencite',
-		],
-	},
-	{
-		name: "[Gen 7] Middle Cup",
-		desc: [
-			"Only middle evolutions are allowed.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3588047/\">Middle Cup</a>",
-		],
-
-		mod: 'gen7',
-		searchShow: false,
-		maxLevel: 50,
-		defaultLevel: 50,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Eviolite', 'Light Ball', 'Baton Pass'],
-		onValidateSet: function (set) {
-			let template = this.getTemplate(set.species || set.name);
-			if (!template.prevo || !template.nfe) {
-				return [set.species + " is not the middle Pokémon in an evolution chain."];
+		mod: 'pokebilities',
+		ruleset: ["[Gen 7] Pokebank OU"],
+		onBegin: function () {
+			let banlistTable = this.getBanlistTable(this.getFormat('gen7ou'));
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				if (pokemon.ability === 'battlebond') {
+					pokemon.innates = [];
+					continue;
+				}
+				pokemon.innates = Object.keys(pokemon.template.abilities).filter(key => key !== 'S' && (key !== 'H' || !pokemon.template.unreleasedHidden)).map(key => toId(pokemon.template.abilities[key])).filter(ability => ability !== pokemon.ability && !banlistTable[ability]);
 			}
 		},
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+			pokemon.innates.forEach(innate => pokemon.addVolatile("other" + innate, pokemon));
+		},
+		onAfterMega: function (pokemon) {
+			pokemon.innates.forEach(innate => pokemon.removeVolatile("other" + innate, pokemon));
+			pokemon.innates = [];
+		},
+	},
+	{
+		name: "[Gen 7] 350 Cup",
+		desc: [
+			"Pok&eacute;mon with a base stat total of 350 or lower get their stats doubled.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3589641/\">350 Cup</a>",
+		],
+
+		mod: '350cup',
+		searchShow: false,
+		ruleset: ['[Gen 7] Pokebank Ubers'],
+		banlist: ['Deep Sea Tooth', 'Eevium Z', 'Eviolite', 'Light Ball'],
 	},
 	{
 		section: "Other Metagames",
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Balanced Hackmons",
+		name: "[Gen 7] Balanced Hackmons (suspect test)",
 		desc: [
 			"Anything that can be hacked in-game and is usable in local battles is allowed.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587475/\">Balanced Hackmons</a>",
@@ -319,11 +326,11 @@ exports.Formats = [
 		banlist: [
 			'Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Groudon', 'Ho-Oh', 'Kartana', 'Kyogre', 'Kyurem-White',
 			'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Pheromosa', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Tapu Lele', 'Xerneas', 'Yveltal', 'Zekrom', 'Zygarde',
-			'Damp Rock', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Smooth Rock', 'Terrain Extender',
+			'Battle Bond', 'Damp Rock', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Smooth Rock', 'Terrain Extender',
 		],
 	},
 	{
-		name: "[Gen 7] Mix and Mega (suspect test)",
+		name: "[Gen 7] Mix and Mega",
 		desc: [
 			"Mega Stones and Primal Orbs can be used on almost any fully evolved Pok&eacute;mon with no Mega Evolution limit.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587740/\">Mix and Mega</a>",
@@ -533,11 +540,11 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 5] Anything Goes",
+		name: "[Gen 1] No Big 4 OU",
 
-		mod: 'gen5',
-		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased'],
+		mod: 'gen1',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'Chansey', 'Exeggutor', 'Tauros', 'Snorlax'],
 	},
 
 	// ORAS Singles

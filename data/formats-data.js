@@ -2873,8 +2873,8 @@ exports.BattleFormatsData = {
 		tier: "Unreleased",
 	},
 	torkoal: {
-		randomBattleMoves: ["shellsmash", "fireblast", "earthpower", "hiddenpowergrass", "stealthrock", "rapidspin", "yawn", "lavaplume"],
-		randomDoubleBattleMoves: ["protect", "heatwave", "earthpower", "willowisp", "shellsmash", "fireblast", "hiddenpowergrass"],
+		randomBattleMoves: ["shellsmash", "fireblast", "earthpower", "solarbeam", "stealthrock", "rapidspin", "yawn", "lavaplume"],
+		randomDoubleBattleMoves: ["protect", "heatwave", "earthpower", "willowisp", "shellsmash", "fireblast", "solarbeam"],
 		tier: "New",
 	},
 	spoink: {
@@ -3733,7 +3733,7 @@ exports.BattleFormatsData = {
 	},
 	drifloon: {
 		randomBattleMoves: ["shadowball", "substitute", "calmmind", "hypnosis", "hiddenpowerfighting", "thunderbolt", "destinybond", "willowisp"],
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	drifblim: {
 		randomBattleMoves: ["acrobatics", "willowisp", "substitute", "destinybond", "shadowball", "hex"],
@@ -4690,7 +4690,7 @@ exports.BattleFormatsData = {
 	},
 	gothita: {
 		randomBattleMoves: ["psychic", "thunderbolt", "hiddenpowerfighting", "shadowball", "substitute", "calmmind", "trick", "grassknot"],
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	gothorita: {
 		randomBattleMoves: ["psychic", "psyshock", "thunderbolt", "hiddenpowerfighting", "shadowball", "substitute", "calmmind", "trick", "grassknot"],
@@ -4736,8 +4736,8 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	vanilluxe: {
-		randomBattleMoves: ["icebeam", "explosion", "hiddenpowerground", "flashcannon", "autotomize", "freezedry"],
-		randomDoubleBattleMoves: ["icebeam", "taunt", "hiddenpowerground", "flashcannon", "autotomize", "protect", "freezedry"],
+		randomBattleMoves: ["blizzard", "explosion", "hiddenpowerground", "flashcannon", "autotomize", "freezedry"],
+		randomDoubleBattleMoves: ["blizzard", "taunt", "hiddenpowerground", "flashcannon", "autotomize", "protect", "freezedry"],
 		tier: "New",
 	},
 	deerling: {
@@ -5878,7 +5878,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	araquanid: {
-		randomBattleMoves: ["liquidation", "lunge", "infestation", "mirrorcoat"],
+		randomBattleMoves: ["liquidation", "leechlife", "lunge", "toxic", "mirrorcoat", "crunch"],
 		tier: "New",
 	},
 	fomantis: {
@@ -6099,7 +6099,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	tapukoko: {
-		randomBattleMoves: ["wildcharge", "voltswitch", "naturesmadness", "bravebird", "uturn"],
+		randomBattleMoves: ["wildcharge", "voltswitch", "naturesmadness", "bravebird", "uturn", "dazzlinggleam"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "discharge", "agility", "electroball"]},
 		],
@@ -6108,7 +6108,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	tapulele: {
-		randomBattleMoves: ["moonblast", "psyshock", "calmmind", "focusblast", "aromatherapy"],
+		randomBattleMoves: ["moonblast", "psyshock", "calmmind", "focusblast", "taunt"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "extrasensory", "flatter", "moonblast"]},
 		],
@@ -6117,7 +6117,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	tapubulu: {
-		randomBattleMoves: ["woodhammer", "naturesmadness", "rocktomb", "superpower", "megahorn"],
+		randomBattleMoves: ["woodhammer", "hornleech", "stoneedge", "superpower", "megahorn", "bulkup"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "zenheadbutt", "megahorn", "skullbash"]},
 		],
@@ -6126,7 +6126,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	tapufini: {
-		randomBattleMoves: ["calmmind", "moonblast", "scald", "substitute", "icebeam"],
+		randomBattleMoves: ["calmmind", "moonblast", "surf", "substitute", "icebeam", "hydropump"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "muddywater", "aquaring", "hydropump"]},
 		],
@@ -6160,34 +6160,66 @@ exports.BattleFormatsData = {
 	},
 	nihilego: {
 		randomBattleMoves: ["stealthrock", "acidspray", "powergem", "toxicspikes", "sludgewave"],
+		eventPokemon: [
+			{"generation": 7, "level": 55, "moves":["powergem", "mirrorcoat", "acidspray", "venomdrench"]},
+		],
+		eventOnly: true,
 		tier: "New",
 	},
 	buzzwole: {
 		randomBattleMoves: ["superpower", "leechlife", "stoneedge", "poisonjab"],
+		eventPokemon: [
+			{"generation": 7, "level": 65, "moves":["counter", "hammerarm", "lunge", "dynamicpunch"]},
+		],
+		eventOnly: true,
 		tier: "New",
 	},
 	pheromosa: {
 		randomBattleMoves: ["highjumpkick", "uturn", "icebeam", "poisonjab", "bugbuzz"],
+		eventPokemon: [
+			{"generation": 7, "level": 60, "moves":["triplekick", "lunge", "bugbuzz", "mefirst"]},
+		],
+		eventOnly: true,
 		tier: "New",
 	},
 	xurkitree: {
 		randomBattleMoves: ["thunderbolt", "voltswitch", "energyball", "dazzlinggleam", "hiddenpowerice"],
+		eventPokemon: [
+			{"generation": 7, "level": 65, "moves":["hypnosis", "discharge", "electricterrain", "powerwhip"]},
+		],
+		eventOnly: true,
 		tier: "New",
 	},
 	celesteela: {
 		randomBattleMoves: ["autotomize", "flashcannon", "airslash", "fireblast", "energyball"],
+		eventPokemon: [
+			{"generation": 7, "level": 65, "moves":["autotomize", "seedbomb", "skullbash", "irondefense"]},
+		],
+		eventOnly: true,
 		tier: "New",
 	},
 	kartana: {
 		randomBattleMoves: ["leafblade", "sacredsword", "smartstrike", "psychocut", "swordsdance"],
+		eventPokemon: [
+			{"generation": 7, "level": 60, "moves":["leafblade", "xscissor", "detect", "airslash"]},
+		],
+		eventOnly: true,
 		tier: "New",
 	},
 	guzzlord: {
 		randomBattleMoves: ["dracometeor", "hammerarm", "crunch", "earthquake", "fireblast"],
+		eventPokemon: [
+			{"generation": 7, "level": 70, "moves":["thrash", "gastroacid", "heavyslam", "wringout"]},
+		],
+		eventOnly: true,
 		tier: "New",
 	},
 	necrozma: {
 		randomBattleMoves: ["autotomize", "swordsdance", "stoneedge", "psychocut", "earthquake", "psyshock"],
+		eventPokemon: [
+			{"generation": 7, "level": 75, "moves":["stealthrock", "irondefense", "wringout", "prismaticlaser"]},
+		],
+		eventOnly: true,
 		tier: "New",
 	},
 	magearna: {
