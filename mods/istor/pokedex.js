@@ -226,7 +226,7 @@ exports.BattlePokedex = {
 		heightm: 1.5,
 		weightkg: 52.7,
 		color: "Brown",
-		eggGroups: ["Mineral"],
+		eggGroups: ["Mineral", "Human-Like"],
 	},
 	panoir: {
 		num: 10018,
