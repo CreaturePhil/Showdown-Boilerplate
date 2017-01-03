@@ -122,6 +122,16 @@ exports.BattleAbilities = {
 		rating: 4,
 		num: 10002,
 	},
+	"extremeentry": {
+		shortDesc: "If this Pokemon switches in for the first time, its moves have their priority increased by 1.",
+		onModifyPriority: function (priority, pokemon, target, move) {
+			if (pokemon.activeTurns > 1) { return priority + 1;
+		},
+		id: "extremeentry",
+		name: "Extreme Entry",
+		rating: 3,
+		num: 177,
+	},
 	"magicalemanation": {
 		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
 		onStart: function (source, effect) {
