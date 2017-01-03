@@ -89,6 +89,14 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["drainpunch", "ironhead", "bulkup", "rest"],
 		tier: "New",
 	},
+	impite: {
+		randomBattleMoves: ["closecombat", "machpunch", "meteorimpact", "uturn", "stoneedge"],
+		tier: "LC",
+	},
+	maniakley: {
+		randomBattleMoves: ["closecombat", "machpunch", "meteorimpact", "uturn", "stoneedge"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
