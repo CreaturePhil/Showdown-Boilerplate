@@ -42,7 +42,7 @@ exports.BattleAbilities = {
 	innovate: {
 		onStart: function(pokemon) {
 			if(pokemon.calculateStat("spa",pokemon.boosts.spa) > pokemon.calculateStat("atk",pokemon.boosts.atk)) {
-				this.add('-activate', source, 'ability: Innovate');
+				this.add('-activate', pokemon, 'ability: Innovate');
 				this.add('-formechange', pokemon, 'Infineer-spc', '[msg]');
 				pokemon.formeChange('Infineer-spc');
 				pokemon.forme = "Special";
