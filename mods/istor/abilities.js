@@ -56,14 +56,14 @@ exports.BattleAbilities = {
 		},
 		onBoost: function(boost, pokemon) {
 			if(pokemon.calculateStat("spa",pokemon.boosts.spa+(boost.spa||0)) > pokemon.calculateStat("atk",pokemon.boosts.atk+(boost.atk||0))) {
-				this.add('-activate', source, 'ability: Innovate');
+				this.add('-activate', pokemon, 'ability: Innovate');
 				this.add('-formechange', pokemon, 'Infineer-spc', '[msg]');
 				pokemon.formeChange('Infineer-spc');
 				pokemon.forme = "Special";
 				return;
 			}
 			if(pokemon.calculateStat("spa",pokemon.boosts.spa+(boost.spa||0)) < pokemon.calculateStat("atk",pokemon.boosts.atk+(boost.atk||0))) {
-				this.add('-activate', source, 'ability: Innovate');
+				this.add('-activate', pokemon, 'ability: Innovate');
 				this.add('-formechange', pokemon, 'Infineer', '[msg]');
 				pokemon.formeChange('Infineer');
 				pokemon.forme = "Physical";
