@@ -40,12 +40,15 @@ Ratings and how they work:
 
 exports.BattleAbilities = {
 	innovate: {
+		id: 'innovate',
+		name: 'Innovate',
 		onStart: function(pokemon) {
 			if(pokemon.calculateStat("spa",pokemon.boosts.spa) > pokemon.calculateStat("atk",pokemon.boosts.atk)) {
 				this.add('-activate', pokemon, 'ability: Innovate');
 				this.add('-formechange', pokemon, 'Infineer-spc', '[msg]');
 				pokemon.formeChange('Infineer-spc');
 				pokemon.forme = "Special";
+				this.add('-start', pokemon, "Special", '[silent]');
 				return;
 			}
 			pokemon.forme = "Physical";
@@ -60,6 +63,7 @@ exports.BattleAbilities = {
 				this.add('-formechange', pokemon, 'Infineer-spc', '[msg]');
 				pokemon.formeChange('Infineer-spc');
 				pokemon.forme = "Special";
+				this.add('-start', pokemon, "Special", '[silent]');
 				return;
 			}
 			if(pokemon.calculateStat("spa",pokemon.boosts.spa+(boost.spa||0)) < pokemon.calculateStat("atk",pokemon.boosts.atk+(boost.atk||0))) {
@@ -67,6 +71,7 @@ exports.BattleAbilities = {
 				this.add('-formechange', pokemon, 'Infineer', '[msg]');
 				pokemon.formeChange('Infineer');
 				pokemon.forme = "Physical";
+				this.add('-start', pokemon, "Physical", '[silent]');
 				return;
 			}
 		}
