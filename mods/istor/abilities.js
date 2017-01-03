@@ -50,7 +50,7 @@ exports.BattleAbilities = {
 			}
 			pokemon.forme = "Physical";
 		},
-		onModifyMove: function(move) {
+		onModifyMove: function(move, pokemon) {
 			if(move.category === "Status") return;
 			move.category = pokemon.forme || "Physical";
 		},
