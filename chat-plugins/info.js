@@ -1665,10 +1665,10 @@ exports.commands = {
 		Config.potd = target;
 		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
 		if (target) {
-			if (Rooms.development) Rooms.development.addRaw("The Pok&eacute;mon of the was set to " + target + ". This Pokemon will be guaranteed to show up in random battles.");
+			if (Rooms.development) Rooms.development.addRaw("<b>The Pok&eacute;mon of the was set to " + target + ". This Pokemon will be guaranteed to show up in random battles.</b>");
 			this.logModCommand("The Pok\u00e9mon of the Day was changed to " + target + " by " + user.name + ".");
 		} else {
-			if (Rooms.development) Rooms.development.addRaw("The Pok&eacute;mon of the Day was removed. No pokemon will be guaranteed in random battles.");
+			if (Rooms.development) Rooms.development.addRaw("<b>The Pok&eacute;mon of the Day was removed. No pokemon will be guaranteed in random battles.</b>");
 			this.logModCommand("The Pok\u00e9mon of the Day was removed by " + user.name + ".");
 		}
 	},
