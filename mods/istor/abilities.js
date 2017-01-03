@@ -39,7 +39,38 @@ Ratings and how they work:
 'use strict';
 
 exports.BattleAbilities = {
-	
+	innovate: {
+		onStart: function(pokemon) {
+			if(pokemon.calculateStat("spa",pokemon.boosts.spa) > pokemon.calculateStat("atk",pokemon.boosts.atk)) {
+				this.add('-activate', source, 'ability: Innovate');
+				this.add('-formechange', pokemon, 'Infineer-spc', '[msg]');
+				pokemon.formeChange('Infineer-spc');
+				pokemon.forme = "Special";
+				return;
+			}
+			pokemon.forme = "Physical";
+		},
+		onModifyMove: function(move) {
+			if(move.category === "Status") return;
+			move.category = pokemon.forme || "Physical";
+		},
+		onBoost: function(boost, pokemon) {
+			if(pokemon.calculateStat("spa",pokemon.boosts.spa+(boost.spa||0)) > pokemon.calculateStat("atk",pokemon.boosts.atk+(boost.atk||0))) {
+				this.add('-activate', source, 'ability: Innovate');
+				this.add('-formechange', pokemon, 'Infineer-spc', '[msg]');
+				pokemon.formeChange('Infineer-spc');
+				pokemon.forme = "Special";
+				return;
+			}
+			if(pokemon.calculateStat("spa",pokemon.boosts.spa+(boost.spa||0)) < pokemon.calculateStat("atk",pokemon.boosts.atk+(boost.atk||0))) {
+				this.add('-activate', source, 'ability: Innovate');
+				this.add('-formechange', pokemon, 'Infineer', '[msg]');
+				pokemon.formeChange('Infineer');
+				pokemon.forme = "Physical";
+				return;
+			}
+		}
+	},
 	"infernalscales": {
 		desc: "This Pokemon's Fire-type attacks have their power doubled, the power of Ice-type attacks against this Pokemon is halved, and this Pokemon cannot be frozen. Gaining this Ability while frozen cures it.",
 		shortDesc: "This Pokemon's Water power is 2x; it can't be burned; Fire power against it is halved.",
