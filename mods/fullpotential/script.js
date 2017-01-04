@@ -1,6 +1,7 @@
 'use strict';
 
 exports.BattleScripts = {
+	battle: {
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		if (typeof move === 'string') move = this.getMove(move);
 
@@ -143,4 +144,5 @@ exports.BattleScripts = {
 
 		return Math.floor(baseDamage);
 	},
+},
 };
