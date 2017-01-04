@@ -4175,6 +4175,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		//ruleset: ['[Gen 7] Pokebank OU'],
 		mod:'fullpotential',
 		desc: ["&bullet; In this metagame, every Pokemon uses their highest raw stat as their attacking stat."],
+		team: 'random',
 	},
 	{
 		name: "Move Mastery",
