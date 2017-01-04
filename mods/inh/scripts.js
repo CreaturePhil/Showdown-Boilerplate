@@ -1,7 +1,6 @@
 'use strict';
 exports.BattleScripts = {
 	init: function() {
-		Rooms.lobby.addRaw("<b>Success</b>");
 		this.getTeam = function (side, team) {
 		const format = this.getFormat();
 		const teamGenerator = typeof format.team === 'string' && format.team.startsWith('random') ? format.team + 'Team' : '';
