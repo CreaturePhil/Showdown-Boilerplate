@@ -125,7 +125,9 @@ exports.BattleAbilities = {
 	"extremeentry": {
 		shortDesc: "If this Pokemon switches in for the first time, its moves have their priority increased by 1.",
 		onModifyPriority: function (priority, pokemon, target, move) {
-			if (pokemon.activeTurns > 1) return priority + 1;
+			if (pokemon.entered) return priority;
+			pokemon.entered = true;
+			return priority + 1;
 		},
 		id: "extremeentry",
 		name: "Extreme Entry",
