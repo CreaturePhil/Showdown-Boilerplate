@@ -1,7 +1,6 @@
 'use strict';
 
 exports.BattleScripts = {
-	battle: {
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		if (typeof move === 'string') move = this.getMove(move);
 
@@ -65,6 +64,7 @@ exports.BattleScripts = {
 		let defenseStat = defensiveCategory === 'Physical' ? 'def' : 'spd';
 		for(let i in statTable) {
 			let stat = attacker.calculateStat(i, attacker.boosts[i]);
+			stat = this.runEvent('Modify' + statTable[i], attacker, defender, move, attack);
 			if(stat > highestStat) {
 				attackStat = i;
 				highestStat = stat;
@@ -144,5 +144,4 @@ exports.BattleScripts = {
 
 		return Math.floor(baseDamage);
 	},
-},
 };
