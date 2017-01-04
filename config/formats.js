@@ -4171,9 +4171,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	},
 	{
 		name: "[Gen 7] Full Potential",
-		section: "Experimental Metas",
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Team Preview'],
 		desc: ["&bullet; In this metagame, every Pokemon uses their highest raw stat as their attacking stat."],
+		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Team Preview'],
 		//team: 'random',
 		mod:'fullpotential',
 	},
