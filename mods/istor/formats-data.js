@@ -93,7 +93,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["closecombat", "machpunch", "meteorimpact", "uturn", "stoneedge"],
 		tier: "LC",
 	},
-	maniakley: {
+	pacteorite: {
 		randomBattleMoves: ["closecombat", "machpunch", "meteorimpact", "uturn", "stoneedge"],
 		tier: "New",
 	},
