@@ -2,6 +2,8 @@
 
 exports.BattleScripts = {
 	init: function() {
+		delete this.getDamage;
+		Rooms.lobby.addRaw("<b>Success</b>");
 		this.getDamage = function (pokemon, target, move, suppressMessages) {
 			if (typeof move === 'string') move = this.getMove(move);
 
