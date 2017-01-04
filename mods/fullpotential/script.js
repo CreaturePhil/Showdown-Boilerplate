@@ -69,7 +69,7 @@ exports.BattleScripts = {
 				highestStat = stat;
 			}
 		}
-		this.add("-message",(attacker.name || attacker.species)+"'s highest stat "+highestStat+" will be used for damage!");
+		attacker.battle.add("-message",(attacker.name || attacker.species)+"'s highest stat "+highestStat+" will be used for damage!");
 		let attack;
 		let defense;
 
