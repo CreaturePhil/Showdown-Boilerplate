@@ -97,6 +97,18 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["closecombat", "machpunch", "meteorimpact", "uturn", "stoneedge"],
 		tier: "New",
 	},
+	defilly: {
+		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
+		tier: "LC",
+	},
+	decapony: {
+		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
+		tier: "NFE",
+	},
+	vertahan: {
+		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
