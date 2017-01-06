@@ -3848,7 +3848,6 @@ class Battle extends Tools.BattleDex {
 		let statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
 		let attack;
 		let defense;
-		let highestStat = 0;
 		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
 		let defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 
