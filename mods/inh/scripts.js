@@ -19,6 +19,6 @@ exports.BattleScripts = {
 			team[i].set.name = name;
 		}
 		return team;
-	}
+		};
 	},
 };
