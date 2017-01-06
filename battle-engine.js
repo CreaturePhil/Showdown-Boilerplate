@@ -3850,11 +3850,11 @@ class Battle extends Tools.BattleDex {
 		let defense;
 		let highestStat, stats = Object.keys(statTable);
 		if(this.format === "gen7fullpotential") {
-			for(let i in stats) {
-				let stat = attacker.calculateStat(i, attacker.boosts[i]);
-				stat = this.runEvent('Modify' + statTable[i], attacker, defender, move, attack);
+			for(let i=0; i<stats.length; i++) {
+				let stat = attacker.calculateStat(stats[i], attacker.boosts[stats[i]]);
+				stat = this.runEvent('Modify' + statTable[stats[i]], attacker, defender, move, attack);
 				if(stat > highestStat) {
-					attackStat = i;
+					attackStat = stats[i];
 					highestStat = stat;
 				}
 			}
