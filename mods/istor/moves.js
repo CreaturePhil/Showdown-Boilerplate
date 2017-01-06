@@ -424,4 +424,34 @@ exports.BattleMovedex = {
 		zMovePower: 190,
 		contestType: "Cool",
 	},
+	"plague": {
+		num: 10017,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		desc: "Has a 50% chance to torment the target.",
+		shortDesc: "50% chance to torment the target.",
+		id: "plague",
+		isViable: true,
+		name: "Plague",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		effect: {
+			noCopy: true,
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'Torment');
+			},
+			onEnd: function (pokemon) {
+				this.add('-end', pokemon, 'Torment');
+			},
+			onDisableMove: function (pokemon) {
+				if (pokemon.lastMove !== 'struggle') pokemon.disableMove(pokemon.lastMove);
+			},
+		},
+		target: "normal",
+		type: "Dragon",
+		zMovePower: 140,
+		contestType: "Tough",
+	},
 };
