@@ -1,8 +1,7 @@
 'use strict';
 
 exports.BattleScripts = {
-	init: function() {
-		this.getDamage = function(pokemon, target, move, suppressMessages) {
+	getDamage : function(pokemon, target, move, suppressMessages) {
 			if (typeof move === 'string') move = this.getMove(move);
 
 			if (typeof move === 'number') {
@@ -71,7 +70,7 @@ exports.BattleScripts = {
 					highestStat = stat;
 				}
 			}
-			this.add("-message",attacker.species+"'s highest stat "+attackStat+" will be used for damage!");
+			this.add("-hint",attacker.species+"'s highest stat "+attackStat+" will be used for damage!");
 			let attack;
 			let defense;
 
@@ -144,6 +143,5 @@ exports.BattleScripts = {
 			if (basePower && !Math.floor(baseDamage)) return 1;
 
 			return Math.floor(baseDamage);
-		};
 	},
 };
