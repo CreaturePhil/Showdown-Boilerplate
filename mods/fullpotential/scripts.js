@@ -70,7 +70,6 @@ exports.BattleScripts = {
 					highestStat = stat;
 				}
 			}
-			this.add("-hint",attacker.species+"'s highest stat "+attackStat+" will be used for damage!");
 			let attack;
 			let defense;
 
