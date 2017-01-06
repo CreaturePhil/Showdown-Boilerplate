@@ -64,7 +64,7 @@ exports.BattleScripts = {
 			let defenseStat = defensiveCategory === 'Physical' ? 'def' : 'spd';
 			for(let i in statTable) {
 				let stat = attacker.calculateStat(i, attacker.boosts[i]);
-				stat = this.runEvent('Modify' + statTable[i], attacker, defender, move, attack);
+				stat = this.runEvent('Modify' + statTable[i], attacker, defender, move, stat);
 				if(stat > highestStat) {
 					attackStat = i;
 					highestStat = stat;
