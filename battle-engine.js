@@ -3858,7 +3858,7 @@ class Battle extends Tools.BattleDex {
 					highestStat = stat;
 				}
 			}
-			this.add("-message",attacker.species+"'s highest stat "+highestStat+" will be used for damage!");
+			this.add("-message",attacker.species+"'s highest stat "+attackStat+" will be used for damage!");
 		}
 		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
 		let defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
