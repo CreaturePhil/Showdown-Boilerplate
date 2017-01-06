@@ -109,6 +109,30 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
 		tier: "New",
 	},
+	alpy {
+		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
+		tier: "LC",
+	},
+	alpike: {
+		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
+		tier: "NFE",
+	},
+	alpra: {
+		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
+		tier: "New",
+	},
+	chy: {
+		randomBattleMoves: ["bodyslam", "substitute", "fireblast", "plague"],
+		tier: "LC",
+	},
+	quemelo: {
+		randomBattleMoves: ["bodyslam", "substitute", "fireblast", "plague"],
+		tier: "NFE",
+	},
+	glatise: {
+		randomBattleMoves: ["bodyslam", "substitute", "fireblast", "plague"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
