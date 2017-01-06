@@ -3851,7 +3851,8 @@ class Battle extends Tools.BattleDex {
 		let highestStat, stats = Object.keys(statTable);
 		if(this.format === "gen7fullpotential") {
 			for(let i=0; i<stats.length; i++) {
-				let stat = attacker.calculateStat(stats[i], attacker.boosts[stats[i]]);
+				let stat = attacker.calculateStat(stats[i], attacker.boosts[stats[i]] || 0);
+				this.add("-hint",attacker.species+"'s highest stat "+stat+" will be used for damage!");
 				//stat = this.runEvent('Modify' + statTable[stats[i]], attacker, defender, move, stat);
 				if(stat >= highestStat) {
 					attackStat = stats[i];
