@@ -4172,7 +4172,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	{
 		name: "Full Potential",
 		desc: ["&bullet; In this metagame, every Pokemon uses their highest raw stat as their attacking stat."],
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Team Preview'],
+		ruleset: ['[Gen 7] Pokebank OU'],
 		//team: 'random',
 		mod:'fullpotential',
 	},
