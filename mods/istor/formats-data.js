@@ -109,7 +109,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
 		tier: "New",
 	},
-	alpy {
+	alpy: {
 		randomBattleMoves: ["stoneedge", "frigidslam", "stealthrock", "earthquake"],
 		tier: "LC",
 	},
