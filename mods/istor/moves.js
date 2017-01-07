@@ -437,6 +437,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		volatileStatus: 'torment',
 		secondary: {
 			noCopy: true,
 			chance: 50,
