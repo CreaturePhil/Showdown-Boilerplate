@@ -437,8 +437,9 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		effect: {
+		secondary: {
 			noCopy: true,
+			chance: 50,
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'Torment');
 			},
