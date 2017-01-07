@@ -110,15 +110,15 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	alpy {
-		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
+		randomBattleMoves: ["stoneedge", "frigidslam", "stealthrock", "earthquake"],
 		tier: "LC",
 	},
 	alpike: {
-		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
+		randomBattleMoves: ["stoneedge", "frigidslam", "stealthrock", "earthquake"],
 		tier: "NFE",
 	},
 	alpra: {
-		randomBattleMoves: ["beatup", "pursuit", "suckerpunch", "feintattack", "shadowsneak", "spiritshackle", "playrough", "swordsdance"],
+		randomBattleMoves: ["stoneedge", "frigidslam", "stealthrock", "earthquake"],
 		tier: "New",
 	},
 	chy: {
