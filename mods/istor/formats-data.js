@@ -130,7 +130,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	glatise: {
-		randomBattleMoves: ["bodyslam", "substitute", "fireblast", "plague"],
+		randomBattleMoves: ["bodyslam", "dragonrush", "batonpass", "coil"],
 		tier: "New",
 	},
 	uisge: {
