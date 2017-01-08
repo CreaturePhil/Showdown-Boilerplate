@@ -4136,40 +4136,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
         	}
     	},
 	{
-		name: "Diversitype",
-		section: "Experimental Metas",
-		ruleset: ['OU'],
-		onBegin: function()
-		{
-			for(let p=0;p<this.sides.length;p++)
-			{
-				for(let i=0;i<this.sides[p].pokemon.length;i++)
-				{
-					let pokemon = this.sides[p].pokemon[i];
-					if(pokemon.types[1]) this.sides[p].pokemon[i].type2 = this.sides[p].pokemon[i].types[1];
-				        this.sides[p].pokemon[i].types[1] = this.sides[p].pokemon[i].hpType || "Dark";
-				        if(pokemon.types[0] === pokemon.types[1]) this.sides[p].pokemon[i].types.length = 1;
-				}
-			}
-		},
-		onSwitchInPriority: 1,
-		onSwitchIn: function (pokemon) {
-		        let types = pokemon.types;
-			this.add('-start', pokemon, 'typechange', types.join('/'), '[silent]');
-		},
-		onModifyMove: function(move, pokemon)
-		{
-			if(pokemon.type2 && move.type == pokemon.type2) move.type = pokemon.hpType || "Dark";
-		},
-		onAfterMega: function(pokemon) {
-			if(pokemon.type2 === pokemon.types[1]) {
-				pokemon.types[1] = pokemon.hpType;
-				if(pokemon.types[0] === pokemon.types[1]) pokemon.types.length = 1;
-			}
-			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
-		},
-	},
-	{
 		name: "[Gen 7] Full Potential",
 		desc: ["&bullet; In this metagame, every Pokemon uses their highest raw stat as their attacking stat."],
 		ruleset: ['[Gen 7] Pokebank OU'],
@@ -4326,63 +4292,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		}
 	},
 	{
-		name: "Beast Mode",
-		mod: "franticfusions",
-		ruleset: ['[Gen 7] Pokebank OU'],
-		onSwitchIn: function (pokemon) {
-			if(!toId(pokemon.ability) === "beastboost") pokemon.addVolatile("beastboost");
-		},
-	},
-	{
-		name: "Enchanted Items Balanced Hackmons",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
-		section: "Experimental Metas",
-		column: 3,
-
-		mod: 'enchanteditems',
-		ruleset: ['Balanced Hackmons'],
-		banlist: ['Bug Gem', 'Electric Gem', 'Fire Gem',
-			'Ice Gem', 'Persim Berry', 'Poison Gem', 'Poke Ball', 'Steel Gem', 'Wave Incense','Aguav Berry',
-		],
-		onValidateSet: function (set) {
-
-			let bannedAbilities = {'Arena Trap': 1, 'Huge Power': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Wonder Guard': 1};
-			if (set.ability in bannedAbilities) {
-				let template = this.getTemplate(set.species || set.name);
-				let legalAbility = false;
-				for (let i in template.abilities) {
-					if (set.ability === template.abilities[i]) legalAbility = true;
-				}
-				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
-			}
-		},
-		onValidateTeam: function (team) {
-			let abilityTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let ability = this.getAbility(team[i].ability);
-				if (!abilityTable[ability.id]) abilityTable[ability.id] = 0;
-				if (++abilityTable[ability.id] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getItem(ability.item).name + ")"];
-				}
-				let item = toId(team[i].item);
-				if (!item) continue;
-				item = this.getItem(item);
-				ability = item.ability;
-				if (!ability) continue;
-				if (!abilityTable[ability]) abilityTable[ability] = 0;
-				if (++abilityTable[ability] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item.name + ")"];
-				}
-			}
-		},
-		onFaint: function (pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
-		},
-		onSwitchOut: function (pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
-		},
-	},
-	{
 		name: "Enchanted Items Hackmons",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
 		section: "Experimental Metas",
@@ -4514,7 +4423,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		},
 	},
 	{//Thanks urkerab for the Cross Evolution code :)
-		name: "Frantic Fusions",
+		name: "[Gen 7] Frantic Fusions",
 		desc: [
 	     		"&bullet; A non pet mod version of Fusion Evolution. <BR /> &bullet; The resultant Pokemon has the primary type of the base mon. If the base mon is shiny, it will get the secondary type of the second mon, else the primary type of the second mon. It will get the averaged stats.<br />&bullet;You can choose any ability from the original Pokemon, and you also get the primary ability of the second Pokemon (The one you put in the nickname). <br />&bullet; Use !fuse for theorymonning purposes",
 	     	],
