@@ -4137,7 +4137,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
     	},
     {
     	section: "Experimental Metas",
-    	column: 3,
+    	column: 1,
     },
 	{
 		name: "[Gen 7] Full Potential",
