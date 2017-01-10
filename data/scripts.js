@@ -3351,10 +3351,9 @@ exports.BattleScripts = {
 		if (!depth) depth = 0;
 		let forceResult = (depth >= 4);
 
-		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
 		const prevSeed = this.seed;
 		this.seed = this.startingSeed.slice(0, 4);
-		const chosenTier = availableTiers[this.random(availableTiers.length)];
+		const chosenTier = "Balanced Hackmons";
 		this.seed = prevSeed;
 
 		let pokemon = [];
@@ -3382,9 +3381,6 @@ exports.BattleScripts = {
 
 			// Limit to one of each species (Species Clause)
 			if (teamData.baseFormes[template.baseSpecies]) continue;
-
-			// Limit the number of Megas to one
-			if (teamData.megaCount >= 1 && speciesFlags.megaOnly) continue;
 
 			// Limit 2 of any type
 			let types = template.types;
