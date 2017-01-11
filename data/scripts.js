@@ -3353,7 +3353,7 @@ exports.BattleScripts = {
 
 		const prevSeed = this.seed;
 		this.seed = this.startingSeed.slice(0, 4);
-		const chosenTier = "Balanced Hackmons";
+		const chosenTier = 'BH';
 		this.seed = prevSeed;
 
 		let pokemon = [];
