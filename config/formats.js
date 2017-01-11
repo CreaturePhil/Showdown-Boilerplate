@@ -226,7 +226,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		team: 'randomFactory',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
+		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
 		name: "Dragon Heaven Super Staff Bros [Beta]",
