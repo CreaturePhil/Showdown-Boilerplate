@@ -221,7 +221,7 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "Battle Factory",
+		name: "[Gen 7] BH Battle Factory",
 		section: "Randomized Metas",
 
 		mod: 'gen7',
