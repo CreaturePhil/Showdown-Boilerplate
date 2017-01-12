@@ -4,14 +4,14 @@
   **************/
 
   body {
-    background: #EEE url("http://img03.deviantart.net/3d9a/i/2016/231/1/2/turtonator_by_phatmon-daej1xo.png") no-repeat left fixed;
+    background: #EEE url("http://img03.deviantart.net/3d9a/i/2016/231/1/2/turtonator_by_phatmon-daej1xo.png") left fixed;
   }
 
-.button{color:black;background:#d4e1f4!important;border:solid 1px black!important}.menugroup
+.button{color:black;background:#f4aa42!important;border:solid 1px black!important}.menugroup
 
 .button:hover,.menugroup
 
-.button:active{color:black;background:#d4e1f4!important;border:solid 1px black!important
+.button:active{color:black;background:#f4aa42!important;border:solid 1px black!important
 }
 
   .astext{
@@ -226,11 +226,11 @@ button.button.mainmenu5{
 }
 
   .maintabbarbottom {
-    background: #d4e1f4;
+    background: #f4aa42;
     border: 1px solid #808080;
   }
 .dark .maintabbarbottom {
-    background: #d4e1f4;
+    background: #f4aa42;
     border: 1px solid #808080;
   }
 
