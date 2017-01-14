@@ -4429,7 +4429,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	     	],
 		mod: 'franticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite'],
+		banlist: ["Uber",'Unreleased', 'Shadow Tag', 'Soul Dew', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite', 'Swoobat'],
  		onBegin: function() {
                         let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
