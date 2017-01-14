@@ -56,7 +56,7 @@ function isMoney(money) {
 function logMoney(message) {
 	if (!message) return;
 	let file = path.join(__dirname, '../logs/money.txt');
-	let date = "[" + new Date().toUTCString() + "] ";f4aa42
+	let date = "[" + new Date().toUTCString() + "] ";
 	let msg = message + "\n";
 	fs.appendFile(file, date + msg);
 }
