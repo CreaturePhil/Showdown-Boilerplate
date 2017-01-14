@@ -56,7 +56,7 @@ function isMoney(money) {
 function logMoney(message) {
 	if (!message) return;
 	let file = path.join(__dirname, '../logs/money.txt');
-	let date = "[" + new Date().toUTCString() + "] ";
+	let date = "[" + new Date().toUTCString() + "] ";f4aa42
 	let msg = message + "\n";
 	fs.appendFile(file, date + msg);
 }
@@ -73,13 +73,13 @@ function getShopDisplay(shop) {
     let start = 0;
     while (start < shop.length) {
         display += "<tr>" +
-                        "<td align='center'><button name='send' style= border: 1px solid Red ; background: Black ; box-shadow: 0px 1px 1px rgba(255 , 255 , 255 , 0.3) inset ; color: Red ; text-shadow: 0px -1px 0px #000 ; border-radius: 3px ; margin: 3px ; padding: 2px 4px' value='/buy " + shop[start][0] + "'><font color=purple face=courier><b>" + shop[start][0] + "</b></font></button>" + "</td>" +
+                        "<td align='center'><button name='send' style= border: 2px solid Red ; background: #f4aa42 ; box-shadow: 0px 1px 1px rgba(255 , 255 , 255 , 0.3) inset ; color: Red ; text-shadow: 0px -1px 0px #000 ; border-radius: 3px ; margin: 3px ; padding: 2px 4px' value='/buy " + shop[start][0] + "'><font color=white face=courier><b>" + shop[start][0] + "</b></font></button>" + "</td>" +
                         "<td align='center'><font color=White face=courier>" + shop[start][1] + "</font></td>" +
                         "<td align='center'><font color=White face=courier>" + shop[start][2] + "</font></td>" +
                     "</tr>";
         start++;
     }
-    display += "</tbody></table></div><br><center><font color=purple face=courier>To buy an item from the shop, use /buy <em>command</em>.</font></center>";
+    display += "</tbody></table></div><br><center><font color=white face=courier>To buy an item from the shop, use /buy <em>command</em>.</font></center>";
     return display;
 }
 
