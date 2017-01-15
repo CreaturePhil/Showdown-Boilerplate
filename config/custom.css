@@ -380,7 +380,7 @@ button.button.mainmenu5{
   }
 
   .battle-log {
-    background-color:#848e8e;
+    background: url("");
     border-color: #413B45;
   }
 
@@ -438,6 +438,11 @@ button.button.mainmenu5{
   .trainer div {
     opacity: 1;
   }
+
+img.pixelated {
+	background:url(http://www.pokestadium.com/sprites/xy/zygarde.gif);
+	background-repeat:no-repeat;
+}
 
   .turnstatus-protect {
     background:url(http://i.imgur.com/RVxCoHz.png);
