@@ -2618,3 +2618,19 @@ exports.BattleLearnsets = {
 	}
 	},
 };
+Defilly: {
+	Learnset: {
+		Foresight: ["7L1"],
+		Tackle: ["7L1"],
+		Bide: ["7L5"],
+		Rage: ["7L9"],
+		Pursuit: ["7L12"],
+		Beat Up: ["7L16"],
+		Shadow Sneak: ["7L20"],
+		Lock On: ["7L23"],
+		Punishment: ["7L27"],
+		Curse: ["7L31"],
+		Play Rough: ["7L34"],
+		Spirit Shackle: ["7L39"],
+		Inferno: ["7L44"],
+		
