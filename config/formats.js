@@ -3009,7 +3009,7 @@ exports.Formats = [
 		name: "[Gen 7] Inheritance",
 		desc: [
 			"Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3529252/\">Inheritance</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3592844/\">Inheritance</a>",
 		],
 		mod: 'inh',
 		ruleset: ['OU'],
