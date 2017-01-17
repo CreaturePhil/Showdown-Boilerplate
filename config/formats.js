@@ -136,10 +136,24 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Balanced Hackmons",
+		desc: [
+			"Anything that can be hacked in-game and is usable in local battles is allowed.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587475/\">Balanced Hackmons</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3588586/\">BH Suspects and Bans Discussion</a>",
+		],
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Arena Trap', 'Huge Power', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Chatter', 'Extreme Evoboost'],
+		validateSet: function (set, teamHas) {
+			let problems = this.validateSet(set, teamHas) || [];
+			set.moves.forEach(move => {
+				if(this.tools.data.Movedex[toId(move)].isZ) {
+					problems.push(set.name + " has a Crystal Free Z-Move, which is banned by Balanced Hackmons.");
+				}
+			});
+			return problems;
+		},
 	},
 	{
 		name: "STABmons",
