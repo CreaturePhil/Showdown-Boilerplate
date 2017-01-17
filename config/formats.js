@@ -4513,6 +4513,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			}
 			if(unobtainable[fusionTemplate.species]) problems.push("You cannot fuse with "+fusionTemplate.species+" since it needs to have a specific ability or an item, or transforms inbattle.")
 			let canHaveAbility = false;
+			if(fusionTemplate.isUnreleased) problems.push("You cannot fuse with a Unreleased Pokemon. ("+set.species+" has nickname "+set.name+", which is unreleased)");
 			if(fusionTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
 			if(toId(fusionTemplate.tier).includes("uber")) problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+fusionTemplate.species+")");
 			if(toId(fusionTemplate.tier) === "cap") problems.push("You cannot fuse with an fake Pokemon. ("+template.species+" has nickname "+fusionTemplate.species+")");
