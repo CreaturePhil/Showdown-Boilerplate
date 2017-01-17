@@ -149,7 +149,7 @@ exports.Formats = [
 			let problems = this.validateSet(set, teamHas) || [];
 			set.moves.forEach(move => {
 				if(this.tools.data.Movedex[toId(move)].isZ) {
-					problems.push(set.name + " has a Crystal Free Z-Move, which is banned by Balanced Hackmons.");
+					problems.push((set.name || set.species) + " has a Crystal Free Z-Move, which is banned by Balanced Hackmons.");
 				}
 			});
 			return problems;
