@@ -4472,7 +4472,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
                 if(mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1]=fusionTemplate.types[shiny];
                 else mixedTemplate.types.length = 1;
 				pokemon.baseTemplate = mixedTemplate;
-				pokemon.fusion = true;
+				pokemon.fusion = fusionTemplate.baseSpecies;
 				pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
 				pokemon.formeChange(mixedTemplate);
 				} catch (e) {
