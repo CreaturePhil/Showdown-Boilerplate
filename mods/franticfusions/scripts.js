@@ -54,6 +54,48 @@ exports.BattleScripts = {
 				};
 		});
 	},
+	getZMove: function (move, pokemon, skipChecks, underlyingMove) {
+		let item = pokemon.getItem();
+		if (!skipChecks) {
+			if (pokemon.side.zMoveUsed) return;
+			if (!item.zMove) return;
+			if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species) && !item.zMoveUser.includes(pokemon.fusion)) return;
+			let moveData = pokemon.getMoveData(move);
+			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
+		}
+
+		if (item.zMoveFrom) {
+			if (move.name === item.zMoveFrom) return item.zMove;
+		} else if (item.zMove === true) {
+			if (move.type === item.zMoveType) {
+				if (move.category === "Status") {
+					return (underlyingMove ? '' : 'Z-') + move.name;
+				} else {
+					return this.zMoveTable[move.type];
+				}
+			}
+		}
+	},
+	canZMove: function (pokemon) {
+		if (pokemon.side.zMoveUsed) return;
+		let item = pokemon.getItem();
+		if (!item.zMove) return;
+		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species) && !item.zMoveUser.includes(pokemon.fusion)) return;
+		let atLeastOne = false;
+		let zMoves = [];
+		for (let i = 0; i < pokemon.moves.length; i++) {
+			let move = this.getMove(pokemon.moves[i]);
+			let zMoveName = this.getZMove(move, pokemon, true) || '';
+			if (zMoveName) {
+				let zMove = this.getMove(zMoveName);
+				zMoves.push({move: zMoveName, target: zMove.target});
+			} else {
+				zMoves.push(null);
+			}
+			if (zMoveName) atLeastOne = true;
+		}
+		if (atLeastOne) return zMoves;
+	},
 	pokemon: {
 		hasAbility: function(ability) {
 			if (this.ignoringAbility()) return false;
