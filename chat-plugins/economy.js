@@ -232,7 +232,7 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.errorReply(amount);
 
-		Db.money.set(toId(username), Db.money.get(toId(username), 0) + amount)
+		Db.money.set(toId(username), Db.money.get(toId(username), 0) + amount);
 		let total = Db.money.get(toId(username));
 		amount = amount + currencyName(amount);
 		total = total + currencyName(total);
