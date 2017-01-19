@@ -4653,7 +4653,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		        if (!set.name || set.name === set.species) return;
 		        let template = this.getTemplate(set.species);
 		        let fusionTemplate = this.getTemplate(set.name);
-			let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
+			//let banlist= {"shedinja":true,"hugepower":true,"purepower":true};
 			if (!fusionTemplate.exists) return;
 			let unobtainable = {'Darmanitan-Zen':true , 'Greninja-Ash':true , 'Zygarde-Complete':true, 'Meloetta-Pirouette':true, 'Castform-Snowy':true , 'Castform-Sunny':true , 'Castform-Rainy':true, 'Aegislash-Blade':true};
 			let types = Object.keys(this.data.TypeChart);
@@ -4664,11 +4664,11 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			let canHaveAbility = false;
 			if(fusionTemplate.isUnreleased) problems.push("You cannot fuse with a Unreleased Pokemon. ("+set.species+" has nickname "+set.name+", which is unreleased)");
 			if(fusionTemplate.isMega) problems.push("You cannot fuse with a Mega Pokemon. ("+set.species+" has nickname "+set.name+")");
-			if(toId(fusionTemplate.tier).includes("uber")) problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+fusionTemplate.species+")");
+			//if(toId(fusionTemplate.tier).includes("uber")) problems.push("You cannot fuse with an Uber. ("+template.species+" has nickname "+fusionTemplate.species+")");
 			if(toId(fusionTemplate.tier) === "cap") problems.push("You cannot fuse with an fake Pokemon. ("+template.species+" has nickname "+fusionTemplate.species+")");
-			if(banlist[toId(fusionTemplate.species)]) problems.push("Fusing with " + fusionTemplate.species + " is banned. ("+template.species+" has nickname "+ fusionTemplate.species + ")");
+			//if(banlist[toId(fusionTemplate.species)]) problems.push("Fusing with " + fusionTemplate.species + " is banned. ("+template.species+" has nickname "+ fusionTemplate.species + ")");
 			for (let a in template.abilities) {
-				if ((template.abilities[a] === set.ability) && !banlist[toId(template.abilities[a])]) {
+				if ((template.abilities[a] === set.ability) /*&& !banlist[toId(template.abilities[a])]*/) {
 					canHaveAbility = true;
 				}
 			}
