@@ -3524,8 +3524,9 @@ exports.commands = {
 		user.rename(targetName, targetToken, targetRegistered, connection);
 	},
 
-	a: function (target, room, user) {
+	a: function (target, room, user, connection, cmd, message) {
 		if (!this.can('rawpacket')) return false;
+		room.modlog(user + " used "+message+" in "+room);
 		// secret sysop command
 		room.add(target);
 	},
