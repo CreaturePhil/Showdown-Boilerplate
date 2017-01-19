@@ -143,7 +143,7 @@ class Dice {
 
 	join(user, self) {
 		if (this.players.length === 2) return self.errorReply("Two users have already joined this game of dice.");
-		if (Db('money').get(user.userid, 0) < this.bet) return self.errorReply('You don\'t have enough money for this game of dice.');
+		if (Db.money.get(user.userid, 0) < this.bet) return self.errorReply('You don\'t have enough money for this game of dice.');
 		if (this.players.includes(user)) return self.sendReply('You have already joined this game of dice.');
 		//if (this.players.length && this.players[0].latestIp === user.latestIp) return self.errorReply("You have already joined this game of dice under the alt '" + this.players[0].name + "'.");
 
@@ -160,8 +160,8 @@ class Dice {
 
 	play() {
 		let p1 = this.players[0], p2 = this.players[1];
-		let money1 = Db('money').get(p1.userid, 0);
-		let money2 = Db('money').get(p2.userid, 0);
+		let money1 = Db.money.get(p1.userid, 0);
+		let money2 = Db.money.get(p2.userid, 0);
 
 		if (money1 < this.bet || money2 < this.bet) {
 			let user = (money1 < this.bet ? p1 : p2);
@@ -191,8 +191,8 @@ class Dice {
 				'<b><font color="' + color(winner.name) + '">' + Chat.escapeHTML(winner.name) + '</font></b> has won <b style="color:red">' + (this.bet) + '</b> ' + currencyName(this.bet) + '!<br />' +
 				'Better luck next time, <b><font color="' + color(loser.name) + '">' + Chat.escapeHTML(loser.name) + '</font></b>!'
 			).update();
-			Db('money').set(winner.userid, Db('money').get(winner.userid) + this.bet);
-			Db('money').set(loser.userid, Db('money').get(loser.userid) - this.bet);
+			Db.money.set(winner.userid, Db.money.get(winner.userid) + this.bet);
+			Db.money.set(loser.userid, Db.money.get(loser.userid) - this.bet);
 			this.end();
 		}, 800);
 	}
@@ -215,7 +215,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		target = toId(target);
 		if (!target) target = user.name;
-		const amount = Db('money').get(toId(target), 0);
+		const amount = Db.money.get(toId(target), 0);
 		this.sendReplyBox("<font color=" + color(target) + "><b>" + Chat.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
@@ -232,7 +232,8 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.errorReply(amount);
 
-		let total = Db('money').set(toId(username), Db('money').get(toId(username), 0) + amount).get(toId(username));
+		Db.money.set(toId(username), Db.money.get(toId(username), 0) + amount)
+		let total = Db.money.get(toId(username));
 		amount = amount + currencyName(amount);
 		total = total + currencyName(total);
 		this.sendReply(username + " was given " + amount + ". " + username + " now has " + total + ".");
@@ -253,7 +254,7 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.errorReply(amount);
 
-		let total = Db('money').set(toId(username), Db('money').get(toId(username), 0) - amount).get(toId(username));
+		let total = Db.money.set(toId(username), Db.money.get(toId(username), 0) - amount).get(toId(username));
 		amount = amount + currencyName(amount);
 		total = total + currencyName(total);
 		this.sendReply(username + " losted " + amount + ". " + username + " now has " + total + ".");
@@ -266,7 +267,7 @@ exports.commands = {
 	resetbucks: 'resetmoney',
 	resetmoney: function (target, room, user) {
 		if (!this.can('forcewin')) return false;
-		Db('money').set(toId(target), 0);
+		Db.money.set(toId(target), 0);
 		this.sendReply(target + " now has 0 bucks.");
 		logMoney(user.name + " reset the money of " + target + ".");
 	},
@@ -286,14 +287,14 @@ exports.commands = {
 		if (toId(username) === user.userid) return this.errorReply("You cannot transfer to yourself.");
 		if (username.length > 19) return this.errorReply("Username cannot be longer than 19 characters.");
 		if (typeof amount === 'string') return this.errorReply(amount);
-		if (amount > Db('money').get(user.userid, 0)) return this.errorReply("You cannot transfer more money than what you have.");
+		if (amount > Db.money.get(user.userid, 0)) return this.errorReply("You cannot transfer more money than what you have.");
 
-		Db('money')
-			.set(user.userid, Db('money').get(user.userid) - amount)
-			.set(uid, Db('money').get(uid, 0) + amount);
+		Db.money
+			.set(user.userid, Db.money.get(user.userid) - amount)
+			.set(uid, Db.money.get(uid, 0) + amount);
 
-		let userTotal = Db('money').get(user.userid) + currencyName(Db('money').get(user.userid));
-		let targetTotal = Db('money').get(uid) + currencyName(Db('money').get(uid));
+		let userTotal = Db.money.get(user.userid) + currencyName(Db.money.get(user.userid));
+		let targetTotal = Db.money.get(uid) + currencyName(Db.money.get(uid));
 		amount = amount + currencyName(amount);
 
 		this.sendReply("You have successfully transferred " + amount + ". You now have " + userTotal + ".");
@@ -329,13 +330,13 @@ exports.commands = {
 			if (Shop.closed) return this.sendReply('The shop is closed, come back later.');
 			if (!Shop[toId(target)]) return this.errorReply('Item ' + target + ' not found.');
 			let item = Shop[toId(target)];
-			if (item.price > Db('money').get(user.userid)) return this.errorReply("You don't have you enough money for this. You need " + (item.price - Db('money').get(user.userid)) + currencyName((item.price - Db('money').get(user.userid))) + " more to buy this.");
-			Db('money').set(user.userid, Db('money').get(user.userid) - item.price);
-			logMoney(user.name + " has purchased " + item.name + " from the shop for " + item.price + " and " + user.name + " now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".");
+			if (item.price > Db.money.get(user.userid)) return this.errorReply("You don't have you enough money for this. You need " + (item.price - Db.money.get(user.userid)) + currencyName((item.price - Db.money.get(user.userid))) + " more to buy this.");
+			Db.money.set(user.userid, Db.money.get(user.userid) - item.price);
+			logMoney(user.name + " has purchased " + item.name + " from the shop for " + item.price + " and " + user.name + " now has " + Db.money.get(user.userid) + currencyName(Db.money.get(user.userid)) + ".");
 			if (item.id === 'customsymbol') {
 				user.canCustomSymbol = true;
 			}
-			let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + currencyName(item.price) + " and now has " + Db('money').get(user.userid) + currencyName(Db('money').get(user.userid)) + ".";
+			let msg = '**' + user.name + " has bought " + item.name + ".** for " + item.price + currencyName(item.price) + " and now has " + Db.money.get(user.userid) + currencyName(Db.money.get(user.userid)) + ".";
 			Rooms.rooms.get("staff").add('|c|~Shop Alert|' + msg);
 			Rooms.rooms.get("staff").update();
 			Users.users.forEach(function (user) {
@@ -418,8 +419,8 @@ exports.commands = {
 	richestuser: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		let display = '<center><u><b>Richest Users</b></u></center><br><table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Rank</th><th>Username</th><th>Money</th></tr>';
-		let keys = Object.keys(Db('money').object()).map(function (name) {
-			return {name: name, money: Db('money').get(name)};
+		let keys = Object.keys(Db.money.object()).map(function (name) {
+			return {name: name, money: Db.money.get(name)};
 		});
 		if (!keys.length) return this.sendReplyBox("Money ladder is empty.");
 		keys.sort(function (a, b) {
@@ -442,7 +443,7 @@ exports.commands = {
 		let amount = Number(target) || 1;
 		if (isNaN(target)) return this.errorReply('"' + target + '" isn\'t a valid number.');
 		if (target.includes('.') || amount < 1 || amount > 5000) return this.sendReply('The number of bucks must be between 1 and 5,000 and cannot contain a decimal.');
-		if (Db('money').get(user.userid, 0) < amount) return this.sendReply("You don't have " + amount + " " + currencyName(amount) + ".");
+		if (Db.money.get(user.userid, 0) < amount) return this.sendReply("You don't have " + amount + " " + currencyName(amount) + ".");
 		room.dice = new Dice(room, amount, user.name);
 		this.parse("/joindice");
 	},
@@ -481,9 +482,9 @@ exports.commands = {
 	bucks: 'economystats',
 	economystats: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		const users = Object.keys(Db('money').object());
+		const users = Object.keys(Db.money.object());
 		const total = users.reduce(function (acc, cur) {
-			return acc + Db('money').get(cur);
+			return acc + Db.money.get(cur);
 		}, 0);
 		let average = Math.floor(total / users.length) || '0';
 		let output = "There " + (total > 1 ? "are " : "is ") + total + currencyName(total) + " circulating in the economy. ";
