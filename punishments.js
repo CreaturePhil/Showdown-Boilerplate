@@ -32,6 +32,8 @@ const BLACKLIST_DURATION = 365 * 24 * 60 * 60 * 1000; // 1 year
 const USERID_REGEX = /^[a-z0-9]+$/;
 const PUNISH_TRUSTED = false;
 
+const PUNISHMENT_POINT_VALUES = {MUTE: 2, BLACKLIST: 3, ROOMBAN: 4};
+
 /**
  * a punishment is an array: [punishType, userid, expireTime, reason]
  * @typedef {[string, string, number, string]} Punishment
@@ -1135,11 +1137,14 @@ Punishments.isRoomBanned = function (user, roomid) {
 /**
  * Returns an array of all room punishments associated with a user.
  *
+ * options.publicOnly will make this only return public room punishments.
+ * options.checkIps will also check the IP of the user for IP-based punishments.
+ *
  * @param {User} user
- * @param {?boolean} publicOnly
+ * @param {?Object} options
  * @return {Array}
  */
-Punishments.getRoomPunishments = function (user, publicOnly) {
+Punishments.getRoomPunishments = function (user, options) {
 	if (!user) return;
 	let userid = toId(user);
 	let checkMutes = typeof user !== 'string';
@@ -1148,11 +1153,21 @@ Punishments.getRoomPunishments = function (user, publicOnly) {
 
 	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 		const curRoom = Rooms.global.chatRooms[i];
-		if (!curRoom || curRoom.isPrivate === true || (publicOnly && (curRoom.isPersonal || curRoom.battle))) continue;
+		if (!curRoom || curRoom.isPrivate === true || ((options && options.publicOnly) && (curRoom.isPersonal || curRoom.battle))) continue;
 		let punishment = Punishments.roomUserids.nestedGet(curRoom.id, userid);
 		if (punishment) {
 			punishments.push([curRoom, punishment]);
-		} else if (checkMutes && curRoom.muteQueue) {
+			continue;
+		} else if (options && options.checkIps) {
+			for (let ip in user.ips) {
+				punishment = Punishments.roomIps.nestedGet(curRoom.id, ip);
+				if (punishment) {
+					punishments.push([curRoom, punishment]);
+					continue;
+				}
+			}
+		}
+		if (checkMutes && curRoom.muteQueue) {
 			for (let i = 0; i < curRoom.muteQueue.length; i++) {
 				let entry = curRoom.muteQueue[i];
 				if (userid === entry.userid ||
@@ -1178,16 +1193,14 @@ Punishments.monitorRoomPunishments = function (user) {
 	const minPunishments = (typeof Config.monitorminpunishments === 'number' ? Config.monitorminpunishments : 3); // Default to 3 if the Config option is not defined or valid
 	if (!minPunishments) return;
 
-	let punishments = Punishments.getRoomPunishments(user, true);
+	let punishments = Punishments.getRoomPunishments(user, {publicOnly: true});
 
 	if (punishments.length >= minPunishments) {
-		let roombans = [];
-		let blacklists = [];
+		let points = 0;
 
 		let punishmentText = punishments.map(([room, punishment]) => {
 			const [punishType, punishUserid, , reason] = punishment;
-			if (punishType === 'ROOMBAN') roombans.push(room.id);
-			if (punishType === 'BLACKLIST') blacklists.push(room.id);
+			if (punishType in PUNISHMENT_POINT_VALUES) points += PUNISHMENT_POINT_VALUES[punishType];
 			let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
 			if (!punishDesc) punishDesc = `punished`;
 			if (punishUserid !== user.userid) punishDesc += ` as ${punishUserid}`;
@@ -1196,12 +1209,10 @@ Punishments.monitorRoomPunishments = function (user) {
 			return `<<${room}>> (${punishDesc})`;
 		}).join(', ');
 
-		if (Config.punishmentautolock && roombans.length && (roombans.length + blacklists.length) >= 3) {
-			let roombanString = roombans.join(', ');
-			let blacklistString = blacklists.map(str => `${str} (blacklisted)`).join(', ');
-			let sep = roombanString && blacklistString ? ', ' : '';
-			let reason = `Autolocked for being banned from ${roombans.length + blacklists.length} rooms: ${roombanString}${sep}${blacklistString}`;
-			let message = `${user.name} was locked for being banned from ${roombans.length + blacklists.length} rooms: ${punishmentText}`;
+		if (Config.punishmentautolock && points >= 10) {
+			let rooms = punishments.map(([room]) => room).join(', ');
+			let reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
+			let message = `${user.name} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
 
 			Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message);
 			user.popup("|modal|You've been locked for breaking the rules in multiple chatrooms.\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
