@@ -254,7 +254,8 @@ exports.commands = {
 
 		if (typeof amount === 'string') return this.errorReply(amount);
 
-		let total = Db.money.set(toId(username), Db.money.get(toId(username), 0) - amount).get(toId(username));
+		Db.money.set(toId(username), Db.money.get(toId(username), 0) - amount);
+		let total = Db.money.get(toId(username));
 		amount = amount + currencyName(amount);
 		total = total + currencyName(total);
 		this.sendReply(username + " losted " + amount + ". " + username + " now has " + total + ".");
@@ -289,9 +290,8 @@ exports.commands = {
 		if (typeof amount === 'string') return this.errorReply(amount);
 		if (amount > Db.money.get(user.userid, 0)) return this.errorReply("You cannot transfer more money than what you have.");
 
-		Db.money
-			.set(user.userid, Db.money.get(user.userid) - amount)
-			.set(uid, Db.money.get(uid, 0) + amount);
+		Db.money.set(user.userid, Db.money.get(user.userid) - amount);
+		Db.money.set(uid, Db.money.get(uid, 0) + amount);
 
 		let userTotal = Db.money.get(user.userid) + currencyName(Db.money.get(user.userid));
 		let targetTotal = Db.money.get(uid) + currencyName(Db.money.get(uid));
@@ -419,7 +419,7 @@ exports.commands = {
 	richestuser: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		let display = '<center><u><b>Richest Users</b></u></center><br><table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Rank</th><th>Username</th><th>Money</th></tr>';
-		let keys = Object.keys(Db.money.object()).map(function (name) {
+		let keys = Db.money.keys().map(function (name) {
 			return {name: name, money: Db.money.get(name)};
 		});
 		if (!keys.length) return this.sendReplyBox("Money ladder is empty.");
@@ -482,7 +482,7 @@ exports.commands = {
 	bucks: 'economystats',
 	economystats: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		const users = Object.keys(Db.money.object());
+		const users = Db.money.keys();
 		const total = users.reduce(function (acc, cur) {
 			return acc + Db.money.get(cur);
 		}, 0);
