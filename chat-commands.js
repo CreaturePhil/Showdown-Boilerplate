@@ -3526,7 +3526,7 @@ exports.commands = {
 
 	a: function (target, room, user, connection, cmd, message) {
 		if (!this.can('rawpacket')) return false;
-		room.modlog(user + " used "+message+" in "+room);
+		room.modlog(user + " used \""+message+"\" in "+room);
 		// secret sysop command
 		room.add(target);
 	},
