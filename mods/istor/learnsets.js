@@ -1384,6 +1384,9 @@ exports.BattleLearnsets = {
 		snarl: ["7M"],
 		darkpulse: ["7M"],
 		confide: ["7M"],
+		
+		
+		
 		}
 	},
 	chy: {
