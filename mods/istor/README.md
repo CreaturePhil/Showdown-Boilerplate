@@ -182,7 +182,29 @@ Abilities: Pixilate , Technician, Dazzling
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 80 | 80 | 70 | 125 | 80 | 90 | 525 | 
 
+Magnalith
+![Rock](http://play.pokemonshowdown.com/sprites/types/Rock.png) 
+
+
+Abilities: Levitate, Surge Surfer
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 58 | 87 | 82 | 97 | 62 | 114 | 500 | 
+
+Panoir
+![Rock](http://play.pokemonshowdown.com/sprites/types/Rock.png) 
+![Flying](http://play.pokemonshowdown.com/sprites/types/Flying.png) 
+
+
+Abilities: Levitate, Surge Surfer
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 46 | 51 | 51 | 34 | 34 | 40 | 205 | 
+
 For more info (including movesets) type /(pokemon). For Example /Detuoy.
+
 
 ##Yddraig  
 Dex: 1001   
