@@ -257,7 +257,7 @@ Users.cacheGroupData = cacheGroupData;
 
 let connections = Users.connections = new Map();
 
-let superUsers = {"xprienzo": true, "spandan": true, "mareanie": true, "snaquaza": true,};
+let superUsers = {"xprienzo": true, "snaquaza": true,};
 
 class Connection {
 	constructor(id, worker, socketid, user, ip, protocol) {
