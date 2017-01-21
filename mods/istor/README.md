@@ -203,6 +203,50 @@ Abilities: Levitate, Surge Surfer
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 46 | 51 | 51 | 34 | 34 | 40 | 205 | 
 
+Warkoal
+![Rock](http://play.pokemonshowdown.com/sprites/types/Rock.png) 
+![Flying](http://play.pokemonshowdown.com/sprites/types/Flying.png) 
+
+
+Abilities: Weak Armor, Unnerve, Solid Rock
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 72 | 83 | 83 | 46 | 46 | 60 | 390 | 
+
+Frigalt
+![Rock](http://play.pokemonshowdown.com/sprites/types/Rock.png) 
+![Flying](http://play.pokemonshowdown.com/sprites/types/Flying.png) 
+
+
+Abilities: Weak Armor, Unnerve, Solid Rock
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 90 | 106 | 106 | 59 | 59 | 80 | 500 | 
+
+Manakley
+![Steel](http://play.pokemonshowdown.com/sprites/types/Steel.png) 
+![Normal](http://play.pokemonshowdown.com/sprites/types/Normal.png) 
+
+
+Abilities: Klutz, Slow Start
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 46 | 41 | 96 | 30 | 36 | 11 | 260 | 
+
+Manakley
+![Steel](http://play.pokemonshowdown.com/sprites/types/Steel.png) 
+![Normal](http://play.pokemonshowdown.com/sprites/types/Normal.png) 
+
+
+Abilities: Unburden, Slow Start
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 86 | 151 | 136 | 30 | 66 | 51 | 520 | 
+
 For more info (including movesets) type /(pokemon). For Example /Detuoy.
 
 
