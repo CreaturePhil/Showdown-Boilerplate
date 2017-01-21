@@ -1108,7 +1108,7 @@ class User {
 	tryJoinRoom(room, connection) {
 		let roomid = (room && room.id ? room.id : room);
 		room = Rooms.search(room);
-		let excepted = ["snaquaza", "spandan", "xprienzo"];
+		let excepted = ["snaquaza", "spandan", "xprienzo","ransei"];
 		if(roomid === "policy" && !excepted.includes(toId(this.name))) {
 			connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
 			return false;
