@@ -3011,7 +3011,6 @@ exports.Formats = [
 			"Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3592844/\">Inheritance</a>",
 		],
-		mod: 'inh',
 		ruleset: ['OU'],
 		banlist: ["Arena Trap", "Assist", "Wonder Guard", "Huge Power", "Pure Power", "Imposter", "Speed Boost"],
 		customBans: {
