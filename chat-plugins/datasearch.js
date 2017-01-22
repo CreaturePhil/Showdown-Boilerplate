@@ -755,6 +755,15 @@ function runMovesearch(target, cmd, canAll, message) {
 			}
 			continue;
 		}
+		
+		if (target === 'zrecovery') {
+			if (!searches['zrecovery']) {
+				searches['zrecovery'] = !isNotSearch;
+			} else if ((searches['zrecovery'] && isNotSearch) || (searches['zrecovery'] === false && !isNotSearch)) {
+				return {reply: 'A search cannot both exclude and include recovery moves.'};
+			}
+			continue;
+		}
 
 		let template = Tools.getTemplate(target);
 		if (template.exists) {
@@ -959,6 +968,13 @@ function runMovesearch(target, cmd, canAll, message) {
 		case 'recovery':
 			for (let move in dex) {
 				let hasRecovery = (dex[move].drain || dex[move].flags.heal);
+				if ((!hasRecovery && searches[search]) || (hasRecovery && !searches[search])) delete dex[move];
+			}
+			break;
+				
+		case 'zrecovery':
+			for (let move in dex) {
+				let hasRecovery = (dex[move].zMoveEffect === "heal");
 				if ((!hasRecovery && searches[search]) || (hasRecovery && !searches[search])) delete dex[move];
 			}
 			break;
