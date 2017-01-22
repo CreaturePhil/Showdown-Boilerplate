@@ -1009,9 +1009,9 @@ function runMovesearch(target, cmd, canAll, message) {
 		case 'zboost':
 			for (let boost in searches[search]) {
 				for (let move in dex) {
-					if (dex[move].zMoveBoosts) {
-						if ((dex[move].zMoveBoosts[boost] > 0 && searches[search][boost]) ||
-							(dex[move].zMoveBoosts[boost] < 1 && !searches[search][boost])) continue;
+					if (dex[move].zMoveBoost) {
+						if ((dex[move].zMoveBoost[boost] > 0 && searches[search][boost]) ||
+							(dex[move].zMoveBoost[boost] < 1 && !searches[search][boost])) continue;
 					} 
 					delete dex[move];
 				}
