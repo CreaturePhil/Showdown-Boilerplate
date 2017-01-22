@@ -859,6 +859,26 @@ function runMovesearch(target, cmd, canAll, message) {
 			searches['boost'][target] = !isNotSearch;
 			continue;
 		}
+		
+		if (target.substr(0, 7) === 'zboosts ') {
+			switch (target.substr(7)) {
+			case 'attack': target = 'atk'; break;
+			case 'defense': target = 'def'; break;
+			case 'specialattack': target = 'spa'; break;
+			case 'spatk': target = 'spa'; break;
+			case 'specialdefense': target = 'spd'; break;
+			case 'spdef': target = 'spd'; break;
+			case 'speed': target = 'spe'; break;
+			case 'acc': target = 'accuracy'; break;
+			case 'evasiveness': target = 'evasion'; break;
+			default: target = target.substr(8);
+			}
+			if (!(target in allBoosts)) return {reply: "'" + escapeHTML(target.substr(8)) + "' is not a recognized stat."};
+			if (!searches['zboost']) searches['zboost'] = {};
+			if ((searches['zboost'][target] && isNotSearch) || (searches['zboost'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
+			searches['zboost'][target] = !isNotSearch;
+			continue;
+		}
 
 		let oldTarget = target;
 		if (target.charAt(target.length - 1) === 's') target = target.substr(0, target.length - 1);
@@ -984,6 +1004,19 @@ function runMovesearch(target, cmd, canAll, message) {
 				}
 			}
 			break;
+				
+		
+		case 'zboost':
+			for (let boost in searches[search]) {
+				for (let move in dex) {
+					if (dex[move].zMoveBoosts) {
+						if ((dex[move].zMoveBoosts[boost] > 0 && searches[search][boost]) ||
+							(dex[move].zMoveBoosts[boost] < 1 && !searches[search][boost])) continue;
+					} 
+					delete dex[move];
+				}
+			}
+			break;
 
 		case 'status':
 		case 'volatileStatus':
@@ -1080,6 +1113,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		case 'recovers': newWord = 'restores'; break;
 		case 'boost':
 		case 'boosts': newWord = 'raises'; break;
+		case 'zboosts': newWord = 'raises'; break;
 		case 'weakens': newWord = 'halves'; break;
 		case 'more': newWord = 'increases'; break;
 		case 'super':
