@@ -156,7 +156,7 @@ Lapras-Istor
 ![Ghost](http://play.pokemonshowdown.com/sprites/types/Ghost.png) 
 ![Ice](http://play.pokemonshowdown.com/sprites/types/Ice.png) 
 
-Abilities: Snow Warning , , Water Absorb 
+Abilities: Snow Warning , Water Absorb 
 
 | HP | Atk | Def | SpA | SpD | Spe | BST |
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
@@ -236,7 +236,7 @@ Abilities: Klutz, Slow Start
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 46 | 41 | 96 | 30 | 36 | 11 | 260 | 
 
-Manakley
+Maniakley
 ![Steel](http://play.pokemonshowdown.com/sprites/types/Steel.png) 
 ![Normal](http://play.pokemonshowdown.com/sprites/types/Normal.png) 
 
@@ -246,6 +246,33 @@ Abilities: Unburden, Slow Start
 | HP | Atk | Def | SpA | SpD | Spe | BST |
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 86 | 151 | 136 | 30 | 66 | 51 | 520 | 
+
+Sparklet
+![Fire](http://play.pokemonshowdown.com/sprites/types/Fire.png) 
+
+Abilities: Flash Fire, Pick Up, Thick Fat 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 50 | 40 | 40 | 40 | 40 | 20 | 230 | 
+
+Spoark
+![Fire](http://play.pokemonshowdown.com/sprites/types/Fire.png) 
+
+Abilities: Flash Fire, Pick Up, Thick Fat 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 95 | 65 | 65 | 90 | 105 | 80 | 500 | 
+
+Spoark-Wild
+![Fire](http://play.pokemonshowdown.com/sprites/types/Fire.png) 
+
+Abilities: Flash Fire, Pick Up, Thick Fat 
+
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 95 | 105 | 65 | 90 | 65 | 80 | 500 | 
 
 For more info (including movesets) type /(pokemon). For Example /Detuoy.
 
