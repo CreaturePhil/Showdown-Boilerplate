@@ -3013,6 +3013,7 @@ exports.Formats = [
 		],
 		ruleset: ['OU'],
 		banlist: ["Arena Trap", "Assist", "Wonder Guard", "Huge Power", "Pure Power", "Imposter", "Speed Boost"],
+		mod: 'gen7',
 		customBans: {
 			receiver: {
 				kyuremblack: 1,
