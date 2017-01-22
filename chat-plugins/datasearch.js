@@ -871,9 +871,9 @@ function runMovesearch(target, cmd, canAll, message) {
 			case 'speed': target = 'spe'; break;
 			case 'acc': target = 'accuracy'; break;
 			case 'evasiveness': target = 'evasion'; break;
-			default: target = target.substr(9);
+			default: target = target.substr(8);
 			}
-			if (!(target in allBoosts)) return {reply: "'" + escapeHTML(target.substr(9)) + "' is not a recognized stat."};
+			if (!(target in allBoosts)) return {reply: "'" + escapeHTML(target.substr(8)) + "' is not a recognized stat."};
 			if (!searches['zboost']) searches['zboost'] = {};
 			if ((searches['zboost'][target] && isNotSearch) || (searches['zboost'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
 			searches['zboost'][target] = !isNotSearch;
