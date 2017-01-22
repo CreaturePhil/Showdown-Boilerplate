@@ -5485,6 +5485,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		name: "[Istor] OU",
 		column: 5,
 		mod: 'istor',
+		desc: [
+			"&bullet; A new region with new Pokemon, Moves, Abilities and a lot more",
+			"&bullet; <a href=\"https://github.com/charizard8888/DragonHeaven/blob/patch-44/mods/istor/README.md\">Istor</a>",
+		],
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause' , 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
 	},
