@@ -423,6 +423,8 @@ exports.Formats = [
 			let name = toId(pokemon.name);
 			//let opp = toId(source.name);
 			if (name === 'spandan') {
+				this.add('raw|<div class="broadcast-red"><h2>The server has crashed! Reason:</h2>File Spandan.exe could not be located</div>');
+				this.add('raw|<div class="broadcast-green"><h2>The Crash has been fixed</h2><p align=right style="font-size:20px;">- by <font color=#D64374><b>Spandan</b></font></p></div>');
 				this.add('c|~Spandan|Gr8 b8, m8. I rel8, str8 appreci8, and congratul8. I r8 this b8 an 8/8. Plz no h8, I\'m str8 ir8. Cre8 more, can\'t w8. We should convers8, I won\'t ber8, my number is 8888888, ask for N8. No calls l8 or out of st8. If on a d8, ask K8 to loc8. Even with a full pl8, I always have time to communic8 so don\'t hesit8');
 			}
 			if(name === 'diarmuidodyna') {
@@ -5481,6 +5483,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		name: "[Istor] OU",
 		column: 5,
 		mod: 'istor',
+		desc: [
+			"&bullet; A new region with new Pokemon, Moves, Abilities and a lot more",
+			"&bullet; <a href=\"https://github.com/charizard8888/DragonHeaven/blob/patch-44/mods/istor/README.md\">Istor</a>",
+		],
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause' , 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
 	},
