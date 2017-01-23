@@ -38,7 +38,7 @@ Your commit summary should make it clear what part of the code you're talking ab
 - BAD: `Ban Genesect`
 - GOOD: `Monotype: Ban Genesect` (notice the uppercase "B")
 
-Do not make commits to fix commits in your pull request. Just squash/amend them into one commit.
+OPTIONAL: If you make commits to fix commits in your pull request, you can squash/amend them into one commit.
 
 - BAD: `Add /lock`, `Fix crash in /lock`, `Fix another crash in /lock` (if these are the same pullreq, they should be the same commit)
 - GOOD: `Add /lock`
@@ -47,6 +47,8 @@ Do not make commits to fix commits in your pull request. Just squash/amend them 
 You may have more than one commit, as long as they make sense as separate commits, and none of your commits are just fixing an earlier commit in your pull request.
 
 Here is a guide for squashing, if you need help with that: https://redew.github.io/rebaseguide/
+
+If while rebasing, you somehow unintentionally break your pull request, do not close it and make a new one to replace it. Instead, you can ask in the Development chatroom for help on trying to fix it; it can almost always be fixed. 
 
 
 Code standards

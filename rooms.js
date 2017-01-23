@@ -90,6 +90,9 @@ class Room {
 	addRaw(message) {
 		return this.add('|raw|' + message);
 	}
+	addLogMessage(user, text) {
+		return this.add('|c|' + user.getIdentity(this) + '|/log ' + text).update();
+	}
 	getLogSlice(amount) {
 		let log = this.log.slice(amount);
 		log.unshift('|:|' + (~~(Date.now() / 1000)));
@@ -427,12 +430,14 @@ class GlobalRoom {
 	getRoomList(filter) {
 		let rooms = [];
 		let skipCount = 0;
-		if (this.battleCount > 150 && !filter) {
+		let [formatFilter, eloFilter] = filter.split(',');
+		if (this.battleCount > 150 && !formatFilter && !eloFilter) {
 			skipCount = this.battleCount - 150;
 		}
 		Rooms.rooms.forEach(room => {
 			if (!room || !room.active || room.isPrivate) return;
-			if (filter && filter !== room.format && filter !== true) return;
+			if (formatFilter && formatFilter !== room.format) return;
+			if (eloFilter && (!room.rated || room.rated < eloFilter)) return;
 			if (skipCount && skipCount--) return;
 
 			rooms.push(room);
@@ -1043,7 +1048,7 @@ class BattleRoom extends Room {
 			fs.mkdir(curpath, '0755', () => {
 				curpath += '/' + logsubfolder;
 				fs.mkdir(curpath, '0755', () => {
-					fs.writeFile(curpath + '/' + this.id + '.log.json', JSON.stringify(logData));
+					fs.writeFile(curpath + '/' + this.id + '.log.json', JSON.stringify(logData), () => {});
 				});
 			});
 		}); // asychronicity

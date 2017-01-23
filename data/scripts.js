@@ -4,16 +4,21 @@ const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAll
 
 exports.BattleScripts = {
 	gen: 7,
-	runMove: function (move, pokemon, target, sourceEffect, zMove) {
-		if (!sourceEffect && toId(move) !== 'struggle') {
+	runMove: function (move, pokemon, targetLoc, sourceEffect, zMove) {
+		let target = this.getTarget(pokemon, zMove || move, targetLoc);
+		if (!sourceEffect && toId(move) !== 'struggle' && !zMove) {
 			let changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
 			if (changedMove && changedMove !== true) {
 				move = changedMove;
 				target = null;
 			}
 		}
-		move = this.getMove(move);
+		let baseMove = this.getMove(move);
+		move = zMove ? this.getZMoveCopy(move, pokemon) : baseMove;
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
+
+		// copy the priority for Quick Guard
+		if (zMove) move.priority = baseMove.priority;
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -42,7 +47,7 @@ exports.BattleScripts = {
 		let lockedMove = this.runEvent('LockMove', pokemon);
 		if (lockedMove === true) lockedMove = false;
 		if (!lockedMove) {
-			if (!pokemon.deductPP(move, null, target) && (move.id !== 'struggle')) {
+			if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 				this.add('cant', pokemon, 'nopp', move);
 				let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
 				this.add('-hint', "This is not a bug, this is really how it works on the " + gameConsole + "; try it yourself if you don't believe us.");
@@ -52,9 +57,13 @@ exports.BattleScripts = {
 		} else {
 			sourceEffect = this.getEffect('lockedmove');
 		}
-		pokemon.moveUsed(move);
-		if (zMove) pokemon.side.zMoveUsed = true;
-		this.useMove(move, pokemon, target, sourceEffect, zMove);
+		pokemon.moveUsed(move, targetLoc);
+
+		if (zMove) {
+			this.add('-zpower', pokemon);
+			pokemon.side.zMoveUsed = true;
+		}
+		this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
 	},
@@ -118,7 +127,7 @@ exports.BattleScripts = {
 		} else if (zMove && move.zMoveEffect === 'heal') {
 			this.heal(pokemon.maxhp, pokemon, pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'healreplacement') {
-			pokemon.side.addSideCondition('healingwish', pokemon, move);
+			move.self = {sideCondition: 'healreplacement'};
 		} else if (zMove && move.zMoveEffect === 'clearnegativeboost') {
 			let boosts = {};
 			for (let i in pokemon.boosts) {
@@ -130,8 +139,8 @@ exports.BattleScripts = {
 			this.add('-clearnegativeboost', pokemon, '[zeffect]');
 		} else if (zMove && move.zMoveEffect === 'redirect') {
 			pokemon.addVolatile('followme', pokemon, {id: 'zpower'});
-		} else if (zMove && move.zMoveEffect === 'crit1') {
-			pokemon.addVolatile('crit1', pokemon, {id: 'zpower'});
+		} else if (zMove && move.zMoveEffect === 'crit2') {
+			pokemon.addVolatile('focusenergy', pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'curse') {
 			if (pokemon.hasType('Ghost')) {
 				this.heal(pokemon.maxhp, pokemon, pokemon, {id: 'zpower'});
@@ -285,6 +294,7 @@ exports.BattleScripts = {
 		}
 		if (this.gen >= 7 && move.pranksterBoosted && target.side !== pokemon.side && !this.getImmunity('prankster', target)) {
 			this.debug('natural prankster immunity');
+			this.add('-hint', "In gen 7, Dark is immune to Prankster moves.");
 			this.add('-immune', target, '[msg]');
 			return false;
 		}
@@ -360,17 +370,25 @@ exports.BattleScripts = {
 
 		if (move.stealsBoosts) {
 			let boosts = {};
+			let stolen = false;
 			for (let statName in target.boosts) {
 				let stage = target.boosts[statName];
-				if (stage > 0) boosts[statName] = stage;
+				if (stage > 0) {
+					boosts[statName] = stage;
+					stolen = true;
+				}
 			}
-			this.boost(boosts, pokemon);
+			if (stolen) {
+				this.attrLastMove('[still]');
+				this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
+				this.boost(boosts, pokemon);
 
-			for (let statName in boosts) {
-				boosts[statName] = 0;
+				for (let statName in boosts) {
+					boosts[statName] = 0;
+				}
+				target.setBoost(boosts);
+				this.add('-anim', pokemon, "Spectral Thief", target);
 			}
-			target.setBoost(boosts);
-			this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
 		}
 
 		move.totalDamage = 0;
@@ -459,6 +477,8 @@ exports.BattleScripts = {
 		if (move.ohko) this.add('-ohko');
 
 		if (!damage && damage !== 0) return damage;
+
+		this.eachEvent('Update');
 
 		if (target && !move.negateSecondary && !(pokemon.hasAbility('sheerforce') && pokemon.volatiles['sheerforce'])) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
@@ -704,7 +724,7 @@ exports.BattleScripts = {
 		Fairy: "Twinkle Tackle",
 	},
 
-	getZMove: function (move, pokemon, skipChecks, underlyingMove) {
+	getZMove: function (move, pokemon, skipChecks) {
 		let item = pokemon.getItem();
 		if (!skipChecks) {
 			if (pokemon.side.zMoveUsed) return;
@@ -719,7 +739,7 @@ exports.BattleScripts = {
 		} else if (item.zMove === true) {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
-					return (underlyingMove ? '' : 'Z-') + move.name;
+					return move.name;
 				} else {
 					return this.zMoveTable[move.type];
 				}
@@ -760,6 +780,7 @@ exports.BattleScripts = {
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
 			if (zMoveName) {
 				let zMove = this.getMove(zMoveName);
+				if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
 				zMoves.push({move: zMoveName, target: zMove.target});
 			} else {
 				zMoves.push(null);
@@ -767,12 +788,6 @@ exports.BattleScripts = {
 			if (zMoveName) atLeastOne = true;
 		}
 		if (atLeastOne) return zMoves;
-	},
-
-	runZMove: function (move, pokemon, target, sourceEffect) {
-		// Limit one Z move per side
-		this.add("-zpower", pokemon);
-		this.runMove(move, pokemon, target, sourceEffect, true);
 	},
 
 	canMegaEvo: function (pokemon) {
@@ -1195,7 +1210,7 @@ exports.BattleScripts = {
 		};
 		// Moves which boost Attack AND Special Attack:
 		let MixedSetup = {
-			growth:1, shellsmash:1, workup:1,
+			conversion: 1, growth:1, shellsmash:1, workup:1,
 		};
 		// Moves which boost Defense and/or Special Defense:
 		let DefenseSetup = {
@@ -1241,7 +1256,7 @@ exports.BattleScripts = {
 					// Certain moves aren't acceptable as a Pokemon's only STAB attack
 					if (!(moveid in NoStab) && (moveid !== 'hiddenpower' || Object.keys(hasType).length === 1)) counter['stab']++;
 				}
-				if (move.priority === 0 && hasAbility['Protean'] && !(moveid in NoStab)) counter['stab']++;
+				if (move.priority === 0 && (hasAbility['Protean'] || moves.includes('conversion')) && !(moveid in NoStab)) counter['stab']++;
 				if (move.category === 'Physical') counter['hustle']++;
 				if (movetype === 'Normal' && !(moveid in NoStab)) {
 					if (hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) counter['stab']++;
@@ -1467,6 +1482,9 @@ exports.BattleScripts = {
 					if (counter.damagingMoves.length < 3 && !counter.setupType && !hasMove['batonpass']) rejected = true;
 					if (hasMove['dracometeor'] || hasMove['overheat']) rejected = true;
 					break;
+				case 'conversion':
+					if (teamDetails.zMove || hasMove['triattack']) rejected = true;
+					break;
 
 				// Bad after setup
 				case 'circlethrow': case 'dragontail':
@@ -1482,7 +1500,7 @@ exports.BattleScripts = {
 				case 'foulplay':
 					if (counter.setupType || !!counter['speedsetup'] || counter['Dark'] > 2 || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
-				case 'haze': case 'pursuit': case 'spikes': case 'waterspout':
+				case 'haze': case 'spikes': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'healbell':
@@ -1497,6 +1515,9 @@ exports.BattleScripts = {
 				case 'protect':
 					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
 					if ((hasMove['lightscreen'] && hasMove['reflect']) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					break;
+				case 'pursuit':
+					if (counter.setupType || (hasMove['rest'] && hasMove['sleeptalk']) || (hasMove['knockoff'] && !hasType['Dark'])) rejected = true;
 					break;
 				case 'rapidspin':
 					if (counter.setupType || teamDetails.hazardClear) rejected = true;
@@ -1531,6 +1552,9 @@ exports.BattleScripts = {
 				// Attacks:
 				case 'bugbite': case 'bugbuzz': case 'signalbeam':
 					if (hasMove['uturn'] && !counter.setupType) rejected = true;
+					break;
+				case 'lunge':
+					if (hasMove['leechlife']) rejected = true;
 					break;
 				case 'darkpulse':
 					if (hasMove['shadowball']) rejected = true;
@@ -1664,11 +1688,15 @@ exports.BattleScripts = {
 				case 'extremespeed':
 					if (counter.setupType !== 'Physical' && hasMove['vacuumwave']) rejected = true;
 					break;
+				case 'facade':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
 				case 'hiddenpower':
 					if (hasMove['rest'] || !counter.stab && counter.damagingMoves.length < 2) rejected = true;
 					break;
 				case 'hypervoice':
 					if (hasMove['naturepower'] || hasMove['return']) rejected = true;
+					if (hasAbility['Liquid Voice'] && hasMove['scald']) rejected = true;
 					break;
 				case 'judgment':
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
@@ -1694,14 +1722,14 @@ exports.BattleScripts = {
 				case 'psychic':
 					if (hasMove['psyshock'] || hasMove['storedpower']) rejected = true;
 					break;
+				case 'psychocut': case 'zenheadbutt':
+					if ((hasMove['psychic'] || hasMove['psyshock']) && counter.setupType !== 'Physical') rejected = true;
+					break;
 				case 'psyshock':
 					if (movePool.length > 1) {
 						let psychic = movePool.indexOf('psychic');
 						if (psychic >= 0) this.fastPop(movePool, psychic);
 					}
-					break;
-				case 'zenheadbutt':
-					if ((hasMove['psychic'] || hasMove['psyshock']) && counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'headsmash':
 					if (hasMove['stoneedge']) rejected = true;
@@ -1722,7 +1750,7 @@ exports.BattleScripts = {
 					if (hasMove['hydropump'] || hasMove['scald']) rejected = true;
 					break;
 				case 'scald':
-					if (hasMove['waterfall'] || hasMove['waterpulse']) rejected = true;
+					if (hasMove['liquidation'] || hasMove['waterfall'] || hasMove['waterpulse']) rejected = true;
 					break;
 
 				// Status:
@@ -1747,7 +1775,7 @@ exports.BattleScripts = {
 					if (hasMove['discharge'] || hasMove['gyroball'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'toxic':
-					if (hasMove['flamecharge'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (counter.setupType || hasMove['flamecharge'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					if (hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'willowisp':
@@ -1807,10 +1835,14 @@ exports.BattleScripts = {
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal']) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Dark Aura'] && !counter['Dark']) ||
+					(hasAbility['Electric Surge'] && !counter['Electric']) ||
 					(hasAbility['Gale Wings'] && !counter['Flying']) ||
+					(hasAbility['Grassy Surge'] && !counter['Grass']) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
+					(hasAbility['Psychic Surge'] && !counter['Psychic']) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
+					(hasAbility['Water Bubble'] && !counter['Water']) ||
 					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
@@ -1880,6 +1912,10 @@ exports.BattleScripts = {
 		if (hasMove['autotomize'] && hasMove['heavyslam']) {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
 		}
+		if (moves[0] === 'conversion') {
+			moves[0] = moves[3];
+			moves[3] = 'conversion';
+		}
 
 		let abilities = Object.values(baseTemplate.abilities);
 		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
@@ -1911,6 +1947,8 @@ exports.BattleScripts = {
 				rejectAbility = !counter['inaccurate'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
+			} else if (ability === 'Flare Boost' || ability === 'Moody') {
+				rejectAbility = true;
 			} else if (ability === 'Gluttony') {
 				rejectAbility = !hasMove['bellydrum'];
 			} else if (ability === 'Lightning Rod') {
@@ -1919,8 +1957,6 @@ exports.BattleScripts = {
 				rejectAbility = template.types.includes('Electric');
 			} else if (ability === 'Liquid Voice') {
 				rejectAbility = !hasMove['hypervoice'];
-			} else if (ability === 'Moody') {
-				rejectAbility = true;
 			} else if (ability === 'Overgrow') {
 				rejectAbility = !counter['Grass'];
 			} else if (ability === 'Poison Heal') {
@@ -1980,6 +2016,9 @@ exports.BattleScripts = {
 			}
 			if (abilities.includes('Unburden') && hasMove['acrobatics']) {
 				ability = 'Unburden';
+			}
+			if (abilities.includes('Water Bubble') && counter['Water']) {
+				ability = 'Water Bubble';
 			}
 			if (template.id === 'ambipom' && !counter['technician']) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
@@ -2065,6 +2104,8 @@ exports.BattleScripts = {
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
 			// To perma-taunt a Pokemon by giving it Assault Vest
 			item = 'Assault Vest';
+		} else if (hasMove['conversion']) {
+			item = 'Normalium Z';
 		} else if (hasMove['geomancy']) {
 			item = 'Power Herb';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
@@ -2188,10 +2229,10 @@ exports.BattleScripts = {
 			RU: 79,
 			BL2: 78,
 			UU: 77,
+			New: 77,
+			Bank: 77,
 			BL: 76,
 			OU: 75,
-			Unreleased: 75,
-			CAP: 75,
 			Uber: 73,
 			'Bank-Uber': 73,
 			AG: 71,
@@ -2207,6 +2248,9 @@ exports.BattleScripts = {
 			Unown: 100,
 		};
 		let tier = template.tier;
+		if (tier.includes('Unreleased') && template.battleOnly) {
+			tier = baseTemplate.tier;
+		}
 		if (tier.charAt(0) === '(') {
 			tier = tier.slice(1, -1);
 		}
@@ -2219,7 +2263,7 @@ exports.BattleScripts = {
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 		if (hasMove['substitute'] && item === 'Sitrus Berry') {
-			// Two substitutes should activate Sitrus Berry
+			// Two Substitutes should activate Sitrus Berry
 			while (hp % 4 > 0) {
 				evs.hp -= 4;
 				hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
@@ -2246,7 +2290,7 @@ exports.BattleScripts = {
 		// Minimize confusion damage
 		if (!counter['Physical'] && !hasMove['copycat'] && !hasMove['transform']) {
 			evs.atk = 0;
-			ivs.atk = hasMove['hiddenpower'] ? ivs.atk - 30 : 0;
+			ivs.atk = 0;
 		}
 
 		if (hasMove['gyroball'] || hasMove['trickroom']) {
@@ -2315,7 +2359,7 @@ exports.BattleScripts = {
 
 			let tier = template.tier;
 			switch (tier) {
-			case 'Uber':
+			case 'Uber': case 'Bank-Uber':
 				// Ubers are limited to 2 but have a 20% chance of being added anyway.
 				if (uberCount > 1 && this.random(5) >= 1) continue;
 				break;
@@ -2415,8 +2459,8 @@ exports.BattleScripts = {
 				typeComboCount[typeCombo] = 1;
 			}
 
-			// Increment Uber/NU counters
-			if (tier === 'Uber') {
+			// Increment Uber/Bank-Uber/PU counters
+			if (tier === 'Uber' || tier === 'Bank-Uber') {
 				uberCount++;
 			} else if (tier === 'PU') {
 				puCount++;

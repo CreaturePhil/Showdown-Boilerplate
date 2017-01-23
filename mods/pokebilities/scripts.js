@@ -1,65 +1,79 @@
 'use strict';
 
 exports.BattleScripts = {
-	init: function()
-	{
-			Object.values(this.data.Abilities).forEach(ability => {
-				let abi = {};
-				let statusability = {"aerilate":true, "aurabreak":true, "galvanize":true, "flashfire":true, "parentalbond":true, "pixilate":true, "refrigerate":true, "sheerforce":true, "slowstart":true, "truant":true, "unburden":true, "zenmode":true};
-				for(let i in ability) abi[i] = ability[i];
-				if(statusability[abi.id])
-				{
-					this.data.Statuses["other"+ability.id] = abi;
-					this.data.Statuses["other"+ability.id].effectType = "Ability";
-					this.data.Statuses["other"+ability.id]["name"] = "Other "+ability["name"];
-					this.data.Statuses["other"+ability.id].noCopy = true;
-					this.data.Statuses["other"+ability.id]["id"] = "other"+ability.id;
-				}
-				else
-				{
-					this.data.Statuses[ability.id] = abi;
-					this.data.Statuses[ability.id].effectType = "Ability";
-					this.data.Statuses[ability.id].noCopy = true;
-				}
-				this.data.Statuses.trace = {
-					desc: "On switch-in, this Pokemon copies a random adjacent opposing Pokemon's Ability. If there is no Ability that can be copied at that time, this Ability will activate as soon as an Ability can be copied. Abilities that cannot be copied are Flower Gift, Forecast, Illusion, Imposter, Multitype, Stance Change, Trace, and Zen Mode.",
-					shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
-					onUpdate: function (pokemon) {
-						let possibleTargets = [];
-						for (let i = 0; i < pokemon.side.foe.active.length; i++) {
-							if (pokemon.side.foe.active[i] && !pokemon.side.foe.active[i].fainted) possibleTargets.push(pokemon.side.foe.active[i]);
-						}
-						while (possibleTargets.length) {
-							let rand = 0;
-							if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
-							let target = possibleTargets[rand], abe=target.innates[this.random(target.innates.length)];
-							let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, otherzenmode:1};
-							if(!bannedAbilities[abe]) {
-								this.add('-ability', pokemon, abe, '[from] ability: Trace', '[of] ' + target);
-								pokemon.removeVolatile("trace", pokemon);
-								pokemon.addVolatile(abe, pokemon);
-							}
-							return;
-						}
-					},
-					id: "trace",
-					name: "Trace",
-					rating: 3,
-					num: 36,
-					effectType: "Ability", 
-					noCopy: true,
-				};
-			});
+	init: function () {
+		Object.values(this.data.Abilities).forEach(ability => {
+			if (ability.id === 'trace') return;
+			let id = 'other' + ability.id;
+			this.data.Statuses[id] = Object.assign({}, ability);
+			this.data.Statuses[id].id = id;
+			this.data.Statuses[id].noCopy = true;
+			this.data.Statuses[id].effectType = "Ability";
+			this.data.Statuses[id].fullname = 'ability: ' + ability.name;
+		});
 	},
 	pokemon: {
-		hasAbility: function(ability) {
+		hasAbility: function (ability) {
 			if (this.ignoringAbility()) return false;
-			if (this.volatiles[ability] || this.volatiles["other"+ability]) return true;
-			let ownAbility = this.ability;
-			if (!Array.isArray(ability)) {
-				return ownAbility === toId(ability);
+			if (Array.isArray(ability)) return ability.some(ability => this.hasAbility(ability));
+			ability = toId(ability);
+			return this.ability === ability || !!this.volatiles["other" + ability];
+		},
+		transformInto: function (pokemon, user, effect) {
+			let template = pokemon.template;
+			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
+				return false;
 			}
-			return ability.map(toId).includes(ownAbility);
-		}
+			if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (user && user.transformed && this.battle.gen >= 5)) {
+				return false;
+			}
+			if (!this.formeChange(template, true)) {
+				return false;
+			}
+			this.transformed = true;
+
+			this.types = pokemon.types;
+			this.addedType = pokemon.addedType;
+			this.knownType = this.side === pokemon.side && pokemon.knownType;
+
+			for (let statName in this.stats) {
+				this.stats[statName] = pokemon.stats[statName];
+			}
+			this.moveset = [];
+			this.moves = [];
+			this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
+			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
+			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
+			for (let i = 0; i < pokemon.moveset.length; i++) {
+				let moveData = pokemon.moveset[i];
+				let moveName = moveData.move;
+				if (moveData.id === 'hiddenpower') {
+					moveName = 'Hidden Power ' + this.hpType;
+				}
+				this.moveset.push({
+					move: moveName,
+					id: moveData.id,
+					pp: moveData.maxpp === 1 ? 1 : 5,
+					maxpp: this.battle.gen >= 5 ? (moveData.maxpp === 1 ? 1 : 5) : moveData.maxpp,
+					target: moveData.target,
+					disabled: false,
+					used: false,
+					virtual: true,
+				});
+				this.moves.push(toId(moveName));
+			}
+			for (let j in pokemon.boosts) {
+				this.boosts[j] = pokemon.boosts[j];
+			}
+			if (effect) {
+				this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
+			} else {
+				this.battle.add('-transform', this, pokemon);
+			}
+			this.setAbility(pokemon.ability, this, {id: 'transform'});
+			this.innates.forEach(innate => this.removeVolatile("other" + innate, this));
+			pokemon.innates.forEach(innate => this.addVolatile("other" + innate, this));
+			return true;
+		},
 	},
 };

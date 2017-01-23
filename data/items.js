@@ -381,6 +381,7 @@ exports.BattleItems = {
 	"belueberry": {
 		id: "belueberry",
 		name: "Belue Berry",
+		isUnreleased: true,
 		spritenum: 21,
 		isBerry: true,
 		naturalGift: {
@@ -998,6 +999,7 @@ exports.BattleItems = {
 	"cornnberry": {
 		id: "cornnberry",
 		name: "Cornn Berry",
+		isUnreleased: true,
 		spritenum: 81,
 		isBerry: true,
 		naturalGift: {
@@ -1023,6 +1025,7 @@ exports.BattleItems = {
 	"custapberry": {
 		id: "custapberry",
 		name: "Custap Berry",
+		isUnreleased: true,
 		spritenum: 86,
 		isBerry: true,
 		naturalGift: {
@@ -1336,6 +1339,7 @@ exports.BattleItems = {
 	"durinberry": {
 		id: "durinberry",
 		name: "Durin Berry",
+		isUnreleased: true,
 		spritenum: 114,
 		isBerry: true,
 		naturalGift: {
@@ -1499,6 +1503,7 @@ exports.BattleItems = {
 	"enigmaberry": {
 		id: "enigmaberry",
 		name: "Enigma Berry",
+		isUnreleased: true,
 		spritenum: 124,
 		isBerry: true,
 		naturalGift: {
@@ -2551,6 +2556,7 @@ exports.BattleItems = {
 	"jabocaberry": {
 		id: "jabocaberry",
 		name: "Jaboca Berry",
+		isUnreleased: true,
 		spritenum: 230,
 		isBerry: true,
 		naturalGift: {
@@ -2796,6 +2802,7 @@ exports.BattleItems = {
 			type: "Fighting",
 		},
 		onUpdate: function (pokemon) {
+			if (!pokemon.hp) return;
 			let move = pokemon.getMoveData(pokemon.lastMove);
 			if (move && move.pp === 0) {
 				pokemon.addVolatile('leppaberry');
@@ -2920,7 +2927,7 @@ exports.BattleItems = {
 		// implemented in the corresponding thing
 		num: 269,
 		gen: 4,
-		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
+		desc: "Holder's use of Aurora Veil, Light Screen, or Reflect lasts 8 turns instead of 5.",
 	},
 	"lopunnite": {
 		id: "lopunnite",
@@ -3049,7 +3056,9 @@ exports.BattleItems = {
 	"machobrace": {
 		id: "machobrace",
 		name: "Macho Brace",
+		isUnreleased: true,
 		spritenum: 269,
+		ignoreKlutz: true,
 		fling: {
 			basePower: 60,
 		},
@@ -3058,7 +3067,7 @@ exports.BattleItems = {
 		},
 		num: 215,
 		gen: 3,
-		desc: "Holder's Speed is halved.",
+		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
 	},
 	"magnet": {
 		id: "magnet",
@@ -3107,6 +3116,7 @@ exports.BattleItems = {
 	"magostberry": {
 		id: "magostberry",
 		name: "Magost Berry",
+		isUnreleased: true,
 		spritenum: 275,
 		isBerry: true,
 		naturalGift: {
@@ -3410,6 +3420,7 @@ exports.BattleItems = {
 	"micleberry": {
 		id: "micleberry",
 		name: "Micle Berry",
+		isUnreleased: true,
 		spritenum: 290,
 		isBerry: true,
 		naturalGift: {
@@ -3538,6 +3549,7 @@ exports.BattleItems = {
 	"nanabberry": {
 		id: "nanabberry",
 		name: "Nanab Berry",
+		isUnreleased: true,
 		spritenum: 302,
 		isBerry: true,
 		naturalGift: {
@@ -3585,6 +3597,7 @@ exports.BattleItems = {
 	"nomelberry": {
 		id: "nomelberry",
 		name: "Nomel Berry",
+		isUnreleased: true,
 		spritenum: 306,
 		isBerry: true,
 		naturalGift: {
@@ -3703,6 +3716,7 @@ exports.BattleItems = {
 	"pamtreberry": {
 		id: "pamtreberry",
 		name: "Pamtre Berry",
+		isUnreleased: true,
 		spritenum: 323,
 		isBerry: true,
 		naturalGift: {
@@ -4022,6 +4036,66 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
+	"poweranklet": {
+		id: "poweranklet",
+		name: "Power Anklet",
+		spritenum: 354,
+		ignoreKlutz: true,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 293,
+		gen: 4,
+		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+	},
+	"powerband": {
+		id: "powerband",
+		name: "Power Band",
+		spritenum: 355,
+		ignoreKlutz: true,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 292,
+		gen: 4,
+		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+	},
+	"powerbelt": {
+		id: "powerbelt",
+		name: "Power Belt",
+		spritenum: 356,
+		ignoreKlutz: true,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 290,
+		gen: 4,
+		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+	},
+	"powerbracer": {
+		id: "powerbracer",
+		name: "Power Bracer",
+		spritenum: 357,
+		ignoreKlutz: true,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 289,
+		gen: 4,
+		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+	},
 	"powerherb": {
 		id: "powerherb",
 		onChargeMove: function (pokemon, target, move) {
@@ -4038,6 +4112,36 @@ exports.BattleItems = {
 		num: 271,
 		gen: 4,
 		desc: "Holder's two-turn moves complete in one turn (except Sky Drop). Single use.",
+	},
+	"powerlens": {
+		id: "powerlens",
+		name: "Power Lens",
+		spritenum: 359,
+		ignoreKlutz: true,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 291,
+		gen: 4,
+		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+	},
+	"powerweight": {
+		id: "powerweight",
+		name: "Power Weight",
+		spritenum: 360,
+		ignoreKlutz: true,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 294,
+		gen: 4,
+		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
 	},
 	"premierball": {
 		id: "premierball",
@@ -4196,6 +4300,7 @@ exports.BattleItems = {
 	"rabutaberry": {
 		id: "rabutaberry",
 		name: "Rabuta Berry",
+		isUnreleased: true,
 		spritenum: 375,
 		isBerry: true,
 		naturalGift: {
@@ -4283,6 +4388,7 @@ exports.BattleItems = {
 	"razzberry": {
 		id: "razzberry",
 		name: "Razz Berry",
+		isUnreleased: true,
 		spritenum: 384,
 		isBerry: true,
 		naturalGift: {
@@ -4465,7 +4571,7 @@ exports.BattleItems = {
 		onAfterDamageOrder: 2,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 6, source, target, null, true);
+				this.damage(source.maxhp / 6, source, target);
 			}
 		},
 		num: 540,
@@ -4526,6 +4632,7 @@ exports.BattleItems = {
 	"rowapberry": {
 		id: "rowapberry",
 		name: "Rowap Berry",
+		isUnreleased: true,
 		spritenum: 420,
 		isBerry: true,
 		naturalGift: {
@@ -4981,6 +5088,7 @@ exports.BattleItems = {
 	"spelonberry": {
 		id: "spelonberry",
 		name: "Spelon Berry",
+		isUnreleased: true,
 		spritenum: 462,
 		isBerry: true,
 		naturalGift: {
@@ -5341,7 +5449,7 @@ exports.BattleItems = {
 	},
 	"twistedspoon": {
 		id: "twistedspoon",
-		name: "TwistedSpoon",
+		name: "Twisted Spoon",
 		spritenum: 520,
 		fling: {
 			basePower: 30,
@@ -5467,6 +5575,7 @@ exports.BattleItems = {
 	"watmelberry": {
 		id: "watmelberry",
 		name: "Watmel Berry",
+		isUnreleased: true,
 		spritenum: 530,
 		isBerry: true,
 		naturalGift: {
@@ -5514,6 +5623,7 @@ exports.BattleItems = {
 	"wepearberry": {
 		id: "wepearberry",
 		name: "Wepear Berry",
+		isUnreleased: true,
 		spritenum: 533,
 		isBerry: true,
 		naturalGift: {

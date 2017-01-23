@@ -916,12 +916,12 @@ class Tournament {
 			let firstMoney = Math.round(tourSize / 4);
 			let secondMoney = Math.round(firstMoney / 2);
 
-			Db('money').set(wid, Db('money').get(wid, 0) + firstMoney);
+			Db.money.set(wid, Db.money.get(wid, 0) + firstMoney);
 			this.room.addRaw("<b><font color='" + color + "'>" + Chat.escapeHTML(winner) + "</font> has won " + "<font color='" + color + "'>" + firstMoney + "</font>" + currencyName(firstMoney) + " for winning the tournament!</b>");
 
 			if (runnerUp) {
-				Db('money').set(rid, Db('money').get(rid, 0) + secondMoney);
-				this.room.addRaw("<b><font color='" + color + "'>" + Chat.escapeHTML(runnerUp) + "</font> has won " +  "<font color='" + color + "'>" + secondMoney + "</font>" + currencyName(secondMoney) + " for winning the tournament!</b>");
+				Db.money.set(rid, Db.money.get(rid, 0) + secondMoney);
+				this.room.addRaw("<b><font color='" + color + "'>" + Chat.escapeHTML(runnerUp) + "</font> has won " + "<font color='" + color + "'>" + secondMoney + "</font>" + currencyName(secondMoney) + " for winning the tournament!</b>");
 			}
 		}
 		delete exports.tournaments[this.room.id];
@@ -1238,7 +1238,9 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <user>, <reason>");
 			}
-			let targetUser = Users.get(params[0]) || params[0];
+			let targetUser = Users.get(params[0]);
+			let online = !!targetUser;
+			if (!online) targetUser = params[0];
 			let targetUserid = toId(targetUser);
 			let reason = '';
 			if (params[1]) {
@@ -1248,7 +1250,12 @@ let commands = {
 
 			if (tournament.checkBanned(targetUser)) return this.errorReply("This user is already banned from tournaments.");
 
-			Punishments.roomPunish(this.room, targetUser, ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason]);
+			let punishment = ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
+			if (online) {
+				Punishments.roomPunish(this.room, targetUser, punishment);
+			} else {
+				Punishments.roomPunishName(this.room, targetUser, punishment);
+			}
 			tournament.removeBannedUser(targetUser);
 			this.privateModCommand((targetUser.name || targetUserid) + " was banned from tournaments by " + user.name + "." + (reason ? " (" + reason + ")" : ""));
 		},

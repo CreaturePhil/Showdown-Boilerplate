@@ -950,7 +950,9 @@ class User {
 			this.namelocked = false;
 		}
 		if (this.autoconfirmed && this.semilocked) {
-			if (this.semilocked === '#dnsbl') {
+			if (this.semilocked.startsWith('#sharedip')) {
+				this.semilocked = false;
+			} else if (this.semilocked === '#dnsbl') {
 				this.popup(`You are locked because someone using your IP has spammed/hacked other websites. This usually means you're using a proxy, in a country where other people commonly hack, or have a virus on your computer that's spamming websites.`);
 				this.semilocked = '#dnsbl.';
 			}
@@ -1022,7 +1024,7 @@ class User {
 		}
 	}
 	onDisconnect(connection) {
-		if (this.named) Db('seen').set(this.userid, Date.now());
+		if (this.named) Db.seen.set(this.userid, Date.now());
 		for (let i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
