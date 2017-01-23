@@ -4165,7 +4165,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		onAfterMoveSecondary: function (target, source, move) {
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
-				if(move.category === "Status" && move.boosts) {
+				if(move.category === "Status" && move.boosts && move.target === "self") {
 					this.useMove(move);
 					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp--);
 				}
