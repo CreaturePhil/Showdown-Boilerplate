@@ -4158,6 +4158,25 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
     	column: 1,
     },
 	{
+		name: "[Gen 7] Setup++",
+		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
+		ruleset: ['[Gen 7] Pokebank OU'],
+		//team: 'random',
+		onAfterMoveSecondary: function (target, source, move) {
+			source.baseMoveset.forEach(curmove => {
+				let move = this.getMove(curmove.id);
+				if(move.category === "Status" && move.boosts) {
+					this.useMove(move);
+					if(target.hasAbility("pressure")) {
+						curmove.pp-=2;
+						continue;
+					}
+					curmove.pp--;
+				}
+			});
+		},
+	},
+	{
 		name: "[Gen 7] Full Potential",
 		desc: ["&bullet; In this metagame, every Pokemon uses their highest raw stat as their attacking stat."],
 		ruleset: ['[Gen 7] Pokebank OU'],
