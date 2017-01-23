@@ -928,7 +928,7 @@ exports.BattleMovedex = {
 		flags: {mirror: 1, protect: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Crabhammer", target);
+			this.add('-anim', source, "Sunsteel Strike", target);
 		},
 		onHit: function (target, source) {
 			if (toId(source.name) === 'eternalmayhem') {
@@ -946,7 +946,7 @@ exports.BattleMovedex = {
 			spe: 1,
 		},
 	},
-		recoil: [1, 2],
+		recoil: [1, 4],
 		target: "normal",
 		type: "Dragon",
 	},
