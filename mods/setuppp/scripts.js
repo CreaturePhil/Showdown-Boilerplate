@@ -199,6 +199,7 @@ exports.BattleScripts = {
 						//mod for setup++ start
 						pokemon.baseMoveset.forEach(curmove => {
 							let move = this.getMove(curmove.id);
+							let isAlive = target.hp === undefined || target.hp <= 0;
 							if(move.category === "Status" && move.boosts && move.target === "self") {
 								this.useMove(move, pokemon);
 								curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
