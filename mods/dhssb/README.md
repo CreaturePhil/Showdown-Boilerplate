@@ -344,24 +344,6 @@ Nature
 Water Change:
 Turbulence: Physical| Flying Type|60 Base Power|100% Accuracy| Priority +1|
 
-### Diarmuid O'Dyna
-Suicune @ Leftovers
-
-Ability: Serene Grace
-
-EVs: 252 HP / 252 Def / 4 SpD
-
-Nature
-- Flirt
-- Yandere Blast
-- Forced Assistance
-- Bitch Slap
-
- Flirt: Same as Attract
- Yandere Blast: 
- Forced Assistance: Same as Tailwind
- Bitch Slap:
-
 ### ClassyZ
 Scizor-Mega @ Scizorite
 
