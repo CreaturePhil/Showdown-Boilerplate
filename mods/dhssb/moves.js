@@ -380,7 +380,7 @@ exports.BattleMovedex = {
 		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Bolt Strike", target);
+			this.add('-anim', source, "Core Enforcer", target);
 		},
 		target: "normal",
 		type: "Dragon",
@@ -463,7 +463,7 @@ exports.BattleMovedex = {
 	//%Elcrest
 	"turbulence": {
 		accuracy: 100,
-		basePower: 60,
+		basePower: 110,
 		category: "Physical",
 		shortDesc: "Nearly always goes first.",
 		id: "turbulence",
@@ -472,7 +472,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Brave Bird", target);
+			this.add('-anim', source, "Dragon Ascent", target);
 		},
 		priority: 2,
 		flags: {contact: 1, protect: 1, mirror: 1},
@@ -535,7 +535,9 @@ exports.BattleMovedex = {
 		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
+			this.add('-anim', source, "Focus Energy", source);
 			this.add('-anim', source, "V-Create", target);
+			this.add("c|&charizard8888|gg m8");
 		},
 	},
 	sacredhax: {
@@ -627,7 +629,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Blue Flare", target);
+			this.add('-anim', source, "Inferno Overdrive", target);
 		},
 		flags: {protect: 1, mirror: 1},
 		secondary: {
@@ -817,7 +819,7 @@ exports.BattleMovedex = {
 		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Nasty Plot", target);
+			this.add('-anim', source, "Black Hole Eclipse", target);
 		},
 		flags: {protect: 1, mirror: 1},
 		secondary: false,
@@ -926,7 +928,7 @@ exports.BattleMovedex = {
 		flags: {mirror: 1, protect: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Crabhammer", target);
+			this.add('-anim', source, "Sunsteel Strike", target);
 		},
 		onHit: function (target, source) {
 			if (toId(source.name) === 'eternalmayhem') {
@@ -944,7 +946,7 @@ exports.BattleMovedex = {
 			spe: 1,
 		},
 	},
-		recoil: [1, 2],
+		recoil: [1, 4],
 		target: "normal",
 		type: "Dragon",
 	},

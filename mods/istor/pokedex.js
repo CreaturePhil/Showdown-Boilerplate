@@ -275,7 +275,7 @@ exports.BattlePokedex = {
 		species: "Manakley",
 		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Steel", "Normal"],
-		baseStats: {hp: 46, atk: 41, def: 96, spa: 30, spd: 36, spe: 1},
+		baseStats: {hp: 46, atk: 41, def: 96, spa: 30, spd: 36, spe: 11},
 		abilities: {0: "Klutz", H: "Slow Start"},
 		heightm: 0.4,
 		weightkg: 205.8,
