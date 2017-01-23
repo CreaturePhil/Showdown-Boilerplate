@@ -4,7 +4,8 @@
   **************/
 
   body {
-    background: #EEE url("http://i.imgur.com/6Wbik2f.png") no-repeat left fixed;
+    background: #EEE url("http://cdn.wallpapersafari.com/8/90/dkvK4w.jpg") no-repeat left fixed;
+    background-size:100%;
     width: 100%;
     max-width: 1500px;
   }
@@ -68,10 +69,90 @@
     color: #19610B;
   }
 
-   .message-announce {
-	background-color:#d4e1f4;
-	color:black;
-	font-weight:bold;
+}
+
+.rainbow {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  cursor: pointer;
+  border: none;
+  font: Jokerman;
+	font-size:60px;
+  color: rgba(0, 0, 0, 0);
+  text-align: center;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  text-shadow: 3px 0 0 , 6px 0 0 black , 9px 0 0 rgb(245,221,8) , 12px 0 0 rgb(5,148,68) , 15px 0 0 rgb(2,135,206) , 18px 0 0  , 21px 0 0  ;
+  -webkit-transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  -moz-transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  -o-transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.rainbow:hover {
+  text-shadow: -3px 0 0 rgb(217,31,38) , -6px 0 0 rgb(226,91,14) , -9px 0 0 rgb(245,221,8) , -12px 0 0 rgb(5,148,68) , -15px 0 0 rgb(2,135,206) , -18px 0 0 rgb(4,77,145) , -21px 0 0 rgb(42,21,113) ;
+  -webkit-transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  -moz-transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  -o-transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.flash {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  padding: 20px;
+	cursor:pointer;
+  border: none;
+  font-family: Jokerman;
+font-size:64px;
+  color: rgba(255,255,255,1);
+  text-align: center;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  text-shadow: 0 0 10px #f4aa42 , 0 0 20px #f4aa42 , 0 0 30px #f4aa42 , 0 0 40px #f4aa42 , 0 0 70px #f4aa42 , 0 0 80px #f4aa42 , 0 0 100px #f4aa42 , 0 0 150px #f4aa42 ;
+  -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+  -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+  -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+  transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+}
+
+.flash:hover {
+  text-shadow: 0 0 5px #d35656 , 0 0 10px #d35656 , 0 0 15px #d35656 , 0 0 20px #d35656 , 0 0 35px #d35656 , 0 0 40px #d35656 , 0 0 50px #d35656 , 0 0 75px #d35656 ;
+}
+.boom{
+  text-align:center;
+  font-size:6.5em;
+  color:#fff;
+  letter-spacing: -7px;
+  font-weight:700;
+  text-transform:uppercase;
+  animation:blur .75s ease-out infinite;
+  text-shadow:0px 0px 5px #fff,
+      0px 0px 7px #fff;
+}
+
+@keyframes blur{
+  from{
+      text-shadow:0px 0px 10px #fff,
+      0px 0px 10px #FFA000, 
+      0px 0px 25px #FFA000,
+      0px 0px 25px #FFA000,
+      0px 0px 25px #FFA000,
+      0px 0px 25px #FFA000,
+      0px 0px 25px #FFA000,
+      0px 0px 25px #FFA000,
+      0px 0px 50px #FFA000,
+      0px 0px 50px #FFA000,
+      0px 0px 50px #7B96B8,
+      0px 0px 150px #7B96B8,
+      0px 10px 100px #7B96B8,
+      0px 10px 100px #7B96B8,
+      0px 10px 100px #7B96B8,
+      0px 10px 100px #7B96B8,
+      0px -10px 100px #7B96B8,
+      0px -10px 100px #7B96B8;}
 }
   .textbox, .textbox:hover, .textbox:focus {
     border: 1px solid #252F3F;
