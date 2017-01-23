@@ -4162,15 +4162,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
 		ruleset: ['[Gen 7] Pokebank OU'],
 		//team: 'random',
-		onAfterSecondary: function (target, source, move) {
-			source.baseMoveset.forEach(curmove => {
-				let move = this.getMove(curmove.id);
-				if(move.category === "Status" && move.boosts && move.target === "self") {
-					this.useMove(move, source);
-					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
-				}
-			});
-		},
+		mod: 'setuppp',
 	},
 	{
 		name: "[Gen 7] Full Potential",
