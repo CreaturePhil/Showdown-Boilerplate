@@ -107,7 +107,10 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'feelsfab': 'http://i.imgur.com/vCPgsQA.jpg',
 		'eeveelutions!':'http://2.media.dorkly.cvcdn.com/25/38/4d9df0e6985ab9e9218f3874ccf9649d.gif',
 		'feelsluke':'http://i.imgur.com/ZQbYp9l.gif',
-		
+		'charizard8888':'http://orig01.deviantart.net/f776/f/2013/180/8/3/chousen_clefairy_by_raizy-d6b7n47.png',
+		'getinthebag':'https://68.media.tumblr.com/209d1a0a125da03b7afcbd53316374c2/tumblr_ohuza1t4MW1qeb3ulo1_500.gif',
+		'oshat':'http://www.geekinsider.com/wp-content/uploads/2013/10/tumblr_mvblw72CTf1sal1obo1_400.gif',
+		'wowwy':'https://media.giphy.com/media/RfprItHPpSCf6/giphy.gif',
 	});
 }
 
