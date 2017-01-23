@@ -4167,11 +4167,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				let move = this.getMove(curmove.id);
 				if(move.category === "Status" && move.boosts) {
 					this.useMove(move);
-					if(target.hasAbility("pressure")) {
-						curmove.pp-=2;
-						continue;
-					}
-					curmove.pp--;
+					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp--);
 				}
 			});
 		},
