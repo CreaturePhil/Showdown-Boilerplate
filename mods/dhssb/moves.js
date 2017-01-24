@@ -40,7 +40,7 @@ exports.BattleMovedex = {
 				def: 1,
 				spd: 1,
 				atk: 1,
-				spe: -1
+				spe: 2,
 			},
 		},
 		onPrepareHit: function (target, source) {
@@ -117,11 +117,11 @@ exports.BattleMovedex = {
 	},
 	"powerlick": {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 110,
 		category: "Special",
 		id: "powerlick",
 		name: "Power Lick",
-		pp: 5,
+		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit: function (target, source) {
@@ -152,8 +152,9 @@ exports.BattleMovedex = {
 		category: 'Physical',
 		basePower: 120,
 		boosts: {
-			def: -1,
-			spd: -1,
+			def: 1,
+			spd: 1,
+			atk: 2,
 		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
@@ -236,7 +237,7 @@ exports.BattleMovedex = {
 "theloomeffect": {
 		num: 407,
 		accuracy: 100,
-		basePower: 100,
+		basePower: 110,
 		category: "Special",
 		id: "theloomeffect",
 		name: "The Loom Effect",
@@ -261,7 +262,7 @@ exports.BattleMovedex = {
 	},
 	chachadance: {
 		accuracy: 100,
-		basePower: 100,
+		basePower: 190,
 		category: "Physical",
 		id: "chachadance",
 		name: "Cha Cha Dance",
@@ -371,8 +372,7 @@ exports.BattleMovedex = {
 		self: {
 				boosts: {
 					spa: 1,
-					spd: 1,
-					evasion: 1,
+					spd: 2,
 				},
 			},
 		boosts: {
@@ -388,10 +388,10 @@ exports.BattleMovedex = {
 		accuracy:100,
 		pp:15,
 		id: "ggm8",
-		name: "ggm8",
+		name: "gg m8",
 		isNonstandard: true,
 		isViable: true,
-		basePower:150,
+		basePower:170,
 		category:"Physical",
 		type:"Dragon",
 		target:"normal",
@@ -409,7 +409,7 @@ exports.BattleMovedex = {
 		},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Focus Energy", source);
+			this.add('-anim', source, "Tail Glow", source);
 			this.add('-anim', source, "V-Create", target);
 			this.add("c|&charizard8888|gg m8");
 		},
@@ -471,8 +471,8 @@ exports.BattleMovedex = {
 		secondary: {
 			self: {
 				boosts: {
-					atk: 1,
-					def: 2,
+					atk: 3,
+					def: 3,
 					spe: 3,
 				},
 			},
@@ -492,7 +492,7 @@ exports.BattleMovedex = {
 	},
 	"blehflame": {
 		accuracy: 100,
-		basePower: 100,
+		basePower: 120,
 		category: "Special",
 		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
 		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
@@ -529,7 +529,7 @@ exports.BattleMovedex = {
 		name: "Haxing Rage",
 		isNonstandard: true,
 		isViable: true,
-		basePower:110,
+		basePower:120,
 		category:"Physical",
 		type:"Dragon",
 		target:"normal",
@@ -551,7 +551,7 @@ exports.BattleMovedex = {
 	},
 	"waitandhope": {
 		accuracy: 100,
-		basePower: 130,
+		basePower: 140,
 		category: "Special",
 		id: "waitandhope",
 		name: "Wait and hope",
@@ -689,6 +689,7 @@ exports.BattleMovedex = {
 		self: {
 			boosts: {
 				def: 1,
+				spd: 1,
 			},
 		},
 		onPrepareHit: function (target, source) {
@@ -789,7 +790,7 @@ exports.BattleMovedex = {
 		contestType: "Tough",
 	},
 	dragonsymphony: {
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
 		id: "dragonsymphony",
@@ -814,13 +815,13 @@ exports.BattleMovedex = {
 			status: 'sleep',
 		},
 		self: {
-	        chance: 40,
+	        chance: 60,
 		boosts: {
-                        atk: 1,
-			spe: 1,
+                        atk: 2,
+			spe: 2,
 		},
 	},
-		recoil: [1, 4],
+		recoil: [1, 5],
 		target: "normal",
 		type: "Dragon",
 	},
