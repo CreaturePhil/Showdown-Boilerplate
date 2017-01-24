@@ -294,6 +294,7 @@ exports.grouplist = [
 		modchatall: true,
 		makeroom: true,
 		editroom: true,
+		addhtml: true,
 		potd: true,
 		disableladder: true,
                 globalonly: true,
