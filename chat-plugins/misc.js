@@ -342,5 +342,5 @@ distor: function (target, room, user, connection, cmd) {
  	},
  
  	newstorhelp: ["/newstor Pokemon, Primary Type, Secondary Type, Primary Ability, Secondary Ability, Hidden Ability, HP, Atk, Def, SpA, SpD, Spe, Mascot"],
-  };
+ 
 };
