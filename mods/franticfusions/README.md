@@ -35,23 +35,24 @@ Charizard Kyurem
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 101 | 127 | 89 | 114 | 87 | 97 | 615 | 
 
+Abilities: Blaze/Solar Power (you can choose one of these) + Teravolt 
 The resultant Pokemon will get all the moves which both the fused Pokemon get
 #### Hmm Cool! What if I Mega Evolve Charizard into Mega Charizard X?   
-The resultant Pokemon will get the same stat boosts which Charizard gets upon mega evolving 
+The resultant Pokemon will get the same stat boosts which Charizard gets upon mega evolving and all the abilities will turn into the one which it gets after Mega evolving (that is Tough Claws)
 For example (this might be a bit confusing) 
 Charizard's stats are:
 
 | HP | Atk | Def | SpA | SpD | Spe | BST |
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
-| 101 | 127 | 89 | 114 | 87 | 97 | 615 | 
+| 78 | 84 | 78 | 109 | 85 | 100 | 534 | 
 
 And Mega Charizard X's stats are 
 
 | HP | Atk | Def | SpA | SpD | Spe | BST |
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
-| 101 | 127 | 89 | 114 | 87 | 97 | 615 | 
+| 78 | 130 | 111 | 130 | 85 | 100 | 634 | 
 
-So it gains ... on mega evolving
+So it gains +46 Atk | + 33 Def | + 21 SpA on mega evolving
 
 The fused mons stats were
 
@@ -65,14 +66,30 @@ So after mega evolution the stats will be
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 101 | 127 | 89 | 114 | 87 | 97 | 615 | 
 
-+...
+ 0 HP | + 46 Atk | + 33 Def | + 21 SpA | +0 SpD | + 0 Spe |
 
+| HP | Atk | Def | SpA | SpD | Spe | BST |
+|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
+| 101 | 173 | 122 | 135 | 87 | 97 | 715 | 
 
+#### Nice! I already have a cool idea! Huge Power Diggersby + Multiscale Dragonite! opinions?  
+Ah nice to see you being interested in this. Cool set but it has been used and was too overpowered so as a result Huge Power was banned.
 
+#### Yeah that makes sense. By the way who makes decision about all these bans and what all things are banned in it?  
+Snaquaza, the meta leader takes all these decisions. And here's the banlist
 ## Banlist:
 - **Pokemon:** Ubers, Shedinja, Swoobat
 - **Abilities:** Shadow Tag, Assist, Huge Power, Pure Power, 
 - **Items:** Medichamite
+
+#### Cool mechanics must've been tough to code? 
+Yeah Spandan has put in a lot of effort into coding this. If you find any bug in it feel free to report that to Spandan or Snaquaza.
+
+#### Great! Who wants to battle me? 
+Feel free to ask that in the chat a lot of people play this but if nobody is ready at that time you can always challenge BatterBotto the bot. And if you want a team to be added in the bot ask XpRienzo or charizard8888 or Spandan or Snaquaza (whoever is online)
+
+#### Thanks! :] 
+No problem m8
 
 https://confluence.atlassian.com/bitbucketserver/markdown-syntax-guide-776639995.html
 
