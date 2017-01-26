@@ -450,3 +450,4 @@ exports.BattleMovedex = {
 		},
 	},
 }
+}
