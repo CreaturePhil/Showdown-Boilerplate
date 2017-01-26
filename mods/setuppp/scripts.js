@@ -197,7 +197,7 @@ exports.BattleScripts = {
 					if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
 						this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
 						//mod for setup++ start
-						this.runEvent('AfterSecondaryEffect', target, pokemon);
+						this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);
 						// mod for setup++ end
 					}
 				}
