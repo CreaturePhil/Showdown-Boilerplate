@@ -4233,6 +4233,16 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		ruleset: ['[Gen 7] OU'],
 		//team: 'random',
 		mod: 'setuppp',
+		onAfterSecondaryEffect: function(target, source) {
+			source.baseMoveset.forEach(curmove => {
+				let move = this.getMove(curmove.id);
+				let isDead = target.hp === undefined || target.hp <= 0;
+				if(move.category === "Status" && move.boosts && move.target === "self" && !target.moveThisTurn && !isDead) {
+					this.useMove(move, source);
+					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
+				}
+			});
+		},
 	},
 	{
 		name: "[Gen 7] Full Potential",
