@@ -111,6 +111,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'getinthebag':'https://68.media.tumblr.com/209d1a0a125da03b7afcbd53316374c2/tumblr_ohuza1t4MW1qeb3ulo1_500.gif',
 		'oshat':'http://www.geekinsider.com/wp-content/uploads/2013/10/tumblr_mvblw72CTf1sal1obo1_400.gif',
 		'wowwy':'https://media.giphy.com/media/RfprItHPpSCf6/giphy.gif',
+		'feelszard':'http://i.imgur.com/SSJoM7P.gif',
 	});
 }
 
