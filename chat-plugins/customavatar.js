@@ -49,6 +49,9 @@ exports.commands = {
 
 			const name = toId(parts[0]);
 			let image_url = parts[1];
+			if(!(image_url.startsWith("https") || image_url.startsWith("https"))) {
+				image_url = "https://"+image_url;
+			}
 			if (image_url.match(/^https?:\/\//i)) image_url = 'http://' + image_url;
 			const ext = path.extname(image_url);
 
