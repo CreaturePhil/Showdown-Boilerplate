@@ -3608,28 +3608,26 @@ exports.Formats = [
 		return problems;
 	},
 },
-    {
-	     name: "Lockdown",
-	     desc: [
-	     		"&bullet; <a href=\"http://www.smogon.com/forums/threads/lockdown-now-playable.3565472/\">Lockdown</a>",
-	     ],
-	     section: "New Other Metagames",
-	     mod: 'lockdown',
-
-	     ruleset: ['OU'],
-	     banlist: ['Damp Rock', 'Heat Rock', 'Smooth Rock', 'Icy Rock'],
-
-	     onTryHitSide: function (target, source, move) {
-	       console.log("trying hitting side");
-	       let lockdownMoves = ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb'];
-	       if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
-	     },
-	     onTryHitField: function (target, source, move) {
-	       console.log("trying hitting field");
-	       let lockdownMoves = ['sunnyday', 'raindance', 'hail', 'sandstorm', 'magicroom', 'wonderroom', 'trickroom', 'gravity', 'electricterrain', 'mistyterrain', 'grassyterrain', 'mudsport', 'watersport'];
-	       if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
-	   }
-   	},
+	{
+		name: "[Gen 7] Lockdown",
+		desc: [
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3593815\">Lockdown</a>",
+			"At the end of Turn 6, battlefield changes become permanent.",
+		],
+		section: "New Other Metagames",
+		mod: 'lockdown',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Damp Rock', 'Heat Rock', 'Smooth Rock', 'Icy Rock', 'Terrain Extender'],
+		unbanlist: ['Genesect'],
+		onTryHitSide: function(target, source, move) {
+			let lockdownMoves = ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb'];
+			if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
+		},
+		onTryHitField: function(target, source, move) {
+			let lockdownMoves = ['sunnyday', 'raindance', 'hail', 'sandstorm', 'magicroom', 'wonderroom', 'trickroom', 'gravity', 'electricterrain', 'mistyterrain', 'grassyterrain', 'psychicterrain', 'mudsport', 'watersport'];
+			if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
+		}
+	},	
 	{
 	    name: "Mirror Move",
 	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mirror-move.3572990/\">Mirror Move</a>"],
