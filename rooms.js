@@ -1373,7 +1373,7 @@ class ChatRoom extends Room {
 
 		this.type = 'chat';
 
-		if (Config.logchat) {
+		if (Config.logchat && !roomid.includes("spam")) {
 			this.rollLogFile(true);
 			this.logEntry = function (entry, date) {
 				const timestamp = Chat.toTimestamp(new Date()).split(' ')[1] + ' ';
