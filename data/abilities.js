@@ -587,7 +587,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
 		onFoeTryMove: function (target, source, effect) {
-			if (source.side === this.effectData.target.side && effect.priority > 0.1 && effect.target !== 'self') {
+			if ((source.side === this.effectData.target.side || effect.id === 'perishsong') && effect.priority > 0.1 && effect.target !== 'foeSide') {
 				this.attrLastMove('[still]');
 				this.add('cant', this.effectData.target, 'ability: Dazzling', effect, '[of] ' + target);
 				return false;
@@ -1713,7 +1713,7 @@ exports.BattleAbilities = {
 		id: "liquidooze",
 		onSourceTryHeal: function (damage, target, source, effect) {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
-			let canOoze = {drain: 1, leechseed: 1};
+			let canOoze = {drain: 1, leechseed: 1, strengthsap: 1};
 			if (canOoze[effect.id]) {
 				this.damage(damage);
 				return 0;
@@ -1759,6 +1759,7 @@ exports.BattleAbilities = {
 			}
 			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
 			this.useMove(newMove, target, source);
 			return null;
 		},
@@ -1768,6 +1769,7 @@ exports.BattleAbilities = {
 			}
 			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
@@ -2563,7 +2565,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
 		onFoeTryMove: function (target, source, effect) {
-			if (source.side === this.effectData.target.side && effect.priority > 0.1 && effect.target !== 'self') {
+			if ((source.side === this.effectData.target.side || effect.id === 'perishsong') && effect.priority > 0.1 && effect.target !== 'foeSide') {
 				this.attrLastMove('[still]');
 				this.add('cant', this.effectData.target, 'ability: Queenly Majesty', effect, '[of] ' + target);
 				return false;
