@@ -197,14 +197,7 @@ exports.BattleScripts = {
 					if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
 						this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
 						//mod for setup++ start
-						pokemon.baseMoveset.forEach(curmove => {
-							let move = this.getMove(curmove.id);
-							let isDead = target.hp === undefined || target.hp <= 0;
-							if(move.category === "Status" && move.boosts && move.target === "self" && !target.moveThisTurn && !isDead) {
-								this.useMove(move, pokemon);
-								curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
-							}
-						});
+						this.runEvent('AfterSecondaryEffect', target, pokemon);
 						// mod for setup++ end
 					}
 				}
