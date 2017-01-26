@@ -39,7 +39,7 @@ exports.BattleScripts = {
 				species: 'Feraligatr', ability: 'Aquify', item: 'Life Orb', gender: 'M', shiny:true, 
 				moves: ['extremespeed', 'dragondance', 'icepunch'],
 				signatureMove: "Bone Crushing Death Roll",
-				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
+				evs: {spd:252, atk:252, spe:252, def:252}, nature: 'Jolly',
 			},
         	'Zmeeed': {
 				species: 'Latios', ability: 'Russian Winter', item: 'Soul Dew', gender: 'M',
@@ -51,10 +51,10 @@ exports.BattleScripts = {
 				species: 'Giratina-Origin', ability: 'The Underlord', item: 'Griseous Orb', gender: 'M', shiny:true,
 				moves: ['willowisp', 'shadowball', 'dragonpulse'],
 				signatureMove: "The Loom Effect",
-				evs: {hp:252, spa: 252, def:4}, nature: 'Modest',
+				evs: {hp:252, spa: 252, def:252}, nature: 'Modest',
 			},
 			'charizard8888': {
-				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Charizardite X', gender: 'M',
+				species: 'Charizard-Mega-X', ability: 'Refrigerate', item: 'Firium Z', gender: 'M',
 				moves: ['fakeout', 'extremespeed', 'flareblitz'],
 				signatureMove: "ggm8",
 				evs: {spd:4, atk:252, spe:252}, nature: 'Jolly',
@@ -82,7 +82,7 @@ exports.BattleScripts = {
 				species: 'Garchomp-Mega', ability: 'Epic Claws', item: 'Focus Sash',
 				moves: ['precipiceblades', 'dragonclaw', 'sacredfire'],
 				signatureMove: "GARCHOMP EPICNESS",
-				evs: {atk:252, def:4, spe:252}, nature: 'Adamant',
+				evs: {atk:252, def:252, spe:252, spd:252}, nature: 'Jolly',
 			},
 			'Snaq': {
 				species: 'Magikarp', ability: 'Parting Shot Spam', item: 'Air Balloon',
@@ -123,7 +123,7 @@ exports.BattleScripts = {
 				species: 'Kyurem-B', ability: 'Breakthrough', item: 'Life Orb', gender: 'M', shiny: true,
 				moves: ['outrage','icebeam','fusionbolt'], name: 'Eternal Mayhem',
 				signatureMove: "Dragon Symphony",
-				evs: {spe:252, spa:4, atk:252}, nature: 'Naughty',
+				evs: {spe:252, spa:252, atk:252}, nature: 'Naughty',
 			},
 			'Spandan': {
 			    species: 'Salamence', ability: 'Multiscale', item: 'Salamencite', gender: 'M',
@@ -135,7 +135,7 @@ exports.BattleScripts = {
 			    species: 'Weavile', ability: 'Knowledge', item: 'Liechi Berry', gender: 'M',
 				moves: ['icepunch', 'knockoff', 'fakeout'],
 				signatureMove: "Logic Power",
-				evs: {atk:252, spd:6, spe:252}, nature: 'Adamant',
+				evs: {atk:252, spd:252, spe:252}, nature: 'Adamant',
 			},
 			'Theswordbreaker': {
 			    species: 'Arceus-Dragon', ability: 'Breaking Point', item: 'Draco Plate', gender: 'M',
@@ -147,13 +147,13 @@ exports.BattleScripts = {
 				species: 'Haxorus', ability: 'Blessed Hax', item: 'Life Orb', gender: 'M',
 				moves: ['ironhead', 'diamondstorm', 'sacredfire'],
 				signatureMove: "Haxing Rage",
-				evs: {atk:252, spe:252, spd:4}, nature: 'Adamant',
+				evs: {atk:252, spe:252, spd:252, def:252}, nature: 'Adamant',
 			},
 			'XpRienzo ☑-☑': {
  				species: 'Reshiram', ability: 'Adaptability', item: 'Charcoal', gender: 'M',
  				moves: ['coreenforcer', 'psystrike', 'voltswitch'],
  				signatureMove: "blehflame",
- 				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
+ 				evs: {spa:252, spd:252, spe:252, def:252}, nature: 'Timid',
  			},
 			'BatterBotto': {
  				species: 'Dragonite', ability: 'Protean', item: 'Iron Ball', gender: 'M', shiny:true,
@@ -171,13 +171,13 @@ exports.BattleScripts = {
  				species: 'Flareon', ability: 'Slowchat', item: 'Charcoal', gender: 'F', shiny:true,
  				moves: ['vcreate', 'recover', 'bellydrum'],
  				signatureMove: "banhammah",
- 				evs: {hp: 252, atk: 252, spe:252}, nature: 'Jolly',
+ 				evs: {hp: 252, atk: 252, spe:252, def:252, spd:252}, nature: 'Jolly',
  			},
 			'Dragitbot': {
  				species: 'Dratini', ability: 'Hidden', item: 'Leftovers', gender: 'F',
  				moves: ['swordsdance', 'agility', 'nastyplot'],
  				signatureMove: "superswitch",
- 				evs: {hp:252, def:252, spd:4}, nature: 'Bold',
+ 				evs: {hp:252, def:252, spd:252}, nature: 'Bold',
  			},
 			'shivam rustagi': {
  				species: 'Giratina', ability: 'Bad Dreams', item: 'Leftovers', gender: 'M',

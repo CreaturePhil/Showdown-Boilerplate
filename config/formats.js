@@ -334,14 +334,13 @@ exports.Formats = [
 			let sentences = [];
 			let sentence = '';
 			if(name === 'spandan') {
+				this.add('raw|<div class="message"><small style="color: #555555">~Spandan joined<br></small></div>');
+				this.add('raw|<center><div class="broadcast-red"><b>The server has crashed!</b><br>Please wait for an administrator to fix it.</div></center>');
 				this.add('c|~Spandan|o shit waddup!');
 			}
 			if(name === 'thetruefalcon') {
 				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
-			}
-			if(name === 'diarmuidodyna') {
-				this.add('c|&Diarmuid O\'Dyna|OMG can i help yoU?');
-				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+				this.add('c|%The True Falcon|Hi all');
 			}
 			if(name === 'hydrostatics') {
 				this.add('c|+Hydrostatics|Gl, Hf Kid');
@@ -392,6 +391,8 @@ exports.Formats = [
 			}
 			if(name === 'charizard8888') {
 				this.add('c|&charizard8888|It\'s **Outragin\' Time !!**');
+				this.add('c|&charizard8888|<div class="chat"><small>*</small><button name="parseCommand" value="/user charizard8888" style="background: none ; border: 0 ; padding: 0 5px 0 0 ; font-family: &quot;verdana&quot; , &quot;helvetica&quot; , &quot;arial&quot; , sans-serif ; font-size: 9pt ; cursor: pointer"><b><font color="#AE830F">charizard8888:</font></b></button><em class="mine">Enjoy my battle theme while everything gets rekt! <img src="https://cdn.rawgit.com/CreaturePhil/dem-feels/master/emotes/feelsfdra.png" title="feelsfdra" width="50" height="50"></em></div>');
+				this.add('raw|<audio style="width: 99.6% ; border: 6px solid #FFA000 ; color: green" controls="" src="http://www.youtubeinmp3.com/fetch/?video=/www.youtube.com/watch?v=12eZvb108xc">Your user agent does not support the HTML5 Audio element.</audio>')
 			}
 			if(name === 'theswordbreaker') {
 				this.add('c|@Theswordbreaker|It\'s time to break some blades >:)');
@@ -424,12 +425,15 @@ exports.Formats = [
 			//let opp = toId(source.name);
 			if (name === 'spandan') {
 				this.add('raw|<div class="broadcast-red"><h3>The server has crashed! Reason:</h3>File Spandan.exe could not be located</div>');
-				this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed</h3><p align=right style="font-size:20px;">- by <font color=#D64374><b>Spandan</b></font></p></div>');
-				this.add('c|~Spandan|Gr8 b8, m8. I rel8, str8 appreci8, and congratul8. I r8 this b8 an 8/8. Plz no h8, I\'m str8 ir8. Cre8 more, can\'t w8. We should convers8, I won\'t ber8, my number is 8888888, ask for N8. No calls l8 or out of st8. If on a d8, ask K8 to loc8. Even with a full pl8, I always have time to communic8 so don\'t hesit8');
+				this.add('raw|[<font color="FF00FF">DragonHeaven</font>] <font color="909090">Spandamn</font> pushed <b>1</b> new commit to <font color="800080">master</font>: <a href="https://hastebin.com/raw/ocavinuyot" target="_blank">https://git.io/vMbyi</a><br><font color="FF00FF">DragonHeaven</font>/<font color="800080">master</font> <a href="https://hastebin.com/raw/ocavinuyot" target="_blank"><font color="606060">a79bac</font></a> Update Server.js');
+				this.add('raw|<div class="message-log">Spandan used /hotpatch formats</div>');
+				this.add('raw|<div class="message-log">Spandan used /hotpatch chat</div>');
+				this.add('raw|<div class="message-log">Spandan used /hotpatch dnsbl</div>');
+				this.add('raw|<div class="message-log">Spandan used /hotpatch battles</div>');
+				this.add('c|~Spandan|DONT PANIC FIXED');
+				this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed</h3><p align=right style="font-size:20px;"></div>');
 			}
-			if(name === 'diarmuidodyna') {
-				this.add('c|&Diarmuid O\'Dyna|awwww okieee');
-			}
+			
 			if(name === 'alphapaul71') {
 				this.add('c| Alpha Paul☯71|RIP Me feelsbd');
 			}
@@ -522,6 +526,7 @@ exports.Formats = [
 			}
 			//Switchout phrase
 			if(name=="spandan") this.add("c|~Spandan|brb");
+			if(name="charizard8888") this.add("c|&charizard8888|brb");
 			if(name=="shivam rustagi") this.add("c|%shivam rustagi|I'll be back to haunt u till eternity"); //testing, hope it works
 
 			// Transform
@@ -4447,7 +4452,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	{//Thanks urkerab for the Cross Evolution code :)
 		name: "[Gen 7] Frantic Fusions",
 		desc: [
-	     		"&bullet; A metagame where you are able to fuse two Pokemon. <BR /> &bullet; The resultant Pokemon has the primary type of the base mon. If the base mon is shiny, it will get the secondary type of the second mon, else the primary type of the second mon. It will get the averaged stats.<br />&bullet;You can choose any ability from the original Pokemon, and you also get the primary ability of the second Pokemon (The one you put in the nickname). <br />&bullet; Use !fuse for theorymonning purposes",
+	     		"&bullet; <a href=https://github.com/XpRienzo/DragonHeaven/blob/master/mods/franticfusions/README.md>Frantic Fusions <br> &bullet; A metagame where you are able to fuse two Pokemon. <BR /> &bullet; The resultant Pokemon has the primary type of the base mon. If the base mon is shiny, it will get the secondary type of the second mon, else the primary type of the second mon. It will get the averaged stats.<br />&bullet;You can choose any ability from the original Pokemon, and you also get the primary ability of the second Pokemon (The one you put in the nickname). <br />&bullet; Use !fuse for theorymonning purposes",
 	     	],
 		mod: 'franticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
@@ -5490,7 +5495,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		mod: 'istor',
 		desc: [
 			"&bullet; A new region with new Pokemon, Moves, Abilities and a lot more",
-			"&bullet; <a href=\"https://github.com/charizard8888/DragonHeaven/blob/patch-44/mods/istor/README.md\">Istor</a>",
+			"&bullet; <a href=\"https://github.com/XpRienzo/DragonHeaven/blob/master/mods/istor/README.md\">Istor</a>",
 		],
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause' , 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
