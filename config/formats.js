@@ -4233,7 +4233,8 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		ruleset: ['[Gen 7] OU'],
 		//team: 'random',
 		mod: 'setuppp',
-		onAfterSecondaryEffect: function(target, source) {
+		onAfterSecondaryEffect: function(target, source, move) {
+			if(move.secondaries.status === target.status || target.volatiles[move.secondaries.volatileStatus]) return;
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
 				let isDead = target.hp === undefined || target.hp <= 0;
