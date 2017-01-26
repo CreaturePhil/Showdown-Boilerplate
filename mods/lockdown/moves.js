@@ -56,18 +56,24 @@ exports.BattleMovedex = {
 			duration: 5,
 			durationCallback: function () {
 				if (this.turn > 2) return 999;
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
 				return 5;			
 			},
 			onSetStatus: function (status, target, source, effect) {
 				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
-					this.debug('Interrupting sleep from Electric Terrain');
+					if (effect.effectType === 'Move' && !effect.secondaries) {
+						this.add('-activate', target, 'move: Electric Terrain');
+					}
 					return false;
 				}
 			},
-			onTryHit: function (target, source, move) {
+			onTryAddVolatile: function (status, target) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				if (move && move.id === 'yawn') {
-					return false;
+				if (status.id === 'yawn') {
+					this.add('-activate', target, 'move: Electric Terrain');
+					return null;
 				}
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
@@ -76,8 +82,12 @@ exports.BattleMovedex = {
 					return this.chainModify(1.5);
 				}
 			},
-			onStart: function () {
-				this.add('-fieldstart', 'move: Electric Terrain');
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Electric Terrain');
+				}
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
@@ -92,6 +102,9 @@ exports.BattleMovedex = {
 			duration: 5,
 			durationCallback: function () {
 				if (this.turn > 2) return 999;
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
 				return 5;			
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
@@ -105,8 +118,12 @@ exports.BattleMovedex = {
 					return this.chainModify(1.5);
 				}
 			},
-			onStart: function (target, source) {
-				this.add('-fieldstart', 'move: Grassy Terrain');
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Grassy Terrain');
+				}
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 2,
@@ -123,7 +140,18 @@ exports.BattleMovedex = {
 					}
 				}
 			},
-			onEnd: function () {
+			onEnd: function (battle) {
+				this.debug('onResidual battle');
+				let pokemon;
+				for (let s in battle.sides) {
+					for (let p in battle.sides[s].active) {
+						pokemon = battle.sides[s].active[p];
+						if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+							this.debug('Pokemon is grounded, healing through Grassy Terrain.');
+							this.heal(pokemon.maxhp / 16, pokemon, pokemon);
+						}
+					}
+				}
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
 		},
@@ -134,12 +162,24 @@ exports.BattleMovedex = {
 			duration: 5,
 			durationCallback: function () {
 				if (this.turn > 2) return 999;
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
 				return 5;			
 			},
 			onSetStatus: function (status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				this.debug('misty terrain preventing status');
+				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+					this.add('-activate', target, 'move: Misty Terrain');
+				}
 				return false;
+			},
+			onTryAddVolatile: function (status, target, source, effect) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (status.id === 'confusion') {
+					this.add('-activate', target, 'move: Misty Terrain');
+					return null;
+				}
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
 				if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
@@ -147,13 +187,57 @@ exports.BattleMovedex = {
 					return this.chainModify(0.5);
 				}
 			},
-			onStart: function (side) {
-				this.add('-fieldstart', 'Misty Terrain');
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Misty Terrain');
+				}
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
 			onEnd: function (side) {
 				this.add('-fieldend', 'Misty Terrain');
+			},
+		},
+	},
+	"psychicterrain": {
+		inherit: true,
+		effect: {
+			duration: 5,
+			durationCallback: function (source, effect) {
+				if(this.turn > 2) return 999;
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onTryHitPriority: 4,
+			onTryHit: function (target, source, effect) {
+				if (!target.isGrounded() || target.isSemiInvulnerable() || target.side === source.side) return;
+				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
+					return;
+				}
+				this.add('-activate', target, 'move: Psychic Terrain');
+				return null;
+			},
+			onBasePower: function (basePower, attacker, defender, move) {
+				if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.debug('psychic terrain boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Psychic Terrain');
+				}
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onEnd: function () {
+				this.add('-fieldend', 'move: Psychic Terrain');
 			},
 		},
 	},
@@ -168,7 +252,8 @@ exports.BattleMovedex = {
 			},
 			onStart: function () {
 				this.add('-fieldstart', 'move: Gravity');
-				for (let side of this.sides) for (let pokemon of side.pokemon) {
+				const allActivePokemon = this.sides[0].active.concat(this.sides[1].active);
+				for (let pokemon of allActivePokemon) {
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 						applies = true;
@@ -193,7 +278,7 @@ exports.BattleMovedex = {
 						applies = true;
 						delete pokemon.volatiles['telekinesis'];
 					}
-					if (applies) this.add('-activate', pokemon, 'Gravity');
+					if (applies) this.add('-activate', pokemon, 'move: Gravity');
 				}
 			},
 			onModifyAccuracy: function (accuracy) {
@@ -201,9 +286,10 @@ exports.BattleMovedex = {
 				return accuracy * 5 / 3;
 			},
 			onDisableMove: function (pokemon) {
-				let disabledMoves = {bounce:1, fly:1, flyingpress:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
-				for (let m in disabledMoves) {
-					pokemon.disableMove(m);
+				for (let i = 0; i < pokemon.moveset.length; i++) {
+					if (this.getMove(pokemon.moveset[i].id).flags['gravity']) {
+						pokemon.disableMove(pokemon.moveset[i].id);
+					}
 				}
 			},
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
@@ -268,11 +354,7 @@ exports.BattleMovedex = {
 			onStart: function (side, source) {
 				this.add('-fieldstart', 'move: WonderRoom', '[of] ' + source);
 			},
-			onModifyMovePriority: -100,
-			onModifyMove: function (move) {
-				move.defensiveCategory = ((move.defensiveCategory || this.getCategory(move)) === 'Physical' ? 'Special' : 'Physical');
-				this.debug('Defensive Category: ' + move.defensiveCategory);
-			},
+			// Swapping defenses implemented in battle-engine.js:BattlePokemon#calculateStat and BattlePokemon#getStat
 			onResidualOrder: 24,
 			onEnd: function () {
 				this.add('-fieldend', 'move: Wonder Room');
@@ -284,9 +366,9 @@ exports.BattleMovedex = {
 		onHit: function (target, source, move) {
 			if (!target.volatiles['substitute'] || move.infiltrates) this.boost({evasion:-1});
 
-			let removeTarget = {reflect:1, lightscreen:1, safeguard:1, mist:1};
+			let removeTarget = {reflect:1, lightscreen:1, safeguard:1, mist:1, auroraveil:1};
 			if (this.turn < 7) {
-				removeTarget = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
+				removeTarget = {reflect:1, lightscreen:1, auroraveil: 1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
 			}
 			
 			let removeAll = {spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
