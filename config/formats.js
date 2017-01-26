@@ -486,12 +486,12 @@ exports.Formats = [
 			if (name === 'spandan') {
 				this.add('raw|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br>Don\'t worry, we\'re working on fixing it.</div>');
 				this.add('raw|[<font color="FF00FF">DragonHeaven</font>] <font color="909090">Spandamn</font> pushed <b>1</b> new commit to <font color="800080">master</font>: <a href="https://hastebin.com/raw/ocavinuyot" target="_blank">https://git.io/vMbyi</a><br><font color="FF00FF">DragonHeaven</font>/<font color="800080">master</font> <a href="https://hastebin.com/raw/ocavinuyot" target="_blank"><font color="606060">a79bac</font></a> Update server.js');
-				this.add('c|~|<div class="message-log">Spandan used /hotpatch formats');
-				this.add('c|~|<div class="message-log">Spandan used /hotpatch chat');
+				this.add('c|~|Spandan used /hotpatch formats');
+				this.add('c|~|Spandan used /hotpatch chat');
 				this.add('c|~|Spandan used /hotpatch dnsbl');
 				this.add('c|~|Spandan used /hotpatch battles');
 				this.add('c|~Spandan|DONT PANIC FIXED');
-				this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed. Thanks for holding on!</h3><p align=right style="font-size:20px;"></div>');
+				this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed.</h3><p align=right style="font-size:20px;"></div>');
 			}
 			
 			if(name === 'alphapaul71') {
