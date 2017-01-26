@@ -431,9 +431,11 @@ exports.BattleMovedex = {
 						this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 						pokemon.side.removeSideCondition('toxicspikes');
 					}
-				} else if (this.effectData.layers >= 2) {
+				}
+				else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
-				} else {
+				}
+				else {
 					pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
 				}
 			},
@@ -446,5 +448,5 @@ exports.BattleMovedex = {
 				this.setTerrain('psychicterrain');
 			}
 		},
-	},	
-};
+	},
+}
