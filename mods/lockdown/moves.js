@@ -6,7 +6,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			durationCallback: function () {
+			durationCallback: function (source, effect) {
 				if (this.turn > 2) return 999;
 				return 5;			
 			},
@@ -30,7 +30,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			durationCallback: function () {
+			durationCallback: function (source, effect) {
 				if (this.turn > 2) return 999;
 				return 5;			
 			},
@@ -54,11 +54,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			durationCallback: function () {
+			durationCallback: function (source, effect) {
 				if (this.turn > 2) return 999;
-				if (source && source.hasItem('terrainextender')) {
-					return 8;
-				}
 				return 5;			
 			},
 			onSetStatus: function (status, target, source, effect) {
@@ -100,11 +97,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			durationCallback: function () {
+			durationCallback: function (source, effect) {
 				if (this.turn > 2) return 999;
-				if (source && source.hasItem('terrainextender')) {
-					return 8;
-				}
 				return 5;			
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
@@ -160,11 +154,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			durationCallback: function () {
+			durationCallback: function (source, effect) {
 				if (this.turn > 2) return 999;
-				if (source && source.hasItem('terrainextender')) {
-					return 8;
-				}
 				return 5;			
 			},
 			onSetStatus: function (status, target, source, effect) {
@@ -207,9 +198,6 @@ exports.BattleMovedex = {
 			duration: 5,
 			durationCallback: function (source, effect) {
 				if(this.turn > 2) return 999;
-				if (source && source.hasItem('terrainextender')) {
-					return 8;
-				}
 				return 5;
 			},
 			onTryHitPriority: 4,
@@ -245,7 +233,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			durationCallback: function () {
+			durationCallback: function (source, effect) {
 				//ignoring Persistent ability
 				if (this.turn > 2) return 999;
 				return 5;
@@ -310,7 +298,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			durationCallback: function () {
+			durationCallback: function (source, effect) {
 				if (this.turn > 2) return 999;
 				return 5;
 			},
@@ -328,7 +316,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			durationCallback: function () {
+			durationCallback: function (source, effect) {
 				if (this.turn > 2) return 999;
 				return 5;
 			},
@@ -347,7 +335,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			durationCallback: function () {
+			durationCallback: function (source, effect) {
 				if (this.turn > 2) return 999;
 				return 5;
 			},
