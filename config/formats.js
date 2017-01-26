@@ -396,9 +396,8 @@ exports.Formats = [
 			let sentences = [];
 			let sentence = '';
 			if(name === 'spandan') {
-				this.add('raw|<div class="message"><small style="color: #555555">~Spandan joined<br></small></div>');
+				this.add('j|Spandan');
 				this.add('raw|<center><div class="broadcast-red"><b>The server has crashed!</b><br>Please wait for an administrator to fix it.</div></center>');
-				this.add('c|~Spandan|o shit waddup!');
 			}
 			if(name === 'thetruefalcon') {
 				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
@@ -452,8 +451,7 @@ exports.Formats = [
 				this.add('c| Eternal Mayhem|Let the music overcome you, control you.');
 			}
 			if(name === 'charizard8888') {
-				this.add('c|&charizard8888|It\'s **Outragin\' Time !!**');
-				this.add('c|&charizard8888|<div class="chat"><small>*</small><button name="parseCommand" value="/user charizard8888" style="background: none ; border: 0 ; padding: 0 5px 0 0 ; font-family: &quot;verdana&quot; , &quot;helvetica&quot; , &quot;arial&quot; , sans-serif ; font-size: 9pt ; cursor: pointer"><b><font color="#AE830F">charizard8888:</font></b></button><em class="mine">Enjoy my battle theme while everything gets rekt! <img src="https://cdn.rawgit.com/CreaturePhil/dem-feels/master/emotes/feelsfdra.png" title="feelsfdra" width="50" height="50"></em></div>');
+				this.add('raw|<div class="chat"><small>*</small><button name="parseCommand" value="/user charizard8888" style="background: none ; border: 0 ; padding: 0 5px 0 0 ; font-family: &quot;verdana&quot; , &quot;helvetica&quot; , &quot;arial&quot; , sans-serif ; font-size: 9pt ; cursor: pointer"><b><font color="#AE830F">charizard8888:</font></b></button><em class="mine">Enjoy my battle theme while everything gets rekt! <img src="https://cdn.rawgit.com/CreaturePhil/dem-feels/master/emotes/feelsfdra.png" title="feelsfdra" width="50" height="50"></em></div>');
 				this.add('raw|<audio style="width: 99.6% ; border: 6px solid #FFA000 ; color: green" controls="" src="http://www.youtubeinmp3.com/fetch/?video=/www.youtube.com/watch?v=12eZvb108xc">Your user agent does not support the HTML5 Audio element.</audio>')
 			}
 			if(name === 'theswordbreaker') {
@@ -486,14 +484,14 @@ exports.Formats = [
 			let name = toId(pokemon.name);
 			//let opp = toId(source.name);
 			if (name === 'spandan') {
-				this.add('raw|<div class="broadcast-red"><h3>The server has crashed! Reason:</h3>File Spandan.exe could not be located</div>');
-				this.add('raw|[<font color="FF00FF">DragonHeaven</font>] <font color="909090">Spandamn</font> pushed <b>1</b> new commit to <font color="800080">master</font>: <a href="https://hastebin.com/raw/ocavinuyot" target="_blank">https://git.io/vMbyi</a><br><font color="FF00FF">DragonHeaven</font>/<font color="800080">master</font> <a href="https://hastebin.com/raw/ocavinuyot" target="_blank"><font color="606060">a79bac</font></a> Update Server.js');
-				this.add('raw|<div class="message-log">Spandan used /hotpatch formats</div>');
-				this.add('raw|<div class="message-log">Spandan used /hotpatch chat</div>');
-				this.add('raw|<div class="message-log">Spandan used /hotpatch dnsbl</div>');
-				this.add('raw|<div class="message-log">Spandan used /hotpatch battles</div>');
+				this.add('raw|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br>Don\'t worry, we\'re working on fixing it.</div>');
+				this.add('raw|[<font color="FF00FF">DragonHeaven</font>] <font color="909090">Spandamn</font> pushed <b>1</b> new commit to <font color="800080">master</font>: <a href="https://hastebin.com/raw/ocavinuyot" target="_blank">https://git.io/vMbyi</a><br><font color="FF00FF">DragonHeaven</font>/<font color="800080">master</font> <a href="https://hastebin.com/raw/ocavinuyot" target="_blank"><font color="606060">a79bac</font></a> Update server.js');
+				this.add('c|~|<div class="message-log">Spandan used /hotpatch formats');
+				this.add('c|~|<div class="message-log">Spandan used /hotpatch chat');
+				this.add('c|~|Spandan used /hotpatch dnsbl');
+				this.add('c|~|Spandan used /hotpatch battles');
 				this.add('c|~Spandan|DONT PANIC FIXED');
-				this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed</h3><p align=right style="font-size:20px;"></div>');
+				this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed. Thanks for holding on!</h3><p align=right style="font-size:20px;"></div>');
 			}
 			
 			if(name === 'alphapaul71') {
