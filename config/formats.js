@@ -3693,8 +3693,12 @@ exports.Formats = [
 		onTryHitField: function(target, source, move) {
 			let lockdownMoves = ['sunnyday', 'raindance', 'hail', 'sandstorm', 'magicroom', 'wonderroom', 'trickroom', 'gravity', 'electricterrain', 'mistyterrain', 'grassyterrain', 'psychicterrain', 'mudsport', 'watersport'];
 			if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
-		}
-	},	
+		},
+		onResidualOrder: 999, 
+		onResidual: function () {
+			this.add("-message", "The Lockdown has commenced! Battlefield changes are now permanent!");
+		},
+	},
 	{
 	    name: "Mirror Move",
 	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mirror-move.3572990/\">Mirror Move</a>"],
