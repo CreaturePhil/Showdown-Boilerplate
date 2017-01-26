@@ -153,7 +153,7 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "[Gen 7] Pokebank Doubles OU",
+		name: "[Gen 7] Doubles OU",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3586596/\">Doubles OU Metagame Discussion</a>"],
 
 		mod: 'gen7',
@@ -165,7 +165,7 @@ exports.Formats = [
 		],
 	},
 	{
-		name: "[Gen 7] Pokebank Doubles Ubers",
+		name: "[Gen 7] Doubles Ubers",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -3192,7 +3192,7 @@ exports.Formats = [
 				else if (toId(donorTemplate.species) !== toId(set.species) && donorTemplate.isMega) {
 					problems = [template.species+" is inheriting from a Mega Pokemon, which is banned."];
 					continue;
-				} else if (donorTemplate.tier === "Uber" || donorTemplate.tier === "Bank-Uber") {
+				} else if (donorTemplate.tier === "Uber") {
 					problems = [template.species+" is inheriting from an Uber, which is banned."];
 					continue;
 				}
@@ -4225,14 +4225,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	{
 		name: "[Gen 7] Setup++",
 		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
-		ruleset: ['[Gen 7] Pokebank OU'],
+		ruleset: ['[Gen 7] OU'],
 		//team: 'random',
 		mod: 'setuppp',
 	},
 	{
 		name: "[Gen 7] Full Potential",
 		desc: ["&bullet; In this metagame, every Pokemon uses their highest raw stat as their attacking stat."],
-		ruleset: ['[Gen 7] Pokebank OU'],
+		ruleset: ['[Gen 7] OU'],
 		//team: 'random',
 		mod:'fullpotential',
 	},
@@ -5560,7 +5560,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			"&bullet; <a href=\"https://github.com/XpRienzo/DragonHeaven/blob/master/mods/istor/README.md\">Istor</a>",
 		],
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause' , 'Freeze Clause Mod'],
-		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
+		banlist: ['Uber', 'Uber', 'Power Construct', 'Shadow Tag'],
 	},
 	{
 		name: "[Istor] Doubles OU",
