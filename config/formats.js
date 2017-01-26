@@ -3696,7 +3696,8 @@ exports.Formats = [
 		},
 		onResidualOrder: 999, 
 		onResidual: function () {
-			this.add("-message", "The Lockdown has commenced! Battlefield changes are now permanent!");
+			if(this.turn !== 6) return;
+				this.add("-message", "The Lockdown has commenced! Battlefield changes are now permanent!");
 		},
 	},
 	{
