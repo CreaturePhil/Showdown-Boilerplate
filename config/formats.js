@@ -3498,116 +3498,116 @@ exports.Formats = [
 	},
 	{
 
-		 name: "Camomons",
-		 desc: [
-				 "Pok&eacute;mon change type to match their first two moves.",
-				 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
-		 ],
-		 section: "New Other Metagames",
+			 name: "Camomons",
+			 desc: [
+					 "Pok&eacute;mon change type to match their first two moves.",
+					 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
+			 ],
+			 section: "New Other Metagames",
 
-		 ruleset: ['OU'],
-		 onBegin: function () {
-				 let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-				 for (let i = 0, len = allPokemon.length; i < len; i++) {
-						 let pokemon = allPokemon[i];
-						 let types = [this.getMove(pokemon.moves[0]).type];
-						 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0])          types.push(this.getMove(pokemon.moves[1]).type);
-						 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
-						 pokemon.types = pokemon.template.types = types;
-				 }
-		 },		
-                 onAfterMega: function (pokemon) {
-				 let types = [this.getMove(pokemon.moves[0]).type];
-				 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
-				 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
-				 pokemon.types = pokemon.template.types = types;
-			  	this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');	
-      },
-                 onSwitchIn: function (pokemon) {
-                                 this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
-                 },
-},
-	
-	{
-	name:"Imprisoned",
-	section:"New Other Metagames",
-	ruleset:['OU'],
-	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/imprisoned.3580920/\">Imprisoned</a>"],
-	onBegin: function()
-	{
-		this.p1.impris = [];
-		this.p2.impris = [];
-		this.isImpris=function(side,move)
-		{
-			let b=false;
-			for(let i=0;i<this[side].impris.length;i++)
-				if(this[side].impris[i]==move)
-					b=true;
-			return b;
-		}
+			 ruleset: ['OU'],
+			 onBegin: function () {
+					 let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+					 for (let i = 0, len = allPokemon.length; i < len; i++) {
+							 let pokemon = allPokemon[i];
+							 let types = [this.getMove(pokemon.moves[0]).type];
+							 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0])          types.push(this.getMove(pokemon.moves[1]).type);
+							 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
+							 pokemon.types = pokemon.template.types = types;
+					 }
+			 },		
+	                 onAfterMega: function (pokemon) {
+					 let types = [this.getMove(pokemon.moves[0]).type];
+					 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
+					 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
+					 pokemon.types = pokemon.template.types = types;
+				  	this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');	
+	      },
+	                 onSwitchIn: function (pokemon) {
+	                                 this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+	                 },
 	},
-	onDisableMove: function(pokemon)
-	{
-		let side=pokemon.side.id;
-		for(let j=0;j<pokemon.moves.length;j++)
+		
 		{
-			let curmove=pokemon.moves[j];
-			if(this.isImpris(side,curmove))
-				pokemon.disableMove(curmove);
-		}
-	},
-	onTryMove: function(source, target, move)
-	{
-		let side=target.side.id,opside=source.side.id;
-		if(!this.isImpris(side,move.id))
-			this[side].impris.push(move.id);
-		for(let i=0;i<this[opside].pokemon.length;i++)
+		name:"Imprisoned",
+		section:"New Other Metagames",
+		ruleset:['OU'],
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/imprisoned.3580920/\">Imprisoned</a>"],
+		onBegin: function()
 		{
-			for(let j=0;j<this[opside].pokemon[i].moves.length;j++)
+			this.p1.impris = [];
+			this.p2.impris = [];
+			this.isImpris=function(side,move)
 			{
-				let curmove=this[opside].pokemon[i].moves[j];
-				if(this.isImpris(opside,curmove))
-					this[opside].pokemon[i].disableMove(curmove);
+				let b=false;
+				for(let i=0;i<this[side].impris.length;i++)
+					if(this[side].impris[i]==move)
+						b=true;
+				return b;
 			}
-		}
+		},
+		onDisableMove: function(pokemon)
+		{
+			let side=pokemon.side.id;
+			for(let j=0;j<pokemon.moves.length;j++)
+			{
+				let curmove=pokemon.moves[j];
+				if(this.isImpris(side,curmove))
+					pokemon.disableMove(curmove);
+			}
+		},
+		onTryMove: function(source, target, move)
+		{
+			let side=target.side.id,opside=source.side.id;
+			if(!this.isImpris(side,move.id))
+				this[side].impris.push(move.id);
+			for(let i=0;i<this[opside].pokemon.length;i++)
+			{
+				for(let j=0;j<this[opside].pokemon[i].moves.length;j++)
+				{
+					let curmove=this[opside].pokemon[i].moves[j];
+					if(this.isImpris(opside,curmove))
+						this[opside].pokemon[i].disableMove(curmove);
+				}
+			}
+		},
 	},
-},
-    {
-		name: "The All-Stars Metagame",
-		section: "New Other Metagames",
-		ruleset: ['OU'],
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-all-stars-metagame-v2-enter-the-pu-a-pokemon-from-each-tier.3510864//\">The All-Stars Metagame</a>"],
-		banlist: [],
+	    {
+			name: "The All-Stars Metagame",
+			section: "New Other Metagames",
+			ruleset: ['OU'],
+			desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-all-stars-metagame-v2-enter-the-pu-a-pokemon-from-each-tier.3510864//\">The All-Stars Metagame</a>"],
+			banlist: [],
 
-		onValidateTeam: function(team){
-			let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0, problems = [], check = true, template;
-			for(let i = 0; i < team.length; i++){
-           		let item = this.getItem(team[i].item);
-           		if(item.megaStone) template = this.getTemplate(team[i].item.megaStone);
-           		else template = this.getTemplate(team[i].species);
-           		let ability = this.getAbility(template.ability);
-           		let tier = template.tier;
-	            for(var j in team[i].moves){
-            		var move = this.getMove(team[i].moves[j]);
-            		if(move.id == "chatter") tier = "NU";}
-            		//Bans Drought + Drizzle users to OU
-            	if(ability.id == "drizzle" || ability.id == "drought") tier = "OU";
-            		//Bans Chatter to NU
-            	if(tier == "OU" || tier == "BL") ouMons++;
-				if(tier == "UU" || tier == "BL2") uuMons++;
-				if(tier == "RU" || tier == "BL3") ruMons++;
-				if(tier == "NU" || tier == "BL4") nuMons++;
-				if(tier == "PU") puMons++;}
-			while(check){
-				if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon.");
-				if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon.");
-				if(1 < ruMons) problems.push("You are able to only bring a maximum of 1 RU / BL3 Pokemon.");
-				if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon.");
-				if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon.");
-				else check = false;}
-		return problems;
+			onValidateTeam: function(team){
+				let ouMons = 0, uuMons = 0, ruMons = 0, nuMons = 0, puMons = 0, problems = [], check = true, template;
+				for(let i = 0; i < team.length; i++){
+	           		let item = this.getItem(team[i].item);
+	           		if(item.megaStone) template = this.getTemplate(team[i].item.megaStone);
+	           		else template = this.getTemplate(team[i].species);
+	           		let ability = this.getAbility(template.ability);
+	           		let tier = template.tier;
+		            for(var j in team[i].moves){
+	            		var move = this.getMove(team[i].moves[j]);
+	            		if(move.id == "chatter") tier = "NU";}
+	            		//Bans Drought + Drizzle users to OU
+	            	if(ability.id == "drizzle" || ability.id == "drought") tier = "OU";
+	            		//Bans Chatter to NU
+	            	if(tier == "OU" || tier == "BL") ouMons++;
+					if(tier == "UU" || tier == "BL2") uuMons++;
+					if(tier == "RU" || tier == "BL3") ruMons++;
+					if(tier == "NU" || tier == "BL4") nuMons++;
+					if(tier == "PU") puMons++;}
+				while(check){
+					if(1 < ouMons) problems.push("You are able to only bring a maximum of 1 OU / BL Pokemon.");
+					if(2 < uuMons) problems.push("You are able to only bring a maximum of 2 UU / BL2 Pokemon.");
+					if(1 < ruMons) problems.push("You are able to only bring a maximum of 1 RU / BL3 Pokemon.");
+					if(1 < nuMons) problems.push("You are able to only bring a maximum of 1 NU / BL4 Pokemon.");
+					if(1 < puMons) problems.push("You are able to only bring a maximum of 1 PU Pokemon.");
+					else check = false;}
+			return problems;
+		},
 	},
-},
 	{
 		name: "[Gen 7] Lockdown",
 		desc: [

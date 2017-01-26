@@ -65,4 +65,4 @@ exports.BattleAbilities = {
 			}
 		},
 	},
-}
+};
