@@ -37,4 +37,4 @@ exports.BattleStatuses = {
 			return 5;
 		},
 	},
-}
+};
