@@ -493,7 +493,7 @@ exports.Formats = [
 				this.add('c|~Spandan|DONT PANIC FIXED');
 				this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed.</h3><p align=right style="font-size:20px;"></div>');
 			}
-			
+
 			if(name === 'alphapaul71') {
 				this.add('c| Alpha Paul☯71|RIP Me feelsbd');
 			}
@@ -2086,7 +2086,7 @@ exports.Formats = [
 
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
-		
+
 	{
 		name: "Random Haxmons",
 		section: "Randomized Metas",
@@ -2627,7 +2627,7 @@ exports.Formats = [
 		    this.win(target.side.foe);
 		}
 	    }
-		
+
 	},
 	{
         name: "Move Equality",
@@ -2738,7 +2738,7 @@ exports.Formats = [
         name: "Acid Rain",
 	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/acid-rain.3518506/\">Acid Rain</a>"],
         section: "Other Metagames",
-     
+
         mod: 'acidrain',
         onBegin: function() {
             this.setWeather('raindance');
@@ -2748,8 +2748,8 @@ exports.Formats = [
         ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
         banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Weather Ball', 'Castform']
     },
-	
-	
+
+
     	{
 		name: "Cross Evolution",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
@@ -3580,19 +3580,19 @@ exports.Formats = [
 							 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
 							 pokemon.types = pokemon.template.types = types;
 					 }
-			 },		
+			 },
 	                 onAfterMega: function (pokemon) {
 					 let types = [this.getMove(pokemon.moves[0]).type];
 					 if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
 					 pokemon.baseTemplate = pokemon.template = Object.assign({}, pokemon.template);
 					 pokemon.types = pokemon.template.types = types;
-				  	this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');	
+				  	this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 	      },
 	                 onSwitchIn: function (pokemon) {
 	                                 this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 	                 },
 	},
-		
+
 		{
 		name:"Imprisoned",
 		section:"New Other Metagames",
@@ -3692,7 +3692,7 @@ exports.Formats = [
 			let lockdownMoves = ['sunnyday', 'raindance', 'hail', 'sandstorm', 'magicroom', 'wonderroom', 'trickroom', 'gravity', 'electricterrain', 'mistyterrain', 'grassyterrain', 'psychicterrain', 'mudsport', 'watersport'];
 			if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
 		},
-		onResidualOrder: 999, 
+		onResidualOrder: 999,
 		onResidual: function () {
 			if(this.turn !== 6) return;
 				this.add("-message", "The Lockdown has commenced! Battlefield changes are now permanent!");
@@ -4226,11 +4226,11 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
     	column: 1,
     },
 	{
-		name: "[Gen 7] Setup++",
+		name: "[Gen 7] Automagic",
 		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
 		ruleset: ['[Gen 7] OU'],
 		//team: 'random',
-		mod: 'setuppp',
+		mod: 'automagic',
 		onAfterSecondaryEffect: function(target, source, move) {
 			if(move.secondaries.status === target.status || target.volatiles[move.secondaries.volatileStatus]) return;
 			source.baseMoveset.forEach(curmove => {
@@ -4569,7 +4569,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		onSwitchIn: function (pokemon) {
 	        let types = pokemon.types;
 	        if(!pokemon.fusetype) pokemon.fusetype = types;
-	        else 
+	        else
 		        pokemon.types = pokemon.fusetype;
 			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			let sec = (statusability[pokemon.abilitwo])? ("other"+pokemon.abilitwo) : (pokemon.abilitwo);
@@ -4714,7 +4714,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		onSwitchIn: function (pokemon) {
 	        let types = pokemon.types;
 	        if(!pokemon.fusetype) pokemon.fusetype = types;
-	        else 
+	        else
 		        pokemon.types = pokemon.fusetype;
 			let statusability = {"aerilate":true,"aurabreak":true,"flashfire":true,"parentalbond":true,"pixilate":true,"refrigerate":true,"sheerforce":true,"slowstart":true,"truant":true,"unburden":true,"zenmode":true};
 			let sec = (statusability[pokemon.abilitwo])? ("other"+pokemon.abilitwo) : (pokemon.abilitwo);
@@ -5589,7 +5589,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	},
 	{
 		name: "[Istor] Random Battle",
-		
+
 		mod: 'istor',
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod' , 'Freeze Clause Mod'],
