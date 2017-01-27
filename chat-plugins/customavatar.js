@@ -41,7 +41,7 @@ load_custom_avatars();
 exports.commands = {
 	customavatar: {
 		set: function (target, room, user) {
-			if (!this.can('globalvoice')) return false;
+			if (!this.can('roomowner')) return false;
 
 			const parts = target.split(',');
 
@@ -68,7 +68,7 @@ exports.commands = {
 		},
 
 		delete: function (target, room, user) {
-			if (!this.can('globalvoice')) return false;
+			if (!this.can('roomowner')) return false;
 
 			const userid = toId(target);
 			const image = Config.customavatars[userid];
