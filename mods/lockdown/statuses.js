@@ -1,7 +1,7 @@
 'use strict';
 
 exports.BattleStatuses = {
-	raindance: {
+	/*raindance: {
 		inherit: true,
 		durationCallback: function() {
 			if (this.turn > 2) {
@@ -36,5 +36,5 @@ exports.BattleStatuses = {
 			}
 			return 5;
 		},
-	},
+	},*/
 };

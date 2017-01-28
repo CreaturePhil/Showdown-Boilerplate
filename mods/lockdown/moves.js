@@ -33,12 +33,4 @@ exports.BattleMovedex = {
 			},
 		},
 	},
-	"genesissupernova": {
-		inherit: true,
-		onHit: function () {
-			if(this.turn < 7) {
-				this.setTerrain('psychicterrain');
-			}
-		},
-	},
 };

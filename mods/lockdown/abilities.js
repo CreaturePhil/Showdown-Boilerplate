@@ -1,7 +1,7 @@
 'use strict';
 
 exports.BattleAbilities = {
-	drought: {
+	/*drought: {
 		inherit: true,
 		onStart: function(source) {
 			for (let i = 0; i < this.queue.length; i++) {
@@ -64,5 +64,5 @@ exports.BattleAbilities = {
 				this.setTerrain('mistyterrain');
 			}
 		},
-	},
+	},*/
 };
