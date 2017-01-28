@@ -3108,25 +3108,9 @@ exports.Formats = [
 			}
 			return template.speciesid;
 		},
-		onValidateTeam: function(team, format, teamHas) {
-			// Donor Clause
-			let evoFamilyLists = [];
-			for (let i = 0; i < team.length; i++) {
-				let set = team[i];
-				if (!set.abilitySources) continue;
-				evoFamilyLists.push(new Set(set.abilitySources.map(format.getEvoFamily)));
-			}
-
-			// Checking actual full incompatibility would require expensive algebra.
-			// Instead, we only check the trivial case of multiple PokÃ©mon only legal for exactly one family. FIXME?
-			let requiredFamilies = Object.create(null);
-			for (let i = 0; i < evoFamilyLists.length; i++) {
-				let evoFamilies = evoFamilyLists[i];
-				if (evoFamilies.size !== 1) continue;
-				evoFamilies = Array.from(evoFamilies);
-				if (requiredFamilies[evoFamilies[0]]) return ["You are limited to one inheritance from each family by the Donor Clause.", "(You inherit more than once from " + this.getTemplate(evoFamilies[0]).species + "'s.)"];
-				requiredFamilies[evoFamilies[0]] = 1;
-			}
+		onChangeSet: function(set, format) {
+			set.donorSpecies = this.getTemplate(toId(set.name.split(" (")[1])).species;
+			set.name = set.name.split(" (")[0].substr(0, 20);
 		},
 		validateSet: function(set, teamHas) {
 			if (!this.format.abilityMap) {
@@ -3222,7 +3206,7 @@ exports.Formats = [
 
 			// Restore the intended species, name and item.
 			set.species = template.species;
-			set.name = name || set.species;
+			set.name = (name ? (name+" ("+set.donorSpecies+")") : (set.species+" ("+set.donorSpecies+")"));
 			set.item = item.name;
 			if (!validSources.length && pokemonWithAbility.length > 1) {
 				return ["" + (set.name || set.species) + " set is illegal."];
@@ -3231,6 +3215,9 @@ exports.Formats = [
 				problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.tools.getTemplate(pokemonWithAbility[0]).name+'.');
 				return problems;
 			}
+		},
+		onSwitchIn: function(pokemon) {
+				this.add('-start', pokemon, pokemon.set.donorSpecies || pokemon.species, '[silent]');
 		},
 	},
 	{
