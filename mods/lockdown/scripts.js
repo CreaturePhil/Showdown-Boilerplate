@@ -9,7 +9,7 @@ exports.BattleScripts = {
 		delete this.sideConditions[status.id];
 		return true;
 	},
-	/*setTerrain(status, source, sourceEffect) {
+	setTerrain(status, source, sourceEffect) {
 		status = this.getEffect(status);
 		if(this.lockdownMoves.includes(status.id) && this.turn > 6) return false;
 		if (sourceEffect === undefined && this.effect) sourceEffect = this.effect;
@@ -93,5 +93,5 @@ exports.BattleScripts = {
 			return false;
 		}
 		return true;
-	},*/
+	},
 };
