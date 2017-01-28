@@ -171,6 +171,10 @@ exports.BattleScripts = {
 			}
 		}
 
+		if (!this.singleEvent('TryMove', move, null, pokemon, target, move)) {
+			return true;
+		}
+
 		if (!this.runEvent('TryMove', pokemon, target, move)) {
 			return true;
 		}
@@ -1625,7 +1629,8 @@ exports.BattleScripts = {
 					if ((hasMove['fireblast'] && counter.setupType !== 'Physical') || hasMove['overheat']) rejected = true;
 					break;
 				case 'fireblast':
-					if ((hasMove['flareblitz'] || hasMove['lavaplume']) && !counter.setupType && !counter['speedsetup']) rejected = true;
+					if (hasMove['lavaplume'] && !counter.setupType && !counter['speedsetup']) rejected = true;
+					if (hasMove['flareblitz'] && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'firepunch': case 'sacredfire':
 					if (hasMove['fireblast'] || hasMove['flareblitz']) rejected = true;
@@ -1641,6 +1646,9 @@ exports.BattleScripts = {
 					break;
 				case 'airslash': case 'oblivionwing':
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
+					break;
+				case 'hex':
+					if (!hasMove['willowisp']) rejected = true;
 					break;
 				case 'shadowball':
 					if (hasMove['hex'] && hasMove['willowisp']) rejected = true;
@@ -2059,6 +2067,10 @@ exports.BattleScripts = {
 			moves[moves.indexOf('thunderpunch')] = 'return';
 		}
 
+		if (hasMove['thunderpunch'] && ability === 'Galvanize') {
+			moves[moves.indexOf('thunderpunch')] = 'return';
+		}
+
 		item = 'Leftovers';
 		if (template.requiredItems) {
 			if (template.baseSpecies === 'Arceus' && hasMove['judgment']) {
@@ -2226,11 +2238,9 @@ exports.BattleScripts = {
 			BL2: 78,
 			UU: 77,
 			New: 77,
-			Bank: 77,
 			BL: 76,
 			OU: 75,
 			Uber: 73,
-			'Bank-Uber': 73,
 			AG: 71,
 		};
 		let customScale = {
@@ -2355,7 +2365,7 @@ exports.BattleScripts = {
 
 			let tier = template.tier;
 			switch (tier) {
-			case 'Uber': case 'Bank-Uber':
+			case 'Uber':
 				// Ubers are limited to 2 but have a 20% chance of being added anyway.
 				if (uberCount > 1 && this.random(5) >= 1) continue;
 				break;
@@ -2455,8 +2465,8 @@ exports.BattleScripts = {
 				typeComboCount[typeCombo] = 1;
 			}
 
-			// Increment Uber/Bank-Uber/PU counters
-			if (tier === 'Uber' || tier === 'Bank-Uber') {
+			// Increment Uber/PU counters
+			if (tier === 'Uber') {
 				uberCount++;
 			} else if (tier === 'PU') {
 				puCount++;
@@ -3391,10 +3401,9 @@ exports.BattleScripts = {
 		if (!depth) depth = 0;
 		let forceResult = (depth >= 4);
 
-		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
 		const prevSeed = this.seed;
 		this.seed = this.startingSeed.slice(0, 4);
-		const chosenTier = availableTiers[this.random(availableTiers.length)];
+		const chosenTier = 'BH';
 		this.seed = prevSeed;
 
 		let pokemon = [];
@@ -3422,9 +3431,6 @@ exports.BattleScripts = {
 
 			// Limit to one of each species (Species Clause)
 			if (teamData.baseFormes[template.baseSpecies]) continue;
-
-			// Limit the number of Megas to one
-			if (teamData.megaCount >= 1 && speciesFlags.megaOnly) continue;
 
 			// Limit 2 of any type
 			let types = template.types;

@@ -583,8 +583,8 @@ exports.commands = {
 			targetRoom.isPrivate = true;
 			targetRoom.chatRoomData.isPrivate = true;
 			Rooms.global.writeChatRoomData();
-			if (Rooms.get('upperstaff')) {
-				Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Private chat room created: <b>' + Chat.escapeHTML(target) + '</b></div>').update();
+			if (Rooms.get('theadminchat')) {
+				Rooms.get('theadminchat').add('|raw|<div class="broadcast-green">Private chat room created: <b>' + Chat.escapeHTML(target) + '</b></div>').update();
 			}
 			this.sendReply("The private chat room '" + target + "' was created.");
 		} else {
@@ -719,8 +719,8 @@ exports.commands = {
 
 		if (targetRoom.chatRoomData) {
 			if (targetRoom.isPrivate) {
-				if (Rooms.get('upperstaff')) {
-					Rooms.get('upperstaff').add(`|raw|<div class="broadcast-red">Private chat room deleted by ${user.userid}: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+				if (Rooms.get('theadminchat')) {
+					Rooms.get('theadminchat').add(`|raw|<div class="broadcast-red">Private chat room deleted by ${user.userid}: <b>${Chat.escapeHTML(target)}</b></div>`).update();
 				}
 			} else {
 				if (Rooms.get('staff')) {
@@ -1628,6 +1628,7 @@ exports.commands = {
 
 	forceglobalban: 'globalban',
 	gban: 'globalban',
+	ban: 'globalban',
 	globalban: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help globalban');
 
@@ -2344,6 +2345,152 @@ exports.commands = {
 	},
 	unmarksharedhelp: ["/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &, ~"],
 
+		roomlog: function (target, room, user, connection) {
+		let lines = 0;
+		// Specific case for modlog command. Room can be indicated with a comma, lines go after the comma.
+		// Otherwise, the text is defaulted to text search in current room's modlog.
+		let month = target.trim().subtring(0,7)
+		let roomId = room.id;
+		let hideIps = !user.can('lock');
+		let path = require('path');
+		let isWin = process.platform === 'win32';
+		let logPath = 'logs/chat/';
+
+		if (target.includes(',')) {
+			let targets = target.split(',');
+			target = targets[1].trim();
+			roomId = toId(targets[0]) || room.id;
+		}
+		let targetRoom = Rooms.search(roomId);
+		// if a room alias was used, replace alias with actual id
+		if (targetRoom) roomId = targetRoom.id;
+		let addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && !targetRoom.isPrivate));
+		logPath = logPath+""+roomId;
+
+		// Let's check the number of lines to retrieve or if it's a word instead
+		if (!target.match(/[^0-9]/)) {
+			lines = parseInt(target || 20);
+			if (lines > 100) lines = 100;
+		}
+		let wordSearch = (!lines || lines < 0);
+
+		// Control if we really, really want to check all modlogs for a word.
+		let roomNames = '';
+		let filename = '';
+		let command = '';
+		if (roomId === 'all' && wordSearch) {
+			if (!this.can('modlog')) return;
+			roomNames = "all rooms";
+			// Get a list of all the rooms
+			let fileList = fs.readdirSync('logs/chat');
+			for (let i = 0; i < fileList.length; ++i) {
+				filename += path.normalize(`${__dirname}/${logPath}${fileList[i]}`) + ' ';
+			}
+		} else if (roomId === 'public' && wordSearch) {
+			if (!this.can('modlog')) return;
+			roomNames = "all public rooms";
+			const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
+			const publicRoomIds = Array.from(Rooms.rooms.values()).filter(isPublicRoom).map(room => room.id);
+			for (let i = 0; i < publicRoomIds.length; i++) {
+				filename += path.normalize(`${__dirname}/${logPath}modlog_${publicRoomIds[i]}.txt`) + ' ';
+			}
+		} else if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) {
+			return this.errorReply("Battles and groupchats do not have modlogs.");
+		} else {
+			if (!user.can('modlog') && !this.can('modlog', null, targetRoom)) return;
+			roomNames = "the room " + roomId;
+			filename = path.normalize(`${__dirname}/${logPath}modlog_${roomId}.txt`);
+		}
+
+		// Seek for all input rooms for the lines or text
+		if (isWin) {
+			command = `${path.normalize(__dirname + '/lib/winmodlog')} tail ${lines} ${filename}`;
+		} else {
+			command = `tail -${lines} ${filename} | tac`;
+		}
+		let grepLimit = 100;
+		let strictMatch = false;
+		if (wordSearch) { // searching for a word instead
+			let searchString = target;
+			strictMatch = true; // search for a 1:1 match?
+
+			if (searchString.match(/^["'].+["']$/)) {
+				searchString = searchString.substring(1, searchString.length - 1);
+			} else if (searchString.includes('_')) {
+				// do an exact search, the approximate search fails for underscores
+			} else if (isWin) {  // ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd)
+				target = `"${target}"`;  // add quotes to target so the caller knows they are getting a strict match
+			} else {
+				// search for ID: allow any number of non-word characters (\W*) in between the letters we have to match.
+				// i.e. if searching for "myUsername", also match on "My User-Name".
+				// note that this doesn't really add a lot of unwanted results, since we use \b..\b
+				target = toId(target);
+				searchString = `\\b${target.split('').join('\\W*')}\\b`;
+				strictMatch = false;
+			}
+
+			if (isWin) {
+				if (strictMatch) {
+					command = `${path.normalize(__dirname + '/lib/winmodlog')} ws ${grepLimit} "${searchString.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1")}" ${filename}`;
+				} else {
+					// doesn't happen. ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd and call it from here)
+				}
+			} else {
+				if (strictMatch) {
+					command = `awk '{print NR,$0}' ${filename} | sort -nr | cut -d' ' -f2- | grep -m${grepLimit} -i '${searchString.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]')}'`;
+				} else {
+					command = `awk '{print NR,$0}' ${filename} | sort -nr | cut -d' ' -f2- | grep -m${grepLimit} -Ei '${searchString}'`;
+				}
+			}
+		}
+
+		// Execute the file search to see modlog
+		require('child_process').exec(command, (error, stdout, stderr) => {
+			if (error && stderr) {
+				connection.popup(`/modlog empty on ${roomNames} or erred`);
+				console.log(`/modlog error: ${error}`);
+				return false;
+			}
+			if (stdout && hideIps) {
+				stdout = stdout.replace(/\([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\)/g, '');
+			}
+			stdout = stdout.split('\n').map(line => {
+				let bracketIndex = line.indexOf(']');
+				let parenIndex = line.indexOf(')');
+				if (bracketIndex < 0) return Chat.escapeHTML(line);
+				const time = line.slice(1, bracketIndex);
+				let timestamp = Chat.toTimestamp(new Date(time), {hour12: true});
+				parenIndex = line.indexOf(')');
+				let thisRoomID = line.slice(bracketIndex + 3, parenIndex);
+				if (addModlogLinks) {
+					let url = Config.modloglink(time, thisRoomID);
+					if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
+				}
+				return `<small>[${timestamp}] (${thisRoomID})</small>${Chat.escapeHTML(line.slice(parenIndex + 1))}`;
+			}).join('<br />');
+			if (lines) {
+				if (!stdout) {
+					connection.popup("The modlog is empty. (Weird.)");
+				} else {
+					connection.popup(`|wide||html|<p>The last ${lines} lines of the Moderator Log of ${roomNames}.</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>${stdout}`);
+				}
+			} else {
+				if (!stdout) {
+					connection.popup(`No moderator actions containing ${target} were found on ${roomNames}.` +
+					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user."));
+				} else {
+					connection.popup(`|wide||html|<p>The last ${grepLimit} logged actions containing ${target} on ${roomNames}.` +
+					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.") + `</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>${stdout}`);
+				}
+			}
+		});
+	},
+	roomloghelp: ["/modlog [roomid|all|public], [n] - Roomid defaults to current room.",
+		"If n is a number or omitted, display the last n lines of the moderator log. Defaults to 20.",
+		"If n is not a number, search the moderator log for 'n' on room's log [roomid]. If you set [all] as [roomid], searches for 'n' on all rooms's logs.",
+		"If you set [public] as [roomid], searches for 'n' in all public room's logs, excluding battles. Requires: % @ * # & ~"],
+
+
 	modlog: function (target, room, user, connection) {
 		let lines = 0;
 		// Specific case for modlog command. Room can be indicated with a comma, lines go after the comma.
@@ -2496,7 +2643,7 @@ exports.commands = {
 		if (!this.can('hotpatch')) return false;
 		if (Monitor.hotpatchLock) return this.errorReply("Hotpatch is currently been disabled. (" + Monitor.hotpatchLock + ")");
 
-		for (let roomid of ['development', 'staff', 'upperstaff']) {
+		for (let roomid of ['development']) {
 			let curRoom = Rooms(roomid);
 			if (curRoom) curRoom.add(`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`).update();
 		}
@@ -3437,8 +3584,9 @@ exports.commands = {
 		user.rename(targetName, targetToken, targetRegistered, connection);
 	},
 
-	a: function (target, room, user) {
+	a: function (target, room, user, connection, cmd, message) {
 		if (!this.can('rawpacket')) return false;
+		room.modlog(user + " used \""+message+"\" in "+room);
 		// secret sysop command
 		room.add(target);
 	},

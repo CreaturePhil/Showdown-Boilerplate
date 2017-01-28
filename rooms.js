@@ -698,6 +698,8 @@ class GlobalRoom {
 				// if staffAutojoin is anything truthy: autojoin if user has any roomauth
 				user.joinRoom(room.id, connection);
 			}
+			if (user.isUpperStaff) user.joinRoom('upperstaff');
+			if(user.isAdmin) user.joinRoom('theadminchat');
 		}
 		for (let i = 0; i < user.connections.length; i++) {
 			connection = user.connections[i];
@@ -1371,7 +1373,7 @@ class ChatRoom extends Room {
 
 		this.type = 'chat';
 
-		if (Config.logchat) {
+		if (Config.logchat && !roomid.includes("spam")) {
 			this.rollLogFile(true);
 			this.logEntry = function (entry, date) {
 				const timestamp = Chat.toTimestamp(new Date()).split(' ')[1] + ' ';
