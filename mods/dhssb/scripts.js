@@ -1,7 +1,7 @@
 "use strict";
 
 exports.BattleScripts = {
-     pokemon: {
+	pokemon: {
 				isGrounded: function(negateImmunity) {
 					if ('gravity' in this.battle.pseudoWeather) return true;
 					if ('ingrain' in this.volatiles) return true;
@@ -15,7 +15,7 @@ exports.BattleScripts = {
 					if ('telekinesis' in this.volatiles) return false;
 					return item !== 'airballoon';
 				}
-     },
+	},
 	randomSeasonalMeleeTeam: function (side) {
 		let team = [];
 		let variant = (this.random(2) === 1);
@@ -26,7 +26,7 @@ exports.BattleScripts = {
 				signatureMove: "Super Duper Wombo Combo",
 				evs: {hp: 252, spa:252, spd: 252, def: 252},
 				ivs: {atk: 0, spe: 0,}, 
-				nature: 'Quiet ',
+				nature: 'Quiet',
 			},
 			'The True Falcon' : {
 				species: 'Samurott', ability: 'Ultra Technical', item: 'Assualt Vest', gender: 'M',
@@ -78,7 +78,7 @@ exports.BattleScripts = {
 				moves: ['dragondance', 'outrage', 'raindance'],
 				signatureMove: "Turbulence",
 				evs: {spe:252, atk:252, hp:4}, nature: 'Jolly',
-		        },
+			},
 			'ClassyZ': {
 				species: 'Scizor-Mega', ability: 'Technician', item: 'Scizorite', gender: 'F', shiny: true,
 				moves: ['machpunch', 'bulletpunch', 'swordsdance'],
@@ -134,19 +134,19 @@ exports.BattleScripts = {
 				evs: {spe:252, spa:252, atk:252}, nature: 'Naughty',
 			},
 			'Spandan': {
-			    species: 'Salamence', ability: 'Multiscale', item: 'Salamencite', gender: 'M',
+				species: 'Salamence', ability: 'Multiscale', item: 'Salamencite', gender: 'M',
 				moves: ['extremespeed', 'shiftgear', 'boomburst'],
 				signatureMove: "Yo MaMMa Joke",
 				evs: {hp: 252, atk:252, def:252, spa:252, spd:252, spe:252}, nature: 'Naive',
 			},
 			'SnakeXZero5': {
-			    species: 'Weavile', ability: 'Knowledge', item: 'Liechi Berry', gender: 'M',
+				species: 'Weavile', ability: 'Knowledge', item: 'Liechi Berry', gender: 'M',
 				moves: ['icepunch', 'knockoff', 'fakeout'],
 				signatureMove: "Logic Power",
 				evs: {atk:252, spd:252, spe:252}, nature: 'Adamant',
 			},
 			'Theswordbreaker': {
-			    species: 'Arceus-Dragon', ability: 'Breaking Point', item: 'Draco Plate', gender: 'M',
+				species: 'Arceus-Dragon', ability: 'Breaking Point', item: 'Draco Plate', gender: 'M',
 				moves: ['spacialrend', 'focusblast', 'blizzard'],
 				signatureMove: "Wait and hope",
 				evs: {spa:252, spd:4, spe:252}, nature: 'Modest',
@@ -158,41 +158,41 @@ exports.BattleScripts = {
 				evs: {atk:252, spe:252, spd:252, def:252}, nature: 'Adamant',
 			},
 			'XpRienzo ☑-☑': {
- 				species: 'Reshiram', ability: 'Adaptability', item: 'Charcoal', gender: 'M',
- 				moves: ['coreenforcer', 'psystrike', 'voltswitch'],
- 				signatureMove: "blehflame",
- 				evs: {spa:252, spd:252, spe:252, def:252}, nature: 'Timid',
- 			},
+				species: 'Reshiram', ability: 'Adaptability', item: 'Charcoal', gender: 'M',
+				moves: ['coreenforcer', 'psystrike', 'voltswitch'],
+				signatureMove: "blehflame",
+				evs: {spa:252, spd:252, spe:252, def:252}, nature: 'Timid',
+			},
 			'BatterBotto': {
- 				species: 'Dragonite', ability: 'Protean', item: 'Iron Ball', gender: 'M', shiny:true,
- 				moves: ['highjumpkick', 'extremespeed', 'vcreate'],
- 				signatureMove: "massacre",
- 				evs: {atk:252, spd:4, spe:252}, nature: 'Adamant',
- 			},
+				species: 'Dragonite', ability: 'Protean', item: 'Iron Ball', gender: 'M', shiny:true,
+				moves: ['highjumpkick', 'extremespeed', 'vcreate'],
+				signatureMove: "massacre",
+				evs: {atk:252, spd:4, spe:252}, nature: 'Adamant',
+			},
 			'OutrageousBoT': {
- 				species: 'Gyarados', ability: 'Dragon Fury', item: 'Life Orb', gender: 'M',
- 				moves: ['outrage', 'dragondance', 'dracometeor'],
- 				signatureMove: "Raging Lake",
- 				evs: {spa:252, spd:4, spe:252}, nature: 'Jolly',
- 			},
+				species: 'Gyarados', ability: 'Dragon Fury', item: 'Life Orb', gender: 'M',
+				moves: ['outrage', 'dragondance', 'dracometeor'],
+				signatureMove: "Raging Lake",
+				evs: {spa:252, spd:4, spe:252}, nature: 'Jolly',
+			},
 			'FlareonDriod': {
- 				species: 'Flareon', ability: 'Slowchat', item: 'Charcoal', gender: 'F', shiny:true,
- 				moves: ['vcreate', 'recover', 'bellydrum'],
- 				signatureMove: "banhammah",
- 				evs: {hp: 252, atk: 252, spe:252, def:252, spd:252}, nature: 'Jolly',
- 			},
+				species: 'Flareon', ability: 'Slowchat', item: 'Charcoal', gender: 'F', shiny:true,
+				moves: ['vcreate', 'recover', 'bellydrum'],
+				signatureMove: "banhammah",
+				evs: {hp: 252, atk: 252, spe:252, def:252, spd:252}, nature: 'Jolly',
+			},
 			'Dragitbot': {
- 				species: 'Dratini', ability: 'Hidden', item: 'Leftovers', gender: 'F',
- 				moves: ['swordsdance', 'agility', 'nastyplot'],
- 				signatureMove: "superswitch",
- 				evs: {hp:252, def:252, spd:252}, nature: 'Bold',
- 			},
+				species: 'Dratini', ability: 'Hidden', item: 'Leftovers', gender: 'F',
+				moves: ['swordsdance', 'agility', 'nastyplot'],
+				signatureMove: "superswitch",
+				evs: {hp:252, def:252, spd:252}, nature: 'Bold',
+			},
 			'shivam rustagi': {
- 				species: 'Giratina', ability: 'Bad Dreams', item: 'Leftovers', gender: 'M',
- 				moves: ['shadowball', 'dragonpulse', 'dreameater'],
- 				signatureMove: "secretkiller",
- 				evs: {spa:252, spd:252, spe:4}, nature: 'Adamant',
- 			},
+				species: 'Giratina', ability: 'Bad Dreams', item: 'Leftovers', gender: 'M',
+				moves: ['shadowball', 'dragonpulse', 'dreameater'],
+				signatureMove: "secretkiller",
+				evs: {spa:252, spd:252, spe:4}, nature: 'Adamant',
+			},
 		};
 
 		// Generate the team randomly.
