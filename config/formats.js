@@ -3108,10 +3108,6 @@ exports.Formats = [
 			}
 			return template.speciesid;
 		},
-		onChangeSet: function(set, format) {
-			set.donorSpecies = this.getTemplate(toId(set.name.split(" (")[1])).species;
-			set.name = set.name.split(" (")[0].substr(0, 20);
-		},
 		validateSet: function(set, teamHas) {
 			if (!this.format.abilityMap) {
 				let abilityMap = Object.create(null);
@@ -3162,7 +3158,7 @@ exports.Formats = [
 				if (!item.exists) return ["" + set.item + " is an invalid item."];
 				if (item.isUnreleased) return ["" + (set.name || set.species) + "'s item " + item.name + " is unreleased."];
 			}
-
+			let donorSpecies = "";
 			let validSources = set.abilitySources = []; // evolutionary families
 			for (let i = 0; i < pokemonWithAbility.length; i++) {
 				let donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
@@ -3195,7 +3191,7 @@ exports.Formats = [
 				problems = this.validateSet(set, teamHas) || [];
 				if (!problems.length) {
 					validSources.push(evoFamily);
-					set.donorSpecies = donorTemplate.species;
+					donorSpecies = donorTemplate.species;
 				}
 				if (validSources.length > 1) {
 					// This is an optimization only valid for the current basic implementation of Donor Clause.
@@ -3206,7 +3202,7 @@ exports.Formats = [
 
 			// Restore the intended species, name and item.
 			set.species = template.species;
-			set.name = (name ? (name+" ("+set.donorSpecies+")") : (set.species+" ("+set.donorSpecies+")"));
+			set.name = (name ? (name+" ("+donorSpecies+")") : (set.species+" ("+donorSpecies+")"));
 			set.item = item.name;
 			if (!validSources.length && pokemonWithAbility.length > 1) {
 				return ["" + (set.name || set.species) + " set is illegal."];
@@ -3217,7 +3213,7 @@ exports.Formats = [
 			}
 		},
 		onSwitchIn: function(pokemon) {
-				this.add('-start', pokemon, pokemon.set.donorSpecies || pokemon.species, '[silent]');
+			this.add('-start', pokemon, pokemon.set.donorSpecies || pokemon.species, '[silent]');
 		},
 	},
 	{
