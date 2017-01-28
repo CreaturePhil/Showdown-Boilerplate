@@ -378,71 +378,9 @@ exports.Formats = [
 			if(this.data.Statuses[name].exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
-			// Add here more hacky stuff for mega abilities.
-			// This happens when the mega switches in, as opposed to mega-evolving on the turn.
-
-
-			// Edgy switch-in sentences go here.
-			// Sentences vary in style and how they are presented, so each Pokémon has its own way of sending them.
-
-			let sentences = [];
-			let sentence = '';
 			if(name === 'thetruefalcon') {
 				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
-			}/*
-			if (name === '') {
-				this.add('c| Elcrest|Get ready to be blown away.');
 			}
-			if(name === '') {
-				this.add('c|@Flygonerz|The Sand Dweller has arrived');
-			}
-			if(name === '') {
-				this.add('c|&PI★EddyChomp|Hey guys, watch me KO this guy lmao xaa :)');
-			}
-			if(name === '') {
-				this.add('c|~Snaq|Sup duds');
-			}
-			if(name === '') {
-				this.add('c|~Snaquaza|Wait, why ain\'t I playing Random Haxmons instead?');
-			}
-			if(name === '') {
-				this.add('c| The God of Haxorus|Hi! I\'m a **Hax**orus :3');
-			}
-			if(name === '') {
-				this.add('c|+Loominite|Okay, lets go :I');
-			}
-			if(name === '') {
-				this.add('c| Eternal Mayhem|Let the music overcome you, control you.');
-			}
-			if(name === '') {
-				this.add('raw|<div class="chat"><small>*</small><button name="parseCommand" value="/user charizard8888" style="background: none ; border: 0 ; padding: 0 5px 0 0 ; font-family: &quot;verdana&quot; , &quot;helvetica&quot; , &quot;arial&quot; , sans-serif ; font-size: 9pt ; cursor: pointer"><b><font color="#AE830F">charizard8888:</font></b></button><em class="mine">Enjoy my battle theme while everything gets rekt! <img src="https://cdn.rawgit.com/CreaturePhil/dem-feels/master/emotes/feelsfdra.png" title="feelsfdra" width="50" height="50"></em></div>');
-				this.add('raw|<audio style="width: 99.6% ; border: 6px solid #FFA000 ; color: green" controls="" src="http://www.youtubeinmp3.com/fetch/?video=/www.youtube.com/watch?v=12eZvb108xc">Your user agent does not support the HTML5 Audio element.</audio>')
-			}
-			if(name === '') {
-				this.add('c|@Theswordbreaker|It\'s time to break some blades >:)');
-				pokemon.types = ["Dragon"];
-			}
-			if(name === '') {
-				this.add('c|~Ransei|yo');
-			}
-			if(name === '') {
-				this.add('c|⚔XpRienzo ☑-☑|Wait, was I supposed to do something?');
-			}
-			if (name === '') {
-				this.add('c|*BatterBotto|Beep Boop');
-			}
-			if (name === '') {
-				this.add('c|*FlareonDriod|Beep Beep');
-			}
-			if (name === '') {
-				this.add('c|*Dragitbot|Boop Boop');
-			}
-			if (name === '') {
-				this.add('c|*OutrageousBoT|Boop Beep');
-			}
-			if (name === '') {
-				this.add('c|%shivam rustagi|__**i am here to destroy ur life!**__');
-			}*/
 		},
 		onModifyPokemon: function (pokemon) {
 			let name = toId(pokemon.name);
