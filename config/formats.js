@@ -3458,13 +3458,15 @@ exports.Formats = [
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Damp Rock', 'Heat Rock', 'Smooth Rock', 'Icy Rock', 'Terrain Extender'],
 		unbanlist: ['Genesect'],
+		onBegin: function() {
+			this.lockdownMoves = ['sunnyday', 'raindance', 'hail', 'sandstorm', 'magicroom', 'wonderroom', 'trickroom', 'gravity', 'electricterrain', 'mistyterrain', 'grassyterrain', 'psychicterrain', 'mudsport', 'watersport'];
+			this.lockdownHazards = ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb'];
+		},
 		onTryHitSide: function(target, source, move) {
-			let lockdownMoves = ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb'];
-			if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
+			if (this.lockdownHazards.indexOf(move.id) > -1 && this.turn > 6) return false;
 		},
 		onTryHitField: function(target, source, move) {
-			let lockdownMoves = ['sunnyday', 'raindance', 'hail', 'sandstorm', 'magicroom', 'wonderroom', 'trickroom', 'gravity', 'electricterrain', 'mistyterrain', 'grassyterrain', 'psychicterrain', 'mudsport', 'watersport'];
-			if (lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
+			if (this.lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
 		},
 		onResidualOrder: 999,
 		onResidual: function () {
