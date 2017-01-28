@@ -3195,7 +3195,7 @@ exports.Formats = [
 				problems = this.validateSet(set, teamHas) || [];
 				if (!problems.length) {
 					validSources.push(evoFamily);
-						set.donorSpecies = donorTemplate.species;
+					set.donorSpecies = donorTemplate.species;
 				}
 				if (validSources.length > 1) {
 					// This is an optimization only valid for the current basic implementation of Donor Clause.
