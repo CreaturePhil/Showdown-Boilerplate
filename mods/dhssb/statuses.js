@@ -12,10 +12,9 @@ exports.BattleStatuses = {
 		},
 		onFaint: function(pokemon) {
 			this.add('c|&ClassyZ|go straight to hell do not pass go do not collect $200');
-		}
+		},
 	},
 	spandan: {
-		effectType: 'Ability',
 		exists: true,
 		onStart: function() {
 			this.add('j|Spandan');
@@ -28,12 +27,12 @@ exports.BattleStatuses = {
 			this.add('c|~|Spandan used /hotpatch chat');
 			this.add('c|~|Spandan used /hotpatch dnsbl');
 			this.add('c|~|Spandan used /hotpatch battles');
-			this.add('c|~Spandan|DONT PANIC FIXED');
+			this.add('c|&Spandan|DONT PANIC FIXED');
 			this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed.</h3><p align=right style="font-size:20px;"></div>');
 		},
 		onSwitchOut: function(pokemon) {
-			this.add("c|~Spandan|brb");
-		}
+			this.add("c|&Spandan|brb");
+		},
 	},
 	thetruefalcon: {
 		exists: true,
@@ -43,206 +42,246 @@ exports.BattleStatuses = {
 		onFaint: function(pokemon) {
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	hydrostatics: {
 		exists: true,
 		onStart: function() {
-			this.add('c|+Hydrostatics|Gl, Hf Kid');
+			this.add('c| Hydrostatics|Gl, Hf Kid');
 		},
 		onFaint: function(pokemon) {
+			this.add('c| Hydrostatics|Cya next time Kid. I will not take it easy on you from next time.');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	quietchimchar: {
 		exists: true,
 		onStart: function() {
+				this.add('c| Quiet Chimchar|Introducing the best starter ever!!');
 		},
 		onFaint: function(pokemon) {
+				this.add('c| Quiet Chimchar|I\'ll get you next time!');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	alphapaul71: {
 		exists: true,
 		onStart: function() {
+				this.add('c| Alpha Paul☯71|!htmlbox');
+				this.add('raw|<button name="parseCommand" value="/user alphapaul71">My Owner!</button>');
 		},
 		onFaint: function(pokemon) {
+				this.add('c| Alpha Paul☯71|RIP Me feelsbd');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	zmeeed: {
 		exists: true,
 		onStart: function() {
+				this.add("c|@Zmeeed|For Mother Russia!");
 		},
 		onFaint: function(pokemon) {
+			this.add("c|@Zmeeed|CYKABLYAT");
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	digitaledge: {
 		exists: true,
 		onStart: function() {
+				this.add('c|&Digital Edge|__**Mo is our lord and savior!**__');
 		},
 		onFaint: function(pokemon) {
+				this.add('c|&Digital Edge|u haxor u didnt get haxed');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	snakexzero5: {
 		exists: true,
 		onStart: function() {
+				this.add('c| SnakeXZero5|A project on Friday and its Monday, YAY!');
 		},
 		onFaint: function(pokemon) {
+				this.add('c| SnakeXZero5|I JUST FORGOT THERES A SUDDEN PROJECT TOMMOROW');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	elcrest: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+				this.add('c| Elcrest|It seems that I can\'t control my turbulence....');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	flygonerz: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+				this.add('c|@Flygonerz|Plox nerf, Ninten__doh__!');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	pieddychomp: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+				this.add("c|&PI★EddyChomp|Fuck this shit, I got rekt. I\'ll get MY REVENGE! RAWR!!!!");
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	snaq: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+				this.add("c|~Snaq|rip in pieces");
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
+	},
+	snaquaza: {
+		exists: true,
+		onStart: function() {
+		},
+		onFaint: function(pokemon) {
+			this.add("c|~Snaquaza|Back to the real meta");
+		},
+		onSwitchOut: function(pokemon) {
+		},
 	},
 	thegodofhaxorus: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+				this.add('c| The God of Haxorus|My own hax against me -3-');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	loominite: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+				this.add('c|+Loominite|eh, i\'m out!');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	eternalmayhem: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+				this.add('c| Eternal Mayhem|The music was too powerful.');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	charizard8888: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+				this.add('c|&charizard8888|I\'m Outta here!');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+			this.add("c|&charizard8888|brb");
+		},
 	},
 	theswordbreaker: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+				this.add('c|@Theswordbreaker|Feh....I.....resign from this farce....ehh');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	ransei: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+ 				this.add('c|~Ransei|ripsei');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	xprienzo: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+ 				this.add('c|⚔XpRienzo ☑-☑|Bleh');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	batterbotto: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+ 				this.add('c|*BatterBotto|Beep Boop');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	flareondriod: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+ 				this.add('c|*FlareonDriod|Beep Beep');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	dragitbot: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+ 				this.add('c|*Dragitbot|Boop Boop');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	outrageousbot: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+ 				this.add('c|*OutrageousBoT|Boop Beep');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+		},
 	},
 	shivamrustagi: {
 		exists: true,
 		onStart: function() {
 		},
 		onFaint: function(pokemon) {
+ 			this.add('c|%shivam rustagi|u will be cursed for ever');
 		},
 		onSwitchOut: function(pokemon) {
-		}
+			this.add("c|%shivam rustagi|I'll be back to haunt u till eternity");
+		},
 	},
 	"levitate": {
 		desc: "This Pokemon is immune to Ground. Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
