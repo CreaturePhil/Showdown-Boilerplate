@@ -27,12 +27,6 @@ exports.BattleScripts = {
 				moves: ['draco meteor', 'overheat', 'close combat'],
 				signatureMove: "Power Lick",evs: {hp: 252, def: 4, spd: 252}, nature: 'Naughty',
 			},
-			'OriolesFan52': {
-				species: 'Feraligatr', ability: 'Aquify', item: 'Life Orb', gender: 'M', shiny:true, 
-				moves: ['extremespeed', 'dragondance', 'icepunch'],
-				signatureMove: "Bone Crushing Death Roll",
-				evs: {spd:252, atk:252, spe:252, def:252}, nature: 'Jolly',
-			},
 			'Zmeeed': {
 				species: 'Latios', ability: 'Russian Winter', item: 'Soul Dew', gender: 'M',
 				moves: ['psystrike', 'aurasphere', 'blizzard'],

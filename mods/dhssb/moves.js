@@ -165,27 +165,6 @@ exports.BattleMovedex = {
 		type: "Ice",
 		contestType: "Beautiful",
 	},
-	"bonecrushingdeathroll" : {
-		name: "Bone Crushing Death Roll",
-		id: "bonecrushingdeathroll",
-		category: 'Physical',
-		basePower: 120,
-		boosts: {
-			def: 1,
-			spd: 1,
-			atk: 2,
-		},
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Breakneck Blitz", target);
-		},
-		pp: 10,
-		accuracy: 100,
-		type: 'Normal',
-		priority:0, 
-		flags: {contact: 1, protect: 1, mirror: 1},
-		target: 'normal',
-	},
 	"blizzard": {
 		num: 59,
 		accuracy: 70,

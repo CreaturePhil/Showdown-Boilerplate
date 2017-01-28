@@ -68,24 +68,6 @@ exports.BattleAbilities = {
 		id:'staticboost',
 		name:'Static Boost',
 	},
-	"aquify": {
-		onModifyMovePriority: -1,
-		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
-				move.type = 'Water';
-				if (move.category !== 'Status') pokemon.addVolatile('aquify');
-			}
-		},
-		effect: {
-			duration: 1,
-			onBasePowerPriority: 8,
-			onBasePower: function (basePower, pokemon, target, move) {
-				return this.chainModify([0x1333, 0x1000]);
-			},
-		},
-		id: "aquify",
-		name: "Aquify",
-	},
 	"phantomguard": {
 		shortDesc: "This Pokemon can only be damaged by supereffective moves and indirect damage.",
 		onStart: function (pokemon) {
