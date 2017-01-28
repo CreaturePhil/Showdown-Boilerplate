@@ -353,11 +353,6 @@ exports.Formats = [
 				}
 			}
 		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		},
 		// Hacks for megas changed abilities. This allow for their changed abilities.
 		onUpdate: function (pokemon) {
 			let name = toId(pokemon.name);
