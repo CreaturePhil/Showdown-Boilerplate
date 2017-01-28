@@ -20,6 +20,14 @@ exports.BattleScripts = {
 		let team = [];
 		let variant = (this.random(2) === 1);
 		let sets = {
+			'Winona' : {
+				species: 'Exeggutor-Alola', ability: 'Dank Zone', item: 'Sitrus Berry', gender: 'M',
+				moves: ['icehammer', 'woodhammer', 'dragonhammer'],
+				signatureMove: "Super Duper Wombo Combo",
+				evs: {hp: 252, spa:252, spd: 252, def: 252},
+				ivs: {atk: 0, spe: 0,}, 
+				nature: 'Quiet ',
+			},
 			'The True Falcon' : {
 				species: 'Samurott', ability: 'Ultra Technical', item: 'Assualt Vest', gender: 'M',
 				moves: ['icepunch', 'waterfall', 'sacred sword'],
