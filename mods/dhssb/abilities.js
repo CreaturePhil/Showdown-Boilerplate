@@ -14,7 +14,7 @@ exports.BattleAbilities = {
 	},
 	"dankzone": {
 		onStart: function(pokemon) {
-			this.add('-ability', pokemon, 'Dank Zone', 'boost');
+			this.add('-ability', pokemon, 'Dank Zone');
 			this.addPseudoWeather('trickroom', pokemon);
 			this.setWeather('sunnyday');
 			this.setTerrain('grassyterrain');

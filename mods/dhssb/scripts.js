@@ -10,7 +10,6 @@ exports.BattleScripts = {
 				moves: ['icehammer', 'woodhammer', 'dragonhammer'],
 				signatureMove: "Super Duper Wombo Combo",
 				evs: {hp: 252, spa:252, spd: 252, def: 252},
-				ivs: {atk: 0, spe: 0,}, 
 				nature: 'Quiet',
 			},
 			'The True Falcon' : {
