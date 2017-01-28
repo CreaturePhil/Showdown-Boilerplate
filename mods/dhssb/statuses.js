@@ -40,10 +40,29 @@ exports.BattleStatuses = {
 			this.add('c|%The True Falcon|Hi all');
 		},
 		onFaint: function(pokemon) {
+<<<<<<< HEAD
+=======
+			this.add('c|%The True Falcon|Bye all');
+>>>>>>> 95e12ddca6b258ae127ce654f80972efe74a5548
 		},
 		onSwitchOut: function(pokemon) {
 		},
 	},
+<<<<<<< HEAD
+=======
+	winona: {
+		exists: true,
+		onStart: function() {
+			this.add('c|$Winona|feelsbrb');
+		},
+		onFaint: function(pokemon) {
+			this.add('raw|<div class="chat"><small>$</small><button name="parseCommand" value="/user Winona" style="background: none ; border: 0 ; padding: 0 5px 0 0 ; font-family: &quot;verdana&quot; , &quot;helvetica&quot; , &quot;arial&quot; , sans-serif ; font-size: 9pt ; cursor: pointer"><b><font color="#8BA725">Winona:</font></b></button><em class="mine">Le RIP me <img src="http://i.imgur.com/wp51rIg.png" title="feelsbn" width="50" height="50"></em></div>');
+		},
+		onSwitchOut: function(pokemon) {
+			this.add("raw|I'm gonna use the Joestar family's secret technique m8 feelsgn");
+		},
+	},
+>>>>>>> 95e12ddca6b258ae127ce654f80972efe74a5548
 	hydrostatics: {
 		exists: true,
 		onStart: function() {
@@ -211,11 +230,19 @@ exports.BattleStatuses = {
 	charizard8888: {
 		exists: true,
 		onStart: function() {
+<<<<<<< HEAD
 				this.add('raw|<div class="chat"><small>*</small><button name="parseCommand" value="/user charizard8888" style="background: none ; border: 0 ; padding: 0 5px 0 0 ; font-family: &quot;verdana&quot; , &quot;helvetica&quot; , &quot;arial&quot; , sans-serif ; font-size: 9pt ; cursor: pointer"><b><font color="#AE830F">charizard8888:</font></b></button><em class="mine">Enjoy my battle theme while everything gets rekt! <img src="https://cdn.rawgit.com/CreaturePhil/dem-feels/master/emotes/feelsfdra.png" title="feelsfdra" width="50" height="50"></em></div>');
 				this.add('raw|<audio style="width: 99.6% ; border: 6px solid #FFA000 ; color: green" controls="" src="http://www.youtubeinmp3.com/fetch/?video=/www.youtube.com/watch?v=12eZvb108xc">Your user agent does not support the HTML5 Audio element.</audio>')
 		},
 		onFaint: function(pokemon) {
 				this.add('c|&charizard8888|I\'m Outta here!');
+=======
+			this.add('raw|<div class="chat"><small>*</small><button name="parseCommand" value="/user charizard8888" style="background: none ; border: 0 ; padding: 0 5px 0 0 ; font-family: &quot;verdana&quot; , &quot;helvetica&quot; , &quot;arial&quot; , sans-serif ; font-size: 9pt ; cursor: pointer"><b><font color="#AE830F">charizard8888:</font></b></button><em class="mine">Enjoy my battle theme while everything gets rekt! <img src="https://cdn.rawgit.com/CreaturePhil/dem-feels/master/emotes/feelsfdra.png" title="feelsfdra" width="50" height="50"></em></div>');
+			this.add('raw|<audio style="width: 99.6% ; border: 6px solid #FFA000 ; color: green" controls="" src="http://www.youtubeinmp3.com/fetch/?video=/www.youtube.com/watch?v=12eZvb108xc">Your user agent does not support the HTML5 Audio element.</audio>')
+		},
+		onFaint: function(pokemon) {
+			this.add('c|&charizard8888|I\'m Outta here!');
+>>>>>>> 95e12ddca6b258ae127ce654f80972efe74a5548
 		},
 		onSwitchOut: function(pokemon) {
 			this.add("c|&charizard8888|brb");
