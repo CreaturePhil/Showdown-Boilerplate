@@ -178,7 +178,9 @@ exports.BattleAbilities = {
 			if (target.side === source.side) return;
 			return 1;
 		},
-		stopAttackEvents: true,
+		onModifyMove: function(move, pokemon) {
+			move.ignoreAbility = true;
+		}
 		id: "pressurebreaker",
 		name: "Pressure Breaker",
 		rating: 1.5,
@@ -412,7 +414,9 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Wonder Breaker');
 		},
-		stopAttackEvents: true,
+		onModifyMove: function(move, pokemon) {
+			move.ignoreAbility = true;
+		}
 		onAnyModifyBoost: function (boosts, target) {
 			let source = this.effectData.target;
 			if (source === target) return;
