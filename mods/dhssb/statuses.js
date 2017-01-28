@@ -45,6 +45,20 @@ exports.BattleStatuses = {
 		onSwitchOut: function(pokemon) {
 		},
 	},
+	flufi: {
+		exists: true,
+		onStart: function() {
+		},
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground') {
+				return false;
+			}
+		},
+		onFaint: function(pokemon) {
+		},
+		onSwitchOut: function(pokemon) {
+		},
+	},
 	winona: {
 		exists: true,
 		onStart: function() {
@@ -327,14 +341,6 @@ exports.BattleStatuses = {
 		onSwitchOut: function(pokemon) {
 			this.add("c|%shivam rustagi|I'll be back to haunt u till eternity");
 		},
-	},
-	"levitate": {
-		desc: "This Pokemon is immune to Ground. Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
-		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it.",
-		// airborneness implemented in battle-engine.js:BattlePokemon#isGrounded
-		id: "levitate",
-		name: "Levitate",
-		effectType: "Ability",
 	},
 	russianwinter: {
 		effectType: 'Weather',
