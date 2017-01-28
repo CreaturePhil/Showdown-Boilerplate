@@ -58,21 +58,6 @@ exports.BattleAbilities = {
 		id: "aquify",
 		name: "Aquify",
 	},
-	shellarmorclone: {
-		onCriticalHit: false,
-		onModifyMove: function (move) {
-			move.willCrit = true;
-			if (move.secondaries) {
-				for (var i = 0; i < move.secondaries.length; i++) {
-					move.secondaries[i].chance = 100;
-				}
-			}
-		},
-		id: "shellarmorclone",
-		name: "Shell Armor",
-		rating: 1,
-		num: 1075,
-	},
 	"phantomguard": {
 		shortDesc: "This Pokemon can only be damaged by supereffective moves and indirect damage.",
 		onStart: function (pokemon) {

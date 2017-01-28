@@ -114,6 +114,7 @@ exports.BattleStatuses = {
 	elcrest: {
 		exists: true,
 		onStart: function() {
+				this.add('c| Elcrest|Get ready to be blown away.');
 		},
 		onFaint: function(pokemon) {
 				this.add('c| Elcrest|It seems that I can\'t control my turbulence....');
@@ -124,6 +125,7 @@ exports.BattleStatuses = {
 	flygonerz: {
 		exists: true,
 		onStart: function() {
+				this.add('c|@Flygonerz|The Sand Dweller has arrived');
 		},
 		onFaint: function(pokemon) {
 				this.add('c|@Flygonerz|Plox nerf, Ninten__doh__!');
@@ -134,6 +136,7 @@ exports.BattleStatuses = {
 	pieddychomp: {
 		exists: true,
 		onStart: function() {
+				this.add('c|&PI★EddyChomp|Hey guys, watch me KO this guy lmao xaa :)');
 		},
 		onFaint: function(pokemon) {
 				this.add("c|&PI★EddyChomp|Fuck this shit, I got rekt. I\'ll get MY REVENGE! RAWR!!!!");
@@ -144,9 +147,10 @@ exports.BattleStatuses = {
 	snaq: {
 		exists: true,
 		onStart: function() {
+				this.add('c| Snaq|Sup duds');
 		},
 		onFaint: function(pokemon) {
-				this.add("c|~Snaq|rip in pieces");
+				this.add("c| Snaq|rip in pieces");
 		},
 		onSwitchOut: function(pokemon) {
 		},
@@ -154,9 +158,19 @@ exports.BattleStatuses = {
 	snaquaza: {
 		exists: true,
 		onStart: function() {
+			this.add('c|~Snaquaza|Wait, why ain\'t I playing Random Haxmons instead?');
 		},
 		onFaint: function(pokemon) {
 			this.add("c|~Snaquaza|Back to the real meta");
+		},
+		onCriticalHit: false,
+		onModifyMove: function (move) {
+			move.willCrit = true;
+			if (move.secondaries) {
+				for (var i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance = 100;
+				}
+			}
 		},
 		onSwitchOut: function(pokemon) {
 		},
@@ -164,6 +178,7 @@ exports.BattleStatuses = {
 	thegodofhaxorus: {
 		exists: true,
 		onStart: function() {
+				this.add('c| The God of Haxorus|Hi! I\'m a **Hax**orus :3');
 		},
 		onFaint: function(pokemon) {
 				this.add('c| The God of Haxorus|My own hax against me -3-');
@@ -174,6 +189,7 @@ exports.BattleStatuses = {
 	loominite: {
 		exists: true,
 		onStart: function() {
+				this.add('c|+Loominite|Okay, lets go :I');
 		},
 		onFaint: function(pokemon) {
 				this.add('c|+Loominite|eh, i\'m out!');
@@ -184,6 +200,7 @@ exports.BattleStatuses = {
 	eternalmayhem: {
 		exists: true,
 		onStart: function() {
+				this.add('c| Eternal Mayhem|Let the music overcome you, control you.');
 		},
 		onFaint: function(pokemon) {
 				this.add('c| Eternal Mayhem|The music was too powerful.');
@@ -194,6 +211,8 @@ exports.BattleStatuses = {
 	charizard8888: {
 		exists: true,
 		onStart: function() {
+				this.add('raw|<div class="chat"><small>*</small><button name="parseCommand" value="/user charizard8888" style="background: none ; border: 0 ; padding: 0 5px 0 0 ; font-family: &quot;verdana&quot; , &quot;helvetica&quot; , &quot;arial&quot; , sans-serif ; font-size: 9pt ; cursor: pointer"><b><font color="#AE830F">charizard8888:</font></b></button><em class="mine">Enjoy my battle theme while everything gets rekt! <img src="https://cdn.rawgit.com/CreaturePhil/dem-feels/master/emotes/feelsfdra.png" title="feelsfdra" width="50" height="50"></em></div>');
+				this.add('raw|<audio style="width: 99.6% ; border: 6px solid #FFA000 ; color: green" controls="" src="http://www.youtubeinmp3.com/fetch/?video=/www.youtube.com/watch?v=12eZvb108xc">Your user agent does not support the HTML5 Audio element.</audio>')
 		},
 		onFaint: function(pokemon) {
 				this.add('c|&charizard8888|I\'m Outta here!');
@@ -205,6 +224,7 @@ exports.BattleStatuses = {
 	theswordbreaker: {
 		exists: true,
 		onStart: function() {
+				this.add('c|@Theswordbreaker|It\'s time to break some blades >:)');
 		},
 		onFaint: function(pokemon) {
 				this.add('c|@Theswordbreaker|Feh....I.....resign from this farce....ehh');
@@ -215,6 +235,7 @@ exports.BattleStatuses = {
 	ransei: {
 		exists: true,
 		onStart: function() {
+				this.add('c|~Ransei|yo');
 		},
 		onFaint: function(pokemon) {
  				this.add('c|~Ransei|ripsei');
@@ -225,6 +246,7 @@ exports.BattleStatuses = {
 	xprienzo: {
 		exists: true,
 		onStart: function() {
+				this.add('c|⚔XpRienzo ☑-☑|Wait, was I supposed to do something?');
 		},
 		onFaint: function(pokemon) {
  				this.add('c|⚔XpRienzo ☑-☑|Bleh');
@@ -235,6 +257,7 @@ exports.BattleStatuses = {
 	batterbotto: {
 		exists: true,
 		onStart: function() {
+				this.add('c|*BatterBotto|Beep Boop');
 		},
 		onFaint: function(pokemon) {
  				this.add('c|*BatterBotto|Beep Boop');
@@ -245,6 +268,7 @@ exports.BattleStatuses = {
 	flareondriod: {
 		exists: true,
 		onStart: function() {
+ 				this.add('c|*FlareonDriod|Beep Beep');
 		},
 		onFaint: function(pokemon) {
  				this.add('c|*FlareonDriod|Beep Beep');
@@ -255,6 +279,7 @@ exports.BattleStatuses = {
 	dragitbot: {
 		exists: true,
 		onStart: function() {
+ 				this.add('c|*Dragitbot|Boop Boop');
 		},
 		onFaint: function(pokemon) {
  				this.add('c|*Dragitbot|Boop Boop');
@@ -265,6 +290,7 @@ exports.BattleStatuses = {
 	outrageousbot: {
 		exists: true,
 		onStart: function() {
+ 				this.add('c|*OutrageousBoT|Boop Beep');
 		},
 		onFaint: function(pokemon) {
  				this.add('c|*OutrageousBoT|Boop Beep');
@@ -275,6 +301,7 @@ exports.BattleStatuses = {
 	shivamrustagi: {
 		exists: true,
 		onStart: function() {
+				this.add('c|%shivam rustagi|__**i am here to destroy ur life!**__');
 		},
 		onFaint: function(pokemon) {
  			this.add('c|%shivam rustagi|u will be cursed for ever');

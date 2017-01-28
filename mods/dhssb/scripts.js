@@ -90,7 +90,7 @@ exports.BattleScripts = {
 				evs: {}, nature: 'Serious',
 			},
 			'Snaquaza': {
-				species: 'Lapras', ability: 'Shell Armor Clone', item: 'Leftovers',
+				species: 'Lapras', ability: 'Shell Armor', item: 'Leftovers',
 				moves: ['icebeam', 'surf', 'ancientpower'],
 				signatureMove: "Ice Shard",
 				evs: {hp:252, atk:252, def:252, spa:252, spd:252, spe:252}, nature: 'Serious',
