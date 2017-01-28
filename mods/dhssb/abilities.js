@@ -25,9 +25,7 @@ exports.BattleAbilities = {
 	"bigbulletgun": {
 		onStart: function (pokemon) {
 			this.boost({def:-2,spd:-2});
-			this.add('-ability', pokemon, 'Big Bullet Gun');
 		},
-		onModifyMovePriority: -2,
 		onModifyMove: function (move) {
 			if (move.id === "closecombat") {
 				move.category = "Special";
