@@ -12,6 +12,35 @@ exports.BattleAbilities = {
 		id: "ultratechnical",
 		name: "Ultra Technical",
 	},
+	"dankzone": {
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Dank Zone', 'boost');
+			this.addPseudoWeather('trickroom', pokemon);
+			this.setWeather('sunnyday');
+			this.setTerrain('grassyterrain');
+		},
+		name: 'Dank Zone',
+		id: 'dankzone',
+	},
+	"bigbulletgun": {
+		onStart: function (pokemon) {
+			this.boost({def:-2,spd:-2});
+			this.add('-ability', pokemon, 'Big Bullet Gun');
+		},
+		onModifyMovePriority: -2,
+		onModifyMove: function (move) {
+			if (move.id === "closecombat") {
+				move.category = "Special";
+			}
+		},
+		onBoost: function (boost) {
+			for (let i in boost) {
+				boost[i] *= -1;
+			}
+		},
+		id:'bigbulletgun',
+		name:'Big Bullet Gun',
+	},
 	"bigbulletgun": {
 		onStart: function (pokemon) {
 			this.boost({def:-2,spd:-2});
@@ -33,7 +62,6 @@ exports.BattleAbilities = {
 	},
 	"staticboost": {
 		onStart: function (pokemon) {
-			pokemon.addVolatile("levitate");
 			this.add('-ability', pokemon, 'Static Boost');
 			this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1, evasion:1});
 		},
