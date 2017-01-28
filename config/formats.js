@@ -328,10 +328,6 @@ exports.Formats = [
 					pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
 				}
 				let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
-				if (name=="diarmuidodyna")
-				{
-					pokemon.types[1]="Ice";
-				}
 				if (name=="thetruefalcon")
 				{
 					pokemon.types[1]="Fighting";
@@ -426,8 +422,7 @@ exports.Formats = [
 				this.add('c| Elcrest|Get ready to be blown away.');
 			}
 			if(name === 'classyz') {
-				pokemon.addVolatile('simpleinnate', pokemon);
-				this.add('c|&ClassyZ|pro tip: if u kill me go straight to hell do not pass go do not collect $200');
+				pokemon.addVolatile('classyz', pokemon);
 			}
 			if(name === 'flygonerz') {
 				this.add('c|@Flygonerz|The Sand Dweller has arrived');
@@ -514,9 +509,6 @@ exports.Formats = [
 			}
 			if(name === 'snakexzero5') {
 				this.add('c| SnakeXZero5|I JUST FORGOT THERES A SUDDEN PROJECT TOMMOROW');
-			}
-			if(name === 'classyz') {
-				this.add('c|&ClassyZ|go straight to hell do not pass go do not collect $200');
 			}
 			if(name === 'flygonerz') {
 				this.add('c|@Flygonerz|Plox nerf, Ninten__doh__!');
@@ -3090,13 +3082,14 @@ exports.Formats = [
 			},
 			donor: {
 				araquanid: 1,
+				chatot: 1,
 				dewpider: 1,
-				smeargle: 1,
 				golurk: 1,
 				golett: 1,
 				machamp:1,
 				machop: 1,
 				machoke: 1,
+				smeargle: 1,
 			},
 		},
 		noChangeForme: true,

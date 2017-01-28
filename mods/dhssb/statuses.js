@@ -2,11 +2,17 @@
 exports.BattleStatuses = {
 	classyz: {
 		effectType: 'Ability',
+		onStart: function () {
+			this.add('c|&ClassyZ|pro tip: if u kill me go straight to hell do not pass go do not collect $200');
+		},
 		onBoost: function (boost) {
 			for (let i in boost) {
 				boost[i] *= 2;
 			}
 		},
+		onFaint: function(pokemon) {
+			this.add('c|&ClassyZ|go straight to hell do not pass go do not collect $200');
+		}
 	},
 	"levitate": {
 		desc: "This Pokemon is immune to Ground. Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
