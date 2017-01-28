@@ -353,14 +353,7 @@ exports.Formats = [
 				}
 			}
 		},
-		onNegateImmunity: function (pokemon, type) {
-			if (pokemon.volatiles['flipside']) return false;
-			const foes = pokemon.side.foe.active;
-			if (foes.length && foes[0].volatiles['samuraijack'] && pokemon.hasType('Dark') && type === 'Psychic') return false;
-		},
 		onEffectiveness: function (typeMod, target, type, move) {
-			if (!target.volatiles['flipside']) return;
-			if (move && move.id === 'retreat') return;
 			if (move && move.id === 'freezedry' && type === 'Water') return;
 			if (move && !this.getImmunity(move, type)) return 1;
 			return -typeMod;
@@ -382,112 +375,94 @@ exports.Formats = [
 				pokemon.addVolatile('curse', pokemon);
 				this.add('-message', pokemon.name + "'s Wonder Guard has cursed it!");
 			}
-
+			if(this.data.Statuses[name].exists) {
+				pokemon.addVolatile(name, pokemon);
+			}
 			// Add here more hacky stuff for mega abilities.
 			// This happens when the mega switches in, as opposed to mega-evolving on the turn.
 
 
 			// Edgy switch-in sentences go here.
 			// Sentences vary in style and how they are presented, so each Pokémon has its own way of sending them.
+
 			let sentences = [];
 			let sentence = '';
-			if(name === 'spandan') {
-				this.add('j|Spandan');
-				this.add('raw|<center><div class="broadcast-red"><b>The server has crashed!</b><br>Please wait for an administrator to fix it.</div></center>');
-			}
-			if(name === 'thetruefalcon') {
+			/*if(name === 'thetruefalcon') {
 				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
-				this.add('c|%The True Falcon|Hi all');
 			}
-			if(name === 'hydrostatics') {
-				this.add('c|+Hydrostatics|Gl, Hf Kid');
-			}
-			if(name === 'quietchimchar') {
+			if(name === '') {
 				this.add('c| Quiet Chimchar|Introducing the best starter ever!!');
 			}
-			if(name === 'alphapaul71') {
+			if(name === '') {
 				this.add('c| Alpha Paul☯71|!htmlbox');
 				this.add('raw|<button name="parseCommand" value="/user alphapaul71">My Owner!</button>');
 			}
-                        if(name === 'zmeeed') {
-                                this.add("c|@Zmeeed|For Mother Russia!");
-                        }
-			if(name === 'digitaledge') {
+			if(name === '') {
+				this.add("c|@Zmeeed|For Mother Russia!");
+			}
+			if(name === '') {
 				this.add('c|&Digital Edge|__**Mo is our lord and savior!**__');
 			}
-			if(name === 'snakexzero5') {
+			if(name === '') {
 				this.add('c| SnakeXZero5|A project on Friday and its Monday, YAY!');
 			}
-			if (name === 'elcrest') {
+			if (name === '') {
 				this.add('c| Elcrest|Get ready to be blown away.');
 			}
-			if(name === 'classyz') {
-				pokemon.addVolatile('classyz', pokemon);
-			}
-			if(name === 'flygonerz') {
+			if(name === '') {
 				this.add('c|@Flygonerz|The Sand Dweller has arrived');
 			}
-			if(name === 'pieddychomp') {
+			if(name === '') {
 				this.add('c|&PI★EddyChomp|Hey guys, watch me KO this guy lmao xaa :)');
 			}
-			if(name === 'snaq') {
+			if(name === '') {
 				this.add('c|~Snaq|Sup duds');
 			}
-			if(name === 'snaquaza') {
+			if(name === '') {
 				this.add('c|~Snaquaza|Wait, why ain\'t I playing Random Haxmons instead?');
 			}
-			if(name === 'thegodofhaxorus') {
+			if(name === '') {
 				this.add('c| The God of Haxorus|Hi! I\'m a **Hax**orus :3');
 			}
-			if(name === 'loominite') {
+			if(name === '') {
 				this.add('c|+Loominite|Okay, lets go :I');
 			}
-			if(name === 'eternalmayhem') {
+			if(name === '') {
 				this.add('c| Eternal Mayhem|Let the music overcome you, control you.');
 			}
-			if(name === 'charizard8888') {
+			if(name === '') {
 				this.add('raw|<div class="chat"><small>*</small><button name="parseCommand" value="/user charizard8888" style="background: none ; border: 0 ; padding: 0 5px 0 0 ; font-family: &quot;verdana&quot; , &quot;helvetica&quot; , &quot;arial&quot; , sans-serif ; font-size: 9pt ; cursor: pointer"><b><font color="#AE830F">charizard8888:</font></b></button><em class="mine">Enjoy my battle theme while everything gets rekt! <img src="https://cdn.rawgit.com/CreaturePhil/dem-feels/master/emotes/feelsfdra.png" title="feelsfdra" width="50" height="50"></em></div>');
 				this.add('raw|<audio style="width: 99.6% ; border: 6px solid #FFA000 ; color: green" controls="" src="http://www.youtubeinmp3.com/fetch/?video=/www.youtube.com/watch?v=12eZvb108xc">Your user agent does not support the HTML5 Audio element.</audio>')
 			}
-			if(name === 'theswordbreaker') {
+			if(name === '') {
 				this.add('c|@Theswordbreaker|It\'s time to break some blades >:)');
 				pokemon.types = ["Dragon"];
 			}
-			if(name === 'ransei') {
+			if(name === '') {
 				this.add('c|~Ransei|yo');
 			}
-			if(name === 'xprienzo') {
- 				this.add('c|⚔XpRienzo ☑-☑|Wait, was I supposed to do something?');
- 			}
- 			if (name === 'batterbotto') {
- 				this.add('c|*BatterBotto|Beep Boop');
- 			}
- 			if (name === 'flareondriod') {
- 				this.add('c|*FlareonDriod|Beep Beep');
- 			}
- 			if (name === 'dragitbot') {
- 				this.add('c|*Dragitbot|Boop Boop');
- 			}
- 			if (name === 'outrageousbot') {
- 				this.add('c|*OutrageousBoT|Boop Beep');
- 			}
- 			if (name === 'shivam rustagi') {
- 				this.add('c|%shivam rustagi|__**i am here to destroy ur life!**__');
- 			}
+			if(name === '') {
+				this.add('c|⚔XpRienzo ☑-☑|Wait, was I supposed to do something?');
+			}
+			if (name === '') {
+				this.add('c|*BatterBotto|Beep Boop');
+			}
+			if (name === '') {
+				this.add('c|*FlareonDriod|Beep Beep');
+			}
+			if (name === '') {
+				this.add('c|*Dragitbot|Boop Boop');
+			}
+			if (name === '') {
+				this.add('c|*OutrageousBoT|Boop Beep');
+			}
+			if (name === '') {
+				this.add('c|%shivam rustagi|__**i am here to destroy ur life!**__');
+			}*/
 		},
 		onFaint: function (pokemon, source, effect) {
 			let name = toId(pokemon.name);
 			//let opp = toId(source.name);
-			if (name === 'spandan') {
-				this.add('raw|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br>Don\'t worry, we\'re working on fixing it.</div>');
-				this.add('raw|[<font color="FF00FF">DragonHeaven</font>] <font color="909090">Spandamn</font> pushed <b>1</b> new commit to <font color="800080">master</font>: <a href="https://hastebin.com/raw/ocavinuyot" target="_blank">https://git.io/vMbyi</a><br><font color="FF00FF">DragonHeaven</font>/<font color="800080">master</font> <a href="https://hastebin.com/raw/ocavinuyot" target="_blank"><font color="606060">a79bac</font></a> Update server.js');
-				this.add('c|~|Spandan used /hotpatch formats');
-				this.add('c|~|Spandan used /hotpatch chat');
-				this.add('c|~|Spandan used /hotpatch dnsbl');
-				this.add('c|~|Spandan used /hotpatch battles');
-				this.add('c|~Spandan|DONT PANIC FIXED');
-				this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed.</h3><p align=right style="font-size:20px;"></div>');
-			}
 
 			if(name === 'alphapaul71') {
 				this.add('c| Alpha Paul☯71|RIP Me feelsbd');
@@ -577,7 +552,6 @@ exports.Formats = [
 				}
 			}
 			//Switchout phrase
-			if(name=="spandan") this.add("c|~Spandan|brb");
 			if(name="charizard8888") this.add("c|&charizard8888|brb");
 			if(name=="shivam rustagi") this.add("c|%shivam rustagi|I'll be back to haunt u till eternity"); //testing, hope it works
 
