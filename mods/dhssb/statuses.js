@@ -1,7 +1,6 @@
 'use strict';
 exports.BattleStatuses = {
-// ClassyZ
-	simpleinnate: {
+	classyz: {
 		effectType: 'Ability',
 		onBoost: function (boost) {
 			for (let i in boost) {
