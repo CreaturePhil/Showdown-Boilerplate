@@ -8,7 +8,7 @@
 
 Reshiram @ Charcoal 
 
-Ability: Adaptability + Levitate  
+Ability: Adaptability 
 
 EVs: 252 SpA / 252 Spe / 4 SpD 
 
@@ -18,14 +18,14 @@ Timid Nature
 - Psystrike
 - Bleh Flame
 
-Bleh Flame: Accuracy: 100 Base Power: 100 | Special Attack| 40% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage
+**Bleh Flame:** Accuracy: 100 Base Power: 100 | Special Attack| 40% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage
 
 ### Ransei
 Rayquaza-Mega @ Life Orb
 
 Ability: Wonder Breaker 
 
-EVs: 
+EVs: 248 HP / 252 Atk/ 252 SpA / 252 Spe
 
 Mild Nature 
 - Dragon Ascent  
@@ -33,10 +33,9 @@ Mild Nature
 - Draco Meteor  
 - Legend's Ambition 
 
-Legend's Ambition (Power: 0 +10 for every typing that exists. So basically 180), Attack: Special, Accuracy: 100%| Type: Dragon| PP: 8| Priority: 1
-Secondary effects: Super effective to all Pokemon including Fairy-type Pokemon. User loses 50% of their HP on use and speed is decreased by 2x making it 0.5
+**Legend's Ambition:** (Power: 0 +10 for every typing that exists. So basically 180), Attack: Special, Accuracy: 100%| Type: Dragon| PP: 8| Priority: 1| Secondary effects: Super effective to all Pokemon including Fairy-type Pokemon. User loses 50% of their HP on use and speed is decreased by 2x making it 0.5
 
-Wonder Breaker: - This Pokemon's moves and their effects ignore the Abilities and Stat Boosts of other Pokemon, Status inflicted from other Pokemon, and cannot have its stats lowered.
+**Wonder Breaker:** - This Pokemon's moves and their effects ignore the Abilities and Stat Boosts of other Pokemon, Status inflicted from other Pokemon, and cannot have its stats lowered.
 
 ### Spandan
 ![Spandan](http://www.smogon.com/dex/media/sprites/xy/salamence-mega.gif)
@@ -44,12 +43,15 @@ Wonder Breaker: - This Pokemon's moves and their effects ignore the Abilities an
 Salamence-Mega @ Salamencite
 
 Ability: Multiscale then Aerilate
+
+EVs: 252 HP / 252 Atk / 252 Def / 252 SpA / 252 SpD / 252 Spe
 - Shift Gear  
 - Boomburst  
 - Extreme Speed  
 - Yo Mamma Joke
+- Total Annhiliation (Z-Move)
 
-Yo Mamma Joke: +1 Priority| Physical Move| 150 Base Power| User recovers 75% of the damage dealt| PP:10| Flying Type
+**Yo Mamma Joke:** +1 Priority| Physical Move| 180 Base Power| User recovers 75% of the damage dealt| PP:10| Flying Type
 
 ### Snaquaza 
 Lapras @ Leftovers
@@ -90,22 +92,25 @@ Phantom Guard:
 
 Necromancy:
 
-### charizard8888
+### charizard8888  
+![charizard8888](http://www.smogon.com/dex/media/sprites/xy/charizard-mega-x.gif)
 
-Mega Charizard X @ Charizardite X  
+Mega Charizard X @ **Firium Z**
 
 Ability: Refrigerate
 
 EVs: 252 Atk / 4 SpD / 252 Spe  
+
 Jolly Nature  
 - Fake Out
 - Extreme Speed
 - Earthquake 
-- gg m8
- 
-ggm8  Dragon Type | Physical move | 150 Base Power | Accuracy: 100 |PP: 15| Additional Effect : 50 % chance to Burn the Target and 80 % chance to increase the speed by 1 Stage| Animation: Like V-Create|Priority: 0|
+- gg m8  
+
+**ggm8:**  Dragon Type | Physical move | 190 Base Power | Accuracy: 100 |PP: 15| Additional Effect : 50 % chance to Burn the Target and 80 % chance to increase the speed by 1 Stage| Animation: Like V-Create|Priority: 0|
 
 ### PI EddyChomp
+![PI EddyChomp](http://www.smogon.com/dex/media/sprites/xy/garchomp-mega.gif)  
 Mega Garchomp @ Focus Sash 
 
 Ability: Epic Claws  
@@ -378,12 +383,10 @@ Raging Lake:
 
 ### flufi 
 
-![flufi](http://www.smogon.com/dex/media/sprites/xy/raichu.gif)
-
-Ability: Static Boost
-
-EVs: 188 hp / 252 spa / 64 spe
-
+![flufi](http://www.smogon.com/dex/media/sprites/xy/raichu.gif)  
+Raichu @ Life Orb  
+Ability: Static Boost  
+EVs: 188 HP / 252 SpA / 64 Spe  
 Modest Nature
 
 - Thunder
@@ -391,6 +394,35 @@ Modest Nature
 - Focus Blast
 - Mythic Form 
 
-Static Boost:on switch-in, raichu gains the ability of magnet rise and gets +1 in every stat including accuracy and evasion  
-
+**Static Boost:**on switch-in, raichu gains the ability of magnet rise and gets +1 in every stat including accuracy and evasion  
 Mythic Form:custom attack: mythic form type: dragon status move accuracy: null power: null adds dragon to raichu's type, so it should be electric/dragon after gains +1 speed
+
+### Winona 
+  
+  ![Winona](http://www.smogon.com/dex/media/sprites/xy/exeggutor-alola.gif)      
+Alolan-Exeggutor @ Sitrus Berry  
+  Ability: Dank Zone  
+  EVs: 252 HP / 252 SpA / 252 SpD / 252 Def  
+  Quiet Nature Nature
+  
+- Ice Hammer
+- Dragon Hammer
+- Wood Hammer
+- Super Duper Wombo Comco  
+
+**Dank Zone:**dank zone : triggers trick room, grassy terrain and sunny day.  
+**Super Duper Wombo Combo:** dragon type , status move , Accuracy: 100%, pp:5 , effect : use nature power, weather ball, splash and belly drum , animation: like revelation dance , priority: 0
+ 
+### The True Falcon  
+ ![Falcon](http://www.smogon.com/dex/media/sprites/xy/samurott.gif)  
+ Samurott @ Assault Vest 
+Ability: Ultra Technical
+EVs: 252 HP / 252 Atk / 4 Def
+Adamant Nature 
+ 
+- Waterfall
+- Ice Punch
+- Secret Sword
+- Heroic Beatdown     
+**Ultra Technical:**  
+**Heroic Beatdown:**
