@@ -2,10 +2,10 @@
 
 exports.BattleFormats = {
 	donorclause: {
-		effectType: 'Banlist',
+		effectType: 'Rule',
 		name: 'Donor Clause',
 		onStart: function() {
-			this.add('rule', "Donor Clause: No two Pokemon may inherit from the same evolutionary line.");
+			this.add('rule', 'Donor Clause: No two Pokemon may inherit from the same evolutionary line.');
 		},
 		onValidateTeam: function(team, format, teamHas) {
 			// Donor Clause
