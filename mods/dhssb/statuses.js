@@ -1,6 +1,7 @@
 'use strict';
 exports.BattleStatuses = {
 	classyz: {
+		exists: true,
 		effectType: 'Ability',
 		onStart: function () {
 			this.add('c|&ClassyZ|pro tip: if u kill me go straight to hell do not pass go do not collect $200');
