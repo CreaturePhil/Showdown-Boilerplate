@@ -387,25 +387,9 @@ exports.Formats = [
 
 			let sentences = [];
 			let sentence = '';
-			/*if(name === 'thetruefalcon') {
+			if(name === 'thetruefalcon') {
 				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
-			}
-			if(name === '') {
-				this.add('c| Quiet Chimchar|Introducing the best starter ever!!');
-			}
-			if(name === '') {
-				this.add('c| Alpha Paul☯71|!htmlbox');
-				this.add('raw|<button name="parseCommand" value="/user alphapaul71">My Owner!</button>');
-			}
-			if(name === '') {
-				this.add("c|@Zmeeed|For Mother Russia!");
-			}
-			if(name === '') {
-				this.add('c|&Digital Edge|__**Mo is our lord and savior!**__');
-			}
-			if(name === '') {
-				this.add('c| SnakeXZero5|A project on Friday and its Monday, YAY!');
-			}
+			}/*
 			if (name === '') {
 				this.add('c| Elcrest|Get ready to be blown away.');
 			}
@@ -459,104 +443,6 @@ exports.Formats = [
 			if (name === '') {
 				this.add('c|%shivam rustagi|__**i am here to destroy ur life!**__');
 			}*/
-		},
-		onFaint: function (pokemon, source, effect) {
-			let name = toId(pokemon.name);
-			//let opp = toId(source.name);
-
-			if(name === 'alphapaul71') {
-				this.add('c| Alpha Paul☯71|RIP Me feelsbd');
-			}
-			if(name === 'hydrostatics') {
-				this.add('c|+Hydrostatics|Cya next time Kid. I will not take it easy on you from next time.');
-			}
-			if(name === 'quietchimchar') {
-				this.add('c| Quiet Chimchar|I\'ll get you next time!');
-			}
-                        if(name == 'zmeeed') {
-                                this.add("c|@Zmeeed|CYKABLYAT");
-                        }
-			if(name === 'digitaledge') {
-				this.add('c|&Digital Edge|u haxor u didnt get haxed');
-			}
-			if (name === 'elcrest') {
-				this.add('c| Elcrest|It seems that I can\'t control my turbulence....');
-			}
-			if(name === 'snakexzero5') {
-				this.add('c| SnakeXZero5|I JUST FORGOT THERES A SUDDEN PROJECT TOMMOROW');
-			}
-			if(name === 'flygonerz') {
-				this.add('c|@Flygonerz|Plox nerf, Ninten__doh__!');
-			}
-			if(name === 'pieddychomp') {
-				this.add("c|&PI★EddyChomp|Fuck this shit, I got rekt. I\'ll get MY REVENGE! RAWR!!!!");
-			}
-			if(name === 'snaq') {
-				this.add("c|~Snaq|rip in pieces");
-			}
-			if(name === 'snaquaza') {
-				this.add("c|~Snaquaza|Back to the real meta");
-			}
-			if(name === 'loominite') {
-				this.add('c|+Loominite|eh, i\'m out!');
-			}
-			if (name === 'thegodofhaxorus') {
-				this.add('c| The God of Haxorus|My own hax against me -3-');
-			}
-			if (name === 'charizard8888') {
-				this.add('c|&charizard8888|I\'m Outta here!');
-			}
-			if(name === 'theswordbreaker') {
-				this.add('c|@Theswordbreaker|Feh....I.....resign from this farce....ehh');
-			}
-			if (name === 'xprienzo') {
- 				this.add('c|⚔XpRienzo ☑-☑|Bleh');
- 			}
- 			if(name === 'eternalmayhem') {
-				this.add('c| Eternal Mayhem|The music was too powerful.');
-			}
- 			if (name === 'ransei') {
- 				this.add('c|~Ransei|ripsei');
- 			}
- 			if (name === 'batterbotto') {
- 				this.add('c|*BatterBotto|Beep Boop');
- 			}
- 			if (name === 'flareondriod') {
- 				this.add('c|*FlareonDriod|Beep Beep');
- 			}
- 			if (name === 'dragitbot') {
- 				this.add('c|*Dragitbot|Boop Boop');
- 			}
- 			if (name === 'outrageousbot') {
- 				this.add('c|*OutrageousBoT|Boop Beep');
- 			}
- 			if (name === 'shivam rustagi') {
- 				this.add('c|%shivam rustagi|u will be cursed for ever');
- 			}
-//Wreck phrase test
-/*			if(opp=="hydrostatics")
-			this.add("c|~Hydrostatics|Git Gud Kid");
-			if(opp=="tejas10")
-			this.add("c|+Tejas10|Cena sucks!");
-			if(opp=="Lost Cause 146")
-			this.add("c|$Lost Cause 146|you cannot stop me.");
-*/
-		},
-		// Special switch-out events for some mons.
-		onSwitchOut: function (pokemon) {
-			let name = toId(pokemon.name);
-
-			if (!pokemon.illusion) {
-				if (name === 'hippopotas') {
-					this.add('-message', 'The sandstorm subsided.');
-				}
-			}
-			//Switchout phrase
-			if(name="charizard8888") this.add("c|&charizard8888|brb");
-			if(name=="shivam rustagi") this.add("c|%shivam rustagi|I'll be back to haunt u till eternity"); //testing, hope it works
-
-			// Transform
-			if (pokemon.originalName) pokemon.name = pokemon.originalName;
 		},
 		onModifyPokemon: function (pokemon) {
 			let name = toId(pokemon.name);
