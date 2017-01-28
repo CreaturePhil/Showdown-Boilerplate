@@ -63,11 +63,10 @@ exports.BattleAbilities = {
 		rating: 5,
 		num: 25,
 	},
-	//%Elcrest
-                "waterchange": {
-                     shortDesc: "If user is Elcrest and Rain Dance is active, it changes to Gyarados and it and allies' Attack and Speed are 1.5x.",
-                     onStart: function (pokemon) {
-			  delete this.effectData.forme;
+	"waterchange": {
+			shortDesc: "If user is Elcrest and Rain Dance is active, it changes to Gyarados and it and allies' Attack and Speed are 1.5x.",
+			onStart: function (pokemon) {
+			delete this.effectData.forme;
 		},
 		onUpdate: function (pokemon) {
 			if (!pokemon.isActive || pokemon.baseTemplate.speciesid !== 'dratini') return;
