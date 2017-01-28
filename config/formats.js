@@ -3469,7 +3469,15 @@ exports.Formats = [
 		onResidualOrder: 999,
 		onResidual: function () {
 			if(this.turn !== 6) return;
-				this.add("-message", "The Lockdown has commenced! Battlefield changes are now permanent!");
+			let pseudo = ['magicroom', 'wonderroom', 'trickroom', 'gravity', 'mudsport', 'watersport'];
+			this.add("-message", "The Lockdown has commenced! Battlefield changes are now permanent!");
+			if(this.weatherData.duration) this.weatherData.duration = 0;
+			if(this.terrainData.duration) this.terrainData.duration = 0;
+			for(let i in this.pseudoWeather) {
+				if(pseudo.includes(i)) {
+					this.pseudoWeather[i].duration = 0;
+				}
+			}
 		},
 	},
 	{
