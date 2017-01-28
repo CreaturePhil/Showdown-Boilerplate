@@ -1,6 +1,25 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"superduperwombocombo": {
+		accuracy: true,
+		category: "Status",
+		id: "superduperwombocombo",
+		name: "Super Duper Wombo Combo",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryHit: function (target, pokemon) {
+			this.add('-anim', pokemon, "Revelation Dance", target);
+			this.useMove("Nature Power", pokemon);
+			this.useMove("Weather Ball", pokemon);
+			this.useMove("Splash", pokemon);
+			this.useMove("Belly Drum", pokemon);
+		},
+		secondary: false,
+		target: "normal",
+		type: "Dragon",
+	},
 	zransei: {
 		accuracy: 100,
 		basePower: 300,

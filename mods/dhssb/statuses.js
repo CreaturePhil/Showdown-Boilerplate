@@ -70,6 +70,9 @@ exports.BattleStatuses = {
 		onSwitchOut: function(pokemon) {
 			this.add("raw|I'm gonna use the Joestar family's secret technique m8 feelsgn");
 		},
+		onDamage: function (damage, target, source, effect) {
+			if (effect.id === 'recoil' && this.activeMove.id !== 'struggle') return null;
+		},
 	},
 	hydrostatics: {
 		exists: true,
