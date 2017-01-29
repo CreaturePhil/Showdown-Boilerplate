@@ -20,7 +20,7 @@ exports.BattleScripts = {
 			break;
 		}
 		while(true);
-		team.push(randomSet(this.getTemplate(fotw)));
+		team.push(this.randomSet(this.getTemplate(fotw)));
 		return team;
 	},
 };
