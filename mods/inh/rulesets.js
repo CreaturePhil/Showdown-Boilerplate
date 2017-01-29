@@ -2,7 +2,7 @@
 
 exports.BattleFormats = {
 	donorclause: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
 		name: 'Donor Clause',
 		onStart: function() {
 			this.add('rule', 'Donor Clause: No two Pokemon may inherit from the same evolutionary line.');
