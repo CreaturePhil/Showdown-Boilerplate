@@ -58,14 +58,14 @@ exports.BattleFormats = {
      },
      onFaint: function (pokemon) {
        if (pokemon.side.god === pokemon) {
-         this.add('-message', pokemon.name + " has fallen! "
-           + pokemon.side.name + "'s team has been Cursed!");
+         this.add('-message', pokemon.name + " has fallen! " + pokemon.side.name + "'s team has been Cursed!");
+         pokemon.side.goddead = true;
        }
      },
      onSwitchIn: function (pokemon) {
-       if (pokemon.side.god.hp === 0) {
+       if (pokemon.side.goddead) {
          // What a horrible night to have a Curse.
-         pokemon.addVolatile('curse', pokemon);
+         pokemon.addVolatile('embargo', pokemon);
        }
      }
    }
