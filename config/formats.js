@@ -4030,6 +4030,22 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
     	column: 1,
     },
 	{
+		name: "[Gen 7] Z-Shift",
+		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
+		ruleset: ['[Gen 7] OU'],
+		mod: 'zshift',
+		onValidateSet: function(set) {
+			let problems = [];
+			set.moves.forEach(move => {
+				let moveData = this.getMove(move);
+				if(moveData.multihit) {
+					problems.push((set.name || set.species)+" has "+moveData.name+", which is a multihit move and is banned by Z-Shift.")
+				}
+			});
+			return problems;
+		},
+	},
+	{
 		name: "[Gen 7] Automagic",
 		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
 		ruleset: ['[Gen 7] OU'],
