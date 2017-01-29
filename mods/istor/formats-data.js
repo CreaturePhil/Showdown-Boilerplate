@@ -133,6 +133,14 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["bodyslam", "dragonrush", "batonpass", "coil"],
 		tier: "New",
 	},
+	suctopus: {
+		randomBattleMoves: ["powerwhip", "liquidation", "poisonjab", "swordsdance"],
+		tier: "LC",
+	},
+	octangle: {
+		randomBattleMoves: ["powerwhip", "liquidation", "poisonjab", "swordsdance"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
