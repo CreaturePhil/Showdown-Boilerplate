@@ -4047,7 +4047,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		onPrepareHit: function (target, source, move) {
 			if(move.isZ && move.baseMove);
 			this.attrLastMove('[still]');
-			this.add('-anim', source, move.baseMove, target);
+			this.add('-anim', target, move.baseMove, source);
 		},
 	},
 	{
