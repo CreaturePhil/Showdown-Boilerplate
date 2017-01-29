@@ -2863,7 +2863,7 @@ exports.Formats = [
 			"Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3592844/\">Inheritance</a>",
 		],
-		ruleset: ['[Gen 7] OU', 'Donor Clause'],
+		ruleset: ['[Gen 7] OU'],
 		banlist: ["Arena Trap", "Assist", "Wonder Guard", "Huge Power", "Pure Power", "Imposter", "Speed Boost"],
 		mod: 'gen7',
 		customBans: {
@@ -2996,6 +2996,26 @@ exports.Formats = [
 			if (!validSources.length) {
 				problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.tools.getTemplate(pokemonWithAbility[0]).name+'.');
 				return problems;
+			}
+		},
+		onValidateTeam: function(team, format, teamHas) {
+			// Donor Clause
+			let evoFamilyLists = [];
+			for (let i = 0; i < team.length; i++) {
+				let set = team[i];
+				if (!set.abilitySources) continue;
+				evoFamilyLists.push(new Set(set.abilitySources.map(format.getEvoFamily)));
+			}
+
+			// Checking actual full incompatibility would require expensive algebra.
+			// Instead, we only check the trivial case of multiple PokÃ©mon only legal for exactly one family. FIXME?
+			let requiredFamilies = Object.create(null);
+			for (let i = 0; i < evoFamilyLists.length; i++) {
+				let evoFamilies = evoFamilyLists[i];
+				if (evoFamilies.size !== 1) continue;
+				evoFamilies = Array.from(evoFamilies);
+				if (requiredFamilies[evoFamilies[0]]) return ["You are limited to one inheritance from each family by the Donor Clause.", "(You inherit more than once from " + this.getTemplate(evoFamilies[0]).species + "'s.)"];
+				requiredFamilies[evoFamilies[0]] = 1;
 			}
 		},
 		onSwitchIn: function(pokemon) {
