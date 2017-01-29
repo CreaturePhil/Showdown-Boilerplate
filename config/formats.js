@@ -5436,7 +5436,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	},
 	{
 		name: "[Istor] Fakemon of the Week",
-		mod: 'istor',
+		mod: 'fakemon',
 		team: 'randomFotW',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod' , 'Freeze Clause Mod'],
 		fotw: "Salamence",
