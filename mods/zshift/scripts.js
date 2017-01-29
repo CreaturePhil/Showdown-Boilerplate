@@ -65,6 +65,7 @@ exports.BattleScripts = {
 	},
 	getZMove: function (move, pokemon, skipChecks) {
 		let item = pokemon.getItem();
+		let target = this.getMove(pokemon.moves[0]);
 		if (!skipChecks) {
 			if (pokemon.side.zMoveUsed) return;
 			if (!item.zMove) return;
@@ -73,7 +74,7 @@ exports.BattleScripts = {
 			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
 		}
 
-		if (item.zMove === true) {
+		if (item.zMove === true && target.type === item.zMoveType) {
 			return move.name;
 		}
 	},
