@@ -73,7 +73,7 @@ exports.BattleScripts = {
 			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
 		}
 
-		if (item.zMove === true && move.type === item.zMoveType) {
+		if (item.zMove === true) {
 			return move.name;
 		}
 	},
@@ -92,7 +92,7 @@ exports.BattleScripts = {
 		zMove.basePower = target.basePower;
 		zMove.type = target.type;
 		zMove.priority = target.priority;
-		zMove.name = "Z-"+target.name;
+		zMove.name = "Z-"+zMove.name;
 		return zMove;
 	},
 
@@ -103,6 +103,7 @@ exports.BattleScripts = {
 		if (item.zMoveUser && item.zMoveUser.includes(pokemon.species)) return;
 		let atLeastOne = false;
 		let zMoves = [];
+		let target = this.getMove(pokemon.moves[0]);
 		for (let i = 0; i < pokemon.moves.length; i++) {
 			let move = this.getMove(pokemon.moves[i]);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
