@@ -65,7 +65,6 @@ exports.BattleScripts = {
 	},
 	getZMove: function (move, pokemon, skipChecks) {
 		let item = pokemon.getItem();
-		let target = this.getMove(pokemon.moves[0]);
 		if (!skipChecks) {
 			if (pokemon.side.zMoveUsed) return;
 			if (!item.zMove) return;
@@ -90,10 +89,11 @@ exports.BattleScripts = {
 		}
 		let target = this.getMove(pokemon.moves[0]);
 		zMove = this.getMoveCopy(move.name);
-		zMove.basePower = target.basePower;
+		zMove.basePower = target.category === 'Status' ? 0 : target.basePower;
 		zMove.type = target.type;
 		zMove.priority = target.priority;
 		zMove.name = "Z-"+zMove.name;
+		zMove.baseMove = target.name;
 		return zMove;
 	},
 
@@ -104,7 +104,6 @@ exports.BattleScripts = {
 		if (item.zMoveUser && item.zMoveUser.includes(pokemon.species)) return;
 		let atLeastOne = false;
 		let zMoves = [];
-		let target = this.getMove(pokemon.moves[0]);
 		for (let i = 0; i < pokemon.moves.length; i++) {
 			let move = this.getMove(pokemon.moves[i]);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';

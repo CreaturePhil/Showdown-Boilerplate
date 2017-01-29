@@ -4044,6 +4044,11 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			});
 			return problems;
 		},
+		onPrepareHit: function (target, source, move) {
+			if(move.isZ && move.baseMove);
+			this.attrLastMove('[still]');
+			this.add('-anim', source, move.baseMove, target);
+		},
 	},
 	{
 		name: "[Gen 7] Automagic",
