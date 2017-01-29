@@ -74,7 +74,7 @@ exports.BattleScripts = {
 			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
 		}
 
-		if (item.zMove === true && target.type === item.zMoveType) {
+		if (item.zMove === true && move.type === item.zMoveType) {
 			return move.name;
 		}
 	},
