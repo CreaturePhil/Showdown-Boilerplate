@@ -5435,10 +5435,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		banlist: ['Arena Trap', 'Huge Power', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Chatter', 'Extreme Evoboost'],
 	},
 	{
-		name: "[Istor] Fakemon of the Week",
+		section: "Fakemon",
+		column: 5,
+	},
+	{
+		name: "[Fakemon] Random Battle",
 		mod: 'fakemon',
 		team: 'randomFotW',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod' , 'Freeze Clause Mod'],
-		fotw: "Salamence",
+		fotw: "Solsprite",
 	},
 ];
