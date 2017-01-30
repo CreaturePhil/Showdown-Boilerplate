@@ -2894,7 +2894,7 @@ exports.Formats = [
 			}
 			return template.speciesid;
 		},
-		validateSet: function(set, teamHas) {
+		onValidateSet: function(set, teamHas) {
 			if (!this.format.abilityMap) {
 				let abilityMap = Object.create(null);
 				for (let speciesid in this.tools.data.Pokedex) {
