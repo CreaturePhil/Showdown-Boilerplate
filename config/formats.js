@@ -2961,7 +2961,7 @@ exports.Formats = [
 				else if (toId(donorTemplate.species) !== toId(set.species) && donorTemplate.isMega) {
 					problems = [template.species+" is inheriting from a Mega Pokemon, which is banned."];
 					continue;
-				} else if (donorTemplate.tier === "Uber") {
+				} else if (donorTemplate.tier === "Uber" || donorTemplate.tier === "Bank-Uber") {
 					problems = [template.species+" is inheriting from an Uber, which is banned."];
 					continue;
 				}
@@ -2988,7 +2988,7 @@ exports.Formats = [
 
 			// Restore the intended species, name and item.
 			set.species = template.species;
-			set.name = (name ? (name+" ("+donorSpecies+")") : (set.species+" ("+donorSpecies+")"));
+			set.name = set.name || set.species;//(name ? (name+" ("+donorSpecies+")") : (set.species+" ("+donorSpecies+")"));
 			set.item = item.name;
 			if (!validSources.length && pokemonWithAbility.length > 1) {
 				return ["" + (set.name || set.species) + " set is illegal."];
@@ -2997,6 +2997,7 @@ exports.Formats = [
 				problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.tools.getTemplate(pokemonWithAbility[0]).name+'.');
 				return problems;
 			}
+			set.name = (name ? (name+" ("+donorSpecies+")") : (set.species+" ("+donorSpecies+")"));
 		},
 		onValidateTeam: function(team, format, teamHas) {
 			// Donor Clause
