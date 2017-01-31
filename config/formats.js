@@ -4061,9 +4061,10 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
 				let isDead = target.hp === undefined || target.hp <= 0;
-				let flag = true;
+				let flag = true, moreSetup = ['bellydrum'];
+				if(!source.types.includes("Ghost")) moreSetup.push("curse");
 				if(move.secondary.volatileStatus || move.secondary.status) flag = flag && !target.moveThisTurn && !isDead;
-				if((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && flag) {
+				if((moreSetup.includes(move.id) || (move.category === "Status" && move.boosts && move.target === "self")) && flag) {
 					this.useMove(move, source);
 					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
 				}
@@ -4074,9 +4075,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
 				let isDead = target.hp === undefined || target.hp <= 0;
-				let flag = true;
-				if(move.secondary.volatileStatus || move.secondary.status) flag = flag && !target.moveThisTurn && !isDead;
-				if(move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) {
+				if((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") {
 					this.useMove(move, source);
 					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
 				}
