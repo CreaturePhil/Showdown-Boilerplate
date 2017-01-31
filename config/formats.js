@@ -4069,6 +4069,11 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 				}
 			});
 		},
+		onAfterMove: function (source, target, move) {
+			if(move.id === "genesissupernova") {
+				this.runEvent("AfterSecondaryEffect", target, source, move);
+			}
+		},
 	},
 	{
 		name: "[Gen 7] Full Potential",
