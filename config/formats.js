@@ -4055,14 +4055,15 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		name: "[Gen 7] Automagic",
 		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
 		ruleset: ['[Gen 7] OU'],
-		//team: 'random',
 		mod: 'automagic',
 		onAfterSecondaryEffect: function(target, source, move) {
 			if(move.secondaries.status === target.status || target.volatiles[move.secondaries.volatileStatus]) return;
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
 				let isDead = target.hp === undefined || target.hp <= 0;
-				if(move.category === "Status" && move.boosts && move.target === "self" && !target.moveThisTurn && !isDead) {
+				let flag = !isDead;
+				if(move.secondary.volatileStatus === "flinch") flag = flag && !target.moveThisTurn;
+				if(move.category === "Status" && move.boosts && move.target === "self" && flag) {
 					this.useMove(move, source);
 					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
 				}
