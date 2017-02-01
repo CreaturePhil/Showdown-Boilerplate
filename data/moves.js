@@ -4584,7 +4584,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		selfdestruct: true,
+		selfdestruct: "always",
 		secondary: false,
 		target: "allAdjacent",
 		type: "Normal",
@@ -4916,9 +4916,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			let damage = pokemon.hp;
-			pokemon.faint();
-			return damage;
+			return pokemon.hp;
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to the user's current HP. If this move is successful, the user faints.",
@@ -4929,7 +4927,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		secondary: false,
 		target: "normal",
 		type: "Fighting",
@@ -7224,7 +7222,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		sideCondition: 'healingwish',
 		effect: {
 			duration: 2,
@@ -9422,7 +9420,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		sideCondition: 'lunardance',
 		effect: {
 			duration: 2,
@@ -10021,7 +10019,7 @@ exports.BattleMovedex = {
 			atk: -2,
 			spa: -2,
 		},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		secondary: false,
 		target: "normal",
 		type: "Dark",
@@ -14130,7 +14128,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		selfdestruct: true,
+		selfdestruct: "always",
 		secondary: false,
 		target: "allAdjacent",
 		type: "Normal",
@@ -15799,8 +15797,8 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Until the end of the turn, all single-target attacks from other Pokemon are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Ability Magic Bounce, or drawn in by the Abilities Lightning Rod or Storm Drain. Fails if it is not a Double Battle or Battle Royale.",
-		shortDesc: "Moves redirect to the target on the turn used.",
+		desc: "Until the end of the turn, all single-target attacks from opponents of the target are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Ability Magic Bounce, or drawn in by the Abilities Lightning Rod or Storm Drain. Fails if it is not a Double Battle or Battle Royale.",
+		shortDesc: "Target's foes' moves are redirected to it this turn.",
 		id: "spotlight",
 		name: "Spotlight",
 		pp: 15,

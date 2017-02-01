@@ -481,7 +481,8 @@ exports.BattleAbilities = {
 	},
 	"contrary": {
 		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
-		onBoost: function (boost) {
+		onBoost: function (boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
 				boost[i] *= -1;
 			}
@@ -697,8 +698,8 @@ exports.BattleAbilities = {
 		num: 190,
 	},
 	"disguise": {
-		desc: "If this Pokemon is a Mimikyu, it will take 0 damage the first time it is attacked in battle. It then changes to Busted Form.",
-		shortDesc: "If this Pokemon is a Mimikyu, it takes 0 damage the first time it is attacked in battle.",
+		desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it changes to Busted Form. Confusion damage also breaks the disguise.",
+		shortDesc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage.",
 		onDamagePriority: 1,
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'mimikyu' && !target.transformed) {
@@ -706,6 +707,13 @@ exports.BattleAbilities = {
 				this.effectData.busted = true;
 				return 0;
 			}
+		},
+		onEffectiveness: function (typeMod, type, move) {
+			if (!this.activeTarget) return;
+			let pokemon = this.activeTarget;
+			if (pokemon.template.speciesid !== 'mimikyu' || pokemon.transformed) return;
+			if (!pokemon.runImmunity(move.type)) return;
+			return 0;
 		},
 		onUpdate: function (pokemon) {
 			if (pokemon.template.speciesid === 'mimikyu' && this.effectData.busted) {
@@ -3029,7 +3037,8 @@ exports.BattleAbilities = {
 	},
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
-		onBoost: function (boost) {
+		onBoost: function (boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
 				boost[i] *= 2;
 			}

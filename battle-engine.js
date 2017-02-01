@@ -2683,6 +2683,7 @@ class Battle extends Tools.BattleDex {
 					TryMove: 1,
 					Boost: 1,
 					DragOut: 1,
+					Effectiveness: 1,
 				};
 				if (eventid in AttackingEvents) {
 					this.debug(eventid + ' handler suppressed by Mold Breaker');

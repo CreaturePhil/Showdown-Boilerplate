@@ -185,14 +185,15 @@ exports.BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
+		if (move.selfdestruct === 'always') {
+			this.faint(pokemon, pokemon, move);
+		}
+
 		let damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 			damage = this.tryMoveHit(target, pokemon, move);
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
-			if (move.selfdestruct) {
-				this.faint(pokemon, pokemon, move);
-			}
 			if (!targets.length) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
@@ -202,7 +203,7 @@ exports.BattleScripts = {
 			damage = 0;
 			let hitTargets = [];
 			for (let i = 0; i < targets.length; i++) {
-				let hitResult = this.tryMoveHit(targets[i], pokemon, move, true);
+				let hitResult = this.tryMoveHit(targets[i], pokemon, move);
 				if (hitResult || hitResult === 0 || hitResult === undefined) {
 					moveResult = true;
 					hitTargets.push(targets[i].toString().substr(0, 3));
@@ -210,7 +211,6 @@ exports.BattleScripts = {
 				damage += hitResult || 0;
 			}
 			if (move.spreadHit) this.attrLastMove('[spread] ' + hitTargets.join(','));
-			if (!pokemon.hp) pokemon.faint();
 		} else {
 			target = targets[0];
 			let lacksTarget = target.fainted;
@@ -237,19 +237,13 @@ exports.BattleScripts = {
 			return true;
 		}
 
-		if (move.selfdestruct) {
-			this.faint(pokemon, pokemon, move);
-		}
-
 		if (!move.negateSecondary && !(pokemon.hasAbility('sheerforce') && pokemon.volatiles['sheerforce'])) {
 			this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 		}
 		return true;
 	},
-	tryMoveHit: function (target, pokemon, move, spreadHit) {
-		if (move.selfdestruct && spreadHit) pokemon.hp = 0;
-
+	tryMoveHit: function (target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 		let hitResult = true;
 
@@ -579,6 +573,16 @@ exports.BattleScripts = {
 			// basically, these values have the same meanings as they do for event
 			// handlers.
 
+			if (damage === false || damage === null) {
+				if (damage === false && !isSecondary && !isSelf) {
+					this.add('-fail', target);
+				}
+				this.debug('damage calculation interrupted');
+				return false;
+			}
+			if (move.selfdestruct === 'ifHit') {
+				this.faint(pokemon, pokemon, move);
+			}
 			if ((damage || damage === 0) && !target.fainted) {
 				if (move.noFaint && damage >= target.hp) {
 					damage = target.hp - 1;
@@ -589,13 +593,6 @@ exports.BattleScripts = {
 					return false;
 				}
 				didSomething = true;
-			}
-			if (damage === false || damage === null) {
-				if (damage === false && !isSecondary && !isSelf) {
-					this.add('-fail', target);
-				}
-				this.debug('damage calculation interrupted');
-				return false;
 			}
 
 			if (moveData.boosts && !target.fainted) {
@@ -2107,6 +2104,8 @@ exports.BattleScripts = {
 			item = 'Choice Specs';
 		} else if (template.species === 'Wobbuffet') {
 			item = hasMove['destinybond'] ? 'Custap Berry' : ['Leftovers', 'Sitrus Berry'][this.random(2)];
+		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.random(4) < 1) {
+			item = 'Aloraichium Z';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
@@ -2210,7 +2209,7 @@ exports.BattleScripts = {
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
 		} else if (ability === 'Gale Wings' && hasMove['bravebird']) {
-			item = 'Sharp Beak';
+			item = !teamDetails.zMove ? 'Flyinium Z' : 'Sharp Beak';
 		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
 			item = 'Leftovers';
 		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise'] && !hasMove['sleeptalk']) {
@@ -2277,6 +2276,9 @@ exports.BattleScripts = {
 		} else if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
 			// Belly Drum should activate Sitrus Berry
 			if (hp % 2 > 0) evs.hp -= 4;
+		} else if (hasMove['substitute'] && hasMove['reversal']) {
+			// Reversal users should be able to use four Substitutes
+			if (hp % 4 === 0) evs.hp -= 4;
 		} else {
 			// Maximize number of Stealth Rock switch-ins
 			if (this.getEffectiveness('Rock', template) === 1) {
