@@ -2371,7 +2371,7 @@ exports.commands = {
 			req.write(toUpload);
 			req.end();
 		};
-		let exec = require('child_process').exec, data = "", commands = "cd logs\ncd chat\ncd "+toId(room)+"\n";
+		let exec = require('child_process').exec, data = "", commands = "cd logs\\chat\\"+toId(room)+"\n";
 		if(target === "today") commands = commands + "less today.txt";
 		else {
 			commands = commands + "cd "+month+"\nless "+date+".txt";
