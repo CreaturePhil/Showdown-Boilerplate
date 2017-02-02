@@ -2381,7 +2381,8 @@ exports.commands = {
 		});
 		try {
 			uploadToHastebin(data, function (r, link) {
-				if (r) return this.sendReplyBox('Roomlog for ' +target+ ': ' + link);
+				link = "https://hastebin.com/raw/"+link.split('/')[link.split('/').length-1];
+				if (r) return this.sendReplyBox('<a href="'+link+'">Roomlog for '+target+ '</a>');
 				else this.sendReplyBox("An Error Occured.");
 			}.bind(this));
 		} 
