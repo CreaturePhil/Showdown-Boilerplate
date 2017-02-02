@@ -2344,8 +2344,8 @@ exports.commands = {
 		return this.addModCommand(`The IP '${target}' was unmarked as shared by ${user.name}.`);
 	},
 	unmarksharedhelp: ["/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &, ~"],
-
-	roomlog: function (target, room, user, connection) {
+		
+	roomlog: function (target, room, user, connection) {//Roomlog code by Spandan		
 		if(!this.can("makechatroom")) return this.errorReply("Error: Access Denied.");
 		if(!target || target === "") return this.errorReply("Error: Please give a parameter.");
 		let date = target.trim(), month = date.substring(0,7);
