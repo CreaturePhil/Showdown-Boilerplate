@@ -2371,14 +2371,12 @@ exports.commands = {
 			req.write(toUpload);
 			req.end();
 		};
-		let exec = require('child_process').exec, data = "", commands = "cd logs\\chat\\"+toId(room)+"\n";
-		if(target === "today") commands = commands + "less today.txt";
+		let data = "", path = "logs/chat/"+toId(room)+"/", ffs = require('fs');
+		if(target === "today") path = path + "today.txt";
 		else {
-			commands = commands + "cd "+month+"\nless "+date+".txt";
+			path = path+month+"/"+date+".txt";
 		}
-		exec(commands, (error, stdout, stderr) => {
-			data = ("" + stdout + stderr);
-		});
+		data = ffs.readFileSync(path);
 		try {
 			uploadToHastebin(data, function (r, link) {
 				link = "https://hastebin.com/raw/"+link.split('/')[link.split('/').length-1];
