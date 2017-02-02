@@ -2347,6 +2347,7 @@ exports.commands = {
 
 	roomlog: function (target, room, user, connection) {
 		if(!this.can("makechatroom")) return this.errorReply("Error: Access Denied.");
+		if(!target || target === "") return this.errorReply("Error: Please give a parameter.");
 		let date = target.trim(), month = date.substring(0,7);
 		let uploadToHastebin = function (toUpload, callback) {
 			var reqOpts = {
@@ -2354,7 +2355,7 @@ exports.commands = {
 				method: "POST",
 				path: '/documents'
 			};
-			var req = require('http').request(reqOpts, function (res) {
+			var req = require('https').request(reqOpts, function (res) {
 				res.on('data', function (chunk) {
 					try {
 						var linkStr = "hastebin.com/" + JSON.parse(chunk.toString())['key'];
