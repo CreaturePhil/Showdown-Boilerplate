@@ -2381,7 +2381,7 @@ exports.commands = {
 			data = fs.readFileSync(path);
 		}
 		catch (e) {
-			this.errorReply("Error: Invalid Date, or logs for that date do not exist.");
+			return this.errorReply("Error: Invalid Date, or logs for that date do not exist.");
 		}
 		try {
 			uploadToHastebin(data, function (r, link) {
