@@ -2345,6 +2345,16 @@ exports.commands = {
 	},
 	unmarksharedhelp: ["/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &, ~"],
 	
+	pingall: function (target, room, user, connection) {
+		if(!this.can("broadcast")) return;
+		let users = Object.values(this.room.users).map(function(user) {
+			if(user.name !== this.user.name) return user.name;
+		}).join(', ');
+		this.add(`|c|${this.user.group}${this.user.name}|${users}: ${target}`);
+	},
+	pingallhelp: ["/pingall [message] - Pings all the users of the current room with a message."
+		     "Requires: +"],
+	
 	//Roomlog code by Spandan
 	roomlog: function (target, room, user, connection) {
 		if(!Config.logchat) return this.errorReply("Roomlogs are disabled for this server. (Did you mean: modlog?)");
