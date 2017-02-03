@@ -2391,7 +2391,7 @@ exports.commands = {
 						mes = mes + line.split('|c|')[i];
 					}
 				}
-				return `[${timestamp}] ${mes.replace('|',': ')}`;
+				return `[${timestamp}] ${mes.replace('|',': ').trim()}`;
 			}
 			else if(line.includes('|j|')) {
 				let timestamp = line.split('|j|')[0].trim(), user = line.split('|j|')[1];
@@ -2400,7 +2400,7 @@ exports.commands = {
 						user = user + line.split('|j|')[i];
 					}
 				}
-				return `(${timestamp}) ${user} joined`;
+				return `(${timestamp}) ${user.trim()} joined`;
 			}
 			else if(line.includes('|l|')) {
 				let timestamp = line.split('|l|')[0].trim(), user = line.split('|l|')[1];
@@ -2409,7 +2409,7 @@ exports.commands = {
 						user = user + line.split('|l|')[i];
 					}
 				}
-				return `(${timestamp}) ${user} left`;
+				return `(${timestamp}) ${user.trim()} left`;
 			}
 			return line;
 		}).join('\n');
