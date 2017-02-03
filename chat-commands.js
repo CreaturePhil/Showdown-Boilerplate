@@ -2383,7 +2383,7 @@ exports.commands = {
 		catch (e) {
 			return this.errorReply("Error: Invalid Date, or logs for that date do not exist.");
 		}
-		data.map(function (line) {
+		data = data.map(function(line) {
 			if(line.includes('|c|')) {
 				let timestamp = line.split('|c|')[0].trim(), mes = line.split('|c|')[1];
 				if(line.split('|c|').length > 2) {
@@ -2412,8 +2412,7 @@ exports.commands = {
 				return `(${timestamp}) ${user} left`;
 			}
 			return line;
-		});
-		data = data.join('\n');
+		}).join('\n');
 		try {
 			uploadToHastebin(data, function (r, link) {
 				link = "https://hastebin.com/raw/"+link.split('/')[link.split('/').length-1];
