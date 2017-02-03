@@ -90,7 +90,7 @@ exports.reportjoinsperiod = 0;
 // report battles - shows messages like "OU battle started" in the lobby
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 160 or so users.
-exports.reportbattles = false;
+exports.reportbattles = true;
 
 // report joins and leaves in battle - shows messages like "<USERNAME> joined" in battle
 //   Set this to false on large tournament servers where battles get a lot of joins and leaves.
@@ -106,9 +106,9 @@ exports.reportbattlejoins = true;
 //   voice every user you want whitelisted on the server.
 
 // chat modchat - default minimum group for speaking in chatrooms; changeable with /modchat
-exports.chatmodchat = false;
+exports.chatmodchat = "autoconfirmed";
 // battle modchat - default minimum group for speaking in battles; changeable with /modchat
-exports.battlemodchat = true;
+exports.battlemodchat = "autoconfirmed";
 // pm modchat - minimum group for PMing other users, challenging other users, and laddering
 exports.pmmodchat = true;
 
@@ -153,7 +153,7 @@ exports.logchallenges = false;
 
 // loguserstats - how often (in milliseconds) to write user stats to the
 // lobby log. This has no effect if `logchat` is disabled.
-exports.loguserstats = 1000 * 60 * 10; // 10 minutes
+exports.loguserstats = 1000 * 60 * 60; // 10 minutes
 
 // validatorprocesses - the number of processes to use for validating teams
 // simulatorprocesses - the number of processes to use for handling battles
@@ -174,7 +174,7 @@ exports.tellsexpiryage = 1000 * 60 * 60 * 24 * 7;
 // and above. Set to ' ' to allow all users to use offline messaging and `false` to disable
 // offline messaging completely. Set to `'autoconfirmed'` to allow only autoconfirmed users
 // to send offline messages.
-exports.tellrank = '+';
+exports.tellrank = 'autoconfirmed';
 
 // Custom avatars.
 // This allows you to specify custom avatar images for users on your server.
@@ -289,6 +289,7 @@ exports.grouplist = [
 		roombot: true,
 		roommod: true,
 		roomdriver: true,
+		roomlog: true,
 		forcewin: true,
 		declare: true,
 		modchatall: true,
@@ -320,6 +321,7 @@ exports.grouplist = [
 		roommod: true,
 		roomdriver: true,
                 roommeme: true,
+		roomlog: true,
                 roomoperator: true,
 		editroom: true,
 		declare: true,
@@ -356,7 +358,6 @@ exports.grouplist = [
 		jurisdiction: 'u',
 		ban: true,
 		modchat: true,
-                roommeme: true,
 		roomvoice: true,
 		rangeban: true,
 		forcerename: true,
