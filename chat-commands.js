@@ -2413,6 +2413,7 @@ exports.commands = {
 			}
 			return line;
 		});
+		data = data.join('\n');
 		try {
 			uploadToHastebin(data, function (r, link) {
 				link = "https://hastebin.com/raw/"+link.split('/')[link.split('/').length-1];
