@@ -519,11 +519,6 @@ button.button.mainmenu5{
     opacity: 1;
   }
 
-img.pixelated {
-	background:url(http://www.pokestadium.com/sprites/xy/zygarde.gif);
-	background-repeat:no-repeat;
-}
-
   .turnstatus-protect {
     background:url(http://i.imgur.com/RVxCoHz.png);
     opacity:1!important;
