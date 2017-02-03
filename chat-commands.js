@@ -2344,9 +2344,10 @@ exports.commands = {
 		return this.addModCommand(`The IP '${target}' was unmarked as shared by ${user.name}.`);
 	},
 	unmarksharedhelp: ["/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &, ~"],
-		
-	roomlog: function (target, room, user, connection) {//Roomlog code by Spandan		
-		if(!this.can("makechatroom")) return this.errorReply("Error: Access Denied.");
+	
+	//Roomlog code by Spandan
+	roomlog: function (target, room, user, connection) {
+		if(!this.can("globalvoice")) return this.errorReply("Error: Access Denied.");
 		if(!target || target === "") return this.errorReply("Error: Please give a parameter.");
 		let date = target.trim(), month = date.substring(0,7);
 		let uploadToHastebin = function (toUpload, callback) {
@@ -2371,12 +2372,17 @@ exports.commands = {
 			req.write(toUpload);
 			req.end();
 		};
-		let data = "", path = "logs/chat/"+toId(room)+"/", ffs = require('fs');
+		let data = "", path = "logs/chat/"+toId(room)+"/";
 		if(target === "today") path = path + "today.txt";
 		else {
 			path = path+month+"/"+date+".txt";
 		}
-		data = ffs.readFileSync(path);
+		try {
+			data = fs.readFileSync(path);
+		}
+		catch (e) {
+			this.errorReply("Error: Invalid Date, or logs for that date do not exist.");
+		}
 		try {
 			uploadToHastebin(data, function (r, link) {
 				link = "https://hastebin.com/raw/"+link.split('/')[link.split('/').length-1];
