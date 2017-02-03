@@ -2378,11 +2378,41 @@ exports.commands = {
 			path = path+month+"/"+date+".txt";
 		}
 		try {
-			data = fs.readFileSync(path);
+			data = fs.readFileSync(path).toString().split('\n');
 		}
 		catch (e) {
 			return this.errorReply("Error: Invalid Date, or logs for that date do not exist.");
 		}
+		data.map(function (line) {
+			if(line.includes('|c|')) {
+				let timestamp = line.split('|c|')[0].trim(), mes = line.split('|c|')[1];
+				if(line.split('|c|').length > 2) {
+					for(let i=2; i<line.split('|c|').length; i++) {
+						mes = mes + line.split('|c|')[i];
+					}
+				}
+				return `[${timestamp}] ${mes.replace('|',': ')}`;
+			}
+			else if(line.includes('|j|')) {
+				let timestamp = line.split('|j|')[0].trim(), user = line.split('|j|')[1];
+				if(line.split('|j|').length > 2) {
+					for(let i=2; i<line.split('|j|').length; i++) {
+						user = user + line.split('|j|')[i];
+					}
+				}
+				return `(${timestamp}) ${user} joined`;
+			}
+			else if(line.includes('|l|')) {
+				let timestamp = line.split('|l|')[0].trim(), user = line.split('|l|')[1];
+				if(line.split('|l|').length > 2) {
+					for(let i=2; i<line.split('|l|').length; i++) {
+						user = user + line.split('|l|')[i];
+					}
+				}
+				return `(${timestamp}) ${user} left`;
+			}
+			return line;
+		});
 		try {
 			uploadToHastebin(data, function (r, link) {
 				link = "https://hastebin.com/raw/"+link.split('/')[link.split('/').length-1];
