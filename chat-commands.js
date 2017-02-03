@@ -2347,7 +2347,7 @@ exports.commands = {
 	
 	pingall: function (target, room, user, connection) {
 		if(!this.can("broadcast")) return;
-		if(Object.keys(this.room.users).length < 3) return this.errorReply("This room doesn't have enough users to use pingall.");
+		if(Object.keys(this.room.users).length < 3) return this.errorReply("This room doesn't have enough users.");
 		let users = Object.values(this.room.users).map(function(user) {
 			return user.name;
 		}.bind(this)).join(', ');
