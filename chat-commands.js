@@ -2347,8 +2347,8 @@ exports.commands = {
 	
 	//Roomlog code by Spandan
 	roomlog: function (target, room, user, connection) {
-		if(!this.can("globalvoice")) return this.errorReply("Error: Access Denied.");
-		if(!target || target === "") return this.errorReply("Error: Please give a parameter.");
+		if(!this.can("globalvoice")) return;
+		if(!target || target === "") return this.errorReply("Error: Please provide a parameter.");
 		let date = target.trim(), month = date.substring(0,7);
 		let uploadToHastebin = function (toUpload, callback) {
 			var reqOpts = {
