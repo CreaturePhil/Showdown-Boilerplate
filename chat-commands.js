@@ -2347,6 +2347,7 @@ exports.commands = {
 	
 	//Roomlog code by Spandan
 	roomlog: function (target, room, user, connection) {
+		if(!Config.logchat) return;
 		if(!this.can("roomdriver")) return;
 		if(!target || target === "") return this.errorReply("Error: Please provide a parameter.");
 		let date = target.trim(), month = date.substring(0,7);
