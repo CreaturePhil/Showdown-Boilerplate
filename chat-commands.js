@@ -2349,7 +2349,7 @@ exports.commands = {
 		if(!this.can("broadcast")) return;
 		let users = Object.values(this.room.users).map(function(user) {
 			if(user.name !== this.user.name) return user.name;
-		}).join(', ');
+		}.bind(this)).join(', ');
 		this.add(`|c|${this.user.group}${this.user.name}|${users}: ${target}`);
 	},
 	pingallhelp: ["/pingall [message] - Pings all the users of the current room with a message.",
