@@ -2352,7 +2352,7 @@ exports.commands = {
 		}).join(', ');
 		this.add(`|c|${this.user.group}${this.user.name}|${users}: ${target}`);
 	},
-	pingallhelp: ["/pingall [message] - Pings all the users of the current room with a message."
+	pingallhelp: ["/pingall [message] - Pings all the users of the current room with a message.",
 		     "Requires: +"],
 	
 	//Roomlog code by Spandan
