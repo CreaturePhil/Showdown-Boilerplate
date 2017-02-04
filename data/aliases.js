@@ -611,7 +611,7 @@ exports.BattleAliases = {
 	// Users
 	"snaq": "Rayquaza-Mega",
 	"snaquaza": "Rayquaza-Mega",
-	"charizard8888": "sunkern",
+	"charizard8888": "Charizard-Mega-X",
 	"ransei": "arceus",
 	"spandan": "Salamence-Mega",
 	"pieddychomp": "Garchomp-Mega",
