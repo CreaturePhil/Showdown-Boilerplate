@@ -3273,7 +3273,7 @@ exports.Formats = [
 		ruleset: ['[Gen 7] OU'],
 		mod: 'automagic',
 		onAfterSecondaryEffect: function(target, source, move) {
-			if(move.secondary.status === target.status || target.volatiles[move.secondary.volatileStatus]) return;
+			if(move.secondaries.status === target.status || target.volatiles[move.secondaries.volatileStatus]) return;
 			let flag = true, moreSetup = ['bellydrum'], isDead = target.hp === undefined || target.hp <= 0;
 			if(!source.types.includes("Ghost")) moreSetup.push("curse");
 			if(move.secondary.volatileStatus || move.secondary.status) flag = flag && !target.moveThisTurn && !isDead;
