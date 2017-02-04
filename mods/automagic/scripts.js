@@ -201,7 +201,13 @@ exports.BattleScripts = {
 						if(moveData.secondary.volatileStatus) flag = !(moveData.secondary.volatileStatus in target.volatiles);
 						if(moveData.secondary.volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
 						this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);//This line isnt modified
-						if(flag && !(target.hp === undefined || target.hp <= 0)) 
+						if(moveData.secondary.self && moveData.secondary.self.boosts) {
+							Object.keys(moveData.secondary.self.boosts).forEach(boost => {
+								if(pokemon.boosts[boost] === 6) flag = false;
+							});
+						}
+						else flag = flag && !(target.hp === undefined || target.hp <= 0);
+						if(flag) 
 							this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);
 						// mod for automagic end
 					}
