@@ -3274,13 +3274,12 @@ exports.Formats = [
 		mod: 'automagic',
 		onAfterSecondaryEffect: function(target, source, move) {
 			if(move.secondary.status === target.status || target.volatiles[move.secondary.volatileStatus]) return;
+			let flag = true, moreSetup = ['bellydrum'], isDead = target.hp === undefined || target.hp <= 0;
+			if(!source.types.includes("Ghost")) moreSetup.push("curse");
+			if(move.secondary.volatileStatus || move.secondary.status) flag = flag && !target.moveThisTurn && !isDead;
+			if(move.secondary.volatileStatus === 'flinch') flag = flag && !!target.activeTurns;
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
-				let isDead = target.hp === undefined || target.hp <= 0;
-				let flag = true, moreSetup = ['bellydrum'];
-				if(!source.types.includes("Ghost")) moreSetup.push("curse");
-				if(move.secondary.volatileStatus || move.secondary.status) flag = flag && !target.moveThisTurn && !isDead;
-				if(move.secondary.volatileStatus === 'flinch') flag = flag && target.activeTurns;
 				if((moreSetup.includes(move.id) || (move.category === "Status" && move.boosts && move.target === "self")) && flag) {
 					this.useMove(move, source);
 					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
