@@ -197,11 +197,12 @@ exports.BattleScripts = {
 					if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
 						//mod for automagic start
 						let flag = true;
-						if(secondaries.status) flag = secondaries.status !== target.status;
-						if(secondaries.volatileStatus) flag = !(secondaries.volatileStatus in target.volatiles);
-						if(secondaries.volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
+						if(moveData.secondary.status) flag = moveData.secondary.status !== target.status;
+						if(moveData.secondary.volatileStatus) flag = !(moveData.secondary.volatileStatus in target.volatiles);
+						if(moveData.secondary.volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
 						this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);//This line isnt modified
-						if(flag && !(target.hp === undefined || target.hp <= 0)) this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);
+						if(flag && !(target.hp === undefined || target.hp <= 0)) 
+							this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);
 						// mod for automagic end
 					}
 				}
