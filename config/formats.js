@@ -5323,6 +5323,65 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
+		name: "[Gen 2] Traps",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
+		],
+
+		mod: 'gen2',
+		ruleset: ['[Gen 2] OU'],
+		onBegin: function () {
+			this.arenaTrap = ['Diglett', 'Dugtrio'];
+			this.magnetPull = ['Magnemite', 'Magneton'];
+		},
+		onFoeTrapPokemon: function (pokemon) {
+			if(this.arenaTrap.includes(this.effectData.target.species)) {
+				if (!this.isAdjacent(pokemon, this.effectData.target)) return;
+				if (pokemon.isGrounded() && !this.arenaTrap.includes(pokemon.species)) {
+					pokemon.tryTrap(true);
+				}
+				return;
+			}
+			if(this.magnetPull.includes(this.effectData.target.species)) {
+				if (pokemon.hasType('Steel') && this.isAdjacent(pokemon, this.effectData.target)) {
+					pokemon.tryTrap(true);
+				}
+				return;
+			}
+			if(this.effectData.target.species === 'Wobbuffet') {
+				if (pokemon.species !== 'Wobbuffet' && this.isAdjacent(pokemon, this.effectData.target)) {
+					pokemon.tryTrap(true);
+				}
+				return;
+			}
+		},
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if(this.arenaTrap.includes(source.species)) {
+				if (!this.isAdjacent(pokemon, source)) return;
+				if (pokemon.isGrounded(!pokemon.knownType)) { // Negate immunity if the type is unknown
+					pokemon.maybeTrapped = true;
+				}
+				return;
+			}
+			if(this.magnetPull.includes(source.species)) {
+				if (!this.isAdjacent(pokemon, source)) return;
+				if (pokemon.isGrounded(!pokemon.knownType) && !this.arenaTrap.includes(pokemon.species)) { // Negate immunity if the type is unknown
+					pokemon.maybeTrapped = true;
+				}
+				return;
+			}
+			if(source.species === 'Wobbuffet') {
+				if (pokemon.species !== 'Wobbuffet' && this.isAdjacent(pokemon, source)) {
+					pokemon.maybeTrapped = true;
+				}
+				return;
+			}
+			
+		},
+	},
+	{
 		name: "[Gen 1] OU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
