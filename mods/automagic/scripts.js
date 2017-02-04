@@ -195,10 +195,13 @@ exports.BattleScripts = {
 				for (let i = 0; i < secondaries.length; i++) {
 					secondaryRoll = this.random(100);
 					if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
-						this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
-						//mod for setup++ start
-						this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);
-						// mod for setup++ end
+						//mod for automagic start
+						let flag = secondaries.status !== target.status && !target.volatiles[secondaries.volatileStatus];
+						if(move.secondary.volatileStatus || move.secondary.status) flag = flag && !target.moveThisTurn && !(target.hp === undefined || target.hp <= 0);
+						if(secondaries.volatileStatus === 'flinch') flag = flag && target.activeTurns;
+						this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);//This line isnt modified
+						if(flag) this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);
+						// mod for automagic end
 					}
 				}
 			}
