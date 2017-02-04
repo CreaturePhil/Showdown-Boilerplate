@@ -4068,6 +4068,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			this.add('-anim', target, move.baseMove, source);
 		},
 	},
+	{
+		name: "[Gen 7] Z-Moves Everywhere",
+		desc: ["&bullet; <a href=http://www.smogon.com/forums/threads/z-moves-everywhere-slate-4-ninetales-torkoal-groudon-submissions-phase-extended.3592186/>Z-Moves Everywhere</a>"],
+		ruleset: ['[Gen 7] Ubers'],
+		mod: 'zmoveseverywhere',
+	},
 	
 	{
 		name: "[Gen 7] Full Potential",
