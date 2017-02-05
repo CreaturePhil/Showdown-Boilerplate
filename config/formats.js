@@ -5523,6 +5523,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		mod: 'fakemon',
 		team: 'randomFotW',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod' , 'Freeze Clause Mod'],
-		fotw: "Solsprite",
+		fotw: "Sostormo",
 	},
 ];
