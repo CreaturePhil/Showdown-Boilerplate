@@ -13,4 +13,16 @@ exports.BattlePokedex = {
 	      	color: "Red",
 	      	eggGroups: ["Field"],
     	},
+	sostormo: {
+	      	num: 999,
+	      	species: "Sostormo",
+	      	types: ["Rock", "Flying"],
+		genderRatio: {M: 0.5, F: 0.5},
+		baseStats: {hp: 119, atk: 92, def: 138, spa: 56, spd: 74, spe: 22},
+	      	abilities: {0: "Mold Breaker"},
+	      	heightm: 100,
+	      	weightkg: 100,
+	      	color: "Red",
+	      	eggGroups: ["Field"],
+    	},
 };
