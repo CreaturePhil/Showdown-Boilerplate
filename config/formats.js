@@ -5329,57 +5329,26 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
 		],
 
-		mod: 'gen2',
+		mod: 'traps',
 		ruleset: ['[Gen 2] OU'],
 		onBegin: function () {
-			this.arenaTrap = ['Diglett', 'Dugtrio'];
-			this.magnetPull = ['Magnemite', 'Magneton'];
+			this.arenaTrap = ['diglett', 'dugtrio'];
+			this.magnetPull = ['magnemite', 'magneton'];
 		},
-		onFoeTrapPokemon: function (pokemon) {
-			if(this.arenaTrap.includes(this.effectData.target.species)) {
-				if (!this.isAdjacent(pokemon, this.effectData.target)) return;
-				if (pokemon.isGrounded() && !this.arenaTrap.includes(pokemon.species)) {
-					pokemon.tryTrap(true);
-				}
+		onSwitchIn: function(pokemon) {
+			if(this.arenaTrap.includes(toId(pokemon.species))) {
+				pokemon.addVolatile('arenatrap');
 				return;
 			}
-			if(this.magnetPull.includes(this.effectData.target.species)) {
-				if (pokemon.hasType('Steel') && this.isAdjacent(pokemon, this.effectData.target)) {
-					pokemon.tryTrap(true);
-				}
+			if(this.shadowTag.includes(toId(pokemon.species))) {
+				pokemon.addVolatile('arenatrap');
 				return;
 			}
-			if(this.effectData.target.species === 'Wobbuffet') {
-				if (pokemon.species !== 'Wobbuffet' && this.isAdjacent(pokemon, this.effectData.target)) {
-					pokemon.tryTrap(true);
-				}
+			if(pokemon.species === 'Wobbuffet') {
+				pokemon.addVolatile('shadowtag');
 				return;
 			}
-		},
-		onFoeMaybeTrapPokemon: function (pokemon, source) {
-			if (!source) source = this.effectData.target;
-			if(this.arenaTrap.includes(source.species)) {
-				if (!this.isAdjacent(pokemon, source)) return;
-				if (pokemon.isGrounded(!pokemon.knownType)) { // Negate immunity if the type is unknown
-					pokemon.maybeTrapped = true;
-				}
-				return;
-			}
-			if(this.magnetPull.includes(source.species)) {
-				if (!this.isAdjacent(pokemon, source)) return;
-				if (pokemon.isGrounded(!pokemon.knownType) && !this.arenaTrap.includes(pokemon.species)) { // Negate immunity if the type is unknown
-					pokemon.maybeTrapped = true;
-				}
-				return;
-			}
-			if(source.species === 'Wobbuffet') {
-				if (pokemon.species !== 'Wobbuffet' && this.isAdjacent(pokemon, source)) {
-					pokemon.maybeTrapped = true;
-				}
-				return;
-			}
-			
-		},
+		}
 	},
 	{
 		name: "[Gen 1] OU",

@@ -1,6 +1,53 @@
 'use strict';
 
 exports.BattleStatuses = {
+	magnetpull: {
+		noCopy: true,
+		effectType: 'Ability',
+		onFoeTrapPokemon: function (pokemon) {
+			if (pokemon.hasType('Steel') && this.isAdjacent(pokemon, this.effectData.target)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if ((!pokemon.knownType || pokemon.hasType('Steel')) && this.isAdjacent(pokemon, source)) {
+				pokemon.maybeTrapped = true;
+			}
+		},
+	},
+	shadowtag: {
+		noCopy: true,
+		effectType: 'Ability',
+		onFoeTrapPokemon: function (pokemon) {
+			if (pokemon.species !== 'Wobbuffet' && this.isAdjacent(pokemon, this.effectData.target)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if (pokemon.species !== 'Wobbuffet' && this.isAdjacent(pokemon, source)) {
+				pokemon.maybeTrapped = true;
+			}
+		},
+	},
+	arenatrap: {
+		noCopy: true,
+		effectType: 'Ability',
+		onFoeTrapPokemon: function (pokemon) {
+			if (!this.isAdjacent(pokemon, this.effectData.target)) return;
+			if (pokemon.isGrounded() && !this.arenaTrap.includes(pokemon.species)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if (!this.isAdjacent(pokemon, source)) return;
+			if (pokemon.isGrounded(!pokemon.knownType)) { // Negate immunity if the type is unknown
+				pokemon.maybeTrapped = true;
+			}
+		}
+	},
 	brn: {
 		effectType: 'Status',
 		onStart: function (target, source, sourceEffect) {
