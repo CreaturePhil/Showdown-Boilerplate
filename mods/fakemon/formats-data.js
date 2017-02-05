@@ -5,4 +5,8 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["calmmind", "lavaplume", "moonblast", "morningsun"],
 		tier: "New",
 	},
+	sostormo: {
+		randomBattleMoves: ["swordsdance", "machpunch", "drainpunch", "stoneedge"],
+		tier: "New",
+	},
 };
