@@ -112,6 +112,7 @@ if (typeof demFeels.extendEmotes === 'function') {
 		'wowwy':'https://media.giphy.com/media/RfprItHPpSCf6/giphy.gif',
 		'feelszard':'http://i.imgur.com/SSJoM7P.gif',
 		'<3':'http://cliparts.co/cliparts/Rkc/M7K/RkcM7KXTj.png',
+		'feelsshivam':'http://i.imgur.com/jTTPtyW.jpg?1',
 	});
 }
 
