@@ -207,6 +207,33 @@ exports.BattleScripts = {
 							});
 						}
 						else flag = flag && !(target.hp === undefined || target.hp <= 0);
+						if(moveData.target === 'Normal' && moveData.secondary.boosts) {
+							let cantLower = {
+								'atk': ['hypercutter', 'clearbody', 'fullmetalbody', 'whitesmoke'],
+								'def': ['bigpecks', 'clearbody', 'fullmetalbody', 'whitesmoke'],
+								'spa': ['clearbody', 'fullmetalbody', 'whitesmoke'],
+								'spd': ['clearbody', 'fullmetalbody', 'whitesmoke'],
+								'spe': ['clearbody', 'fullmetalbody', 'whitesmoke'],
+								'accuracy': ['keeneye', 'clearbody', 'fullmetalbody', 'whitesmoke'],
+							}
+							for(let k in moveData.secondary.boosts) {
+								if(target.boosts[k] === -6) {
+									flag = false;
+									continue;
+								}
+								if (moveData.secondary.boosts[k]<0) {
+									for(let j = 0; j<cantLower[k].length; j++) {
+										if(target.hasAbility(cantLower[k][j])) {
+											flag = false;
+											break;
+										}
+									}
+								}
+							}
+						}
+						if(target.hasAbility('shielddust') && !move.ignoreAbility) {
+							flag = false;
+						}
 						if(flag) 
 							this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);
 						// mod for automagic end
