@@ -2248,7 +2248,7 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "Classic Hackmons",
+		name: "[Gen 7] Classic Hackmons",
 		section: "Other Metagames",
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		maxLevel: 100,
@@ -2375,388 +2375,15 @@ exports.Formats = [
 		banlist: ['Kangaskhanite', 'Perish Song'],
 	},
 	{
-		name: "Meta Man",
-		desc: [
-			"When a Pokemon faints, the opposing Pokemon replaces its current ability with the fainted Pokemon's and gains its last-used move in a new slot (for up to 9 total moves). These changes last the entire match. If a Pokemon faints before using a move during the match, no move is gained by the opponent.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/meta-man.3565966/\">Meta Man</a>",
-		],
-		section: "Other Metagames",
-		mod: "metaman",
-		ruleset: ['OU'],
-		onFaint: function(pokemon)
-		{
-			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
-			pokemon.side.foe.pokemon[0].setAbility(pokemon.ability);
-			pokemon.side.foe.pokemon[0].baseAbility = pokemon.ability;
-			let lastMove = pokemon.lastM;
-			let has
-			if(pokemon.side.foe.pokemon[0].moveset.length<=9 && lastMove && !pokemon.side.foe.pokemon[0].hasMove(lastMove.id))
-			{
-				pokemon.side.foe.pokemon[0].moveset.push(lastMove);
-				pokemon.side.foe.pokemon[0].baseMoveset.push(lastMove);
-				this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
-			}
-		},
-	},
-	{
-	    name: "Top Percentage",
-	    section: "Other Metagames",
-	    mod: 'toppercentage',
-	    desc:["&lt; <a href=\"http://www.smogon.com/forums/threads/top-percentage.3564459/\">Top Percentage</a>"],
-	    ruleset: ['OU'],
-	    onBegin: function() {
-			this.add("raw|Welcome to Top Percentage! The first Player to deal 400% damage wins! HAHAHAH!");
-		for (var i = 0; i < this.sides.length; i++) {
-		    this.sides[i].metaCount = 400;
-		}
-	    },
-	    onDamage: function(damage, target) {
-		//only should work if does not make target faint
-		let percentage = 100 * damage / target.maxhp;
-		if (damage >= target.hp) {
-		    percentage = 100 * target.hp / target.maxhp;
-		}
-		target.side.metaCount -= percentage;
-		this.add('-message', target.side.name+" has " + Math.round(target.side.metaCount) + "% left!");
-		if (target.side.metaCount <= 0.1) {
-		    //note: making this 0.1 because I got 1.10 times 10^-15 once
-		    //something silly with rounding
-		    //this works well enough
-	            this.add('-message', target.side.foe.name+" has dealt 400% damage!");
-		    this.win(target.side.foe);
-		}
-	    }
-
-	},
-	{
-        name: "Move Equality",
-	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-equality-playable-whirlpool-fire-spin-infestation-sand-tomb-are-now-banned-see-post-193.3539145/\">Move Equality</a>"],
-        section: "Other Metagames",
-        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Metagrossite', 'Landorus', 'Mud Slap', 'Keldeo'],
-        onModifyMove: function (move, pokemon) {
-            //Account for all moves affected by minimize, terrains/weathers, or two-turn moves (besides earthquake and dragon rush as they're already 100 BP)
-            var forbid = ['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'phantomforce', 'shadowforce'];
-            if (!move.priority && !move.basePowerCallback && !move.onBasePower && move.basePower && move.category !== 'Status' && forbid.indexOf(move.id) === -1) move.basePower = 100;
-            if (!move.priority && move.multihit) {
-                if (typeof(move.multihit) === 'number') {
-                    move.basePower = 100/move.multihit;
-                } else {
-                    move.basePower = 100/move.multihit[1];
-                }
-            }
-            if (move.type === 'Flying' && move.category !== 'Status') move.basePower = 100;
-        }
-    },
-	{
-        name: "Move Equality 1v1",
-	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-equality-playable-whirlpool-fire-spin-infestation-sand-tomb-are-now-banned-see-post-193.3539145/\">Move Equality</a>"],
-        section: "Other Metagames",
-        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Metagrossite', 'Landorus', 'Mud Slap', 'Keldeo'],
-        onModifyMove: function (move, pokemon) {
-            //Account for all moves affected by minimize, terrains/weathers, or two-turn moves (besides earthquake and dragon rush as they're already 100 BP)
-            var forbid = ['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'phantomforce', 'shadowforce'];
-            if (!move.priority && !move.basePowerCallback && !move.onBasePower && move.basePower && move.category !== 'Status' && forbid.indexOf(move.id) === -1) move.basePower = 100;
-            if (!move.priority && move.multihit) {
-                if (typeof(move.multihit) === 'number') {
-                    move.basePower = 100/move.multihit;
-                } else {
-                    move.basePower = 100/move.multihit[1];
-                }
-            }
-            if (move.type === 'Flying' && move.category !== 'Status') move.basePower = 100;
-        },
-        validateTeam: function (team, format) {
-            if (team.length > 3) return ['You may only bring up to three Pokémon.'];
-        },
-        onBegin: function () {
-            this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-            this.p1.pokemonLeft = this.p1.pokemon.length;
-            this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-            this.p2.pokemonLeft = this.p2.pokemon.length;
-        }
-    },
-	{
-        name: "Mega Mania",
-	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mega-mania-playable-on-aqua.3525444/\">Mega Mania</a>"],
-        section: "Other Metagames",
-
-        mod: "megamania",
-        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Mega Mania'],
-        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Regigigas', 'Slaking', 'Ignore Illegal Abilities']
-    },
-	{
-  name: "Technician Tower",
-  desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/technician-tower-2-0-now-playable-on-the-aqua-server.3521635/\">Technician Tower</a>"],
-  section: "Other Metagames",
-
-  mod:'technichiantower',
-  ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-  banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Technician', 'Skill Link'],
-  validateSet: function(set) {
-    for (var i in set.moves) {
-      var move = this.getMove(string(set.moves[i]));
-        if (move.basePower && move.basePower >= 90) return ['The move ' + move.name + ' is banned because it has >90 Base Power.'];
-        if (move.id === 'frustration' && set.happiness < 105) return ['The move Frustration is banned because Pokemon ' + (set.name || set.species) + ' has less than 105 happiness'];
-        if (move.id === 'return' && set.happiness > 150) return ['The move Return is banned because Pokemon ' + (set.name || set.species) + 'has more than 150 happiness'];
-        if (move.basePowerCallback && !(move.id in {'frustration':1,'return':1})) return ['The move ' + move.name + ' is banned because it has a variable BP'];
-        if (move.basePower && move.basePower > 63 && set.ability in {'Pixilate':1,'Aerilate':1,'Refrigerate':1}) return ['The move ' + move.name + ' is banned for Pokemon with an -ate ability.']
-      }
-    },
-    onBasePowerPriority: 8,
-    onBasePower: function (basePower, attacker, defender, move) {
-       if (basePower <= 60) {
-         this.debug('Technician boost');
-         return this.chainModify(1.5);
-       }
-   },
-},
-	    {
-        name: "Immunimons",
-	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/immunimons.3516996/\">Immunimons</a>"],
-        section: "Other Metagames",
-
-        ruleset: ['OU'],
-        banlist: [],
-        onTryHit: function (target, source, move) {
-            if (target === source || move.type === '???' || move.id === 'struggle') return;
-            if (target.hasType(move.type)) {
-                this.add('-debug','immunimons immunity [' + move.id + ']');
-                return null;
-            }
-        },
-        onDamage: function (damage, target, source, effect) {
-            if ((source.hasType('Rock') && effect.id === 'stealthrock') || (source.hasType('Ground') && effect.id === 'spikes')) {
-                this.add('-debug','immunimons immunity [' + effect.id + ']');
-                return false;
-            }
-        },
-    },
-	 {
-        name: "Acid Rain",
-	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/acid-rain.3518506/\">Acid Rain</a>"],
-        section: "Other Metagames",
-
-        mod: 'acidrain',
-        onBegin: function() {
-            this.setWeather('raindance');
-            delete this.weatherData.duration;
-            this.add('-message', "Eh, close enough.");
-        },
-        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Weather Ball', 'Castform']
-    },
-
-
-    	{
-		name: "Cross Evolution",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
-		section: "Other Metagames",
-
-		ruleset: ['Ubers', 'Baton Pass Clause'],
-		banlist: ['Rule:nicknameclause'],
-		onValidateTeam: function (team) {
-			let nameTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let name = team[i].name;
-				if (name) {
-					if (nameTable[name]) {
-						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
-					}
-					nameTable[name] = true;
-				}
-			}
-		},
-		validateSet: function (set, teamHas) {
-			let crossTemplate = this.tools.getTemplate(set.name);
-			if (!crossTemplate.exists) return this.validateSet(set, teamHas);
-			let template = this.tools.getTemplate(set.species);
-			if (!template.exists) return ["The Pokemon '" + set.species + "' does not exist."];
-			if (!template.evos.length) return ["" + template.species + " cannot cross evolve because it doesn't evolve."];
-			if (crossTemplate.species == 'Shedinja') return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it is banned."];
-			if (crossTemplate.battleOnly || !crossTemplate.prevo) return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it isn't an evolution."];
-			let crossPrevoTemplate = this.tools.getTemplate(crossTemplate.prevo);
-			if (!crossPrevoTemplate.prevo !== !template.prevo) return ["" + template.species + " cannot cross into " + crossTemplate.species + " because they are not consecutive evolutionary stages."];
-
-			// Make sure no stat is too high/low to cross evolve to
-			let stats = {'hp': 'HP', 'atk': 'Attack', 'def': 'Defense', 'spa': 'Special Attack', 'spd': 'Special Defense', 'spe': 'Speed'};
-			for (let statid in template.baseStats) {
-				let evoStat = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
-				if (evoStat < 1) {
-					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too low."];
-				} else if (evoStat > 255) {
-					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too high."];
-				}
-			}
-
-			let mixedTemplate = Object.assign({}, template);
-			// Ability test
-			let ability = this.tools.getAbility(set.ability);
-			if (ability.name !== 'Huge Power' && ability.name !== 'Pure Power' && ability.name !== 'Shadow Tag') mixedTemplate.abilities = crossTemplate.abilities;
-
-			mixedTemplate.learnset = Object.assign({}, template.learnset);
-			let newMoves = 0;
-			for (let i in set.moves) {
-				let move = toId(set.moves[i]);
-				if (!this.checkLearnset(move, template)) continue;
-				if (this.checkLearnset(move, crossTemplate)) continue;
-				if (++newMoves > 2) continue;
-				mixedTemplate.learnset[move] = ['6T'];
-			}
-			return this.validateSet(set, teamHas, mixedTemplate);
-		},
-		onBegin: function () {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-                                if (pokemon.set.name === pokemon.set.species) continue;
-				let crossTemplate = this.getTemplate(pokemon.name);
-				if (!crossTemplate.exists) continue;
-				try {
-				let template = pokemon.baseTemplate;
-				let crossPrevoTemplate = this.getTemplate(crossTemplate.prevo);
-				let mixedTemplate = Object.assign({}, template);
-				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
-				mixedTemplate.weightkg = Math.max(0.1, template.weightkg + crossTemplate.weightkg - crossPrevoTemplate.weightkg);
-				mixedTemplate.nfe = false;
-
-				mixedTemplate.baseStats = {};
-				for (let statid in template.baseStats) {
-					mixedTemplate.baseStats[statid] = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
-				}
-				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
-
-				mixedTemplate.types = template.types.slice();
-				if (crossTemplate.types[0] !== crossPrevoTemplate.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
-				if (crossTemplate.types[1] !== crossPrevoTemplate.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
-				if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
-
-				pokemon.baseTemplate = mixedTemplate;
-				pokemon.formeChange(mixedTemplate);
-				pokemon.crossEvolved = true;
-				} catch (e) {
-					this.add('-hint', 'Failed to cross evolve ' + pokemon.baseTemplate.species + ' to ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
-				}
-			}
-		},
-		onSwitchInPriority: 1,
-		onSwitchIn: function (pokemon) {
-			if (pokemon.crossEvolved) {
-				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
-			}
-		},
-	},
-	{
-			name:"Partners in Crime",
-		        section: "Other Metagames",
-		        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/partners-in-crime.3559988/\">Partners in Crime</a>"],
-		        ruleset: ["Doubles OU"],
-		        mod: "pic",
-		        gameType:"doubles",
-		        banlist: ["Huge Power","Kangaskhanite", "Mawilite","Medichamite","Pure Power","Wonder Guard"],
-			onBegin: function()
-			{
-					for(let i=1;i<=2;i++)
-					{
-						for(let j=0;j<this["p"+i].pokemon.length;j++)
-						{
-							this["p"+i].pokemon[j].om = this["p"+i].pokemon[j].moveset;
-							this["p"+i].pokemon[j].obm = this["p"+i].pokemon[j].baseMoveset;
-						}
-					}
-			},
-		        onSwitchIn: function(pokemon)
-		        {
-		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
-		        	if(pokemon.isActive && this[side].pokemon[partner].isActive)
-		        	{
-		        		let partl = this[side].pokemon[partner].obm.length, pokl = pokemon.obm.length;
-		        		this[side].pokemon[partner].moveset = this[side].pokemon[partner].om.concat(pokemon.om);
-		        		this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm.concat(pokemon.obm);
-		        		pokemon.moveset = pokemon.om.concat(this[side].pokemon[partner].om);
-		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
-					for(let i=0;i<this[side].pokemon[partner].moveset.length;i++)
-					{
-						if(!this[side].pokemon[partner].volatiles.choicelock)
-						{
-							this[side].pokemon[partner].moveset[i].disabled=false;
-							this[side].pokemon[partner].moveset[i].disabledSource = '';
-							this[side].pokemon[partner].baseMoveset[i].disabled=false;
-							this[side].pokemon[partner].baseMoveset[i].disabledSource = '';
-						}
-					}
-					for(let i=0;i<pokemon.moveset.length;i++)
-					{
-						if(!pokemon.volatiles.choicelock)
-						{
-							pokemon.moveset[i].disabled=false;
-							pokemon.moveset[i].disabledSource = '';
-							pokemon.baseMoveset[i].disabled=false;
-							pokemon.baseMoveset[i].disabledSource = '';
-						}
-					}
-		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
-		        		{
-		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
-		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
-		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
-		        		}
-		        		if(Object.keys(pokemon.volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
-		        		{
-		        			if(pokemon.innate) pokemon.removeVolatile(pokemon.innate);
-		        			pokemon.innate = toId(this[side].pokemon[partner].ability);
-		        			pokemon.addVolatile(pokemon.innate);
-		        		}
-		        	}
-		        },
-		        onAfterMega: function(pokemon)
-		        {
-		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
-		        	if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
-		        	{
-		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
-		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
-		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
-		        	}
-		        },
-		        onFaint: function(pokemon)
-		        {
-		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
-		        	if(this[side].pokemon[partner].isActive)
-		        	{
-		        		this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate)
-		        		delete this[side].pokemon[partner].innate;
-		        	}
-		        	this[side].pokemon[partner].moveset = this[side].pokemon[partner].om;
-		        	this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm;
-		        },
-		},
-	{
-		name: "Averagemons",
-		desc: [
-			"Every Pok&eacute;mon has a stat spread of 100/100/100/100/100/100.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a>",
-		],
-		section: "Other Metagames",
-
-
-		mod: 'averagemons',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Smeargle', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Sableye + Prankster',
-			'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Light Ball', 'Soul Dew', 'Thick Club', 'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Chatter',
-		],
-	},
-	{
-		name: "Hidden Type",
+		name: "[Gen 7] Hidden Type",
 		desc: [
 			"Pok&eacute;mon have an added type determined by their IVs. Same as the Hidden Power type.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3591194/\">Hidden Type</a>",
 		],
 
-
+		searchShow: false,
 		mod: 'hiddentype',
-		ruleset: ['OU'],
+		ruleset: ['[Gen 7] OU'],
 	},
 	{
 		name: "OU Theorymon",
@@ -2774,104 +2401,107 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber'],
 	},
+
 	{
-		section: "Old OMotMs",
-		column: 3,
+        	name: "Anti-Vaxxers",
+		desc: ["All type-based immunities cease to apply."],
+        	section: "New Other Metagames",
+        	column: 3,
+        	mod: "antivaxxers",
+        	ruleset: ["OU"],
 	},
+	
 	{
-		name: "Follow The Leader",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3565685/\">Follow The Leader</a>"],
-		section: "Old OMotMs",
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew',
-			'Arena Trap', 'Gale Wings', 'Huge Power', 'Imposter', 'Pure Power', 'Shadow Tag', 'Chatter',
-		],
-		validateSet: function (set, teamHas) {
-			let species = toId(set.species);
-			let template = this.tools.getTemplate(species);
-			if (!template.exists || template.isNonstandard) return ["" + set.species + " is not a real Pok\u00E9mon."];
-			if (template.battleOnly) template = this.tools.getTemplate(template.baseSpecies);
-			if (this.tools.getBanlistTable(this.format)[template.id] || template.tier in {'Uber': 1, 'Unreleased': 1} && template.species !== 'Aegislash') {
-				return ["" + template.species + " is banned by Follow The Leader."];
-			}
-
-			if (!teamHas.donorTemplate) teamHas.donorTemplate = template;
-			let name = set.name;
-			if (name === set.species) delete set.name;
-			set.species = teamHas.donorTemplate.species;
-			let problems = this.validateSet(set, teamHas, teamHas.donorTemplate);
-
-			set.species = template.species;
-			set.name = (name === set.species ? "" : name);
-
-			return problems;
+		name: "[Gen 7] Automagic",
+		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
+		ruleset: ['[Gen 7] OU'],
+		mod: 'automagic',
+		onAfterSecondaryEffect: function(target, source, move) {
+			let moreSetup = ['bellydrum'];
+			if(!source.types.includes("Ghost")) moreSetup.push("curse");
+			source.baseMoveset.forEach(curmove => {
+				let move = this.getMove(curmove.id);
+				if(moreSetup.includes(move.id) || (move.category === "Status" && move.boosts && move.target === "self")) {
+					this.useMove(move, source);
+					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
+				}
+			});
+		},
+		onAfterMove: function (source, target, move) {
+			if(move.id !== "genesissupernova") return;
+			source.baseMoveset.forEach(curmove => {
+				let move = this.getMove(curmove.id);
+				let isDead = target.hp === undefined || target.hp <= 0;
+				if((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") {
+					this.useMove(move, source);
+					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
+				}
+			});
 		},
 	},
-    	{
-        name: "Gifts of the Gods",
-        desc: [
-            "Each Pok&eacute;mon receives one base stat, depending on its position, from the Uber.",
-            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3579610/\">Gifts of the Gods</a>",
-        ],
-        section: "Old OMotMs",
-        column: 3,
-
-        ruleset: ['Ubers', 'Baton Pass Clause'],
-        banlist: ['Uber > 1', 'AG ++ Uber', 'Blissey', 'Chansey', 'Eviolite', 'Mawilite', 'Medichamite', 'Sablenite', 'Soul Dew', 'Huge Power', 'Pure Power', 'Shadow Tag'],
-        onBegin: function () {
-            let stats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-            for (let j = 0; j < this.sides.length; j++) {
-                // onBegin happens before Mega Rayquaza clause
-                let uber = this.sides[j].pokemon.find(pokemon => ['AG', 'Uber'].includes(this.getTemplate(pokemon.canMegaEvo || pokemon.baseTemplate).tier)) || this.sides[j].pokemon[0];
-                for (let i = 0, len = this.sides[j].pokemon.length; i < len; i++) {
-                    let pokemon = this.sides[j].pokemon[i];
-                    ["baseTemplate", "canMegaEvo"].forEach(key => {
-                        if (pokemon[key]) {
-                            let template = Object.assign({}, this.getTemplate(pokemon[key]));
-                            template.baseStats = Object.assign({}, template.baseStats);
-                            template.baseStats[stats[i]] = uber.baseTemplate.baseStats[stats[i]];
-                            pokemon[key] = template;
-                        }
-                    });
-                    pokemon.formeChange(pokemon.baseTemplate);
-                    if (i === 0 && !pokemon.template.maxHP) {
-                        pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
-                    }
-                }
-            }
-        },
-    	},
 	{
-   name: "Gods and Followers",
-	 desc: [
-		 "The Pok&eacute;mon in the first slot is the God; the Followers must share a type with the God. If the God Pok&eacute;mon faints, the Followers are inflicted with Curse.",
-		 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3545230/\">Gods and Followers</a>",
-	 ],
-   section: "Old OMotMs",
+			 name: "[Gen 7] Bad \'n Boosted",
+			 section: "New Other Metagames",
+			 desc: ["&bullet; All the stats of a pokemon which are 70 or below get doubled.<br>For example, Growlithe's stats are 55/70/45/70/50/60 in BnB they become 110/140/90/140/100/120<br><b>Banlist:</b>Eviolite, Huge Power, Pure Power"],
+			 mod: 'bnb',
+			 ruleset: ['[Gen 7] Ubers'],
+			 banlist: ['Eviolite', 'Huge Power', 'Pure Power']
+	 },
+    {
+       name: "[Gen 7] Pokebilities",
+       desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3588652/\">Pokebilities</a>: A Pokemon has all of its abilities active at the same time."],
+       mod: 'pokebilities',
+       ruleset: ["OU"],
+       onSwitchInPriority: 1,
+       onBegin: function() {
+         let statusability = {
+           "aerilate": true,
+           "aurabreak": true,
+           "flashfire": true,
+           "parentalbond": true,
+           "pixilate": true,
+           "refrigerate": true,
+           "sheerforce": true,
+           "slowstart": true,
+           "truant": true,
+           "unburden": true,
+           "zenmode": true
+         };
+         for (let p = 0; p < this.sides.length; p++) {
+           for (let i = 0; i < this.sides[p].pokemon.length; i++) {
+             let pokemon = this.sides[p].pokemon[i];
+             let template = this.getTemplate(pokemon.species);
+             this.sides[p].pokemon[i].innates = [];
+             let bans = this.data.Formats.gen7ou.banlist;
+             bans.push("Battle Bond");
+             for (let a in template.abilities) {
+               for (let k = 0; k < bans.length; k++) {
+                 if (toId(bans[k]) === toId(template.abilities[a])) continue;
+               }
 
-   mod: 'godsandfollowers',
-   ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Followers Clause', 'Cancel Mod'],
-   banlist: ['Illegal']
-},
+               if (toId(a) == 'h' && template.unreleasedHidden) continue;
+               if (toId(template.abilities[a]) == pokemon.ability) continue;
+               if (statusability[toId(template.abilities[a])])
+                 this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
+               else
+                 this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+             }
+           }
+         }
+       },
+       onSwitchIn: function(pokemon) {
+         for (let i = 0; i < pokemon.innates.length; i++) {
+           if (!pokemon.volatiles[pokemon.innates[i]])
+             pokemon.addVolatile(pokemon.innates[i]);
+         }
+       },
+       onAfterMega: function(pokemon) {
+         for (let i = 0; i < pokemon.innates.length; i++) {
+           pokemon.removeVolatile(pokemon.innates[i]);
+         }
+       },
+    },
 	{
-		name: "Haxmons",
-		section: "Old OMotMs",
-
-		ruleset: ['OU', 'Freeze Clause'],
-		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
-		onModifyMovePriority: -100,
-		onModifyMove: function (move) {
-			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
-			move.willCrit = true;
-			if (move.secondaries) {
-				for (var i = 0; i < move.secondaries.length; i++) {
-					move.secondaries[i].chance = 100;
-				}
-			}
-		}
-	},
-  {
 		name: "[Gen 7] Inheritance",
 		desc: [
 			"Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
@@ -3008,10 +2638,395 @@ exports.Formats = [
 			this.add('-start', pokemon, donorTemplate.species, '[silent]');
 		},
 	},
+	{
+		name: "[Gen 7] Lockdown",
+		desc: [
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3593815\">Lockdown</a>",
+			"At the end of Turn 6, battlefield changes become permanent.",
+		],
+		section: "New Other Metagames",
+		mod: 'lockdown',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Damp Rock', 'Heat Rock', 'Smooth Rock', 'Icy Rock', 'Terrain Extender'],
+		unbanlist: ['Genesect'],
+		onBegin: function() {
+			this.lockdownMoves = ['sunnyday', 'raindance', 'hail', 'sandstorm', 'magicroom', 'wonderroom', 'trickroom', 'gravity', 'electricterrain', 'mistyterrain', 'grassyterrain', 'psychicterrain', 'mudsport', 'watersport'];
+			this.lockdownHazards = ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb'];
+		},
+		onTryHitSide: function(target, source, move) {
+			if (this.lockdownHazards.indexOf(move.id) > -1 && this.turn > 6) return false;
+		},
+		onTryHitField: function(target, source, move) {
+			if (this.lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
+		},
+		onResidualOrder: 999,
+		onResidual: function () {
+			if(this.turn !== 6) return;
+			let pseudo = ['magicroom', 'wonderroom', 'trickroom', 'gravity', 'mudsport', 'watersport'];
+			this.add("-message", "The Lockdown has commenced! Battlefield changes are now permanent!");
+			if(this.weatherData.duration) this.weatherData.duration = 0;
+			if(this.terrainData.duration) this.terrainData.duration = 0;
+			for(let i in this.pseudoWeather) {
+				if(pseudo.includes(i)) {
+					this.pseudoWeather[i].duration = 0;
+				}
+			}
+		},
+	},
+	{
+		name: "Move Mastery",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-mastery.3590075/\">Move Mastery</a>"],
+		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+		banlist: ['Unreleased', 'Illegal'],
+		mod: 'gen7',
+		validateSet: function(set, teamHas) {
+			if (!this.validateSet(set, teamHas).length) return [];
+			let ability = this.tools.getAbility(set.ability);
+			let template = this.tools.getTemplate(set.species);
+			let movemasters = {
+				adaptability: [],
+				angerpoint: ["Frost Breath", "Storm Throw"],
+				anticipation: [],
+				aromaveil: ["Taunt", "Torment", "Encore", "Disable", "Heal Block", "Attract"],
+				battlearmor: ["Frost Breath", "Storm Throw"],
+				bigpecks: ["Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech"],
+				blaze: ["Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
+				bulletproof: ["Acid Spray", "Aura Sphere", "Barrage", "Beak Blast", "Bullet Seed", "Egg Bomb", "Electro Ball", "Energy Ball", "Focus Blast", "Gyro Ball", "Ice Ball", "Magnet Bomb", "Mist Ball", "Mud Bomb", "Octazooka", "Rock Wrecker", "Searing Shot", "Seed Bomb", "Shadow Ball", "Sludge Bomb", "Weather Ball", "Zap Cannon"],
+				chlorophyll: ["Sunny Day"],
+				clearbody: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
+				comatose: ["Hex", "Wake-Up Slap", "Sleep Talk", "Snore", "Uproar", "Rest"],
+				competitive: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
+				compoundeyes: [],
+				corrosion: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic"],
+				damp: ["Self-Destruct", "Explosion"],
+				dancer: ["Feather Dance", "Fiery Dance", "Dragon Dance", "Lunar Dance", "Petal Dance", "Revelation Dance", "Quiver Dance", "Swords Dance", "Teeter Dance"],
+				dazzling: ["Fake Out", "Extreme Speed", "Feint", "First Impression", "Accelerock", "Aqua Jet", "Baby-Doll Eyes", "Bullet Punch", "Ice Shard", "Ion Deluge", "Mach Punch", "Powder", "Quick Attack", "Shadow Sneak", "Sucker Punch", "Vacuum Wave", "Water Shuriken"],
+				defiant: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
+				dryskin: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool", "Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
+				filter: [],
+				flareboost: ["Beak Blast", "Blaze Kick", "Blue Flare", "Ember", "Fire Blast", "Fire Fang", "Fire Punch", "Flamethrower", "Flame Wheel", "Flare Blitz", "Fling", "Heat Wave", "Ice Burn", "Inferno", "Lava Plume", "Sacred Fire", "Scald", "Searing Shot", "Steam Eruption", "Tri Attack", "Will-O-Wisp"],
+				flashfire: ["Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create", "Will-O-Wisp"],
+				flowergift: ["Sunny Day"],
+				fluffy: ["Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
+				grasspelt: ["Grassy Terrain"],
+				harvest: ["Sunny Day"],
+				heatproof: ["Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
+				heavymetal: ["Autotomize", "Grass Knot", "Heat Crash", "Heavy Slam", "Low Kick", "Sky Drop"],
+				hypercutter: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento"],
+				icebody: ["Hail"],
+				immunity: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
+				infiltrator: ["Light Screen", "Reflect", "Safeguard", "Substitute"],
+				innerfocus: ["Air Slash", "Astonish", "Bite", "Bone Club", "Dark Pulse", "Dragon Rush", "Extrasensory", "Fake Out", "Fire Fang", "Fling", "Headbutt", "Heart Stamp", "Hyper Fang", "Ice Fang", "Icicle Crash", "Iron Head", "Needle Arm", "Rock Slide", "Rolling Kick", "Sky Attack", "Snore", "Steamroller", "Stomp", "Thunder Fang", "Twister", "Waterfall", "Zen Headbutt", "Zing Zap"],
+				insomnia: ["Dark Void", "Grass Whistle", "Hypnosis", "Lovely Kiss", "Relic Song", "Rest", "Sing", "Sleep Powder", "Spore", "Yawn"],
+				ironfist: ["Bullet Punch", "Comet Punch", "Dizzy Punch", "Drain Punch", "Dynamic Punch", "Fire Punch", "Focus Punch", "Hammer Arm", "Ice Hammer", "Ice Punch", "Mach Punch", "Mega Punch", "Meteor Mash", "Power-Up Punch", "Shadow Punch", "Sky Uppercut", "Thunder Punch"],
+				justified: ["Assurance", "Beat Up", "Bite", "Brutal Swing", "Crunch", "Dark Pulse", "Darkest Lariat", "Feint Attack", "Fling", "Foul Play", "Hyperspace Fury", "Knock Off", "Night Daze", "Night Slash", "Payback", "Power Trip", "Punishment", "Pursuit", "Snarl", "Sucker Punch", "Thief", "Throat Chop"],
+				keeneye: ["Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
+				levitate: ["Bone Club", "Bone Rush", "Bonemerang", "Bulldoze", "Dig", "Drill Run", "Earth Power", "Earthquake", "High Horsepower", "Land's Wrath", "Magnitude", "Mud Slap", "Mud Bomb", "Mud Shot", "Precipice Blades", "Sand Attack", "Stomping Tantrum", "Thousand Arrows", "Thousand Waves", "Gravity", "Smack Down", "Spikes", "Toxic Spikes", "Sticky Web"],
+				lightmetal: ["Autotomize", "Grass Knot", "Heat Crash", "Heavy Slam", "Low Kick", "Sky Drop"],
+				lightningrod: ["Bolt Strike", "Charge Beam", "Discharge", "Eerie Impulse", "Electrify", "Electro Ball", "Electroweb", "Fusion Bolt", "Ion Deluge", "Nuzzle", "Parabolic Charge", "Shock Wave", "Spark", "Thunder", "Thunder Fang", "Thunder Punch", "Thunder Shock", "Thunder Wave", "Thunderbolt", "Volt Switch", "Volt Tackle", "Wild Charge", "Zap Cannon", "Zing Zap"],
+				limber: ["Body Slam", "Bolt Strike", "Bounce", "Discharge", "Dragon Breath", "Fling", "Force Palm", "Freeze Shock", "Glare", "Lick", "Nuzzle", "Spark", "Stun Spore", "Thunder", "Thunder Fang", "Thunder Punch", "Thunder Shock", "Thunder Wave", "Thunderbolt", "Tri Attack", "Volt Tackle", "Zap Cannon"],
+				liquidooze: ["Absorb", "Drain Punch", "Draining Kiss", "Dream Eater", "Giga Drain", "Horn Leech", "Leech Life", "Leech Seed", "Mega Drain", "Oblivion Wing", "Parabolic Charge"],
+				liquidvoice: ["Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Confide", "Disarming Voice", "Echoed Voice", "Grass Whistle", "Growl", "Heal Bell", "Hyper Voice", "Metal Sound", "Noble Roar", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar"],
+				magmaarmor: ["Blizzard", "Freeze-Dry", "Ice Beam", "Ice Fang", "Ice Punch", "Powder Snow", "Tri Attack"],
+				megalauncher: ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Heal Pulse", "Origin Pulse", "Water Pulse"],
+				merciless: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
+				minus: ["Magnetic Flux", "Gear Up"],
+				motordrive: ["Bolt Strike", "Charge Beam", "Discharge", "Eerie Impulse", "Electrify", "Electro Ball", "Electroweb", "Fusion Bolt", "Ion Deluge", "Nuzzle", "Parabolic Charge", "Shock Wave", "Spark", "Thunder", "Thunder Fang", "Thunder Punch", "Thunder Shock", "Thunder Wave", "Thunderbolt", "Volt Switch", "Volt Tackle", "Wild Charge", "Zap Cannon", "Zing Zap"],
+				naturalcure: ["Volt Switch", "U-turn", "Parting Shot", "Baton Pass", "Roar", "Whirlwind", "Dragon Tail", "Circle Throw"],
+				oblivious: ["Taunt", "Attract"],
+				overcoat: ["Cotton Spore", "Poison Powder", "Powder", "Rage Powder", "Sleep Powder", "Spore", "Stun Spore"],
+				overgrow: ["Absorb", "Bullet Seed", "Energy Ball", "Frenzy Plant", "Giga Drain", "Grass Knot", "Grass Pledge", "Horn Leech", "Leaf Blade", "Leaf Storm", "Leaf Tornado", "Leafage", "Magical Leaf", "Mega Drain", "Needle Arm", "Petal Blizzard", "Petal Dance", "Power Whip", "Razor Leaf", "Seed Bomb", "Seed Flare", "Solar Beam", "Solar Blade", "Trop Kick", "Vine Whip", "Wood Hammer"],
+				owntempo: ["Chatter", "Confuse Ray", "Confusion", "Dizzy Punch", "Dynamic Punch", "Flatter", "Hurricane", "Psybeam", "Rock Climb", "Signal Beam", "Supersonic", "Swagger", "Sweet Kiss", "Teeter Dance", "Water Pulse"],
+				plus: ["Magnetic Flux", "Gear Up"],
+				poisonheal: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
+				prismarmor: [],
+				raindish: ["Rain Dance"],
+				rattled: ["Attack Order", "Bug Bite", "Bug Buzz", "Fell Stinger", "First Impression", "Fury Cutter", "Infestation", "Leech Life", "Lunge", "Megahorn", "Pin Missile", "Pollen Puff", "Signal Beam", "Silver Wind", "Steamroller", "Struggle Bug", "Twineedle", "U-turn", "X-Scissor", "Assurance", "Beat Up", "Bite", "Brutal Swing", "Crunch", "Dark Pulse", "Darkest Lariat", "Feint Attack", "Fling", "Foul Play", "Hyperspace Fury", "Knock Off", "Night Daze", "Night Slash", "Payback", "Power Trip", "Punishment", "Pursuit", "Snarl", "Sucker Punch", "Thief", "Throat Chop", "Astonish", "Hex", "Lick", "Moongeist Beam", "Night Shade", "Ominous Wind", "Phantom Force", "Shadow Ball", "Shadow Bone", "Shadow Claw", "Shadow Force", "Shadow Punch", "Shadow Sneak", "Spirit Shackle"],
+				reckless: ["Take Down", "Double-Edge", "Submission", "Volt Tackle", "Flare Blitz", "Brave Bird", "Wood Hammer", "Head Smash", "Wild Charge", "Head Charge", "High Jump Kick"],
+				regenerator: ["Volt Switch", "U-turn", "Parting Shot", "Baton Pass", "Roar", "Whirlwind", "Dragon Tail", "Circle Throw"],
+				rockhead: ["Take Down", "Double-Edge", "Submission", "Volt Tackle", "Flare Blitz", "Brave Bird", "Wood Hammer", "Head Smash", "Wild Charge", "Head Charge"],
+				sandforce: ["Bone Club", "Bone Rush", "Bonemerang", "Bulldoze", "Dig", "Drill Run", "Earth Power", "Earthquake", "High Horsepower", "Land's Wrath", "Magnitude", "Mud Slap", "Mud Bomb", "Mud Shot", "Precipice Blades", "Sand Attack", "Stomping Tantrum", "Thousand Arrows", "Thousand Waves", "Accelerock", "Ancient Power", "Diamond Storm", "Head Smash", "Power Gem", "Rock Blast", "Rock Slide", "Rock Throw", "Rock Tomb", "Rock Wrecker", "Rollout", "Smack Down", "Stone Edge", "Anchor Shot", "Bullet Punch", "Doom Desire", "Flash Cannon", "Gear Grind", "Gyro Ball", "Heavy Slam", "Iron Head", "Iron Tail", "Magnet Bomb", "Metal Burst", "Metal Claw", "Meteor Mash", "Mirror Shot", "Smart Strike", "Steel Wing", "Sunsteel Strike"],
+				sandrush: ["Sandstorm"],
+				sandveil: ["Sandstorm"],
+				sapsipper: ["Absorb", "Bullet Seed", "Energy Ball", "Frenzy Plant", "Giga Drain", "Grass Knot", "Grass Pledge", "Horn Leech", "Leaf Blade", "Leaf Storm", "Leaf Tornado", "Leafage", "Magical Leaf", "Mega Drain", "Needle Arm", "Petal Blizzard", "Petal Dance", "Power Whip", "Razor Leaf", "Seed Bomb", "Seed Flare", "Solar Beam", "Solar Blade", "Trop Kick", "Vine Whip", "Wood Hammer", "Cotton Spore", "Forest's Curse", "Grass Whistle", "Leech Seed", "Sleep Powder", "Spore", "Strength Sap", "Stun Spore", "Worry Seed"],
+				scrappy: ["Barrage", "Bind", "Body Slam", "Boomburst", "Chip Away", "Comet Punch", "Constrict", "Covet", "Crush Claw", "Crush Grip", "Cut", "Dizzy Punch", "Double-Edge", "Double Hit", "Double Slap", "Echoed Voice", "Egg Bomb", "Endeavor", "Explosion", "Extreme Speed", "Facade", "Fake Out", "False Swipe", "Feint", "Flail", "Frustration", "Fury Attack", "Fury Swipes", "Giga Impact", "Guillotine", "Head Charge", "Headbutt", "Hidden Power", "Hold Back", "Horn Attack", "Horn Drill", "Hyper Beam", "Hyper Fang", "Hyper Voice", "Judgement", "Last Resort", "Mega Kick", "Mega Punch", "Multi-Attack", "Natural Power", "Pay Day", "Pound", "Quick Attack", "Rage", "Rapid Spin", "Razor Wind", "Relic Song", "Retaliate", "Return", "Revelation Dance", "Rock Climb", "Round", "Scratch", "Secret Power", "Self-Destruct", "Skull Bash", "Slam", "Slash", "Smelling Salts", "Snore", "Sonic Boom", "Spike Cannon", "Spit Up", "Stomp", "Strength", "Super Fang", "Swift", "Tackle", "Tail Slap", "Take Down", "Techno Blast", "Thrash", "Tri Attack", "Trump Card", "Uproar", "Vice Grip", "Weather Ball", "Wrap", "Wring Out", "Arm Thrust", "Aura Sphere", "Brick Break", "Circle Throw", "Close Combat", "Counter", "Cross Chop", "Double Kick", "Drain Punch", "Dynamic Punch", "Final Gambit", "Flying Press", "Focus Blast", "Focus Punch", "Force Palm", "Hammer Arm", "High Jump Kick", "Jump Kick", "Karate Chop", "Low Kick", "Low Sweep", "Mach Punch", "Power-Up Punch", "Revenge", "Reversal", "Rock Smash", "Rolling Kick", "Sacred Sword", "Secret Sword", "Seismic Toss", "Sky Uppercut", "Storm Throw", "Submission", "Superpower", "Triple Kick", "Vacuum Wave", "Vital Throw", "Wake-Up Slap"],
+				sheerforce: ["Aurora Beam", "Lunge", "Play Rough", "Trop Kick", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Mist Ball", "Moonblast", "Mystical Fire", "Snarl", "Struggle Bug", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Ancient Power", "Metal Claw", "Meteor Mash", "Ominous Wind", "Power-Up Punch", "Rototiller", "Silver Wind", "Fell Stinger", "Steel Wing", "Diamond Storm", "Charge Beam", "Fiery Dance", "Flame Charge"],
+				shellarmor: ["Frost Breath", "Storm Throw"],
+				shielddust: ["Aurora Beam", "Lunge", "Play Rough", "Trop Kick", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Mist Ball", "Moonblast", "Mystical Fire", "Snarl", "Struggle Bug", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Ancient Power", "Metal Claw", "Meteor Mash", "Ominous Wind", "Power-Up Punch", "Rototiller", "Silver Wind", "Fell Stinger", "Steel Wing", "Diamond Storm", "Charge Beam", "Fiery Dance", "Flame Charge"],
+				simple: ["Aurora Beam", "Lunge", "Play Rough", "Trop Kick", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Mist Ball", "Moonblast", "Mystical Fire", "Snarl", "Struggle Bug", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Ancient Power", "Metal Claw", "Meteor Mash", "Ominous Wind", "Power-Up Punch", "Rototiller", "Silver Wind", "Fell Stinger", "Steel Wing", "Diamond Storm", "Charge Beam", "Fiery Dance", "Flame Charge", "Bulk Up", "Coil", "Curse", "Dragon Dance", "Growth", "Hone Claws", "Howl", "Meditate", "Sharpen", "Shift Gear", "Work Up", "Acupressure", "Shell Smash", "Swagger", "Swords Dance", "Belly Drum", "Baby-Doll Eyes", "Growl", "Noble Roar", "Parting Shot", "Play Nice", "Strength Sap", "Tearful Look", "Tickle", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Cosmic Power", "Defend Order", "Defense Curl", "Flower Shield", "Harden", "Magnetic Flux", "Stockpile", "Withdraw", "Acid Armor", "Barrier", "Iron Defense", "Cotton Guard", "Leer", "Tail Whip", "Screech", "Calm Mind", "Flatter", "Rototiller", "Quiver Dance", "Geomancy", "Nasty Plot", "Tail Glow", "Confide", "Captivate", "Eerie Impulse", "Charge", "Amnesia", "Fake Tears", "Metal Sound", "Double Team", "Minimize", "Defog", "Sweet Scent", "Kinesis", "Sand Attack", "Smokescreen", "Dragon Dance", "Rock Polish", "Sticky Web", "Toxic Thread", "Cotton Spore", "Scary Face", "String Shot"],
+				skilllink: ["Arm Thrust", "Barrage", "Bone Rush", "Bullet Seed", "Comet Punch", "Double Slap", "Fury Attack", "Fury Swipes", "Icicle Spear", "Pin Missile", "Rock Blast", "Spike Cannon", "Tail Slap", "Water Shuriken", "Bonemerang", "Double Hit", "Double Kick", "Dual Chop", "Gear Grind", "Twineedle", "Triple Kick"],
+				slushrush: ["Hail"],
+				sniper: ["Frost Breath", "Storm Throw"],
+				snowcloak: ["Hail"],
+				solarpower: ["Sunny Day"],
+				solidrock: [],
+				soulheart: ["Self-Destruct", "Explosion", "Healing Wish", "Lunar Dance", "Memento"],
+				soundproof: ["Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Confide", "Disarming Voice", "Echoed Voice", "Grass Whistle", "Growl", "Heal Bell", "Hyper Voice", "Metal Sound", "Noble Roar", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar"],
+				stakeout: ["Volt Switch", "U-turn", "Parting Shot", "Baton Pass", "Roar", "Whirlwind", "Dragon Tail", "Circle Throw"],
+				steadfast: ["Air Slash", "Astonish", "Bite", "Bone Club", "Dark Pulse", "Dragon Rush", "Extrasensory", "Fake Out", "Fire Fang", "Fling", "Headbutt", "Heart Stamp", "Hyper Fang", "Ice Fang", "Icicle Crash", "Iron Head", "Needle Arm", "Rock Slide", "Rolling Kick", "Sky Attack", "Snore", "Steamroller", "Stomp", "Thunder Fang", "Twister", "Waterfall", "Zen Headbutt", "Zing Zap"],
+				steelworker: ["Anchor Shot", "Bullet Punch", "Doom Desire", "Flash Cannon", "Gear Grind", "Gyro Ball", "Heavy Slam", "Iron Head", "Iron Tail", "Magnet Bomb", "Metal Burst", "Metal Claw", "Meteor Mash", "Mirror Shot", "Smart Strike", "Steel Wing", "Sunsteel Strike"],
+				stickyhold: ["Covet", "Thief", "Bug Bite", "Pluck", "Incinerate", "Knock Off", "Trick", "Switcheroo"],
+				stormdrain: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
+				strongjaw: ["Bite", "Crunch", "Fire Fang", "Hyper Fang", "Ice Fang", "Poison Fang", "Psychic Fangs", "Thunder Fang"],
+				suctioncups: ["Volt Switch", "U-turn", "Parting Shot", "Baton Pass", "Roar", "Whirlwind", "Dragon Tail", "Circle Throw"],
+				surgesurfer: ["Electric Terrain"],
+				swarm: ["Attack Order", "Bug Bite", "Bug Buzz", "Fell Stinger", "First Impression", "Fury Cutter", "Infestation", "Leech Life", "Lunge", "Megahorn", "Pin Missile", "Pollen Puff", "Signal Beam", "Silver Wind", "Steamroller", "Struggle Bug", "Twineedle", "U-turn", "X-Scissor"],
+				sweetveil: ["Dark Void", "Grass Whistle", "Hypnosis", "Lovely Kiss", "Relic Song", "Rest", "Sing", "Sleep Powder", "Spore", "Yawn"],
+				swiftswim: ["Rain Dance"],
+				tangledfeet: ["Chatter", "Confuse Ray", "Confusion", "Dizzy Punch", "Dynamic Punch", "Flatter", "Hurricane", "Psybeam", "Rock Climb", "Signal Beam", "Supersonic", "Swagger", "Sweet Kiss", "Teeter Dance", "Water Pulse"],
+				technician: [],
+				thickfat: ["Aurora Beam", "Avalanche", "Blizzard", "Freeze-Dry", "Freeze Shock", "Frost Breath", "Glaciate", "Ice Ball", "Ice Beam", "Ice Burn", "Ice Fang", "Ice Hammer", "Ice Punch", "Ice Shard", "Icicle Crash", "Icicle Spear", "Icy Wind", "Powder Snow", "Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
+				tintedlens: [],
+				torrent: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
+				toxicboost: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
+				triage: ["Aqua Ring", "Floral Healing", "Grassy Terrain", "Heal Pulse", "Healing Wish", "Ingrain", "Leech Seed", "Pain Split", "Present", "Purify", "Strength Sap", "Wish", "Heal Order", "Milk Drink", "Moonlight", "Morning Sun", "Recover", "Rest", "Roost", "Shore Up", "Slack Off", "Soft-Boiled", "Synthesis", "Absorb", "Drain Punch", "Draining Kiss", "Dream Eater", "Giga Drain", "Horn Leech", "Leech Life", "Leech Seed", "Mega Drain", "Oblivion Wing", "Parabolic Charge"],
+				unaware: ["Aurora Beam", "Lunge", "Play Rough", "Trop Kick", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Mist Ball", "Moonblast", "Mystical Fire", "Snarl", "Struggle Bug", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Ancient Power", "Metal Claw", "Meteor Mash", "Ominous Wind", "Power-Up Punch", "Rototiller", "Silver Wind", "Fell Stinger", "Steel Wing", "Diamond Storm", "Charge Beam", "Fiery Dance", "Flame Charge", "Bulk Up", "Coil", "Curse", "Dragon Dance", "Growth", "Hone Claws", "Howl", "Meditate", "Sharpen", "Shift Gear", "Work Up", "Acupressure", "Shell Smash", "Swagger", "Swords Dance", "Belly Drum", "Baby-Doll Eyes", "Growl", "Noble Roar", "Parting Shot", "Play Nice", "Strength Sap", "Tearful Look", "Tickle", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Cosmic Power", "Defend Order", "Defense Curl", "Flower Shield", "Harden", "Magnetic Flux", "Stockpile", "Withdraw", "Acid Armor", "Barrier", "Iron Defense", "Cotton Guard", "Leer", "Tail Whip", "Screech", "Calm Mind", "Flatter", "Rototiller", "Quiver Dance", "Geomancy", "Nasty Plot", "Tail Glow", "Confide", "Captivate", "Eerie Impulse", "Charge", "Amnesia", "Fake Tears", "Metal Sound", "Double Team", "Minimize", "Defog", "Sweet Scent", "Kinesis", "Sand Attack", "Smokescreen"],
+				unburden: ["Fling", "Covet", "Thief", "Bug Bite", "Pluck", "Incinerate", "Knock Off", "Trick", "Switcheroo"],
+				vitalspirit: ["Dark Void", "Grass Whistle", "Hypnosis", "Lovely Kiss", "Relic Song", "Rest", "Sing", "Sleep Powder", "Spore", "Yawn"],
+				voltabsorb: ["Bolt Strike", "Charge Beam", "Discharge", "Eerie Impulse", "Electrify", "Electro Ball", "Electroweb", "Fusion Bolt", "Ion Deluge", "Nuzzle", "Parabolic Charge", "Shock Wave", "Spark", "Thunder", "Thunder Fang", "Thunder Punch", "Thunder Shock", "Thunder Wave", "Thunderbolt", "Volt Switch", "Volt Tackle", "Wild Charge", "Zap Cannon", "Zing Zap"],
+				waterabsorb: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
+				waterbubble: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool", "Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create", "Beak Blast", "Ice Burn", "Tri Attack", "Will-O-Wisp", "Fling"],
+				watercompaction: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
+				waterveil: ["Beak Blast", "Blaze Kick", "Blue Flare", "Ember", "Fire Blast", "Fire Fang", "Fire Punch", "Flamethrower", "Flame Wheel", "Flare Blitz", "Fling", "Heat Wave", "Ice Burn", "Inferno", "Lava Plume", "Sacred Fire", "Scald", "Searing Shot", "Steam Eruption", "Tri Attack", "Will-O-Wisp"],
+				whitesmoke: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
+			};
+			let allMoves = this.tools.data.Movedex;
+			for(let i in allMoves) {
+				let move = allMoves[i];
+				if (template.types.includes(move.type)) {
+						movemasters.adaptability.push(move.id);
+				}
+				if (this.tools.getImmunity(move, template) && this.tools.getEffectiveness(move, template) > 0) {
+						movemasters.anticipation.push(move.id);
+						movemasters.solidrock.push(move.id);
+						movemasters.filter.push(move.id);
+						movemasters.prismarmor.push(move.id);
+				}
+				if (this.tools.getEffectiveness(move, template) < 1) {
+						movemasters.tintedlens.push(move.id);
+				}
+				if (move.basePower <= 60) {
+						movemasters.technician.push(move.id);
+				}
+				if (move.accuracy < 100) {
+						movemasters.compoundeyes.push(move.id);
+				}
+			}
+			if(movemasters[ability.id]) {
+				let moves = movemasters[ability.id];
+				for(let j=0;j<moves.length;j++) {
+					if(template.learnset[toId(moves[j])]) continue;
+					template.learnset[toId(moves[j])] = ["7T"];
+				}
+				return this.validateSet(set, teamHas, template);
+			}
+		}
+	},
+   	{
+        name: "[Gen 7] Offensification",
+        desc: [
+        	"All attacks are caclulated from the user's highest attacking stat.",
+		"&bullet; <a href=\"http://www.smogon.com/forums/threads/offensification-hoopa-u-banned.3524512/\">Offensification</a>",
+        ],
+        section: "New Other Metagames",
+        ruleset: ['[Gen 7] OU'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Flatter', 'Kyurem-Black'],
+        onModifyMove: function (move, pokemon) {
+            if (pokemon.stats.atk > pokemon.stats.spa) {
+                move.category = (move.category === "Status") ? "Status" : "Physical";
+            } else if (pokemon.stats.spa > pokemon.stats.atk) {
+                move.category = (move.category === "Status") ? "Status" : "Special";
+            }
+
+            if (move.id === 'bellydrum') {
+                move.onHit = function (target) {
+                    if (target.hp <= target.maxhp / 2 || target.boosts.atk >= 6 || target.maxhp === 1) { // Shedinja clause
+                        return false;
+                    }
+                    this.directDamage(target.maxhp / 2);
+                    if (target.stats.atk >= target.stats.spa) {
+                        target.setBoost({atk: 6});
+                        this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
+                    } else {
+                        target.setBoost({spa: 6});
+                        this.add('-setboost', target, 'spa', '6', '[from] move: Belly Drum');
+                    }
+                }
+            }
+        },
+        onBoost: function (boost, target, source, effect) {
+            var boostee = target;
+            if (source && target === source) boostee = source;
+            var phys = false;
+            if (boostee.stats.atk > boostee.stats.spa) phys = true;
+            var spec = false;
+            if (boostee.stats.atk < boostee.stats.spa) spec = true;
+            if (phys || spec) {
+                for (var i in boost) {
+                    if (phys && i === 'spa') {
+                        if (boost['atk']) boost['atk'] += boost[i];
+                        else boost['atk'] = boost[i];
+                        boost[i] = 0;
+                    } else if (phys && i === 'spd') {
+                        if (boost['def']) boost['def'] += boost[i];
+                        else boost['def'] = boost[i];
+                        boost[i] = 0;
+                    } else if (spec && i === 'atk') {
+                        if (boost['spa']) boost['spa'] += boost[i];
+                        else boost['spa'] = boost[i];
+                        boost[i] = 0;
+                    } else if (spec && i === 'def') {
+                        if (boost['spd']) boost['spd'] += boost[i];
+                        else boost['spd'] = boost[i];
+                        boost[i] = 0;
+                    }
+                }
+            }
+        }
+    },
+    
+	{
+		name: "[Gen 7] Trademarked",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>"],
+		section: "New Other Metagames",
+		column: 1,
+
+		mod: 'trademarked',
+		ruleset: ['[Gen 7] OU','trademarkclause'],
+		banlist: ['Slaking','Regigigas','Nature Power'],
+		validateSet: function (set, teamHas) {
+			if (!this.validateSet(set, teamHas).length) return [];
+			let ability = this.tools.getAbility(set.ability);
+			let template = this.tools.getTemplate(set.species);
+			if (!set.moves.includes(ability.id) && !set.moves.includes(ability.name) && !this.checkLearnset(ability.id, template, {set: set})) {
+				template = Object.assign({}, template);
+				template.abilities = {0: ability.name};
+			}
+			return this.validateSet(set, teamHas, template);
+		},
+		
+	},
+	{
+		name: "[Gen 7] Z-Moves Everywhere",
+		desc: ["&bullet; <a href=http://www.smogon.com/forums/threads/z-moves-everywhere-slate-4-ninetales-torkoal-groudon-submissions-phase-extended.3592186/>Z-Moves Everywhere</a>"],
+		ruleset: ['[Gen 7] Ubers'],
+		mod: 'zmoveseverywhere',
+	},
+
+	{
+		section: "Old Other Metagames",
+		column: 3,
+	},
+	{
+		name: "Ascension",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3546114/\">OU Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571990/\">OU Viability Ranking</a>",
+		],
+		section: "Old Other Metagames",
+		mod: "ascension",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
+	},
+	{
+		name: "Follow The Leader",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3565685/\">Follow The Leader</a>"],
+		section: "Old Other Metagames",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew',
+			'Arena Trap', 'Gale Wings', 'Huge Power', 'Imposter', 'Pure Power', 'Shadow Tag', 'Chatter',
+		],
+		validateSet: function (set, teamHas) {
+			let species = toId(set.species);
+			let template = this.tools.getTemplate(species);
+			if (!template.exists || template.isNonstandard) return ["" + set.species + " is not a real Pok\u00E9mon."];
+			if (template.battleOnly) template = this.tools.getTemplate(template.baseSpecies);
+			if (this.tools.getBanlistTable(this.format)[template.id] || template.tier in {'Uber': 1, 'Unreleased': 1} && template.species !== 'Aegislash') {
+				return ["" + template.species + " is banned by Follow The Leader."];
+			}
+
+			if (!teamHas.donorTemplate) teamHas.donorTemplate = template;
+			let name = set.name;
+			if (name === set.species) delete set.name;
+			set.species = teamHas.donorTemplate.species;
+			let problems = this.validateSet(set, teamHas, teamHas.donorTemplate);
+
+			set.species = template.species;
+			set.name = (name === set.species ? "" : name);
+
+			return problems;
+		},
+	},
+    	{
+        name: "Gifts of the Gods",
+        desc: [
+            "Each Pok&eacute;mon receives one base stat, depending on its position, from the Uber.",
+            "&bullet; <a href=\"https://www.smogon.com/forums/threads/3579610/\">Gifts of the Gods</a>",
+        ],
+        section: "Old Other Metagames",
+        column: 3,
+
+        ruleset: ['Ubers', 'Baton Pass Clause'],
+        banlist: ['Uber > 1', 'AG ++ Uber', 'Blissey', 'Chansey', 'Eviolite', 'Mawilite', 'Medichamite', 'Sablenite', 'Soul Dew', 'Huge Power', 'Pure Power', 'Shadow Tag'],
+        onBegin: function () {
+            let stats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+            for (let j = 0; j < this.sides.length; j++) {
+                // onBegin happens before Mega Rayquaza clause
+                let uber = this.sides[j].pokemon.find(pokemon => ['AG', 'Uber'].includes(this.getTemplate(pokemon.canMegaEvo || pokemon.baseTemplate).tier)) || this.sides[j].pokemon[0];
+                for (let i = 0, len = this.sides[j].pokemon.length; i < len; i++) {
+                    let pokemon = this.sides[j].pokemon[i];
+                    ["baseTemplate", "canMegaEvo"].forEach(key => {
+                        if (pokemon[key]) {
+                            let template = Object.assign({}, this.getTemplate(pokemon[key]));
+                            template.baseStats = Object.assign({}, template.baseStats);
+                            template.baseStats[stats[i]] = uber.baseTemplate.baseStats[stats[i]];
+                            pokemon[key] = template;
+                        }
+                    });
+                    pokemon.formeChange(pokemon.baseTemplate);
+                    if (i === 0 && !pokemon.template.maxHP) {
+                        pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+                    }
+                }
+            }
+        },
+    	},
+	{
+   name: "Gods and Followers",
+	 desc: [
+		 "The Pok&eacute;mon in the first slot is the God; the Followers must share a type with the God. If the God Pok&eacute;mon faints, the Followers are inflicted with Curse.",
+		 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3545230/\">Gods and Followers</a>",
+	 ],
+   section: "Old Other Metagames",
+
+   mod: 'godsandfollowers',
+   ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Followers Clause', 'Cancel Mod'],
+   banlist: ['Illegal']
+},
+	{
+		name: "Haxmons",
+		section: "Old Other Metagames",
+
+		ruleset: ['OU', 'Freeze Clause'],
+		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
+		onModifyMovePriority: -100,
+		onModifyMove: function (move) {
+			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
+			move.willCrit = true;
+			if (move.secondaries) {
+				for (var i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance = 100;
+				}
+			}
+		}
+	},
   {
 		name: "Megamons",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3566648/\">Megamons</a>"],
-		section: "Old OMotMs",
+		section: "Old Other Metagames",
 
 		ruleset: ['Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Gengar-Mega', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Rayquaza-Mega'],
@@ -3163,7 +3178,7 @@ exports.Formats = [
         name: "Metagamiate",
         desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3502303/\">Metagamiate</a>"],
 
-		section: "Old OMotMs",
+		section: "Old Other Metagames",
 
         ruleset: ['OU'],
         banlist: ['Dragonite', 'Kyurem-Black'],
@@ -3185,8 +3200,7 @@ exports.Formats = [
     {
 		name: "Nature Swap",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3577739/\">Nature Swap</a>"],
-		section: "Old OMotMs",
-		column: 2,
+		section: "Old Other Metagames",
 
 		ruleset: ['OU'],
 		banlist: ['Chansey', 'Cloyster'],
@@ -3212,155 +3226,64 @@ exports.Formats = [
 			}
 		},
 	},
-	 {
-        name: "No Status",
-	desc: ["&bullet; All Status moves are banned <br> &bullet; <a href=\"http://www.smogon.com/forums/threads/no-status.3542555/\">No Status</a>"],
-        section: "Old OMotMs",
-        ruleset: ['OU'],
-        validateSet: function (set) {
-            var problems = [];
-            if (set.moves) {
-                for (var i = 0; i < set.moves.length; i++) {
-                    var move = this.getMove(set.moves[i]);
-                    if (move.category === 'Status') problems.push(move.name + ' is banned due to it being a Status move.');
-                }
-            }
-            return problems;
-        }
-    },
 	{
-        name: "Protean Palace",
-				desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/protean-palace.3496299/\">Protean Palace</a>"],
-				section: "Old OMotMs",
-				column: 2,
-
-        ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite'],
-        onPrepareHit: function (source, target, move) {
-            var type = move.type;
-            if (type && type !== '???' && source.getTypes().join() !== type) {
-                if (!source.setType(type)) return;
-                this.add('-start', source, 'typechange', type);
-            }
-        }
-    },
-
-
-	{
-        	name: "Anti-Vaxxers",
-		desc: ["All type-based immunities cease to apply."],
-        	section: "New Other Metagames",
-        	column: 3,
-        	mod: "antivaxxers",
-        	ruleset: ["OU"],
-	},
-	{
-		name: "Ascension",
+		name: "Meta Man",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3546114/\">OU Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571990/\">OU Viability Ranking</a>",
+			"When a Pokemon faints, the opposing Pokemon replaces its current ability with the fainted Pokemon's and gains its last-used move in a new slot (for up to 9 total moves). These changes last the entire match. If a Pokemon faints before using a move during the match, no move is gained by the opponent.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/meta-man.3565966/\">Meta Man</a>",
 		],
-		section: "New Other Metagames",
-		mod: "ascension",
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
-	},
-	{
-		name: "[Gen 7] Automagic",
-		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
-		ruleset: ['[Gen 7] OU'],
-		mod: 'automagic',
-		onAfterSecondaryEffect: function(target, source, move) {
-			let moreSetup = ['bellydrum'];
-			if(!source.types.includes("Ghost")) moreSetup.push("curse");
-			source.baseMoveset.forEach(curmove => {
-				let move = this.getMove(curmove.id);
-				if(moreSetup.includes(move.id) || (move.category === "Status" && move.boosts && move.target === "self")) {
-					this.useMove(move, source);
-					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
-				}
-			});
-		},
-		onAfterMove: function (source, target, move) {
-			if(move.id !== "genesissupernova") return;
-			source.baseMoveset.forEach(curmove => {
-				let move = this.getMove(curmove.id);
-				let isDead = target.hp === undefined || target.hp <= 0;
-				if((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") {
-					this.useMove(move, source);
-					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
-				}
-			});
+		section: "Old Other Metagames",
+		mod: "metaman",
+		ruleset: ['OU'],
+		onFaint: function(pokemon)
+		{
+			this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+this.data.Abilities[pokemon.ability].name+"!");
+			pokemon.side.foe.pokemon[0].setAbility(pokemon.ability);
+			pokemon.side.foe.pokemon[0].baseAbility = pokemon.ability;
+			let lastMove = pokemon.lastM;
+			let has
+			if(pokemon.side.foe.pokemon[0].moveset.length<=9 && lastMove && !pokemon.side.foe.pokemon[0].hasMove(lastMove.id))
+			{
+				pokemon.side.foe.pokemon[0].moveset.push(lastMove);
+				pokemon.side.foe.pokemon[0].baseMoveset.push(lastMove);
+				this.add("-message",pokemon.side.foe.pokemon[0].name+" received "+pokemon.name+"'s "+pokemon.lastM.move+"!");
+			}
 		},
 	},
 	{
-			 name: "[Gen 7] Bad \'n Boosted",
-			 section: "New Other Metagames",
+	    name: "Top Percentage",
+	    section: "Old Other Metagames",
+	    mod: 'toppercentage',
+	    desc:["&lt; <a href=\"http://www.smogon.com/forums/threads/top-percentage.3564459/\">Top Percentage</a>"],
+	    ruleset: ['OU'],
+	    onBegin: function() {
+			this.add("raw|Welcome to Top Percentage! The first Player to deal 400% damage wins! HAHAHAH!");
+		for (var i = 0; i < this.sides.length; i++) {
+		    this.sides[i].metaCount = 400;
+		}
+	    },
+	    onDamage: function(damage, target) {
+		//only should work if does not make target faint
+		let percentage = 100 * damage / target.maxhp;
+		if (damage >= target.hp) {
+		    percentage = 100 * target.hp / target.maxhp;
+		}
+		target.side.metaCount -= percentage;
+		this.add('-message', target.side.name+" has " + Math.round(target.side.metaCount) + "% left!");
+		if (target.side.metaCount <= 0.1) {
+		    //note: making this 0.1 because I got 1.10 times 10^-15 once
+		    //something silly with rounding
+		    //this works well enough
+	            this.add('-message', target.side.foe.name+" has dealt 400% damage!");
+		    this.win(target.side.foe);
+		}
+	    }
 
-			 mod: 'bnb',
-			 ruleset: ['[Gen 7] Ubers'],
-			 banlist: ['Eviolite', 'Huge Power', 'Pure Power']
-	 },
-    {
-       name: "[Gen 7] Pokebilities",
-       desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3588652/\">Pokebilities</a>: A Pokemon has all of its abilities active at the same time."],
-       mod: 'pokebilities',
-       ruleset: ["OU"],
-       onSwitchInPriority: 1,
-       onBegin: function() {
-         let statusability = {
-           "aerilate": true,
-           "aurabreak": true,
-           "flashfire": true,
-           "parentalbond": true,
-           "pixilate": true,
-           "refrigerate": true,
-           "sheerforce": true,
-           "slowstart": true,
-           "truant": true,
-           "unburden": true,
-           "zenmode": true
-         };
-         for (let p = 0; p < this.sides.length; p++) {
-           for (let i = 0; i < this.sides[p].pokemon.length; i++) {
-             let pokemon = this.sides[p].pokemon[i];
-             let template = this.getTemplate(pokemon.species);
-             this.sides[p].pokemon[i].innates = [];
-             let bans = this.data.Formats.gen7ou.banlist;
-             bans.push("Battle Bond");
-             for (let a in template.abilities) {
-               for (let k = 0; k < bans.length; k++) {
-                 if (toId(bans[k]) === toId(template.abilities[a])) continue;
-               }
-
-               if (toId(a) == 'h' && template.unreleasedHidden) continue;
-               if (toId(template.abilities[a]) == pokemon.ability) continue;
-               if (statusability[toId(template.abilities[a])])
-                 this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
-               else
-                 this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
-             }
-           }
-         }
-       },
-       onSwitchIn: function(pokemon) {
-         for (let i = 0; i < pokemon.innates.length; i++) {
-           if (!pokemon.volatiles[pokemon.innates[i]])
-             pokemon.addVolatile(pokemon.innates[i]);
-         }
-       },
-       onAfterMega: function(pokemon) {
-         for (let i = 0; i < pokemon.innates.length; i++) {
-           pokemon.removeVolatile(pokemon.innates[i]);
-         }
-       },
-    },
-    {
+	},
+	{
     	 name: "Baton Pass Marathon",
     	 desc:["&bullet; <a href=\"http://www.smogon.com/forums/threads/baton-pass-marathon-coded-looking-for-a-server.3517800\">Baton Pass Marathon</a>",],
-    	 section: "New Other Metagames",
+    	 section: "Old Other Metagames",
     	 mod: 'batonpassmarathon',
 
     	 ruleset: ['OU'],
@@ -3376,7 +3299,7 @@ exports.Formats = [
 					 "Pok&eacute;mon change type to match their first two moves.",
 					 "&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
 			 ],
-			 section: "New Other Metagames",
+			section: "Old Other Metagames",
 
 			 ruleset: ['OU'],
 			 onBegin: function () {
@@ -3403,7 +3326,7 @@ exports.Formats = [
 
 		{
 		name:"Imprisoned",
-		section:"New Other Metagames",
+		section: "Old Other Metagames",
 		ruleset:['OU'],
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/imprisoned.3580920/\">Imprisoned</a>"],
 		onBegin: function()
@@ -3445,9 +3368,9 @@ exports.Formats = [
 			}
 		},
 	},
-	 {
+	{
 			name: "The All-Stars Metagame",
-			section: "New Other Metagames",
+			section: "Old Other Metagames",
 			ruleset: ['OU'],
 			desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-all-stars-metagame-v2-enter-the-pu-a-pokemon-from-each-tier.3510864//\">The All-Stars Metagame</a>"],
 			banlist: [],
@@ -3482,44 +3405,9 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Lockdown",
-		desc: [
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3593815\">Lockdown</a>",
-			"At the end of Turn 6, battlefield changes become permanent.",
-		],
-		section: "New Other Metagames",
-		mod: 'lockdown',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Damp Rock', 'Heat Rock', 'Smooth Rock', 'Icy Rock', 'Terrain Extender'],
-		unbanlist: ['Genesect'],
-		onBegin: function() {
-			this.lockdownMoves = ['sunnyday', 'raindance', 'hail', 'sandstorm', 'magicroom', 'wonderroom', 'trickroom', 'gravity', 'electricterrain', 'mistyterrain', 'grassyterrain', 'psychicterrain', 'mudsport', 'watersport'];
-			this.lockdownHazards = ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb'];
-		},
-		onTryHitSide: function(target, source, move) {
-			if (this.lockdownHazards.indexOf(move.id) > -1 && this.turn > 6) return false;
-		},
-		onTryHitField: function(target, source, move) {
-			if (this.lockdownMoves.indexOf(move.id) > -1 && this.turn > 6) return false;
-		},
-		onResidualOrder: 999,
-		onResidual: function () {
-			if(this.turn !== 6) return;
-			let pseudo = ['magicroom', 'wonderroom', 'trickroom', 'gravity', 'mudsport', 'watersport'];
-			this.add("-message", "The Lockdown has commenced! Battlefield changes are now permanent!");
-			if(this.weatherData.duration) this.weatherData.duration = 0;
-			if(this.terrainData.duration) this.terrainData.duration = 0;
-			for(let i in this.pseudoWeather) {
-				if(pseudo.includes(i)) {
-					this.pseudoWeather[i].duration = 0;
-				}
-			}
-		},
-	},
-	{
 	    name: "Mirror Move",
 	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mirror-move.3572990/\">Mirror Move</a>"],
-	    section: "New Other Metagames",
+	    section: "Old Other Metagames",
 	    ruleset: ["OU"],
 	    banlist: ["Imprison"],
 	    mod: "mirrormove",
@@ -3550,7 +3438,7 @@ exports.Formats = [
 	},
 	{
 		name: "Nature's Fear",
-		section: "New Other Metagames",
+		section: "Old Other Metagames",
 		ruleset:['OU'],
 		desc: ["All pokes have a special \"Intimidate\" on top on their ability, which means it still have their original Ability. This Intimidate lowers opposing stats by 1 stage based on negative (may be changed to positive if it's better) side of the Nature. For example, if you send out a Timid natured pokemon, your opponent's Attack is lowered.",
 		       "&bullet; <a href=\"http://www.smogon.com/forums/threads/natures-fear.3584688/\">Nature's Fear</a>"],
@@ -3591,71 +3479,9 @@ exports.Formats = [
 			}
 		},
 	},
-   	{
-        name: "[Gen 7] Offensification",
-        desc: [
-        	"All attacks are caclulated from the user's highest attacking stat.",
-		"&bullet; <a href=\"http://www.smogon.com/forums/threads/offensification-hoopa-u-banned.3524512/\">Offensification</a>",
-        ],
-        section: "New Other Metagames",
-        ruleset: ['[Gen 7] OU'],
-        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Flatter', 'Kyurem-Black'],
-        onModifyMove: function (move, pokemon) {
-            if (pokemon.stats.atk > pokemon.stats.spa) {
-                move.category = (move.category === "Status") ? "Status" : "Physical";
-            } else if (pokemon.stats.spa > pokemon.stats.atk) {
-                move.category = (move.category === "Status") ? "Status" : "Special";
-            }
-
-            if (move.id === 'bellydrum') {
-                move.onHit = function (target) {
-                    if (target.hp <= target.maxhp / 2 || target.boosts.atk >= 6 || target.maxhp === 1) { // Shedinja clause
-                        return false;
-                    }
-                    this.directDamage(target.maxhp / 2);
-                    if (target.stats.atk >= target.stats.spa) {
-                        target.setBoost({atk: 6});
-                        this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
-                    } else {
-                        target.setBoost({spa: 6});
-                        this.add('-setboost', target, 'spa', '6', '[from] move: Belly Drum');
-                    }
-                }
-            }
-        },
-        onBoost: function (boost, target, source, effect) {
-            var boostee = target;
-            if (source && target === source) boostee = source;
-            var phys = false;
-            if (boostee.stats.atk > boostee.stats.spa) phys = true;
-            var spec = false;
-            if (boostee.stats.atk < boostee.stats.spa) spec = true;
-            if (phys || spec) {
-                for (var i in boost) {
-                    if (phys && i === 'spa') {
-                        if (boost['atk']) boost['atk'] += boost[i];
-                        else boost['atk'] = boost[i];
-                        boost[i] = 0;
-                    } else if (phys && i === 'spd') {
-                        if (boost['def']) boost['def'] += boost[i];
-                        else boost['def'] = boost[i];
-                        boost[i] = 0;
-                    } else if (spec && i === 'atk') {
-                        if (boost['spa']) boost['spa'] += boost[i];
-                        else boost['spa'] = boost[i];
-                        boost[i] = 0;
-                    } else if (spec && i === 'def') {
-                        if (boost['spd']) boost['spd'] += boost[i];
-                        else boost['spd'] = boost[i];
-                        boost[i] = 0;
-                    }
-                }
-            }
-        }
-    },
-    {
+	{
     name: "Open House",
-    section: "New Other Metagames",
+    section: "Old Other Metagames",
 
     ruleset: ['OU'],
     banlist: [],
@@ -3717,7 +3543,7 @@ exports.Formats = [
 },
 	{
 		name: "No Haxmons",
-		section: "New Other Metagames",
+		section: "Old Other Metagames",
 
 		ruleset: ['OU', 'Freeze Clause'],
 		banlist: [],
@@ -3734,7 +3560,7 @@ exports.Formats = [
 	},
 	{
      name: "Palette Pals",
-     section: "New Other Metagames",
+     section: "Old Other Metagames",
      desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/palette-pals-formerly-tradeoff.3578405/\">Palette Pals</a>"],
      ruleset: ['OU'],
      banlist: ['Huge Power', 'Pure Power', 'Medichamite', 'Kyurem-Black', 'Slaking', 'Regigigas', 'Light Ball', 'Eviolite', 'Deep Sea Tooth', 'Deep Sea Scale', 'Thick Club'],
@@ -3778,7 +3604,7 @@ exports.Formats = [
    },
 {
 	name:"Recyclables",
-	section:"New Other Metagames",
+	section: "Old Other Metagames",
 desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.3581818/\">Recyclables</a>: <br />If the item on a Pokemon was not knocked off, it will be recycled at the end of every turn."],
 	ruleset:['OU'],
 		onResidualOrder: 999, //This will always occur as the last possible occurence of the turn's residual phase.
@@ -3808,15 +3634,14 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	{
         name: "The Negative Metagame",
         desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-negative-metagame-playable-on-aqua.3529936/\">The Negative Metagame</a>"],
-        section: "New Other Metagames",
-
+        section: "Old Other Metagames",
         mod: 'thenegativemetagame',
         ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Swagger Clause', 'Team Preview', 'Evasion Moves Clause'],
         banlist: ['DeepSeaTooth', 'DeepSeaScale', 'Eviolite', 'Huge Power', 'Light Ball', 'Pure Power', 'Smeargle', 'Thick Club', 'Illegal', 'Unreleased']
     	},
          {
 		name: "Therianmons",
-	    section: "New Other Metagames",
+	    section: "Old Other Metagames",
 	    desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/therianmons.3566303/\">Therianmons</a>"],
 	    ruleset: ['OU'],
 
@@ -3861,7 +3686,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	},
 	{
 	name:"The Great Pledge",
-	section:"New Other Metagames",
+	section: "Old Other Metagames",
 	ruleset:['OU'],
 	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-great-pledge.3581858/\">The Great Pledge</a>"],
 	onBegin: function()
@@ -3983,32 +3808,12 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 	},
 },
 	{
-		name: "[Gen 7] Trademarked",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>"],
-		section: "New Other Metagames",
-		column: 1,
-
-		mod: 'trademarked',
-		ruleset: ['[Gen 7] OU','trademarkclause'],
-		banlist: ['Slaking','Regigigas','Nature Power'],
-		validateSet: function (set, teamHas) {
-			if (!this.validateSet(set, teamHas).length) return [];
-			let ability = this.tools.getAbility(set.ability);
-			let template = this.tools.getTemplate(set.species);
-			if (!set.moves.includes(ability.id) && !set.moves.includes(ability.name) && !this.checkLearnset(ability.id, template, {set: set})) {
-				template = Object.assign({}, template);
-				template.abilities = {0: ability.name};
-			}
-			return this.validateSet(set, teamHas, template);
-		},
-	},
-
-	 {
         name: "Type Omelette",
-        section: "New Other Metagames",
+        section: "Old Other Metagames",
 
 
         ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+	desc: [" &bullet; <a href=http://www.smogon.com/forums/threads/type-omelette-coded-looking-for-server.3540328/> "],
         banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Landorus', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'],
         mod: 'mileseggsworth', //This is a pun, and was the most popular in name submissions.
         //Since this metagame uses custom types, let's make the types known to the players.
@@ -4020,7 +3825,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
     	},
 	{
 		name: "Universal Ubers",
-		section: "New Other Metagames",
+		section: "Old Other Metagames",
 		mod: 'primordialpokemon',
 
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
@@ -4039,13 +3844,411 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
         	    }
         	}
     	},
+	{
+        name: "Move Equality",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-equality-playable-whirlpool-fire-spin-infestation-sand-tomb-are-now-banned-see-post-193.3539145/\">Move Equality</a>"],
+        section: "Old Other Metagames",
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Metagrossite', 'Landorus', 'Mud Slap', 'Keldeo'],
+        onModifyMove: function (move, pokemon) {
+            //Account for all moves affected by minimize, terrains/weathers, or two-turn moves (besides earthquake and dragon rush as they're already 100 BP)
+            var forbid = ['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'phantomforce', 'shadowforce'];
+            if (!move.priority && !move.basePowerCallback && !move.onBasePower && move.basePower && move.category !== 'Status' && forbid.indexOf(move.id) === -1) move.basePower = 100;
+            if (!move.priority && move.multihit) {
+                if (typeof(move.multihit) === 'number') {
+                    move.basePower = 100/move.multihit;
+                } else {
+                    move.basePower = 100/move.multihit[1];
+                }
+            }
+            if (move.type === 'Flying' && move.category !== 'Status') move.basePower = 100;
+        }
+    },
+	{
+        name: "Move Equality 1v1",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-equality-playable-whirlpool-fire-spin-infestation-sand-tomb-are-now-banned-see-post-193.3539145/\">Move Equality</a>"],
+        section: "Old Other Metagames",
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Metagrossite', 'Landorus', 'Mud Slap', 'Keldeo'],
+        onModifyMove: function (move, pokemon) {
+            //Account for all moves affected by minimize, terrains/weathers, or two-turn moves (besides earthquake and dragon rush as they're already 100 BP)
+            var forbid = ['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'phantomforce', 'shadowforce'];
+            if (!move.priority && !move.basePowerCallback && !move.onBasePower && move.basePower && move.category !== 'Status' && forbid.indexOf(move.id) === -1) move.basePower = 100;
+            if (!move.priority && move.multihit) {
+                if (typeof(move.multihit) === 'number') {
+                    move.basePower = 100/move.multihit;
+                } else {
+                    move.basePower = 100/move.multihit[1];
+                }
+            }
+            if (move.type === 'Flying' && move.category !== 'Status') move.basePower = 100;
+        },
+        validateTeam: function (team, format) {
+            if (team.length > 3) return ['You may only bring up to three Pokémon.'];
+        },
+        onBegin: function () {
+            this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+            this.p1.pokemonLeft = this.p1.pokemon.length;
+            this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+            this.p2.pokemonLeft = this.p2.pokemon.length;
+        }
+    },
+	{
+        name: "Mega Mania",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mega-mania-playable-on-aqua.3525444/\">Mega Mania</a>"],
+        section: "Old Other Metagames",
+
+        mod: "megamania",
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Mega Mania'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Regigigas', 'Slaking', 'Ignore Illegal Abilities']
+    },
+	{
+  name: "Technician Tower",
+  desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/technician-tower-2-0-now-playable-on-the-aqua-server.3521635/\">Technician Tower</a>"],
+  section: "Old Other Metagames",
+  mod:'technichiantower',
+  ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+  banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Technician', 'Skill Link'],
+  validateSet: function(set) {
+    for (var i in set.moves) {
+      var move = this.getMove(string(set.moves[i]));
+        if (move.basePower && move.basePower >= 90) return ['The move ' + move.name + ' is banned because it has >90 Base Power.'];
+        if (move.id === 'frustration' && set.happiness < 105) return ['The move Frustration is banned because Pokemon ' + (set.name || set.species) + ' has less than 105 happiness'];
+        if (move.id === 'return' && set.happiness > 150) return ['The move Return is banned because Pokemon ' + (set.name || set.species) + 'has more than 150 happiness'];
+        if (move.basePowerCallback && !(move.id in {'frustration':1,'return':1})) return ['The move ' + move.name + ' is banned because it has a variable BP'];
+        if (move.basePower && move.basePower > 63 && set.ability in {'Pixilate':1,'Aerilate':1,'Refrigerate':1}) return ['The move ' + move.name + ' is banned for Pokemon with an -ate ability.']
+      }
+    },
+    onBasePowerPriority: 8,
+    onBasePower: function (basePower, attacker, defender, move) {
+       if (basePower <= 60) {
+         this.debug('Technician boost');
+         return this.chainModify(1.5);
+       }
+   },
+},
+	 {
+        name: "Hawluchange",
+        section: "Old Other Metagames",
+       
+        ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite'],
+	desc: [" &bullet; <a href=http://www.smogon.com/forums/threads/hawluchange-now-playable.3529847/>"],
+        mod: "hawluchange",
+        onModifyMove: function (move, pokemon) {
+            if (move.id === 'flyingpress') {
+                move.type = pokemon.types[0];
+                if (pokemon.types[1]) {
+                    move.onEffectiveness = function(typeMod, type, move) {
+                        return typeMod + this.getEffectiveness(pokemon.types[1], type);
+                    }
+                } else {
+                    move.onEffectiveness = function(typeMod, type, move) {
+                        return typeMod;
+                    }
+                }
+            }
+        }
+    },
+	{
+    name: "Type Exchange",
+    desc: [
+        "&bullet; <a href=\"http://www.smogon.com/forums/threads/type-exchange.3556479/\">Type Exchange Metagame Discussion</a>",
+        "&bullet; <a href=\"http://www.smogon.com/forums/threads/type-exchange.3556479/page-2#post-6547201/\">Gothitelle & Gothorita Quick Ban</a>"
+    ],
+    section: "Old Other Metagames",
+    ruleset: [/*'OU',*/ 'Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+    banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', /*'Shadow Tag',*/ 'Gothitelle', 'Gothorita'],
+    onBegin: function () {
+        [this.p1.pokemon,this.p2.pokemon].forEach(function(pokemons) {
+            let last_pokemon = {
+                types: pokemons[pokemons.length-1].types,
+                typesData: pokemons[pokemons.length-1].typesData,
+            };
+            for (let i = pokemons.length-1; i > 0; i--) {
+                pokemons[i].types = pokemons[i-1].types;
+                pokemons[i].typesData = pokemons[i-1].typesData;
+            }
+            pokemons[0].types = last_pokemon.types;
+            pokemons[0].typesData = last_pokemon.typesData;
+        })
+    },
+},
+	    {
+        name: "Immunimons",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/immunimons.3516996/\">Immunimons</a>"],
+        section: "Old Other Metagames",
+
+        ruleset: ['OU'],
+        banlist: [],
+        onTryHit: function (target, source, move) {
+            if (target === source || move.type === '???' || move.id === 'struggle') return;
+            if (target.hasType(move.type)) {
+                this.add('-debug','immunimons immunity [' + move.id + ']');
+                return null;
+            }
+        },
+        onDamage: function (damage, target, source, effect) {
+            if ((source.hasType('Rock') && effect.id === 'stealthrock') || (source.hasType('Ground') && effect.id === 'spikes')) {
+                this.add('-debug','immunimons immunity [' + effect.id + ']');
+                return false;
+            }
+        },
+    },
+	 {
+        name: "Acid Rain",
+	desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/acid-rain.3518506/\">Acid Rain</a>"],
+        section: "Old Other Metagames",
+
+        mod: 'acidrain',
+        onBegin: function() {
+            this.setWeather('raindance');
+            delete this.weatherData.duration;
+            this.add('-message', "Eh, close enough.");
+        },
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Weather Ball', 'Castform']
+    },
+
+
+    	{
+		name: "Cross Evolution",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
+		section: "Old Other Metagames",
+
+		ruleset: ['Ubers', 'Baton Pass Clause'],
+		banlist: ['Rule:nicknameclause'],
+		onValidateTeam: function (team) {
+			let nameTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let name = team[i].name;
+				if (name) {
+					if (nameTable[name]) {
+						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
+					}
+					nameTable[name] = true;
+				}
+			}
+		},
+		validateSet: function (set, teamHas) {
+			let crossTemplate = this.tools.getTemplate(set.name);
+			if (!crossTemplate.exists) return this.validateSet(set, teamHas);
+			let template = this.tools.getTemplate(set.species);
+			if (!template.exists) return ["The Pokemon '" + set.species + "' does not exist."];
+			if (!template.evos.length) return ["" + template.species + " cannot cross evolve because it doesn't evolve."];
+			if (crossTemplate.species == 'Shedinja') return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it is banned."];
+			if (crossTemplate.battleOnly || !crossTemplate.prevo) return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it isn't an evolution."];
+			let crossPrevoTemplate = this.tools.getTemplate(crossTemplate.prevo);
+			if (!crossPrevoTemplate.prevo !== !template.prevo) return ["" + template.species + " cannot cross into " + crossTemplate.species + " because they are not consecutive evolutionary stages."];
+
+			// Make sure no stat is too high/low to cross evolve to
+			let stats = {'hp': 'HP', 'atk': 'Attack', 'def': 'Defense', 'spa': 'Special Attack', 'spd': 'Special Defense', 'spe': 'Speed'};
+			for (let statid in template.baseStats) {
+				let evoStat = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
+				if (evoStat < 1) {
+					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too low."];
+				} else if (evoStat > 255) {
+					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too high."];
+				}
+			}
+
+			let mixedTemplate = Object.assign({}, template);
+			// Ability test
+			let ability = this.tools.getAbility(set.ability);
+			if (ability.name !== 'Huge Power' && ability.name !== 'Pure Power' && ability.name !== 'Shadow Tag') mixedTemplate.abilities = crossTemplate.abilities;
+
+			mixedTemplate.learnset = Object.assign({}, template.learnset);
+			let newMoves = 0;
+			for (let i in set.moves) {
+				let move = toId(set.moves[i]);
+				if (!this.checkLearnset(move, template)) continue;
+				if (this.checkLearnset(move, crossTemplate)) continue;
+				if (++newMoves > 2) continue;
+				mixedTemplate.learnset[move] = ['6T'];
+			}
+			return this.validateSet(set, teamHas, mixedTemplate);
+		},
+		onBegin: function () {
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+                                if (pokemon.set.name === pokemon.set.species) continue;
+				let crossTemplate = this.getTemplate(pokemon.name);
+				if (!crossTemplate.exists) continue;
+				try {
+				let template = pokemon.baseTemplate;
+				let crossPrevoTemplate = this.getTemplate(crossTemplate.prevo);
+				let mixedTemplate = Object.assign({}, template);
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
+				mixedTemplate.weightkg = Math.max(0.1, template.weightkg + crossTemplate.weightkg - crossPrevoTemplate.weightkg);
+				mixedTemplate.nfe = false;
+
+				mixedTemplate.baseStats = {};
+				for (let statid in template.baseStats) {
+					mixedTemplate.baseStats[statid] = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
+				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+
+				mixedTemplate.types = template.types.slice();
+				if (crossTemplate.types[0] !== crossPrevoTemplate.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
+				if (crossTemplate.types[1] !== crossPrevoTemplate.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
+				if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
+
+				pokemon.baseTemplate = mixedTemplate;
+				pokemon.formeChange(mixedTemplate);
+				pokemon.crossEvolved = true;
+				} catch (e) {
+					this.add('-hint', 'Failed to cross evolve ' + pokemon.baseTemplate.species + ' to ' + crossTemplate.species + '. Please report this error so that it can be fixed.');
+				}
+			}
+		},
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+			if (pokemon.crossEvolved) {
+				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+			}
+		},
+	},
+	{
+			name:"Partners in Crime",
+		        section: "Old Other Metagames",
+		        desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/partners-in-crime.3559988/\">Partners in Crime</a>"],
+		        ruleset: ["Doubles OU"],
+		        mod: "pic",
+		        gameType:"doubles",
+		        banlist: ["Huge Power","Kangaskhanite", "Mawilite","Medichamite","Pure Power","Wonder Guard"],
+			onBegin: function()
+			{
+					for(let i=1;i<=2;i++)
+					{
+						for(let j=0;j<this["p"+i].pokemon.length;j++)
+						{
+							this["p"+i].pokemon[j].om = this["p"+i].pokemon[j].moveset;
+							this["p"+i].pokemon[j].obm = this["p"+i].pokemon[j].baseMoveset;
+						}
+					}
+			},
+		        onSwitchIn: function(pokemon)
+		        {
+		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
+		        	if(pokemon.isActive && this[side].pokemon[partner].isActive)
+		        	{
+		        		let partl = this[side].pokemon[partner].obm.length, pokl = pokemon.obm.length;
+		        		this[side].pokemon[partner].moveset = this[side].pokemon[partner].om.concat(pokemon.om);
+		        		this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm.concat(pokemon.obm);
+		        		pokemon.moveset = pokemon.om.concat(this[side].pokemon[partner].om);
+		        		pokemon.baseMoveset = pokemon.obm.concat(this[side].pokemon[partner].obm);
+					for(let i=0;i<this[side].pokemon[partner].moveset.length;i++)
+					{
+						if(!this[side].pokemon[partner].volatiles.choicelock)
+						{
+							this[side].pokemon[partner].moveset[i].disabled=false;
+							this[side].pokemon[partner].moveset[i].disabledSource = '';
+							this[side].pokemon[partner].baseMoveset[i].disabled=false;
+							this[side].pokemon[partner].baseMoveset[i].disabledSource = '';
+						}
+					}
+					for(let i=0;i<pokemon.moveset.length;i++)
+					{
+						if(!pokemon.volatiles.choicelock)
+						{
+							pokemon.moveset[i].disabled=false;
+							pokemon.moveset[i].disabledSource = '';
+							pokemon.baseMoveset[i].disabled=false;
+							pokemon.baseMoveset[i].disabledSource = '';
+						}
+					}
+		        		if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
+		        		{
+		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
+		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
+		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
+		        		}
+		        		if(Object.keys(pokemon.volatiles).indexOf(toId(this[side].pokemon[partner].ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
+		        		{
+		        			if(pokemon.innate) pokemon.removeVolatile(pokemon.innate);
+		        			pokemon.innate = toId(this[side].pokemon[partner].ability);
+		        			pokemon.addVolatile(pokemon.innate);
+		        		}
+		        	}
+		        },
+		        onAfterMega: function(pokemon)
+		        {
+		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
+		        	if(Object.keys(this[side].pokemon[partner].volatiles).indexOf(toId(pokemon.ability))<0 && this[side].pokemon[partner].ability != pokemon.ability)
+		        	{
+		        			if(this[side].pokemon[partner].innate) this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate);
+		        			this[side].pokemon[partner].innate = toId(pokemon.ability);
+		        			this[side].pokemon[partner].addVolatile(this[side].pokemon[partner].innate);
+		        	}
+		        },
+		        onFaint: function(pokemon)
+		        {
+		        	let side = pokemon.side.id, partner = (pokemon.position==0)?1:0;
+		        	if(this[side].pokemon[partner].isActive)
+		        	{
+		        		this[side].pokemon[partner].removeVolatile(this[side].pokemon[partner].innate)
+		        		delete this[side].pokemon[partner].innate;
+		        	}
+		        	this[side].pokemon[partner].moveset = this[side].pokemon[partner].om;
+		        	this[side].pokemon[partner].baseMoveset = this[side].pokemon[partner].obm;
+		        },
+		},
+	{
+		name: "Averagemons",
+		desc: [
+			"Every Pok&eacute;mon has a stat spread of 100/100/100/100/100/100.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a>",
+		],
+		section: "Old Other Metagames",
+
+
+		mod: 'averagemons',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
+		banlist: ['Smeargle', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Sableye + Prankster',
+			'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Light Ball', 'Soul Dew', 'Thick Club', 'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Chatter',
+		],
+	},
+	 {
+        name: "No Status",
+	desc: ["&bullet; All Status moves are banned <br> &bullet; <a href=\"http://www.smogon.com/forums/threads/no-status.3542555/\">No Status</a>"],
+        section: "Old Other Metagames",
+        ruleset: ['OU'],
+        validateSet: function (set) {
+            var problems = [];
+            if (set.moves) {
+                for (var i = 0; i < set.moves.length; i++) {
+                    var move = this.getMove(set.moves[i]);
+                    if (move.category === 'Status') problems.push(move.name + ' is banned due to it being a Status move.');
+                }
+            }
+            return problems;
+        }
+    },
+	{
+        name: "Protean Palace",
+				desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/protean-palace.3496299/\">Protean Palace</a>"],
+				section: "Old Other Metagames",
+				column: 2,
+
+        ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite'],
+        onPrepareHit: function (source, target, move) {
+            var type = move.type;
+            if (type && type !== '???' && source.getTypes().join() !== type) {
+                if (!source.setType(type)) return;
+                this.add('-start', source, 'typechange', type);
+            }
+        }
+    },
+
     {
     	section: "Experimental Metas",
     	column: 1,
     },
 	{
 		name: "[Gen 7] Z-Shift",
-		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
+		desc: ["&bullet; In Z-Shift, the Type, Base Power and Priority of the move in the first slot is transferred to the Z-Move being used.<br>Necrozma @ Electrium Z  <br>Ability: Prism Armor  <br>EVs: 252 HP / 252 SpA / 4 SpD<br>Modest Nature  <br>IVs: 0 Atk  <br>- Prismatic Laser <br>- Charge Beam  <br>- Dark Pulse  <br>- Moonlight<br><br>So if this is the set then<br><b>Z-Charge Beam:</b> 160 Base Power, 90% Accuracy, Psychic type move with 70% chance to raise the user's SpA by 1 stage"],
 		ruleset: ['[Gen 7] OU'],
 		mod: 'zshift',
 		onValidateSet: function(set) {
@@ -4064,12 +4267,6 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 			this.add('-anim', target, move.baseMove, source);
 		},
 	},
-	{
-		name: "[Gen 7] Z-Moves Everywhere",
-		desc: ["&bullet; <a href=http://www.smogon.com/forums/threads/z-moves-everywhere-slate-4-ninetales-torkoal-groudon-submissions-phase-extended.3592186/>Z-Moves Everywhere</a>"],
-		ruleset: ['[Gen 7] Ubers'],
-		mod: 'zmoveseverywhere',
-	},
 	
 	{
 		name: "[Gen 7] Full Potential",
@@ -4078,155 +4275,7 @@ desc:["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.358181
 		//team: 'random',
 		mod:'fullpotential',
 	},
-	{
-		name: "Move Mastery",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-mastery.3590075/\">Move Mastery</a>"],
-		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		banlist: ['Unreleased', 'Illegal'],
-		mod: 'gen7',
-		validateSet: function(set, teamHas) {
-			if (!this.validateSet(set, teamHas).length) return [];
-			let ability = this.tools.getAbility(set.ability);
-			let template = this.tools.getTemplate(set.species);
-			let movemasters = {
-				adaptability: [],
-				angerpoint: ["Frost Breath", "Storm Throw"],
-				anticipation: [],
-				aromaveil: ["Taunt", "Torment", "Encore", "Disable", "Heal Block", "Attract"],
-				battlearmor: ["Frost Breath", "Storm Throw"],
-				bigpecks: ["Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech"],
-				blaze: ["Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
-				bulletproof: ["Acid Spray", "Aura Sphere", "Barrage", "Beak Blast", "Bullet Seed", "Egg Bomb", "Electro Ball", "Energy Ball", "Focus Blast", "Gyro Ball", "Ice Ball", "Magnet Bomb", "Mist Ball", "Mud Bomb", "Octazooka", "Rock Wrecker", "Searing Shot", "Seed Bomb", "Shadow Ball", "Sludge Bomb", "Weather Ball", "Zap Cannon"],
-				chlorophyll: ["Sunny Day"],
-				clearbody: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
-				comatose: ["Hex", "Wake-Up Slap", "Sleep Talk", "Snore", "Uproar", "Rest"],
-				competitive: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
-				compoundeyes: [],
-				corrosion: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic"],
-				damp: ["Self-Destruct", "Explosion"],
-				dancer: ["Feather Dance", "Fiery Dance", "Dragon Dance", "Lunar Dance", "Petal Dance", "Revelation Dance", "Quiver Dance", "Swords Dance", "Teeter Dance"],
-				dazzling: ["Fake Out", "Extreme Speed", "Feint", "First Impression", "Accelerock", "Aqua Jet", "Baby-Doll Eyes", "Bullet Punch", "Ice Shard", "Ion Deluge", "Mach Punch", "Powder", "Quick Attack", "Shadow Sneak", "Sucker Punch", "Vacuum Wave", "Water Shuriken"],
-				defiant: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
-				dryskin: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool", "Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
-				filter: [],
-				flareboost: ["Beak Blast", "Blaze Kick", "Blue Flare", "Ember", "Fire Blast", "Fire Fang", "Fire Punch", "Flamethrower", "Flame Wheel", "Flare Blitz", "Fling", "Heat Wave", "Ice Burn", "Inferno", "Lava Plume", "Sacred Fire", "Scald", "Searing Shot", "Steam Eruption", "Tri Attack", "Will-O-Wisp"],
-				flashfire: ["Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create", "Will-O-Wisp"],
-				flowergift: ["Sunny Day"],
-				fluffy: ["Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
-				grasspelt: ["Grassy Terrain"],
-				harvest: ["Sunny Day"],
-				heatproof: ["Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
-				heavymetal: ["Autotomize", "Grass Knot", "Heat Crash", "Heavy Slam", "Low Kick", "Sky Drop"],
-				hypercutter: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento"],
-				icebody: ["Hail"],
-				immunity: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
-				infiltrator: ["Light Screen", "Reflect", "Safeguard", "Substitute"],
-				innerfocus: ["Air Slash", "Astonish", "Bite", "Bone Club", "Dark Pulse", "Dragon Rush", "Extrasensory", "Fake Out", "Fire Fang", "Fling", "Headbutt", "Heart Stamp", "Hyper Fang", "Ice Fang", "Icicle Crash", "Iron Head", "Needle Arm", "Rock Slide", "Rolling Kick", "Sky Attack", "Snore", "Steamroller", "Stomp", "Thunder Fang", "Twister", "Waterfall", "Zen Headbutt", "Zing Zap"],
-				insomnia: ["Dark Void", "Grass Whistle", "Hypnosis", "Lovely Kiss", "Relic Song", "Rest", "Sing", "Sleep Powder", "Spore", "Yawn"],
-				ironfist: ["Bullet Punch", "Comet Punch", "Dizzy Punch", "Drain Punch", "Dynamic Punch", "Fire Punch", "Focus Punch", "Hammer Arm", "Ice Hammer", "Ice Punch", "Mach Punch", "Mega Punch", "Meteor Mash", "Power-Up Punch", "Shadow Punch", "Sky Uppercut", "Thunder Punch"],
-				justified: ["Assurance", "Beat Up", "Bite", "Brutal Swing", "Crunch", "Dark Pulse", "Darkest Lariat", "Feint Attack", "Fling", "Foul Play", "Hyperspace Fury", "Knock Off", "Night Daze", "Night Slash", "Payback", "Power Trip", "Punishment", "Pursuit", "Snarl", "Sucker Punch", "Thief", "Throat Chop"],
-				keeneye: ["Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
-				levitate: ["Bone Club", "Bone Rush", "Bonemerang", "Bulldoze", "Dig", "Drill Run", "Earth Power", "Earthquake", "High Horsepower", "Land's Wrath", "Magnitude", "Mud Slap", "Mud Bomb", "Mud Shot", "Precipice Blades", "Sand Attack", "Stomping Tantrum", "Thousand Arrows", "Thousand Waves", "Gravity", "Smack Down", "Spikes", "Toxic Spikes", "Sticky Web"],
-				lightmetal: ["Autotomize", "Grass Knot", "Heat Crash", "Heavy Slam", "Low Kick", "Sky Drop"],
-				lightningrod: ["Bolt Strike", "Charge Beam", "Discharge", "Eerie Impulse", "Electrify", "Electro Ball", "Electroweb", "Fusion Bolt", "Ion Deluge", "Nuzzle", "Parabolic Charge", "Shock Wave", "Spark", "Thunder", "Thunder Fang", "Thunder Punch", "Thunder Shock", "Thunder Wave", "Thunderbolt", "Volt Switch", "Volt Tackle", "Wild Charge", "Zap Cannon", "Zing Zap"],
-				limber: ["Body Slam", "Bolt Strike", "Bounce", "Discharge", "Dragon Breath", "Fling", "Force Palm", "Freeze Shock", "Glare", "Lick", "Nuzzle", "Spark", "Stun Spore", "Thunder", "Thunder Fang", "Thunder Punch", "Thunder Shock", "Thunder Wave", "Thunderbolt", "Tri Attack", "Volt Tackle", "Zap Cannon"],
-				liquidooze: ["Absorb", "Drain Punch", "Draining Kiss", "Dream Eater", "Giga Drain", "Horn Leech", "Leech Life", "Leech Seed", "Mega Drain", "Oblivion Wing", "Parabolic Charge"],
-				liquidvoice: ["Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Confide", "Disarming Voice", "Echoed Voice", "Grass Whistle", "Growl", "Heal Bell", "Hyper Voice", "Metal Sound", "Noble Roar", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar"],
-				magmaarmor: ["Blizzard", "Freeze-Dry", "Ice Beam", "Ice Fang", "Ice Punch", "Powder Snow", "Tri Attack"],
-				megalauncher: ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Heal Pulse", "Origin Pulse", "Water Pulse"],
-				merciless: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
-				minus: ["Magnetic Flux", "Gear Up"],
-				motordrive: ["Bolt Strike", "Charge Beam", "Discharge", "Eerie Impulse", "Electrify", "Electro Ball", "Electroweb", "Fusion Bolt", "Ion Deluge", "Nuzzle", "Parabolic Charge", "Shock Wave", "Spark", "Thunder", "Thunder Fang", "Thunder Punch", "Thunder Shock", "Thunder Wave", "Thunderbolt", "Volt Switch", "Volt Tackle", "Wild Charge", "Zap Cannon", "Zing Zap"],
-				naturalcure: ["Volt Switch", "U-turn", "Parting Shot", "Baton Pass", "Roar", "Whirlwind", "Dragon Tail", "Circle Throw"],
-				oblivious: ["Taunt", "Attract"],
-				overcoat: ["Cotton Spore", "Poison Powder", "Powder", "Rage Powder", "Sleep Powder", "Spore", "Stun Spore"],
-				overgrow: ["Absorb", "Bullet Seed", "Energy Ball", "Frenzy Plant", "Giga Drain", "Grass Knot", "Grass Pledge", "Horn Leech", "Leaf Blade", "Leaf Storm", "Leaf Tornado", "Leafage", "Magical Leaf", "Mega Drain", "Needle Arm", "Petal Blizzard", "Petal Dance", "Power Whip", "Razor Leaf", "Seed Bomb", "Seed Flare", "Solar Beam", "Solar Blade", "Trop Kick", "Vine Whip", "Wood Hammer"],
-				owntempo: ["Chatter", "Confuse Ray", "Confusion", "Dizzy Punch", "Dynamic Punch", "Flatter", "Hurricane", "Psybeam", "Rock Climb", "Signal Beam", "Supersonic", "Swagger", "Sweet Kiss", "Teeter Dance", "Water Pulse"],
-				plus: ["Magnetic Flux", "Gear Up"],
-				poisonheal: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
-				prismarmor: [],
-				raindish: ["Rain Dance"],
-				rattled: ["Attack Order", "Bug Bite", "Bug Buzz", "Fell Stinger", "First Impression", "Fury Cutter", "Infestation", "Leech Life", "Lunge", "Megahorn", "Pin Missile", "Pollen Puff", "Signal Beam", "Silver Wind", "Steamroller", "Struggle Bug", "Twineedle", "U-turn", "X-Scissor", "Assurance", "Beat Up", "Bite", "Brutal Swing", "Crunch", "Dark Pulse", "Darkest Lariat", "Feint Attack", "Fling", "Foul Play", "Hyperspace Fury", "Knock Off", "Night Daze", "Night Slash", "Payback", "Power Trip", "Punishment", "Pursuit", "Snarl", "Sucker Punch", "Thief", "Throat Chop", "Astonish", "Hex", "Lick", "Moongeist Beam", "Night Shade", "Ominous Wind", "Phantom Force", "Shadow Ball", "Shadow Bone", "Shadow Claw", "Shadow Force", "Shadow Punch", "Shadow Sneak", "Spirit Shackle"],
-				reckless: ["Take Down", "Double-Edge", "Submission", "Volt Tackle", "Flare Blitz", "Brave Bird", "Wood Hammer", "Head Smash", "Wild Charge", "Head Charge", "High Jump Kick"],
-				regenerator: ["Volt Switch", "U-turn", "Parting Shot", "Baton Pass", "Roar", "Whirlwind", "Dragon Tail", "Circle Throw"],
-				rockhead: ["Take Down", "Double-Edge", "Submission", "Volt Tackle", "Flare Blitz", "Brave Bird", "Wood Hammer", "Head Smash", "Wild Charge", "Head Charge"],
-				sandforce: ["Bone Club", "Bone Rush", "Bonemerang", "Bulldoze", "Dig", "Drill Run", "Earth Power", "Earthquake", "High Horsepower", "Land's Wrath", "Magnitude", "Mud Slap", "Mud Bomb", "Mud Shot", "Precipice Blades", "Sand Attack", "Stomping Tantrum", "Thousand Arrows", "Thousand Waves", "Accelerock", "Ancient Power", "Diamond Storm", "Head Smash", "Power Gem", "Rock Blast", "Rock Slide", "Rock Throw", "Rock Tomb", "Rock Wrecker", "Rollout", "Smack Down", "Stone Edge", "Anchor Shot", "Bullet Punch", "Doom Desire", "Flash Cannon", "Gear Grind", "Gyro Ball", "Heavy Slam", "Iron Head", "Iron Tail", "Magnet Bomb", "Metal Burst", "Metal Claw", "Meteor Mash", "Mirror Shot", "Smart Strike", "Steel Wing", "Sunsteel Strike"],
-				sandrush: ["Sandstorm"],
-				sandveil: ["Sandstorm"],
-				sapsipper: ["Absorb", "Bullet Seed", "Energy Ball", "Frenzy Plant", "Giga Drain", "Grass Knot", "Grass Pledge", "Horn Leech", "Leaf Blade", "Leaf Storm", "Leaf Tornado", "Leafage", "Magical Leaf", "Mega Drain", "Needle Arm", "Petal Blizzard", "Petal Dance", "Power Whip", "Razor Leaf", "Seed Bomb", "Seed Flare", "Solar Beam", "Solar Blade", "Trop Kick", "Vine Whip", "Wood Hammer", "Cotton Spore", "Forest's Curse", "Grass Whistle", "Leech Seed", "Sleep Powder", "Spore", "Strength Sap", "Stun Spore", "Worry Seed"],
-				scrappy: ["Barrage", "Bind", "Body Slam", "Boomburst", "Chip Away", "Comet Punch", "Constrict", "Covet", "Crush Claw", "Crush Grip", "Cut", "Dizzy Punch", "Double-Edge", "Double Hit", "Double Slap", "Echoed Voice", "Egg Bomb", "Endeavor", "Explosion", "Extreme Speed", "Facade", "Fake Out", "False Swipe", "Feint", "Flail", "Frustration", "Fury Attack", "Fury Swipes", "Giga Impact", "Guillotine", "Head Charge", "Headbutt", "Hidden Power", "Hold Back", "Horn Attack", "Horn Drill", "Hyper Beam", "Hyper Fang", "Hyper Voice", "Judgement", "Last Resort", "Mega Kick", "Mega Punch", "Multi-Attack", "Natural Power", "Pay Day", "Pound", "Quick Attack", "Rage", "Rapid Spin", "Razor Wind", "Relic Song", "Retaliate", "Return", "Revelation Dance", "Rock Climb", "Round", "Scratch", "Secret Power", "Self-Destruct", "Skull Bash", "Slam", "Slash", "Smelling Salts", "Snore", "Sonic Boom", "Spike Cannon", "Spit Up", "Stomp", "Strength", "Super Fang", "Swift", "Tackle", "Tail Slap", "Take Down", "Techno Blast", "Thrash", "Tri Attack", "Trump Card", "Uproar", "Vice Grip", "Weather Ball", "Wrap", "Wring Out", "Arm Thrust", "Aura Sphere", "Brick Break", "Circle Throw", "Close Combat", "Counter", "Cross Chop", "Double Kick", "Drain Punch", "Dynamic Punch", "Final Gambit", "Flying Press", "Focus Blast", "Focus Punch", "Force Palm", "Hammer Arm", "High Jump Kick", "Jump Kick", "Karate Chop", "Low Kick", "Low Sweep", "Mach Punch", "Power-Up Punch", "Revenge", "Reversal", "Rock Smash", "Rolling Kick", "Sacred Sword", "Secret Sword", "Seismic Toss", "Sky Uppercut", "Storm Throw", "Submission", "Superpower", "Triple Kick", "Vacuum Wave", "Vital Throw", "Wake-Up Slap"],
-				sheerforce: ["Aurora Beam", "Lunge", "Play Rough", "Trop Kick", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Mist Ball", "Moonblast", "Mystical Fire", "Snarl", "Struggle Bug", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Ancient Power", "Metal Claw", "Meteor Mash", "Ominous Wind", "Power-Up Punch", "Rototiller", "Silver Wind", "Fell Stinger", "Steel Wing", "Diamond Storm", "Charge Beam", "Fiery Dance", "Flame Charge"],
-				shellarmor: ["Frost Breath", "Storm Throw"],
-				shielddust: ["Aurora Beam", "Lunge", "Play Rough", "Trop Kick", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Mist Ball", "Moonblast", "Mystical Fire", "Snarl", "Struggle Bug", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Ancient Power", "Metal Claw", "Meteor Mash", "Ominous Wind", "Power-Up Punch", "Rototiller", "Silver Wind", "Fell Stinger", "Steel Wing", "Diamond Storm", "Charge Beam", "Fiery Dance", "Flame Charge"],
-				simple: ["Aurora Beam", "Lunge", "Play Rough", "Trop Kick", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Mist Ball", "Moonblast", "Mystical Fire", "Snarl", "Struggle Bug", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Ancient Power", "Metal Claw", "Meteor Mash", "Ominous Wind", "Power-Up Punch", "Rototiller", "Silver Wind", "Fell Stinger", "Steel Wing", "Diamond Storm", "Charge Beam", "Fiery Dance", "Flame Charge", "Bulk Up", "Coil", "Curse", "Dragon Dance", "Growth", "Hone Claws", "Howl", "Meditate", "Sharpen", "Shift Gear", "Work Up", "Acupressure", "Shell Smash", "Swagger", "Swords Dance", "Belly Drum", "Baby-Doll Eyes", "Growl", "Noble Roar", "Parting Shot", "Play Nice", "Strength Sap", "Tearful Look", "Tickle", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Cosmic Power", "Defend Order", "Defense Curl", "Flower Shield", "Harden", "Magnetic Flux", "Stockpile", "Withdraw", "Acid Armor", "Barrier", "Iron Defense", "Cotton Guard", "Leer", "Tail Whip", "Screech", "Calm Mind", "Flatter", "Rototiller", "Quiver Dance", "Geomancy", "Nasty Plot", "Tail Glow", "Confide", "Captivate", "Eerie Impulse", "Charge", "Amnesia", "Fake Tears", "Metal Sound", "Double Team", "Minimize", "Defog", "Sweet Scent", "Kinesis", "Sand Attack", "Smokescreen", "Dragon Dance", "Rock Polish", "Sticky Web", "Toxic Thread", "Cotton Spore", "Scary Face", "String Shot"],
-				skilllink: ["Arm Thrust", "Barrage", "Bone Rush", "Bullet Seed", "Comet Punch", "Double Slap", "Fury Attack", "Fury Swipes", "Icicle Spear", "Pin Missile", "Rock Blast", "Spike Cannon", "Tail Slap", "Water Shuriken", "Bonemerang", "Double Hit", "Double Kick", "Dual Chop", "Gear Grind", "Twineedle", "Triple Kick"],
-				slushrush: ["Hail"],
-				sniper: ["Frost Breath", "Storm Throw"],
-				snowcloak: ["Hail"],
-				solarpower: ["Sunny Day"],
-				solidrock: [],
-				soulheart: ["Self-Destruct", "Explosion", "Healing Wish", "Lunar Dance", "Memento"],
-				soundproof: ["Boomburst", "Bug Buzz", "Chatter", "Clanging Scales", "Confide", "Disarming Voice", "Echoed Voice", "Grass Whistle", "Growl", "Heal Bell", "Hyper Voice", "Metal Sound", "Noble Roar", "Parting Shot", "Perish Song", "Relic Song", "Roar", "Round", "Screech", "Sing", "Snarl", "Snore", "Sparkling Aria", "Supersonic", "Uproar"],
-				stakeout: ["Volt Switch", "U-turn", "Parting Shot", "Baton Pass", "Roar", "Whirlwind", "Dragon Tail", "Circle Throw"],
-				steadfast: ["Air Slash", "Astonish", "Bite", "Bone Club", "Dark Pulse", "Dragon Rush", "Extrasensory", "Fake Out", "Fire Fang", "Fling", "Headbutt", "Heart Stamp", "Hyper Fang", "Ice Fang", "Icicle Crash", "Iron Head", "Needle Arm", "Rock Slide", "Rolling Kick", "Sky Attack", "Snore", "Steamroller", "Stomp", "Thunder Fang", "Twister", "Waterfall", "Zen Headbutt", "Zing Zap"],
-				steelworker: ["Anchor Shot", "Bullet Punch", "Doom Desire", "Flash Cannon", "Gear Grind", "Gyro Ball", "Heavy Slam", "Iron Head", "Iron Tail", "Magnet Bomb", "Metal Burst", "Metal Claw", "Meteor Mash", "Mirror Shot", "Smart Strike", "Steel Wing", "Sunsteel Strike"],
-				stickyhold: ["Covet", "Thief", "Bug Bite", "Pluck", "Incinerate", "Knock Off", "Trick", "Switcheroo"],
-				stormdrain: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
-				strongjaw: ["Bite", "Crunch", "Fire Fang", "Hyper Fang", "Ice Fang", "Poison Fang", "Psychic Fangs", "Thunder Fang"],
-				suctioncups: ["Volt Switch", "U-turn", "Parting Shot", "Baton Pass", "Roar", "Whirlwind", "Dragon Tail", "Circle Throw"],
-				surgesurfer: ["Electric Terrain"],
-				swarm: ["Attack Order", "Bug Bite", "Bug Buzz", "Fell Stinger", "First Impression", "Fury Cutter", "Infestation", "Leech Life", "Lunge", "Megahorn", "Pin Missile", "Pollen Puff", "Signal Beam", "Silver Wind", "Steamroller", "Struggle Bug", "Twineedle", "U-turn", "X-Scissor"],
-				sweetveil: ["Dark Void", "Grass Whistle", "Hypnosis", "Lovely Kiss", "Relic Song", "Rest", "Sing", "Sleep Powder", "Spore", "Yawn"],
-				swiftswim: ["Rain Dance"],
-				tangledfeet: ["Chatter", "Confuse Ray", "Confusion", "Dizzy Punch", "Dynamic Punch", "Flatter", "Hurricane", "Psybeam", "Rock Climb", "Signal Beam", "Supersonic", "Swagger", "Sweet Kiss", "Teeter Dance", "Water Pulse"],
-				technician: [],
-				thickfat: ["Aurora Beam", "Avalanche", "Blizzard", "Freeze-Dry", "Freeze Shock", "Frost Breath", "Glaciate", "Ice Ball", "Ice Beam", "Ice Burn", "Ice Fang", "Ice Hammer", "Ice Punch", "Ice Shard", "Icicle Crash", "Icicle Spear", "Icy Wind", "Powder Snow", "Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create"],
-				tintedlens: [],
-				torrent: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
-				toxicboost: ["Cross Poison", "Fling", "Gunk Shot", "Poison Jab", "Poison Powder", "Poison Sting", "Poison Tail", "Sludge", "Sludge Bomb", "Sludge Wave", "Smog", "Toxic Thread", "Twineedle", "Poison Fang", "Toxic", "Toxic Spikes"],
-				triage: ["Aqua Ring", "Floral Healing", "Grassy Terrain", "Heal Pulse", "Healing Wish", "Ingrain", "Leech Seed", "Pain Split", "Present", "Purify", "Strength Sap", "Wish", "Heal Order", "Milk Drink", "Moonlight", "Morning Sun", "Recover", "Rest", "Roost", "Shore Up", "Slack Off", "Soft-Boiled", "Synthesis", "Absorb", "Drain Punch", "Draining Kiss", "Dream Eater", "Giga Drain", "Horn Leech", "Leech Life", "Leech Seed", "Mega Drain", "Oblivion Wing", "Parabolic Charge"],
-				unaware: ["Aurora Beam", "Lunge", "Play Rough", "Trop Kick", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Mist Ball", "Moonblast", "Mystical Fire", "Snarl", "Struggle Bug", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Ancient Power", "Metal Claw", "Meteor Mash", "Ominous Wind", "Power-Up Punch", "Rototiller", "Silver Wind", "Fell Stinger", "Steel Wing", "Diamond Storm", "Charge Beam", "Fiery Dance", "Flame Charge", "Bulk Up", "Coil", "Curse", "Dragon Dance", "Growth", "Hone Claws", "Howl", "Meditate", "Sharpen", "Shift Gear", "Work Up", "Acupressure", "Shell Smash", "Swagger", "Swords Dance", "Belly Drum", "Baby-Doll Eyes", "Growl", "Noble Roar", "Parting Shot", "Play Nice", "Strength Sap", "Tearful Look", "Tickle", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Cosmic Power", "Defend Order", "Defense Curl", "Flower Shield", "Harden", "Magnetic Flux", "Stockpile", "Withdraw", "Acid Armor", "Barrier", "Iron Defense", "Cotton Guard", "Leer", "Tail Whip", "Screech", "Calm Mind", "Flatter", "Rototiller", "Quiver Dance", "Geomancy", "Nasty Plot", "Tail Glow", "Confide", "Captivate", "Eerie Impulse", "Charge", "Amnesia", "Fake Tears", "Metal Sound", "Double Team", "Minimize", "Defog", "Sweet Scent", "Kinesis", "Sand Attack", "Smokescreen"],
-				unburden: ["Fling", "Covet", "Thief", "Bug Bite", "Pluck", "Incinerate", "Knock Off", "Trick", "Switcheroo"],
-				vitalspirit: ["Dark Void", "Grass Whistle", "Hypnosis", "Lovely Kiss", "Relic Song", "Rest", "Sing", "Sleep Powder", "Spore", "Yawn"],
-				voltabsorb: ["Bolt Strike", "Charge Beam", "Discharge", "Eerie Impulse", "Electrify", "Electro Ball", "Electroweb", "Fusion Bolt", "Ion Deluge", "Nuzzle", "Parabolic Charge", "Shock Wave", "Spark", "Thunder", "Thunder Fang", "Thunder Punch", "Thunder Shock", "Thunder Wave", "Thunderbolt", "Volt Switch", "Volt Tackle", "Wild Charge", "Zap Cannon", "Zing Zap"],
-				waterabsorb: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
-				waterbubble: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool", "Blast Burn", "Blaze Kick", "Blue Flare", "Burn Up", "Ember", "Eruption", "Fiery Dance", "Fire Blast", "Fire Fang", "Fire Lash", "Fire Pledge", "Fire Punch", "Fire Spin", "Flame Burst", "Flame Charge", "Flame Wheel", "Flamethrower", "Flare Blitz", "Fusion Flare", "Heat Crash", "Heat Wave", "Incinerate", "Inferno", "Magma Storm", "Mystical Fire", "Overheat", "Sacred Fire", "Searing Shot", "Shell Trap", "V-Create", "Beak Blast", "Ice Burn", "Tri Attack", "Will-O-Wisp", "Fling"],
-				watercompaction: ["Aqua Jet", "Aqua Tail", "Brine", "Bubble", "Bubble Beam", "Clamp", "Crabhammer", "Dive", "Hydro Cannon", "Hydro Pump", "Liquidation", "Muddy Water", "Octazooka", "Origin Pulse", "Razor Shell", "Scald", "Soak", "Sparkling Aria", "Steam Eruption", "Surf", "Water Gun", "Water Pledge", "Water Pulse", "Water Spout", "Waterfall", "Water Shuriken", "Whirlpool"],
-				waterveil: ["Beak Blast", "Blaze Kick", "Blue Flare", "Ember", "Fire Blast", "Fire Fang", "Fire Punch", "Flamethrower", "Flame Wheel", "Flare Blitz", "Fling", "Heat Wave", "Ice Burn", "Inferno", "Lava Plume", "Sacred Fire", "Scald", "Searing Shot", "Steam Eruption", "Tri Attack", "Will-O-Wisp"],
-				whitesmoke: ["Aurora Beam", "Baby-Doll Eyes", "Growl", "Lunge", "Noble Roar", "Parting Shot", "Play Nice", "Play Rough", "Strength Sap", "Tearful Look", "Tickle", "Trop Kick", "Venom Drench", "Charm", "Feather Dance", "King's Shield", "Memento", "Crunch", "Crush Claw", "Fire Lash", "Iron Tail", "Leer", "Liquidation", "Razor Shell", "Rock Smash", "Shadow Bone", "Tail Whip", "Tickle", "Screech", "Confide", "Mist Ball", "Moonblast", "Mystical Fire", "Noble Roar", "Parting Shot", "Snarl", "Struggle Bug", "Tearful Look", "Venom Drench", "Captivate", "Eerie Impulse", "Memento", "Acid", "Bug Buzz", "Earth Power", "Energy Ball", "Flash Cannon", "Focus Blast", "Luster Purge", "Shadow Ball", "Acid Spray", "Fake Tears", "Metal Sound", "Seed Flare", "Bubble", "Bubble Beam", "Bulldoze", "Constrict", "Electroweb", "Glaciate", "Icy Wind", "Low Sweep", "Mud Shot", "Rock Tomb", "Sticky Web", "Toxic Thread", "Venom Drench", "Cotton Spore", "Scary Face", "String Shot", "Defog", "Sweet Scent", "Flash", "Kinesis", "Leaf Tornado", "Mirror Shot", "Mud Bomb", "Mud-Slap", "Muddy Water", "Night Daze", "Octazooka", "Sand Attack", "Smokescreen"],
-			};
-			let allMoves = this.tools.data.Movedex;
-			for(let i in allMoves) {
-				let move = allMoves[i];
-				if (template.types.includes(move.type)) {
-						movemasters.adaptability.push(move.id);
-				}
-				if (this.tools.getImmunity(move, template) && this.tools.getEffectiveness(move, template) > 0) {
-						movemasters.anticipation.push(move.id);
-						movemasters.solidrock.push(move.id);
-						movemasters.filter.push(move.id);
-						movemasters.prismarmor.push(move.id);
-				}
-				if (this.tools.getEffectiveness(move, template) < 1) {
-						movemasters.tintedlens.push(move.id);
-				}
-				if (move.basePower <= 60) {
-						movemasters.technician.push(move.id);
-				}
-				if (move.accuracy < 100) {
-						movemasters.compoundeyes.push(move.id);
-				}
-			}
-			if(movemasters[ability.id]) {
-				let moves = movemasters[ability.id];
-				for(let j=0;j<moves.length;j++) {
-					if(template.learnset[toId(moves[j])]) continue;
-					template.learnset[toId(moves[j])] = ["7T"];
-				}
-				return this.validateSet(set, teamHas, template);
-			}
-		}
-	},
+	
 	{
 		name: "Enchanted Items Hackmons",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
