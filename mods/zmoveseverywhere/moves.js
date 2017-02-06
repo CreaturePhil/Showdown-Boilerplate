@@ -11,6 +11,10 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Frenzy Plant", target);
+		},
 		target: "normal",
 		type: "Grass",
 		isZ: "venusauramz",
@@ -25,6 +29,10 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+	  	onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Blast Burn", target);
+		},
 		target: "normal",
 		type: "Fire",
 		isZ: "charizardiumz",
@@ -39,6 +47,10 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+	  	onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hydro Cannon", target);
+		},
 		target: "normal",
 		type: "Water",
 		isZ: "blastoisiumz",
@@ -53,6 +65,10 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+	  	onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Icicle Spear", target);
+		},
 	  	secondary: {
 			chance: 10,
 			status: 'frz',
@@ -72,8 +88,10 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		target: "normal",
-		type: "Dark",
+	   	onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Black Hole Eclipse", target);
+		},
 	   	beforeTurnCallback: function (pokemon, target) {
 			target.side.addSideCondition('pursuit', pokemon);
 			if (!target.side.sideConditions['pursuit'].sources) {
@@ -115,6 +133,8 @@ exports.BattleMovedex = {
 				}
 			},
 		},
+		target: "normal",
+		type: "Dark",
 		isZ: "tyraniumz",
 	},
 	"earthlycrush": {
@@ -127,6 +147,10 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Tectonic Rage", target);
+		},
 		target: "normal",
 		type: "Ground",
 		multihit: 2,
@@ -142,6 +166,10 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Giga Drain", target);
+		},
 		target: "normal",
 		type: "Grass",
 		drain: [2, 3],
@@ -161,6 +189,10 @@ exports.BattleMovedex = {
 			atk: 2,
 		},
 		flags: {},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Diamond Storm", target);
+		},
 		target: "normal",
 		type: "Rock",
 		drain: [2, 3],
@@ -176,6 +208,32 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Blizzard", target);
+		},
+		weather: 'hail',
+		sideCondition: 'tailwind',
+		effect: {
+			duration: 4,
+			durationCallback: function (target, source, effect) {
+				if (source && source.hasAbility('persistent')) {
+					return 6;
+				}
+				return 4;
+			},
+			onStart: function (side) {
+				this.add('-sidestart', side, 'move: Tailwind');
+			},
+			onModifySpe: function (spe, pokemon) {
+				return this.chainModify(2);
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 4,
+			onEnd: function (side) {
+				this.add('-sideend', side, 'move: Tailwind');
+			},
+		},
 		target: "normal",
 		type: "Ice",
 		isZ: "vanilliumz",
