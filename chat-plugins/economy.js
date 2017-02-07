@@ -24,7 +24,7 @@ const INACTIVE_END_TIME = 1 * 60 * 1000; // 1 minute
  * @returns {String}
  */
 function currencyName(amount) {
-	let name = " buck";
+	let name = " Dragon Dollar";
 	return amount === 1 ? name : name + "s";
 }
 

@@ -481,7 +481,8 @@ exports.BattleAbilities = {
 	},
 	"contrary": {
 		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
-		onBoost: function (boost) {
+		onBoost: function (boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
 				boost[i] *= -1;
 			}
@@ -587,7 +588,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
 		onFoeTryMove: function (target, source, effect) {
-			if (source.side === this.effectData.target.side && effect.priority > 0.1 && effect.target !== 'self') {
+			if ((source.side === this.effectData.target.side || effect.id === 'perishsong') && effect.priority > 0.1 && effect.target !== 'foeSide') {
 				this.attrLastMove('[still]');
 				this.add('cant', this.effectData.target, 'ability: Dazzling', effect, '[of] ' + target);
 				return false;
@@ -697,8 +698,8 @@ exports.BattleAbilities = {
 		num: 190,
 	},
 	"disguise": {
-		desc: "If this Pokemon is a Mimikyu, it will take 0 damage the first time it is attacked in battle. It then changes to Busted Form.",
-		shortDesc: "If this Pokemon is a Mimikyu, it takes 0 damage the first time it is attacked in battle.",
+		desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it changes to Busted Form. Confusion damage also breaks the disguise.",
+		shortDesc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage.",
 		onDamagePriority: 1,
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'mimikyu' && !target.transformed) {
@@ -706,6 +707,13 @@ exports.BattleAbilities = {
 				this.effectData.busted = true;
 				return 0;
 			}
+		},
+		onEffectiveness: function (typeMod, type, move) {
+			if (!this.activeTarget) return;
+			let pokemon = this.activeTarget;
+			if (pokemon.template.speciesid !== 'mimikyu' || pokemon.transformed) return;
+			if (!pokemon.runImmunity(move.type)) return;
+			return 0;
 		},
 		onUpdate: function (pokemon) {
 			if (pokemon.template.speciesid === 'mimikyu' && this.effectData.busted) {
@@ -1713,7 +1721,7 @@ exports.BattleAbilities = {
 		id: "liquidooze",
 		onSourceTryHeal: function (damage, target, source, effect) {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
-			let canOoze = {drain: 1, leechseed: 1};
+			let canOoze = {drain: 1, leechseed: 1, strengthsap: 1};
 			if (canOoze[effect.id]) {
 				this.damage(damage);
 				return 0;
@@ -1759,6 +1767,7 @@ exports.BattleAbilities = {
 			}
 			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
 			this.useMove(newMove, target, source);
 			return null;
 		},
@@ -1768,6 +1777,7 @@ exports.BattleAbilities = {
 			}
 			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
 			this.useMove(newMove, this.effectData.target, source);
 			return null;
 		},
@@ -2563,7 +2573,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
 		onFoeTryMove: function (target, source, effect) {
-			if (source.side === this.effectData.target.side && effect.priority > 0.1 && effect.target !== 'self') {
+			if ((source.side === this.effectData.target.side || effect.id === 'perishsong') && effect.priority > 0.1 && effect.target !== 'foeSide') {
 				this.attrLastMove('[still]');
 				this.add('cant', this.effectData.target, 'ability: Queenly Majesty', effect, '[of] ' + target);
 				return false;
@@ -2990,12 +3000,12 @@ exports.BattleAbilities = {
 			if (pokemon.hp > pokemon.maxhp / 2) {
 				if (pokemon.template.speciesid === 'minior') {
 					pokemon.formeChange('Minior-Meteor');
-					this.add('-formechange', pokemon, 'Minior-Meteor', '[msg]', '[from] ability: Shields Down');
+					this.add('-formechange', pokemon, 'Minior-Meteor', '[from] ability: Shields Down');
 				}
 			} else {
 				if (pokemon.template.speciesid !== 'minior') {
 					pokemon.formeChange(pokemon.set.species);
-					this.add('-formechange', pokemon, pokemon.set.species, '[msg]', '[from] ability: Shields Down');
+					this.add('-formechange', pokemon, pokemon.set.species, '[from] ability: Shields Down');
 				}
 			}
 		},
@@ -3027,7 +3037,8 @@ exports.BattleAbilities = {
 	},
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
-		onBoost: function (boost) {
+		onBoost: function (boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
 				boost[i] *= 2;
 			}

@@ -39,8 +39,8 @@ const Monitor = module.exports = {
 	},
 	adminlog: function (text) {
 		this.notice(text);
-		if (Rooms('upperstaff')) {
-			Rooms('upperstaff').add('|c|~|' + text).update();
+		if (Rooms('theadminchat')) {
+			Rooms('theadminchat').add('|c|~|' + text).update();
 		}
 	},
 	logHTML: function (text) {

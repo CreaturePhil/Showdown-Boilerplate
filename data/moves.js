@@ -1997,8 +1997,10 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		onTryHit: function (target, source, move) {
-			if (!source.hasType("Fire")) return false;
+		onTryMove: function (pokemon, target, move) {
+			if (pokemon.hasType('Fire')) return;
+			this.add('-fail', pokemon, 'move: Burn Up');
+			return null;
 		},
 		self: {
 			onHit: function (pokemon) {
@@ -3055,7 +3057,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		status: 'slp',
-		onTry: function (pokemon, target, move) {
+		onTryMove: function (pokemon, target, move) {
 			if (pokemon.template.species === 'Darkrai' || move.hasBounced) {
 				return;
 			}
@@ -4582,7 +4584,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		selfdestruct: true,
+		selfdestruct: "always",
 		secondary: false,
 		target: "allAdjacent",
 		type: "Normal",
@@ -4914,9 +4916,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			let damage = pokemon.hp;
-			pokemon.faint();
-			return damage;
+			return pokemon.hp;
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to the user's current HP. If this move is successful, the user faints.",
@@ -4927,7 +4927,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		secondary: false,
 		target: "normal",
 		type: "Fighting",
@@ -6552,31 +6552,17 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 2,
-			onResidual: function (battle) {
-				this.debug('onResidual battle');
-				let pokemon;
-				for (let s in battle.sides) {
-					for (let p in battle.sides[s].active) {
-						pokemon = battle.sides[s].active[p];
-						if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-							this.debug('Pokemon is grounded, healing through Grassy Terrain.');
-							this.heal(pokemon.maxhp / 16, pokemon, pokemon);
-						}
-					}
+			onResidual: function () {
+				this.eachEvent('Terrain');
+			},
+			onTerrain: function (pokemon) {
+				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
+					this.heal(pokemon.maxhp / 16, pokemon, pokemon);
 				}
 			},
-			onEnd: function (battle) {
-				this.debug('onResidual battle');
-				let pokemon;
-				for (let s in battle.sides) {
-					for (let p in battle.sides[s].active) {
-						pokemon = battle.sides[s].active[p];
-						if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-							this.debug('Pokemon is grounded, healing through Grassy Terrain.');
-							this.heal(pokemon.maxhp / 16, pokemon, pokemon);
-						}
-					}
-				}
+			onEnd: function () {
+				this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
 		},
@@ -7236,7 +7222,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		sideCondition: 'healingwish',
 		effect: {
 			duration: 2,
@@ -9434,7 +9420,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		sideCondition: 'lunardance',
 		effect: {
 			duration: 2,
@@ -9565,6 +9551,7 @@ exports.BattleMovedex = {
 				}
 				let newMove = this.getMoveCopy(move.id);
 				newMove.hasBounced = true;
+				newMove.pranksterBoosted = false;
 				this.useMove(newMove, target, source);
 				return null;
 			},
@@ -9574,6 +9561,7 @@ exports.BattleMovedex = {
 				}
 				let newMove = this.getMoveCopy(move.id);
 				newMove.hasBounced = true;
+				newMove.pranksterBoosted = false;
 				this.useMove(newMove, this.effectData.target, source);
 				return null;
 			},
@@ -10031,7 +10019,7 @@ exports.BattleMovedex = {
 			atk: -2,
 			spa: -2,
 		},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		secondary: false,
 		target: "normal",
 		type: "Dark",
@@ -11889,6 +11877,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-singleturn', target, 'Powder');
 			},
+			onTryMovePriority: -1,
 			onTryMove: function (pokemon, target, move) {
 				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'move: Powder');
@@ -14139,7 +14128,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		selfdestruct: true,
+		selfdestruct: "always",
 		secondary: false,
 		target: "allAdjacent",
 		type: "Normal",
@@ -15808,8 +15797,8 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Until the end of the turn, all single-target attacks from other Pokemon are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Ability Magic Bounce, or drawn in by the Abilities Lightning Rod or Storm Drain. Fails if it is not a Double Battle or Battle Royale.",
-		shortDesc: "Moves redirect to the target on the turn used.",
+		desc: "Until the end of the turn, all single-target attacks from opponents of the target are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Ability Magic Bounce, or drawn in by the Abilities Lightning Rod or Storm Drain. Fails if it is not a Double Battle or Battle Royale.",
+		shortDesc: "Target's foes' moves are redirected to it this turn.",
 		id: "spotlight",
 		name: "Spotlight",
 		pp: 15,
@@ -16154,7 +16143,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "The user restores its HP equal to the target's Attack stat, calculated with its stat stage, then lowers the target's Attack by 1 stage.",
+		desc: "Lowers the target's Attack by 1 stage. The user restores its HP equal to the target's Attack stat calculated with its stat stage before this move was used. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Fails if the target's Attack stat stage is -6.",
 		shortDesc: "User heals HP=target's Atk stat. Lowers Atk by 1.",
 		id: "strengthsap",
 		isViable: true,
@@ -16164,8 +16153,9 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, heal: 1},
 		onHit: function (target, source) {
 			if (target.boosts.atk === -6) return false;
-			this.heal(target.getStat('atk', false, true), source);
+			let atk = target.getStat('atk', false, true);
 			this.boost({atk:-1}, target, source, null, null, true);
+			this.heal(atk, source, target);
 		},
 		secondary: false,
 		target: "normal",
@@ -16676,7 +16666,7 @@ exports.BattleMovedex = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			if (!this.singleEvent('TakeItem', myItem, source.itemData, source, target, move, myItem)) {
+			if ((myItem && !this.singleEvent('TakeItem', myItem, source.itemData, target, source, move, myItem)) || (yourItem && !this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem))) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
 				return false;
@@ -17629,7 +17619,7 @@ exports.BattleMovedex = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			if (!this.singleEvent('TakeItem', myItem, source.itemData, source, target, move, myItem)) {
+			if ((myItem && !this.singleEvent('TakeItem', myItem, source.itemData, target, source, move, myItem)) || (yourItem && !this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem))) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
 				return false;

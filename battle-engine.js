@@ -29,7 +29,6 @@ class BattlePokemon {
 		this.getDetails = (this.getDetails || BattlePokemon.getDetails).bind(this);
 
 		this.set = set;
-
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
 			this.battle.debug('Unidentified species: ' + this.species);
@@ -971,7 +970,7 @@ class BattlePokemon {
 		return false;
 	}
 	useItem(item, source, sourceEffect) {
-		if (!this.hp || !this.isActive) return false;
+		if ((!this.hp && !this.getItem().isGem) || !this.isActive) return false;
 		if (!this.item) return false;
 
 		let id = toId(item);
@@ -2679,6 +2678,7 @@ class Battle extends Tools.BattleDex {
 					TryMove: 1,
 					Boost: 1,
 					DragOut: 1,
+					Effectiveness: 1,
 				};
 				if (eventid in AttackingEvents) {
 					this.debug(eventid + ' handler suppressed by Mold Breaker');
@@ -3471,7 +3471,10 @@ class Battle extends Tools.BattleDex {
 			// need two players to start
 			return;
 		}
-
+		if(this.data.Formats[this.formatData.id].desc) {	
+			let desc = this.data.Formats[this.formatData.id].desc.join("<br />");
+			this.add("raw|<div class=\"infobox\">"+desc+"</div>");
+		}
 		if (this.started) {
 			this.makeRequest();
 			this.isActive = true;
@@ -3845,7 +3848,6 @@ class Battle extends Tools.BattleDex {
 		let statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
 		let attack;
 		let defense;
-
 		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
 		let defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 
@@ -4957,7 +4959,6 @@ class Battle extends Tools.BattleDex {
 	join(slot, name, avatar, team) {
 		if (this.p1 && this.p1.isActive && this.p2 && this.p2.isActive) return false;
 		if ((this.p1 && this.p1.isActive && this.p1.name === name) || (this.p2 && this.p2.isActive && this.p2.name === name)) return false;
-
 		let player = null;
 		if (this.p1 && this.p1.isActive || slot === 'p2') {
 			if (this.started) {

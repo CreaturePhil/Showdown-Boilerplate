@@ -1076,8 +1076,8 @@ exports.commands = {
 		this.sendReplyBox(
 			"Pok&eacute;mon Showdown is open source:<br />" +
 			"- Language: JavaScript (Node.js)<br />" +
-			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />" +
-			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source code</a><br />" +
+			"- <a href=\"https://github.com/XpRienzo/DragonHeaven/commits/master\">What's new here?</a><br />" +
+			"- <a href=\"https://github.com/XpRienzo/DragonHeaven\">Dragon Heaven source code</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Dex\">Dex source code</a>"
 		);
@@ -1188,7 +1188,7 @@ exports.commands = {
 			"- <a href=\"https://www.smogon.com/cap/\">CAP project website and description</a><br />" +
 			"- <a href=\"https://www.smogon.com/forums/threads/48782/\">What Pok&eacute;mon have been made?</a><br />" +
 			"- <a href=\"https://www.smogon.com/forums/forums/311\">Talk about the metagame here</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/threads/3512318/\">Sample XY CAP teams</a>"
+			"- <a href=\"https://www.smogon.com/forums/threads/3593752/\">Sample SM CAP teams</a>"
 		);
 	},
 	caphelp: ["/cap - Provides an introduction to the Create-A-Pok&eacute;mon project.",
@@ -1694,10 +1694,10 @@ exports.commands = {
 		Config.potd = target;
 		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
 		if (target) {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
+			if (Rooms.development) Rooms.development.addRaw("<b>The Pok&eacute;mon of the was set to " + target + ". This Pokemon will be guaranteed to show up in random battles.</b>");
 			this.logModCommand("The Pok\u00e9mon of the Day was changed to " + target + " by " + user.name + ".");
 		} else {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
+			if (Rooms.development) Rooms.development.addRaw("<b>The Pok&eacute;mon of the Day was removed. No pokemon will be guaranteed in random battles.</b>");
 			this.logModCommand("The Pok\u00e9mon of the Day was removed by " + user.name + ".");
 		}
 	},
