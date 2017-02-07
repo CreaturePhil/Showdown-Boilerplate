@@ -156,7 +156,7 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Diamond Storm", target);
 		},
-		target: "normal",
+		target: "self",
 		type: "Rock",
 		drain: [2, 3],
 		isZ: "gigaliumz",
