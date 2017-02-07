@@ -63,3 +63,5 @@ exports.BattleScripts = {
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
 	},
+	},
+};
