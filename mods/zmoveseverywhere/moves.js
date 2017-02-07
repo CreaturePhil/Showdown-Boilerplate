@@ -81,57 +81,20 @@ exports.BattleMovedex = {
    "pursuingstrike": {
 		accuracy: 100,
 		basePower: 180,
+	        basePowerCallback: function (pokemon, target, move) {
+			// You can't get here unless the pursuit succeeds
+			if (target.beingCalledBack) {
+				this.debug('Pursuit damage boost');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
 		category: "Physical",
 		id: "pursuingstrike",
 		isViable: true,
 		name: "Pursuing Strike",
 		pp: 1,
 		priority: 0,
-		flags: {},
-	   	onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Black Hole Eclipse", target);
-		},
-	   	beforeTurnCallback: function (pokemon, target) {
-			target.side.addSideCondition('pursuit', pokemon);
-			if (!target.side.sideConditions['pursuit'].sources) {
-				target.side.sideConditions['pursuit'].sources = [];
-			}
-			target.side.sideConditions['pursuit'].sources.push(pokemon);
-		},
-		onModifyMove: function (move, source, target) {
-			if (target && target.beingCalledBack) move.accuracy = true;
-		},
-		onTryHit: function (target, pokemon) {
-			target.side.removeSideCondition('pursuit');
-		},
-		effect: {
-			duration: 1,
-			onBeforeSwitchOut: function (pokemon) {
-				this.debug('Pursuit start');
-				let sources = this.effectData.sources;
-				let alreadyAdded = false;
-				for (let i = 0; i < sources.length; i++) {
-					if (sources[i].moveThisTurn || sources[i].fainted) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
-						alreadyAdded = true;
-					}
-					this.cancelMove(sources[i]);
-					// Run through each decision in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-					// If it is, then Mega Evolve before moving.
-					if (sources[i].canMegaEvo) {
-						for (let j = 0; j < this.queue.length; j++) {
-							if (this.queue[j].pokemon === sources[i] && this.queue[j].choice === 'megaEvo') {
-								this.runMegaEvo(sources[i]);
-								this.queue.splice(j, 1);
-								break;
-							}
-						}
-					}
-					this.runMove('pursuit', sources[i], this.getTargetLoc(pokemon, sources[i]));
-				}
-			},
 		},
 		target: "normal",
 		type: "Dark",
