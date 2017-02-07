@@ -95,7 +95,6 @@ exports.BattleMovedex = {
 		name: "Pursuing Strike",
 		pp: 1,
 		priority: 0,
-		},
 		target: "normal",
 		type: "Dark",
 		isZ: "tyraniumz",
