@@ -27,7 +27,7 @@ exports.Formats = [
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Aguav Berry', 'Berry Juice', 'Cheek Pouch', 'Dry Skin', 'Ice Body', 'Poison Heal', 'Regenerator', 'Volt Absorb', 'Water Absorb', 'Rain Dish', 'Blace Sludge', 'Enigma Berry', 'Figy Berry', 'Iapapa Berry', 'Mago Berry', 'Oran Berry', 'Shell Bell', 'Sitrus Berry', 'Wiki Berry', 'Leftovers'],
 		onValidateSet: function (set) {
-			if (set.moves.length !== 1 && toId(set.moves[0]) !== 'metronome') {
+			if (set.moves.length >= 1 || toId(set.moves[0]) !== 'metronome') {
 				return [(set.name || set.species) + " can only have Metronome."];
 			}
 		},
