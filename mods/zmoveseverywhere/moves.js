@@ -18,7 +18,7 @@ exports.BattleMovedex = {
 		terrain: 'Grass Pledge',
 		target: "normal",
 		type: "Grass",
-		isZ: "venusauramz",
+		isZ: "venusaurumz",
 	},
   "intensifiedinferno": {
 		accuracy: 100,
