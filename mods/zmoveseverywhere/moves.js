@@ -168,11 +168,9 @@ exports.BattleMovedex = {
 				move.type = 'Rock';
 			}
 		},
-		effect: {
-			onStart: function(pokemon) {
-				this.add('-sidestart', pokemon.side, 'move: Stealth Rock');
-				this.add('-sidestart', pokemon.side.foe, 'move: Stealth Rock');
-			},
+		onHit: function (target, source, move) {
+			this.add('-sidestart', source.side, 'move: Stealth Rock');
+			this.add('-sidestart', target.side, 'move: Stealth Rock');
 		},
 		target: "normal",
 		type: "Ground",
