@@ -233,8 +233,10 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Blizzard", target);
 		},
+		onHit: function(target, source, move) {
+			this.add('-sidestart', source.side, 'move: Tailwind');
+		},
 		weather: 'hail',
-		terrain: 'tailwind',
 		target: "normal",
 		type: "Ice",
 		isZ: "vanilliumz",
