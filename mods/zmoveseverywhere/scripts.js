@@ -58,9 +58,53 @@ exports.BattleScripts = {
 
 		if (zMove) {
 			this.add('-zpower', pokemon);
+			pokemon.zMoveUsed = true;
 		}
 		this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
+	},
+	getZMove: function (move, pokemon, skipChecks) {
+		let item = pokemon.getItem();
+		if (!skipChecks) {
+			if (pokemon.zMoveUsed) return;
+			if (!item.zMove) return;
+			if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species)) return;
+			let moveData = pokemon.getMoveData(move);
+			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
+		}
+
+		if (item.zMoveFrom) {
+			if (move.name === item.zMoveFrom) return item.zMove;
+		} else if (item.zMove === true) {
+			if (move.type === item.zMoveType) {
+				if (move.category === "Status") {
+					return move.name;
+				} else {
+					return this.zMoveTable[move.type];
+				}
+			}
+		}
+	},
+	canZMove: function (pokemon) {
+		if (pokemon.zMoveUsed) return;
+		let item = pokemon.getItem();
+		if (!item.zMove) return;
+		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species)) return;
+		let atLeastOne = false;
+		let zMoves = [];
+		for (let i = 0; i < pokemon.moves.length; i++) {
+			let move = this.getMove(pokemon.moves[i]);
+			let zMoveName = this.getZMove(move, pokemon, true) || '';
+			if (zMoveName) {
+				let zMove = this.getMove(zMoveName);
+				if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
+				zMoves.push({move: zMoveName, target: zMove.target});
+			} else {
+				zMoves.push(null);
+			}
+			if (zMoveName) atLeastOne = true;
+		}
+		if (atLeastOne) return zMoves;
 	},
 };
