@@ -234,21 +234,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "Blizzard", target);
 		},
 		weather: 'hail',
-		sideCondition: 'tailwind',
-		effect: {
-			duration: 4,
-			onStart: function(pokemon) {
-				this.add('-sidestart', pokemon.side, 'move: Tailwind');
-			},
-			onModifySpe: function(spe, pokemon) {
-				return this.chainModify(2);
-			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 4,
-			onEnd: function(pokemon) {
-				this.add('-sideend', pokemon.side, 'move: Tailwind');
-			},
-		},
+		terrain: 'tailwind',
 		target: "normal",
 		type: "Ice",
 		isZ: "vanilliumz",
