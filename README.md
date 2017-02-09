@@ -12,7 +12,7 @@ contexts or applications without being greatly changed from the original.
 
 This repository contains the files needed to set up your own Pokémon Showdown
 server with all the amazing stuff that private Pokémon Showdown servers like
-Origin, EOS, Frost, or Pandora has.
+Origin, EOS, Frost, Azure or Pandora has.
 
 For more information on Pokémon Showdown, visit the main
 [Pokémon Showdown](https://github.com/Zarel/Pokemon-Showdown) repository.
@@ -41,10 +41,6 @@ This boilerplate is brought to you and maintained by the following people:
 [![Philip La](https://avatars3.githubusercontent.com/u/5875574?s=117)](http://creaturephil.github.io) | [![jd](https://avatars1.githubusercontent.com/u/2987451?s=117)](https://github.com/jd4564) | [![Fender](https://avatars2.githubusercontent.com/u/8406186?s=117)](https://github.com/TheFenderStory)
 :---:|:---:|:---:|:---:|:---:
 [Philip La](http://creaturephil.github.io) | [jd](https://github.com/jd4564) | [Fender](https://github.com/TheFenderStory)
-
-## Special thanks
-
-- See http://pokemonshowdown.com/credits
 
 ## License
 

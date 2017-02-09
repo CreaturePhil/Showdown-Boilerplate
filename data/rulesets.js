@@ -30,43 +30,14 @@ exports.BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard GBU',
 		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
-			'Mewtwo',
-			'Mew',
-			'Lugia',
-			'Ho-Oh',
-			'Celebi',
-			'Kyogre',
-			'Groudon',
-			'Rayquaza',
-			'Jirachi',
-			'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed',
-			'Dialga',
-			'Palkia',
-			'Giratina', 'Giratina-Origin',
-			'Phione',
-			'Manaphy',
-			'Darkrai',
-			'Shaymin', 'Shaymin-Sky',
-			'Arceus',
-			'Victini',
-			'Reshiram',
-			'Zekrom',
-			'Kyurem', 'Kyurem-Black', 'Kyurem-White',
-			'Keldeo',
-			'Meloetta',
-			'Genesect',
-			'Xerneas',
-			'Yveltal',
-			'Zygarde',
-			'Diancie',
-			'Hoopa', 'Hoopa-Unbound',
-			'Volcanion',
-			'Solgaleo', 'Lunala', 'Cosmog', 'Cosmoem',
-			'Necrozma',
-			'Magearna',
-			'Greninja + Battle Bond',
-			'Marshadow',
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew', 'Battle Bond',
+			'Mewtwo', 'Mew',
+			'Lugia', 'Ho-Oh', 'Celebi',
+			'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi', 'Deoxys',
+			'Dialga', 'Palkia', 'Giratina', 'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus',
+			'Victini', 'Reshiram', 'Zekrom', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect',
+			'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion',
+			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow',
 		],
 	},
 	standarddoubles: {
@@ -105,6 +76,9 @@ exports.BattleFormats = {
 			if (set.species === set.name) delete set.name;
 			if (template.gen > this.gen) {
 				problems.push(set.species + ' does not exist in gen ' + this.gen + '.');
+			}
+			if ((template.num === 25 || template.num === 172) && template.tier === 'Illegal') {
+				problems.push(set.species + ' does not exist outside of gen ' + template.gen + '.');
 			}
 			let ability = {};
 			if (set.ability) {

@@ -14,7 +14,7 @@ exports.BattleMovedex = {
 	darkvoid: {
 		inherit: true,
 		accuracy: 80,
-		onTry: function () {},
+		onTryMove: function () {},
 	},
 	destinybond: {
 		inherit: true,
@@ -154,6 +154,27 @@ exports.BattleMovedex = {
 	rockblast: {
 		inherit: true,
 		flags: {protect: 1, mirror: 1},
+	},
+	powder: {
+		inherit: true,
+		effect: {
+			duration: 1,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'Powder');
+			},
+			onTryMovePriority: 1,
+			onTryMove: function (pokemon, target, move) {
+				if (move.type === 'Fire') {
+					this.add('-activate', pokemon, 'move: Powder');
+					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
+					return false;
+				}
+			},
+		},
+	},
+	reflecttype: {
+		inherit: true,
+		desc: "Causes the user's types to become the same as the current types of the target. Fails if the user is an Arceus.",
 	},
 	sheercold: {
 		inherit: true,
