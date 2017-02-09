@@ -7,7 +7,7 @@ exports.BattleItems = {
                 zMove: "Swampy Smackdown",
                 zMoveFrom: "Energy Ball",
                 zMoveUser: ["Venusaur"],
-                desc: "If the holder is Venusaur with the move Energy Ball, it can use Swampy Smackdown",
+                desc: "If the holder is Venusaur with the move Energy Ball, it can use Swampy Smackdown.",
         },
       "charizardiumz": {
                 id: "charizardiumz",
@@ -16,7 +16,7 @@ exports.BattleItems = {
                 zMove: "Intensified Inferno",
                 zMoveFrom: "Flamethrower",
                 zMoveUser: ["Charizard"],
-                desc: "If the holder is Charizard with the move Flamethrower, it can use Intensified Inferno",
+                desc: "If the holder is Charizard with the move Flamethrower, it can use Intensified Inferno.",
         },
         "blastoisiumz": {
                 id: "blastoisiumz",
@@ -25,7 +25,7 @@ exports.BattleItems = {
                 zMove: "Destructive Downpour",
                 zMoveFrom: "Scald",
                 zMoveUser: ["Blastoise"],
-                desc: "If the holder is Blastoise with the move Scald, it can use Destructive Downpour",
+                desc: "If the holder is Blastoise with the move Scald, it can use Destructive Downpour.",
         },
         "alolaninetaliumz": {
                 id: "alolaninetaliumz",
@@ -34,7 +34,7 @@ exports.BattleItems = {
                 zMove: "Hail Hydra",
                 zMoveFrom: "Blizzard",
                 zMoveUser: ["Ninetales-Alola"],
-                desc: "If the holder is Ninetales-Alola with the move Blizzard, it can use Hail Hydra",
+                desc: "If the holder is Ninetales-Alola with the move Blizzard, it can use Hail Hydra.",
         },
         "tyraniumz": {
                 id: "tyraniumz",
@@ -43,7 +43,7 @@ exports.BattleItems = {
                 zMove: "Pursuing Strike",
                 zMoveFrom: "Pursuit",
                 zMoveUser: ["Tyranitar"],
-                desc: "If the holder is Tyranitar with the move Pursuit, it can use Pursuing Strike",
+                desc: "If the holder is Tyranitar with the move Pursuit, it can use Pursuing Strike.",
         },
         "hippowniumz": {
                 id: "hippowniumz",
@@ -52,7 +52,7 @@ exports.BattleItems = {
                 zMove: "Earthly Crush",
                 zMoveFrom: "Earthquake",
                 zMoveUser: ["Hippowdon"],
-                desc: "If the holder is Hippowdon with the move Earthquake, it can use Earthly Crush",
+                desc: "If the holder is Hippowdon with the move Earthquake, it can use Earthly Crush.",
         },
         "abomasnowniumz": {
                 id: "abomasnowniumz",
@@ -61,7 +61,7 @@ exports.BattleItems = {
                 zMove: "Blossoming Life Drain",
                 zMoveFrom: "Giga Drain",
                 zMoveUser: ["Abomasnow"],
-                desc: "If the holder is Abomasnow with the move Gig Drain, it can use Blossoming Life Drain",
+                desc: "If the holder is Abomasnow with the move Gig Drain, it can use Blossoming Life Drain.",
         },
         "gigaliumz": {
                 id: "gigaliumz",
@@ -70,7 +70,7 @@ exports.BattleItems = {
                 zMove: "Honing Rocks",
                 zMoveFrom: "Rock Polish",
                 zMoveUser: ["Gigalith"],
-                desc: "If the holder is Gigalith with the move Rock Polish, it can use Honing Rocks",
+                desc: "If the holder is Gigalith with the move Rock Polish, it can use Honing Rocks.",
         },
         "vanilliumz": {
                 id: "vanilliumz",
@@ -79,7 +79,6 @@ exports.BattleItems = {
                 zMove: "Snowstorm Spinkle",
                 zMoveFrom: "Blizzard",
                 zMoveUser: ["Vanilluxe"],
-                desc: "If the holder is Vanilluxe with the move Blizzard, it can use Snowstorm Spinkle",
+                desc: "If the holder is Vanilluxe with the move Blizzard, it can use Snowstorm Spinkle.",
         },
-
 };
