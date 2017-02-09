@@ -15,7 +15,9 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Frenzy Plant", target);
 		},
-		terrain: 'Grass Pledge',
+		onHit: function (target, source, move) {
+			target.side.addSideCondition('grasspledge');
+		},
 		target: "normal",
 		type: "Grass",
 		isZ: "venusaurumz",
@@ -30,10 +32,12 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		terrain: 'Fire Pledge',
 		onPrepareHit: function(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Blast Burn", target);
+		},
+		onHit: function (target, source, move) {
+			target.side.addSideCondition('firepledge');
 		},
 		target: "normal",
 		type: "Fire",
@@ -49,10 +53,12 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		terrain: 'Water Pledge',
 		onPrepareHit: function(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hydro Cannon", target);
+		},
+		onHit: function (target, source, move) {
+			source.side.addSideCondition('waterpledge');
 		},
 		target: "normal",
 		type: "Water",
