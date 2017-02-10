@@ -2599,12 +2599,11 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "Gods and Followers",
+		name: "[Gen 7] Gods and Followers",
 		desc: [
-			"The Pok&eacute;mon in the first slot is the God; the Followers must share a type with the God. If the God Pok&eacute;mon faints, the Followers are inflicted with Curse.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545230/\">Gods and Followers</a>",
+			"The Pok&eacute;mon in the first slot is the God; the Followers must share a type with the God. If the God Pok&eacute;mon faints, the Followers are inflicted with Embargo.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3589187/\">Gods and Followers</a>",
 		],
-
 		mod: 'godsandfollowers',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Followers Clause', 'Cancel Mod'],
 		banlist: ['Illegal']
