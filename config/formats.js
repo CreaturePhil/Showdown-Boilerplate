@@ -2705,7 +2705,7 @@ exports.Formats = [
 			}
 		},
 	},
-	{
+	/*{
 		name: "[Gen 7] Mergemons",
 		desc: [
 			"Pok&eacute;mon gain the movepool of the previous and the next fully evolved Pok&eacute;mon, according to the Pok&eacute;dex.",
@@ -2715,7 +2715,7 @@ exports.Formats = [
 		mod: 'mergemons',
 		ruleset: ['[Gen 7] OU'],
 		banlist: [],
-	},
+	},*/
    	{
         name: "[Gen 7] Offensification",
         desc: [
