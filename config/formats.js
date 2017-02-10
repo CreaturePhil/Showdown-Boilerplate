@@ -5706,7 +5706,7 @@ exports.Formats = [
 	},*/
 	{
 		section: "Istor",
-		column: 5,
+		column: 3,
 	},
 	{
 		name: "[Istor] OU",
@@ -5754,7 +5754,7 @@ exports.Formats = [
 	},
 	{
 		section: "Fakemon",
-		column: 5,
+		column: 3,
 	},
 	{
 		name: "[Fakemon] Random Battle",
