@@ -4397,7 +4397,7 @@ exports.Formats = [
 	},
 	{
 		section: "Experimental Metas",
-		column: 4,
+		column: 3,
 	},
 	{
 		name: "[Gen 7] Z-Shift",
