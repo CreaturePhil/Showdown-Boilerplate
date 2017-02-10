@@ -8,8 +8,11 @@ exports.Formats = [
 	// Randomized Metas
 	///////////////////////////////////////////////////////////////////
 	{
-		name: "[Gen 7] BH Battle Factory",
 		section: "Randomized Metas",
+		column: 1,
+	},
+	{
+		name: "[Gen 7] BH Battle Factory",
 
 		mod: 'gen7',
 		team: 'randomFactory',
@@ -33,7 +36,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Triples Hackmons Cup",
-		section: "Randomized Metas",
 
 		gameType: 'triples',
 		team: 'randomHC',
@@ -42,7 +44,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Challenge Cup",
-		section: "Randomized Metas",
 		column: 1,
 
 		mod: 'gen7',
@@ -52,7 +53,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Dragon Heaven Super Staff Bros",
 		desc: ["&bullet; The staff here becomes a Pokemon and battles! <br> &bullet; <a href=\"https://github.com/XpRienzo/DragonHeaven/blob/master/mods/dhssb/README.md\">Movesets</a>"],
-		section: "Randomized Metas",
 		mod: 'dhssb',
 		team: 'randomSeasonalMelee',
 		ruleset: ['PotD', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
@@ -128,7 +128,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] [Main] Super Staff Bros. Melee",
-		section: "Randomized Metas",
 		mod: 'ssbm',
 		team: 'randomSeasonalMelee',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
@@ -1606,7 +1605,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Random Battle",
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
-		section: "Randomized Metas",
 
 		mod: 'gen7',
 		team: 'random',
@@ -1667,7 +1665,6 @@ exports.Formats = [
 			"Pok&eacute;mon change type to match their first two moves.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
 		],
-		section: "Randomized Metas",
 		team: 'random',
 
 		ruleset: ['[Gen 7] OU'],
@@ -1694,7 +1691,6 @@ exports.Formats = [
 			"Pok&eacute;mon change type to match their moves. Hence, a Pokemon can now have a maximum of 4 types.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
 		],
-		section: "Randomized Metas",
 		team: 'random',
 
 		ruleset: ['Random Battle', 'Team Preview'],
@@ -1737,7 +1733,6 @@ exports.Formats = [
 
 	{
 		name: "[Gen 7] Random Haxmons",
-		section: "Randomized Metas",
 
 		team: 'random',
 		ruleset: ['[Gen 7] OU', 'Freeze Clause'],
@@ -1756,7 +1751,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Random Open House",
 		desc: ["Every 5 turns, one of Trick Room, Magic Room or Wonder Room is set up.", "&bullet; <a href=\"http://www.smogon.com/forums/threads/open-house.3584274/\">Open House</a>"],
-		section: "Randomized Metas",
 		mod: "openhouse",
 		team: 'random',
 		ruleset: ["Team Preview", 'Random Battle'],
@@ -1786,7 +1780,6 @@ exports.Formats = [
 		],
 		team: 'random',
 		ruleset: ['Team Preview', 'Random Battle'],
-		section: "Randomized Metas",
 		mod: "metaman",
 		onFaint: function(pokemon)
 		{
@@ -1803,10 +1796,8 @@ exports.Formats = [
 			}
 		},
 	},
-
 	{
 		name: "[Gen 7] Random Top Percentage",
-		section: "Randomized Metas",
 		mod: 'toppercentage',
 		desc: ["&lt; <a href=\"http://www.smogon.com/forums/threads/top-percentage.3564459/\">Top Percentage</a>"],
 		ruleset: ['Random Battle', "Team Preview"],
@@ -1833,9 +1824,6 @@ exports.Formats = [
 				this.win(target.side.foe);
 			}
 		},
-		/*onAfterDamage: function(damage, target, source, move) {
-
-		},*/
 	},
 	{
 		name: "[Gen 7] Random Pokebilities",
@@ -2305,7 +2293,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Classic Hackmons",
-		section: "Other Metagames",
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		maxLevel: 100,
 		defaultLevel: 100,
@@ -2403,7 +2390,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3562639/\">LC UU</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3562640/\">LC UU Viability Ranking</a>",
 		],
-		section: "Other Metagames",
 
 		maxLevel: 5,
 		ruleset: ['LC'],
@@ -2454,11 +2440,13 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber'],
 	},
-	// New Other Metagames ///////////////////////////////////////////////////////////////////	
+	// New Other Metagames ///////////////////////////////////////////////////////////////////
+	{
+		section: "New Other Metagames",
+	},
 	{
 		name: "[Gen 7] Automagic",
 		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
-		section: "New Other Metagames",
 		column: 2,
 		ruleset: ['[Gen 7] OU'],
 		mod: 'automagic',
@@ -2487,7 +2475,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Bad \'n Boosted",
-		section: "New Other Metagames",
 		desc: ["&bullet; All the stats of a pokemon which are 70 or below get doubled.<br>For example, Growlithe's stats are 55/70/45/70/50/60 in BnB they become 110/140/90/140/100/120<br><b>Banlist:</b>Eviolite, Huge Power, Pure Power"],
 		mod: 'bnb',
 		ruleset: ['[Gen 7] Ubers'],
@@ -2496,7 +2483,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Cross Evolution",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
-		section: "New Other Metagames",
 
 		ruleset: ['[Gen 7] Ubers', 'Baton Pass Clause'],
 		banlist: ['Rule:nicknameclause'],
@@ -2751,7 +2737,6 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3593815\">Lockdown</a>",
 			"At the end of Turn 6, battlefield changes become permanent.",
 		],
-		section: "New Other Metagames",
 		mod: 'lockdown',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Damp Rock', 'Heat Rock', 'Smooth Rock', 'Icy Rock', 'Terrain Extender'],
@@ -2780,7 +2765,7 @@ exports.Formats = [
 			}
 		},
 	},
-	/*{
+	{
 		name: "[Gen 7] Mergemons",
 		desc: [
 			"Pok&eacute;mon gain the movepool of the previous and the next fully evolved Pok&eacute;mon, according to the Pok&eacute;dex.",
@@ -2790,14 +2775,13 @@ exports.Formats = [
 		mod: 'mergemons',
 		ruleset: ['[Gen 7] OU'],
 		banlist: [],
-	},*/
+	},
 	{
 		name: "[Gen 7] Offensification",
 		desc: [
 			"All attacks are caclulated from the user's highest attacking stat.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/offensification-hoopa-u-banned.3524512/\">Offensification</a>",
 		],
-		section: "New Other Metagames",
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Flatter', 'Kyurem-Black'],
 		onModifyMove: function(move, pokemon) {
@@ -2915,7 +2899,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Trademarked",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>"],
-		section: "New Other Metagames",
 		column: 1,
 
 		mod: 'trademarked',
@@ -2949,7 +2932,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571990/\">OU Viability Ranking</a>",
 		],
-		section: "Pet Mods",
 		mod: "ascension",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
@@ -3144,10 +3126,8 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		mod: 'thefirstnewgen',
 	},
-
 	{
 		name: "Universal Ubers",
-		section: "Pet Mods",
 		mod: 'primordialpokemon',
 
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
@@ -3167,14 +3147,12 @@ exports.Formats = [
 	{
 		name: "Anti-Vaxxers",
 		desc: ["All type-based immunities cease to apply."],
-		section: "Old Other Metagames",
 		mod: "antivaxxers",
 		ruleset: ['OU'],
 	},
 	{
 		name: "Follow The Leader",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3565685/\">Follow The Leader</a>"],
-		section: "Old Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew',
@@ -3210,8 +3188,6 @@ exports.Formats = [
 			"Each Pok&eacute;mon receives one base stat, depending on its position, from the Uber.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3579610/\">Gifts of the Gods</a>",
 		],
-		section: "Old Other Metagames",
-		column: 4,
 
 		ruleset: ['Ubers', 'Baton Pass Clause'],
 		banlist: ['Uber > 1', 'AG ++ Uber', 'Blissey', 'Chansey', 'Eviolite', 'Mawilite', 'Medichamite', 'Sablenite', 'Soul Dew', 'Huge Power', 'Pure Power', 'Shadow Tag'],
@@ -3240,7 +3216,6 @@ exports.Formats = [
 	},
 	{
 		name: "Haxmons",
-		section: "Old Other Metagames",
 
 		ruleset: ['OU', 'Freeze Clause'],
 		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
@@ -3270,7 +3245,6 @@ exports.Formats = [
 	{
 		name: "Megamons",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3566648/\">Megamons</a>"],
-		section: "Old Other Metagames",
 
 		ruleset: ['Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Gengar-Mega', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Rayquaza-Mega'],
@@ -3422,8 +3396,6 @@ exports.Formats = [
 		name: "Metagamiate",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3502303/\">Metagamiate</a>"],
 
-		section: "Old Other Metagames",
-
 		ruleset: ['OU'],
 		banlist: ['Dragonite', 'Kyurem-Black'],
 		onModifyMovePriority: -1,
@@ -3444,7 +3416,6 @@ exports.Formats = [
 	{
 		name: "Nature Swap",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3577739/\">Nature Swap</a>"],
-		section: "Old Other Metagames",
 
 		ruleset: ['OU'],
 		banlist: ['Chansey', 'Cloyster'],
@@ -3476,7 +3447,6 @@ exports.Formats = [
 			"When a Pokemon faints, the opposing Pokemon replaces its current ability with the fainted Pokemon's and gains its last-used move in a new slot (for up to 9 total moves). These changes last the entire match. If a Pokemon faints before using a move during the match, no move is gained by the opponent.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/meta-man.3565966/\">Meta Man</a>",
 		],
-		section: "Old Other Metagames",
 		mod: "metaman",
 		ruleset: ['OU'],
 		onFaint: function(pokemon)
@@ -3496,7 +3466,6 @@ exports.Formats = [
 	},
 	{
 		name: "Top Percentage",
-		section: "Old Other Metagames",
 		mod: 'toppercentage',
 		desc: ["&lt; <a href=\"http://www.smogon.com/forums/threads/top-percentage.3564459/\">Top Percentage</a>"],
 		ruleset: ['OU'],
@@ -3527,7 +3496,6 @@ exports.Formats = [
 	{
 		name: "Baton Pass Marathon",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/baton-pass-marathon-coded-looking-for-a-server.3517800\">Baton Pass Marathon</a>", ],
-		section: "Old Other Metagames",
 		mod: 'batonpassmarathon',
 
 		ruleset: ['OU'],
@@ -3543,7 +3511,6 @@ exports.Formats = [
 			"Pok&eacute;mon change type to match their first two moves.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
 		],
-		section: "Old Other Metagames",
 
 		ruleset: ['OU'],
 		onBegin: function() {
@@ -3570,7 +3537,6 @@ exports.Formats = [
 
 	{
 		name: "Imprisoned",
-		section: "Old Other Metagames",
 		ruleset: ['OU'],
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/imprisoned.3580920/\">Imprisoned</a>"],
 		onBegin: function()
@@ -3615,7 +3581,6 @@ exports.Formats = [
 	},
 	{
 		name: "The All-Stars Metagame",
-		section: "Old Other Metagames",
 		ruleset: ['OU'],
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-all-stars-metagame-v2-enter-the-pu-a-pokemon-from-each-tier.3510864//\">The All-Stars Metagame</a>"],
 		banlist: [],
@@ -3662,7 +3627,6 @@ exports.Formats = [
 	{
 		name: "Mirror Move",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mirror-move.3572990/\">Mirror Move</a>"],
-		section: "Old Other Metagames",
 		ruleset: ['OU'],
 		banlist: ["Imprison"],
 		mod: "mirrormove",
@@ -3693,7 +3657,6 @@ exports.Formats = [
 	},
 	{
 		name: "Nature's Fear",
-		section: "Old Other Metagames",
 		ruleset: ['OU'],
 		desc: ["All pokes have a special \"Intimidate\" on top on their ability, which means it still have their original Ability. This Intimidate lowers opposing stats by 1 stage based on negative (may be changed to positive if it's better) side of the Nature. For example, if you send out a Timid natured pokemon, your opponent's Attack is lowered.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/natures-fear.3584688/\">Nature's Fear</a>"
@@ -3739,13 +3702,8 @@ exports.Formats = [
 	},
 	{
 		name: "Open House",
-		section: "Old Other Metagames",
-
 		ruleset: ['OU'],
 		banlist: [],
-
-
-
 		onBegin: function() {
 			this.randnumber = Math.floor(Math.random() * 3);
 			this.randNo2 = Math.floor(Math.random() * 2);
@@ -3801,7 +3759,6 @@ exports.Formats = [
 	},
 	{
 		name: "No Haxmons",
-		section: "Old Other Metagames",
 
 		ruleset: ['OU', 'Freeze Clause'],
 		banlist: [],
@@ -3818,7 +3775,6 @@ exports.Formats = [
 	},
 	{
 		name: "Palette Pals",
-		section: "Old Other Metagames",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/palette-pals-formerly-tradeoff.3578405/\">Palette Pals</a>"],
 		ruleset: ['OU'],
 		banlist: ['Huge Power', 'Pure Power', 'Medichamite', 'Kyurem-Black', 'Slaking', 'Regigigas', 'Light Ball', 'Eviolite', 'Deep Sea Tooth', 'Deep Sea Scale', 'Thick Club'],
@@ -3862,7 +3818,6 @@ exports.Formats = [
 	},
 	{
 		name: "Recyclables",
-		section: "Old Other Metagames",
 		desc: ["&bullet;<a href=\"http://www.smogon.com/forums/threads/recyclables.3581818/\">Recyclables</a>: <br />If the item on a Pokemon was not knocked off, it will be recycled at the end of every turn."],
 		ruleset: ['OU'],
 		onResidualOrder: 999, //This will always occur as the last possible occurence of the turn's residual phase.
@@ -3892,14 +3847,12 @@ exports.Formats = [
 	{
 		name: "The Negative Metagame",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-negative-metagame-playable-on-aqua.3529936/\">The Negative Metagame</a>"],
-		section: "Old Other Metagames",
 		mod: 'thenegativemetagame',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Swagger Clause', 'Team Preview', 'Evasion Moves Clause'],
 		banlist: ['DeepSeaTooth', 'DeepSeaScale', 'Eviolite', 'Huge Power', 'Light Ball', 'Pure Power', 'Smeargle', 'Thick Club', 'Illegal', 'Unreleased']
 	},
 	{
 		name: "Therianmons",
-		section: "Old Other Metagames",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/therianmons.3566303/\">Therianmons</a>"],
 		ruleset: ['OU'],
 
@@ -3944,7 +3897,6 @@ exports.Formats = [
 	},
 	{
 		name: "The Great Pledge",
-		section: "Old Other Metagames",
 		ruleset: ['OU'],
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/the-great-pledge.3581858/\">The Great Pledge</a>"],
 		onBegin: function()
@@ -4066,7 +4018,6 @@ exports.Formats = [
 	},
 	{
 		name: "Type Omelette",
-		section: "Old Other Metagames",
 
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
@@ -4083,7 +4034,6 @@ exports.Formats = [
 	{
 		name: "VoltTurn Mayhem",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/voltturn-mayhem-lcotm.3527847/\">VoltTurn Mayhem</a>"],
-		section: "Old Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite'],
@@ -4096,7 +4046,7 @@ exports.Formats = [
 	{
 		name: "Move Equality",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-equality-playable-whirlpool-fire-spin-infestation-sand-tomb-are-now-banned-see-post-193.3539145/\">Move Equality</a>"],
-		section: "Old Other Metagames",
+
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Metagrossite', 'Landorus', 'Mud Slap', 'Keldeo'],
 		onModifyMove: function(move, pokemon) {
@@ -4116,7 +4066,7 @@ exports.Formats = [
 	{
 		name: "Move Equality 1v1",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-equality-playable-whirlpool-fire-spin-infestation-sand-tomb-are-now-banned-see-post-193.3539145/\">Move Equality</a>"],
-		section: "Old Other Metagames",
+
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Metagrossite', 'Landorus', 'Mud Slap', 'Keldeo'],
 		onModifyMove: function(move, pokemon) {
@@ -4145,8 +4095,6 @@ exports.Formats = [
 	{
 		name: "Mega Mania",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/mega-mania-playable-on-aqua.3525444/\">Mega Mania</a>"],
-		section: "Old Other Metagames",
-
 		mod: "megamania",
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Mega Mania'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Regigigas', 'Slaking', 'Ignore Illegal Abilities']
@@ -4154,7 +4102,6 @@ exports.Formats = [
 	{
 		name: "Technician Tower",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/technician-tower-2-0-now-playable-on-the-aqua-server.3521635/\">Technician Tower</a>"],
-		section: "Old Other Metagames",
 		mod: 'technichiantower',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Technician', 'Skill Link'],
@@ -4185,8 +4132,6 @@ exports.Formats = [
 	},
 	{
 		name: "Hawluchange",
-		section: "Old Other Metagames",
-
 		ruleset: ['OU'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite'],
 		desc: [" &bullet; <a href=http://www.smogon.com/forums/threads/hawluchange-now-playable.3529847/>"],
@@ -4212,7 +4157,6 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/type-exchange.3556479/\">Type Exchange Metagame Discussion</a>",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/type-exchange.3556479/page-2#post-6547201/\">Gothitelle & Gothorita Quick Ban</a>"
 		],
-		section: "Old Other Metagames",
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', /*'Shadow Tag',*/ 'Gothitelle', 'Gothorita'],
 		onBegin: function() {
@@ -4233,7 +4177,6 @@ exports.Formats = [
 	{
 		name: "Immunimons",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/immunimons.3516996/\">Immunimons</a>"],
-		section: "Old Other Metagames",
 
 		ruleset: ['OU'],
 		banlist: [],
@@ -4254,7 +4197,6 @@ exports.Formats = [
 	{
 		name: "Acid Rain",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/acid-rain.3518506/\">Acid Rain</a>"],
-		section: "Old Other Metagames",
 
 		mod: 'acidrain',
 		onBegin: function() {
@@ -4267,7 +4209,6 @@ exports.Formats = [
 	},
 	{
 		name: "Partners in Crime",
-		section: "Old Other Metagames",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/partners-in-crime.3559988/\">Partners in Crime</a>"],
 		ruleset: ['Doubles OU'],
 		mod: "pic",
@@ -4360,9 +4301,6 @@ exports.Formats = [
 			"Every Pok&eacute;mon has a stat spread of 100/100/100/100/100/100.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a>",
 		],
-		section: "Old Other Metagames",
-
-
 		mod: 'averagemons',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Smeargle', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Sableye + Prankster',
@@ -4372,7 +4310,6 @@ exports.Formats = [
 	{
 		name: "No Status",
 		desc: ["&bullet; All Status moves are banned <br> &bullet; <a href=\"http://www.smogon.com/forums/threads/no-status.3542555/\">No Status</a>"],
-		section: "Old Other Metagames",
 		ruleset: ['OU'],
 		validateSet: function(set) {
 			var problems = [];
@@ -4388,7 +4325,6 @@ exports.Formats = [
 	{
 		name: "Protean Palace",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/protean-palace.3496299/\">Protean Palace</a>"],
-		section: "Old Other Metagames",
 		column: 2,
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
