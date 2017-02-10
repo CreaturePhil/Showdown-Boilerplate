@@ -3139,6 +3139,13 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "[Gen 7] Pokemon: The New First Generation",
+		desc: ["&bullet; <a href=http://www.smogon.com/forums/threads/z-moves-everywhere-slate-4-ninetales-torkoal-groudon-submissions-phase-extended.3592186/>Pokemon: The New First Generation</a>"],
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		mod: 'thefirstnewgen',
+	},
+
+	{
 		name: "Universal Ubers",
 		section: "Pet Mods",
 		mod: 'primordialpokemon',
