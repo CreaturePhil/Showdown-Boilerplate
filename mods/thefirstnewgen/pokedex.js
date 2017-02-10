@@ -31,7 +31,7 @@ exports.BattlePokedex = {
 	},
 	metadillo: {
 		num: 8004,
-		species: "Shrubber",
+		species: "Metadillo",
 		types: ["Fire", "Steel"],
 		baseStats: {hp: 70, atk: 65, def: 95, spa: 75, spd: 60, spe: 50},
 		abilities: {0: "Blaze", H: "Filter"},
@@ -42,5 +42,26 @@ exports.BattlePokedex = {
 		types: ["Fire","Steel"],
 		baseStats: {hp: 92, atk: 75, def: 110, spa: 110, spd: 75, spe: 68},
 		abilities: {0: "Blaze", H: "Filter"},
+	},
+	linnual: {
+		num: 8006,
+		species: "Linnual",
+		types: ["Water"],
+		baseStats: {hp: 66, atk: 56, def: 56, spa: 48, spd: 56, spe: 36},
+		abilities: {0: "Torrent", H: "Rain Dish"},
+	},
+	dontidahl: {
+		num: 8007,
+		species: "Donitidahl",
+		types: ["Water", "Ice"],
+		baseStats: {hp: 95, atk: 75, def: 70, spa: 65, spd: 70, spe: 40},
+		abilities: {0: "Torrent", H: "Rain Dish"},
+	},
+	dorshellical: {
+		num: 8008,
+		species: "Dorshellical",
+		types: ["Water","Ice"],
+		baseStats: {hp: 124, atk: 105, def: 90, spa: 80, spd: 85, spe: 46},
+		abilities: {0: "Torrent", H: "Rain Dish"},
 	},
 };
