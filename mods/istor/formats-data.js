@@ -141,6 +141,22 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["powerwhip", "liquidation", "poisonjab", "swordsdance"],
 		tier: "New",
 	},
+	chibacco: {
+		randomBattleMoves: ["grassknot", "nastyplot", "darkpulse", "synthesis", "hiddenpowerfire"],
+		tier: "LC",
+	},
+	obsetsun: {
+		randomBattleMoves: ["grassknot", "nastyplot", "darkpulse", "synthesis", "hiddenpowerfire"],
+		tier: "NFE",
+	},
+	tobaka: {
+		randomBattleMoves: ["grassknot", "nastyplot", "darkpulse", "synthesis", "hiddenpowerfire"],
+		tier: "New",
+	},
+	ammonisk: {
+		randomBattleMoves: ["stickyweb", "recover", "sludgebomb", "toxicspikes"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
