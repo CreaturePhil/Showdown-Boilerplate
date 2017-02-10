@@ -134,6 +134,54 @@ exports.BattleAbilities = {
 		rating: 3,
 		num: 177,
 	},
+	"mesmerize": {
+		shortDesc: "Making contact has a 100% chance of adding Leech Seed.",
+		// upokecenter says this is implemented as an added secondary effect
+		onModifyMove: function (move) {
+			if (!move || !move.flags['contact']) return;
+			this.add('-start', target, 'move: Leech Seed');
+			onResidualOrder: 8,
+			onResidual: function (pokemon) {
+				let target = this.effectData.source.side.active[pokemon.volatiles['leechseed'].sourcePosition];
+				if (!target || target.fainted || target.hp <= 0) {
+					this.debug('Nothing to leech into');
+					return;
+				}
+				let damage = this.damage(pokemon.maxhp / 8, pokemon, target);
+				if (damage) {
+					this.heal(damage, target, pokemon);
+				}
+			},
+			});
+		},
+		onAfterDamage: function (damage, target, source, move) {
+			if (move && move.flags['contact']) {
+				this.add('-start', target, 'move: Leech Seed');
+			},	
+			onResidualOrder: 8,
+			onResidual: function (pokemon) {
+				let target = this.effectData.source.side.active[pokemon.volatiles['leechseed'].sourcePosition];
+				if (!target || target.fainted || target.hp <= 0) {
+					this.debug('Nothing to leech into');
+					return;
+				}
+				let damage = this.damage(pokemon.maxhp / 8, pokemon, target);
+				if (damage) {
+					this.heal(damage, target, pokemon);
+				}
+			},
+		},
+		onTryHit: function (target) {
+			if (target.hasType('Grass')) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
+		},
+		id: "poisontouch",
+		name: "Poison Touch",
+		rating: 2,
+		num: 143,
+	},
 	"magicalemanation": {
 		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
 		onStart: function (source, effect) {
