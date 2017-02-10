@@ -5710,7 +5710,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Istor] OU",
-		column: 5,
 		mod: 'istor',
 		desc: [
 			"&bullet; A new region with new Pokemon, Moves, Abilities and a lot more",
