@@ -15,4 +15,11 @@ exports.BattlePokedex = {
 		baseStats: {hp: 55, atk: 85, def: 45, spa: 79, spd: 65, spe: 86},
 		abilities: {0: "Overgrow", H: "Moxie"},
 	},
+	fungarai: {
+		num: 8002,
+		specias: "Fungarai",
+		types: ["Grass","Ground"],
+		baseStats: {hp: 70, atk: 125, def: 55, spa: 100, spd: 70, spe: 110},
+		abilities: {0: "Overgrow", H: "Moxie"},
+	},
 };
