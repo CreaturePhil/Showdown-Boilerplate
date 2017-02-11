@@ -121,9 +121,17 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["stoneedge", "frigidslam", "stealthrock", "earthquake"],
 		tier: "New",
 	},
-	chy: {
-		randomBattleMoves: ["bodyslam", "substitute", "fireblast", "plague"],
+	sparklet: {
+		randomBattleMoves: ["fireworkcrash", "thunderbolt", "milkdrink", "playrough"],
 		tier: "LC",
+	},
+	spoark: {
+		randomBattleMoves: ["milkdrink", "flamethrower", "thunderbolt", "willowisp"],
+		tier: "New",
+	},
+	spoarkwild: {
+		randomBattleMoves: ["fireworkcrash", "wildcharge", "playrough", "earthquake", "megahorn"],
+		tier: "New",
 	},
 	quemelo: {
 		randomBattleMoves: ["bodyslam", "substitute", "fireblast", "plague"],
@@ -155,6 +163,10 @@ exports.BattleFormatsData = {
 	},
 	ammonisk: {
 		randomBattleMoves: ["stickyweb", "recover", "sludgebomb", "toxicspikes"],
+		tier: "New",
+	},
+	nochu: {
+		randomBattleMoves: ["playrough", "earthquake", "fakeout", "bulkup"],
 		tier: "New",
 	},
 	uisge: {
