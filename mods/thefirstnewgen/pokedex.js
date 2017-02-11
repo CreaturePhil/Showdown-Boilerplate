@@ -113,7 +113,7 @@ exports.BattlePokedex = {
 	chipmorgue: {
 		num: 8016,
 		species: "Chipmorgue",
-		types: ["Normal"],
+		types: ["Normal","Dark"],
 		baseStats: {hp: 42, atk: 35, def: 54, spa: 25, spd: 62, spe: 53},
 		abilities: {0: "Fur Coat", 1:"Justified", H: "Cheek Pouch"},
 		heightm: 0.4,
