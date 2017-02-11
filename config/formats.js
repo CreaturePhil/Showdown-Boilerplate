@@ -2972,6 +2972,34 @@ exports.Formats = [
 		},
 	},
 	{
+		name: "[Gen 2] Traps",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
+		],
+
+		mod: 'traps',
+		ruleset: ['[Gen 2] OU'],
+		onBegin: function () {
+			this.arenaTrap = ['diglett', 'dugtrio'];
+			this.magnetPull = ['magnemite', 'magneton'];
+		},
+		onSwitchIn: function(pokemon) {
+			if(this.arenaTrap.includes(toId(pokemon.species))) {
+				pokemon.addVolatile('arenatrap');
+				return;
+			}
+			if(this.shadowTag.includes(toId(pokemon.species))) {
+				pokemon.addVolatile('arenatrap');
+				return;
+			}
+			if(pokemon.species === 'Wobbuffet') {
+				pokemon.addVolatile('shadowtag');
+				return;
+			}
+		}
+	},
+	{
 		name: "[Gen 7] Move Mastery",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-mastery.3590075/\">Move Mastery</a>"],
 		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
