@@ -132,7 +132,7 @@ exports.BattleAbilities = {
 		id: "extremeentry",
 		name: "Extreme Entry",
 		rating: 3,
-		num: 177,
+		num: 10003,
 	},
 	"mesmerize": {
 		shortDesc: "Making contact has a 100% chance of adding Leech Seed.",
@@ -177,10 +177,19 @@ exports.BattleAbilities = {
 				return null;
 			}
 		},
-		id: "poisontouch",
-		name: "Poison Touch",
-		rating: 2,
-		num: 143,
+		id: "mesmerize",
+		name: "Mesmerize",
+		rating: 4,
+		num: 10004,
+	},
+	"hunter": {
+		desc: "If this Pokemon is knocked out with a contact move, that move's user loses 1/4 of its maximum HP, rounded down. If any active Pokemon has the Ability Damp, this effect is prevented.",
+		shortDesc: "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
+		id: "hunter",
+		name: "Hunter",
+			/* Add in a Pursuit effect for all moves here, no power boost */
+		rating: 5,
+		num: 106,
 	},
 	"magicalemanation": {
 		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
