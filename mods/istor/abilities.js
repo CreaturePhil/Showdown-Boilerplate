@@ -136,46 +136,15 @@ exports.BattleAbilities = {
 	},
 	"mesmerize": {
 		shortDesc: "Making contact has a 100% chance of adding Leech Seed.",
-		// upokecenter says this is implemented as an added secondary effect
 		onModifyMove: function (move) {
 			if (!move || !move.flags['contact']) return;
-			this.add('-start', target, 'move: Leech Seed');
-			onResidualOrder: 8,
-			onResidual: function (pokemon) {
-				let target = this.effectData.source.side.active[pokemon.volatiles['leechseed'].sourcePosition];
-				if (!target || target.fainted || target.hp <= 0) {
-					this.debug('Nothing to leech into');
-					return;
-				}
-				let damage = this.damage(pokemon.maxhp / 8, pokemon, target);
-				if (damage) {
-					this.heal(damage, target, pokemon);
-				}
-			},
+			onModifyMove: function(move) {move.volatileStatus = 'leechseed'}
 			});
 		},
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
-				this.add('-start', target, 'move: Leech Seed');
+				onModifyMove: function(move) {move.volatileStatus = 'leechseed'}
 			},	
-			onResidualOrder: 8,
-			onResidual: function (pokemon) {
-				let target = this.effectData.source.side.active[pokemon.volatiles['leechseed'].sourcePosition];
-				if (!target || target.fainted || target.hp <= 0) {
-					this.debug('Nothing to leech into');
-					return;
-				}
-				let damage = this.damage(pokemon.maxhp / 8, pokemon, target);
-				if (damage) {
-					this.heal(damage, target, pokemon);
-				}
-			},
-		},
-		onTryHit: function (target) {
-			if (target.hasType('Grass')) {
-				this.add('-immune', target, '[msg]');
-				return null;
-			}
 		},
 		id: "mesmerize",
 		name: "Mesmerize",
