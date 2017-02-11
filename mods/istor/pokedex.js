@@ -575,6 +575,18 @@ exports.BattlePokedex = {
 		color: "Yellow",
 		eggGroups: ["Water 3"],
 	},
+	nochu: {
+		num: 10040,
+		species: "Nochu",
+		genderRatio: {M: 0.5, F: 0.5},
+		types: ["Ground", "Fairy"],
+		baseStats: {hp: 86, atk: 112, def: 60, spa: 53, spd: 43, spe: 78},
+		abilities: {0: "Hunter"},
+		heightm: 0.3,
+		weightkg: 5.0,
+		color: "Yellow",
+		eggGroups: ["Water 3"],
+	},
 	uisge: {
 		num: 11001,
 		species: "Uisge",
