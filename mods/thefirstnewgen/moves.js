@@ -708,4 +708,80 @@ exports.BattleMovedex = {
           target: "normal",
           type: "Grass",
       },
+	"7slashbushidoassault": {
+		accuracy: 100,
+		basePower: 185,
+		category: "Physical",
+		id: "7slashbushidoassault",
+		isViable: true,
+		name: "7-Slash Bushido Assault",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Tectonic Rage", target);
+		},
+		target: "normal",
+		type: "Ground",
+		isZ: "fungariumz",
+	},
+	"moltensteelblast": {
+		accuracy: 100,
+		basePower: 200,
+		category: "Special",
+		id: "moltensteelblast",
+		isViable: true,
+		name: "Molten Steel Blast",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Corkscrew Crash", target);
+		},
+		target: "normal",
+		type: "Steel",
+		isZ: "steelicilliumz",
+	},
+	"petrifyingglaciercharge": {
+		accuracy: 100,
+		basePower: 190,
+		category: "Physical",
+		id: "petrifyingglaciercharge",
+		isViable: true,
+		name: "Petrifying Glacier Charge",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Subzero Slammer", target);
+		},
+		target: "normal",
+		type: "Ice",
+		isZ: "dorshelliumz",
+	},
+	"incineratingantlerlunge": {
+		accuracy: 100,
+		basePower: 175,
+		category: "Physical",
+		id: "incineratingantlerlunge",
+		isViable: true,
+		name: "Incinerating Antler Lunge",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		secondary: {
+			chance: 100,
+			status: 'brn',
+		},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Inferno Overdrive", target);
+		},
+		target: "normal",
+		type: "Fire",
+		isZ: "pyrominiumz",
+	},
 };
