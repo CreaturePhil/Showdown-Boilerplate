@@ -272,12 +272,10 @@ exports.BattleScripts = {
 							if (status.id && !this.battle.singleEvent('Start', status, this.statusData, this, source, sourceEffect)) {
 								this.battle.debug('status start [' + status.id + '] interrupted');
 								// cancel the setstatus
-								this.status = prevStatus;
-								this.statusData = prevStatusData;
 								return false;
 							}
-							if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
-								return false;
+							this.status = prevStatus;
+							this.statusData = prevStatusData;
 							}
 							return true;
 						}.bind(target);
