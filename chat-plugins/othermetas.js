@@ -879,307 +879,91 @@ exports.commands= {
                 }
                 this.sendReplyBox(text);
         },
-	'ei':function(target,room,user)
-	{
-                 if (!this.runBroadcast()) return;
-		let abilities =
-		{
-			aerilate : 'Air Balloon',
-			adaptability : 'Apicot Berry',
-			adapt : 'Apicot Berry',
-			analytic:'Water Gem',
-			anticipation : 'Black Belt',
-			arenatrap : 'Bug Gem',
-			aromaveil : 'Black Glasses',
-			aurabreak : 'Black Sludge',
-			baddreams : 'BrightPowder',
-			battlearmor : 'Cell Battery',
-			bigpecks : 'Charcoal',
-			blaze : 'Charti Berry',
-			bulletproof : 'Chesto Berry',
-			cheekpouch : 'Chilan Berry',
-			chlorophyll : 'Chople Berry',
-			clearbody : 'Coba Berry',
-			cloudnine : 'Colbur Berry',
-			colorchange : 'Custap Berry',
-			competitive : 'Damp Rock',
-			compoundeyes : 'Dragon Fang',
-			contrary : 'Dark Gem',
-			cursedbody : 'Eject Button',
-			cutecharm : 'Expert Belt',
-			damp : 'Flame Orb',
-			darkaura : 'Focus Band',
-			defeatist : 'Full Incense',
-			defiant : 'Ganlon Berry',
-			deltastream : 'Grepa Berry',
-			desolateland : 'Grip Claw',
-			desoland : 'Grip Claw',
-			download : 'Haban Berry',
-			drizzle : 'Hard Stone',
-			drought : 'Heat Rock',
-			dryskin : 'Iapapa Berry',
-			earlybird : 'Icy Rock',
-			effectspore : 'Kasib Berry',
-			fairyaura : 'Kebia Berry',
-			filter : 'Kee Berry',
-			flamebody : 'Kelpsy Berry',
-			flareboost : 'King\'s Rock',
-			flashfire : 'Lagging Tail',
-			flowergift : 'Lansat Berry',
-			flowerveil : 'Lax Incense',
-			forecast : 'Leppa Berry',
-			forewarn : 'Liechi Berry',
-			friendguard : 'Luminous Moss',
-			frisk : 'Magnet',
-			furcoat : 'Dragon Gem',
-			fc : 'Dragon Gem',
-			galewings : 'Maranga Berry',
-			gw : 'Maranga Berry',
-			gluttony : 'Metal Coat',
-			gooey: 'Metronome',
-			grasspelt : 'Micle Berry',
-			guts: 'Miracle Seed',
-			harvest : 'Muscle Band',
-			healer : 'Mystic Water',
-			heatproof : 'Never-Melt Ice',
-			heavymetal : 'Occa Berry',
-			honeygather : 'Odd Incense',
-			hugepower : 'Electric Gem',
-			hustle : 'Passho Berry',
-			hydration : 'Payapa Berry',
-			hypercutter : 'Petaya Berry',
-			icebody : 'Poison Barb',
-			illuminate : 'Quick Claw',
-			illusion : 'Razor Claw',
-			immunity : 'Razor Fang',
-			imposter : 'Fairy Gem',
-			infiltrator : 'Rindo Berry',
-			innerfocus : 'Rock Incense',
-			insomnia : 'Rose Incense',
-			intimidate : 'Red Card',
-			intim : 'Red Card',
-			ironbarbs : 'Roseli Berry',
-			ironfist : 'Safety Goggles',
-			justified : 'Salac Berry',
-			keeneye : 'Scope Lens',
-			klutz : 'Sea Incense',
-			leafguard : 'Sharp Beak',
-			levitate : 'Nomel Berry',
-			lightmetal : 'Shell Bell',
-			lightningrod : 'Shuca Berry',
-			limber : 'Silk Scarf',
-			liquidooze : 'SilverPowder',
-			mbounce : 'Smooth Rock',
-			magicbounce : 'Smooth Rock',
-			magicguard : 'Snowball',
-			mguard : 'Snowball',
-			magician : 'Soft Sand',
-			magmaarmor : 'Spell Tag',
-			magnetpull : 'Starf Berry',
-			marvelscale : 'Sticky Barb',
-			megalauncher : 'Tanga Berry',
-			minus : 'TwistedSpoon',
-			moldbreaker : 'Wacan Berry',
-			moody : 'Wave Incense',
-			motordrive : 'Weakness Policy',
-			moxie : 'White Herb',
-			multiscale : 'Wide Lens',
-			multitype : 'Wise Glasses',
-			mummy : 'Yache Berry',
-			naturalcure : 'Zoom Lens',
-			noguard : 'Adamant Orb',
-			normalize : 'Burn Drive',
-			oblivious : 'Chill Drive',
-			overcoat : 'DeepSeaScale',
-			overgrow : 'DeepSeaTooth',
-			owntempo : 'Douse Drive',
-			parentalbond : 'Fire Gem',
-			pbond : 'Fire Gem',
-			pickpocket : 'Light Ball',
-			pickup : 'Lucky Punch',
-			pixilate : 'Griseous Orb',
-			plus : 'Lustrous Orb',
-			poisonheal : 'Metal Powder',
-			ph : 'Metal Powder',
-			poisonpoint : 'Quick Powder',
-			poisontouch : 'Shock Drive',
-			prankster : 'Mail',
-			prank : 'Soul Dew',
-			pressure : 'Stick',
-			primordialsea : 'Thick Club',
-			primsea : 'Thick Club',
-			protean : 'Aguav Berry',
-			purepower : 'Ice Gem',
-			quickfeet : 'Aspear Berry',
-			raindish : 'Binding Band',
-			rattled : 'Cheri Berry',
-			reckless : 'Destiny Knot',
-			refrigerate : 'Enigma Berry',
-			fridge : 'Enigma Berry',
-			regen : 'Figy Berry',
-			regenerator : 'Figy Berry',
-			rivalry : 'Float Stone',
-			rockhead : 'Iron Ball',
-			roughskin : 'Jaboca Berry',
-			runaway : 'Macho Brace',
-			sandforce : 'Mago Berry',
-			sandrush : 'Oran Berry',
-			sandstream : 'Pecha Berry',
-			sandveil : 'Persim Berry',
-			sapsipper : 'Rawst Berry',
-			scrappy : 'Ring Target',
-			serenegrace : 'Rowap Berry',
-			serenevil : 'Rowap Berry',
-			shadowtag : 'Poison Gem',
-			shedskin : 'Wiki Berry',
-			sheerforce : 'Armor Fossil',
-			sf : 'Armor Fossil',
-			shellarmor : 'Belue Berry',
-			shielddust : 'Bluk Berry',
-			simple : 'Psychic Gem',
-			skilllink : 'Cherish Ball',
-			slowstart : 'Claw Fossil',
-			sniper : 'Cornn Berry',
-			snowcloak : 'Cover Fossil',
-			snowwarning : 'Dive Ball',
-			solarpower : 'Dome Fossil',
-			solidrock : 'Dream Ball',
-			soundproof : 'Durin Berry',
-			speedboost : 'Dusk Ball',
-			stall : 'Electrizer',
-			stancechange : 'Energy Powder',
-			static : 'Fast Ball',
-			steadfast : 'Freind Ball',
-			stench : 'Great Ball',
-			stickyhold : 'Heal Ball',
-			stormdrain : 'Heavy Ball',
-			strongjaw : 'Helix Fossil',
-			sturdy : 'Hondew Berry',
-			suctioncups : 'Level Ball',
-			superluck : 'Love Ball',
-			swarm : 'Lure Ball',
-			sweetveil : 'Luxury Ball',
-			swiftswim : 'Magost Berry',
-			symbiosis : 'Master Ball',
-			synchronize : 'Moon Ball',
-			tangledfeet : 'Nanab Berry',
-			technician : 'Nest Ball',
-			tech : 'Nest Ball',
-			telepathy : 'Net Ball',
-			thickfat : 'Old Amber',
-			tintedlens : 'Pamtre Berry',
-			torrent : 'Park Ball',
-			toughclaws : 'Pinap Berry',
-			toxicboost : 'Plume Fossil',
-			trace : 'Poke Ball',
-			truant : 'Pomeg Berry',
-			unaware : 'Qualot Berry',
-			unburden : 'Quick Ball',
-			unnerve : 'Rabuta Berry',
-			victorystar : 'Rare Bone',
-			vitalspirit : 'Razz Berry',
-			voltabsorb : 'Repeat Ball',
-			waterabsorb : 'Root Fossil',
-			waterveil : 'Safari Ball',
-			weakarmor : 'Skull Fossil',
-			whitesmoke : 'Spelon Berry',
-			wonderguard : 'Steel Gem',
-			wg : 'Steel Gem',
-			wonderskin : 'Sport Ball',
-			zenmode : 'Tamato Berry',
-			aftermath : 'Premier Ball'
-		};
-		let text = "";
-	        let abe = toId(target);
-	        if(target=='')
-	        	text+="Usage: <code>/ei <Ability></code>"
-			else if(target=='bans')
-	        	text+="The current banlist for Enchanted Items is: Ubers, Kyurem-Black, Chatter, Shedinja, and the held abilities of Arena Trap, Contrary, Fur Coat, Huge Power, Imposter, Parental Bond, Pure Power, Shadow Tag, Simple, Trace(temporarily) and Wonder Guard.";
-	        else if(target=='retain')
-	        	text+="These items retain their effects in EI: Assault Vest, Choice Band, Choice Scarf, Choice Specs, Eviolite, Focus Sash, Leftovers, Life Orb, Light Clay, Lum Berry, Mental Herb, Power Herb, Rocky Helmet, Sitrus Berry, Toxic Orb, Mega Stones and Type Plates."
-	        else if(target=='turboblaze' || target == 'teravolt')
-	        	text+="Please use Mold Breaker instead of that ability, because it doesn't have an Enchanted Item anymore. The Enchanted Item for Mold Breaker is: Wacan Berry.";
-	        else if(abilities[abe]==undefined)
-	        	text+="Sorry, that ability does not exist."
-	        else
-	        	text+="The Enchanted Item for "+target+" is <b>"+abilities[abe]+"</b>.";
-	        this.sendReplyBox(text);
-	},
 	fuse: function(target, room, user) {
-         if (!this.runBroadcast()) return;
-        let text = "";
-        let separated = target.split(",");
-        let name = (("" + separated[0]).trim()).toLowerCase();
-        let name2 = (("" + separated[1]).trim()).toLowerCase();
-        name = toId(name);
-        name2 = toId(name2);
-	let pokemen=Tools.data.Pokedex;
-        if (pokemen[name]==undefined || pokemen[name2]==undefined)
-        {
-                this.errorReply("Error: Pokemon not found");
-		return;
-        }
-        else {
-                let baseStats = {};
-                baseStats['avehp'] = Math.floor((pokemen[name].baseStats.hp + pokemen[name2].baseStats.hp) / 2);
-                baseStats['aveatk'] = Math.floor((pokemen[name].baseStats.atk + pokemen[name2].baseStats.atk) / 2);
-                baseStats['avedef'] = Math.floor((pokemen[name].baseStats.def + pokemen[name2].baseStats.def) / 2);
-                baseStats['avespa'] = Math.floor((pokemen[name].baseStats.spa + pokemen[name2].baseStats.spa) / 2);
-                baseStats['avespd'] = Math.floor((pokemen[name].baseStats.spd + pokemen[name2].baseStats.spd) / 2);
-                baseStats['avespe'] = Math.floor((pokemen[name].baseStats.spe + pokemen[name2].baseStats.spe) / 2);
-                let type = pokemen[name].types[0];
-		let ability = "";
-		let weight = (pokemen[name].weightkg + pokemen[name2].weightkg)/2;
-		for(let i in pokemen[name].abilities) {
-			ability+=pokemen[name].abilities[i]+"/";
+		if (!this.runBroadcast()) return;
+		let text = "";
+		let separated = target.split(",");
+		let name = (("" + separated[0]).trim()).toLowerCase();
+		let name2 = (("" + separated[1]).trim()).toLowerCase();
+		name = toId(name);
+		name2 = toId(name2);
+		let pokemen = Tools.data.Pokedex;
+		if (pokemen[name] == undefined || pokemen[name2] == undefined)
+		{
+			this.errorReply("Error: Pokemon not found");
+			return;
 		}
-		ability = ability.substring(0,ability.length-1);
-		ability = ability+" + "+pokemen[name2].abilities['0'];
-                if(separated[2] && toId(separated[2]) === "shiny" && pokemen[name2].types[1])
-                        type = type + '/' + pokemen[name2].types[1];
-                else if (pokemen[name].types[0] != pokemen[name2].types[0])
-                        type = type + '/' + pokemen[name2].types[0];
-                if(type.split("/")[0] === type.split("/")[1]) {
-                        type = type.split("/")[0];
-                }
-                let bst = baseStats['avehp'] + baseStats['aveatk'] + baseStats['avedef'] + baseStats['avespa'] + baseStats['avespd'] + baseStats['avespe'];
-                text = "<b>Stats</b>: " + baseStats['avehp'] + "/" + baseStats['aveatk'] + "/" + baseStats['avedef'] + "/" + baseStats['avespa'] + "/" + baseStats['avespd'] + "/" + baseStats['avespe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
-                this.sendReplyBox(text);
-        }
-},
+		else {
+			let baseStats = {};
+			baseStats['avehp'] = Math.floor((pokemen[name].baseStats.hp + pokemen[name2].baseStats.hp) / 2);
+			baseStats['aveatk'] = Math.floor((pokemen[name].baseStats.atk + pokemen[name2].baseStats.atk) / 2);
+			baseStats['avedef'] = Math.floor((pokemen[name].baseStats.def + pokemen[name2].baseStats.def) / 2);
+			baseStats['avespa'] = Math.floor((pokemen[name].baseStats.spa + pokemen[name2].baseStats.spa) / 2);
+			baseStats['avespd'] = Math.floor((pokemen[name].baseStats.spd + pokemen[name2].baseStats.spd) / 2);
+			baseStats['avespe'] = Math.floor((pokemen[name].baseStats.spe + pokemen[name2].baseStats.spe) / 2);
+			let type = pokemen[name].types[0];
+			let ability = "";
+			let weight = (pokemen[name].weightkg + pokemen[name2].weightkg) / 2;
+			for (let i in pokemen[name].abilities) {
+				ability += pokemen[name].abilities[i] + "/";
+			}
+			ability = ability.substring(0, ability.length - 1);
+			ability = ability + " + " + pokemen[name2].abilities['0'];
+			if (separated[2] && toId(separated[2]) === "shiny" && pokemen[name2].types[1])
+				type = type + '/' + pokemen[name2].types[1];
+			else if (pokemen[name].types[0] != pokemen[name2].types[0])
+				type = type + '/' + pokemen[name2].types[0];
+			if (type.split("/")[0] === type.split("/")[1]) {
+				type = type.split("/")[0];
+			}
+			let bst = baseStats['avehp'] + baseStats['aveatk'] + baseStats['avedef'] + baseStats['avespa'] + baseStats['avespd'] + baseStats['avespe'];
+			text = "<b>Stats</b>: " + baseStats['avehp'] + "/" + baseStats['aveatk'] + "/" + baseStats['avedef'] + "/" + baseStats['avespa'] + "/" + baseStats['avespd'] + "/" + baseStats['avespe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " + ability + "<br /><b>Weight</b>: " + weight + " kg";
+			this.sendReplyBox(text);
+		}
+	},
 	di: 'distor',
 	dataistor: 'distor',
 	distor: function(target, room, user) {
         	 if (!this.runBroadcast()) return;
-                 if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon, including ones from istor.");
+                 if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon/Ability/Move, including ones from istor.");
 		let name = toId(target);
-		let pokemen;
+		let abilistor, movestor, pokemen;
 		try {
 			pokemen = Tools.dexes.istor.data.Pokedex;
+			abilistor = Tools.dexes.istor.data.Abilities;
+			movestor = Tools.dexes.istor.data.Movedex;
 		}
 		catch(e) {
 			return this.errorReply("Error: Please start an istor battle before using this command");
 		}
-		if (!pokemen[name])
-			return this.errorReply("Error: Pokemon not found");
-		let baseStats = pokemen[name].baseStats;
-		let types = pokemen[name].types;
-		let type = '<span class="col typecol">';
-		for(let i = 0; i<types.length;i++) {
-			type = type+ '<img src="https://play.pokemonshowdown.com/sprites/types/'+types[i]+'.png" alt="'+types[i]+'" height="14" width="32">';
+		if(pokemen[name]) {
+			let baseStats = pokemen[name].baseStats;
+			let types = pokemen[name].types;
+			let type = '<span class="col typecol">';
+			for(let i = 0; i<types.length;i++) {
+				type = type+ '<img src="https://play.pokemonshowdown.com/sprites/types/'+types[i]+'.png" alt="'+types[i]+'" height="14" width="32">';
+			}
+			type = type+"</span>";
+			let ability = "";
+			let weight = pokemen[name].weightkg;
+			for(let i in pokemen[name].abilities) {
+				ability+=pokemen[name].abilities[i]+"/";
+			}
+			ability = ability.substring(0,ability.length-1);
+			let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
+			let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
+			return this.sendReplyBox(text);
 		}
-		type = type+"</span>";
-		let ability = "";
-		let weight = pokemen[name].weightkg;
-		for(let i in pokemen[name].abilities) {
-			ability+=pokemen[name].abilities[i]+"/";
+		else if(movestor[name].desc || movestor[name].shortDesc) {
+			return this.sendReplyBox(`<b>${movestor[name].name}</b>: ${(movestor[name].desc || movestor[name].shortDesc)}`);
 		}
-		ability = ability.substring(0,ability.length-1);
-		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
-		this.sendReplyBox(text);
+		else if(abilistor[name].desc || abilistor[name].shortDesc) {
+			return this.sendReplyBox(`<b>${abilistor[name].name}</b>: ${(abilistor[name].desc || abilistor[name].shortDesc)}`);
+		}
+		else 
+			return this.errorReply("Error: Pokemon/Ability/Move not found");
+		
 	},
-
         learnistor: function(target, room, user) {
                 if (!this.runBroadcast()) return;
 		let learnstor, movestor, dexstor;
