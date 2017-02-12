@@ -954,10 +954,10 @@ exports.commands= {
 			let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
 			return this.sendReplyBox(text);
 		}
-		else if(movestor[name].desc || movestor[name].shortDesc) {
+		else if(movestor[name] && (movestor.desc || movestor[name].shortDesc)) {
 			return this.sendReplyBox(`<b>${movestor[name].name}</b>: ${(movestor[name].desc || movestor[name].shortDesc)}`);
 		}
-		else if(abilistor[name].desc || abilistor[name].shortDesc) {
+		else if(abilistor[name] && (abilistor[name].desc || abilistor[name].shortDesc)) {
 			return this.sendReplyBox(`<b>${abilistor[name].name}</b>: ${(abilistor[name].desc || abilistor[name].shortDesc)}`);
 		}
 		else 
