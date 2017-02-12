@@ -25,4 +25,16 @@ exports.BattlePokedex = {
 	      	color: "Red",
 	      	eggGroups: ["Field"],
     	},
+	roadroach: {
+	      	num: 999,
+	      	species: "Roadroach",
+	      	types: ["Bug", "Ground"],
+		genderRatio: {M: 0.5, F: 0.5},
+		baseStats: {hp: 46, atk: 91, def: 81, spa: 40, spd: 51, spe: 76},
+	      	abilities: {0: "Safe Swap"},
+	      	heightm: 100,
+	      	weightkg: 100,
+	      	color: "Red",
+	      	eggGroups: ["Field"],
+    	},
 };
