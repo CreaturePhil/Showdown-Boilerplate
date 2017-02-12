@@ -197,6 +197,7 @@ exports.BattleScripts = {
 					if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
 						//mod for automagic start
 						let flag = true;
+						if(moveData.secondary.status) flag = moveData.secondary.status !== target.status;
 						if(moveData.secondary.volatileStatus) flag = !(moveData.secondary.volatileStatus in target.volatiles);
 						if(moveData.secondary.volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
 						this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);//This line isnt modified
@@ -230,7 +231,7 @@ exports.BattleScripts = {
 								}
 							}
 						}
-						let canSetStatus = function (status, source, sourceEffect, ignoreImmunities) {
+						/*let canSetStatus = function (status, source, sourceEffect, ignoreImmunities) {
 							if (!this.hp) return false;
 							status = this.battle.getEffect(status);
 							if (this.battle.event) {
@@ -277,8 +278,8 @@ exports.BattleScripts = {
 							this.status = prevStatus;
 							this.statusData = prevStatusData;
 							return true;
-						}.bind(target);
-						if(pokemon.hasAbility('sheerforce') || !canSetStatus(moveData.secondary.status, target)) flag = false;
+						}.bind(target);*/
+						if(pokemon.hasAbility('sheerforce')/* || !canSetStatus(moveData.secondary.status, target*/)) flag = false;
 						if(target.hasAbility('shielddust') && !move.ignoreAbility) {
 							flag = false;
 						}
