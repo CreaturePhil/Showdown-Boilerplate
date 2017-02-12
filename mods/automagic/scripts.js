@@ -197,7 +197,6 @@ exports.BattleScripts = {
 					if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
 						//mod for automagic start
 						let flag = true;
-						if(moveData.secondary.status) flag = moveData.secondary.status !== target.status;
 						if(moveData.secondary.volatileStatus) flag = !(moveData.secondary.volatileStatus in target.volatiles);
 						if(moveData.secondary.volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
 						this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);//This line isnt modified
@@ -231,6 +230,58 @@ exports.BattleScripts = {
 								}
 							}
 						}
+						let canSetStatus: function (status, source, sourceEffect, ignoreImmunities) {
+							if (!this.hp) return false;
+							status = this.battle.getEffect(status);
+							if (this.battle.event) {
+								if (!source) source = this.battle.event.source;
+								if (!sourceEffect) sourceEffect = this.battle.effect;
+							}
+							if (this.status === status.id) {
+								return false;
+							}
+							if (!ignoreImmunities && status.id && !(source && source.hasAbility('corrosion') && status.id in {
+									'tox': 1,
+									'psn': 1
+								})) {
+								// the game currently never ignores immunities
+								if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
+									return false;
+								}
+							}
+							let prevStatus = this.status;
+							let prevStatusData = this.statusData;
+							if (status.id) {
+								let result = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+								if (!result) {
+									return result;
+								}
+							}
+							this.status = status.id;
+							this.statusData = {
+								id: status.id,
+								target: this
+							};
+							if (source) this.statusData.source = source;
+							if (status.duration) {
+								this.statusData.duration = status.duration;
+							}
+							if (status.durationCallback) {
+								this.statusData.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
+							}
+							if (status.id && !this.battle.singleEvent('Start', status, this.statusData, this, source, sourceEffect)) {
+								this.battle.debug('status start [' + status.id + '] interrupted');
+								// cancel the setstatus
+								this.status = prevStatus;
+								this.statusData = prevStatusData;
+								return false;
+							}
+							if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
+								return false;
+							}
+							return true;
+						}
+						if(pokemon.hasAbility('sheerforce') || !canSetStatus(moveData.secondary.status, target)) flag = false;
 						if(target.hasAbility('shielddust') && !move.ignoreAbility) {
 							flag = false;
 						}
