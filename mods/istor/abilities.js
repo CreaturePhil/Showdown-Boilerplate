@@ -42,6 +42,8 @@ exports.BattleAbilities = {
 	innovate: {
 		id: 'innovate',
 		name: 'Innovate',
+		desc: "This Pokemon attacks from their Attack stat when it is higher than their Special Attack stat and vice versa.",
+		shortDesc: "This Pokemon always attacks of its highest attacking stat.",
 		onStart: function(pokemon) {
 			if(pokemon.calculateStat("spa",pokemon.boosts.spa) > pokemon.calculateStat("atk",pokemon.boosts.atk)) {
 				this.add('-activate', pokemon, 'ability: Innovate');
@@ -123,6 +125,7 @@ exports.BattleAbilities = {
 		num: 10002,
 	},
 	"extremeentry": {
+		desc: "If this Pokemon switches in for the first time, its moves have their priority increased by 1.",
 		shortDesc: "If this Pokemon switches in for the first time, its moves have their priority increased by 1.",
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (pokemon.entered) return priority;
@@ -135,6 +138,7 @@ exports.BattleAbilities = {
 		num: 10003,
 	},
 	"mesmerize": {
+		desc: "Making contact has a 100% chance of adding Leech Seed.",
 		shortDesc: "Making contact has a 100% chance of adding Leech Seed.",
 		// upokecenter says this is implemented as an added secondary effect
 		onModifyMove: function (move) {
@@ -147,8 +151,8 @@ exports.BattleAbilities = {
 		num: 10004,
 	},
 	"hunter": {
-		desc: "If this Pokemon is knocked out with a contact move, that move's user loses 1/4 of its maximum HP, rounded down. If any active Pokemon has the Ability Damp, this effect is prevented.",
-		shortDesc: "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
+		desc: "When the target of this move switches out, the move will hit before the target switches out.",
+		shortDesc: "Moves hit the target before switching out.",
 		id: "hunter",
 		name: "Hunter",
 			/* Add in a Pursuit effect for all moves here, no power boost */
@@ -156,6 +160,7 @@ exports.BattleAbilities = {
 		num: 106,
 	},
 	"magicalemanation": {
+		desc: "On switch-in, this Pokemon summons Magic Room.",
 		shortDesc: "On switch-in, this Pokemon summons Magic Room.",
 		onStart: function (source, effect) {
 			this.addPseudoWeather('magicroom', source, effect, '[of] ' + source);
@@ -166,6 +171,7 @@ exports.BattleAbilities = {
 		num: 11002,
 	},
 	"trickyemanation": {
+		desc: "On switch-in, this Pokemon summons Trick Room.",
 		shortDesc: "On switch-in, this Pokemon summons Trick Room.",
 		onStart: function (source, effect) {
 			this.addPseudoWeather('trickroom', source, effect, '[of] ' + source);
@@ -176,6 +182,7 @@ exports.BattleAbilities = {
 		num: 11003,
 	},
 	"wondrousemanation": {
+		desc: "On switch-in, this Pokemon summons Wonder Room.",
 		shortDesc: "On switch-in, this Pokemon summons Wonder Room.",
 		onStart: function (source, effect) {
 			this.addPseudoWeather('wonderroom', source, effect, '[of] ' + source);
