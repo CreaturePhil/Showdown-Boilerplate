@@ -241,7 +241,6 @@ let natures = {
                 minus: 'atk'
         },
 };
-//let learnstor = Tools.dexes.istor.data.Learnsets, movestor = Tools.dexes.istor.data.Movedex, dexstor= Tools.dexes.istor.data.Pokedex;
 exports.commands= {
 	mixandmega: 'mnm',
         mnm: function(target, room, user) {
@@ -1148,13 +1147,19 @@ exports.commands= {
                 this.sendReplyBox(text);
         }
 },
-	/*di: 'distor',
+	di: 'distor',
 	dataistor: 'distor',
 	distor: function(target, room, user) {
         	 if (!this.runBroadcast()) return;
                  if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon, including ones from istor.");
 		let name = toId(target);
-		let pokemen=Tools.dexes.istor.data.Pokedex;
+		let pokemen;
+		try {
+			pokemen = Tools.dexes.istor.data.Pokedex;
+		}
+		catch(e) {
+			return this.errorReply("Error: Please start an istor battle before using this command");
+		}
 		if (!pokemen[name])
 			return this.errorReply("Error: Pokemon not found");
 		let baseStats = pokemen[name].baseStats;
@@ -1177,6 +1182,15 @@ exports.commands= {
 
         learnistor: function(target, room, user) {
                 if (!this.runBroadcast()) return;
+		let learnstor, movestor, dexstor;
+		try {
+			learnstor = Tools.dexes.istor.data.Learnsets;
+			movestor = Tools.dexes.istor.data.Movedex;
+			dexstor= Tools.dexes.istor.data.Pokedex;
+		}
+		catch(e) {
+			return this.errorReply("Error: Please start an istor battle before using this command");
+		}
                 if(!target || toId(target) === '') return this.sendReply("/learnistor: Shows the whether a Pokemon can learn a move, including Pokemon and Moves from istor.");
                 let targets = target.split(','), mon = targets[0], move = targets[1];
                 if(!mon || !dexstor[toId(mon)]) return this.errorReply("Error: Pokemon not found");
@@ -1188,5 +1202,5 @@ exports.commands= {
                         return this.sendReplyBox("In Istor, "+mon.species+' <font color="green"><u><b>can<b><u></font> learn '+move.name);
                 }
                 return this.sendReplyBox("In Istor, "+mon.species+' <font color="red"><u><b>can\'t<b><u></font> learn '+move.name);
-        },*/
+        },
 };
