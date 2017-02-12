@@ -72,7 +72,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-                /* Adaptibility Orb */
+	},/* Adaptibility Orb */
            "moonshard": {
 		id: "moonshard",
 		name: "Moon Shard",
