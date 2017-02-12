@@ -2478,7 +2478,7 @@ exports.Formats = [
 		desc: ["&bullet; All the stats of a pokemon which are 70 or below get doubled.<br>For example, Growlithe's stats are 55/70/45/70/50/60 in BnB they become 110/140/90/140/100/120<br><b>Banlist:</b>Eviolite, Huge Power, Pure Power"],
 		mod: 'bnb',
 		ruleset: ['[Gen 7] Ubers'],
-		banlist: ['Eviolite', 'Huge Power', 'Pure Power']
+		banlist: ['Eviolite', 'Huge Power', 'Pure Power', 'Eevium Z']
 	},
 	{
 		name: "[Gen 7] Cross Evolution",
