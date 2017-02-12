@@ -14,3 +14,4 @@ exports.BattleAbilities = {
 		rating: 4,
 		num: 1000,
 	},
+};
