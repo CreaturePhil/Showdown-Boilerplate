@@ -206,7 +206,7 @@ exports.BattleMovedex = {
 			},
 		},
 		target: "normal",
-		type: "rock",
+		type: "Rock",
 	},
 	"sandpadding": {
 		accuracy: true,
