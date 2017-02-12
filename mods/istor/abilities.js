@@ -145,6 +145,11 @@ exports.BattleAbilities = {
 			if (!move || !move.flags['contact']) return;
 			move.volatileStatus = "leechseed";
 		},
+		onAfterDamage: function (damage, target, source, move) {
+			if (move && move.flags['contact'] && !source.hasType('Grass')) {
+				source.addVolatile('leechseed', target);
+			}
+		},
 		id: "mesmerize",
 		name: "Mesmerize",
 		rating: 4,
