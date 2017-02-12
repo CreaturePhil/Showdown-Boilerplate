@@ -9,4 +9,8 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["swordsdance", "machpunch", "drainpunch", "stoneedge"],
 		tier: "New",
 	},
+	roadroach: {
+		randomBattleMoves: ["uturn", "rockslide", "roadsweep", "sandattack"],
+		tier: "RU",
+	},
 };
