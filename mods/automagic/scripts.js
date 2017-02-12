@@ -280,7 +280,7 @@ exports.BattleScripts = {
 								return false;
 							}
 							return true;
-						}
+						}.bind(target);
 						if(pokemon.hasAbility('sheerforce') || !canSetStatus(moveData.secondary.status, target)) flag = false;
 						if(target.hasAbility('shielddust') && !move.ignoreAbility) {
 							flag = false;
