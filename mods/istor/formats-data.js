@@ -169,6 +169,14 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["playrough", "earthquake", "fakeout", "bulkup"],
 		tier: "New",
 	},
+	peruin: {
+		randomBattleMoves: ["headsmash", "knockoff", "pursuit", "earthquake"],
+		tier: "New",
+	},
+	elyrentz: {
+		randomBattleMoves: ["voltswitch", "powergem", "earthpower", "thunderbolt", "hurricane"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
