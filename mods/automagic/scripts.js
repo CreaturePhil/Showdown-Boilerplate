@@ -230,7 +230,7 @@ exports.BattleScripts = {
 								}
 							}
 						}
-						let canSetStatus: function (status, source, sourceEffect, ignoreImmunities) {
+						let canSetStatus = function (status, source, sourceEffect, ignoreImmunities) {
 							if (!this.hp) return false;
 							status = this.battle.getEffect(status);
 							if (this.battle.event) {
