@@ -276,7 +276,6 @@ exports.BattleScripts = {
 							}
 							this.status = prevStatus;
 							this.statusData = prevStatusData;
-							}
 							return true;
 						}.bind(target);
 						if(pokemon.hasAbility('sheerforce') || !canSetStatus(moveData.secondary.status, target)) flag = false;
