@@ -491,7 +491,9 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		recoil: [50, 100], /* Spandan I need you to make this always half of your health, like Super Fang */
+		onHit: function (target, source) {//Copy-paste from Curse code.
+			this.directDamage(source.maxhp / 2, source, source);
+		},
 		secondary: false,
 		target: "normal",
 		type: "Fire",
