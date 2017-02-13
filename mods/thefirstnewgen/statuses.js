@@ -19,7 +19,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function (source, effect) {
-			if (source && source.hasItem('necrosis')) {
+			if (source && source.hasItem('necroticrock')) {
 				return 8;
 			}
 			return 5;
