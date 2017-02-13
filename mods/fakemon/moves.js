@@ -17,7 +17,7 @@ exports.BattleMovedex = {
 		onTry: function (pokemon, target) {
 			if (pokemon.activeTurns > 1) {
 				this.add('-fail', pokemon);
-				this.add('-hint', "First Impression only works on your first turn out.");
+				this.add('-hint', "Roadsweep only works on your first turn out. #loser");
 				return null;
 			}
 		},
