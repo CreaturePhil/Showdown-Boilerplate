@@ -4,7 +4,7 @@ exports.BattleStatuses = {
 	    infected: { /* Get 1/2 X SpA working */
 		              effectType: 'Status',
                   onStart: function (target, source, sourceEffect) {
-                    } else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+                     if (sourceEffect && sourceEffect.effectType === 'Ability') {
                       this.add('-status', target, 'infected', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
                     } else {
                       this.add('-status', target, 'infected');
