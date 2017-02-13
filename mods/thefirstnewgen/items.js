@@ -32,6 +32,18 @@ exports.BattleItems = {
         zMoveFrom: "Antler Scorch",
         zMoveUser: ["Pyromoose"], 
       },    
+	"snorlaxite": {
+		id: "snorlaxite",
+		name: "Snorlaxite",
+		megaStone: "Snorlax-Mega",
+		megaEvolves: "Snorlax",
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		desc: "If holder is a Snorlax, this item allows it to Mega Evolve in battle.",
+	},
+	
         "allrounderbadge": { /* Not Sure about this :P */
 		id: "allrounderbadge",
 		name: "All-Rounder Badge",
@@ -56,7 +68,8 @@ exports.BattleItems = {
 			return this.chainModify(1.05);
 		},
                 
-	},
+	}, 
+	/* Adaptibility Orb, Moon Shard*/
         "assaultshield": {
 		id: "assaultshield",
 		name: "assault Shield",
@@ -71,24 +84,6 @@ exports.BattleItems = {
 					pokemon.disableMove(moves[i].id);
 				}
 			}
-		},
-	},/* Adaptibility Orb */
-           "moonshard": {
-		id: "moonshard",
-		name: "Moon Shard",
-		spritenum: 610,
-		onPlate: 'Fairy',
-		onBasePowerPriority: 6,
-		onBasePower: function (basePower, user, target, move) {
-			if (move && move.type === 'Fairy') {
-				return this.chainModify([0x1333, 0x1000]);
-			}
-		},
-		onTakeItem: function (item, pokemon, source) {
-			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
-				return false;
-			}
-			return true;
 		},
 	},
 };
