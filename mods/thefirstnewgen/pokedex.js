@@ -498,4 +498,26 @@ exports.BattlePokedex = {
 		prevo: "Seedocyte",
 		eggGroups: ["Mineral", "Water 3"],
 	},
+	/* Mega Snorlax */
+	snorlax: {
+		inherit: true,
+		abilities: {0: "Immunity", 1: "Thick Fat", H: "Gluttony"},
+		otherFormes: ["snorlaxmega"],
+	},
+	snorlaxmega: {
+		num: 143,
+		species: "Snorlax-Mega",
+		baseSpecies: "Butterfree",
+		forme: "Mega",
+		formeLetter: "M",
+		types: ["Normal"],
+		baseStats: {hp: 160, atk: 135, def: 135, spa: 65, spd: 135, spe: 10},
+		abilities: {0: "Comatose"},
+		heightm: 2.1,
+		weightkg: 460,
+		color: "Black",
+		prevo: "munchlax",
+		evoLevel: 1,
+		eggGroups: ["Monster"],
+	},
 };
