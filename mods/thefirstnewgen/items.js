@@ -47,25 +47,28 @@ exports.BattleItems = {
         "allrounderbadge": { /* Not Sure about this :P */
 		id: "allrounderbadge",
 		name: "All-Rounder Badge",
-		onModifyAtkPriority: 1,
-		onModifyAtk: function (atk) {
-			return this.chainModify(1.05);
+		fling: {
+			basePower: 40,
 		},
-                onModifyDefPriority: 1,
-		onModifyDef: function (def) {
-			return this.chainModify(1.05);
+		onModifyAtkPriority: 2,
+		onModifyAtk: function (atk, pokemon) {
+				return this.chainModify(1.05);
 		},
-                onModifySpAPriority: 1,
-		onModifySpA: function (spa) {
-			return this.chainModify(1.05);
+		onModifyDefPriority: 2,
+		onModifyDef: function (def, pokemon) {
+				return this.chainModify(1.05);
 		},
-                onModifySpDPriority: 1,
-		onModifySpD: function (spd) {
-			return this.chainModify(1.05);
+		onModifySpAPriority: 2,
+		onModifySpA: function (spa, pokemon) {
+				return this.chainModify(1.05);
 		},
-                onModifySpePriority: 1,
-		onModifySpe: function (spe) {
-			return this.chainModify(1.05);
+		onModifySpDPriority: 2,
+		onModifySpD: function (spd, pokemon) {
+				return this.chainModify(1.05);
+		},
+		onModifySpePriority: 2,
+		onModifySpe: function (spe, pokemon) {
+				return this.chainModify(1.05);
 		},
                 
 	}, 
