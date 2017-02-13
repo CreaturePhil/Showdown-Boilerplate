@@ -348,7 +348,7 @@ exports.BattleLearnsets = {
                  rage: ["5L1"], 
                  megamelt: ["5L1"],
         },
-                 steelicillo: {
+        steelicillo: {
                  tackle: ["5L1"], 
                  ember: ["5L1"], 
                  tailwhip: ["5L1"], 
@@ -420,5 +420,6 @@ exports.BattleLearnsets = {
                  megamelt: ["5L1"],
                  scorchshot: ["5L1"], 
                  flashcannon: ["5L1"],
+                 moltensteelblast: ["5L1"],
         },
 };
