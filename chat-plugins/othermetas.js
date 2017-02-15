@@ -84,6 +84,7 @@ if (process.send && module === process.mainModule) {
 	process.nextTick(() => Tools.includeMods());
 }//All this isfrom datasearch.js
 exports.commands= {
+	/*********Will finish later
 	mixandmega: 'mnm',
         mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -169,7 +170,7 @@ exports.commands= {
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
 		let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
 		return this.sendReplyBox(text);
-        },
+        },******/
 	ns: 'natureswap',
         'natureswap': function(target, room, user) {
 		if (!this.runBroadcast()) return;
