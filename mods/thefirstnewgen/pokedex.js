@@ -507,7 +507,7 @@ exports.BattlePokedex = {
 	snorlaxmega: {
 		num: 143,
 		species: "Snorlax-Mega",
-		baseSpecies: "Butterfree",
+		baseSpecies: "Snorlax",
 		forme: "Mega",
 		formeLetter: "M",
 		types: ["Normal"],
