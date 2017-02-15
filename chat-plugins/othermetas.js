@@ -955,7 +955,7 @@ exports.commands= {
 			return this.sendReplyBox(text);
 		}
 		else if(movestor[name] && (movestor.desc || movestor[name].shortDesc)) {
-			return this.sendReplyBox(`<b>${movestor[name].name}</b>: ${(movestor[name].desc || movestor[name].shortDesc)}`);
+			return this.sendReplyBox(`<b>${movestor[name].name}</b>: ${(movestor[name].desc || movestor[name].shortDesc)}<br><b>Type: </b><span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/${(movestor[name].type)}.png" alt="${(movestor[name].type)}" height="14" width="32"><br><b>Accuracy: </b>${(movestor[name].accuracy)}%<br><b>Base Power: </b>${(movestor[name].basePower)}<br><b>Category: </b>${(movestor[name].category)}</b><br><b>Priority: </b>${(movestor[name].priority)}</b>`);
 		}
 		else if(abilistor[name] && (abilistor[name].desc || abilistor[name].shortDesc)) {
 			return this.sendReplyBox(`<b>${abilistor[name].name}</b>: ${(abilistor[name].desc || abilistor[name].shortDesc)}`);
@@ -987,4 +987,46 @@ exports.commands= {
                 }
                 return this.sendReplyBox("In Istor, "+mon.species+' <font color="red"><u><b>can\'t<b><u></font> learn '+move.name);
         },
+	dgen: 'dnewgen',
+	dnewgen: function(target, room, user) {
+        	 if (!this.runBroadcast()) return;
+                 if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon/Ability/Move, including ones from istor.");
+		let name = toId(target);
+		let abiliden, moveden, pokegen;
+		try {
+			pokegen = Tools.dexes.thefirstnewgen.data.Pokedex;
+			abiliden = Tools.dexes.thefirstnewgen.data.Abilities;
+			moveden = Tools.dexes.thefirstnewgen.data.Movedex;
+		}
+		catch(e) {
+			return this.errorReply("Error: Please start a Pokemon: The New First Generation battle before using this command");
+		}
+		if(pokegen[name]) {
+			let baseStats = pokegen[name].baseStats;
+			let types = pokegen[name].types;
+			let type = '<span class="col typecol">';
+			for(let i = 0; i<types.length;i++) {
+				type = type+ '<img src="https://play.pokemonshowdown.com/sprites/types/'+types[i]+'.png" alt="'+types[i]+'" height="14" width="32">';
+			}
+			type = type+"</span>";
+			let ability = "";
+			let weight = pokegen[name].weightkg;
+			for(let i in pokegen[name].abilities) {
+				ability+=pokegen[name].abilities[i]+"/";
+			}
+			ability = ability.substring(0,ability.length-1);
+			let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
+			let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
+			return this.sendReplyBox(text);
+		}
+		else if(moveden[name]) {
+			return this.sendReplyBox(`<ul class="utilichart"><li class="result"><span class="col movenamecol">${moveden[name].name}</span> <span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/${(moveden[name].type)}.png" alt="${(moveden[name].type)}" height="14" width="32"><img src="//play.pokemonshowdown.com/sprites/categories/${(moveden[name].category)}.png" alt="${(moveden[name].category)}" height="14" width="32"></span> <span class="col labelcol"><em>Power</em><br>${(moveden[name].basePower)}</span> <span class="col widelabelcol"><em>Accuracy</em><br>${(moveden[name].accuracy)}%</span> <span class="col pplabelcol"><em>PP</em><br>${(moveden[name].pp)}</span> <span class="col movedesccol">${(moveden[name].shortDesc)}</span> </li><li style="clear:both"></li></ul><div class="chat"><font size="1"><font color="#686868">Priority:</font> ${(moveden[name].priority)}|<font color="#686868">Gen:</font> New First Gen |<font color="#686868"> Target:</font>${(moveden[name].target)}</div>`);
+		}
+		else if(abiliden[name]) {
+			return this.sendReplyBox(`<b>${abiliden[name].name}</b>: ${(abiliden[name].shortDesc)}`);
+		}
+		else 
+			return this.errorReply("Error: Pokemon/Ability/Move not found");
+		
+	},
 };
