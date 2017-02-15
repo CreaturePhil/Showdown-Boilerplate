@@ -43,8 +43,18 @@ exports.BattleItems = {
 		},
 		desc: "If holder is a Snorlax, this item allows it to Mega Evolve in battle.",
 	},
-	
-        "allrounderbadge": { /* Not Sure about this :P */
+	  "knyffinite": {
+		id: "knyffinite",
+		name: "Knyffinite",
+		megaStone: "Knyffe-Mega",
+		megaEvolves: "Knyffe",
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		desc: "If holder is a Knyffe, this item allows it to Mega Evolve in battle.",
+	  },
+	  "allrounderbadge": { /* Not Sure about this :P */
 		id: "allrounderbadge",
 		name: "All-Rounder Badge",
 		fling: {
