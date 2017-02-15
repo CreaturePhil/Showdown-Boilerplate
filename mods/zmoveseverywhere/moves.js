@@ -281,6 +281,10 @@ exports.BattleMovedex = {
 		onEffectiveness: function (typeMod, type, move) {
 			return typeMod + this.getEffectiveness('Ground', type);
 		},
+		secondary: {
+			chance: 70,
+			status: 'brn',
+		},
 		onPrepareHit: function(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Flare Blitz", target);
