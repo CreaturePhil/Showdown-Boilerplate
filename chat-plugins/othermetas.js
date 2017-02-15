@@ -87,11 +87,62 @@ exports.commands= {
 	mixandmega: 'mnm',
         mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
-                let sep = target.split('@'), mnmTools = {};
-		mnmTools['getTemplate'] = Tools.getTemplate;
-		mnmTools.getMegaDeltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(mnmTools);
-		mnmTools.doGetMixedTemplate = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(mnmTools);
-		mnmTools.getMixedTemplate = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(mnmTools);
+                let sep = target.split('@'), mnmTools = {
+			getTemplate: Tools.getTemplate,
+			getMixedTemplate: function (originalSpecies, megaSpecies) {
+				let originalTemplate = this.getTemplate(originalSpecies);
+				let megaTemplate = this.getTemplate(megaSpecies);
+				if (originalTemplate.baseSpecies === megaTemplate.baseSpecies) return megaTemplate;
+				let deltas = this.getMegaDeltas(megaTemplate);
+				let template = this.doGetMixedTemplate(originalTemplate, deltas);
+				return template;
+			},
+			getMegaDeltas: function (megaTemplate) {
+				let baseTemplate = this.getTemplate(megaTemplate.baseSpecies);
+				let deltas = {
+					ability: megaTemplate.abilities['0'],
+					baseStats: {},
+					weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
+					originalMega: megaTemplate.species,
+					requiredItem: megaTemplate.requiredItem,
+				};
+				for (let statId in megaTemplate.baseStats) {
+					deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
+				}
+				if (megaTemplate.types.length > baseTemplate.types.length) {
+					deltas.type = megaTemplate.types[1];
+				} else if (megaTemplate.types.length < baseTemplate.types.length) {
+					deltas.type = baseTemplate.types[0];
+				} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
+					deltas.type = megaTemplate.types[1];
+				}
+				if (megaTemplate.isMega) deltas.isMega = true;
+				if (megaTemplate.isPrimal) deltas.isPrimal = true;
+				return deltas;
+			},
+			doGetMixedTemplate: function (template, deltas) {
+				if (!deltas) throw new TypeError("Must specify deltas!");
+				if (!template || typeof template === 'string') template = this.getTemplate(template);
+				template = Object.assign({}, template);
+				template.abilities = {'0': deltas.ability};
+				if (template.types[0] === deltas.type) {
+					template.types = [deltas.type];
+				} else if (deltas.type) {
+					template.types = [template.types[0], deltas.type];
+				}
+				let baseStats = template.baseStats;
+				template.baseStats = {};
+				for (let statName in baseStats) {
+					template.baseStats[statName] = this.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
+				}
+				template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
+				template.originalMega = deltas.originalMega;
+				template.requiredItem = deltas.requiredItem;
+				if (deltas.isMega) template.isMega = true;
+				if (deltas.isPrimal) template.isPrimal = true;
+				return template;
+			},
+		};
 		let stone = sep[1], mon = sep[0], primals = ['redorb', 'blueorb'];
 		if (!Tools.data.Pokedex[toId(mon)] || (!Tools.data.Items[toId(stone)].megaStone || primals.includes(toId(stone))) || !target.includes('@')) {
 			return this.errorReply('ERROR: Invalid Input. Use /mnm <pokemon> @ <mega stone/orb>');
