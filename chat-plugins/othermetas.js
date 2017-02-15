@@ -966,15 +966,7 @@ exports.commands= {
 	},
         learnistor: function(target, room, user) {
                 if (!this.runBroadcast()) return;
-		let learnstor, movestor, dexstor;
-		try {
-			learnstor = Tools.dexes.istor.data.Learnsets;
-			movestor = Tools.dexes.istor.data.Movedex;
-			dexstor= Tools.dexes.istor.data.Pokedex;
-		}
-		catch(e) {
-			return this.errorReply("Error: Please start an istor battle before using this command");
-		}
+		let learnstor = Tools.mod('istor').Learnsets, movestor = Tools.mod('istor').Movedex, dexstor = Tools.mod('istor').Pokedex;
                 if(!target || toId(target) === '') return this.sendReply("/learnistor: Shows the whether a Pokemon can learn a move, including Pokemon and Moves from istor.");
                 let targets = target.split(','), mon = targets[0], move = targets[1];
                 if(!mon || !dexstor[toId(mon)]) return this.errorReply("Error: Pokemon not found");
@@ -992,15 +984,7 @@ exports.commands= {
         	 if (!this.runBroadcast()) return;
                  if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon/Ability/Move, including ones from istor.");
 		let name = toId(target);
-		let abiliden, moveden, pokegen;
-		try {
-			pokegen = Tools.dexes.thefirstnewgen.data.Pokedex;
-			abiliden = Tools.dexes.thefirstnewgen.data.Abilities;
-			moveden = Tools.dexes.thefirstnewgen.data.Movedex;
-		}
-		catch(e) {
-			return this.errorReply("Error: Please start a Pokemon: The New First Generation battle before using this command");
-		}
+		let abiliden = Tools.mod('thefirstnewgen').data.Abilities, moveden = Tools.mod('thefirstnewgen').data.Movedex, pokegen = Tools.mod('thefirstnewgen').data.Pokedex;
 		if(pokegen[name]) {
 			let baseStats = pokegen[name].baseStats;
 			let types = pokegen[name].types;
@@ -1027,6 +1011,5 @@ exports.commands= {
 		}
 		else 
 			return this.errorReply("Error: Pokemon/Ability/Move not found");
-		
 	},
 };
