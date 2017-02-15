@@ -553,4 +553,36 @@ exports.BattlePokedex = {
 		evoLevel: 36,
 		eggGroups: ["Bug"],
 	},
+	revenya: {
+		num: 8128,
+		species: "Revenya",
+		types: ["Normal", "Ghost"],
+		baseStats: {hp: 50, atk: 60, def: 70, spa: 30, spd: 60, spe: 90},
+		abilities: {0: "Unstable Molecules", 1: "Cute Charm", H: "Poison Heal"},
+		evos: "nyantum"
+	},
+	nyantum: {
+		num: 8129,
+		species: "Nyantum",
+		types: ["Normal", "Ghost"],
+		baseStats: {hp: 70, atk: 85, def: 115, spa: 60, spd: 105, spe: 110},
+		abilities: {0: "Unstable Molecules", 1: "Cute Charm", H: "Poison Heal"},
+		prevo: "revenya"
+	},
+	nimbice: {
+		num: 8128,
+		species: "Nimbice",
+		types: ["Ice", "Water"],
+		baseStats: {hp: 100, atk: 50, def: 70, spa: 60, spd: 80, spe: 30},
+		abilities: {0: "Snow Warning", H: "Filter"},
+		evos: "icicloud"
+	},
+	icicloud: {
+		num: 8128,
+		species: "Icicloud",
+		types: ["Ice", "Water"],
+		baseStats: {hp: 135, atk: 70, def: 95, spa: 85, spd: 110, spe: 45},
+		abilities: {0: "Snow Warning", H: "Filter"},
+		prevo: "nimbice"
+	},
 };
