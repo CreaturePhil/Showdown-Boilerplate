@@ -927,15 +927,7 @@ exports.commands= {
         	 if (!this.runBroadcast()) return;
                  if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon/Ability/Move, including ones from istor.");
 		let name = toId(target);
-		let abilistor, movestor, pokemen;
-		try {
-			pokemen = Tools.dexes.istor.data.Pokedex;
-			abilistor = Tools.dexes.istor.data.Abilities;
-			movestor = Tools.dexes.istor.data.Movedex;
-		}
-		catch(e) {
-			return this.errorReply("Error: Please start an istor battle before using this command");
-		}
+		let abilistor = Tools.mod('istor').Abilities, movestor = Tools.mod('istor').Movedex, pokemen = Tools.mod('istor').Pokedex;
 		if(pokemen[name]) {
 			let baseStats = pokemen[name].baseStats;
 			let types = pokemen[name].types;
