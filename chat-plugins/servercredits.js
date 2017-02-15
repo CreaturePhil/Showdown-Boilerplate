@@ -19,7 +19,7 @@ exports.commands = {
                     "- " + hashColor('Spandan', true) + " (Format Development, <s>Crashes</s>)<br />" +
 					"<br />" +
 					"<u>Contributors:</u><br />" +
-					"- " + hashColor('charizard8888', true) + " (Roomintro's)<br />" +
+					"- " + hashColor('charizard8888', true) + " (Roomintros, HTML, CSS, Development)<br />" +
                     "- " + hashColor('ClassyZ', true) + " (DHSSB, Development)<br />" +
                     "- " + hashColor('Eternal Mayhem', true) + " (Roomintro's)<br />" +
                     "- " + hashColor('Spects', true) + " (Development)<br />" +
