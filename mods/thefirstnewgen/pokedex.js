@@ -552,4 +552,5 @@ exports.BattlePokedex = {
 		prevo: "Scyther",
 		evoLevel: 36,
 		eggGroups: ["Bug"],
+	},
 };
