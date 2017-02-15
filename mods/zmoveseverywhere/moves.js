@@ -241,4 +241,71 @@ exports.BattleMovedex = {
 		type: "Ice",
 		isZ: "vanilliumz",
 	},
+	"infernoburst": {
+		accuracy: 100,
+		basePower: 195,
+		category: "Special",
+		id: "infernoburst",
+		isViable: true,
+		name: "Inferno Burst",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		weather: 'sunnyday',
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spa: 3,
+				},
+			},
+		},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Inferno Overdrive", target);
+		},
+		target: "normal",
+		type: "Fire",
+		isZ: "ninetalesiumz",
+	},
+	"blitzingtremor": {
+		accuracy: 100,
+		basePower: 180,
+		category: "Physical",
+		id: "blitzingtremor",
+		isViable: true,
+		name: "Blitzing Tremor",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onEffectiveness: function (typeMod, type, move) {
+			return typeMod + this.getEffectiveness('Ground', type);
+		},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Flare Blitz", target);
+			this.add('-anim', source, "Earthly Crust", target);
+		},
+		target: "normal",
+		type: "Fire",
+		isZ: "groudoniumz",
+	},
+	"pyrotechnics": { /* Code The Additional Effect: Torkoal deals damage. Afterwards it gains +1 to each stat for each other Fire-type or Grass-type on its team without a status condition, and not fainted. -1 Priority. Fails if you have no other Fire-types or Grass-types on your team- similar checks on teammates to Beat Up. */
+		accuracy: 100,
+		basePower: 180,
+		category: "Special",
+		id: "pyrotechnics",
+		isViable: true,
+		name: "Pyrotechnics ",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Inferno Overdrive", target);
+		},
+		target: "normal",
+		type: "Fire",
+		isZ: "torkoaliumz",
+	},
 };
