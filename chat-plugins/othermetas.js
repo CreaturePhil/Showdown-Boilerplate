@@ -927,7 +927,7 @@ exports.commands= {
         	 if (!this.runBroadcast()) return;
                  if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon/Ability/Move, including ones from istor.");
 		let name = toId(target);
-		let abilistor = Tools.mod('istor').Abilities, movestor = Tools.mod('istor').Movedex, pokemen = Tools.mod('istor').Pokedex;
+		let abilistor = Tools.mod('istor').data.Abilities, movestor = Tools.mod('istor').data.Movedex, pokemen = Tools.mod('istor').data.Pokedex;
 		if(pokemen[name]) {
 			let baseStats = pokemen[name].baseStats;
 			let types = pokemen[name].types;
@@ -958,7 +958,7 @@ exports.commands= {
 	},
         learnistor: function(target, room, user) {
                 if (!this.runBroadcast()) return;
-		let learnstor = Tools.mod('istor').Learnsets, movestor = Tools.mod('istor').Movedex, dexstor = Tools.mod('istor').Pokedex;
+		let learnstor = Tools.mod('istor').data.Learnsets, movestor = Tools.mod('istor').data.Movedex, dexstor = Tools.mod('istor').data.Pokedex;
                 if(!target || toId(target) === '') return this.sendReply("/learnistor: Shows the whether a Pokemon can learn a move, including Pokemon and Moves from istor.");
                 let targets = target.split(','), mon = targets[0], move = targets[1];
                 if(!mon || !dexstor[toId(mon)]) return this.errorReply("Error: Pokemon not found");
