@@ -87,8 +87,8 @@ exports.commands= {
 	mixandmega: 'mnm',
         mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
-                let sep = target.split('@'), mnmTools = Object.assign({}, Tools);
-		mnmTools.getMegaDeltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas;
+                let sep = target.split('@'), mnmTools = {};
+		mnmTools['getTemplate'] = Tools.getTemplate;
 		mnmTools.getMegaDeltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(mnmTools);
 		mnmTools.doGetMixedTemplate = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(mnmTools);
 		mnmTools.getMixedTemplate = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(mnmTools);
