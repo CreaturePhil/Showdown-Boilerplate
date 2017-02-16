@@ -1,10 +1,13 @@
 'use strict';
 
 exports.BattleStatuses = {
-	allterrain: {
+	/*allterrain: {
 		name: 'All Terrain',
 		id: 'allterrain',
 		duration: 0,
+		onBegin: function() {
+			this.setTerrain('allterrain');
+		},
 		onSetStatus: function (status, target, source, effect) {
 			if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
 				if (effect.effectType === 'Move' && !effect.secondaries) {
@@ -61,17 +64,10 @@ exports.BattleStatuses = {
 				return this.chainModify(1.5);
 			}
 		},
-		onStart: function (battle, source, effect) {
-			this.add('-fieldstart', 'move: All Terrain');
-		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual: function () {
 			this.eachEvent('Terrain');
-		},
-		onEnd: function () {
-			this.eachEvent('Terrain');
-			this.add('-fieldend', 'move: All Terrain');
 		},
 		onTerrain: function (pokemon) {
 			if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
@@ -79,5 +75,12 @@ exports.BattleStatuses = {
 				this.heal(pokemon.maxhp / 16, pokemon, pokemon);
 			}
 		},
-	},
+		onStart: function (battle, source, effect) {
+			this.add('-fieldstart', 'move: All Terrain');
+		},
+		onEnd: function () {
+			this.eachEvent('Terrain');
+			this.add('-fieldend', 'move: All Terrain');
+		},
+	},*/
 };
