@@ -2362,28 +2362,6 @@ exports.commands = {
 		if(!this.can("roomdriver")) return;
 		if(!target || target === "") return this.errorReply("Error: Please provide a parameter.");
 		let date = target.trim(), month = date.substring(0,7);
-		let uploadToHastebin = function (toUpload, callback) {
-			var reqOpts = {
-				hostname: "hastebin.com",
-				method: "POST",
-				path: '/documents'
-			};
-			var req = require('https').request(reqOpts, function (res) {
-				res.on('data', function (chunk) {
-					try {
-						var linkStr = "hastebin.com/" + JSON.parse(chunk.toString())['key'];
-						if (typeof callback === "function") callback(true, linkStr);
-					} catch (e) {
-						if (typeof callback === "function") callback(false, e);
-					}
-				});
-			});
-			req.on('error', function (e) {
-				if (typeof callback === "function") callback(false, e);
-			});
-			req.write(toUpload);
-			req.end();
-		};
 		let data = "", path = "logs/chat/"+toId(room)+"/";
 		if(target === "today") path = path + "today.txt";
 		else {
