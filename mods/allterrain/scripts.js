@@ -6,7 +6,6 @@ exports.BattleScripts = {
 		if(status.id !== "allterrain") return false;
 		if (sourceEffect === undefined && this.effect) sourceEffect = this.effect;
 		if (source === undefined && this.event && this.event.target) source = this.event.target;
-
 		if (this.terrain === status.id) return false;
 		let prevTerrain = this.terrain;
 		let prevTerrainData = this.terrainData;

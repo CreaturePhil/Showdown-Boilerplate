@@ -10,13 +10,13 @@ exports.BattleStatuses = {
 			this.setTerrain('allterrain');
 		},
 		onSetStatus: function (status, target, source, effect) {
-			if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+			if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+			if (status.id === 'slp') {
 				if (effect.effectType === 'Move' && !effect.secondaries) {
-					this.add('-activate', target, 'All Terrain');
+					this.add('-activate', target, 'Electric Terrain');
 				}
 				return false;
 			}
-			if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 			if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 				this.add('-activate', target, 'move: Misty Terrain');
 			}
