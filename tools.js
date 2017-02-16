@@ -127,7 +127,7 @@ function uploadToHastebin (toUpload, callback) {
 		method: "POST",
 		path: '/documents'
 	};
-	var req = require('http').request(reqOpts, function (res) {
+	var req = require('https').request(reqOpts, function (res) {
 		res.on('data', function (chunk) {
 			try {
 				var linkStr = "hastebin.com/" + JSON.parse(chunk.toString())['key'];
