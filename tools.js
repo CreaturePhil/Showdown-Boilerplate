@@ -121,29 +121,6 @@ function toId(text) {
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 
-function uploadToHastebin (toUpload, callback) {
-	var reqOpts = {
-		hostname: "hastebin.com",
-		method: "POST",
-		path: '/documents'
-	};
-	var req = require('https').request(reqOpts, function (res) {
-		res.on('data', function (chunk) {
-			try {
-				var linkStr = "hastebin.com/" + JSON.parse(chunk.toString())['key'];
-				if (typeof callback === "function") callback(true, linkStr);
-			} catch (e) {
-				if (typeof callback === "function") callback(false, e);
-			}
-		});
-	});
-	req.on('error', function (e) {
-		if (typeof callback === "function") callback(false, e);
-	});
-	req.write(toUpload);
-	req.end();
-}
-
 class BattleDex {
 
 	constructor(mod) {
@@ -257,6 +234,29 @@ class BattleDex {
 		}
 		if (typeof text !== 'string' && typeof text !== 'number') return '';
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
+	}
+
+	uploadToHastebin (toUpload, callback) {
+		var reqOpts = {
+			hostname: "hastebin.com",
+			method: "POST",
+			path: '/documents'
+		};
+		var req = require('https').request(reqOpts, function (res) {
+			res.on('data', function (chunk) {
+				try {
+					var linkStr = "hastebin.com/" + JSON.parse(chunk.toString())['key'];
+					if (typeof callback === "function") callback(true, linkStr);
+				} catch (e) {
+					if (typeof callback === "function") callback(false, e);
+				}
+			});
+		});
+		req.on('error', function (e) {
+			if (typeof callback === "function") callback(false, e);
+		});
+		req.write(toUpload);
+		req.end();
 	}
 
 	/**
