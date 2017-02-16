@@ -2450,6 +2450,7 @@ exports.Formats = [
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3596038/\">All Terrain</a>: All Terrain is a metagame in which all terrains are active permanently. Yes, Grassy, Electric, Misty and Psychic terrain are all active all at once."],
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Nature Power', 'Secret Power', 'Camoflauge', 'Raichu-Alola'],
+		unbanlist: ["Landorus"],
 		mod: 'allterrain',
 		onBegin: function() {
 			this.setTerrain('allterrain');
