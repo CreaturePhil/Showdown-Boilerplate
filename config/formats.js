@@ -2443,12 +2443,13 @@ exports.Formats = [
 	// New Other Metagames ///////////////////////////////////////////////////////////////////
 	{
 		section: "New Other Metagames",
+		column: 2,
 	},
 	{
 		name: "[Gen 7] All Terrain",
 		desc: ["&bullet; All Terrain is a metagame in which all terrains are active permanently. Yes, Grassy, Electric, Misty and Psychic terrain are all active all at once."],
-		column: 2,
 		ruleset: ['[Gen 7] OU'],
+		banlist: ['Nature Power', 'Secret Power', 'Camoflauge', 'Raichu-Alola'],
 		mod: 'allterrain',
 		onBegin: function() {
 			this.setTerrain('allterrain');
@@ -2457,7 +2458,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Automagic",
 		desc: ["&bullet; Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
-		column: 2,
 		ruleset: ['[Gen 7] OU'],
 		mod: 'automagic',
 		onAfterSecondaryEffect: function(target, source, move) {
