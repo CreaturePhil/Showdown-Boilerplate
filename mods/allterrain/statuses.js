@@ -1,9 +1,10 @@
 'use strict';
 
 exports.BattleStatuses = {
-	/*allterrain: {
+	allterrain: {
 		name: 'All Terrain',
 		id: 'allterrain',
+		effectType: 'terrain',
 		duration: 0,
 		onBegin: function() {
 			this.setTerrain('allterrain');
@@ -11,7 +12,7 @@ exports.BattleStatuses = {
 		onSetStatus: function (status, target, source, effect) {
 			if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
 				if (effect.effectType === 'Move' && !effect.secondaries) {
-					this.add('-activate', target, 'move: All Terrain');
+					this.add('-activate', target, 'All Terrain');
 				}
 				return false;
 			}
@@ -76,11 +77,11 @@ exports.BattleStatuses = {
 			}
 		},
 		onStart: function (battle, source, effect) {
-			this.add('-fieldstart', 'move: All Terrain');
+			this.add('-fieldstart', 'All Terrain');
 		},
 		onEnd: function () {
 			this.eachEvent('Terrain');
-			this.add('-fieldend', 'move: All Terrain');
+			this.add('-fieldend', 'All Terrain');
 		},
-	},*/
+	},
 };
