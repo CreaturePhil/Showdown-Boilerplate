@@ -2447,7 +2447,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] All Terrain",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3596038/\"></a>: All Terrain is a metagame in which all terrains are active permanently. Yes, Grassy, Electric, Misty and Psychic terrain are all active all at once."],
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3596038/\">All Terrain</a>: All Terrain is a metagame in which all terrains are active permanently. Yes, Grassy, Electric, Misty and Psychic terrain are all active all at once."],
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Nature Power', 'Secret Power', 'Camoflauge', 'Raichu-Alola'],
 		mod: 'allterrain',
@@ -2457,7 +2457,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Automagic",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3594333/\"></a>Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3594333/\">Automagic</a>: Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
 		ruleset: ['[Gen 7] OU'],
 		mod: 'automagic',
 		onAfterSecondaryEffect: function(target, source, move) {
