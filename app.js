@@ -106,6 +106,7 @@ global.Monitor = require('./monitor');
 
 global.Tools = require('./tools');
 global.toId = Tools.getId;
+global.uploadToHastebin = Tools.uploadToHastebin;
 
 global.LoginServer = require('./loginserver');
 
