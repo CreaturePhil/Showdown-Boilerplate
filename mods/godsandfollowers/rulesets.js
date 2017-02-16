@@ -28,7 +28,6 @@ exports.BattleFormats = {
 					problems.push("You cannot use " + name + " as non-god.");
 				}
 				var bannedItems = {
-					'Soul Dew': true,
 					'Gengarite': true,
 					'Kangaskhanite': true,
 					'Lucarionite': true,
