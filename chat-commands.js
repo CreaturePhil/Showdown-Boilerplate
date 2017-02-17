@@ -2356,7 +2356,7 @@ exports.commands = {
 	pingallhelp: ["/pingall [message] - Pings all the users of the current room with a message.",
 		     "Requires: +"],
 	
-	//Roomlog code by Spandan
+	/*
 	roomlog: function (target, room, user, connection) {
 		if(!Config.logchat) return this.errorReply("Roomlogs are disabled for this server. (Did you mean: modlog?)");
 		if(!this.can("roomdriver")) return;
@@ -2415,7 +2415,7 @@ exports.commands = {
 		}
 	},
 	roomloghelp: ["/roomlog [date|today] - Generates a hastebin link to show the room logs for that date.",
-		      "Requires: & ~"],
+		      "Requires: & ~"],*/
 
 
 	modlog: function (target, room, user, connection) {
