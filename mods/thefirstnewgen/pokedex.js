@@ -107,7 +107,7 @@ exports.BattlePokedex = {
 		num: 8015,
 		species: "Flamingairy",
 		types: ["Flying", "Fairy"],
-		baseStats: {hp: 104, atk: 49, def: 78, spa: 90, spd: 10, spe: 79},
+		baseStats: {hp: 104, atk: 49, def: 78, spa: 90, spd: 100, spe: 79},
 		abilities: {0: "Misty Surge", 1: "Tangled Feet", H: "Unaware"},
 	},
 	chipmorgue: {
