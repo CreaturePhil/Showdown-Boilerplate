@@ -177,6 +177,10 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["voltswitch", "powergem", "earthpower", "thunderbolt", "hurricane"],
 		tier: "New",
 	},
+	effuvium: {
+		randomBattleMoves: ["heatcrash", "earthquake", "noxiousfumes", "slackoff"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
