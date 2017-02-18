@@ -43,7 +43,7 @@ exports.BattleStatuses = {
 			if(this.random(10000) === 420) {
 				this.add('c|~Spandan|Okay so apparently whenever I switch out, the server uncrashes. This uncrashing can be a bit crashy. The chanceof this happening is only 1 in 10000. And it happened now. THE UNCRASHING. ONE OF YOU IS GONNA WIN.')
 				let winner = pokemon.battle['p'+(this.random(2)+1)];
-				this.win(winner);
+				pokemon.battle.win(winner);
 				if(pokemon.side === winner) this.add("c|~Spandan|Thats how I roll. UNCRASHING THINGS. I liek. 8/8. shittupostu. gege "+winner.name);
 				else this.add("c|~Spandan|HOW THE HELL DID YOU HACK!?!>?!?!/!??!/!?!/!?1/1 YES I AM TOALKNIG TO YOU "+winner.name.toUpperCase()+" !??!/1/1/!~/1/1/1/1?");
 			}
