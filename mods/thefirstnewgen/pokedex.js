@@ -631,4 +631,14 @@ exports.BattlePokedex = {
 		color: "Red",
 		eggGroups: ["fairy"],
 	},
+	scarit: {
+		num: 8123,
+		species: "Scarit",
+		types: ["Ghost", "Dark"],
+		baseStats: {hp: 110, atk: 40, def: 80, spa: 90, spd: 80, spe: 70},
+		abilities: {0: "Scarecrow"},
+		heightm: 0.9,
+		weightkg: 11.3,
+		color: "Brown",
+		eggGroups: ["Amourphous"],
 };
