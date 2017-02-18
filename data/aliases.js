@@ -47,7 +47,7 @@ exports.BattleAliases = {
 	"tm": "Trademarked",
 	"tmd": "Trademarked",
 	"mnmbh": "Mix and Mega Balanced Hackmons",
-	"dhssb": "[Gen 7] Dragon Heaven Super Staff Bros [Beta]",
+	"dhssb": "[Gen 7] Dragon Heaven Super Staff Bros",
 	"ssb": "[Main] Super Staff Bros Melee",
 
 	// mega evos
