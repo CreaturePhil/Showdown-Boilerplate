@@ -16,6 +16,7 @@ exports.BattleStatuses = {
 		},
 	},
 	bbgun999: {
+		exists: true,
 		onStart: function (pokemon) {
 			this.boost({def:-2,spd:-2});
 		},

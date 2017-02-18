@@ -115,7 +115,7 @@ exports.Formats = [
 				pokemon.addVolatile('curse', pokemon);
 				this.add('-message', pokemon.name + "'s Wonder Guard has cursed it!");
 			}
-			if (this.data.Statuses[name].exists) {
+			if (this.data.Statuses[name] && this.data.Statuses[name].exists) {
 				pokemon.addVolatile(name, pokemon);
 			}
 			if (name === 'thetruefalcon') {
