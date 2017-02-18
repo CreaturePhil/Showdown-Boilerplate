@@ -611,6 +611,18 @@ exports.BattlePokedex = {
 	      	color: "Green",
 	      	eggGroups: ["Field", "Monster"],
     	},
+	effuvium: {
+	      	num: 10044,
+	      	species: "Effuvium",
+	      	types: ["Ground", "Fire"],
+		genderRatio: {M: 0.5, F: 0.5},
+		baseStats: {hp: 122, atk: 92, def: 81, spa: 68, spd: 133, spe: 34},
+	      	abilities: {0: "Poison Heal", 1: "Flame Body", H: "Mold Breaker"},
+	      	heightm: 2.8,
+	      	weightkg: 855.6,
+	      	color: "Red",
+	      	eggGroups: ["Field", "Dragon"],
+    	},
 	uisge: {
 		num: 11001,
 		species: "Uisge",
