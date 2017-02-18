@@ -67,4 +67,20 @@ exports.BattleAbilities = {
 		name: "Frostblood",
 		rating: 3,
 	},
+	"scarecrow": { /* I'm not epxerienced as much with coding abilities, so someone may want to check over this*/
+		shortDesc: "This Pokemon does 1.5 times more damage to and recieves 3/4 damage from flying types.",
+		onBasePowerPriority: 0,
+		onBasePower: function (basePower, attacker, target, move) {
+			if (target.type === 'Flying') {
+				this.debug('Scarecrow boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onBasePowerPriority: 0,
+		onBasePower: function (basePower, attacker, target, move) {
+			if (attacker.type === 'Flying') {
+				this.debug('Scarecrow boost');
+				return this.chainModify(0.75);
+			}
+		},
 };
