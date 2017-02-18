@@ -641,4 +641,5 @@ exports.BattlePokedex = {
 		weightkg: 11.3,
 		color: "Brown",
 		eggGroups: ["Amourphous"],
+	},
 };
