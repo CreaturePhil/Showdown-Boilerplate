@@ -23,7 +23,7 @@ exports.BattleScripts = {
 				signatureMove: "Mythic Form",evs: {hp:188, spa:252, spe:64}, nature: 'Modest',
 			},
 			'BBgun999' : {
-				species: 'Goodra', ability: 'Big Bullet Gun', item: 'Rocky Helmet', gender: 'Male',
+				species: 'Goodra', ability: 'Contrary', item: 'Rocky Helmet', gender: 'Male',
 				moves: ['draco meteor', 'overheat', 'close combat'],
 				signatureMove: "Power Lick",evs: {hp: 252, def: 4, spd: 252}, nature: 'Naughty',
 			},

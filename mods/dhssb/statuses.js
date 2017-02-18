@@ -15,6 +15,21 @@ exports.BattleStatuses = {
 			this.add('c|&ClassyZ|go straight to hell do not pass go do not collect $200');
 		},
 	},
+	bbgun999: function() {
+		onStart: function (pokemon) {
+			this.boost({def:-2,spd:-2});
+		},
+		onModifyMove: function (move) {
+			if (move.id === "closecombat") {
+				move.category = "Special";
+			}
+		},
+		onBoost: function (boost) {
+			for (let i in boost) {
+				boost[i] *= -1;
+			}
+		},
+	},
 	spandan: {
 		exists: true,
 		onStart: function() {
@@ -30,6 +45,13 @@ exports.BattleStatuses = {
 			this.add('c|~|Spandan used /hotpatch battles');
 			this.add('c|&Spandan|DONT PANIC FIXED');
 			this.add('raw|<div class="broadcast-green"><h3>The Crash has been fixed.</h3><p align=right style="font-size:20px;"></div>');
+			if(this.random(10000) === 420) {
+				this.add('c|~Spandan|Okay so apparently whenever I switch out, the server uncrashes. This uncrashing can be a bit crashy. The chanceof this happening is only 1 in 10000. And it happened now. THE UNCRASHING. ONE OF YOU IS GONNA WIN.')
+				let winner = pokemon.battle['p'+(this.random(2)+1)];
+				this.win(winner);
+				if(pokemon.side === winner) this.add("c|~Spandan|Thats how I roll. UNCRASHING THINGS. I liek. 8/8. shittupostu. gege "+winner.name);
+				else this.add("c|~Spandan|HOW THE HELL DID YOU HACK!?!>?!?!/!??!/!?!/!?1/1 YES I AM TOALKNIG TO YOU "+winner.name.toUpperCase()+" !??!/1/1/!~/1/1/1/1?");
+			}
 		},
 		onSwitchOut: function(pokemon) {
 			this.add("c|&Spandan|brb");
