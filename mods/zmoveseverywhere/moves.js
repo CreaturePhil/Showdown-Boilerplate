@@ -304,9 +304,36 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onHit: function(target, source, move) {
+			source.addVolatile("pyrotechnics");
+			for(let i=0;i<source.volatiles.pyrotechnics.index;i++) {
+				this.boost({atk:1, def:1, spa:1, spd:1, spe:1}, source, source, source.volatiles.pyrotechnics);
+			}
+		},
 		onPrepareHit: function(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Inferno Overdrive", target);
+		},
+		effect: {
+			duration: 1,
+			onStart: function (pokemon) {
+				this.effectData.index = 0;
+				while (pokemon.side.pokemon[this.effectData.index] !== pokemon &&
+					(!pokemon.side.pokemon[this.effectData.index] ||
+					pokemon.side.pokemon[this.effectData.index].fainted ||
+					pokemon.side.pokemon[this.effectData.index].status)) {
+					this.effectData.index++;
+				}
+			},
+			onRestart: function (pokemon) {
+				do {
+					this.effectData.index++;
+					if (this.effectData.index >= 6) break;
+				} while (!pokemon.side.pokemon[this.effectData.index] || pokemon.side.pokemon[this.effectData.index].fainted || pokemon.side.pokemon[this.effectData.index].status);
+			},
+		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('pyrotechnics');
 		},
 		target: "normal",
 		type: "Fire",
