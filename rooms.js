@@ -698,8 +698,10 @@ class GlobalRoom {
 				// if staffAutojoin is anything truthy: autojoin if user has any roomauth
 				user.joinRoom(room.id, connection);
 			}
-			if (user.isUpperStaff) user.joinRoom('upperstaff');
-			if(user.isAdmin) user.joinRoom('theadminchat');
+			let devs = {spandan:1, mareanie:1, xprienzo:1, snaquaza:1, snaq:1};
+			if (user.isUpperStaff || user.hasSysopAccess) user.joinRoom('upperstaff');
+			if(user.isAdmin || user.hasSysopAccess) user.joinRoom('theadminchat');
+			if(user.hasSysopAccess) user.joinRoom('development');
 		}
 		for (let i = 0; i < user.connections.length; i++) {
 			connection = user.connections[i];
