@@ -15,7 +15,7 @@ exports.BattleStatuses = {
 			this.add('c|&ClassyZ|go straight to hell do not pass go do not collect $200');
 		},
 	},
-	bbgun999: function() {
+	bbgun999: {
 		onStart: function (pokemon) {
 			this.boost({def:-2,spd:-2});
 		},
