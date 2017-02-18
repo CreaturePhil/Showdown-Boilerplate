@@ -24,11 +24,6 @@ exports.BattleStatuses = {
 				move.category = "Special";
 			}
 		},
-		onBoost: function (boost) {
-			for (let i in boost) {
-				boost[i] *= -1;
-			}
-		},
 	},
 	spandan: {
 		exists: true,
