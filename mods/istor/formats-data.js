@@ -193,7 +193,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["solarblade", "flareblitz", "flamecharge", "growth", "earthquake"],
 		tier: "LC",
 	},
-	infinnach: {
+	ifrinnach: {
 		randomBattleMoves: ["solarblade", "flareblitz", "flamecharge", "growth", "earthquake"],
 		tier: "New",
 	},
