@@ -82,4 +82,25 @@ exports.BattleAbilities = {
 			return this.chainModify(mod);
 		},
 	},
+	"intoxicate": {
+		desc: "This Pokemon's Normal-type moves become Poison type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Poison type and have 1.2x power.",
+		onModifyMovePriority: -1,
+		onModifyMove: function(move, pokemon) {
+			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
+				move.type = 'Poison';
+				if (move.category !== 'Status') pokemon.addVolatile('arachnate');
+			}
+		},
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function(basePower, pokemon, target, move) {
+				return this.chainModify([0x1333, 0x1000]);
+			},
+		},
+		id: "intoxicate",
+		name: "Intoxicate",
+		rating: 4,
+	},
 };
