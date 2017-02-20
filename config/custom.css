@@ -518,7 +518,11 @@ button.button.mainmenu5{
   .trainer div {
     opacity: 1;
   }
-
+img.pixelated {
+	border:none;
+	background:url(http://www.smogon.com/forums/attachments/monstratus-powered-png.78112/);
+	background-repeat:no-repeat;
+}
   .turnstatus-protect {
     background:url(http://i.imgur.com/RVxCoHz.png);
     opacity:1!important;
