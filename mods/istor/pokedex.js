@@ -682,7 +682,7 @@ exports.BattlePokedex = {
 		species: "Zerazay",
 		genderRatio: {M: 0.5, F: 0.5},
 		types: ["Rock", "Ghost"],
-		baseStats: {hp: 46, atk: 46, def: 76, spa: 76, spd: 86, spe: 76},
+		baseStats: {hp: 46, atk: 46, def: 76, spa: 76, spd: 96, spe: 76},
 		abilities: {0: "Infiltrator", 1: "Cursed Body", H: "Sand Stream"},
 		heightm: 0.3,
 		weightkg: 2.4,
