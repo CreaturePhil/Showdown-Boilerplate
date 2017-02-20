@@ -13,4 +13,8 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["uturn", "rockslide", "roadsweep", "sandattack"],
 		tier: "RU",
 	},
+	skybleu: {
+		randomBattleMoves: ["hurricane", "hydropump", "airslash", "icebeam", "bugbuzz", "roost", "focusblast],
+		tier: "Uber",
+	},
 };
