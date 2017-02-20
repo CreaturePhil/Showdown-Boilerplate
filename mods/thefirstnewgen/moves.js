@@ -643,26 +643,26 @@ exports.BattleMovedex = {
 	   Toxic Terrain */
 	
 	"starburst": {
-          accuracy: 100,
-          basePower: 80,
-          category: "Special",
-	  shortDesc: "30% chance to Burn",
-          id: "starburst",
-          isViable: true,
-	  name: "Star Burst",
-          pp: 15,
-          priority: 0,
-          flags: {protect: 1, mirror: 1},
-	  onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Psycho Boost", target);
-		},
-          secondary: {
-                    chance: 30,
-	            status: 'brn',
-          },
-          target: "normal",
-          type: "Psychic",
+		  accuracy: 100,
+		  basePower: 80,
+		  category: "Special",
+		  shortDesc: "30% chance to Burn",
+		  id: "starburst",
+		  isViable: true,
+		  name: "Star Burst",
+		  pp: 15,
+		  priority: 0,
+		  flags: {protect: 1, mirror: 1},
+		  onPrepareHit: function (target, source) {
+				this.attrLastMove('[still]');
+				this.add('-anim', source, "Psycho Boost", target);
+			},
+		  secondary: {
+			    chance: 30,
+			    status: 'brn',
+		  },
+		  target: "normal",
+		  type: "Psychic",
       },
 	"goldenrush": {
 		accuracy: 95,
@@ -709,7 +709,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 	},
-		"despicablestrike": {
+	"despicablestrike": {
 		num: 492,
 		accuracy: 100,
 		basePower: 95,
@@ -843,45 +843,45 @@ exports.BattleMovedex = {
           type: "Ice",
       },
 	"antlerscorch": {
-          accuracy: 100,
-          basePower: 80,
-          category: "Physical",
-	  shortDesc: "No additional effect",
-          id: "antlerscorch",
-          isViable: true,
-	  name: "Antler Scorch",
-          pp: 15,
-          priority: 0,
-          flags: {protect: 1, mirror: 1, contact: 1},
-	  onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Flame Wheel", target);
-		},
-          target: "normal",
-          type: "Fire",
-      },
+		  accuracy: 100,
+		  basePower: 80,
+		  category: "Physical",
+		  shortDesc: "No additional effect",
+		  id: "antlerscorch",
+		  isViable: true,
+		  name: "Antler Scorch",
+		  pp: 15,
+		  priority: 0,
+		  flags: {protect: 1, mirror: 1, contact: 1},
+		  onPrepareHit: function (target, source) {
+				this.attrLastMove('[still]');
+				this.add('-anim', source, "Flame Wheel", target);
+			},
+		  target: "normal",
+		  type: "Fire",
+	      },
 	"sweetstrike": {
-          accuracy: 100,
-          basePower: 90,
-          category: "Special",
-	  shortDesc: "40% chance to encore",
-          id: "sweetstrike",
-          isViable: true,
-	  name: "Sweet Strike",
-          pp: 15,
-          priority: 0,
-          flags: {protect: 1, mirror: 1, contact: 1},
-	  onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Leaf Tornado", target);
-		},
-		secondary: {
-			chance: 40,
-			volatileStatus: 'encore',
-	  },
-          target: "normal",
-          type: "Grass",
-      },
+		  accuracy: 100,
+		  basePower: 90,
+		  category: "Special",
+		  shortDesc: "40% chance to encore",
+		  id: "sweetstrike",
+		  isViable: true,
+		  name: "Sweet Strike",
+		  pp: 15,
+		  priority: 0,
+		  flags: {protect: 1, mirror: 1, contact: 1},
+		  onPrepareHit: function (target, source) {
+				this.attrLastMove('[still]');
+				this.add('-anim', source, "Leaf Tornado", target);
+			},
+			secondary: {
+				chance: 40,
+				volatileStatus: 'encore',
+		  },
+		  target: "normal",
+		  type: "Grass",
+	      },
 	"7slashbushidoassault": {
 		accuracy: 100,
 		basePower: 185,
@@ -958,4 +958,195 @@ exports.BattleMovedex = {
 		type: "Fire",
 		isZ: "pyrominiumz",
 	},
+	"lightningburst": {
+		accuracy: 95,
+		basePower: 30,
+		category: "Special",
+		shortDesc: "Hits 3 times. Last hit has a 10% chance to paralyze the foe",
+		id: "lightningburst",
+		name: "Lightning Burst",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Parabolic Charge", target);
+			this.add('-anim', source, "Parabolic Charge", target);
+			this.add('-anim', source, "Parabolic Charge", target);
+		},
+		secondary: {
+			chance: 10,
+			status: 'par',
+		},
+		multihit: 3,
+		target: "normal",
+		type: "Electric",
+	},
+	"thunderblade": {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "10% chance to paralyze. High Crit Ratio",
+		id: "thunderblade",
+		name: "Thunderblade",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Wild Charge", target);
+		},
+		secondary: {
+			chance: 10,
+			status: 'par',
+		},
+		critRatio: 2,
+		target: "normal",
+		type: "Electric",
+	},
+	"plasmaclaw": {
+		accuracy: 90,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "20% chance to Burn or Paralyze",
+		id: "plasmaclaw",
+		name: "Plasma Claw",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Bolt Strike", target);
+		},
+		secondary: {
+			chance: 20,
+			status: 'par',
+		},
+		target: "normal",
+		type: "Electric",
+	},
+	"xray": {
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		shortDesc: "30% chance to badly poison",
+		id: "xray",
+		name: "X-Ray",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Thunder", target);
+		},
+		secondary: {
+			chance: 30,
+			status: 'tox',
+		},
+		target: "normal",
+		type: "Electric",
+	},
+	/* Adrenaline: Fighting Type, Status, Doubles Attack and Speed for 3 turns, but halves defence */
+	"cryogenicfire": {
+		accuracy: 90,
+		basePower: 100,
+		category: "Special",
+		shortDesc: "20% chance to Burn or Paralyze",
+		id: "cryogenicfire",
+		name: "Cryogenic Fire",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Bolt Strike", target);
+		},
+		secondary: {
+			chance: 20,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Fire",
+	},
+	"molt": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user cures its burn, poison, or paralysis.",
+		shortDesc: "User cures its burn, poison, or paralysis.",
+		id: "molt",
+		name: "Molt",
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1},
+		onHit: function (pokemon) {
+			if (pokemon.status in {'': 1, 'slp': 1, 'frz': 1}) return false;
+			pokemon.cureStatus();
+		},
+		target: "self",
+		type: "Flying",
+	},
+	"moltenglass": {
+		  accuracy: 50,
+		  basePower: 150,
+		  category: "Special",
+		  shortDesc: "100% chance to burn the target",
+		  id: "moltenglass",
+		  isViable: true,
+		  name: "Molten Glass",
+		  onPrepareHit: function (target, source) {
+				this.attrLastMove('[still]');
+				this.add('-anim', source, "Earth Power", target);
+			},
+		  pp: 15,
+		  priority: 0,
+		  flags: {protect: 1, mirror: 1},
+		  secondary: {
+			    chance: 100,
+			    status: 'brn',
+		  },
+		  target: "normal",
+		  type: "Ground",
+	 },
+	"ludicrousspeed": {
+		  accuracy: 90,
+		  basePower: 100,
+		  category: "Physical",
+		  shortDesc: "+3 Priority",
+		  id: "ludicrousspeed",
+		  isViable: true,
+		  name: "Ludicrous Speed",
+		  onPrepareHit: function (target, source) {
+				this.attrLastMove('[still]');
+				this.add('-anim', source, "Extreme Speed", target);
+			},
+		  pp: 15,
+		  priority: 1,
+		  flags: {protect: 1, mirror: 1},
+		  target: "normal",
+		  type: "Normal",
+	 },
+	/* Aquagel: Water Type Status Move, Provides an immunity to fire. Allows you to cross lava and magma in the overworld*/
+		"jetstream": {
+		  accuracy: 50,
+		  basePower: 150,
+		  category: "Special",
+		  shortDesc: "100% chance to confuse the target",
+		  id: "jetstream",
+		  isViable: true,
+		  name: "Jet Stream",
+		  onPrepareHit: function (target, source) {
+				this.attrLastMove('[still]');
+				this.add('-anim', source, "Chatter", target);
+			},
+		  pp: 15,
+		  priority: 0,
+		  flags: {protect: 1, mirror: 1},
+		  secondary: {
+			    chance: 100,
+			    volatileStatus: 'confusion',
+		  },
+		  target: "normal",
+		  type: "Flying",
+	 },
 };
