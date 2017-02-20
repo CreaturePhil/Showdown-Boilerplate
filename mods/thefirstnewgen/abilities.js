@@ -103,10 +103,17 @@ exports.BattleAbilities = {
 		name: "Intoxicate",
 		rating: 4,
 	},
-	"quickclaws": { /*Need to get the damage modifier working*/
+	"quickclaws": {
 		shortDesc: "Any attacks with 70 bp or less get a +1 to priority, but deal 1/4 Less Damage.",
 		onModifyPriority: function(priority, pokemon, target, move, basePower) {
 			if (move.BasePower < 71) return priority + 1;
+		},
+		onBasePowerPriority: 8,
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (move.BasePower < 71) {
+				this.debug('Quick Claws modifier');
+				return this.chainModify(0.75);
+			},
 		},
 		id: "quickclaws",
 		name: "Quick Claws",
