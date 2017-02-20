@@ -721,7 +721,7 @@ exports.BattlePokedex = {
 		num: 10052,
 		species: "Kelperial",
 		genderRatio: {M: 0.5, F: 0.5},
-		types: ["Rock", "Ghost"],
+		types: ["Water", "Fairy"],
 		baseStats: {hp: 86, atk: 76, def: 66, spa: 106, spd: 76, spe: 126},
 		abilities: {0: "Rain Dish", 1: "Wonder Skin", H: "Drizzle"},
 		heightm: 2.4,
