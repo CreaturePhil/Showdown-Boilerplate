@@ -181,6 +181,38 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["heatcrash", "earthquake", "noxiousfumes", "slackoff"],
 		tier: "New",
 	},
+	babieti: {
+		randomBattleMoves: ["icehammer", "frigidslam", "closecombat", "iceshard", "earthquake", "thunderpunch"],
+		tier: "LC",
+	},
+	glacieti: {
+		randomBattleMoves: ["icehammer", "frigidslam", "closecombat", "iceshard", "earthquake", "thunderpunch"],
+		tier: "New",
+	},
+	ogannach: {
+		randomBattleMoves: ["solarblade", "flareblitz", "flamecharge", "growth", "earthquake"],
+		tier: "LC",
+	},
+	infinnach: {
+		randomBattleMoves: ["solarblade", "flareblitz", "flamecharge", "growth", "earthquake"],
+		tier: "New",
+	},
+	zerazay: {
+		randomBattleMoves: ["powergem", "shadowball", "thunderbolt", "calmmind"],
+		tier: "LC",
+	},
+	zoulzura: {
+		randomBattleMoves: ["powergem", "shadowball", "thunderbolt", "calmmind"],
+		tier: "New",
+	},
+	koltie: {
+		randomBattleMoves: ["surf", "moonblast", "icebeam", "hurricane", "calmmind"],
+		tier: "LC",
+	},
+	kelperial: {
+		randomBattleMoves: ["surf", "moonblast", "icebeam", "hurricane", "calmmind"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
