@@ -5743,6 +5743,6 @@ exports.Formats = [
 		mod: 'fakemon',
 		team: 'randomFotW',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Freeze Clause Mod'],
-		fotw: "Roadroach",
+		fotw: "Skybleu",
 	},
 ];
