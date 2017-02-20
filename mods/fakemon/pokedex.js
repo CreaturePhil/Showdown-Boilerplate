@@ -2,7 +2,7 @@
 
 exports.BattlePokedex = {
  	solsprite: {
-	      	num: 999,
+	      	num: -999,
 	      	species: "Solsprite",
 	      	types: ["Fire", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
@@ -14,7 +14,7 @@ exports.BattlePokedex = {
 	      	eggGroups: ["Field"],
     	},
 	sostormo: {
-	      	num: 999,
+	      	num: -999,
 	      	species: "Sostormo",
 	      	types: ["Rock", "Flying"],
 		genderRatio: {M: 0.5, F: 0.5},
@@ -26,12 +26,24 @@ exports.BattlePokedex = {
 	      	eggGroups: ["Field"],
     	},
 	roadroach: {
-	      	num: 999,
+	      	num: -999,
 	      	species: "Roadroach",
 	      	types: ["Bug", "Ground"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 46, atk: 91, def: 81, spa: 40, spd: 51, spe: 76},
 	      	abilities: {0: "Safe Swap"},
+	      	heightm: 100,
+	      	weightkg: 100,
+	      	color: "Red",
+	      	eggGroups: ["Field"],
+    	},
+	skybleu: {
+	      	num: 999,
+	      	species: "Skybleu",
+	      	types: ["Water", "Flying"],
+		genderRatio: {M: 0.5, F: 0.5},
+		baseStats: {hp: 95, atk: 70, def: 90, spa: 135, spd: 85, spe: 120},
+	      	abilities: {0: "Gale Wings", "Drizzle", "No Guard"},
 	      	heightm: 100,
 	      	weightkg: 100,
 	      	color: "Red",
