@@ -43,7 +43,7 @@ exports.BattlePokedex = {
 	      	types: ["Water", "Flying"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 70, def: 90, spa: 135, spd: 85, spe: 120},
-	      	abilities: {0: "Gale Wings", "Drizzle", "No Guard"},
+	      	abilities: {0: "Gale Wings", 1: "Drizzle", H: "No Guard"},
 	      	heightm: 100,
 	      	weightkg: 100,
 	      	color: "Red",
