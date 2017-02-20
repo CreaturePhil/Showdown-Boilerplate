@@ -78,7 +78,7 @@ exports.BattleAbilities = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			let mod = 1;
-			if (move.type === 'Flying') mod *= 3 / 4;
+			if (source.type === 'Flying') mod *= 3 / 4;
 			return this.chainModify(mod);
 		},
 	},
@@ -102,5 +102,14 @@ exports.BattleAbilities = {
 		id: "intoxicate",
 		name: "Intoxicate",
 		rating: 4,
+	},
+	"quickclaws": { /*Need to get the damage modifier working*/
+		shortDesc: "Any attacks with 70 bp or less get a +1 to priority, but deal 1/4 Less Damage.",
+		onModifyPriority: function(priority, pokemon, target, move, basePower) {
+			if (move.BasePower < 71) return priority + 1;
+		},
+		id: "quickclaws",
+		name: "Quick Claws",
+		rating: 3,
 	},
 };
