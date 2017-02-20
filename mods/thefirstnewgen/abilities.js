@@ -89,7 +89,7 @@ exports.BattleAbilities = {
 		onModifyMove: function(move, pokemon) {
 			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
 				move.type = 'Poison';
-				if (move.category !== 'Status') pokemon.addVolatile('arachnate');
+				if (move.category !== 'Status') pokemon.addVolatile('intoxicate');
 			}
 		},
 		effect: {
