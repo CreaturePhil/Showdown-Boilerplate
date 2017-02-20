@@ -2795,6 +2795,7 @@ exports.Formats = [
 		],
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Flatter', 'Kyurem-Black'],
+		mod:'gen7',
 		onModifyMove: function(move, pokemon) {
 			if (pokemon.stats.atk > pokemon.stats.spa) {
 				move.category = (move.category === "Status") ? "Status" : "Physical";
