@@ -59,7 +59,18 @@ exports.BattleItems = {
 		},
 		desc: "If holder is a Knyffe, this item allows it to Mega Evolve in battle.",
 	},
-	"allrounderbadge": { /* Not Sure about this :P */
+		"carnivite": {
+		id: "carnivite",
+		name: "Carnivite",
+		megaStone: "Carnivine-Mega",
+		megaEvolves: "Carnivine",
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		desc: "If holder is a Carnivine, this item allows it to Mega Evolve in battle.",
+	},
+	"allrounderbadge": { 
 		id: "allrounderbadge",
 		name: "All-Rounder Badge",
 		fling: {
