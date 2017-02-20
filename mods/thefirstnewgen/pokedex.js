@@ -554,7 +554,7 @@ exports.BattlePokedex = {
 		eggGroups: ["Bug"],
 	},
 	revenya: {
-		num: 8128,
+		num: 8048,
 		species: "Revenya",
 		types: ["Normal", "Ghost"],
 		baseStats: {hp: 50, atk: 60, def: 70, spa: 30, spd: 60, spe: 90},
@@ -562,7 +562,7 @@ exports.BattlePokedex = {
 		evos: "nyantum"
 	},
 	nyantum: {
-		num: 8129,
+		num: 8049,
 		species: "Nyantum",
 		types: ["Normal", "Ghost"],
 		baseStats: {hp: 70, atk: 85, def: 115, spa: 60, spd: 105, spe: 110},
@@ -570,7 +570,7 @@ exports.BattlePokedex = {
 		prevo: "revenya"
 	},
 	nimbice: {
-		num: 8128,
+		num: 8050,
 		species: "Nimbice",
 		types: ["Ice", "Water"],
 		baseStats: {hp: 100, atk: 50, def: 70, spa: 60, spd: 80, spe: 30},
@@ -578,7 +578,7 @@ exports.BattlePokedex = {
 		evos: "icicloud"
 	},
 	icicloud: {
-		num: 8128,
+		num: 8051,
 		species: "Icicloud",
 		types: ["Ice", "Water"],
 		baseStats: {hp: 135, atk: 70, def: 95, spa: 85, spd: 110, spe: 45},
@@ -586,7 +586,7 @@ exports.BattlePokedex = {
 		prevo: "nimbice"
 	},
 	armymph: {
-		num: 8127,
+		num: 8052,
 		species: "Armymph",
 		types: ["Ground", "Fairy"],
 		baseStats: {hp: 40, atk: 64, def: 84, spa: 30, spd: 55, spe: 77},
@@ -598,7 +598,7 @@ exports.BattlePokedex = {
 		eggGroups: ["field", "fairy"],
 	},
 	burrowxie: {
-		num: 8126,
+		num: 8053,
 		species: "Burrowxie",
 		types: ["Ground", "Fairy"],
 		baseStats: {hp: 50, atk: 84, def: 141, spa: 40, spd: 95, spe: 117},
@@ -610,7 +610,7 @@ exports.BattlePokedex = {
 		eggGroups: ["field", "fairy"],
 	},
 	pixflakeeast: {
-		num: 8125,
+		num: 8054,
 		species: "Pixflake-East",
 		types: ["Ice", "Fairy"],
 		baseStats: {hp: 60, atk: 65, def: 40, spa: 120, spd: 40, spe: 130},
@@ -621,7 +621,7 @@ exports.BattlePokedex = {
 		eggGroups: ["fairy"],
 	},
 	pixflakwest: {
-		num: 8124,
+		num: 8055,
 		species: "Pixflake-West",
 		types: ["Ice", "Fairy"],
 		baseStats: {hp: 90, atk: 85, def: 110, spa: 30, spd: 110, spe: 30},
@@ -632,7 +632,7 @@ exports.BattlePokedex = {
 		eggGroups: ["fairy"],
 	},
 	scarit: {
-		num: 8123,
+		num: 8066,
 		species: "Scarit",
 		types: ["Ghost", "Dark"],
 		baseStats: {hp: 110, atk: 40, def: 80, spa: 90, spd: 80, spe: 70},
@@ -641,5 +641,29 @@ exports.BattlePokedex = {
 		weightkg: 11.3,
 		color: "Brown",
 		eggGroups: ["Amourphous"],
+	},
+	kimosoul: {
+		num: 8067,
+		species: "Kimosoul",
+		types: ["Ghost", "Dark"],
+		baseStats: {hp: 50, atk: 45, def: 40, spa: 50, spd: 55, spe: 85},
+		abilities: {0: "Shadow Tag", H: "Cute Charm"},
+		heightm: 0.9,
+		weightkg: 22.7,
+		color: "White",
+		evo: "Spirilure",
+		eggGroups: ["Human-Like", "Amorphous"],
+	},
+	spirilure: {
+		num: 8068,
+		species: "Spirilure",
+		types: ["Ghost", "Dark"],
+		baseStats: {hp: 65, atk: 55, def: 65, spa: 95, spd: 65, spe: 110},
+		abilities: {0: "Shadow Tag", H: "Intimidate"},
+		heightm: 1.5,
+		weightkg: 36.2,
+		color: "White",
+		prevo: "Kimosoul",
+		eggGroups: ["Human-Like", "Amorphous"],
 	},
 };
