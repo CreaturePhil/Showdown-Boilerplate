@@ -1126,8 +1126,7 @@ exports.BattleMovedex = {
 		  target: "normal",
 		  type: "Normal",
 	 },
-	/* Aquagel: Water Type Status Move, Provides an immunity to fire. Allows you to cross lava and magma in the overworld*/
-		"jetstream": {
+	"jetstream": {
 		  accuracy: 50,
 		  basePower: 150,
 		  category: "Special",
@@ -1138,7 +1137,7 @@ exports.BattleMovedex = {
 		  onPrepareHit: function (target, source) {
 				this.attrLastMove('[still]');
 				this.add('-anim', source, "Chatter", target);
-			},
+		  },
 		  pp: 15,
 		  priority: 0,
 		  flags: {protect: 1, mirror: 1},
