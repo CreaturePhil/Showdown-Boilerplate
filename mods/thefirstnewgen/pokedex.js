@@ -217,7 +217,7 @@ exports.BattlePokedex = {
 		heightm: 2.1,
 		weightkg: 47.9,
 		color: "Red",
-		prevos: "Sparkideer",
+		prevo: "sparkideer",
 		evoLevel: 38,
 		eggGroups: ["Field"],
 	},
@@ -434,7 +434,7 @@ exports.BattlePokedex = {
 		heightm: 1.1,
 		weightkg: 14.3,
 		color: "Brown",
-		evo: "Dashoo",
+		evo: "dashoo",
 		evoLevel: 41,
 		eggGroups: ["Flying", "Field"],
 	},
@@ -459,7 +459,7 @@ exports.BattlePokedex = {
 		heightm: 1.4,
 		weightkg: 20.3,
 		color: "Yellow",
-		prevo: "Seedocyte",
+		prevo: "seedocyte",
 		eggGroups: ["Mineral", "Water 3"],
 	},
 	medusting: {
@@ -471,7 +471,7 @@ exports.BattlePokedex = {
 		heightm: 0.7,
 		weightkg: 20.3,
 		color: "Blue",
-		prevo: "Seedocyte",
+		prevo: "seedocyte",
 		eggGroups: ["Mineral", "Water 3"],
 	},
 	stingoral: {
@@ -576,7 +576,7 @@ exports.BattlePokedex = {
 		types: ["Normal", "Ghost"],
 		baseStats: {hp: 50, atk: 60, def: 70, spa: 30, spd: 60, spe: 90},
 		abilities: {0: "Unstable Molecules", 1: "Cute Charm", H: "Poison Heal"},
-		evos: "Nyantum"
+		evos: "Nyantum",
 	},
 	nyantum: {
 		num: 8049,
@@ -584,7 +584,7 @@ exports.BattlePokedex = {
 		types: ["Normal", "Ghost"],
 		baseStats: {hp: 70, atk: 85, def: 115, spa: 60, spd: 105, spe: 110},
 		abilities: {0: "Unstable Molecules", 1: "Cute Charm", H: "Poison Heal"},
-		prevo: "Revenya"
+		prevo: "Revenya",
 	},
 	nimbice: {
 		num: 8050,
@@ -592,7 +592,7 @@ exports.BattlePokedex = {
 		types: ["Ice", "Water"],
 		baseStats: {hp: 100, atk: 50, def: 70, spa: 60, spd: 80, spe: 30},
 		abilities: {0: "Snow Warning", H: "Filter"},
-		evos: "icicloud"
+		evos: "icicloud",
 	},
 	icicloud: {
 		num: 8051,
