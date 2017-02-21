@@ -1686,7 +1686,7 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Random Camomons Plus Plus",
+		name: "[Gen 7] Random Camomons++",
 		desc: [
 			"Pok&eacute;mon change type to match their moves. Hence, a Pokemon can now have a maximum of 4 types.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
