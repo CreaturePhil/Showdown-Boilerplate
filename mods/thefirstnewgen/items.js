@@ -59,7 +59,7 @@ exports.BattleItems = {
 		},
 		desc: "If holder is a Knyffe, this item allows it to Mega Evolve in battle.",
 	},
-		"carnivite": {
+	"carnivite": {
 		id: "carnivite",
 		name: "Carnivite",
 		megaStone: "Carnivine-Mega",
