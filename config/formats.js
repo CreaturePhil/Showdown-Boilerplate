@@ -1660,7 +1660,7 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Random Camomons",
+		name: "[Gen 7] Random Camomon",
 		desc: [
 			"Pok&eacute;mon change type to match their first two moves.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3513059/\">Camomons</a>",
