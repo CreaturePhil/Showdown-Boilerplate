@@ -1159,7 +1159,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		// No Guard-like effect for Poison-type users implemented in BattleScripts#tryMoveHit
 		status: 'infected',
 		secondary: false,
 		target: "normal",
