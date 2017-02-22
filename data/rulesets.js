@@ -395,12 +395,12 @@ exports.BattleFormats = {
 					}
 					abilityTable[ability]++;
 					if (clones[ability]) {
-						clones.ability.forEach(clone => {abilityTable[clone]++;});
+						clones[ability].forEach(clone => {abilityTable[clone]++;});
 					}
 				} else {
 					abilityTable[ability] = 1;
 					if (clones[ability]) {
-						clones.ability.forEach(clone => {abilityTable[clone] = 1;});
+						clones[ability].forEach(clone => {abilityTable[clone] = 1;});
 					}
 				}
 			}
