@@ -361,6 +361,7 @@ exports.BattleFormats = {
 			}
 		},
 	},
+	
 	abilityclause: {
 		effectType: 'ValidatorRule',
 		name: 'Ability Clause',
@@ -370,21 +371,18 @@ exports.BattleFormats = {
 		onValidateTeam: function (team, format) {
 			let abilityTable = {};
 			let clones = {
-				airlock: ['cloud9'],
+				airlock: ['cloudnine'],
 				battlearmor: ['shellarmor'],
 				clearbody: ['whitesmoke'],
-				cloud9: ['airlock'],
 				dazzling: ['queenlymajesty'],
+				emergencyexit: ['wimpout'],
+				filter: ['solidrock'],
+				gooey: ['tanglinghair'],
 				insomnia: ['vitalspirit'],
+				ironbarbs: ['roughskin'],
+				minus: ['plus'],
 				moldbreaker: ['teravolt', 'turboblaze'],
 				powerofalchemy: ['receiver'],
-				queenlymajesty: ['dazzling'],
-				receiver: ['powerofalchemy'],
-				shellarmor: ['battlearmor'],
-				teravolt: ['moldbreaker', 'turboblaze'],
-				turboblaze: ['moldbreaker', 'teravolt'],
-				vitalspirit: ['insomnia'],
-				whitesmoke: ['clearbody'],
 			};
 			for (let i = 0; i < team.length; i++) {
 				let ability = toId(team[i].ability);
