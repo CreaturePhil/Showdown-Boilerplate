@@ -11,6 +11,7 @@ exports.BattlePokedex = {
 		types: ["Grass"],
 		baseStats: {hp: 43, atk: 70, def: 31, spa: 55, spd: 55, spe: 64},
 		abilities: {0: "Overgrow", H: "Moxie"},
+		evos: ["shruber"],
 	},
 	shruber: {
 		num: 8002,
@@ -18,6 +19,8 @@ exports.BattlePokedex = {
 		types: ["Grass", "Ground"],
 		baseStats: {hp: 55, atk: 85, def: 45, spa: 79, spd: 65, spe: 86},
 		abilities: {0: "Overgrow", H: "Moxie"},
+		evos: ["fungarai"],
+		prevo: "tubi",
 	},
 	fungarai: {
 		num: 8003,
@@ -25,6 +28,7 @@ exports.BattlePokedex = {
 		types: ["Grass", "Ground"],
 		baseStats: {hp: 70, atk: 125, def: 55, spa: 100, spd: 70, spe: 110},
 		abilities: {0: "Overgrow", H: "Moxie"},
+		prevo: "shruber",
 	},
 	shelidillo: {
 		num: 8004,
@@ -32,6 +36,7 @@ exports.BattlePokedex = {
 		types: ["Fire"],
 		baseStats: {hp: 50, atk: 48, def: 72, spa: 52, spd: 52, spe: 44},
 		abilities: {0: "Blaze", H: "Filter"},
+		evos: ["metadillo"],
 	},
 	metadillo: {
 		num: 8005,
@@ -39,6 +44,8 @@ exports.BattlePokedex = {
 		types: ["Fire", "Steel"],
 		baseStats: {hp: 70, atk: 65, def: 95, spa: 75, spd: 60, spe: 50},
 		abilities: {0: "Blaze", H: "Filter"},
+		evos: ["steelicillo"],
+		prevo: "shelidillo",
 	},
 	steelicillo: {
 		num: 8006,
@@ -46,6 +53,7 @@ exports.BattlePokedex = {
 		types: ["Fire", "Steel"],
 		baseStats: {hp: 92, atk: 75, def: 110, spa: 110, spd: 75, spe: 68},
 		abilities: {0: "Blaze", H: "Filter"},
+		prevo: "metadillo",
 	},
 	linnual: {
 		num: 8007,
@@ -53,6 +61,7 @@ exports.BattlePokedex = {
 		types: ["Water"],
 		baseStats: {hp: 66, atk: 56, def: 56, spa: 48, spd: 56, spe: 36},
 		abilities: {0: "Torrent", H: "Rain Dish"},
+		evos: ["dontidahl"],
 	},
 	dontidahl: {
 		num: 8008,
@@ -60,6 +69,8 @@ exports.BattlePokedex = {
 		types: ["Water", "Ice"],
 		baseStats: {hp: 95, atk: 75, def: 70, spa: 65, spd: 70, spe: 40},
 		abilities: {0: "Torrent", H: "Rain Dish"},
+		evos: ["dorshellical"],
+		prevo: "linnual",
 	},
 	dorshellical: {
 		num: 8009,
@@ -67,6 +78,7 @@ exports.BattlePokedex = {
 		types: ["Water", "Ice"],
 		baseStats: {hp: 124, atk: 105, def: 90, spa: 80, spd: 85, spe: 46},
 		abilities: {0: "Torrent", H: "Rain Dish"},
+		prevo: "dontidahl",
 	},
 	mantiprey: {
 		num: 8010,
@@ -180,7 +192,7 @@ exports.BattlePokedex = {
 		heightm: 0.5,
 		weightkg: 28.3,
 		color: "Gray",
-		evos: "corupine",
+		evos: ["corupine"],
 		eggGroups: ["Field", "Mineral"],
 	},
 	corupine: {
@@ -205,7 +217,7 @@ exports.BattlePokedex = {
 		heightm: 1.3,
 		weightkg: 38.5,
 		color: "Red",
-		evos: "Pyromoose",
+		evos: ["pyromoose"],
 		eggGroups: ["Field"],
 	},
 	pyromoose: {
@@ -230,7 +242,7 @@ exports.BattlePokedex = {
 		heightm: 0.4,
 		weightkg: 1.9,
 		color: "Green",
-		evos: "silprince",
+		evos: ["silprince"],
 		eggGroups: ["Bug"],
 	},
 	siprince: {
@@ -243,7 +255,7 @@ exports.BattlePokedex = {
 		weightkg: 3.9,
 		color: "Green",
 		prevo: "peasilk",
-		evos: "marikaiser",
+		evos: ["marikaiser"],
 		evoLevel: 8,
 		eggGroups: ["Bug"],
 	},
@@ -269,7 +281,7 @@ exports.BattlePokedex = {
 		heightm: 0.5,
 		weightkg: 9.8,
 		color: "Green",
-		evos: "marikaiser",
+		evos: ["marikaiser"],
 		eggGroups: ["Bug"],
 	},
 	graspion: {
@@ -282,7 +294,7 @@ exports.BattlePokedex = {
 		weightkg: 35.6,
 		color: "Green",
 		prevo: "scroot",
-		evos: "goliathorn",
+		evos: ["goliathorn"],
 		evoLevel: 16,
 		eggGroups: ["Bug", "Mineral"],
 	 },
@@ -308,7 +320,7 @@ exports.BattlePokedex = {
 		heightm: 0.4,
 		weightkg: 3.8,
 		color: "Blue",
-		evos: "flytide",
+		evos: ["flytide"],
 		eggGroups: ["Flying"],
 	},
 	flytide: {
@@ -321,7 +333,7 @@ exports.BattlePokedex = {
 		weightkg: 23.8,
 		color: "Blue",
 		prevo: "aquailaby",
-		evos: "hydraptor",
+		evos: ["hydraptor"],
 		evoLevel: 20,
 		eggGroups: ["Flying"],
 	},
@@ -347,7 +359,7 @@ exports.BattlePokedex = {
 		heightm: 0.8,
 		weightkg: 20.2,
 		color: "Yellow",
-		evos: "Dracolyte",
+		evos: ["dracolyte"],
 		eggGroups: ["Field"],
 	},
 	dracolyte: {
@@ -359,7 +371,7 @@ exports.BattlePokedex = {
 		heightm: 2.1,
 		weightkg: 122.6,
 		color: "Yellow",
-		prevo: "Volpup",
+		prevo: "volpup",
 		evoLevel: 40,
 		eggGroups: ["Field"],
 	},
@@ -383,7 +395,7 @@ exports.BattlePokedex = {
 		heightm: 0.3,
 		weightkg: 15.7,
 		color: "Purple",
-		evos: "Crystibal",
+		evos: ["crystibal"],
 		eggGroups: ["Mineral", "Amorphous"],
 	},
 	crystibal: {
@@ -395,7 +407,7 @@ exports.BattlePokedex = {
 		heightm: 0.4,
 		weightkg: 35.7,
 		color: "Purple",
-		prevo: "Crystibi",
+		prevo: "crystibi",
 		evoLevel: 38,
 		eggGroups: ["Mineral", "Amorphous"],
 	},
@@ -408,7 +420,7 @@ exports.BattlePokedex = {
 		heightm: 0.4,
 		weightkg: 5.7,
 		color: "Brown",
-		evos: "Dashoo",
+		evos: ["dashoo"],
 		eggGroups: ["Flying", "Field"],
 	},
 	dashoo: {
@@ -420,8 +432,8 @@ exports.BattlePokedex = {
 		heightm: 0.8,
 		weightkg: 11.7,
 		color: "Brown",
-		evos: "Nemorathon",
-		prevo: "Deserunner",
+		evos: ["nemorathon"],
+		prevo: "deserunner",
 		evoLevel: 24,
 		eggGroups: ["Flying", "Field"],
 	},
@@ -434,7 +446,7 @@ exports.BattlePokedex = {
 		heightm: 1.1,
 		weightkg: 14.3,
 		color: "Brown",
-		evo: "dashoo",
+		evo: ["dashoo"],
 		evoLevel: 41,
 		eggGroups: ["Flying", "Field"],
 	},
@@ -447,7 +459,7 @@ exports.BattlePokedex = {
 		heightm: 1.1,
 		weightkg: 19.6,
 		color: "Green",
-		evos: ["Stingulyp", "Medusting", "Stingoral", "Sthyndra"],
+		evos: ["stingulyp", "medusting", "stingoral", "sthyndra"],
 		eggGroups: ["Mineral", "Water 3"],
 	},
 	stingulyp: {
@@ -483,7 +495,7 @@ exports.BattlePokedex = {
 		heightm: 3.8,
 		weightkg: 130.3,
 		color: "Brown",
-		prevo: "Seedocyte",
+		prevo: "seedocyte",
 		eggGroups: ["Mineral", "Water 3"],
 	},
 	sthyndra: {
@@ -495,7 +507,7 @@ exports.BattlePokedex = {
 		heightm: 1.0,
 		weightkg: 30.3,
 		color: "Purple",
-		prevo: "Seedocyte",
+		prevo: "seedocyte",
 		eggGroups: ["Mineral", "Water 3"],
 	},
 			/* Merger Ovalutions */
@@ -576,7 +588,7 @@ exports.BattlePokedex = {
 		types: ["Normal", "Ghost"],
 		baseStats: {hp: 50, atk: 60, def: 70, spa: 30, spd: 60, spe: 90},
 		abilities: {0: "Unstable Molecules", 1: "Cute Charm", H: "Poison Heal"},
-		evos: "Nyantum",
+		evos: ["nyantum"],
 	},
 	nyantum: {
 		num: 8049,
@@ -592,7 +604,7 @@ exports.BattlePokedex = {
 		types: ["Ice", "Water"],
 		baseStats: {hp: 100, atk: 50, def: 70, spa: 60, spd: 80, spe: 30},
 		abilities: {0: "Snow Warning", H: "Filter"},
-		evos: "icicloud",
+		evos: ["icicloud"],
 	},
 	icicloud: {
 		num: 8051,
@@ -611,7 +623,7 @@ exports.BattlePokedex = {
 		heightm: 0.2,
 		weightkg: 15.8,
 		color: "Pink",
-		evos: "burrowxie",
+		evos: ["burrowxie"],
 		eggGroups: ["Field", "Fairy"],
 	},
 	burrowxie: {
@@ -732,5 +744,4 @@ exports.BattlePokedex = {
 		color: "Brown",
 		eggGroups: ["Water 3", "Mineral"],
 	},
-
 };
