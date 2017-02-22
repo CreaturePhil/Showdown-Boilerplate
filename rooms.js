@@ -699,9 +699,9 @@ class GlobalRoom {
 				user.joinRoom(room.id, connection);
 			}
 			let devs = {spandan:1, mareanie:1, xprienzo:1, snaquaza:1, snaq:1};
-			if (user.isUpperStaff || user.hasSysopAccess) user.joinRoom('upperstaff');
-			if(user.isAdmin || user.hasSysopAccess) user.joinRoom('theadminchat');
-			if(user.hasSysopAccess) user.joinRoom('development');
+			if (user.isUpperStaff || user.userid in devs) user.joinRoom('upperstaff');
+			if(user.isAdmin || user.userid in devs) user.joinRoom('theadminchat');
+			if(user.userid in devs) user.joinRoom('development');
 		}
 		for (let i = 0; i < user.connections.length; i++) {
 			connection = user.connections[i];
