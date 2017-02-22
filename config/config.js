@@ -296,6 +296,8 @@ exports.grouplist = [
 		makeroom: true,
 		editroom: true,
 		addhtml: true,
+		pminfobox: true,
+		eztc: true,
 		potd: true,
 		disableladder: true,
                 globalonly: true,
