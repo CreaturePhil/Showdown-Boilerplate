@@ -65,7 +65,7 @@ exports.BattleAbilities = {
 				return this.chainModify(1.5);
 			}
 		},
-				onSourceModifyAtk: function (atk, attacker, defender, move) {
+		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Fire' || move.type === 'Water' || move.type === 'Electric' || move.type === 'Grass') {
 				this.debug('Draconic Light weaken');
 				return this.chainModify(0.5);
