@@ -2725,6 +2725,7 @@ exports.Formats = [
 					let donor = pokemon.baseAbility.split('0')[1];
 					pokemon.donor = toId(donor);
 					pokemon.baseAbility = pokemon.baseAbility.split('0')[0];
+					pokemon.ability = pokemon.baseAbility;
 				}
 			}
 		},
