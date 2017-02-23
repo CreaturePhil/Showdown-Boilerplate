@@ -122,7 +122,7 @@ exports.commands= {
 			for (let i in template.baseStats) {
 				template.baseStats[i] = Tools.clampIntRange(template.baseStats[i] + mega.baseStats[i] - mon.baseStats[i], 1, 255);
 			}
-			if (mega.types !== mon.types) {
+			if (mega.types[1] !== mon.types[1]) {
 				if (mega.name === 'Aggron-Mega') {
 					if (template.types[0] === 'Steel') {
 						template.types = ['Steel'];
