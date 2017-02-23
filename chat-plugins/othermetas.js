@@ -84,93 +84,74 @@ if (process.send && module === process.mainModule) {
 	process.nextTick(() => Tools.includeMods());
 }//All this isfrom datasearch.js
 exports.commands= {
-	/*********Will finish later
 	mixandmega: 'mnm',
         mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
-                let sep = target.split('@'), mnmTools = {
-			getTemplate: Tools.getTemplate,
-			getMixedTemplate: function (originalSpecies, megaSpecies) {
-				let originalTemplate = this.getTemplate(originalSpecies);
-				let megaTemplate = this.getTemplate(megaSpecies);
-				if (originalTemplate.baseSpecies === megaTemplate.baseSpecies) return megaTemplate;
-				let deltas = this.getMegaDeltas(megaTemplate);
-				let template = this.doGetMixedTemplate(originalTemplate, deltas);
-				return template;
-			},
-			getMegaDeltas: function (megaTemplate) {
-				let baseTemplate = this.getTemplate(megaTemplate.baseSpecies);
-				let deltas = {
-					ability: megaTemplate.abilities['0'],
-					baseStats: {},
-					weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
-					originalMega: megaTemplate.species,
-					requiredItem: megaTemplate.requiredItem,
-				};
-				for (let statId in megaTemplate.baseStats) {
-					deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
-				}
-				if (megaTemplate.types.length > baseTemplate.types.length) {
-					deltas.type = megaTemplate.types[1];
-				} else if (megaTemplate.types.length < baseTemplate.types.length) {
-					deltas.type = baseTemplate.types[0];
-				} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
-					deltas.type = megaTemplate.types[1];
-				}
-				if (megaTemplate.isMega) deltas.isMega = true;
-				if (megaTemplate.isPrimal) deltas.isPrimal = true;
-				return deltas;
-			},
-			doGetMixedTemplate: function (template, deltas) {
-				if (!deltas) throw new TypeError("Must specify deltas!");
-				if (!template || typeof template === 'string') template = this.getTemplate(template);
-				template = Object.assign({}, template);
-				template.abilities = {'0': deltas.ability};
-				if (template.types[0] === deltas.type) {
-					template.types = [deltas.type];
-				} else if (deltas.type) {
-					template.types = [template.types[0], deltas.type];
-				}
-				let baseStats = template.baseStats;
-				template.baseStats = {};
-				for (let statName in baseStats) {
-					template.baseStats[statName] = this.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
-				}
-				template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
-				template.originalMega = deltas.originalMega;
-				template.requiredItem = deltas.requiredItem;
-				if (deltas.isMega) template.isMega = true;
-				if (deltas.isPrimal) template.isPrimal = true;
-				return template;
-			},
-		};
-		let stone = sep[1], mon = sep[0], primals = ['redorb', 'blueorb'];
-		if (!Tools.data.Pokedex[toId(mon)] || (!Tools.data.Items[toId(stone)].megaStone || primals.includes(toId(stone))) || !target.includes('@')) {
+                let sep = target.split('@');
+		let stone = sep[1], template = sep[0], primals = ['redorb', 'blueorb'];
+		if (!Tools.data.Pokedex[toId(template] || (!Tools.data.Items[toId(stone)].megaStone || primals.includes(toId(stone))) || !target.includes('@')) {
 			return this.errorReply('ERROR: Invalid Input. Use /mnm <pokemon> @ <mega stone/orb>');
 		}
-		mon = Tools.getTemplate(toId(mon));
-		stone = Tools.getItem(toId(stone));
-		if(mon.isMega || (mon.evos && Object.keys(mon.evos).length > 0)) {
-			return this.errorReply(`You cannot mega evolve ${mon.name} in Mix and Mega.`);
+		template = Tools.getTemplate(template);
+		stone = Tools.getItem(stone);
+		if(template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
+			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
-		let template = mnmTools.getMixedTemplate(mon.species, stone.megaStone);
-		let baseStats = template.baseStats;
-		let types = template.types;
+		if (stone.id === 'redorb') {
+			for (let i in template.baseStats) {
+				template.baseStats[i]+= Tools.clampIntRange(Tools.getTemplate('Groudon-Primal').baseStats[i] - Tools.getTemplate('Groudon').baseStats[i], 1, 255);
+			}
+			if (template.types[0] === 'Fire') {
+				template.types = ['Fire'];
+			}
+			else {
+				template.types[1] = 'Fire';
+			}
+			template.ability = 'Desolate Land';
+			template.weightkg = Tools.clampIntRange(Tools.getTemplate('Groudon-Primal').weightkg - Tools.getTemplate('Groudon').weightkg, 0.1);
+		}
+		else if (stone.id === 'blueorb') {
+			for (let i in template.baseStats) {
+				template.baseStats[i]+= Tools.clampIntRange(Tools.getTemplate('Kyogre-Primal').baseStats[i] - Tools.getTemplate('Kyogre').baseStats[i], 1, 255);
+			}
+			template.ability = 'Primordial Sea';
+			template.weightkg = Tools.clampIntRange(Tools.getTemplate('Kyogre-Primal').weightkg - Tools.getTemplate('Kyogre').weightkg, 0.1);
+		}
+		else {
+			let mon = Tools.getTemplate(stone.megaEvolves), mega = Tools.getTemplate(stone.megaStone);
+			for (let i in template.baseStats) {
+				template.baseStats[i]+= Tools.clampIntRange(mega.baseStats[i] - mon.baseStats[i], 1, 255);
+			}
+			if (mega.types !== mon.types) {
+				if (mega.name = 'Aggron-Mega') {
+					if (template.types[0] === 'Steel') {
+						template.types = ['Steel'];
+					}
+					else {
+						template.types[1] = 'Steel';
+					}
+				}
+				else {
+					if (template.types[0] === mega.types[1]) {
+						template.types = [mega.types[1]];
+					}
+					else {
+						template.types[1] = mega.types[1];
+					}
+				}
+			}
+			template.ability = mega.abilities['0'];
+			template.weightkg = Tools.clampIntRange(mega.weightkg - mon.weightkg, 0.1);
+		}
 		let type = '<span class="col typecol">';
-		for(let i = 0; i<types.length;i++) {
-			type = type+ '<img src="https://play.pokemonshowdown.com/sprites/types/'+types[i]+'.png" alt="'+types[i]+'" height="14" width="32">';
+		for(let i = 0; i<template.types.length;i++) {
+			type = type+ '<img src="https://play.pokemonshowdown.com/sprites/types/'+template.types[i]+'.png" alt="'+template.types[i]+'" height="14" width="32">';
 		}
 		type = type+"</span>";
-		let ability = "";
-		let weight = template.weightkg;
-		for(let i in template.abilities) {
-			ability+=pokegen[name].abilities[i]+"/";
-		}
-		ability = ability.substring(0,ability.length-1);
-		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
+		let bst = template.baseStats['hp'] + template.baseStats['atk'] + template.baseStats['def'] + template.baseStats['spa'] + template.baseStats['spd'] + template.baseStats['spe'];
+		let text = "<b>Stats</b>: " + template.baseStats['hp'] + "/" + template.baseStats['atk'] + "/" + template.baseStats['def'] + "/" + template.baseStats['spa'] + "/" + template.baseStats['spd'] + "/" + template.baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Ability</b>: " +template.ability+ "<br /><b>Weight</b>: "+template.weightkg+" kg";
 		return this.sendReplyBox(text);
-        },******/
+        },
 	ns: 'natureswap',
         'natureswap': function(target, room, user) {
 		if (!this.runBroadcast()) return;
