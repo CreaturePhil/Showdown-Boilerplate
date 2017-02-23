@@ -496,7 +496,7 @@ exports.BattleLearnsets = {
 		harden: ["5L1"],
 		wildcharge: ["5L1"],
 		flareblitz: ["5L1"],
-		waterpledge
+		waterpledge: ["5L1"],
 	},
 
 	dontidahl: {
