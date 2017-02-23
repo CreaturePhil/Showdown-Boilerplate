@@ -2721,12 +2721,9 @@ exports.Formats = [
 		},
 		onBegin: function () {
 			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-				let lastParens = pokemon.set.pokeball.lastIndexOf('(');
-				if (lastParens < 0) lastParens = pokemon.set.pokeball.length; // If the engine is hotpatched without the validator.
-				let donorTemplate = this.getTemplate(pokemon.set.pokeball.slice(lastParens + 1, -1));
-				pokemon.donor = donorTemplate.species;
-				// Reproduce pokémon identity initialization in constructor
-				pokemon.set.pokeball = pokemon.set.pokeball.slice(0, lastParens).trim();
+				let donor = pokemon.set.pokeball.split(' (')[1];
+				pokemon.donor = toId(donor);
+				pokemon.set.pokeball = pokemon.set.pokeball.split(' (')[1];
 			}
 		},
 		onSwitchIn: function (pokemon) {
