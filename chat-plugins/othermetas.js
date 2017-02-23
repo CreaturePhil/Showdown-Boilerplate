@@ -14,7 +14,8 @@ exports.commands= {
 			if(template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
 				return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 			}
-			let ability, types = template.types, weightkg, baseStats ={};
+			let ability, types = [template.types[0]], weightkg, baseStats ={};
+			if(template.types[1]) types.push(template.types[1]);
 			if (stone.id === 'redorb') {
 				for (let i in template.baseStats) {
 					baseStats[i] = Tools.clampIntRange(template.baseStats[i] + Tools.getTemplate('Groudon-Primal').baseStats[i] - Tools.getTemplate('Groudon').baseStats[i], 1, 255);
