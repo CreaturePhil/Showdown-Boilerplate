@@ -99,7 +99,7 @@ exports.commands= {
 		}
 		if (stone.id === 'redorb') {
 			for (let i in template.baseStats) {
-				template.baseStats[i] = Tools.clampIntRange((template.baseStats[i] + Tools.getTemplate('Groudon-Primal').baseStats[i] - Tools.getTemplate('Groudon').baseStats[i], 1, 255);
+				template.baseStats[i] = Tools.clampIntRange(template.baseStats[i] + Tools.getTemplate('Groudon-Primal').baseStats[i] - Tools.getTemplate('Groudon').baseStats[i], 1, 255);
 			}
 			if (template.types[0] === 'Fire') {
 				template.types = ['Fire'];
