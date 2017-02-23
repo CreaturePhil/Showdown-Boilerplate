@@ -2614,18 +2614,18 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Uber', 'Kyurem-Black', 'Pheromosa', 'Regigigas', 'Shedinja', 'Slaking', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
 		bannedDonors: ['Araquanid', 'Azumarill', 'Azurill', 'Blaziken', 'Bunnelby', 'Carvanha', 'Chatot', 'Combusken', 'Dewpider', 'Diggersby', 'Diglett', 'Ditto', 'Dugtrio', 'Golett', 'Golurk', 'Liepard', 'Machamp', 'Machoke', 'Machop', 'Marill', 'Medicham', 'Meditite', 'Meowstic', 'Purrloin', 'Scolipede', 'Sharpedo', 'Smeargle', 'Torchic', 'Trapinch', 'Venipede', 'Whirlipede'],
 		noChangeForme: true,
 		noChangeAbility: true,
-		getEvoFamily: function(species) {
+		getEvoFamily: function (species) {
 			let template = Tools.getTemplate(species);
 			while (template.prevo) {
 				template = Tools.getTemplate(template.prevo);
 			}
 			return template.speciesid;
 		},
-		validateSet: function(set, teamHas) {
+		validateSet: function (set, teamHas) {
 			if (!this.format.abilityMap) {
 				let abilityMap = Object.create(null);
 				for (let speciesid in this.tools.data.Pokedex) {
@@ -2695,9 +2695,9 @@ exports.Formats = [
 
 			// Protocol: Include the data of the donor species in the `name` data slot.
 			// Afterwards, we are going to reset the name to what the user intended. :]
-			set.name = `${set.name || set.species} (${canonicalSource})`;
+			set.pokeball = `${set.pokeball || 'pokeball'} (${canonicalSource})`;
 		},
-		onValidateTeam: function(team, format) {
+		onValidateTeam: function (team, format) {
 			// Donor Clause
 			let evoFamilyLists = [];
 			for (let i = 0; i < team.length; i++) {
@@ -2712,32 +2712,27 @@ exports.Formats = [
 			let requiredFamilies = Object.create(null);
 			for (let i = 0; i < evoFamilyLists.length; i++) {
 				let evoFamilies = evoFamilyLists[i];
-				if (evoFamilies.size !== 1) continue;
+				if (evoFamilies.length !== 1) continue;
 				let [familyId] = evoFamilies;
 				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
 				requiredFamilies[familyId]++;
-				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
+				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each evolution family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
 			}
 		},
-		onBegin: function() {
+		onBegin: function () {
 			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-				let lastParens = pokemon.set.name.lastIndexOf('(');
-				if (lastParens < 0) lastParens = pokemon.set.name.length; // If the engine is hotpatched without the validator.
-				let donorTemplate = this.getTemplate(pokemon.set.name.slice(lastParens + 1, -1));
-				while (donorTemplate.evos.length) donorTemplate = this.getTemplate(donorTemplate.evos[0]);
+				let lastParens = pokemon.set.pokeball.lastIndexOf('(');
+				if (lastParens < 0) lastParens = pokemon.set.pokeball.length; // If the engine is hotpatched without the validator.
+				let donorTemplate = this.getTemplate(pokemon.set.pokeball.slice(lastParens + 1, -1));
 				pokemon.donor = donorTemplate.species;
-				pokemon.name = pokemon.set.name.slice(0, lastParens).trim();
-
 				// Reproduce pokémon identity initialization in constructor
-				pokemon.name = pokemon.name.slice(0, 20);
-				pokemon.fullname = `${pokemon.side.id}: ${pokemon.name}`;
-				pokemon.id = pokemon.fullname;
+				pokemon.set.pokeball = pokemon.set.pokeball.slice(0, lastParens).trim();
 			}
 		},
-		onSwitchIn: function(pokemon) {
+		onSwitchIn: function (pokemon) {
 			if (!pokemon.donor) return;
 			let donorTemplate = this.getTemplate(pokemon.donor);
-			if (!donorTemplate) return;
+			if (!donorTemplate.exists) return;
 			// Place volatiles on the Pokémon to show the donor details.
 			this.add('-start', pokemon, donorTemplate.species, '[silent]');
 		},
