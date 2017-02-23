@@ -47,6 +47,7 @@ exports.BattleAbilities = {
 			if (move.type === 'Fire') mod *= 2;
 			return this.chainModify(mod);
 		},
+	},
 	"burrow": {
 		shortDesc: "This Pokemon's Ground-type moves have their priority increased by 1.",
 		onModifyPriority: function(priority, pokemon, target, move) {
