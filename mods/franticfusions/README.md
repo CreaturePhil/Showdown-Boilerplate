@@ -83,7 +83,7 @@ Snaquaza, the meta leader takes all these decisions. And here's the banlist
 - **Items:** Medichamite
 
 #### Cool mechanics must've been tough to code? 
-Yeah Spandan has put in a lot of effort into coding this. If you find any bug in it feel free to report that to Spandan or Snaquaza.
+Yeah Spandan has put in a lot of effort into coding this (mostly validator; the fusion template code is based on urkerab's Cross Evolution code). If you find any bug in it feel free to report that to Spandan or Snaquaza.
 
 #### Great! Who wants to battle me? 
 Feel free to ask that in the chat a lot of people play this but if nobody is ready at that time you can always challenge BatterBotto the bot. And if you want a team to be added in the bot ask XpRienzo or charizard8888 or Spandan or Snaquaza (whoever is online)
