@@ -65,20 +65,11 @@ exports.BattleAbilities = {
 				return this.chainModify(1.5);
 			}
 		},
-		onSourceModifyAtk: function (atk, attacker, defender, move) {
-			if (move.type === 'Fire' || move.type === 'Water' || move.type === 'Electric' || move.type === 'Grass') {
-				this.debug('Draconic Light weaken');
-				return this.chainModify(0.5);
-			}
-		},
-		onModifySpAPriority: 5,
-		onSourceModifySpA: function (atk, attacker, defender, move) {
-			if (move.type === 'Fire' || move.type === 'Water' || move.type === 'Electric' || move.type === 'Grass') {
-				this.debug('Draconic Light weaken');
-				return this.chainModify(0.5);
-			}
-		},
 		onSourceModifyDamage: function (damage, source, target, move) {
+			if (move.type === 'Fire' || move.type === 'Water' || move.type === 'Electric' || move.type === 'Grass') {
+				this.debug('Draconic Light weaken');
+				return this.chainModify(0.5);
+			}
 			let mod = 1;
 			if (move.type === 'Dragon') mod *= 2;
 			return this.chainModify(mod);
