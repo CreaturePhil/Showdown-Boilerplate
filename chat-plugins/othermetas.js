@@ -99,7 +99,7 @@ exports.commands= {
 		}
 		if (stone.id === 'redorb') {
 			for (let i in template.baseStats) {
-				template.baseStats[i]+= Tools.clampIntRange(Tools.getTemplate('Groudon-Primal').baseStats[i] - Tools.getTemplate('Groudon').baseStats[i], 1, 255);
+				template.baseStats[i] = Tools.clampIntRange((template.baseStats[i] + Tools.getTemplate('Groudon-Primal').baseStats[i] - Tools.getTemplate('Groudon').baseStats[i], 1, 255);
 			}
 			if (template.types[0] === 'Fire') {
 				template.types = ['Fire'];
@@ -108,22 +108,22 @@ exports.commands= {
 				template.types[1] = 'Fire';
 			}
 			template.ability = 'Desolate Land';
-			template.weightkg = Tools.clampIntRange(Tools.getTemplate('Groudon-Primal').weightkg - Tools.getTemplate('Groudon').weightkg, 0.1);
+			template.weightkg = Tools.clampIntRange(template.weightkg + Tools.getTemplate('Groudon-Primal').weightkg - Tools.getTemplate('Groudon').weightkg, 0.1);
 		}
 		else if (stone.id === 'blueorb') {
 			for (let i in template.baseStats) {
-				template.baseStats[i]+= Tools.clampIntRange(Tools.getTemplate('Kyogre-Primal').baseStats[i] - Tools.getTemplate('Kyogre').baseStats[i], 1, 255);
+				template.baseStats[i] = Tools.clampIntRange(template.baseStats[i] + Tools.getTemplate('Kyogre-Primal').baseStats[i] - Tools.getTemplate('Kyogre').baseStats[i], 1, 255);
 			}
 			template.ability = 'Primordial Sea';
-			template.weightkg = Tools.clampIntRange(Tools.getTemplate('Kyogre-Primal').weightkg - Tools.getTemplate('Kyogre').weightkg, 0.1);
+			template.weightkg = Tools.clampIntRange(template.weightkg + Tools.getTemplate('Kyogre-Primal').weightkg - Tools.getTemplate('Kyogre').weightkg, 0.1);
 		}
 		else {
 			let mon = Tools.getTemplate(stone.megaEvolves), mega = Tools.getTemplate(stone.megaStone);
 			for (let i in template.baseStats) {
-				template.baseStats[i]+= Tools.clampIntRange(mega.baseStats[i] - mon.baseStats[i], 1, 255);
+				template.baseStats[i] = Tools.clampIntRange(template.baseStats[i] + mega.baseStats[i] - mon.baseStats[i], 1, 255);
 			}
 			if (mega.types !== mon.types) {
-				if (mega.name = 'Aggron-Mega') {
+				if (mega.name === 'Aggron-Mega') {
 					if (template.types[0] === 'Steel') {
 						template.types = ['Steel'];
 					}
