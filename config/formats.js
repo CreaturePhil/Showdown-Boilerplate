@@ -2721,7 +2721,7 @@ exports.Formats = [
 		},
 		onBegin: function () {
 			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-				if(pokemon.set.pokeball.includes('(')) {
+				if(pokemon.set.pokeball && pokemon.set.pokeball.includes('(')) {
 					let donor = pokemon.set.pokeball.split(' (')[1];
 					pokemon.donor = toId(donor);
 					pokemon.set.pokeball = pokemon.set.pokeball.split(' (')[1];
