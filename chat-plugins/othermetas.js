@@ -1,157 +1,75 @@
 'use strict';
 
-const ProcessManager = require('./../process-manager');
-
-const MAX_PROCESSES = 1;
-const RESULTS_MAX_LENGTH = 10;
-
-const PM = exports.PM = new ProcessManager({
-	maxProcesses: MAX_PROCESSES,
-	execFile: __filename,
-	onMessageUpstream: function (message) {
-		// Protocol:
-		// "[id]|JSON"
-		let pipeIndex = message.indexOf('|');
-		let id = +message.substr(0, pipeIndex);
-		let result = JSON.parse(message.slice(pipeIndex + 1));
-
-		if (this.pendingTasks.has(id)) {
-			this.pendingTasks.get(id)(result);
-			this.pendingTasks.delete(id);
-			this.release();
-		}
-	},
-	onMessageDownstream: function (message) {
-		// protocol:
-		// "[id]|{data, sig}"
-		let pipeIndex = message.indexOf('|');
-		let id = message.substr(0, pipeIndex);
-
-		let data = JSON.parse(message.slice(pipeIndex + 1));
-		process.send(id + '|' + JSON.stringify(this.receive(data)));
-	},
-	receive: function (data) {
-		let result;
-		try {
-			switch (data.cmd) {
-			case 'randpoke':
-			case 'dexsearch':
-				result = runDexsearch(data.target, data.cmd, data.canAll, data.message);
-				break;
-			case 'movesearch':
-				result = runMovesearch(data.target, data.cmd, data.canAll, data.message);
-				break;
-			case 'itemsearch':
-				result = runItemsearch(data.target, data.cmd, data.canAll, data.message);
-				break;
-			case 'learn':
-				result = runLearn(data.target, data.message);
-				break;
-			default:
-				result = null;
-			}
-		} catch (err) {
-			require('./../crashlogger')(err, 'A search query', data);
-			result = {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
-		}
-		return result;
-	},
-	isChatBased: true,
-});
-
-if (process.send && module === process.mainModule) {
-	// This is a child process!
-
-	global.Config = require('../config/config');
-
-	if (Config.crashguard) {
-		process.on('uncaughtException', err => {
-			require('../crashlogger')(err, 'A dexsearch process', true);
-		});
-	}
-
-	global.Tools = require('../tools');
-	global.toId = Tools.getId;
-	Tools.includeData();
-	Tools.includeMods();
-	global.TeamValidator = require('../team-validator');
-
-	process.on('message', message => PM.onMessageDownstream(message));
-	process.on('disconnect', () => process.exit());
-
-	require('../repl').start('dexsearch', cmd => eval(cmd));
-} else if (!PM.maxProcesses) {
-	process.nextTick(() => Tools.includeMods());
-}//All this isfrom datasearch.js
 exports.commands= {
 	mixandmega: 'mnm',
         mnm: function(target, room, user) {
-		if (!this.runBroadcast()) return;
-                let sep = target.split('@');
-		let stone = sep[1], template = sep[0], primals = ['redorb', 'blueorb'];
-		if (!Tools.data.Pokedex[toId(template)] || (!Tools.data.Items[toId(stone)] || !Tools.data.Items[toId(stone)].megaStone || primals.includes(toId(stone))) || !target.includes('@')) {
-			return this.errorReply('ERROR: Invalid Input. Use /mnm <pokemon> @ <mega stone/orb>');
-		}
-		template = Object.assign({}, Tools.getTemplate(template));
-		stone = Object.assign({}, Tools.getItem(stone));
-		if(template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
-			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
-		}
-		if (stone.id === 'redorb') {
-			for (let i in template.baseStats) {
-				template.baseStats[i] = Tools.clampIntRange(template.baseStats[i] + Tools.getTemplate('Groudon-Primal').baseStats[i] - Tools.getTemplate('Groudon').baseStats[i], 1, 255);
+			if (!this.runBroadcast()) return;
+	                let sep = target.split('@');
+			let stone = sep[1], template = sep[0], primals = ['redorb', 'blueorb'];
+			if (!Tools.data.Pokedex[toId(template)] || (!Tools.data.Items[toId(stone)] || !Tools.data.Items[toId(stone)].megaStone || primals.includes(toId(stone))) || !target.includes('@')) {
+				return this.errorReply('ERROR: Invalid Input. Use /mnm <pokemon> @ <mega stone/orb>');
 			}
-			if (template.types[0] === 'Fire') {
-				template.types = ['Fire'];
+			template = Object.assign({}, Tools.getTemplate(template));
+			stone = Object.assign({}, Tools.getItem(stone));
+			if(template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
+				return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 			}
-			else {
-				template.types[1] = 'Fire';
-			}
-			template.ability = 'Desolate Land';
-			template.weightkg = Tools.clampIntRange(template.weightkg + Tools.getTemplate('Groudon-Primal').weightkg - Tools.getTemplate('Groudon').weightkg, 0.1);
-		}
-		else if (stone.id === 'blueorb') {
-			for (let i in template.baseStats) {
-				template.baseStats[i] = Tools.clampIntRange(template.baseStats[i] + Tools.getTemplate('Kyogre-Primal').baseStats[i] - Tools.getTemplate('Kyogre').baseStats[i], 1, 255);
-			}
-			template.ability = 'Primordial Sea';
-			template.weightkg = Tools.clampIntRange(template.weightkg + Tools.getTemplate('Kyogre-Primal').weightkg - Tools.getTemplate('Kyogre').weightkg, 0.1);
-		}
-		else {
-			let mon = Tools.getTemplate(stone.megaEvolves), mega = Tools.getTemplate(stone.megaStone);
-			for (let i in template.baseStats) {
-				template.baseStats[i] = Tools.clampIntRange(template.baseStats[i] + mega.baseStats[i] - mon.baseStats[i], 1, 255);
-			}
-			if (mega.types[1] !== mon.types[1]) {
-				if (mega.name === 'Aggron-Mega') {
-					if (template.types[0] === 'Steel') {
-						template.types = ['Steel'];
-					}
-					else {
-						template.types[1] = 'Steel';
-					}
+			let ability, types, weightkg, baseStats;
+			if (stone.id === 'redorb') {
+				for (let i in template.baseStats) {
+					baseStats[i] = Tools.clampIntRange(template.baseStats[i] + Tools.getTemplate('Groudon-Primal').baseStats[i] - Tools.getTemplate('Groudon').baseStats[i], 1, 255);
+				}
+				if (template.types[0] === 'Fire') {
+					types = ['Fire'];
 				}
 				else {
-					if (template.types[0] === mega.types[1]) {
-						template.types = [mega.types[1]];
+					types = [template.types[0], 'Fire'];
+				}
+				ability = 'Desolate Land';
+				weightkg = Tools.clampIntRange(template.weightkg + Tools.getTemplate('Groudon-Primal').weightkg - Tools.getTemplate('Groudon').weightkg, 0.1);
+			}
+			else if (stone.id === 'blueorb') {
+				for (let i in template.baseStats) {
+					baseStats[i] = Tools.clampIntRange(template.baseStats[i] + Tools.getTemplate('Kyogre-Primal').baseStats[i] - Tools.getTemplate('Kyogre').baseStats[i], 1, 255);
+				}
+				ability = 'Primordial Sea';
+				weightkg = Tools.clampIntRange(template.weightkg + Tools.getTemplate('Kyogre-Primal').weightkg - Tools.getTemplate('Kyogre').weightkg, 0.1);
+			}
+			else {
+				let mon = Tools.getTemplate(stone.megaEvolves), mega = Tools.getTemplate(stone.megaStone);
+				for (let i in template.baseStats) {
+					baseStats[i] = Tools.clampIntRange(template.baseStats[i] + mega.baseStats[i] - mon.baseStats[i], 1, 255);
+				}
+				if (mega.types[1] !== mon.types[1]) {
+					if (mega.name === 'Aggron-Mega') {
+						if (template.types[0] === 'Steel') {
+							types = ['Steel'];
+						}
+						else {
+							types = [template.types[0], 'Steel'];
+						}
 					}
 					else {
-						template.types[1] = mega.types[1];
+						if (template.types[0] === mega.types[1]) {
+							types = [mega.types[1]];
+						}
+						else {
+							types = [template.types[0], mega.types[1]];
+						}
 					}
 				}
+				ability = mega.abilities['0'];
+				weightkg = Tools.clampIntRange(mega.weightkg - mon.weightkg, 0.1);
 			}
-			template.ability = mega.abilities['0'];
-			template.weightkg = Tools.clampIntRange(mega.weightkg - mon.weightkg, 0.1);
-		}
-		let type = '<span class="col typecol">';
-		for(let i = 0; i<template.types.length;i++) {
-			type = type+ '<img src="https://play.pokemonshowdown.com/sprites/types/'+template.types[i]+'.png" alt="'+template.types[i]+'" height="14" width="32">';
-		}
-		type = type+"</span>";
-		let bst = template.baseStats['hp'] + template.baseStats['atk'] + template.baseStats['def'] + template.baseStats['spa'] + template.baseStats['spd'] + template.baseStats['spe'];
-		let text = "<b>Stats</b>: " + template.baseStats['hp'] + "/" + template.baseStats['atk'] + "/" + template.baseStats['def'] + "/" + template.baseStats['spa'] + "/" + template.baseStats['spd'] + "/" + template.baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Ability</b>: " +template.ability+ "<br /><b>Weight</b>: "+template.weightkg+" kg";
-		return this.sendReplyBox(text);
-        },
+			let type = '<span class="col typecol">';
+			for(let i = 0; i<types.length;i++) {
+				type = type+ '<img src="https://play.pokemonshowdown.com/sprites/types/'+template.types[i]+'.png" alt="'+template.types[i]+'" height="14" width="32">';
+			}
+			type = type+"</span>";
+			let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
+			let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Ability</b>: " +ability+ "<br /><b>Weight</b>: "+weightkg+" kg";
+			return this.sendReplyBox(text);
+    	},
 	ns: 'natureswap',
         'natureswap': function(target, room, user) {
 		if (!this.runBroadcast()) return;
