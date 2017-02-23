@@ -2695,7 +2695,7 @@ exports.Formats = [
 
 			// Protocol: Include the data of the donor species in the `name` data slot.
 			// Afterwards, we are going to reset the name to what the user intended. :]
-			set.pokeball = `${set.pokeball || 'pokeball'} (${canonicalSource})`;
+			set.ability = `${set.ability}0${canonicalSource}`;
 		},
 		onValidateTeam: function (team, format) {
 			// Donor Clause
@@ -2721,10 +2721,10 @@ exports.Formats = [
 		},
 		onBegin: function () {
 			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-				if(pokemon.pokeball && pokemon.pokeball.includes('(')) {
-					let donor = pokemon.pokeball.split(' (')[1];
+				if(pokemon.baseAbility.includes('0')) {
+					let donor = pokemon.baseAbility.split('0')[1];
 					pokemon.donor = toId(donor);
-					pokemon.pokeball = pokemon.pokeball.split(' (')[1];
+					pokemon.baseAbility = pokemon.baseAbility.split('0')[0];
 				}
 			}
 		},
