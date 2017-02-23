@@ -92,8 +92,8 @@ exports.commands= {
 		if (!Tools.data.Pokedex[toId(template)] || (!Tools.data.Items[toId(stone)] || !Tools.data.Items[toId(stone)].megaStone || primals.includes(toId(stone))) || !target.includes('@')) {
 			return this.errorReply('ERROR: Invalid Input. Use /mnm <pokemon> @ <mega stone/orb>');
 		}
-		template = Tools.getTemplate(template);
-		stone = Tools.getItem(stone);
+		template = Object.assign({}, Tools.getTemplate(template));
+		stone = Object.assign({}, Tools.getItem(stone));
 		if(template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
