@@ -2596,6 +2596,14 @@ exports.Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] Full Potential",
+		desc: ["&bullet; In this metagame, every Pokemon uses their highest raw stat as their attacking stat."],
+		ruleset: ['[Gen 7] OU'],
+		//team: 'random',
+		mod: 'fullpotential',
+		banlist: ['Pheromosa', 'Shuckle', 'Speed Boost'],
+	},
+	{
 		name: "[Gen 7] Gods and Followers",
 		desc: [
 			"The Pok&eacute;mon in the first slot is the God; the Followers must share a type with the God. If the God Pok&eacute;mon faints, the Followers are inflicted with Embargo.",
@@ -4397,16 +4405,6 @@ exports.Formats = [
 			this.add('-anim', target, move.baseMove, source);
 		},
 	},
-
-	{
-		name: "[Gen 7] Full Potential",
-		desc: ["&bullet; In this metagame, every Pokemon uses their highest raw stat as their attacking stat."],
-		ruleset: ['[Gen 7] OU'],
-		//team: 'random',
-		mod: 'fullpotential',
-		banlist: ['Pheromosa', 'Shuckle', 'Speed Boost'],
-	},
-
 	{
 		name: "Enchanted Items Hackmons",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
