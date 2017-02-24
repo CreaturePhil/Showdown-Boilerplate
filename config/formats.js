@@ -4404,6 +4404,7 @@ exports.Formats = [
 		ruleset: ['[Gen 7] OU'],
 		//team: 'random',
 		mod: 'fullpotential',
+		banlist: ['Pheromosa', 'Shuckle', 'Speed Boost'],
 	},
 
 	{
