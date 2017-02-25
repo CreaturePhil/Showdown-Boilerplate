@@ -19,13 +19,11 @@ exports.commands= {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
 		let deltas; //This hack is, yes, terribluh.
-		let baseTemplate = Tools.getTemplate(stone.megaEvolves), megaTemplate;
+		let baseTemplate = Tools.getTemplate(stone.megaEvolves), megaTemplate = Tools.getTemplate(stone.megaStone);
 		if (stone.id === 'redorb') {
 			megaTemplate = Tools.getTemplate("Groudon-Primal");
 		} else if (stone.id === 'blueorb') {
 			megaTemplate = Tools.getTemplate("Kyogre-Primal");
-		} else {
-			megaTemplate = Tools.getTemplate(stone.megaStone);
 		}
 		deltas = {
 			ability: megaTemplate.abilities['0'],
