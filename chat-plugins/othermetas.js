@@ -103,7 +103,7 @@ exports.commands= {
 			gnbp = 40;
 		}
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${template.abilities['0']}<br /><b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
+		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${template.abilities['0']}<br /><b>Weight</b>: ${template.weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
