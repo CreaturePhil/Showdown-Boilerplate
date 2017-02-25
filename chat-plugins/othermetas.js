@@ -1,7 +1,7 @@
 'use strict';
 
 exports.commands= {
-	/*mixandmega: 'mnm',
+	mixandmega: 'mnm',
     mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if(!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
@@ -53,7 +53,7 @@ exports.commands= {
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
 		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${ability}<br /><b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
-	},*/
+	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
 	ns: 'natureswap',
         'natureswap': function(target, room, user) {
