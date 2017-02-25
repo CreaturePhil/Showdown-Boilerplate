@@ -7,8 +7,11 @@ exports.commands= {
 		if(!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
         let sep = target.split('@');
 		let stone = toId(sep[1]), template = toId(sep[0]), primals = ['redorb', 'blueorb'];
-		if (!Tools.data.Items[stone] || !Tools.data.Items[stone].megaStone || !primals.includes(stone) || !Tools.data.Pokedex[toId(template)]) {
-			return this.parse('/help mixandmega');
+		if (!Tools.data.Items[stone] || !Tools.data.Items[stone].megaStone || !primals.includes(stone)) {
+			return this.errorReply('Error: Mega Stone not found');
+		}
+		if (!Tools.data.Pokedex[toId(template)]) {
+			return this.errorReply("Error: Pokemon not found");
 		}
 		template = Object.assign({}, Tools.getTemplate(template));
 		stone = Object.assign({}, Tools.getItem(stone));
