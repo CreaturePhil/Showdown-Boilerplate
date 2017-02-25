@@ -1,7 +1,7 @@
 'use strict';
 
 exports.commands= {
-	/*mixandmega: 'mnm',
+	mixandmega: 'mnm',
     mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
         let sep = target.split('@');
@@ -70,7 +70,7 @@ exports.commands= {
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
 		let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Ability</b>: " +ability+ "<br /><b>Weight</b>: "+weightkg+" kg";
 		return this.sendReplyBox(text);
-	},*/
+	},
 	ns: 'natureswap',
         'natureswap': function(target, room, user) {
 		if (!this.runBroadcast()) return;
