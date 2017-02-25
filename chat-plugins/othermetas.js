@@ -66,7 +66,7 @@ exports.commands= {
 			ability = mega.abilities['0'];
 			weightkg = Tools.clampIntRange(template.weightkg + mega.weightkg - mon.weightkg, 0.1);
 		}*/
-		let deltas = (Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)).(Tools.getTemplate(stone.megaStone));
+		let deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate(stone.megaStone));
 		if (!template || typeof template === 'string') template = Tools.getTemplate(template);
 		template = Object.assign({}, template);
 		template.abilities = {'0': deltas.ability};
