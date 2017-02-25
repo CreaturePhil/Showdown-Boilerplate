@@ -9,11 +9,11 @@
     max-width: 1500px;
   }
 
-.button{color:black;background:#0315b5!important;border:solid 1px black!important}.menugroup
+.button{color:black;background:#238be0!important;border:solid 1px black!important}.menugroup
 
 .button:hover,.menugroup
 
-.button:active{color:black;background:#0315b5!important;border:solid 1px black!important
+.button:active{color:black;background:#238be0!important;border:solid 1px black!important
 }
 
   .astext{
@@ -253,7 +253,7 @@ button.button.mainmenu5{
   }
 
   .userlist {
-    background: rgba(178, 223, 247, 0.45);
+    background: rgba(167, 239, 239, 0.45);
     border-right: 1px solid #252F3F;
   }
 
