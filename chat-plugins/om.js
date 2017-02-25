@@ -19,10 +19,10 @@ exports.commands= {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
 		let deltas; //This hack is, yes, terribluh.
-		if (stone.id === 'redorb') {
+		if (stone.name === 'Red Orb') {
 			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate("Groudon-Primal"));
 		}
-		if (stone.id === 'blueorb') {
+		if (stone.id === 'Blue Orb') {
 			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate("Kyogre-Primal"));
 		}
 		else {
