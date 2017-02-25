@@ -9,7 +9,7 @@ exports.commands= {
 		let stone = toId(sep[1]), template = toId(sep[0]), primals = ['redorb', 'blueorb'];
 		if ((!Tools.data.Items[stone] || !Tools.data.Items[stone].megaEvolves) && !primals.includes(stone)) {
 			return this.errorReply('Error: Mega Stone not found');
-		}fdhndhndfgjnfgjdfhgk
+		}
 		if (!Tools.data.Pokedex[toId(template)]) {
 			return this.errorReply("Error: Pokemon not found");
 		}
