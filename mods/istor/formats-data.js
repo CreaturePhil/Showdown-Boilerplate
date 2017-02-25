@@ -213,6 +213,26 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["surf", "moonblast", "icebeam", "hurricane", "calmmind"],
 		tier: "New",
 	},
+	allight: {
+		randomBattleMoves: ["knockoff", "suckerpunch", "pursuit", "hypnosis", "playrough"],
+		tier: "LC",
+	},
+	anxurity: {
+		randomBattleMoves: ["knockoff", "suckerpunch", "pursuit", "hypnosis", "playrough"],
+		tier: "New",
+	},
+	bushrie: {
+		randomBattleMoves: ["partingshot", "destinybond", "shadowball", "perishsong", "protect"],
+		tier: "LC",
+	},
+	shrierra: {
+		randomBattleMoves: ["partingshot", "destinybond", "shadowball", "perishsong", "protect"],
+		tier: "NFE",
+	},
+	neshrill: {
+		randomBattleMoves: ["partingshot", "destinybond", "shadowball", "perishsong", "protect"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
