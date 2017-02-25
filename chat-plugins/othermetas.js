@@ -4,10 +4,11 @@ exports.commands= {
 	mixandmega: 'mnm',
     mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
+		if(!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
         let sep = target.split('@');
-		let stone = sep[1], template = sep[0], primals = ['redorb', 'blueorb'];
-		if (!Tools.data.Pokedex[toId(template)] || (!Tools.data.Items[toId(stone)] || !Tools.data.Items[toId(stone)].megaStone || !primals.includes(toId(stone))) || !target.includes('@')) {
-			return this.errorReply('ERROR: Invalid Input. Use /mnm <pokemon> @ <mega stone/orb>');
+		let stone = toId(sep[1]), template = toId(sep[0]), primals = ['redorb', 'blueorb'];
+		if (!Tools.data.Items[stone] || !Tools.data.Items[stone].megaStone || !primals.includes(stone) || !Tools.data.Pokedex[toId(template)]) {
+			return this.parse('/help mixandmega');
 		}
 		template = Object.assign({}, Tools.getTemplate(template));
 		stone = Object.assign({}, Tools.getItem(stone));
@@ -87,6 +88,7 @@ exports.commands= {
 		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${ability}<br /><b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
 	},
+	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
 	ns: 'natureswap',
         'natureswap': function(target, room, user) {
 		if (!this.runBroadcast()) return;
