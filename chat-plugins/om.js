@@ -2,12 +2,12 @@
 
 exports.commands= {
 	mixandmega: 'mnm',
-	mnm: function(target, room, user) {
+	mnm: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
-		let stone = toId(sep[1]), template = toId(sep[0]), primals = ['redorb', 'blueorb'];
-		if ((!Tools.data.Items[stone] || !Tools.data.Items[stone].megaEvolves) && !primals.includes(stone)) {
+		let stone = toId(sep[1]), template = toId(sep[0]);
+		if ((!Tools.data.Items[stone] || !Tools.data.Items[stone].megaEvolves) && !Tools.data.Items[stone].onPrimal) {
 			return this.errorReply('Error: Mega Stone not found');
 		}
 		if (!Tools.data.Pokedex[toId(template)]) {
@@ -18,7 +18,16 @@ exports.commands= {
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
-		let deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate(stone.megaStone));
+		let deltas; //This hack is, yes, terribluh.
+		if (stone.id === 'redorb') {
+			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate("Groudon-Primal"));
+		}
+		if (stone.id === 'blueorb') {
+			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate("Kyogre-Primal"));
+		}
+		else {
+			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate(stone.megaStone));
+		}
 		let ability = deltas.ability, types = template.types, baseStats = Object.assign({}, template.baseStats);
 		if (types[0] === deltas.type) {
 			types = [deltas.type];
@@ -28,7 +37,7 @@ exports.commands= {
 		for (let statName in baseStats) {
 			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		let weightkg = Math.max(0.1, template.weightkg + deltas.weightkg); //-----------------------------
+		let weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
 		let type = '<span class="col typecol">';
 		for (let i = 0; i < types.length; i++) {
 			type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${types[i]}.png" alt="${types[i]}" height="14" width="32">`;
@@ -37,17 +46,13 @@ exports.commands= {
 		let gnbp = 20;
 		if (weightkg >= 200) {
 			gnbp = 120;
-		}
-		else if (weightkg >= 100) {
+		} else if (weightkg >= 100) {
 			gnbp = 100;
-		}
-		else if (weightkg >= 50) {
+		} else if (weightkg >= 50) {
 			gnbp = 80;
-		}
-		else if (weightkg >= 25) {
+		} else if (weightkg >= 25) {
 			gnbp = 60;
-		}
-		else if (weightkg >= 10) {
+		} else if (weightkg >= 10) {
 			gnbp = 40;
 		}
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
