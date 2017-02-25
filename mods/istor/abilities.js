@@ -162,7 +162,42 @@ exports.BattleAbilities = {
 		name: "Hunter",
 			/* Add in a Pursuit effect for all moves here, no power boost */
 		rating: 5,
-		num: 106,
+		num: 10005,
+	},
+	"midnightlurker": {
+		shortDesc: "This Pokemon's attacks are critical hits if the target is asleep.",
+		onModifyCritRatio: function (critRatio, source, target) {
+			if (target && target.status in {'slp':1}) return 5;
+		},
+		id: "midnightlurker",
+		name: "Midnight Lurker",
+		rating: 2,
+		num: 10006,
+	},
+	"doomsday": {
+		desc: "On switch-in, this Pokemon inflicts a Perish Song.",
+		shortDesc: "On switch-in, this Pokemon inflicts Perish Song.",
+		onStart: function (pokemon) {
+			let foeactive = pokemon.side.foe.active;
+			let activated = false;
+			for (let i = 0; i < foeactive.length; i++) {
+				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
+				if (!activated) {
+					this.add('-ability', pokemon, 'Doomsday', 'boost');
+					activated = true;
+				}
+				if (foeactive[i].volatiles['substitute']) {
+					this.add('-immune', foeactive[i], '[msg]');
+				} else {
+					pokemon.addVolatile('perishsong')
+
+				}
+			}
+		},
+		id: "doomsday",
+		name: "Doomsday",
+		rating: 3.5,
+		num: 10007,
 	},
 	"magicalemanation": {
 		desc: "On switch-in, this Pokemon summons Magic Room.",
