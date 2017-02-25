@@ -22,10 +22,10 @@ exports.commands= {
 		let baseTemplate = Tools.getTemplate(stone.megaEvolves), megaTemplate = Tools.getTemplate(stone.megaStone);
 		if (stone.id === 'redorb') {
 			megaTemplate = Tools.getTemplate("Groudon-Primal");
-			megaTemplate = Tools.getTemplate("Groudon");
+			baseTemplate = Tools.getTemplate("Groudon");
 		} else if (stone.id === 'blueorb') {
 			megaTemplate = Tools.getTemplate("Kyogre-Primal");
-			megaTemplate = Tools.getTemplate("Kyogre");
+			baseTemplate = Tools.getTemplate("Kyogre");
 		}
 		deltas = {
 			ability: megaTemplate.abilities['0'],
