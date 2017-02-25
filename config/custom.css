@@ -4,16 +4,16 @@
   **************/
 
   body {
-    background: #EEE url("http://cdn.wallpapersafari.com/8/90/dkvK4w.jpg") no-repeat left fixed;
+    background: #EEE url("http://i.imgur.com/FJ6LkXo.png") no-repeat left fixed;
     width: 100%;
     max-width: 1500px;
   }
 
-.button{color:black;background:#f4aa42!important;border:solid 1px black!important}.menugroup
+.button{color:black;background:#0315b5!important;border:solid 1px black!important}.menugroup
 
 .button:hover,.menugroup
 
-.button:active{color:black;background:#f4aa42!important;border:solid 1px black!important
+.button:active{color:black;background:#0315b5!important;border:solid 1px black!important
 }
 
   .astext{
@@ -22,10 +22,10 @@
   }
 
   .broadcast-blue {
-    background-image: url(https://s3.amazonaws.com/videoblocks-content/video/thumbnail/0xPgM5l/fiery-frame-black-background_xke6hmq8__M0000.jpg);
-    border: 5px solid #FFA000;
+    background-image: url(https://i.ytimg.com/vi/Mccg0fLFq-U/maxresdefault.jpg);
+    border: 5px solid #0B1361;
     font-size:24px;
-    color: #846907;
+    color: #0B1361;
     font-weight:bold;
     font-family: sans-serif;
     padding: 50px;
@@ -473,7 +473,7 @@ button.button.mainmenu5{
 /*Battle CSS*/
 
   .backdrop {
-    background: url(http://cdn.wallpapersafari.com/31/60/sFZiGV.jpg) !important;
+    background: url(http://img03.deviantart.net/d68c/i/2014/213/3/b/swablu_and_altaria_by_kazeskyfox-d7t6x5p.png) !important;
         opacity: 0.6;
 }
 
