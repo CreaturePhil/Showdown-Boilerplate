@@ -60,7 +60,7 @@ exports.commands= {
 				}
 			}
 			ability = mega.abilities['0'];
-			weightkg = Tools.clampIntRange(mega.weightkg - mon.weightkg, 0.1);
+			weightkg = Tools.clampIntRange(template.weightkg + mega.weightkg - mon.weightkg, 0.1);
 		}
 		let type = '<span class="col typecol">';
 		for(let i = 0; i<types.length;i++) {
