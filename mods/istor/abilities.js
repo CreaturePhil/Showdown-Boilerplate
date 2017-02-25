@@ -186,11 +186,10 @@ exports.BattleAbilities = {
 					this.add('-ability', pokemon, 'Doomsday', 'boost');
 					activated = true;
 				}
-				if (foeactive[i].volatiles['substitute']) {
+				if (foeactive[i].volatiles['substitute'] || foeactive[i].hasAbility('soundproof')) {
 					this.add('-immune', foeactive[i], '[msg]');
 				} else {
 					pokemon.addVolatile('perishsong')
-
 				}
 			}
 		},
