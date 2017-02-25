@@ -4674,7 +4674,7 @@ exports.Formats = [
 				'Castform-Snowy': true,
 				'Castform-Sunny': true,
 				'Castform-Rainy': true,
-				'Aegislash-Blade': true
+				'Aegislash-Blade': true,
 			};
 			let types = Object.keys(this.data.TypeChart);
 			for (let i = 0; i < types.length; i++) {

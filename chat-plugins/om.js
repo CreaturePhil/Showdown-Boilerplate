@@ -2,10 +2,10 @@
 
 exports.commands= {
 	mixandmega: 'mnm',
-    mnm: function(target, room, user) {
+	mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if(!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
-        let sep = target.split('@');
+		if (!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
+		let sep = target.split('@');
 		let stone = toId(sep[1]), template = toId(sep[0]), primals = ['redorb', 'blueorb'];
 		if ((!Tools.data.Items[stone] || !Tools.data.Items[stone].megaEvolves) && !primals.includes(stone)) {
 			return this.errorReply('Error: Mega Stone not found');
@@ -15,14 +15,11 @@ exports.commands= {
 		}
 		template = Object.assign({}, Tools.getTemplate(template));
 		stone = Object.assign({}, Tools.getItem(stone));
-		if(template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
+		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
 		let deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate(stone.megaStone));
-		let ability = deltas.ability, types = template.types, baseStats = {};
-		for (let i in template.baseStats) {
-			baseStats[i] = template.baseStats[i];
-		}
+		let ability = deltas.ability, types = template.types, baseStats = Object.assign({}, template.baseStats);
 		if (types[0] === deltas.type) {
 			types = [deltas.type];
 		} else if (deltas.type) {
@@ -31,12 +28,12 @@ exports.commands= {
 		for (let statName in baseStats) {
 			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		let weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);//-----------------------------
+		let weightkg = Math.max(0.1, template.weightkg + deltas.weightkg); //-----------------------------
 		let type = '<span class="col typecol">';
-		for(let i = 0; i<types.length;i++) {
+		for (let i = 0; i < types.length; i++) {
 			type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${types[i]}.png" alt="${types[i]}" height="14" width="32">`;
 		}
-		type = type+"</span>";
+		type = type + "</span>";
 		let gnbp = 20;
 		if (weightkg >= 200) {
 			gnbp = 120;
