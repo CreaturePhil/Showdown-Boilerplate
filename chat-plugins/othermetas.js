@@ -19,11 +19,14 @@ exports.commands= {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
 		let deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate(stone.megaStone));
-		let ability = deltas.ability, types = template.types, baseStats = Object.assign({}, template.baseStats);
-		if (template.types[0] === deltas.type) {
+		let ability = deltas.ability, types = template.types, baseStats = {};
+		for (let i in template.baseStats) {
+			baseStats[i] = template.baseStats[i];
+		}
+		if (types[0] === deltas.type) {
 			types = [deltas.type];
 		} else if (deltas.type) {
-			types = [template.types[0], deltas.type];
+			types = [types[0], deltas.type];
 		}
 		for (let statName in baseStats) {
 			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
