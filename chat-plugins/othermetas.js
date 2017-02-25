@@ -164,7 +164,7 @@ exports.commands= {
         	 if (!this.runBroadcast()) return;
                  if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon/Ability/Move, including ones from istor.");
 		let name = toId(target);
-		let abilistor = Tools.mod('istor').data.Abilities, movestor = Tools.mod('istor').data.Movedex, pokemen = Tools.mod('istor').data.Pokedex;
+		let abilistor = Tools.mod('istor').data.Abilities, movestor = Tools.mod('istor').data.Movedex, pokemen = Tools.mod('istor').data.Pokedex, itemstor = Tools.mod('istor').data.Items;
 		if(pokemen[name]) {
 			let baseStats = pokemen[name].baseStats;
 			let types = pokemen[name].types;
@@ -189,6 +189,9 @@ exports.commands= {
 		else if(abilistor[name] && (abilistor[name].desc || abilistor[name].shortDesc)) {
 			return this.sendReplyBox(`<b>${abilistor[name].name}</b>: ${(abilistor[name].desc || abilistor[name].shortDesc)}`);
 		}
+		else if(itemstor[name] && (itemstor[name].desc || itemstor[name].shortDesc)) {
+			return this.sendReplyBox(`<b>${itemstor[name].name}</b>: ${(itemstor[name].desc || itemstor[name].shortDesc)}`);
+		}
 		else 
 			return this.errorReply("Error: Pokemon/Ability/Move not found");
 		
@@ -211,9 +214,9 @@ exports.commands= {
 	dgen: 'dnewgen',
 	dnewgen: function(target, room, user) {
         	 if (!this.runBroadcast()) return;
-                 if(!target || toId(target) === '') return this.sendReply("/distor: Shows the data for a Pokemon/Ability/Move, including ones from istor.");
+                 if(!target || toId(target) === '') return this.sendReply("/dgen: Shows the data for a Pokemon/Ability/Move/Item, including ones from Pokemon The New First Gen.");
 		let name = toId(target);
-		let abiliden = Tools.mod('thefirstnewgen').data.Abilities, moveden = Tools.mod('thefirstnewgen').data.Movedex, pokegen = Tools.mod('thefirstnewgen').data.Pokedex;
+		let abiliden = Tools.mod('thefirstnewgen').data.Abilities, moveden = Tools.mod('thefirstnewgen').data.Movedex, pokegen = Tools.mod('thefirstnewgen').data.Pokedex, itemgen = Tools.mod('thefirstnewgen').data.Items;
 		if(pokegen[name]) {
 			let baseStats = pokegen[name].baseStats;
 			let types = pokegen[name].types;
@@ -223,13 +226,14 @@ exports.commands= {
 			}
 			type = type+"</span>";
 			let ability = "";
+			let info = pokegen[name].gender;
 			let weight = pokegen[name].weightkg;
 			for(let i in pokegen[name].abilities) {
 				ability+=pokegen[name].abilities[i]+"/";
 			}
 			ability = ability.substring(0,ability.length-1);
 			let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-			let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
+			let text = ""+info+"</button><br><b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " +ability+ "<br /><b>Weight</b>: "+weight+" kg";
 			return this.sendReplyBox(text);
 		}
 		else if(moveden[name]) {
@@ -238,7 +242,10 @@ exports.commands= {
 		else if(abiliden[name]) {
 			return this.sendReplyBox(`<b>${abiliden[name].name}</b>: ${(abiliden[name].shortDesc)}`);
 		}
+		else if(itemgen[name]) {
+			return this.sendReplyBox(`<b>${itemgen[name].name}</b>: ${(itemgen[name].desc || itemgen[name].shortDesc)}`);
+		}
 		else 
-			return this.errorReply("Error: Pokemon/Ability/Move not found");
+			return this.errorReply("Error: Pokemon/Ability/Move/Item not found");
 	},
 };
