@@ -67,43 +67,39 @@ exports.commands= {
 			weightkg = Tools.clampIntRange(template.weightkg + mega.weightkg - mon.weightkg, 0.1);
 		}*/
 		let deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate(stone.megaStone));
-		if (!template || typeof template === 'string') template = Tools.getTemplate(template);
-		template = Object.assign({}, template);
-		template.abilities = {'0': deltas.ability};
+		let ability = deltas.ability, types = template.types, baseStats = Object.assign({}, template.baseStats);
 		if (template.types[0] === deltas.type) {
-			template.types = [deltas.type];
+			types = [deltas.type];
 		} else if (deltas.type) {
-			template.types = [template.types[0], deltas.type];
+			types = [template.types[0], deltas.type];
 		}
-		let baseStats = template.baseStats;
-		template.baseStats = {};
 		for (let statName in baseStats) {
 			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);//-----------------------------
+		let weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);//-----------------------------
 		let type = '<span class="col typecol">';
-		for(let i = 0; i<template.types.length;i++) {
-			type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${template.types[i]}.png" alt="${template.types[i]}" height="14" width="32">`;
+		for(let i = 0; i<types.length;i++) {
+			type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${types[i]}.png" alt="${types[i]}" height="14" width="32">`;
 		}
 		type = type+"</span>";
 		let gnbp = 20;
-		if (template.weightkg >= 200) {
+		if (weightkg >= 200) {
 			gnbp = 120;
 		}
-		else if (template.weightkg >= 100) {
+		else if (weightkg >= 100) {
 			gnbp = 100;
 		}
-		else if (template.weightkg >= 50) {
+		else if (weightkg >= 50) {
 			gnbp = 80;
 		}
-		else if (template.weightkg >= 25) {
+		else if (weightkg >= 25) {
 			gnbp = 60;
 		}
-		else if (template.weightkg >= 10) {
+		else if (weightkg >= 10) {
 			gnbp = 40;
 		}
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${template.abilities['0']}<br /><b>Weight</b>: ${template.weightkg} kg (${gnbp} BP)`;
+		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${ability}<br /><b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
