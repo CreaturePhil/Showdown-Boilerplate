@@ -68,19 +68,19 @@ exports.commands= {
 		}
 		type = type+"</span>";
 		let gnbp = 20;
-		if (targetWeight >= 200) {
+		if (weightkg >= 200) {
 			gnbp = 120;
 		}
-		else if (targetWeight >= 100) {
+		else if (weightkg >= 100) {
 			gnbp = 100;
 		}
-		else if (targetWeight >= 50) {
+		else if (weightkg >= 50) {
 			gnbp = 80;
 		}
-		else if (targetWeight >= 25) {
+		else if (weightkg >= 25) {
 			gnbp = 60;
 		}
-		else if (targetWeight >= 10) {
+		else if (weightkg >= 10) {
 			gnbp = 40;
 		}
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
