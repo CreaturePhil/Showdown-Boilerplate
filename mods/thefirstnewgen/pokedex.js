@@ -133,6 +133,7 @@ exports.BattlePokedex = {
 		color: "Black",
 		evos: "sciuridark",
 		eggGroups: ["Field"],
+		gender: "<img src=https://lh3.googleusercontent.com/-7C3Lm2mipNE/V6c7stnQ8xI/AAAAAAAAAUU/faoRbWJHfCo1Uhxr8O_QqmzT0A3xvGMIA/s346/Chipmorgue.png width=64 height=64><i>This Pokemon is a favorite of trainers, being very loyal. They do, however, have a mischevious side. Chipmorgue have been known to store various things in their cheeks to hide them from their trainers, including, but not limited to, berries, items, Pokeballs, fossils, and one time even an entire bicycle!<br><br>Chipmourgue have very thick and fluffy fur, and thus are often sought after by poachers. Thankfully they have yet to capture a Chipmorgue, as when threatened, these Pokemon will ferociously attack, swarming poachers and smothering them with their tails.<br>It is said that when Chipmorgue points its tail at something, then it will die. This, however, has never been proven, but some people fear Chipmorgue to this day.</i>"
 	},
 	sciuridark: {
 		num: 8017,
@@ -219,6 +220,7 @@ exports.BattlePokedex = {
 		color: "Red",
 		evos: ["pyromoose"],
 		eggGroups: ["Field"],
+		gender: "<img src=https://lh3.googleusercontent.com/-vyhM6FFBlcw/V6SBrdSnf3I/AAAAAAAAATc/G2GNGac4qBA3zvdQlxDXZChLRRK__WwCACL0B/s346/sprite4.png width=256 height=256><br><i>Sparkideers are very territorial Pokemon, marking out what is theirs by burning a line around it. When captured, it is known that they will only trust their trainers after they have burned them.<br><br>Sparkideer are actually carnivores, eating anything that smells like prey. Many new trainers have been known to be attacked by Sparkideer after approaching them while they are hunting.</i><br>",
 	},
 	pyromoose: {
 		num: 8024,
@@ -719,6 +721,7 @@ exports.BattlePokedex = {
 		prevo: "toddlebot",
 		evoLevel: 35,
 		eggGroups: ["Human-Like", "Mineral"],
+		gender:"<b>Concept/General Design:</b>A tiny, basic robot-like creature that could definitely change into something greater. Mainly grey, with blue and red parts.<br><br><b>Other Notes/Competitive Use:</b>While it's an NFE with overall meh stats, using it's Hidden Ability of Prankster, it can be a nice support mon with moves like Thunder Wave, Stealth Rock, Substitute, and Yawn in LC. It's also decently strong, for an unevolved Pokemon, and has moves like Prankster Bulk Up, Iron Head, Ice Punch, Flash Cannon, Dazzling Gleam, Low Kick, Prankster Autotomize, etc.<br><br><b>Stage 1 - The Split:</b><br>This is where the spilt kicks in. Basically, when the little Toddlebot grows up, it will evolve into one of two Pokemon based one its gender. These two Pokemon are distinctly different in terms of typing, personality, and stats.<br><br><b>Method of Evolution:</b> Evolves from Male Toddlebots at Level 35<br>"
 	},
 	robeauty: {
 		num: 8061,
