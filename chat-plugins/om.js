@@ -19,15 +19,32 @@ exports.commands= {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
 		let deltas; //This hack is, yes, terribluh.
-		if (stone.name === 'Red Orb') {
-			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate("Groudon-Primal"));
+		let baseTemplate = this.getTemplate(stone.megaEvolves), megaTemplate;
+		if (stone.id === 'redorb') {
+			megaTemplate = this.getTemplate("Groudon-Primal");
+		} else if (stone.id === 'blueorb') {
+			megaTemplate = this.getTemplate("Kyogre-Primal");
+		} else {
+			megaTemplate = this.getTemplate(stone.megaStone);
 		}
-		if (stone.id === 'Blue Orb') {
-			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate("Kyogre-Primal"));
+		deltas = {
+			ability: megaTemplate.abilities['0'],
+			baseStats: {},
+			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
+			originalMega: megaTemplate.species,
+			requiredItem: megaTemplate.requiredItem,
+		};
+		for (let statId in megaTemplate.baseStats) {
+			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		}
-		else {
-			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate(stone.megaStone));
+		if (megaTemplate.types.length > baseTemplate.types.length) {
+			deltas.type = megaTemplate.types[1];
+		} else if (megaTemplate.types.length < baseTemplate.types.length) {
+			deltas.type = baseTemplate.types[0];
+		} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
+			deltas.type = megaTemplate.types[1];
 		}
+		//////////////////////////////////////////
 		let ability = deltas.ability, types = template.types, baseStats = Object.assign({}, template.baseStats);
 		if (types[0] === deltas.type) {
 			types = [deltas.type];
