@@ -1,7 +1,7 @@
 'use strict';
 
 exports.commands= {
-	mixandmega: 'mnm',
+	/*mixandmega: 'mnm',
     mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if(!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
@@ -18,54 +18,6 @@ exports.commands= {
 		if(template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
-		/*let ability, types = [template.types[0]], weightkg, baseStats ={};
-		if(template.types[1]) types.push(template.types[1]);
-		if (stone.id === 'redorb') {
-			for (let i in template.baseStats) {
-				baseStats[i] = Tools.clampIntRange(template.baseStats[i] + Tools.getTemplate('Groudon-Primal').baseStats[i] - Tools.getTemplate('Groudon').baseStats[i], 1, 255);
-			}
-			if (template.types[0] === 'Fire') {
-				types = ['Fire'];
-			}
-			else {
-				types = [template.types[0], 'Fire'];
-			}
-			ability = 'Desolate Land';
-			weightkg = Tools.clampIntRange(template.weightkg + Tools.getTemplate('Groudon-Primal').weightkg - Tools.getTemplate('Groudon').weightkg, 0.1);
-		}
-		else if (stone.id === 'blueorb') {
-			for (let i in template.baseStats) {
-				baseStats[i] = Tools.clampIntRange(template.baseStats[i] + Tools.getTemplate('Kyogre-Primal').baseStats[i] - Tools.getTemplate('Kyogre').baseStats[i], 1, 255);
-			}
-			ability = 'Primordial Sea';
-			weightkg = Tools.clampIntRange(template.weightkg + Tools.getTemplate('Kyogre-Primal').weightkg - Tools.getTemplate('Kyogre').weightkg, 0.1);
-		}
-		else {
-			let mon = Tools.getTemplate(stone.megaEvolves), mega = Tools.getTemplate(stone.megaStone);
-			for (let i in template.baseStats) {
-				baseStats[i] = Tools.clampIntRange(template.baseStats[i] + mega.baseStats[i] - mon.baseStats[i], 1, 255);
-			}
-			if (mega.types[1] !== mon.types[1]) {
-				if (mega.name === 'Aggron-Mega') {
-					if (template.types[0] === 'Steel') {
-						types = ['Steel'];
-					}
-					else {
-						types = [template.types[0], 'Steel'];
-					}
-				}
-				else {
-					if (template.types[0] === mega.types[1]) {
-						types = [mega.types[1]];
-					}
-					else {
-						types = [template.types[0]].push(mega.types[1]);
-					}
-				}
-			}
-			ability = mega.abilities['0'];
-			weightkg = Tools.clampIntRange(template.weightkg + mega.weightkg - mon.weightkg, 0.1);
-		}*/
 		let deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate(stone.megaStone));
 		let ability = deltas.ability, types = template.types, baseStats = Object.assign({}, template.baseStats);
 		if (template.types[0] === deltas.type) {
@@ -101,7 +53,7 @@ exports.commands= {
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
 		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${ability}<br /><b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
-	},
+	},*/
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
 	ns: 'natureswap',
         'natureswap': function(target, room, user) {
