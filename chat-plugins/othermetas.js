@@ -6,7 +6,7 @@ exports.commands= {
 		if (!this.runBroadcast()) return;
         let sep = target.split('@');
 		let stone = sep[1], template = sep[0], primals = ['redorb', 'blueorb'];
-		if (!Tools.data.Pokedex[toId(template)] || (!Tools.data.Items[toId(stone)] || !Tools.data.Items[toId(stone)].megaStone || primals.includes(toId(stone))) || !target.includes('@')) {
+		if (!Tools.data.Pokedex[toId(template)] || (!Tools.data.Items[toId(stone)] || !Tools.data.Items[toId(stone)].megaStone || !primals.includes(toId(stone))) || !target.includes('@')) {
 			return this.errorReply('ERROR: Invalid Input. Use /mnm <pokemon> @ <mega stone/orb>');
 		}
 		template = Object.assign({}, Tools.getTemplate(template));
@@ -55,7 +55,7 @@ exports.commands= {
 						types = [mega.types[1]];
 					}
 					else {
-						types = [template.types[0], mega.types[1]];
+						types = [template.types[0]].push(mega.types[1]);
 					}
 				}
 			}
