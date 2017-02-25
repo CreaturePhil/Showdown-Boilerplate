@@ -64,11 +64,27 @@ exports.commands= {
 		}
 		let type = '<span class="col typecol">';
 		for(let i = 0; i<types.length;i++) {
-			type = type+ '<img src="https://play.pokemonshowdown.com/sprites/types/'+template.types[i]+'.png" alt="'+template.types[i]+'" height="14" width="32">';
+			type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${template.types[i]}.png" alt="${template.types[i]}" height="14" width="32">`;
 		}
 		type = type+"</span>";
+		let gnbp = 20;
+		if (targetWeight >= 200) {
+			gnbp = 120;
+		}
+		else if (targetWeight >= 100) {
+			gnbp = 100;
+		}
+		else if (targetWeight >= 50) {
+			gnbp = 80;
+		}
+		else if (targetWeight >= 25) {
+			gnbp = 60;
+		}
+		else if (targetWeight >= 10) {
+			gnbp = 40;
+		}
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = "<b>Stats</b>: " + baseStats['hp'] + "/" + baseStats['atk'] + "/" + baseStats['def'] + "/" + baseStats['spa'] + "/" + baseStats['spd'] + "/" + baseStats['spe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Ability</b>: " +ability+ "<br /><b>Weight</b>: "+weightkg+" kg";
+		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> " + type + "<br /><b>Ability</b>: " +ability+ "<br /><b>Weight</b>: "+weightkg+" kg ("+gnbp+" BP)`;
 		return this.sendReplyBox(text);
 	},
 	ns: 'natureswap',
