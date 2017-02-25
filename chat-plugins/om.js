@@ -19,20 +19,18 @@ exports.commands= {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
 		let deltas; //This hack is, yes, terribluh.
-		let baseTemplate = this.getTemplate(stone.megaEvolves), megaTemplate;
+		let baseTemplate = Tools.getTemplate(stone.megaEvolves), megaTemplate;
 		if (stone.id === 'redorb') {
-			megaTemplate = this.getTemplate("Groudon-Primal");
+			megaTemplate = Tools.getTemplate("Groudon-Primal");
 		} else if (stone.id === 'blueorb') {
-			megaTemplate = this.getTemplate("Kyogre-Primal");
+			megaTemplate = Tools.getTemplate("Kyogre-Primal");
 		} else {
-			megaTemplate = this.getTemplate(stone.megaStone);
+			megaTemplate = Tools.getTemplate(stone.megaStone);
 		}
 		deltas = {
 			ability: megaTemplate.abilities['0'],
 			baseStats: {},
 			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
-			originalMega: megaTemplate.species,
-			requiredItem: megaTemplate.requiredItem,
 		};
 		for (let statId in megaTemplate.baseStats) {
 			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
