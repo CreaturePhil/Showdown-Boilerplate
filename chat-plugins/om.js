@@ -258,7 +258,7 @@ exports.commands= {
 		if(!Tools.data.Pokedex[toId(target)]) {
 			return this.errorReply("Error: Pokemon not found.")
 		}
-		let bst = 0, pokeobj = Tools.data.Pokedex[toId(target)];
+		let bst = 0, pokeobj = Tools.getTemplate(toId(target));
 		for(let i in pokeobj.baseStats) {
 			bst += pokeobj.baseStats[i];
 		}
@@ -270,7 +270,7 @@ exports.commands= {
 			newStats[i] = pokeobj.baseStats[i]*2;
 		}
 		let text = `${pokeobj.species} in 350 Cup: <br />`;
-		for(let i in newStats) text = `${text}newStats[i]/`;
+		for(let i in newStats) text = `${text+newStats[i]}/`;
 		text = text.substring(0,text.length-1);
 		this.sendReplyBox(text);
 	},
