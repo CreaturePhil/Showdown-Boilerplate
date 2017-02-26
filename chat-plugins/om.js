@@ -266,7 +266,7 @@ exports.commands= {
 			return this.parse('/dt '+target);
 		}
 		let newStats = {};
-		for( i in pokeobj.baseStats) {
+		for(let i in pokeobj.baseStats) {
 			newStats[i] = pokeobj.baseStats[i]*2;
 		}
 		let text = `${pokeobj.species} in 350 Cup: <br />`;
