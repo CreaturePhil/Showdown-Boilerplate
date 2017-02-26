@@ -28,4 +28,28 @@ exports.BattleMovedex = {
 		zMovePower: 120,
 		contestType: "Tough",
 	},
+	"abyssteething": {
+		num: 1000,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "20% chance to lower the target's Defense by 1.",
+		id: "abyssteething",
+		isViable: true,
+		name: "Abyss Teething",
+		pp: 15,
+		priority: 0,
+		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 20,
+			boosts: {
+				def: -1,
+				spd: -1,
+			},
+		},
+		target: "normal",
+		type: "Water",
+		zMovePower: 160,
+		contestType: "Tough",
  };
