@@ -1,7 +1,7 @@
 'use strict';
 
 exports.BattleMovedex = {
-  "roadsweep": {
+	"roadsweep": {
 		num: 1000,
 		accuracy: 95,
 		basePower: 60,
@@ -13,15 +13,19 @@ exports.BattleMovedex = {
 		name: "Roadsweep",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onTry: function (pokemon, target) {
+		flags: {
+			contact: 1,
+			protect: 1,
+			mirror: 1
+		},
+		onTry: function(pokemon, target) {
 			if (pokemon.activeTurns > 1) {
 				this.add('-fail', pokemon);
 				this.add('-hint', "Roadsweep only works on your first turn out. #loser");
 				return null;
 			}
 		},
-    forceSwitch: true,
+		forceSwitch: true,
 		secondary: false,
 		target: "normal",
 		type: "Ground",
@@ -40,7 +44,12 @@ exports.BattleMovedex = {
 		name: "Abyss Teething",
 		pp: 15,
 		priority: 0,
-		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
+		flags: {
+			bite: 1,
+			contact: 1,
+			protect: 1,
+			mirror: 1
+		},
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -52,4 +61,5 @@ exports.BattleMovedex = {
 		type: "Water",
 		zMovePower: 160,
 		contestType: "Tough",
- };
+	},
+};
