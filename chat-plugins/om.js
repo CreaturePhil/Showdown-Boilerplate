@@ -281,7 +281,7 @@ exports.commands= {
 		if(!Tools.data.Pokedex[toId(target)]) {
 			return this.errorReply("Error: Pokemon not found.")
 		}
-		this.sendReplyBox(`${Tools.data.Pokedex[toId(target)].species} in 350 Cup: <br /> ` + Object.values(Tools.mod("bnb").data.Pokedex[toId(target)].baseStats).join('/'));
+		this.sendReplyBox(`${Tools.data.Pokedex[toId(target)].species} in Bad 'N Boosted: <br /> ` + Object.values(Tools.mod("bnb").data.Pokedex[toId(target)].baseStats).join('/'));
 	},
-	cup350help: ["/bnb <pokemon> - Shows the base stats that a Pokemon would have in Bad 'n Boosted."],
+	badnboostedhelp: ["/bnb <pokemon> - Shows the base stats that a Pokemon would have in Bad 'n Boosted."],
 };
