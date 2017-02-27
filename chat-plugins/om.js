@@ -252,6 +252,7 @@ exports.commands= {
 		else 
 			return this.errorReply("Error: Pokemon/Ability/Move/Item not found");
 	},
+	
 	'350' : 'cup350',
 	cup350 : function (target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -264,7 +265,7 @@ exports.commands= {
 		}
 		let newStats = {};
 		for(let i in pokeobj.baseStats) {
-			newStats[i] = pokeobj.baseStats[i] * bst <= 350 ? 2 : 1;
+			newStats[i] = pokeobj.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
 		let text = `${pokeobj.species} in 350 Cup: <br />`;
 		for(let i in newStats) text = `${text+newStats[i]}/`;
@@ -272,6 +273,7 @@ exports.commands= {
 		this.sendReplyBox(text);
 	},
 	cup350help: ["/350 <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],
+	
 	'bnb' : 'badnboosted',
 	badnboosted : function (target, room, user) {
 		if (!this.runBroadcast()) return;
