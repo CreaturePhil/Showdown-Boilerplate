@@ -275,4 +275,14 @@ exports.commands= {
 		this.sendReplyBox(text);
 	},
 	cup350help: ["/350 <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],
+	'bnb' : 'badnboosted',
+	badnboosted : function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		if(!Tools.data.Pokedex[toId(target)]) {
+			return this.errorReply("Error: Pokemon not found.")
+		}
+		let text = `${Tools.data.Pokedex[toId(target)].species} in 350 Cup: <br />`;
+		this.sendReplyBox(Object.values(Tools.mod("bnb").data.Pokedex[toId(target)].baseStats).join('/'));
+	},
+	cup350help: ["/bnb <pokemon> - Shows the base stats that a Pokemon would have in Bad 'n Boosted."],
 };
