@@ -3165,7 +3165,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Pokemon: The New First Generation",
-		desc: ["&bullet; <a href=http://www.smogon.com/forums/threads/pokemon-the-new-first-gen-submissions-for-new-pokemon-over.3578653/>Pokemon: The New First Generation</a>"],
+		desc: ["&bullet; <a href=http://www.smogon.com/forums/threads/pokemon-the-new-first-gen-submissions-for-new-pokemon-over.3578653/>Pokemon: The New First Generation</a>",
+		       "&bullet; <a href=https://docs.google.com/spreadsheets/d/1RT8-Ntryi_SvlD_AwBCPWTso7bFZNpAGX4F7wuHBPQY/edit>Pokemon: The New First Gen Spreadhseet</a>",
+		       "&bullet; Use /dgen <Pokemon/Item/Ability/Move> for more info",
+		      ],
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		mod: 'thefirstnewgen',
 	},
@@ -4386,7 +4389,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Z-Shift",
-		desc: ["&bullet; In Z-Shift, the Type, Base Power and Priority of the move in the first slot is transferred to the Z-Move being used.<br><br>Necrozma @ <b>Electrium Z</b>  <br>Ability: Prism Armor  <br>EVs: 252 HP / 252 SpA / 4 SpD<br>Modest Nature  <br>IVs: 0 Atk  <br>- Prismatic Laser <br>- Dark Pulse  <br>- <b>Charge Beam</b>  <br>- Moonlight<br><br>So if this is the set then<br><b>Z-Charge Beam:</b> 160 Base Power, 90% Accuracy, Psychic type move with 70% chance to raise the user's SpA by 1 stage"],
+		desc: ["&bullet; In Z-Shift, the Type, Base Power and Priority of the move in the first slot is transferred to the Z-Move being used.<br><br>Necrozma @ <b>Electrium Z</b>  <br>Ability: Prism Armor  <br>EVs: 252 HP / 252 SpA / 4 SpD<br>Modest Nature  <br>IVs: 0 Atk  <br>- <b>Prismatic Laser</b> <br>- Dark Pulse  <br>- <b>Charge Beam</b>  <br>- Moonlight<br><br>So if this is the set then<br><b>Z-Charge Beam:</b> 160 Base Power, 90% Accuracy, Psychic type move with 70% chance to raise the user's SpA by 1 stage"],
 		ruleset: ['[Gen 7] OU'],
 		mod: 'zshift',
 		onValidateSet: function(set) {
@@ -5691,6 +5694,7 @@ exports.Formats = [
 		desc: [
 			"&bullet; A new region with new Pokemon, Moves, Abilities and a lot more",
 			"&bullet; <a href=\"https://github.com/XpRienzo/DragonHeaven/blob/master/mods/istor/README.md\">Istor</a>",
+			"&bullet; Use /distor <Pokemon/Item/Ability/Move> and /learnistor <Pokemon>, <move>for more info",
 		],
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause', 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Uber', 'Power Construct', 'Shadow Tag'],
