@@ -330,7 +330,7 @@ exports.commands = {
 			if (Shop.closed) return this.sendReply('The shop is closed, come back later.');
 			if (!Shop[toId(target)]) return this.errorReply('Item ' + target + ' not found.');
 			let item = Shop[toId(target)];
-			if (item.price > Db.money.get(user.userid)) return this.errorReply("You don't have you enough money for this. You need " + (item.price - Db.money.get(user.userid)) + currencyName((item.price - Db.money.get(user.userid))) + " more to buy this.");
+			if (item.price > Db.money.get(user.userid, 0)) return this.errorReply("You don't have you enough money for this. You need " + (item.price - Db.money.get(user.userid)) + currencyName((item.price - Db.money.get(user.userid))) + " more to buy this.");
 			Db.money.set(user.userid, Db.money.get(user.userid) - item.price);
 			logMoney(user.name + " has purchased " + item.name + " from the shop for " + item.price + " and " + user.name + " now has " + Db.money.get(user.userid) + currencyName(Db.money.get(user.userid)) + ".");
 			if (item.id === 'customsymbol') {
