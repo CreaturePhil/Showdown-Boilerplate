@@ -493,9 +493,7 @@ Abilities: Conservate
 |-------------|-------------|:-----------:|--------------|--------------|--------------|---------|
 | 96 | 91 | 142 | 91 | 142 | 118 | 680 | 
 
-For more info (including movesets) type /(pokemon). For Example /Detuoy.
-
-
+For more info (including movesets) type ! distor <pokemon/item/move/ability>. For Example /distor Detuoy
 ## Learnsets:	
 
 ## Yddraig
