@@ -3167,7 +3167,7 @@ exports.Formats = [
 		name: "[Gen 7] Pokemon: The New First Generation",
 		desc: ["&bullet; <a href=http://www.smogon.com/forums/threads/pokemon-the-new-first-gen-submissions-for-new-pokemon-over.3578653/>Pokemon: The New First Generation</a>",
 		       "&bullet; <a href=https://docs.google.com/spreadsheets/d/1RT8-Ntryi_SvlD_AwBCPWTso7bFZNpAGX4F7wuHBPQY/edit>Pokemon: The New First Gen Spreadhseet</a>",
-		       "&bullet; Use /dgen <Pokemon/Item/Ability/Move> for more info",
+		       "&bullet; Use /dgen (Pokemon/Item/Ability/Move) for more info",
 		      ],
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		mod: 'thefirstnewgen',
@@ -5694,7 +5694,7 @@ exports.Formats = [
 		desc: [
 			"&bullet; A new region with new Pokemon, Moves, Abilities and a lot more",
 			"&bullet; <a href=\"https://github.com/XpRienzo/DragonHeaven/blob/master/mods/istor/README.md\">Istor</a>",
-			"&bullet; Use /distor <Pokemon/Item/Ability/Move> and /learnistor <Pokemon>, <move>for more info",
+			"&bullet; Use /distor (Pokemon/Item/Ability/Move) and /learnistor (Pokemon), (Move) for more info",
 		],
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause', 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Uber', 'Power Construct', 'Shadow Tag'],
