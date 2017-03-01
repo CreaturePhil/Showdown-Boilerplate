@@ -13,7 +13,7 @@ exports.BattleScripts = {
 				nature: 'Quiet',
 			},
 			'The True Falcon' : {
-				species: 'Samurott', ability: 'Ultra Technical', item: 'Assualt Vest', gender: 'M',
+				species: 'Samurott', ability: 'Ultra Technical', item: 'Assault Vest', gender: 'M',
 				moves: ['icepunch', 'waterfall', 'sacred sword'],
 				signatureMove: "Heroic Beatdown",evs: {hp: 252, atk:252, def:4}, nature: 'Adamant',
 			},
