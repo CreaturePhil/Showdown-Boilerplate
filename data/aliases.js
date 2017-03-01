@@ -63,6 +63,15 @@ exports.BattleAliases = {
 	"choon": "[Gen 7] Choonmons",
 	"lockdoown": "[Gen 7] Lockdown",
 	"offensification": "[Gen 7] Offensification",
+	"badnboosted": "[Gen 7] Bad \'n Boosted",
+	"bnb": "[Gen 7] Bad \'n Boosted",
+	"fullpotential": "[Gen 7] Full Potential",
+	"fp": "[Gen 7] Full Potential",
+	"crossevolution": "[Gen 7] Cross Evolution",
+	"crossevo": "[Gen 7] Cross Evolution",
+	"allterrain": "[Gen 7] All Terrain",
+	"ptnfg": "[Gen 7] Pokemon: The New First Generation",
+	"movemastery": "[Gen 7] Move Mastery",
 
 	// mega evos
 	"maero": "Aerodactyl-Mega",
