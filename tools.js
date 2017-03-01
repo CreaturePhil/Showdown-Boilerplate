@@ -49,6 +49,11 @@ if (!Object.values) {
 		for (let k in object) values.push(object[k]);
 		return values;
 	};
+	Object.entries = function (object) {
+		let entries = [];
+		for (let k in object) entries.push([k, object[k]]);
+		return entries;
+	};
 }
 
 // shim padStart
@@ -694,6 +699,36 @@ class BattleDex {
 		return stats;
 	}
 
+	getHiddenPower(ivs) {
+		const hpTypes = ['Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark'];
+		const stats = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
+		if (this.gen <= 2) {
+			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
+			const atkDV = Math.floor(ivs.atk / 2);
+			const defDV = Math.floor(ivs.def / 2);
+			const speDV = Math.floor(ivs.spe / 2);
+			const spcDV = Math.floor(ivs.spa / 2);
+			return {
+				type: hpTypes[4 * (atkDV % 4) + (defDV % 4)],
+				power: Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV > 2 ? 3 : spcDV)) / 2 + 31),
+			};
+		} else {
+			// Hidden Power check for gen 3 onwards
+			let hpTypeX = 0, hpPowerX = 0;
+			let i = 1;
+			for (const s in stats) {
+				hpTypeX += i * (ivs[s] % 2);
+				hpPowerX += i * (Math.floor(ivs[s] / 2) % 2);
+				i *= 2;
+			}
+			return {
+				type: hpTypes[Math.floor(hpTypeX * 15 / 63)],
+				// In Gen 6, Hidden Power is always 60 base power
+				power: (this.gen && this.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60,
+			};
+		}
+	}
+
 	getBanlistTable(format, subformat, depth) {
 		let banlistTable;
 		if (!depth) depth = 0;
@@ -1000,6 +1035,11 @@ class BattleDex {
 			} else {
 				buf += '|';
 			}
+
+			if (set.pokeball || set.hpType) {
+				buf += ',' + set.hpType;
+				buf += ',' + toId(set.pokeball);
+			}
 		}
 
 		return buf;
@@ -1045,7 +1085,7 @@ class BattleDex {
 			// moves
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
-			set.moves = buf.substring(i, j).split(',');
+			set.moves = buf.substring(i, j).split(',', 24);
 			i = j + 1;
 
 			// nature
@@ -1058,7 +1098,7 @@ class BattleDex {
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
 			if (j !== i) {
-				let evs = buf.substring(i, j).split(',');
+				let evs = buf.substring(i, j).split(',', 6);
 				set.evs = {
 					hp: Number(evs[0]) || 0,
 					atk: Number(evs[1]) || 0,
@@ -1080,7 +1120,7 @@ class BattleDex {
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
 			if (j !== i) {
-				let ivs = buf.substring(i, j).split(',');
+				let ivs = buf.substring(i, j).split(',', 6);
 				set.ivs = {
 					hp: ivs[0] === '' ? 31 : Number(ivs[0]) || 0,
 					atk: ivs[1] === '' ? 31 : Number(ivs[1]) || 0,
@@ -1106,13 +1146,18 @@ class BattleDex {
 
 			// happiness
 			j = buf.indexOf(']', i);
+			let misc;
 			if (j < 0) {
-				if (buf.substring(i)) {
-					set.happiness = Number(buf.substring(i));
-				}
-				break;
+				if (i < buf.length) misc = buf.substring(i).split(',', 3);
+			} else {
+				if (i !== j) misc = buf.substring(i, j).split(',', 3);
 			}
-			if (i !== j) set.happiness = Number(buf.substring(i, j));
+			if (misc) {
+				set.happiness = Number(misc[0]);
+				set.hpType = misc[1];
+				set.pokeball = misc[2];
+			}
+			if (j < 0) break;
 			i = j + 1;
 		}
 

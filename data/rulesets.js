@@ -30,7 +30,7 @@ exports.BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard GBU',
 		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Soul Dew', 'Battle Bond',
+		banlist: ['Unreleased', 'Illegal', 'Battle Bond',
 			'Mewtwo', 'Mew',
 			'Lugia', 'Ho-Oh', 'Celebi',
 			'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi', 'Deoxys',
@@ -39,6 +39,11 @@ exports.BattleFormats = {
 			'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion',
 			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow',
 		],
+		onValidateSet(set, format) {
+			if (this.gen < 7 && toId(set.item) === 'souldew') {
+				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
+			}
+		},
 	},
 	standarddoubles: {
 		effectType: 'ValidatorRule',
@@ -372,12 +377,28 @@ exports.BattleFormats = {
 		},
 		onValidateTeam: function (team, format) {
 			let abilityTable = {};
+			let base = {
+				airlock: 'cloudnine',
+				battlearmor: 'shellarmor',
+				clearbody: 'whitesmoke',
+				dazzling: 'queenlymajesty',
+				emergencyexit: 'wimpout',
+				filter: 'solidrock',
+				gooey: 'tanglinghair',
+				insomnia: 'vitalspirit',
+				ironbarbs: 'roughskin',
+				minus: 'plus',
+				powerofalchemy: 'receiver',
+				teravolt: 'moldbreaker',
+				turboblaze: 'moldbreaker',
+			};
 			for (let i = 0; i < team.length; i++) {
 				let ability = toId(team[i].ability);
 				if (!ability) continue;
+				if (ability in base) ability = base[ability];
 				if (ability in abilityTable) {
 					if (abilityTable[ability] >= 2) {
-						return ["You are limited to two of each ability by the Ability Clause.", "(You have more than two " + this.getAbility(ability).name + ")"];
+						return ["You are limited to two of each ability by the Ability Clause.", `(You have more than two ${this.getAbility(ability).name} variants)`];
 					}
 					abilityTable[ability]++;
 				} else {
@@ -518,10 +539,10 @@ exports.BattleFormats = {
 				}
 				if (item.zMove && move.type === item.zMoveType) {
 					if (move.zMoveBoost && move.zMoveBoost.spe > 0) {
-						speedBoosted = true;
+						if (!speedBoosted) speedBoosted = move.name;
 					}
 					if (move.zMoveBoost && (move.zMoveBoost.atk > 0 || move.zMoveBoost.def > 0 || move.zMoveBoost.spa > 0 || move.zMoveBoost.spd > 0)) {
-						nonSpeedBoosted = true;
+						if (!nonSpeedBoosted || move.name === speedBoosted) nonSpeedBoosted = move.name;
 					}
 				}
 			}
@@ -550,6 +571,9 @@ exports.BattleFormats = {
 				}
 			}
 			if (!nonSpeedBoosted) return;
+
+			// if both boost sources are Z-moves, and they're distinct
+			if (speedBoosted !== nonSpeedBoosted && typeof speedBoosted === 'string' && typeof nonSpeedBoosted === 'string') return;
 
 			return [(set.name || set.species) + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
 		},

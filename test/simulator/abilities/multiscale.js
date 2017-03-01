@@ -19,7 +19,7 @@ describe('Multiscale', function () {
 		battle.commitDecisions();
 		damage = pokemon.maxhp - pokemon.hp;
 		curhp = pokemon.hp;
-		battle.seed = battle.startingSeed.slice();
+		battle.resetRNG();
 		battle.commitDecisions();
 		assert.strictEqual(damage, battle.modify(curhp - pokemon.hp, 0.5));
 	});
@@ -33,7 +33,7 @@ describe('Multiscale', function () {
 		battle.commitDecisions();
 		damage = pokemon.maxhp - pokemon.hp;
 		curhp = pokemon.hp;
-		battle.seed = battle.startingSeed.slice();
+		battle.resetRNG();
 		battle.commitDecisions();
 		assert.strictEqual(curhp - pokemon.hp, damage);
 	});
