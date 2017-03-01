@@ -4768,7 +4768,7 @@ exports.Formats = [
 				try {
 					let template = pokemon.baseTemplate;
 					let mixedTemplate = Object.assign({}, template);
-					mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + fusionTemplate.species;
+					mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
 					mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
 
 					mixedTemplate.baseStats = {};
