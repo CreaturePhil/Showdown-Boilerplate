@@ -5,8 +5,6 @@ exports.BattleAliases = {
 	"randombattle": "[Gen 7] Random Battle",
 	"randbats": "[Gen 7] Random Battle",
 	"ag": "[Gen 7] Anything Goes",
-	"randomdoublesbattle": "[Gen 7] Random Doubles Battle",
-	"randdubs": "[Gen 7] Random Doubles Battle",
 	"doubles": "[Gen 7] Doubles OU",
 	"dou": "[Gen 7] Doubles OU",
 	"vgc2017": "[Gen 7] VGC 2017",
