@@ -4,10 +4,12 @@
  */
 'use strict';
 
+let fs = require('fs');
+
 function updateColor() {
 	let newCss = '/* COLORS START */\n';
 	Db.customcolors.keys().forEach(userid => {
-		newCSS += generateCSS(userid, Db.customcolors.get(userid));
+		newCss += generateCSS(userid, Db.customcolors.get(userid));
 	})
 	newCss += '/* COLORS END */\n';
 
