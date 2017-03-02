@@ -157,7 +157,6 @@ function MD5(e) {
 }
 /*eslint-enable */
 let colorCache = {};
-
 // hashColor function
 Util.hashColor = function (name) {
 	name = toId(name);
@@ -286,3 +285,8 @@ function toHex(N) {
 	N = Math.round(N);
 	return "0123456789ABCDEF".charAt((N - N % 16) / 16) + "0123456789ABCDEF".charAt(N % 16);
 }
+
+Util.nameColor = function (name, bold, userGroup) {
+	let userGroupSymbol = Users.usergroups[toId(name)] ? '<b><font color=#948A88>' + Users.usergroups[name].substr(0, 1) + '</font></b>' : "";
+	return (userGroup ? userGroupSymbol : "") + (bold ? "<b>" : "") + "<font color=" + Util.hashColor(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Chat.escapeHTML(Users.getExact(name).name) : Chat.escapeHTML(name)) + "</font>" + (bold ? "</b>" : "");
+};
