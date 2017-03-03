@@ -1,4 +1,4 @@
-/**
+/*
  * Hashcolor file.
  * Custom Colors Refactored by Lord Haji to use nef
  */
@@ -288,5 +288,5 @@ function toHex(N) {
 
 Util.nameColor = function (name, bold, userGroup) {
 	let userGroupSymbol = Users.usergroups[toId(name)] ? '<b><font color=#948A88>' + Users.usergroups[name].substr(0, 1) + '</font></b>' : "";
-	return (userGroup ? userGroupSymbol : "") + (bold ? "<b>" : "") + "<font color=" + Util.hashColor(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Chat.escapeHTML(Users.getExact(name).name) : Chat.escapeHTML(name)) + "</font>" + (bold ? "</b>" : "");
+	return (userGroup ? userGroupSymbol : "") + (bold ? "<strong>" : "") + "<font color=" + Util.hashColor(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Chat.escapeHTML(Users.getExact(name).name) : Chat.escapeHTML(name)) + "</font>" + (bold ? "</strong>" : "");
 };
