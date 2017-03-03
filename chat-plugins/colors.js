@@ -95,7 +95,7 @@ exports.commands = {
 /*eslint-disable */
 function MD5(e) {
 	function t(e, t) {
-		let n, r, i, s, o;
+		var n, r, i, s, o;
 		i = e & 2147483648;
 		s = t & 2147483648;
 		n = e & 1073741824;
@@ -125,24 +125,24 @@ function MD5(e) {
 	}
 
 	function o(e) {
-		let t = "",
+		var t = "",
 			n = "",
 			r;
 		for (r = 0; r <= 3; r++) n = e >>> r * 8 & 255, n = "0" + n.toString(16), t += n.substr(n.length - 2, 2);
 		return t
 	}
-	let u = [],
+	var u = [],
 		a, f, l, c, h, p, d, v, e = function(e) {
-			for (e = e.replace(/\r\n/g, "\n"), t = "", n = 0; n < e.length; n++) {
-				let r = e.charCodeAt(n);
+			for (var e = e.replace(/\r\n/g, "\n"), t = "", n = 0; n < e.length; n++) {
+				var r = e.charCodeAt(n);
 				r < 128 ? t += String.fromCharCode(r) : (r > 127 && r < 2048 ? t += String.fromCharCode(r >> 6 | 192) : (t += String.fromCharCode(r >> 12 | 224), t += String.fromCharCode(r >> 6 & 63 | 128)), t += String.fromCharCode(r & 63 | 128));
 			}
 			return t;
 		}(e),
 		u = function(e) {
-			let t, n = e.length;
+			var t, n = e.length;
 			t = n + 8;
-			for (let r = ((t - t % 64) / 64 + 1) * 16, i = Array(r - 1), s = 0, o = 0; o < n;) t = (o - o % 4) / 4, s = o % 4 * 8, i[t] |= e.charCodeAt(o) << s, o++;
+			for (var r = ((t - t % 64) / 64 + 1) * 16, i = Array(r - 1), s = 0, o = 0; o < n;) t = (o - o % 4) / 4, s = o % 4 * 8, i[t] |= e.charCodeAt(o) << s, o++;
 			i[(o - o % 4) / 4] |= 128 << o % 4 * 8;
 			i[r - 2] = n << 3;
 			i[r - 1] = n >>> 29;
@@ -288,6 +288,6 @@ function toHex(N) {
 }
 
 Util.nameColor = function (name, bold, userGroup) {
-	let userGroupSymbol = Users.usergroups[toId(name)] ? '<b><font color=#948A88>' + Users.usergroups[name].substr(0, 1) + '</font></b>' : "";
+	let userGroupSymbol = Users.usergroups[toId(name)] ? '<b><font color=#948A88>' + Users.usergroups[toId(name)].substr(0, 1) + '</font></b>' : "";
 	return (userGroup ? userGroupSymbol : "") + (bold ? "<strong>" : "") + "<font color=" + Util.hashColor(name) + ">" + (Users(name) && Users(name).connected && Users.getExact(name) ? Chat.escapeHTML(Users.getExact(name).name) : Chat.escapeHTML(name)) + "</font>" + (bold ? "</strong>" : "");
 };
