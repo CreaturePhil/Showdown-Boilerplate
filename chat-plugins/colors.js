@@ -10,7 +10,7 @@ function updateColor() {
 	let newCss = '/* COLORS START */\n';
 	Db.customcolors.keys().forEach(userid => {
 		newCss += generateCSS(userid, Db.customcolors.get(userid));
-	})
+	});
 	newCss += '/* COLORS END */\n';
 
 	let file = fs.readFileSync('config/custom.css', 'utf8').split('\n');
