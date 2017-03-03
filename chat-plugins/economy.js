@@ -5,7 +5,6 @@
 */
 'use strict';
 
-let color = require('../config/color');
 let fs = require('fs');
 let path = require('path');
 let writeJSON = true;
@@ -134,7 +133,7 @@ class Dice {
 			delete this.room.dice;
 		}, INACTIVE_END_TIME);
 
-		this.startMessage = '<div class="infobox"><b style="font-size: 14pt; color: #24678d"><center><span style="color: ' + color(starter) + '">' + Chat.escapeHTML(starter) + '</span> has started a game of dice for <span style = "color: green">' + amount + '</span> ' + currencyName(amount) + '!</center></b><br>' +
+		this.startMessage = '<div class="infobox"><b style="font-size: 14pt; color: #24678d"><center>' + Util.nameColor(starter, true, true) + ' has started a game of dice for <span style = "color: green">' + amount + '</span> ' + currencyName(amount) + '!</center></b><br>' +
 			'<center><img style="margin-right: 30px;" src = "http://i.imgur.com/eywnpqX.png" width="80" height="80">' +
 			'<img style="transform:rotateY(180deg); margin-left: 30px;" src="http://i.imgur.com/eywnpqX.png" width="80" height="80"><br>' +
 			'<button name="send" value="/joindice">Click to join!</button></center>';
@@ -148,7 +147,7 @@ class Dice {
 		//if (this.players.length && this.players[0].latestIp === user.latestIp) return self.errorReply("You have already joined this game of dice under the alt '" + this.players[0].name + "'.");
 
 		this.players.push(user);
-		this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '<center><b><font color ="' + color(user.name) + '">' + Chat.escapeHTML(user.name) + '</font></b> has joined the game!</center></div>').update();
+		this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '<center>' + Util.nameColor(user.name, true, true) + ' has joined the game!</center></div>').update();
 		if (this.players.length === 2) this.play();
 	}
 
@@ -169,10 +168,10 @@ class Dice {
 			user.sendTo(this.room, 'You have been removed from this game of dice, as you do not have enough money.');
 			other.sendTo(this.room, user.name + ' has been removed from this game of dice, as they do not have enough money. Wait for another user to join.');
 			this.players.remove(user);
-			this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '<center>' + this.players.map(user => "<b><font color='" + color(user.name) + "'>" + Chat.escapeHTML(user.name) + "</font></b>") + ' has joined the game!</center>').update();
+			this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '<center>' + this.players.map(user => Util.nameColor(user.name, true, true)) + ' has joined the game!</center>').update();
 			return;
 		}
-		let players = this.players.map(user => "<b><font color='" + color(user.name) + "'>" + Chat.escapeHTML(user.name) + "</font></b>").join(' and ');
+		let players = this.players.map(user => Util.nameColor(user.name, true, true) + "</font></b>").join(' and ');
 		this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '<center>' + players + ' have joined the game!</center></div>').update();
 		let roll1, roll2;
 		do {
@@ -186,10 +185,10 @@ class Dice {
 			this.room.add('|uhtmlchange|' + this.room.diceCount + '|<div class="infobox"><center>' + players + ' have joined the game!<br /><br />' +
 				'The game has been started! Rolling the dice...<br />' +
 				'<img src = "' + diceImg(roll1) + '" align = "left" title = "' + Chat.escapeHTML(p1.name) + '\'s roll"><img src = "' + diceImg(roll2) + '" align = "right" title = "' + p2.name + '\'s roll"><br />' +
-				'<b><font color="' + color(p1.name) + '">' + Chat.escapeHTML(p1.name) + '</font></b> rolled ' + (roll1 + 1) + '!<br />' +
-				'<b><font color="' + color(p2.name) + '">' + Chat.escapeHTML(p2.name) + '</font></b> rolled ' + (roll2 + 1) + '!<br />' +
-				'<b><font color="' + color(winner.name) + '">' + Chat.escapeHTML(winner.name) + '</font></b> has won <b style="color:red">' + (this.bet) + '</b> ' + currencyName(this.bet) + '!<br />' +
-				'Better luck next time, <b><font color="' + color(loser.name) + '">' + Chat.escapeHTML(loser.name) + '</font></b>!'
+				Util.nameColor(p1.name, true, true) + ' rolled ' + (roll1 + 1) + '!<br />' +
+				Util.nameColor(p2.name, true, true) + ' rolled ' + (roll2 + 1) + '!<br />' +
+				Util.nameColor(winner.name, true, true) + ' has won <b style="color:red">' + (this.bet) + '</b> ' + currencyName(this.bet) + '!<br />' +
+				'Better luck next time, ' + Util.nameColor(loser.name, true, true) + '!'
 			).update();
 			Db.money.set(winner.userid, Db.money.get(winner.userid) + this.bet);
 			Db.money.set(loser.userid, Db.money.get(loser.userid) - this.bet);
@@ -216,7 +215,7 @@ exports.commands = {
 		target = toId(target);
 		if (!target) target = user.name;
 		const amount = Db.money.get(toId(target), 0);
-		this.sendReplyBox("<font color=" + color(target) + "><b>" + Chat.escapeHTML(target) + "</b></font> has " + amount + currencyName(amount) + ".");
+		this.sendReplyBox(Util.nameColor(target, true, true) + " has " + amount + currencyName(amount) + ".");
 	},
 	wallethelp: ["/wallet [user] - Shows the amount of money a user has."],
 
