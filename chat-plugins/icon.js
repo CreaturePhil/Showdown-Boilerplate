@@ -6,7 +6,6 @@
 
 let icons = {};
 const fs = require('fs');
-const color = require('../config/color');
 let http = require('http');
 
 function load() {
@@ -30,10 +29,10 @@ function updateIcons() {
 	let file = fs.readFileSync('config/custom.css', 'utf8').split('\n');
 	if (~file.indexOf('/* ICONS START */')) file.splice(file.indexOf('/* ICONS START */'), (file.indexOf('/* ICONS END */') - file.indexOf('/* ICONS START */')) + 1);
 	fs.writeFileSync('config/custom.css', file.join('\n') + newCss);
-	Util.reloadCSS();
+	reloadCSS();
 }
 
-Util.reloadCSS = function () {
+function reloadCSS() {
 	let options = {
 		host: 'play.pokemonshowdown.com',
 		port: 80,
@@ -41,7 +40,7 @@ Util.reloadCSS = function () {
 		method: 'GET',
 	};
 	http.get(options);
-};
+}
 
 function generateCSS(name, icon) {
 	let css = '';
@@ -77,8 +76,8 @@ exports.commands = {
 		}
 		if (toId(target[0]) === 'delete') return this.errorReply("Did you mean: /icon " + target[1] + ", delete");
 		if (icons[toId(target[0])]) return this.errorReply("This user already has a custom userlist icon.  Do /icon [user], delete and then set their new icon.");
-		this.sendReply("|raw|You have given <b><font color=" + color(Chat.escapeHTML(target[0])) + ">" + Chat.escapeHTML(target[0]) + "</font></b> an icon.");
-		Rooms('staff').add('|raw|<b><font color="' + color(Chat.escapeHTML(target[0])) + '">' + Chat.escapeHTML(target[0]) + '</font> has received an icon from ' + Chat.escapeHTML(user.name) + '.</b>').update();
+		this.sendReply("|raw|You have given " + Util.nameColor(target[0], true, true) + " an icon.");
+		Rooms('staff').add('|raw|' + Util.nameColor(target[0], true, true) + ' has received an icon from ' + Chat.escapeHTML(user.name) + '.</b>').update();
 		this.privateModCommand("(" + target[0] + " has recieved icon: '" + target[1] + "' from " + user.name + ".)");
 		icons[toId(target[0])] = target[1];
 		updateIcons();
