@@ -301,7 +301,7 @@ exports.commands= {
 			'LC Uber': 20,
 			'LC': 20,
 		};
-		let template = Object.assign({}, this.getTemplate(target));
+		let template = Object.assign({}, Tools.getTemplate(target));
 		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in 350 Cup: <br /> ${Object.values(template.baseStats).join('/')}`);
 		let boost = boosts[template.tier];
 		let newStats = Object.assign({}, template.baseStats);
