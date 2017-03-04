@@ -30,7 +30,7 @@ exports.BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard GBU',
 		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Soul Dew', 'Battle Bond',
+		banlist: ['Unreleased', 'Illegal', 'Battle Bond',
 			'Mewtwo', 'Mew',
 			'Lugia', 'Ho-Oh', 'Celebi',
 			'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi', 'Deoxys',
@@ -39,6 +39,11 @@ exports.BattleFormats = {
 			'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion',
 			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow',
 		],
+		onValidateSet(set, format) {
+			if (this.gen < 7 && toId(set.item) === 'souldew') {
+				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
+			}
+		},
 	},
 	standarddoubles: {
 		effectType: 'ValidatorRule',
@@ -573,6 +578,9 @@ exports.BattleFormats = {
 				}
 			}
 			if (!nonSpeedBoosted) return;
+
+			// if both boost sources are Z-moves, and they're distinct
+			if (speedBoosted !== nonSpeedBoosted && typeof speedBoosted === 'string' && typeof nonSpeedBoosted === 'string') return;
 
 			return [(set.name || set.species) + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
 		},

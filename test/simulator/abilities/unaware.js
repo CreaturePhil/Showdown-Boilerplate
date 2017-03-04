@@ -19,7 +19,7 @@ describe('Unaware', function () {
 		let damage = pokemon.maxhp - pokemon.hp;
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
-		battle.seed = battle.startingSeed.slice();
+		battle.resetRNG();
 		battle.commitDecisions();
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, damage);
 	});
@@ -34,7 +34,7 @@ describe('Unaware', function () {
 		battle.choose('p1', 'move 2');
 		battle.commitDecisions();
 		pokemon.hp = pokemon.maxhp;
-		battle.seed = battle.startingSeed.slice();
+		battle.resetRNG();
 		battle.commitDecisions();
 		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, damage);
 	});
@@ -47,7 +47,7 @@ describe('Unaware', function () {
 		let pokemon = battle.p2.active[0];
 		let damage = pokemon.maxhp - pokemon.hp;
 		pokemon.hp = pokemon.maxhp;
-		battle.seed = battle.startingSeed.slice();
+		battle.resetRNG();
 		battle.commitDecisions();
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, damage);
 	});
@@ -60,7 +60,7 @@ describe('Unaware', function () {
 		let pokemon = battle.p1.active[0];
 		let damage = pokemon.maxhp - pokemon.hp;
 		pokemon.hp = pokemon.maxhp;
-		battle.seed = battle.startingSeed.slice();
+		battle.resetRNG();
 		battle.commitDecisions();
 		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, damage);
 	});
@@ -74,7 +74,7 @@ describe('Unaware', function () {
 		let damage = pokemon.maxhp - pokemon.hp;
 		battle.boost({atk: 2}, battle.p2.active[0]);
 		pokemon.hp = pokemon.maxhp;
-		battle.seed = battle.startingSeed.slice();
+		battle.resetRNG();
 		battle.commitDecisions();
 		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, damage);
 	});

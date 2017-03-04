@@ -86,11 +86,12 @@ exports.commands = {
 		saveRoomFaqs();
 		this.privateModCommand(`(${user.name} added an alias for '${topic}': ${alias})`);
 	},
+	rfaq: 'roomfaq',
 	roomfaq: function (target, room, user) {
 		if (!roomFaqs[room.id]) return this.errorReply("This room has no FAQ topics.");
 		let topic = toId(target);
 		if (topic === 'constructor') return false;
-		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.id]).filter(val => !getAlias(room.id, val)).join(', ')}`);
+		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.id]).filter(val => !getAlias(room.id, val)).sort((a, b) => a.localeCompare(b)).join(', ')}`);
 		if (!roomFaqs[room.id][topic]) return this.errorReply("Invalid topic.");
 		topic = getAlias(room.id, topic) || topic;
 

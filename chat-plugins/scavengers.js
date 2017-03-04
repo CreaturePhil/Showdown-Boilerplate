@@ -153,13 +153,13 @@ exports.commands = {
 	},
 	scavengershelp: 'scavengerhelp',
 	scavengerhelp: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply('This command can only be used in the Scavengers room.');
+		if (room && room.id !== 'scavengers') return this.errorReply('This command can only be used in the Scavengers room.');
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			'<strong>Player commands:</strong><br />' +
 			'- /scavengers - Join the scavengers room<br />' +
 			'- /joinhunt - Join the current scavenger hunt<br />' +
-			'- /scavenge <em>guess</em> - Attempt to answer the hint<br />' +
+			'- /scavenge _______ - Attempt to answer the hint<br />' +
 			'- /scavengerstatus - Get your current game status<br />' +
 			'<br />' +
 			'<strong>Staff commands:</strong><br />' +

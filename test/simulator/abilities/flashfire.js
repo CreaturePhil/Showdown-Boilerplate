@@ -40,7 +40,7 @@ describe('Flash Fire', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk', 'incinerate']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['incinerate', 'worryseed']}]);
 		battle.commitDecisions();
-		battle.seed = battle.startingSeed.slice();
+		battle.resetRNG();
 		p2.chooseMove('worryseed').foe.chooseMove('incinerate');
 		let damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 		assert.bounded(damage, [54, 65]);
