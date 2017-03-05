@@ -197,8 +197,8 @@ exports.BattleScripts = {
 				if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
 					// mod for automagic start
 					let flag = true;
-					let canSetStatus = function (status, mon, sauce) {
-						if(!!mon.status || !status) return false;
+					let canSetStatus = function (status, pokemon, source) {
+						if(pokemon.status) return false;
 						let cantStatus = {
 							brn: ['Fire', 'comatose', 'waterveil', 'waterbubble'],
 							frz: ['Ice', 'comatose', 'magmaarmor'],
@@ -207,12 +207,12 @@ exports.BattleScripts = {
 							slp: ['comatose', 'insomnia', 'vitalspirit'],
 							tox: ['comatose', 'immunity'],
 						};
-						if(mon.hasType(['Poison', 'Steel']) && sauce.hasAbility('corrosion') && (status === 'psn' || status === 'tox') return true;
-						if(mon.hasType(cantStatus[status])[1]) return false;
+						if(pokemon.hasType(['Poison', 'Steel']) && source.hasAbility('corrosion') && (status === 'psn' || status === 'tox')) return true;
+						if(pokemon.hasType(cantStatus[status])[1]) return false;
 						if(move.ignoreAbility) return true;
-						if(mon.hasAbility('leafguard') && this.isWeather(['sunnyday', 'desolateland'])) return false;
-						if(mon.hasAbility('shieldsdown') && mon.template.speciesid === 'miniormeteor') return false;
-						if(mon.hasAbility(cantStatus[status])) return false;
+						if(pokemon.hasAbility('leafguard') && this.isWeather(['sunnyday', 'desolateland'])) return false;
+						if(pokemon.hasAbility('shieldsdown') && pokemon.template.speciesid === 'miniormeteor') return false;
+						if(pokemon.hasAbility(cantStatus[status])) return false;
 					};
 					if (moveData.secondary.status) flag = canSetStatus(moveData.secondary.status, target, pokemon);
 					if (moveData.secondary.volatileStatus) flag = !(moveData.secondary.volatileStatus in target.volatiles);
