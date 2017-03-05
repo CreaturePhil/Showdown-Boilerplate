@@ -233,7 +233,7 @@ exports.BattleScripts = {
 					} else {
 						flag = flag && !(target.hp === undefined || target.hp <= 0);
 					}
-					if (moveData.target === 'Normal' && moveData.secondary.boosts) {
+					if (moveData.target !== 'self' && moveData.secondary.boosts) {
 						let cantLower = {
 							'atk': ['clearbody', 'fullmetalbody', 'hypercutter', 'whitesmoke'],
 							'def': ['bigpecks', 'clearbody', 'fullmetalbody', 'whitesmoke'],
@@ -245,7 +245,7 @@ exports.BattleScripts = {
 						for (let k in moveData.secondary.boosts) {
 							if (target.boosts[k] === -6) {
 								flag = false;
-								continue;
+								break;
 							}
 							if (moveData.secondary.boosts[k] < 0 && target.hasAbility(cantLower[k]) && !move.ignoreAbility) {
 								flag = false;
