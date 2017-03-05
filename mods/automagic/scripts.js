@@ -215,7 +215,7 @@ exports.BattleScripts = {
 								return false;
 							}
 						}
-						if(target.hasType(cantStatus[status][1])) return false;
+						if(target.hasType(cantStatus[status][0])) return false;
 						if(move.ignoreAbility) return true;
 						if(target.hasAbility('leafguard') && this.isWeather(['sunnyday', 'desolateland'])) return false;
 						if(target.hasAbility('shieldsdown') && target.template.speciesid === 'miniormeteor') return false;
