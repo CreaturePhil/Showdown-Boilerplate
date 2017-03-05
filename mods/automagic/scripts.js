@@ -213,6 +213,7 @@ exports.BattleScripts = {
 						if(pokemon.hasAbility('leafguard') && this.isWeather(['sunnyday', 'desolateland'])) return false;
 						if(pokemon.hasAbility('shieldsdown') && pokemon.template.speciesid === 'miniormeteor') return false;
 						if(pokemon.hasAbility(cantStatus[status])) return false;
+						return true;
 					};
 					if (moveData.secondary.status) flag = canSetStatus(moveData.secondary.status, target, pokemon);
 					if (moveData.secondary.volatileStatus) flag = !(moveData.secondary.volatileStatus in target.volatiles);
