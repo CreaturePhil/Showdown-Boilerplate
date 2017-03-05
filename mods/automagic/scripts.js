@@ -203,7 +203,7 @@ exports.BattleScripts = {
 							brn: ['Fire', 'comatose', 'waterveil', 'waterbubble'],
 							frz: ['Ice', 'comatose', 'magmaarmor'],
 							par: ['Electric', 'comatose', 'limber'],
-							psn: tox,
+							psn: ['comatose', 'immunity'],
 							slp: ['comatose', 'insomnia', 'vitalspirit'],
 							tox: ['comatose', 'immunity'],
 						};
