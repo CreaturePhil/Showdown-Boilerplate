@@ -2493,8 +2493,8 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Cross Evolution",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3569577/\">Cross Evolution</a>"],
-
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3594854\">Cross Evolution</a>"],
+		mod: 'gen7',
 		ruleset: ['[Gen 7] Ubers', 'Baton Pass Clause'],
 		banlist: ['Rule:nicknameclause'],
 		onValidateTeam: function(team) {
@@ -2515,6 +2515,7 @@ exports.Formats = [
 			let template = this.tools.getTemplate(set.species);
 			if (!template.exists) return ["The Pokemon '" + set.species + "' does not exist."];
 			if (!template.evos.length) return ["" + template.species + " cannot cross evolve because it doesn't evolve."];
+			if (template.species === 'Sneasel') return [`Sneasel as a base Pokemon is banned.`];
 			if (crossTemplate.species == 'Shedinja') return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it is banned."];
 			if (crossTemplate.battleOnly || !crossTemplate.prevo) return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it isn't an evolution."];
 			let crossPrevoTemplate = this.tools.getTemplate(crossTemplate.prevo);
@@ -2602,6 +2603,38 @@ exports.Formats = [
 		//team: 'random',
 		mod: 'fullpotential',
 		banlist: ['Pheromosa', 'Shuckle', 'Speed Boost'],
+	},
+	{
+		name: "[Gen 7] Godly Gift",
+		desc: [
+			"Each Pok&eacute;mon receives one base stat, depending on its position, from the Uber.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3597618/\">Godly Gift</a>",
+		],
+
+		ruleset: ['Ubers', 'Baton Pass Clause'],
+		banlist: ['Uber > 1', 'AG ++ Uber', 'Blissey', 'Chansey', 'Eviolite', 'Gengarite', 'Sablenite', 'Huge Power', 'Pure Power', 'Shadow Tag'],
+		onBegin: function() {
+			let stats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+			for (let j = 0; j < this.sides.length; j++) {
+				// onBegin happens before Mega Rayquaza clause
+				let uber = this.sides[j].pokemon.find(pokemon => ['AG', 'Uber'].includes(this.getTemplate(pokemon.canMegaEvo || pokemon.baseTemplate).tier)) || this.sides[j].pokemon[0];
+				for (let i = 0, len = this.sides[j].pokemon.length; i < len; i++) {
+					let pokemon = this.sides[j].pokemon[i];
+					["baseTemplate", "canMegaEvo"].forEach(key => {
+						if (pokemon[key]) {
+							let template = Object.assign({}, this.getTemplate(pokemon[key]));
+							template.baseStats = Object.assign({}, template.baseStats);
+							template.baseStats[stats[i]] = uber.baseTemplate.baseStats[stats[i]];
+							pokemon[key] = template;
+						}
+					});
+					pokemon.formeChange(pokemon.baseTemplate);
+					if (i === 0 && !pokemon.template.maxHP) {
+						pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+					}
+				}
+			}
+		},
 	},
 	{
 		name: "[Gen 7] Gods and Followers",
@@ -3226,38 +3259,6 @@ exports.Formats = [
 			set.name = (name === set.species ? "" : name);
 
 			return problems;
-		},
-	},
-	{
-		name: "Gifts of the Gods",
-		desc: [
-			"Each Pok&eacute;mon receives one base stat, depending on its position, from the Uber.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3579610/\">Gifts of the Gods</a>",
-		],
-
-		ruleset: ['Ubers', 'Baton Pass Clause'],
-		banlist: ['Uber > 1', 'AG ++ Uber', 'Blissey', 'Chansey', 'Eviolite', 'Mawilite', 'Medichamite', 'Sablenite', 'Soul Dew', 'Huge Power', 'Pure Power', 'Shadow Tag'],
-		onBegin: function() {
-			let stats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-			for (let j = 0; j < this.sides.length; j++) {
-				// onBegin happens before Mega Rayquaza clause
-				let uber = this.sides[j].pokemon.find(pokemon => ['AG', 'Uber'].includes(this.getTemplate(pokemon.canMegaEvo || pokemon.baseTemplate).tier)) || this.sides[j].pokemon[0];
-				for (let i = 0, len = this.sides[j].pokemon.length; i < len; i++) {
-					let pokemon = this.sides[j].pokemon[i];
-					["baseTemplate", "canMegaEvo"].forEach(key => {
-						if (pokemon[key]) {
-							let template = Object.assign({}, this.getTemplate(pokemon[key]));
-							template.baseStats = Object.assign({}, template.baseStats);
-							template.baseStats[stats[i]] = uber.baseTemplate.baseStats[stats[i]];
-							pokemon[key] = template;
-						}
-					});
-					pokemon.formeChange(pokemon.baseTemplate);
-					if (i === 0 && !pokemon.template.maxHP) {
-						pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
-					}
-				}
-			}
 		},
 	},
 	{
