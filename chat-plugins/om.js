@@ -1,26 +1,28 @@
 'use strict';
 
 exports.commands= {
-	mixandmega: 'mnm',
-	mnm: function (target, room, user) {
+	mnm: 'mixandmega',
+	mixandmega: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
+		if (!toId(target) || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
-		let stone = toId(sep[1]), template = toId(sep[0]);
-		if ((!Tools.data.Items[stone] || !Tools.data.Items[stone].megaEvolves) && !Tools.data.Items[stone].onPrimal) {
-			return this.errorReply('Error: Mega Stone not found');
+		let stone = toId(sep[1]);
+		let template = toId(sep[0]);
+		if (!Tools.data.Items[stone] || (Tools.data.Items[stone] && !Tools.data.Items[stone].megaEvolves && !Tools.data.Items[stone].onPrimal)) {
+			return this.errorReply(`Error: Mega Stone not found`);
 		}
 		if (!Tools.data.Pokedex[toId(template)]) {
-			return this.errorReply("Error: Pokemon not found");
+			return this.errorReply(`Error: Pokemon not found`);
 		}
 		template = Object.assign({}, Tools.getTemplate(template));
 		stone = Object.assign({}, Tools.getItem(stone));
-		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
+		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) { // Mega Pokemon cannot be mega evolved
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
-		let deltas; //This hack is, yes, terribluh.
-		let baseTemplate = Tools.getTemplate(stone.megaEvolves), megaTemplate = Tools.getTemplate(stone.megaStone);
-		if (stone.id === 'redorb') {
+		let deltas; // Get mega deltas.
+		let baseTemplate = Tools.getTemplate(stone.megaEvolves);
+		let megaTemplate = Tools.getTemplate(stone.megaStone);
+		if (stone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
 			megaTemplate = Tools.getTemplate("Groudon-Primal");
 			baseTemplate = Tools.getTemplate("Groudon");
 		} else if (stone.id === 'blueorb') {
@@ -43,23 +45,25 @@ exports.commands= {
 			deltas.type = megaTemplate.types[1];
 		}
 		//////////////////////////////////////////
-		let ability = deltas.ability, types = template.types, baseStats = Object.assign({}, template.baseStats);
-		if (types[0] === deltas.type) {
+		let ability = deltas.ability;
+		let types = template.types;
+		let baseStats = Object.assign({}, template.baseStats);
+		if (types[0] === deltas.type) { // Add any type gains
 			types = [deltas.type];
 		} else if (deltas.type) {
 			types = [types[0], deltas.type];
 		}
-		for (let statName in baseStats) {
+		for (let statName in baseStats) { // Add the changed stats and weight
 			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		let weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
+		let weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
 		let type = '<span class="col typecol">';
-		for (let i = 0; i < types.length; i++) {
+		for (let i = 0; i < types.length; i++) { // HTML for some nice type images.
 			type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${types[i]}.png" alt="${types[i]}" height="14" width="32">`;
 		}
 		type = type + "</span>";
 		let gnbp = 20;
-		if (weightkg >= 200) {
+		if (weightkg >= 200) { // Calculate Grass Knot/Low Kick Base Power
 			gnbp = 120;
 		} else if (weightkg >= 100) {
 			gnbp = 100;
@@ -69,12 +73,17 @@ exports.commands= {
 			gnbp = 60;
 		} else if (weightkg >= 10) {
 			gnbp = 40;
-		}
+		} // Aah, only if `template` had a `bst` property.
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${ability}<br /><b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
+		let text = `<b>Stats</b>: ${Object.values(baseStats).join('/')}<br />`;
+		text = `${text}<b>BST</b>: ${bst}<br />`;
+		text = `${text}<b>Type:</b> ${type}<br />`;
+		text = `${text}<b>Ability</b>: ${ability}<br />`;
+		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
+
 	ns: 'natureswap',
         'natureswap': function(target, room, user) {
 		if (!this.runBroadcast()) return;
