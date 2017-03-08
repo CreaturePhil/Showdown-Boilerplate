@@ -2458,32 +2458,35 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Automagic",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3594333/\">Automagic</a>: Whenever an attack activates a secondary effect, any setup moves in that Pokemon's movepool are activated too."],
-		ruleset: ['[Gen 7] OU'],
+		desc: [
+			"Whenever an attack's secondary effect is triggered, any setup moves in that Pok&eacute;mon's moveset are run.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3594333/\">Automagic</a>",
+		],
+
 		mod: 'automagic',
-		onAfterSecondaryEffect: function(target, source, move) {
-			let moreSetup = ['bellydrum'];
+		searchShow: false,
+		ruleset: ['[Gen 7] OU'],
+		banlist: ["King's Rock", 'Razor Fang'],
+		onAfterSecondaryEffect: function (target, source, move) {
+			let moreSetup = ['acupressure', 'bellydrum', 'stockpile'];
 			if (!source.types.includes("Ghost")) moreSetup.push("curse");
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
 				if (moreSetup.includes(move.id) || (move.category === "Status" && move.boosts && move.target === "self")) {
 					this.useMove(move, source);
-					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
 				}
 			});
 		},
-		onAfterMove: function(source, target, move) {
+		onAfterMove: function (source, target, move) {
 			if (move.id !== "genesissupernova") return;
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
-				let isDead = target.hp === undefined || target.hp <= 0;
-				if ((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") {
+				if ((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") { // Confirm that it successfully set Psychic Terrain
 					this.useMove(move, source);
-					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
 				}
 			});
 		},
-	},
+},
 	{
 		name: "[Gen 7] Bad \'n Boosted",
 		desc: ["&bullet; All the stats of a pokemon which are 70 or below get doubled.<br>For example, Growlithe's stats are 55/70/45/70/50/60 in BnB they become 110/140/90/140/100/120<br><b>Banlist:</b>Eviolite, Huge Power, Pure Power"],
