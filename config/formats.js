@@ -2831,6 +2831,26 @@ exports.Formats = [
 		banlist: [],
 	},
 	{
+		name: "[Gen 7] Metagamiate",
+		desc: ["&bullet; Every Pokemon has a -ate ability matching its primary type or secondary type if shiny."],
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Dragonite', 'Kyurem-Black'],
+		onModifyMovePriority: -1,
+		onModifyMove: function(move, pokemon) {
+			if (move.type !== 'Normal' || move.id === 'hiddenpower' || pokemon.hasAbility(['aerilate', 'galvanize', 'pixilate', 'refrigerate']) || move.isZ) return;
+			let types = pokemon.getTypes();
+			let type = types.length < 2 || !pokemon.set.shiny ? types[0] : types[1];
+			move.type = type;
+			move.isMetagamiate = true;
+		},
+		onBasePowerPriority: 8,
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (!move.isMetagamiate) return;
+			return this.chainModify([0x14CD, 0x1000]);
+		},
+	},
+	{
 		name: "[Gen 7] Offensification",
 		desc: [
 			"All attacks are caclulated from the user's highest attacking stat.",
