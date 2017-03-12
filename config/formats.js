@@ -1837,6 +1837,26 @@ exports.Formats = [
 		team: 'random',
 	},
 	{
+		name: "[Gen 7] Random Move Equality",
+		desc: ["&bullet; Every Move has 100 base power with the exception of moves that have varying base powers."],
+		mod: 'gen7',
+		ruleset: ['Random Battle'],
+		team: 'random',
+		onModifyMovePriority: 5,
+		onModifyMove: function(move, pokemon) {
+			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return;
+			if (move.isZ) {
+				move.basePower = 180;
+				return;
+			}
+			if (move.multihit) {
+				move.basePower = parseInt(100 / move.multihit[move.multihit.length - 1]);
+				return;
+			}
+			move.basePower = 100;
+		},
+	},
+	{
 		name: "[Gen 7] Random Pokebilities",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pokébilities.3588652\">Pokebilities</a>: A Pokemon can have all of its abilities at the same time."],
 		ruleset: ["Random Battle"],
