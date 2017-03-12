@@ -1830,6 +1830,13 @@ exports.Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] Random Last Will",
+		desc: ["&bullet; Every Pokemon will use the move in their last moveslot before fainting in battle."],
+		ruleset: ['Random Battle'],
+		mod: 'lastwill',
+		team: 'random',
+	},
+	{
 		name: "[Gen 7] Random Pokebilities",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/pokébilities.3588652\">Pokebilities</a>: A Pokemon can have all of its abilities at the same time."],
 		ruleset: ["Random Battle"],
@@ -2790,7 +2797,6 @@ exports.Formats = [
 		desc: ["&bullet; Every Pokemon will use the move in their last moveslot before fainting in battle."],
 		ruleset: ['[Gen 7] OU'],
 		mod: 'lastwill',
-		team: 'random',
 	},
 	{
 		name: "[Gen 7] Lockdown",

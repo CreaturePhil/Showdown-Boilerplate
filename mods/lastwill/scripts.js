@@ -13,7 +13,7 @@ exports.BattleScripts = {
 				source: source,
 				effect: effect,
 			});
-			this.useMove(this.moves[this.moves.length - 1]);
+			this.battle.useMove(this.moves[this.moves.length - 1], this);
 			return d;
 		},
 	},
