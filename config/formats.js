@@ -4436,7 +4436,7 @@ exports.Formats = [
 		mod: 'dualwielding',
 		validateSet: function(set, teamHas) {
 			let ability = set.ability;
-			if (!this.tools.getItem(toId(ability))) return [`${set.name || set.species}  has an invalid item.`];
+			if (!this.tools.data.Items[toId(ability)]) return [`${set.name || set.species}  has an invalid item.`];
 			let problems = this.validateSet(set, teamHas) || [];
 			let item2 = this.tools.getItem(toId(ability));
 			let bans = {};
