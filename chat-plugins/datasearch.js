@@ -297,7 +297,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let allTiers = {'uber':'Uber', 'ou':'OU', 'bl':"BL", 'uu':'UU', 'bl2':"BL2", 'ru':'RU', 'bl3':"BL3", 'nu':'NU', 'bl4':"BL4", 'pu':'PU', 'nfe':'NFE', 'lc uber':"LC Uber", 'lc':'LC', 'cap':"CAP"};
 	let allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 	let allEggGroups = {'amorphous':'Amorphous', 'bug':'Bug', 'ditto':'Ditto', 'dragon':'Dragon', 'fairy':'Fairy', 'field':'Field', 'flying':'Flying', 'grass':'Grass', 'humanlike':'Human-Like', 'mineral':'Mineral', 'monster':'Monster', 'undiscovered':'Undiscovered', 'water1':'Water 1', 'water2':'Water 2', 'water3':'Water 3'};
-	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1};
+	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1, 'weight':1};
 	let showAll = false;
 	let megaSearch = null;
 	let capSearch = null;
@@ -537,6 +537,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				case 'specialdefense': stat = 'spd'; break;
 				case 'spdef': stat = 'spd'; break;
 				case 'speed': stat = 'spe'; break;
+				case 'wt': stat = 'weight'; break;
 				}
 				if (!(stat in allStats)) return {reply: "'" + escapeHTML(target) + "' did not contain a valid stat."};
 				if (!orGroup.stats[stat]) orGroup.stats[stat] = {};
@@ -627,6 +628,8 @@ function runDexsearch(target, cmd, canAll, message) {
 					for (let monStats in dex[mon].baseStats) {
 						monStat += dex[mon].baseStats[monStats];
 					}
+				} else if (stat === 'weight') {
+					monStat = dex[mon].weightkg;
 				} else {
 					monStat = dex[mon].baseStats[stat];
 				}
@@ -744,6 +747,26 @@ function runMovesearch(target, cmd, canAll, message) {
 			if ((searches['flags'][target] && isNotSearch) || (searches['flags'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
 			searches['flags'][target] = !isNotSearch;
 			continue;
+		}
+
+		if (target.startsWith('gen')) {
+			let targetInt = parseInt(target.substr(3));
+			if (targetInt && targetInt < 8 && targetInt > 0) {
+				if (searches['gens']) {
+					if (searches['gens'][targetInt]) {
+						if (searches['gens'][targetInt] === isNotSearch) {
+							return {reply: "A search cannot both include and exclude '" + escapeHTML(target) + "'."};
+						} else {
+							return {reply: "The search included '" + escapeHTML(target) + "' more than once."};
+						}
+					} else {
+						return {reply: "A move cannot have multiple gens."};
+					}
+				}
+				searches['gens'] = {};
+				searches['gens'][targetInt] = !isNotSearch;
+				continue;
+			}
 		}
 
 		if (target === 'all') {
@@ -965,6 +988,17 @@ function runMovesearch(target, cmd, canAll, message) {
 						} else {
 							if (dex[move].secondary && dex[move].secondaries) delete dex[move];
 						}
+					}
+				}
+			}
+			break;
+
+		case 'gens':
+			for (let gen in searches[search]) {
+				let targetGen = parseInt(gen);
+				for (let move in dex) {
+					if ((dex[move].gen === targetGen) !== searches[search][gen]) {
+						delete dex[move];
 					}
 				}
 			}
