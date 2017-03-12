@@ -2786,6 +2786,12 @@ exports.Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] Last Will",
+		desc: ["&bullet; Every Pokemon will use the move in their last moveslot before fainting in battle."],
+		ruleset: ['[Gen 7] OU'],
+		mod: 'lastwill',
+	},
+	{
 		name: "[Gen 7] Lockdown",
 		desc: [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3593815\">Lockdown</a>",
