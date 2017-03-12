@@ -2497,7 +2497,7 @@ exports.Formats = [
 				}
 			});
 		},
-},
+	},
 	{
 		name: "[Gen 7] Bad \'n Boosted",
 		desc: ["&bullet; All the stats of a pokemon which are 70 or below get doubled.<br>For example, Growlithe's stats are 55/70/45/70/50/60 in BnB they become 110/140/90/140/100/120<br><b>Banlist:</b>Eviolite, Huge Power, Pure Power"],
@@ -2624,7 +2624,7 @@ exports.Formats = [
 			"Each Pok&eacute;mon receives one base stat, depending on its position, from the Uber.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3597618/\">Godly Gift</a>",
 		],
-
+		mod: 'gen7',
 		ruleset: ['Ubers', 'Baton Pass Clause'],
 		banlist: ['Uber > 1', 'AG ++ Uber', 'Blissey', 'Chansey', 'Eviolite', 'Gengarite', 'Sablenite', 'Huge Power', 'Pure Power', 'Shadow Tag'],
 		onBegin: function() {
@@ -2833,6 +2833,19 @@ exports.Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] Mediocremons",
+		desc: ['&bullet; Only Pokemon with stats below 100 are allowed'],
+		ruleset: ['[Gen 7] OU'],
+		mod: 'gen7',
+		onValidateSet: function (set) {
+			let stats = this.getTemplate(set.species).baseStats;
+			for (let i = 0; i < stats.length; i++) {
+				let stat = stats[i];
+				if(stat >= 100) return [`${set.name || set.species} is banned by Mediocremons.`];
+			}
+		},
+	},
+	{
 		name: "[Gen 7] Mergemons",
 		desc: [
 			"Pok&eacute;mon gain the movepool of the previous and the next fully evolved Pok&eacute;mon, according to the Pok&eacute;dex.",
@@ -2861,6 +2874,26 @@ exports.Formats = [
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (!move.isMetagamiate) return;
 			return this.chainModify([0x14CD, 0x1000]);
+		},
+	},
+	{
+		name: "[Gen 7] Move Equality",
+		desc: ["&bullet; Every Move has 100 base power with the exception of moves that have varying base powers."],
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Power Up Punch'],
+		onModifyMovePriority: 5,
+		onModifyMove: function(move, pokemon) {
+			if (move.category === 'Status' || move.priority != 0 || move.onBasePower || move.basePowerCallback) return;
+			if (move.isZ) {
+				move.basePower = 180;
+				return;
+			}
+			if (move.multihit) {
+				move.basePower = parseInt(100 / move.multihit[move.multihit.length - 1]);
+				return;
+			}
+			move.basePower = 100;
 		},
 	},
 	{
@@ -2983,7 +3016,41 @@ exports.Formats = [
 			}
 		},
 	},
-
+	{
+		name: "[Gen 7] Poketrade",
+		desc: [
+			"Pok&eacute;mon with the same item swap base stats.",
+			"&bullet; <a href=\"https://cloud.githubusercontent.com/assets/19758381/23832074/f89d6c1e-0753-11e7-94c8-42f8c3dcfbda.png\">Pok&eacute;trade</a>",
+		],
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU'],
+		banlist: [],
+		onBegin: function () {
+			for (let j = 0; j < this.sides.length; j++) {
+				let itemTable = {};
+				for (let i = 0; i < this.sides[j].pokemon.length; i++) {
+					let pokemon = item = this.sides[j].pokemon[i].getItem();
+					if(!item) return;
+					if(!(item.id in itemTable)) itemTable[item.id] = [];
+					itemTable[item.id].push(i);
+				}
+				for (let i in itemTable) {
+					for (let k = 0; k < itemTable[i].length; k++) {
+						let pokemon = this.sides[j].pokemon[k], swapmon = itemTable[k+1] || itemTable[0];
+						["baseTemplate", "canMegaEvo"].forEach(key => {
+							if (pokemon[key]) {
+								let template = Object.assign({}, this.getTemplate(pokemon[key])), template2 = this.getTemplate(swapmon);
+								template.baseStats = Object.assign({}, template2.baseStats);
+								pokemon[key] = template;
+							}
+						});
+						pokemon.formeChange(pokemon.baseTemplate);
+						pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+					}
+				}
+			}
+		},
+	},
 	{
 		name: "[Gen 7] Trademarked",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>"],
