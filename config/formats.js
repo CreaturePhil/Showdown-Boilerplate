@@ -4436,15 +4436,13 @@ exports.Formats = [
 		mod: 'dualwielding',
 		validateSet: function(set, teamHas) {
 			let ability = set.ability;
-			if (!this.tools.getItem(toId(ability))) return [`${set.name || set.species}  has an invalid ability.`];
+			if (!this.tools.getItem(toId(ability))) return [`${set.name || set.species}  has an invalid item.`];
 			let problems = this.validateSet(set, teamHas) || [];
 			let item2 = this.tools.getItem(toId(ability));
-			let bans = {
-				
-			};
+			let bans = {};
 			if (bans[toId(item2.id)]) problems.push(set.species + "'s item " + item2.name + " is banned by Dual Wielding.");
 			if (item2.id === toId(set.item)) problems.push(`You cannot have two of ${item2.name} on the same Pokemon.`);
-			if (item2.name.includes('choice') && toId(set.item).includes('choice')) problems.push(`You cannot have ${item2.name} and ${this.tools.getItem(set.item).name} on the same Pokemon.`);
+			if (item2.id.includes('choice') && toId(set.item).includes('choice')) problems.push(`You cannot have ${item2.name} and ${this.tools.getItem(set.item).name} on the same Pokemon.`);
 			set.ability = ability;
 			return problems;
 		},
