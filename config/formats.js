@@ -2790,6 +2790,7 @@ exports.Formats = [
 		desc: ["&bullet; Every Pokemon will use the move in their last moveslot before fainting in battle."],
 		ruleset: ['[Gen 7] OU'],
 		mod: 'lastwill',
+		team: 'random',
 	},
 	{
 		name: "[Gen 7] Lockdown",
