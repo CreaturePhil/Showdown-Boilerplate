@@ -2884,7 +2884,7 @@ exports.Formats = [
 		banlist: ['Power Up Punch'],
 		onModifyMovePriority: 5,
 		onModifyMove: function(move, pokemon) {
-			if (move.category === 'Status' || move.priority != 0 || move.onBasePower || move.basePowerCallback) return;
+			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return;
 			if (move.isZ) {
 				move.basePower = 180;
 				return;
