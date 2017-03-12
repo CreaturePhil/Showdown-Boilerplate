@@ -324,7 +324,7 @@ exports.BattleScripts = {
 
 			return true;
 		},
-		getItem(): function {
+		getItem: function () {
 			return this.battle.getItem(this.item) || this.battle.getItem(this.ability);
 		},
 		eatItem: function (item, source, sourceEffect) {
