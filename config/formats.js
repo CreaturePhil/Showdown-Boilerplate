@@ -4416,6 +4416,28 @@ exports.Formats = [
 		column: 3,
 	},
 	{
+		name: "[Gen 7] Dual Wielding",
+		desc: "&bullet; A Pokemon can hold two items, the second item in the Ability Slot.",
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Fling', 'Regigigas', 'Slaking'],
+		mod: 'dualwielding',
+		validateSet: function(set, teamHas) {
+			let ability = set.ability;
+			if (!this.tools.getItem(toId(ability))) return [`${set.name || set.species}  has an invalid ability.`];
+			set.item = '';
+			let problems = this.validateSet(set, teamHas) || [];
+			let item2 = this.tools.getItem(toId(ability));
+			let bans = {
+				
+			};
+			if (bans[toId(item2.id)]) problems.push(set.species + "'s item " + item2.name + " is banned by Dual Wielding.");
+			if (item2.id === toId(set.item)) problems.push(`You cannot have two of ${item2.name} on the same Pokemon.`);
+			if (item2.includes('choice') && toId(set.item).includes('choice')) problems.push(`You cannot have ${item2.name} and ${this.tools.getItem(set.item).name} on the same Pokemon.`);
+			set.ability = ability;
+			return problems;
+		},
+	},
+	{
 		name: "[Gen 7] Z-Shift",
 		desc: ["&bullet; In Z-Shift, the Type, Base Power and Priority of the move in the first slot is transferred to the Z-Move being used.<br><br>Necrozma @ <b>Electrium Z</b>  <br>Ability: Prism Armor  <br>EVs: 252 HP / 252 SpA / 4 SpD<br>Modest Nature  <br>IVs: 0 Atk  <br>- <b>Prismatic Laser</b> <br>- Dark Pulse  <br>- <b>Charge Beam</b>  <br>- Moonlight<br><br>So if this is the set then<br><b>Z-Charge Beam:</b> 160 Base Power, 90% Accuracy, Psychic type move with 70% chance to raise the user's SpA by 1 stage"],
 		ruleset: ['[Gen 7] OU'],
