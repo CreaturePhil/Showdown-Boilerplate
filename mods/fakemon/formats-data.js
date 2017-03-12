@@ -17,8 +17,12 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["hurricane", "hydropump", "airslash", "icebeam", "bugbuzz", "roost", "focusblast"],
 		tier: "Uber",
 	},
-	skybleu: {
+	jawnado: {
 		randomBattleMoves: ["return", "crunch", "dragondance", "waterfall", "poisonfang", "rapidspin", "abyssteething"],
+		tier: "New",
+	},
+	valkyrieti: {
+		randomBattleMoves: ["dazzlinggleam", "earthpower", "psyshock", "focusblast", "flashcannon", "glare", "stealth rock"],
 		tier: "New",
 	},
 };
