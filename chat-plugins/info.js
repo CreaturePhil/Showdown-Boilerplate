@@ -1353,8 +1353,9 @@ exports.commands = {
 			for (let i = 0; i < sections[sectionId].formats.length; i++) {
 				let format = Tools.getFormat(sections[sectionId].formats[i]);
 				let nameHTML = Chat.escapeHTML(format.name);
-				let descHTML = format.desc ? (format.desc.join("<br />") + (format.suspect ? ("<br /><b>Currently Suspecting</b>: " + format.suspect) : "")) : "&mdash;";
-				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
+				let descHTML = format.desc ? (format.desc.join("<br />")) : "&mdash;";
+				let banlist = format.banlist.join(',');
+				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td><td style="border: 1px solid gray; margin-left:10px">&bullet;<b>Banlist:</b>${banlist}</td></tr>`);
 			}
 		}
 		buf.push(`</table>`);
