@@ -2492,8 +2492,8 @@ exports.Formats = [
 			});
 			if (bst <= 350) {
 				Object.keys(template.baseStats).forEach(stat => {
-					template.baseStats[stat] *= 2;
-				});
+					this.baseStats[stat] *= 2;
+				}).bind(template);
 			}
 			return template;
 		},
@@ -2548,8 +2548,8 @@ exports.Formats = [
 		banlist: ['Eviolite', 'Huge Power', 'Pure Power', 'Eevium Z'],
 		onModifyTemplate: function (template, pokemon) {
 			Object.keys(template.baseStats).forEach(stat => {
-				template.baseStat[stat] = template.baseStat[stat] <=70 ? template.baseStat[stat] * 2 : template.baseStat[stat];
-			});
+				this.baseStat[stat] = this.baseStat[stat] <=70 ? this.baseStat[stat] * 2 : this.baseStat[stat];
+			}).bind(template);
 			return template;
 		},
 	},
