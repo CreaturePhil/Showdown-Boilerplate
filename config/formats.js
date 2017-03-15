@@ -2531,7 +2531,7 @@ exports.Formats = [
 			"Pok&eacute;mon change type to match their first two moves.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
 		],
-
+		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		onModifyTemplate: function (template, pokemon) {
 			let types = [this.getMove(pokemon.moves[0]).type];
