@@ -2519,11 +2519,17 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Bad \'n Boosted",
+		name: "[Gen 7] Bad 'n Boosted",
 		desc: ["&bullet; All the stats of a pokemon which are 70 or below get doubled.<br>For example, Growlithe's stats are 55/70/45/70/50/60 in BnB they become 110/140/90/140/100/120<br><b>Banlist:</b>Eviolite, Huge Power, Pure Power"],
-		mod: 'bnb',
+		mod: 'gen7',
 		ruleset: ['[Gen 7] Ubers'],
 		banlist: ['Eviolite', 'Huge Power', 'Pure Power', 'Eevium Z']
+		onModifyTemplate: function (template, pokemon) {
+			Object.values(template.baseStats).map(stat => {
+				return stat <=70 ? stat * 2 : stat;
+			});
+			return template;
+		},
 	},
 	{
 		name: "[Gen 7] Camomons",
