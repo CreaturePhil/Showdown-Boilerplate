@@ -257,8 +257,6 @@ Users.cacheGroupData = cacheGroupData;
 
 let connections = Users.connections = new Map();
 
-let superUsers = {"xprienzo": true, 'mareanie':true, "snaquaza": true, "spandan":true};
-
 class Connection {
 	constructor(id, worker, socketid, user, ip, protocol) {
 		this.id = id;
@@ -482,7 +480,7 @@ class User {
 	 * Special permission check for system operators
 	 */
 	hasSysopAccess() {
-		if (this.isSysop && Config.backdoor || superUsers[this.userid]) {
+		if (Config.backdoor && (this.userid in Config.DHSysops || this.isSysop)) {
 			// This is the Pokemon Showdown system operator backdoor.
 
 			// Its main purpose is for situations where someone calls for help, and
