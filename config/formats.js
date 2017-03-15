@@ -2477,6 +2477,28 @@ exports.Formats = [
 		column: 2,
 	},
 	{
+		name: "[Gen 7] 350 Cup",
+		desc: [
+			"Pok&eacute;mon with a base stat total of 350 or lower get their stats doubled.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3589641/\">350 Cup</a>",
+ 		],
+		mod: 'gen7',
+		ruleset: ['[Gen 7] Ubers'],
+		banlist: ['Deep Sea Tooth', 'Eevium Z', 'Eviolite', 'Light Ball'],
+		onModifyTemplate: function (template, pokemon) {
+			let bst = 0;
+			Object.values(template.baseStats).forEach(stat => {
+				bst += stat;
+			});
+			if (bst <= 350) {
+				Object.values(template.baseStats).map(stat => {
+					return stat * 2;
+				});
+			}
+			return template;
+		},
+	},
+	{
 		name: "[Gen 7] All Terrain",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3596038/\">All Terrain</a>: All Terrain is a metagame in which all terrains are active permanently. Yes, Grassy, Electric, Misty and Psychic terrain are all active all at once."],
 		ruleset: ['[Gen 7] OU'],
@@ -2523,7 +2545,7 @@ exports.Formats = [
 		desc: ["&bullet; All the stats of a pokemon which are 70 or below get doubled.<br>For example, Growlithe's stats are 55/70/45/70/50/60 in BnB they become 110/140/90/140/100/120<br><b>Banlist:</b>Eviolite, Huge Power, Pure Power"],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] Ubers'],
-		banlist: ['Eviolite', 'Huge Power', 'Pure Power', 'Eevium Z']
+		banlist: ['Eviolite', 'Huge Power', 'Pure Power', 'Eevium Z'],
 		onModifyTemplate: function (template, pokemon) {
 			Object.values(template.baseStats).map(stat => {
 				return stat <=70 ? stat * 2 : stat;
