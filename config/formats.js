@@ -2536,7 +2536,8 @@ exports.Formats = [
 		onModifyTemplate: function (template, pokemon) {
 			let types = [this.getMove(pokemon.moves[0]).type];
 			if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
-			return Object.assign({types: types}, template);
+			template.types = types;
+			return template;
 		},
 		onAfterMega: function (pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
