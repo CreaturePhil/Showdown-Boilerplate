@@ -2491,9 +2491,9 @@ exports.Formats = [
 				bst += stat;
 			});
 			if (bst <= 350) {
-				Object.keys(template.baseStats).forEach(stat => {
-					this.baseStats[stat] *= 2;
-				}).bind(template);
+				for (let i in template.baseStats) {
+					template.baseStats[i] *= 2;
+				}
 			}
 			return template;
 		},
@@ -2547,9 +2547,9 @@ exports.Formats = [
 		ruleset: ['[Gen 7] Ubers'],
 		banlist: ['Eviolite', 'Huge Power', 'Pure Power', 'Eevium Z'],
 		onModifyTemplate: function (template, pokemon) {
-			Object.keys(template.baseStats).forEach(stat => {
-				this.baseStat[stat] = this.baseStat[stat] <=70 ? this.baseStat[stat] * 2 : this.baseStat[stat];
-			}).bind(template);
+			for (let i in template.baseStats) {
+				if(template.baseStats[i] <= 70) template.baseStats[i] *= 2;
+			}
 			return template;
 		},
 	},
