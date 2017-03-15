@@ -2547,8 +2547,8 @@ exports.Formats = [
 		ruleset: ['[Gen 7] Ubers'],
 		banlist: ['Eviolite', 'Huge Power', 'Pure Power', 'Eevium Z'],
 		onModifyTemplate: function (template, pokemon) {
-			template.baseStats = Object.values(template.baseStats).map(stat => {
-				return stat <=70 ? stat * 2 : stat;
+			Object.keys(template.baseStats).forEach(stat => {
+				template.baseStat[stat] = template.baseStat[stat] <=70 ? template.baseStat[stat] * 2 : template.baseStat[stat];
 			});
 			return template;
 		},
