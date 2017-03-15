@@ -2526,6 +2526,26 @@ exports.Formats = [
 		banlist: ['Eviolite', 'Huge Power', 'Pure Power', 'Eevium Z']
 	},
 	{
+		name: "[Gen 7] Camomons",
+		desc: [
+			"Pok&eacute;mon change type to match their first two moves.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
+		],
+
+		ruleset: ['[Gen 7] OU'],
+		onModifyTemplate: function (template, pokemon) {
+			let types = [this.getMove(pokemon.moves[0]).type];
+			if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
+			return Object.assign({types: types}, template);
+		},
+		onAfterMega: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+		onSwitchIn: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+	},
+	{
 		name: "[Gen 7] Cross Evolution",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3594854\">Cross Evolution</a>"],
 		mod: 'gen7',
