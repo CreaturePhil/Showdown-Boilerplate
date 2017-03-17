@@ -3347,10 +3347,9 @@ exports.Formats = [
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Uber', 'Unreleased', 'Shadow Tag', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite', 'Swoobat'],
 		onModifyTemplate: function (template, pokemon) {
-			let fusionTemplate = this.getTemplate(pokemon.name);
+			let fusionTemplate = this.getTemplate(pokemon.name), mixedTemplate = Object.assign({}, template);
 			if (!fusionTemplate.exists) return template;
 			try {
-				let mixedTemplate = Object.assign({}, template);
 				mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
 				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
 
@@ -3522,10 +3521,9 @@ exports.Formats = [
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased'],
 		onModifyTemplate: function (template, pokemon) {
-			let fusionTemplate = this.getTemplate(pokemon.name);
+			let fusionTemplate = this.getTemplate(pokemon.name), mixedTemplate = Object.assign({}, template);
 			if (!fusionTemplate.exists) return template;
 			try {
-				let mixedTemplate = Object.assign({}, template);
 				mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
 				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
 
@@ -3694,10 +3692,9 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Little Cup'],
 		banlist: ['Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Yanma', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
 		onModifyTemplate: function (template, pokemon) {
-			let fusionTemplate = this.getTemplate(pokemon.name);
+			let fusionTemplate = this.getTemplate(pokemon.name), mixedTemplate = Object.assign({}, template);
 			if (!fusionTemplate.exists) return template;
 			try {
-				let mixedTemplate = Object.assign({}, template);
 				mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
 				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
 
@@ -3873,10 +3870,9 @@ exports.Formats = [
 			'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
 		],
 		onModifyTemplate: function (template, pokemon) {
-			let fusionTemplate = this.getTemplate(pokemon.name);
+			let fusionTemplate = this.getTemplate(pokemon.name), mixedTemplate = Object.assign({}, template);
 			if (!fusionTemplate.exists) return template;
 			try {
-				let mixedTemplate = Object.assign({}, template);
 				mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
 				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
 
