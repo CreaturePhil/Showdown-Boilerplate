@@ -2415,53 +2415,6 @@ exports.Formats = [
 			return -typeMod;
 		},
 	},
-	{
-		name: "LC UU",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3562639/\">LC UU</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3562640/\">LC UU Viability Ranking</a>",
-		],
-
-		maxLevel: 5,
-		ruleset: ['LC'],
-		banlist: ['Abra', 'Aipom', 'Anorith', 'Archen', 'Bunnelby', 'Carvanha', 'Chinchou', 'Cottonee', 'Croagunk', 'Diglett',
-			'Drifloon', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Gothita', 'Honedge',
-			'Larvesta', 'Magnemite', 'Mienfoo', 'Munchlax', 'Omanyte', 'Onix', 'Pawniard', 'Ponyta', 'Porygon', 'Scraggy',
-			'Shellder', 'Snivy', 'Snubbull', 'Spritzee', 'Staryu', 'Stunky', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby',
-			'Corphish', 'Houndour', 'Pancham', 'Skrelp', 'Vulpix', 'Zigzagoon', 'Shell Smash', 'Sticky Web',
-		],
-	},
-	{
-		name: "2v2 Doubles",
-		desc: [
-			"Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547040/\">2v2 Doubles</a>",
-		],
-
-		gameType: 'doubles',
-
-		teamLength: {
-			validate: [2, 4],
-			battle: 2,
-		},
-		ruleset: ['Doubles OU'],
-		banlist: ['Kangaskhanite', 'Perish Song'],
-	},
-	{
-		name: "OU Theorymon",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3559611/\">OU Theorymon</a>"],
-
-		mod: 'theorymon',
-		ruleset: ['OU'],
-	},
-	{
-		name: "Gen-NEXT OU",
-
-		mod: 'gennext',
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
-		banlist: ['Uber'],
-	},
 	// New Other Metagames ///////////////////////////////////////////////////////////////////
 	{
 		section: "New Other Metagames",
