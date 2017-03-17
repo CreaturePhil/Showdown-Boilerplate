@@ -2575,6 +2575,16 @@ exports.Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] Consolation Prize",
+		desc: [
+			"Pok&eacute;mon have their lowest raw stat doubled.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/#post-7270834/\">Consolation Prize</a>",
+		],
+		mod: 'consolationprize',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Shaymin', 'Victini', 'Metagrossite'],
+	},
+	{
 		name: "[Gen 7] Cross Evolution",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3594854\">Cross Evolution</a>"],
 		mod: 'gen7',
