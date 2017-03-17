@@ -3346,38 +3346,30 @@ exports.Formats = [
 		mod: 'franticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Uber', 'Unreleased', 'Shadow Tag', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite', 'Swoobat'],
-		suspect: "Nothing Right now",
-		onBegin: function() {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-				if (pokemon.set.name === pokemon.set.species) continue;
-				let fusionTemplate = this.getTemplate(pokemon.name);
-				if (!fusionTemplate.exists) continue;
-				try {
-					let template = pokemon.baseTemplate;
-					let mixedTemplate = Object.assign({}, template);
-					mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
-					mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
+		onModifyTemplate: function (template, pokemon) {
+			let fusionTemplate = this.getTemplate(pokemon.name);
+			if (!fusionTemplate.exists) return template;
+			try {
+				let mixedTemplate = Object.assign({}, template);
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
+				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
 
-					mixedTemplate.baseStats = {};
-					for (let statid in template.baseStats) {
-						mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid]) / 2;
-					}
-					pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
-
-					mixedTemplate.types = template.types.slice();
-					let shiny = (pokemon.set.shiny && fusionTemplate.types[1]) ? 1 : 0;
-					if (mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1] = fusionTemplate.types[shiny];
-					else mixedTemplate.types.length = 1;
-					pokemon.baseTemplate = mixedTemplate;
-					pokemon.fusion = fusionTemplate.baseSpecies;
-					pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
-					pokemon.formeChange(mixedTemplate);
-				} catch (e) {
-					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
+				mixedTemplate.baseStats = {};
+				for (let statid in template.baseStats) {
+					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid]) / 2;
 				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+
+				mixedTemplate.types = template.types.slice();
+				let shiny = (pokemon.set.shiny && fusionTemplate.types[1]) ? 1 : 0;
+				if (mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1] = fusionTemplate.types[shiny];
+				else mixedTemplate.types.length = 1;
+				pokemon.fusion = fusionTemplate.baseSpecies;
+				pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
+			} catch (e) {
+				this.add('-hint', 'Failed to fuse ' + template.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
 			}
+			return mixedTemplate;
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn: function(pokemon) {
@@ -3529,37 +3521,30 @@ exports.Formats = [
 		mod: 'franticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased'],
-		onBegin: function() {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-				if (pokemon.set.name === pokemon.set.species) continue;
-				let fusionTemplate = this.getTemplate(pokemon.name);
-				if (!fusionTemplate.exists) continue;
-				try {
-					let template = pokemon.baseTemplate;
-					let mixedTemplate = Object.assign({}, template);
-					mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
-					mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
+		onModifyTemplate: function (template, pokemon) {
+			let fusionTemplate = this.getTemplate(pokemon.name);
+			if (!fusionTemplate.exists) return template;
+			try {
+				let mixedTemplate = Object.assign({}, template);
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
+				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
 
-					mixedTemplate.baseStats = {};
-					for (let statid in template.baseStats) {
-						mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid]) / 2;
-					}
-					pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
-
-					mixedTemplate.types = template.types.slice();
-					let shiny = (pokemon.set.shiny && fusionTemplate.types[1]) ? 1 : 0;
-					if (mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1] = fusionTemplate.types[shiny];
-					else mixedTemplate.types.length = 1;
-					pokemon.baseTemplate = mixedTemplate;
-					pokemon.fusion = fusionTemplate.baseSpecies;
-					pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
-					pokemon.formeChange(mixedTemplate);
-				} catch (e) {
-					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
+				mixedTemplate.baseStats = {};
+				for (let statid in template.baseStats) {
+					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid]) / 2;
 				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+
+				mixedTemplate.types = template.types.slice();
+				let shiny = (pokemon.set.shiny && fusionTemplate.types[1]) ? 1 : 0;
+				if (mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1] = fusionTemplate.types[shiny];
+				else mixedTemplate.types.length = 1;
+				pokemon.fusion = fusionTemplate.baseSpecies;
+				pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
+			} catch (e) {
+				this.add('-hint', 'Failed to fuse ' + template.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
 			}
+			return mixedTemplate;
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn: function(pokemon) {
@@ -3708,38 +3693,30 @@ exports.Formats = [
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Little Cup'],
 		banlist: ['Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Yanma', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
-		suspect: "Nothing Right now",
-		onBegin: function() {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-				if (pokemon.set.name === pokemon.set.species) continue;
-				let fusionTemplate = this.getTemplate(pokemon.name);
-				if (!fusionTemplate.exists) continue;
-				try {
-					let template = pokemon.baseTemplate;
-					let mixedTemplate = Object.assign({}, template);
-					mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
-					mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
+		onModifyTemplate: function (template, pokemon) {
+			let fusionTemplate = this.getTemplate(pokemon.name);
+			if (!fusionTemplate.exists) return template;
+			try {
+				let mixedTemplate = Object.assign({}, template);
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
+				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
 
-					mixedTemplate.baseStats = {};
-					for (let statid in template.baseStats) {
-						mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid]) / 2;
-					}
-					pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
-
-					mixedTemplate.types = template.types.slice();
-					let shiny = (pokemon.set.shiny && fusionTemplate.types[1]) ? 1 : 0;
-					if (mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1] = fusionTemplate.types[shiny];
-					else mixedTemplate.types.length = 1;
-					pokemon.baseTemplate = mixedTemplate;
-					pokemon.fusion = fusionTemplate.baseSpecies;
-					pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
-					pokemon.formeChange(mixedTemplate);
-				} catch (e) {
-					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
+				mixedTemplate.baseStats = {};
+				for (let statid in template.baseStats) {
+					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid]) / 2;
 				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+
+				mixedTemplate.types = template.types.slice();
+				let shiny = (pokemon.set.shiny && fusionTemplate.types[1]) ? 1 : 0;
+				if (mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1] = fusionTemplate.types[shiny];
+				else mixedTemplate.types.length = 1;
+				pokemon.fusion = fusionTemplate.baseSpecies;
+				pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
+			} catch (e) {
+				this.add('-hint', 'Failed to fuse ' + template.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
 			}
+			return mixedTemplate;
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn: function(pokemon) {
@@ -3895,38 +3872,30 @@ exports.Formats = [
 			'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
 		],
-		suspect: "Nothing Right now",
-		onBegin: function() {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-				if (pokemon.set.name === pokemon.set.species) continue;
-				let fusionTemplate = this.getTemplate(pokemon.name);
-				if (!fusionTemplate.exists) continue;
-				try {
-					let template = pokemon.baseTemplate;
-					let mixedTemplate = Object.assign({}, template);
-					mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
-					mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
+		onModifyTemplate: function (template, pokemon) {
+			let fusionTemplate = this.getTemplate(pokemon.name);
+			if (!fusionTemplate.exists) return template;
+			try {
+				let mixedTemplate = Object.assign({}, template);
+				mixedTemplate.baseSpecies = mixedTemplate.species = template.species;
+				mixedTemplate.weightkg = Math.max(0.1, (template.weightkg + fusionTemplate.weightkg) / 2)
 
-					mixedTemplate.baseStats = {};
-					for (let statid in template.baseStats) {
-						mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid]) / 2;
-					}
-					pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
-
-					mixedTemplate.types = template.types.slice();
-					let shiny = (pokemon.set.shiny && fusionTemplate.types[1]) ? 1 : 0;
-					if (mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1] = fusionTemplate.types[shiny];
-					else mixedTemplate.types.length = 1;
-					pokemon.baseTemplate = mixedTemplate;
-					pokemon.fusion = fusionTemplate.baseSpecies;
-					pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
-					pokemon.formeChange(mixedTemplate);
-				} catch (e) {
-					this.add('-hint', 'Failed to fuse ' + pokemon.baseTemplate.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
+				mixedTemplate.baseStats = {};
+				for (let statid in template.baseStats) {
+					mixedTemplate.baseStats[statid] = (template.baseStats[statid] + fusionTemplate.baseStats[statid]) / 2;
 				}
+				pokemon.hp = pokemon.maxhp = Math.floor(Math.floor(2 * mixedTemplate.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] >> 2) + 100) * pokemon.level / 100 + 10);
+
+				mixedTemplate.types = template.types.slice();
+				let shiny = (pokemon.set.shiny && fusionTemplate.types[1]) ? 1 : 0;
+				if (mixedTemplate.types[0] !== fusionTemplate.types[shiny]) mixedTemplate.types[1] = fusionTemplate.types[shiny];
+				else mixedTemplate.types.length = 1;
+				pokemon.fusion = fusionTemplate.baseSpecies;
+				pokemon.abilitwo = toId(fusionTemplate.abilities[0]);
+			} catch (e) {
+				this.add('-hint', 'Failed to fuse ' + template.species + ' and ' + fusionTemplate.species + '. Please report this error so that it can be fixed.');
 			}
+			return mixedTemplate;
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn: function(pokemon) {
