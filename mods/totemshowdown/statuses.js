@@ -12,7 +12,7 @@ exports.BattleStatuses = {
 		},
 		onModifyMove: function (pokemon) {
 			delete move.selfSwitch;
-		}
+		},
 		onTrapPokemon: function (pokemon) {
 			pokemon.tryTrap();
 		},
