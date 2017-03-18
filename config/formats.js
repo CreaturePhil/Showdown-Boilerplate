@@ -5282,6 +5282,48 @@ exports.Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] Completed",
+		desc: [
+			"Pok&eacute;mon no longer have their stats drop when they evolve or when they change forms during battle.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/page-2#post-7271952\">Completed</a>",
+		],
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Ignore Illegal Abilities', 'Wonder Guard', 'Shaymin', 'Shadow Tag', 'Parental Bond ++ Seismic Toss'],
+		onModifyTemplate: function (template, pokemon) {
+			let newStats = Object.assign({}, template.baseStats), prevo = pokemon.baseTemplate.prevo;
+			while (prevo) {
+				let prevoTemplate = this.getTemplate(prevo);
+				for (let i in newStats.baseStats) {
+					newStats[i] = Math.max(prevoTemplate.baseStats[i], newStats.baseStats[i]);
+				}
+				prevo = prevoTemplate.prevo;
+			}
+			if (!pokemon.baseTemplate.otherFormes) return Object.assign(template, newStats);
+			for (let i = 0; i < pokemon.baseTemplate.otherFormes.length; i++) {
+				let formeTemplate = this.getTemplate(pokemon.baseTemplate.otherFormes[i]);
+				for (let j in newStats) {
+					newStats[i] = Math.max(formeTemplate.baseStats[i], newStats[i]);
+				}
+			}
+			return Object.assign(template, newStats);
+		},
+		onValidateSet: function (set, teamHas) {
+			let template = this.getTemplate(set.species);
+			let abilities = {};
+			for (let i in template.abilities) {
+				abilities[template.abilities[i]] = 1;
+			}
+			if (!template.otherFormes) return [];
+			for (let i = 0; i < template.otherFormes.length; i++) {
+				let formeTemplate = template.otherFormes[i];
+				for (let j in formeTemplate.abilities) {
+					abilities[formeTemplate.abilities[j]] = 1;
+				}
+			}
+			if (!(set.ability in abilities)) return [`${set.name || set.species} cannot have ${this.getAbility(set.ability).name}.`];
+		},
+	},
+	{
 		name: "[Gen 7] Consolation Prize",
 		desc: [
 			"Pok&eacute;mon have their lowest raw stat doubled.",
