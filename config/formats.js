@@ -5357,20 +5357,6 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "Enchanted Items Hackmons",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
-
-		mod: 'enchanteditems',
-		ruleset: ['HP Percentage Mod'],
-		banlist: ['Ignore Illegal Abilities', 'Ignore Illegal Moves'],
-		onFaint: function(pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
-		},
-		onSwitchOut: function(pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
-		},
-	},
-	{
 		section: "Experimental Metagames",
 		column: 3,
 	},
@@ -5431,6 +5417,20 @@ exports.Formats = [
 				}
 			}
 		},
+		onFaint: function(pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+		},
+		onSwitchOut: function(pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+		},
+	},
+	{
+		name: "Enchanted Items Hackmons",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
+
+		mod: 'enchanteditems',
+		ruleset: ['HP Percentage Mod'],
+		banlist: ['Ignore Illegal Abilities', 'Ignore Illegal Moves'],
 		onFaint: function(pokemon) {
 			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
 		},
