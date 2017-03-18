@@ -231,7 +231,7 @@ exports.commands = {
 	music: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help music');
 		if (!this.runBroadcast()) return;
-		let musick = target;
+		let musick = Chat.escapeHTML(target.trim());
 		if(cmd=="ytmusic")
 		{
 			if(musick.substring(0,8)=="https://") musick = musick.substring(7,musick.length);
