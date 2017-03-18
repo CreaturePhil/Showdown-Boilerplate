@@ -5287,6 +5287,7 @@ exports.Formats = [
 			"Pok&eacute;mon no longer have their stats drop when they evolve or when they change forms during battle.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/page-2#post-7271952\">Completed</a>",
 		],
+		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Ignore Illegal Abilities', 'Wonder Guard', 'Shaymin', 'Shadow Tag', 'Parental Bond ++ Seismic Toss'],
 		onModifyTemplate: function (template, pokemon) {
