@@ -5263,7 +5263,12 @@ exports.Formats = [
 			if (!pokemon.side.foe.active[0]) return;
 			pokemon.side.foe.active[0].removeVolatile(sec, pokemon);
 			delete pokemon.side.foe.active[0].sec;
-		}
+		},
+		onFaint: function (pokemon) {
+			if (!pokemon.side.foe.active[0]) return;
+			pokemon.side.foe.active[0].removeVolatile(sec, pokemon);
+			delete pokemon.side.foe.active[0].sec;
+		},
 	},
 	{
 		name: "[Gen 7] Consolation Prize",
