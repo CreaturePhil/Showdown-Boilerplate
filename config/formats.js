@@ -5258,7 +5258,7 @@ exports.Formats = [
 			let sec = statusability[pokemon.ability] ? ("other" + pokemon.ability) : pokemon.ability;
 			pokemon.side.foe.active[0].sec = sec;
 			pokemon.side.foe.active[0].addVolatile(sec);
-			let sec = statusability[pokemon.side.foe.active[0].ability] ? ("other" + pokemon.side.foe.active[0].ability) : pokemon.side.foe.active[0].ability;
+			sec = statusability[pokemon.side.foe.active[0].ability] ? ("other" + pokemon.side.foe.active[0].ability) : pokemon.side.foe.active[0].ability;
 			pokemon.sec = sec;
 			pokemon.addVolatile(sec);
 		},
