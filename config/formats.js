@@ -5264,12 +5264,12 @@ exports.Formats = [
 		},
 		onSwitchOut: function (pokemon) {
 			if (!pokemon.side.foe.active[0]) return;
-			pokemon.side.foe.active[0].removeVolatile(sec);
+			pokemon.side.foe.active[0].removeVolatile(pokemon.side.foe.active[0].sec);
 			delete pokemon.side.foe.active[0].sec;
 		},
 		onFaint: function (pokemon) {
 			if (!pokemon.side.foe.active[0]) return;
-			pokemon.side.foe.active[0].removeVolatile(sec);
+			pokemon.side.foe.active[0].removeVolatile(pokemon.side.foe.active[0].sec);
 			delete pokemon.side.foe.active[0].sec;
 		},
 	},
