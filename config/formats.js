@@ -5323,7 +5323,8 @@ exports.Formats = [
 		],
 		onBegin: function () {
 			this.sides = this.sides.map(pokemon => {
-				return pokemon[0].totem = true;
+				pokemon[0].totem = true;
+				return pokemon;
 			});
 		},
 		onSwitchIn: function (pokemon) {
