@@ -2519,16 +2519,6 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Consolation Prize",
-		desc: [
-			"Pok&eacute;mon have their lowest raw stat doubled.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/#post-7270834/\">Consolation Prize</a>",
-		],
-		mod: 'consolationprize',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Shaymin', 'Victini', 'Metagrossite'],
-	},
-	{
 		name: "[Gen 7] Cross Evolution",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3594854\">Cross Evolution</a>"],
 		mod: 'gen7',
@@ -5202,8 +5192,18 @@ exports.Formats = [
 		}
 	},
 	{
-		section: "Experimental Metas",
+		section: "From Submissions/Workshop",
 		column: 3,
+	},
+	{
+		name: "[Gen 7] Consolation Prize",
+		desc: [
+			"Pok&eacute;mon have their lowest raw stat doubled.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/#post-7270834/\">Consolation Prize</a>",
+		],
+		mod: 'consolationprize',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Mew', 'Celebi', 'Jirachi', 'Manaphy', 'Shaymin', 'Victini', 'Metagrossite'],
 	},
 	{
 		name: "[Gen 7] Dual Wielding",
@@ -5222,105 +5222,6 @@ exports.Formats = [
 			if (item2.id.includes('choice') && toId(set.item).includes('choice')) problems.push(`You cannot have ${item2.name} and ${this.tools.getItem(set.item).name} on the same Pokemon.`);
 			set.ability = ability;
 			return problems;
-		},
-	},
-	{
-		name: "[Gen 7] Z-Shift",
-		desc: ["&bullet; In Z-Shift, the Type, Base Power and Priority of the move in the first slot is transferred to the Z-Move being used.<br><br>Necrozma @ <b>Electrium Z</b>  <br>Ability: Prism Armor  <br>EVs: 252 HP / 252 SpA / 4 SpD<br>Modest Nature  <br>IVs: 0 Atk  <br>- <b>Prismatic Laser</b> <br>- Dark Pulse  <br>- <b>Charge Beam</b>  <br>- Moonlight<br><br>So if this is the set then<br><b>Z-Charge Beam:</b> 160 Base Power, 90% Accuracy, Psychic type move with 70% chance to raise the user's SpA by 1 stage"],
-		ruleset: ['[Gen 7] OU'],
-		mod: 'zshift',
-		onValidateSet: function(set) {
-			let problems = [];
-			set.moves.forEach(move => {
-				let moveData = this.getMove(move);
-				if (moveData.multihit) {
-					problems.push((set.name || set.species) + " has " + moveData.name + ", which is a multihit move and is banned by Z-Shift.")
-				}
-			});
-			return problems;
-		},
-		onPrepareHit: function(target, source, move) {
-			if (!(move.isZ && move.baseMove)) return;
-			this.attrLastMove('[still]');
-			this.add('-anim', target, move.baseMove, source);
-		},
-	},
-	{
-		name: "Enchanted Items Hackmons",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
-
-		mod: 'enchanteditems',
-		ruleset: ['HP Percentage Mod'],
-		banlist: ['Ignore Illegal Abilities', 'Ignore Illegal Moves'],
-		onFaint: function(pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
-		},
-		onSwitchOut: function(pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
-		},
-	},
-	{
-		name: "Enchanted Items Plus",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/enchanted-items-enchanted-items-plus-announced.3570431/page-20#post-6939744\">Enchanted Items Plus</a>"],
-
-		mod: 'enchanteditems',
-		ruleset: ['Ubers'],
-		banlist: ['Ignore Illegal Abilities', 'Shedinja', 'Imposter',
-			'Bug Gem', 'Electric Gem', 'Fire Gem',
-			'Ice Gem', 'Poison Gem', 'Poke Ball', 'Steel Gem', 'Dark Gem', 'Psychic Gem',
-		],
-		onValidateSet: function(set) {
-
-			let bannedAbilities = {
-				'Arena Trap': 1,
-				'Huge Power': 1,
-				'Parental Bond': 1,
-				'Pure Power': 1,
-				'Shadow Tag': 1,
-				'Wonder Guard': 1,
-				'Contrary': 1,
-				'Simple': 1,
-				'Imposter': 1,
-				'Simple': 1
-			};
-			if (set.ability in bannedAbilities) {
-				let template = this.getTemplate(set.species || set.name);
-				let legalAbility = false;
-				for (let i in template.abilities) {
-					if (set.ability === template.abilities[i]) legalAbility = true;
-				}
-				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
-			}
-			let ability = this.getAbility(set.ability);
-			let item = this.getItem(set.item);
-			if (ability.item && ability.item === item.id) {
-				return ["You are not allowed to have " + ability.name + " and " + item.name + " on the same Pokémon."];
-			}
-		},
-		onValidateTeam: function(team) {
-			let abilityTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let ability = this.getAbility(team[i].ability);
-				if (!abilityTable[ability.id]) abilityTable[ability.id] = 0;
-				if (++abilityTable[ability.id] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getItem(ability.item).name + ")"];
-				}
-				let item = toId(team[i].item);
-				if (!item) continue;
-				item = this.getItem(item);
-				ability = item.ability;
-				if (!ability) continue;
-				if (!abilityTable[ability]) abilityTable[ability] = 0;
-				if (++abilityTable[ability] > 2) {
-					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item.name + ")"];
-				}
-			}
-		},
-		onFaint: function(pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
-		},
-		onSwitchOut: function(pokemon) {
-			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
 		},
 	},
 	{
@@ -5405,6 +5306,136 @@ exports.Formats = [
 					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + ")"];
 				}
 			}
+		},
+	},
+	{
+		name: "[Gen 7] Totem Showdown",
+		desc: [
+			"The Pok&eacute;mon in the first slot of a team acts like a Totem Pokemon which cannot be switched out.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/#post-7270627\">Totem Showdown</a>",
+		],
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Perish Song'],
+		onBegin: function () {
+			this.sides = this.sides.map(pokemon => {
+				return pokemon[0].totem = true;
+			});
+		},
+		onSwitchIn: function (pokemon) {
+			if(!pokemon.totem) return;
+			this.add('-message', `Totem ${pokemon.species}'s aura flared to life! Its stats rose!`);
+			pokemon.trapped = pokemon.maybeTrapped = true;
+			for (let i in pokemon.boosts) {
+				pokemon.boosts[i] = 1;
+				this.add('-boost', pokemon, i, 1, '[silent]');
+			}
+		},
+		onTrapPokemonPriority: -11,
+		onTrapPokemon: function (pokemon) {
+			if (pokemon.totem) pokemon.trapped = pokemon.maybeTrapped = true;
+		},
+	},
+	{
+		name: "[Gen 7] Z-Shift",
+		desc: ["&bullet; In Z-Shift, the Type, Base Power and Priority of the move in the first slot is transferred to the Z-Move being used.<br><br>Necrozma @ <b>Electrium Z</b>  <br>Ability: Prism Armor  <br>EVs: 252 HP / 252 SpA / 4 SpD<br>Modest Nature  <br>IVs: 0 Atk  <br>- <b>Prismatic Laser</b> <br>- Dark Pulse  <br>- <b>Charge Beam</b>  <br>- Moonlight<br><br>So if this is the set then<br><b>Z-Charge Beam:</b> 160 Base Power, 90% Accuracy, Psychic type move with 70% chance to raise the user's SpA by 1 stage"],
+		ruleset: ['[Gen 7] OU'],
+		mod: 'zshift',
+		onValidateSet: function(set) {
+			let problems = [];
+			set.moves.forEach(move => {
+				let moveData = this.getMove(move);
+				if (moveData.multihit) {
+					problems.push((set.name || set.species) + " has " + moveData.name + ", which is a multihit move and is banned by Z-Shift.")
+				}
+			});
+			return problems;
+		},
+		onPrepareHit: function(target, source, move) {
+			if (!(move.isZ && move.baseMove)) return;
+			this.attrLastMove('[still]');
+			this.add('-anim', target, move.baseMove, source);
+		},
+	},
+	{
+		name: "Enchanted Items Hackmons",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
+
+		mod: 'enchanteditems',
+		ruleset: ['HP Percentage Mod'],
+		banlist: ['Ignore Illegal Abilities', 'Ignore Illegal Moves'],
+		onFaint: function(pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+		},
+		onSwitchOut: function(pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+		},
+	},
+	{
+		section: "Experimental Metagames",
+		column: 3,
+	},
+	{
+		name: "Enchanted Items Plus",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/enchanted-items-enchanted-items-plus-announced.3570431/page-20#post-6939744\">Enchanted Items Plus</a>"],
+
+		mod: 'enchanteditems',
+		ruleset: ['Ubers'],
+		banlist: ['Ignore Illegal Abilities', 'Shedinja', 'Imposter',
+			'Bug Gem', 'Electric Gem', 'Fire Gem',
+			'Ice Gem', 'Poison Gem', 'Poke Ball', 'Steel Gem', 'Dark Gem', 'Psychic Gem',
+		],
+		onValidateSet: function(set) {
+
+			let bannedAbilities = {
+				'Arena Trap': 1,
+				'Huge Power': 1,
+				'Parental Bond': 1,
+				'Pure Power': 1,
+				'Shadow Tag': 1,
+				'Wonder Guard': 1,
+				'Contrary': 1,
+				'Simple': 1,
+				'Imposter': 1,
+				'Simple': 1
+			};
+			if (set.ability in bannedAbilities) {
+				let template = this.getTemplate(set.species || set.name);
+				let legalAbility = false;
+				for (let i in template.abilities) {
+					if (set.ability === template.abilities[i]) legalAbility = true;
+				}
+				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
+			}
+			let ability = this.getAbility(set.ability);
+			let item = this.getItem(set.item);
+			if (ability.item && ability.item === item.id) {
+				return ["You are not allowed to have " + ability.name + " and " + item.name + " on the same Pokémon."];
+			}
+		},
+		onValidateTeam: function(team) {
+			let abilityTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let ability = this.getAbility(team[i].ability);
+				if (!abilityTable[ability.id]) abilityTable[ability.id] = 0;
+				if (++abilityTable[ability.id] > 2) {
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getItem(ability.item).name + ")"];
+				}
+				let item = toId(team[i].item);
+				if (!item) continue;
+				item = this.getItem(item);
+				ability = item.ability;
+				if (!ability) continue;
+				if (!abilityTable[ability]) abilityTable[ability] = 0;
+				if (++abilityTable[ability] > 2) {
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item.name + ")"];
+				}
+			}
+		},
+		onFaint: function(pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+		},
+		onSwitchOut: function(pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
 		},
 	},
 	{
