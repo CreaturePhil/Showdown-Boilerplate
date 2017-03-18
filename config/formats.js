@@ -5314,6 +5314,7 @@ exports.Formats = [
 			"The Pok&eacute;mon in the first slot of a team acts like a Totem Pokemon which cannot be switched out.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/#post-7270627\">Totem Showdown</a>",
 		],
+		mod: 'totemshowdown',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Perish Song'],
 		onBegin: function () {
@@ -5322,17 +5323,7 @@ exports.Formats = [
 			});
 		},
 		onSwitchIn: function (pokemon) {
-			if(!pokemon.totem) return;
-			this.add('-message', `Totem ${pokemon.species}'s aura flared to life! Its stats rose!`);
-			pokemon.trapped = pokemon.maybeTrapped = true;
-			for (let i in pokemon.boosts) {
-				pokemon.boosts[i] = 1;
-				this.add('-boost', pokemon, i, 1, '[silent]');
-			}
-		},
-		onTrapPokemonPriority: -11,
-		onTrapPokemon: function (pokemon) {
-			if (pokemon.totem) pokemon.trapped = pokemon.maybeTrapped = true;
+			if(pokemon.totem) pokemon.addVolatile('totem');
 		},
 	},
 	{
