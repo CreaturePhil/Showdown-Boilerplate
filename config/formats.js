@@ -1746,6 +1746,7 @@ exports.Formats = [
 		team: 'random',
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
+			if (pokemon.side.foe.active[0]) return;
 			let statusability = {
 				"aerilate": true,
 				"aurabreak": true,
@@ -1760,8 +1761,14 @@ exports.Formats = [
 				"zenmode": true,
 			};
 			let sec = statusability[pokemon.ability] ? "other" + pokemon.ability : pokemon.ability;
-			if (pokemon.side.foe.active[0]) pokemon.side.foe.active[0].addVolatile(sec, pokemon);
+			pokemon.side.foe.active[0].sec = sec;
+			pokemon.side.foe.active[0].addVolatile(sec, pokemon);
 		},
+		onSwitchOut: function (pokemon) {
+			if (!pokemon.side.foe.active[0]) return;
+			pokemon.side.foe.active[0].removeVolatile(sec, pokemon);
+			delete pokemon.side.foe.active[0].sec;
+		}
 	},
 	{
 		name: "[Gen 7] Random Haxmons",
