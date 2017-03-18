@@ -5323,7 +5323,7 @@ exports.Formats = [
 		],
 		onSwitchIn: function (pokemon) {
 			if(pokemon.side.totemSet) return;
-			pokemon.addVolatile('totem');
+			pokemon.side.pokemon[0].addVolatile('totem');
 			pokemon.side.totemSet = true;
 		},
 	},
