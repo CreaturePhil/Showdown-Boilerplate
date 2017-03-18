@@ -1746,7 +1746,7 @@ exports.Formats = [
 		team: 'random',
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
-			if (pokemon.side.foe.active[0]) return;
+			if (!pokemon.side.foe.active[0]) return;
 			let statusability = {
 				"aerilate": true,
 				"aurabreak": true,
@@ -5249,7 +5249,7 @@ exports.Formats = [
 		banlist: ["Liepard", "Serperior"],
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
-			if (pokemon.side.foe.active[0]) return;
+			if (!pokemon.side.foe.active[0]) return;
 			let statusability = {
 				"aerilate": true,
 				"aurabreak": true,
