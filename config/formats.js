@@ -1734,7 +1734,35 @@ exports.Formats = [
 			pokemon.types = pokemon.template.types = types;
 		},
 	},
-
+	{
+		name: "[Gen 7] Random Ability Sharing",
+		desc: [
+			"&bullet; Ability sharing is an OU-based meta where you basically share your ability with your opponent, with a reset every switch. (your ability isn't replaced by the ability of the opponent, but you still can profit of it)",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/#post-7271345\">Ability Sharing</a>",
+		],
+		mod: 'franticfusions',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ["Liepard", "Serperior"],
+		team: 'random',
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+			let statusability = {
+				"aerilate": true,
+				"aurabreak": true,
+				"flashfire": true,
+				"parentalbond": true,
+				"pixilate": true,
+				"refrigerate": true,
+				"sheerforce": true,
+				"slowstart": true,
+				"truant": true,
+				"unburden": true,
+				"zenmode": true,
+			};
+			let sec = statusability[pokemon.ability] ? "other" + pokemon.ability : pokemon.ability;
+			if (pokemon.side.foe.active[0]) pokemon.side.foe.active[0].addVolatile(sec, pokemon);
+		},
+	},
 	{
 		name: "[Gen 7] Random Haxmons",
 
@@ -5194,6 +5222,34 @@ exports.Formats = [
 	{
 		section: "From Submissions/Workshop",
 		column: 3,
+	},
+	{
+		name: "[Gen 7] Ability Sharing",
+		desc: [
+			"&bullet; Ability sharing is an OU-based meta where you basically share your ability with your opponent, with a reset every switch. (your ability isn't replaced by the ability of the opponent, but you still can profit of it)",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/#post-7271345\">Ability Sharing</a>",
+		],
+		mod: 'franticfusions',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ["Liepard", "Serperior"],
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+			let statusability = {
+				"aerilate": true,
+				"aurabreak": true,
+				"flashfire": true,
+				"parentalbond": true,
+				"pixilate": true,
+				"refrigerate": true,
+				"sheerforce": true,
+				"slowstart": true,
+				"truant": true,
+				"unburden": true,
+				"zenmode": true,
+			};
+			let sec = statusability[pokemon.ability] ? "other" + pokemon.ability : pokemon.ability;
+			if (pokemon.side.foe.active[0]) pokemon.side.foe.active[0].addVolatile(sec, pokemon);
+		},
 	},
 	{
 		name: "[Gen 7] Consolation Prize",
