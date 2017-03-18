@@ -5,7 +5,7 @@ exports.BattleStatuses = {
 		noCopy: true,
 		onStart: function (pokemon) {
 			this.add('-message', `Totem ${pokemon.species}'s aura flared to life! Its stats rose!`);
-			for (let i in pokemon.boosts) {
+			for (let i in pokemon.stats) {
 				pokemon.boosts[i] = 1;
 				this.add('-boost', pokemon, i, 1, '[silent]');
 			}
