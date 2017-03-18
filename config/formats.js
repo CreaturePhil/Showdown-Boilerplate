@@ -5316,7 +5316,7 @@ exports.Formats = [
 			}
 			if (!template.otherFormes) return [];
 			for (let i = 0; i < template.otherFormes.length; i++) {
-				let formeTemplate = template.otherFormes[i];
+				let formeTemplate = this.getTemplate(template.otherFormes[i]);
 				for (let j in formeTemplate.abilities) {
 					abilities[formeTemplate.abilities[j]] = 1;
 				}
