@@ -1760,15 +1760,23 @@ exports.Formats = [
 				"unburden": true,
 				"zenmode": true,
 			};
-			let sec = statusability[pokemon.ability] ? "other" + pokemon.ability : pokemon.ability;
+			let sec = statusability[pokemon.ability] ? ("other" + pokemon.ability) : pokemon.ability;
 			pokemon.side.foe.active[0].sec = sec;
-			pokemon.side.foe.active[0].addVolatile(sec, pokemon);
+			pokemon.side.foe.active[0].addVolatile(sec);
+			sec = statusability[pokemon.side.foe.active[0].ability] ? ("other" + pokemon.side.foe.active[0].ability) : pokemon.side.foe.active[0].ability;
+			pokemon.sec = sec;
+			pokemon.addVolatile(sec);
 		},
 		onSwitchOut: function (pokemon) {
 			if (!pokemon.side.foe.active[0]) return;
-			pokemon.side.foe.active[0].removeVolatile(sec, pokemon);
+			pokemon.side.foe.active[0].removeVolatile(pokemon.side.foe.active[0].sec);
 			delete pokemon.side.foe.active[0].sec;
-		}
+		},
+		onFaint: function (pokemon) {
+			if (!pokemon.side.foe.active[0]) return;
+			pokemon.side.foe.active[0].removeVolatile(pokemon.side.foe.active[0].sec);
+			delete pokemon.side.foe.active[0].sec;
+		},
 	},
 	{
 		name: "[Gen 7] Random Haxmons",
