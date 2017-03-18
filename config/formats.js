@@ -5315,8 +5315,11 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598275/#post-7270627\">Totem Showdown</a>",
 		],
 		mod: 'totemshowdown',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Perish Song'],
+		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
+		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Jirachi', 'Kyogre', 'Kyurem-White',
+			'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom', 'Perish Song',
+			'Power Construct', 'Eevium Z', 'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
+		],
 		onBegin: function () {
 			this.sides = this.sides.map(pokemon => {
 				return pokemon[0].totem = true;
