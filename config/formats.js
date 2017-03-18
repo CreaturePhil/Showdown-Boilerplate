@@ -5289,7 +5289,7 @@ exports.Formats = [
 		],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Ignore Illegal Abilities', 'Wonder Guard', 'Shaymin', 'Shadow Tag', 'Parental Bond ++ Seismic Toss'],
+		banlist: ['Ignore Illegal Abilities', 'Wonder Guard', 'Serene Grace ++ Shaymin', 'Shadow Tag', 'Parental Bond ++ Seismic Toss'],
 		onModifyTemplate: function (template, pokemon) {
 			let newStats = Object.assign({}, template.baseStats), prevo = pokemon.baseTemplate.prevo;
 			while (prevo) {
