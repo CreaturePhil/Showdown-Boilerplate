@@ -5322,9 +5322,8 @@ exports.Formats = [
 			'Power Construct', 'Eevium Z', 'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
 		],
 		onBegin: function () {
-			this.sides = this.sides.map(pokemon => {
-				pokemon[0].totem = true;
-				return pokemon;
+			this.sides.forEach(side => {
+				side.pokemon[0].totem = true;
 			});
 		},
 		onSwitchIn: function (pokemon) {
