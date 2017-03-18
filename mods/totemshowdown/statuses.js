@@ -10,7 +10,7 @@ exports.BattleStatuses = {
 				this.add('-boost', pokemon, i, 1, '[silent]');
 			}
 		},
-		onModifyMove: function (pokemon) {
+		onModifyMove: function (move) {
 			delete move.selfSwitch;
 		},
 		onTrapPokemon: function (pokemon) {

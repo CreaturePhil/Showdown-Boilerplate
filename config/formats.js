@@ -5321,13 +5321,9 @@ exports.Formats = [
 			'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom', 'Perish Song',
 			'Power Construct', 'Eevium Z', 'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
 		],
-		onBegin: function () {
-			this.sides.forEach(side => {
-				side.pokemon[0].totem = true;
-			});
-		},
 		onSwitchIn: function (pokemon) {
-			if(pokemon.totem) pokemon.addVolatile('totem');
+			if(pokemon.side.totem) return;
+			if (pokemon.addVolatile('totem')) pokemon.side.totem = pokemon;
 		},
 	},
 	{
