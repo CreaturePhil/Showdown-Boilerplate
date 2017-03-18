@@ -110,7 +110,7 @@ exports.chatmodchat = "autoconfirmed";
 // battle modchat - default minimum group for speaking in battles; changeable with /modchat
 exports.battlemodchat = "autoconfirmed";
 // pm modchat - minimum group for PMing other users, challenging other users, and laddering
-exports.pmmodchat = true;
+exports.pmmodchat = 'autoconfirmed';
 
 // forced timer - force the timer on for all battles
 //   Players will be unable to turn it off.
