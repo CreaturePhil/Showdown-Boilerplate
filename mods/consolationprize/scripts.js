@@ -28,7 +28,7 @@ exports.BattleScripts = {
 					lowest = this.baseStats[statName];
 				}
 			}
-			if (Object.values(this.baseStats).indexOf(lowest) === Object.values(this.baseStats).lastIndexOf(lowest)) this.stats[lStat] = this.baseStats[lStat] = this.baseStats[lStat] * 2;
+			this.stats[lStat] = this.baseStats[lStat] = this.baseStats[lStat] * 2;
 			this.speed = this.stats.spe;
 		}
 		return true;
