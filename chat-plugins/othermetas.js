@@ -59,7 +59,7 @@ exports.commands = {
 			}
 		}
 		let type = `<span class="col typecol"><img src="https://play.pokemonshowdown.com/sprites/types/${typ1}.png" alt="${typ1}" height="14" width="32">`;
-		if (typ2) `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${typ2}.png" alt="${typ2}" height="14" width="32">`;
+		if (typ2) type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${typ2}.png" alt="${typ2}" height="14" width="32">`;
 		type += "</span>";
 		let gnbp = 20;
 		if (weightkg >= 200) { // Calculate Grass Knot/Low Kick Base Power
