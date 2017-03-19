@@ -19,5 +19,9 @@ exports.BattleStatuses = {
 		onDragOut: function (pokemon) {
 			return null;
 		},
+		onFaint: function (pokemon) {
+			this.add('-message', `${pokemon.side.name}'s Totem has fallen!`);
+			pokemon.side.win(pokemon.side.foe);
+		},
 	}
 };
