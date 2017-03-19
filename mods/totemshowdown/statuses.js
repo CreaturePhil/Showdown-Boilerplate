@@ -21,7 +21,7 @@ exports.BattleStatuses = {
 		},
 		onFaint: function (pokemon) {
 			this.add('-message', `${pokemon.side.name}'s Totem has fallen!`);
-			pokemon.side.win(pokemon.side.foe);
+			pokemon.battle.win(pokemon.side.foe);
 		},
 	}
 };
