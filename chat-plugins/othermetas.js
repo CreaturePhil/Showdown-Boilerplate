@@ -23,7 +23,7 @@ exports.commands = {
 		let setStage = 1, crossStage = 1;
 		if (poke1.prevo) {
 			setStage++;
-			if (pokemen[poke1.prevo].prevo) {
+			if (Tools.data.Pokedex[poke1.prevo].prevo) {
 				setStage++;
 			}
 		}
