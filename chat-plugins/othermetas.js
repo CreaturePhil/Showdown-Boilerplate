@@ -49,9 +49,9 @@ exports.commands = {
 		if (poke2.types[0] !== prevo.types[0]) typ1 = poke2.types[0];
 		if (poke2.types[1] !== prevo.types[1]) typ2 = poke2.types[1] || poke2.types[0];
 		if (typ1 === typ2) typ2 = "";
-		let weight = poke2.weightkg - prevo.weightkg + poke1.weightkg;
-		if (weight <= 0) {
-			weight = 0.1;
+		let weightkg = poke2.weightkg - prevo.weightkg + poke1.weightkg;
+		if (weightkg <= 0) {
+			weightkg = 0.1;
 		}
 		for (var i in stats) {
 			if (stats[i] <= 0 || stats[i] > 255) {
