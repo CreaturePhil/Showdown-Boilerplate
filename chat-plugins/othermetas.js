@@ -9,7 +9,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		if (!target || !target.includes(',')) return this.parse('/help crossevo')
 		let pokes = target.split(",");
-		if (!Tools.data.Pokedex[pokes[0]] || !Tools.data.Pokedex[pokes[1]]) {
+		if (!Tools.data.Pokedex[toId(pokes[0])] || !Tools.data.Pokedex[toId(pokes[1])]) {
 			return this.errorReply('Error: Pokemon not found.')
 		}
 		let poke1 = Tools.getTemplate(pokes[0]), poke2 = Tools.getTemplate(pokes[1]);
