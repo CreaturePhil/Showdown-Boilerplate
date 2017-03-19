@@ -2,6 +2,42 @@
 'use strict';
 
 exports.commands = {
+	'!othermetas': true,
+	om: 'othermetas',
+	othermetas: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		target = toId(target);
+		let buffer = "";
+
+		if (target === 'all' && this.broadcasting) {
+			return this.sendReplyBox("You cannot broadcast information about all Other Metagames at once.");
+		}
+
+		if (!target || target === 'all') {
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames.394/\">Other Metagames Forum</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/om-analyses.416/\">Other Metagames Analyses</a><br />";
+			if (!target) return this.sendReplyBox(buffer);
+		}
+		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
+
+		if (target === 'all') {
+			// Display OMotM formats, with forum thread links as caption
+			this.parse('/formathelp omofthemonth');
+
+			// Display the rest of OM formats, with OM hub/index forum links as caption
+			this.parse('/formathelp othermetagames');
+			return this.sendReply('|raw|<center>' + buffer + '</center>');
+		}
+		if (showMonthly) {
+			this.target = 'omofthemonth';
+			this.run('formathelp');
+		} else {
+			this.run('formathelp');
+		}
+	},
+	othermetashelp: ["/om - Provides links to information on the Other Metagames.",
+		"!om - Show everyone that information. Requires: + % @ * # & ~"],
+
 	ce: "crossevolve",
 	crossevo: "crossevolve",
 	crossevolve: function(target, user, room)
@@ -74,14 +110,16 @@ exports.commands = {
 			gnbp = 40;
 		} // Aah, only if `template` had a `bst` property.
 		let bst = stats['hp'] + stats['atk'] + stats['def'] + stats['spa'] + stats['spd'] + stats['spe'];
-		let text = `<b>${poke1.species}</b> ===> <b>${poke2.species}</b>:`;
-		text = `<b>Stats</b>: ${Object.values(stats).join('/')}<br />`;
+		let text = `<b>${poke1.species}</b> ===> <b>${poke2.species}</b>:<br />`;
+		text = `${text}<b>Stats</b>: ${Object.values(stats).join('/')}<br />`;
 		text = `${text}<b>BST</b>: ${bst}<br />`;
 		text = `${text}<b>Type:</b> ${type}<br />`;
 		text = `${text}<b>Abilities</b>: ${ability}<br />`;
 		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
 	},
+	crossevolvehelp: ["/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon."],
+
 	mnm: 'mixandmega',
 	mixandmega: function (target, room, user) {
 		if (!this.runBroadcast()) return;
