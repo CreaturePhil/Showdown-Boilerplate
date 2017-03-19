@@ -58,10 +58,6 @@ exports.commands = {
 				return this.errorReply(`This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
 			}
 		}
-		text += " __" + poke1.species + "__ ===> __" + poke2.species + "__: Stats:";
-		text += " Abilities:" + ability + " Type:" + typ1;
-		if (typ2 != "" && typ2 != typ1) text += "/" + typ2;
-		text += " Weight: " + weight + " kg (" + gnbp(weight) + " BP)";
 		let type = '<span class="col typecol"><img src="https://play.pokemonshowdown.com/sprites/types/${typ1}.png" alt="${typ1}" height="14" width="32">';
 		if (typ2) type += '<img src="https://play.pokemonshowdown.com/sprites/types/${typ2}.png" alt="${typ2]}" height="14" width="32">';
 		type += "</span>";
