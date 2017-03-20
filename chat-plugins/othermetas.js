@@ -273,7 +273,7 @@ exports.commands = {
 			'LC Uber': 20,
 			'LC': 20,
 		};
-		let boost = boosts[template.tier];
+		let boost = boosts[mixedTemplate.tier];
 		let mixedTemplate = Object.assign({}, Tools.getTemplate(target));
 		if (!(mixedTemplate.tier in boosts)) boost = 0;
 		let newStats = {};
