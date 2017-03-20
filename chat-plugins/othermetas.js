@@ -48,22 +48,23 @@ exports.commands = {
 		if (!Tools.data.Pokedex[toId(pokes[0])] || !Tools.data.Pokedex[toId(pokes[1])]) {
 			return this.errorReply('Error: Pokemon not found.')
 		}
-		let poke1 = Tools.getTemplate(pokes[0]), poke2 = Tools.getTemplate(pokes[1]);
-		let prevo = Tools.getTemplate(poke2.prevo);
-		if (!poke1.evos || !poke1.evos.length) {
-			return this.errorReply(`Error: ${poke1.species} does not evolve.`);
+		let template = Object.assign({}, Tools.getTemplate(pokes[0])), crossTemplate = Object.assign({}, Tools.getTemplate(pokes[1]));
+		let prevo = Tools.getTemplate(crossTemplate.prevo);
+		let mixedTemplate = Object.assign({}, template);
+		if (!template.evos || !template.evos.length) {
+			return this.errorReply(`Error: ${template.species} does not evolve.`);
 		}
 		if (!prevo.exists) {
-			return this.errorReply(`Error: You cannot cross evolve into ${poke2.species}.`);
+			return this.errorReply(`Error: You cannot cross evolve into ${crossTemplate.species}.`);
 		}
 		let setStage = 1, crossStage = 1;
-		if (poke1.prevo) {
+		if (template.prevo) {
 			setStage++;
-			if (Tools.data.Pokedex[poke1.prevo].prevo) {
+			if (Tools.data.Pokedex[template.prevo].prevo) {
 				setStage++;
 			}
 		}
-		if (poke2.prevo) {
+		if (crossTemplate.prevo) {
 			crossStage++;
 			if (prevo.prevo) {
 				crossStage++;
@@ -72,81 +73,23 @@ exports.commands = {
 		if (setStage + 1 !== crossStage) {
 			return this.sendReply(`Error: Cross evolution must follow evolutionary stages. (${poke1.species} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
 		}
-		let stats = {};
-		let ability = Object.values(poke2.abilities).join('/');
-		for (let statName in poke1.baseStats) {
-			let stat = poke1.baseStats[statName];
-			stat += poke2.baseStats[statName] - prevo.baseStats[statName];
-			stats[statName] = stat;
+		mixedTemplate.abilities = Object.assign({}, crossTemplate.abilities);
+		for (let statName in template.baseStats) {
+			mixedTemplate.baseStats[statName] += crossTemplate.baseStats[statName] - prevo.baseStats[statName];
 		}
-		let typ1 = "", typ2 = "";
-		typ1 = typ1 + poke1.types[0];
-		if (poke1.types[1]) typ2 = typ2 + poke1.types[1];
-		if (poke2.types[0] !== prevo.types[0]) typ1 = poke2.types[0];
-		if (poke2.types[1] !== prevo.types[1]) typ2 = poke2.types[1] || poke2.types[0];
-		if (typ1 === typ2) typ2 = "";
-		let weightkg = poke2.weightkg - prevo.weightkg + poke1.weightkg;
-		if (weightkg <= 0) {
-			weightkg = 0.1;
+		if (crossTemplate.types[0] !== prevo.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
+		if (crossTemplate.types[1] !== prevo.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
+		if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
+		mixedTemplate.weightkg += crossTemplate.weightkg - prevo.weightkg;
+		if (mixedTemplate.weightkg <= 0) {
+			mixedTemplate.weightkg = 0.1;
 		}
-		for (var i in stats) {
-			if (stats[i] <= 0 || stats[i] > 255) {
+		for (var i in mixedTemplate.baseStats) {
+			if (mixedTemplate.baseStats[i] < 1 || mixedTemplate.baseStats[i] > 255) {
 				return this.errorReply(`This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
 			}
 		}
-		let type = `<span class="col typecol"><img src="https://play.pokemonshowdown.com/sprites/types/${typ1}.png" alt="${typ1}" height="14" width="32">`;
-		if (typ2) type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${typ2}.png" alt="${typ2}" height="14" width="32">`;
-		type += "</span>";
-		let gnbp = 20;
-		if (weightkg >= 200) { // Calculate Grass Knot/Low Kick Base Power
-			gnbp = 120;
-		} else if (weightkg >= 100) {
-			gnbp = 100;
-		} else if (weightkg >= 50) {
-			gnbp = 80;
-		} else if (weightkg >= 25) {
-			gnbp = 60;
-		} else if (weightkg >= 10) {
-			gnbp = 40;
-		} // Aah, only if `template` had a `bst` property.
-		let bst = stats['hp'] + stats['atk'] + stats['def'] + stats['spa'] + stats['spd'] + stats['spe'];
-		let text = `<b>${poke1.species}</b> ===> <b>${poke2.species}</b>:<br />`;
-		text = `${text}<b>Stats</b>: ${Object.values(stats).join('/')}<br />`;
-		text = `${text}<b>BST</b>: ${bst}<br />`;
-		text = `${text}<b>Type:</b> ${type}<br />`;
-		text = `${text}<b>Abilities</b>: ${ability}<br />`;
-		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
-		//return this.sendReplyBox(text);
-		let buf = '<li class="result">';
-			buf += '<span class="col numcol">' + (poke1.tier || poke2.tier) + '</span> ';
-			buf += '<span class="col iconcol"><span style="' + Tools.getPokemonIcon(poke1) + '"></span></span> ';
-			buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + poke1.id + '" target="_blank">' + poke1.species + '</a></span> ';
-			buf += type;
-			buf += '<span style="float:left;min-height:26px">';
-			if (poke2.abilities['1']) {
-				buf += '<span class="col twoabilitycol">' + poke2.abilities['0'] + '<br />' + poke2.abilities['1'] + '</span>';
-			} else {
-				buf += '<span class="col abilitycol">' + poke2.abilities['0'] + '</span>';
-			}
-			if (poke2.abilities['S']) {
-				buf += '<span class="col twoabilitycol' + (poke2.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + poke2.abilities['H'] + '<br />' + poke2.abilities['S'] + '</em></span>';
-			} else if (poke2.abilities['H']) {
-				buf += '<span class="col abilitycol' + (poke2.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + poke2.abilities['H'] + '</em></span>';
-			} else {
-				buf += '<span class="col abilitycol"></span>';
-			}
-			buf += '</span>';
-			buf += '<span style="float:left;min-height:26px">';
-			buf += '<span class="col statcol"><em>HP</em><br />' + stats.hp + '</span> ';
-			buf += '<span class="col statcol"><em>Atk</em><br />' + stats.atk + '</span> ';
-			buf += '<span class="col statcol"><em>Def</em><br />' + stats.def + '</span> ';
-			buf += '<span class="col statcol"><em>SpA</em><br />' + stats.spa + '</span> ';
-			buf += '<span class="col statcol"><em>SpD</em><br />' + stats.spd + '</span> ';
-			buf += '<span class="col statcol"><em>Spe</em><br />' + stats.spe + '</span> ';
-			buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
-			buf += '</span>';
-		buf += '</li>';
-		this.sendReply(`|raw|<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`);
+		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
 	},
 	crossevolvehelp: ["/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon."],
 
