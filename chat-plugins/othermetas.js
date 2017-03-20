@@ -277,7 +277,7 @@ exports.commands = {
 		let boost = boosts[mixedTemplate.tier];
 		if (!(mixedTemplate.tier in boosts)) boost = 0;
 		let newStats = {};
-		for (let statName in template.baseStats) {
+		for (let statName in mixedTemplate.baseStats) {
 			newStats[statName] = Tools.clampIntRange(mixedTemplate.baseStats[statName] + boost, 1, 255);
 		}
 		mixedTemplate.baseStats = Object.assign({}, newStats);
