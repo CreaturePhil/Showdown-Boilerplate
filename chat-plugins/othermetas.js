@@ -116,7 +116,37 @@ exports.commands = {
 		text = `${text}<b>Type:</b> ${type}<br />`;
 		text = `${text}<b>Abilities</b>: ${ability}<br />`;
 		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
-		return this.sendReplyBox(text);
+		//return this.sendReplyBox(text);
+		let buf = '<li class="result">';
+			buf += '<span class="col numcol">' + (poke1.tier || poke2.tier) + '</span> ';
+			buf += '<span class="col iconcol"><span style="background:transparent url(https://play.pokemonshowdown.com/sprites/smicons-pokeball-sheet.png) no-repeat scroll -0px 4px"></span></span> ';
+			buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + poke1.id + '" target="_blank">' + poke1.species + '</a></span> ';
+			buf += type;
+			buf += '<span style="float:left;min-height:26px">';
+			if (poke2.abilities['1']) {
+				buf += '<span class="col twoabilitycol">' + poke2.abilities['0'] + '<br />' + poke2.abilities['1'] + '</span>';
+			} else {
+				buf += '<span class="col abilitycol">' + poke2.abilities['0'] + '</span>';
+			}
+			if (poke2.abilities['S']) {
+				buf += '<span class="col twoabilitycol' + (poke2.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + poke2.abilities['H'] + '<br />' + poke2.abilities['S'] + '</em></span>';
+			} else if (poke2.abilities['H']) {
+				buf += '<span class="col abilitycol' + (poke2.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + poke2.abilities['H'] + '</em></span>';
+			} else {
+				buf += '<span class="col abilitycol"></span>';
+			}
+			buf += '</span>';
+			buf += '<span style="float:left;min-height:26px">';
+			buf += '<span class="col statcol"><em>HP</em><br />' + stats.hp + '</span> ';
+			buf += '<span class="col statcol"><em>Atk</em><br />' + stats.atk + '</span> ';
+			buf += '<span class="col statcol"><em>Def</em><br />' + stats.def + '</span> ';
+			buf += '<span class="col statcol"><em>SpA</em><br />' + stats.spa + '</span> ';
+			buf += '<span class="col statcol"><em>SpD</em><br />' + stats.spd + '</span> ';
+			buf += '<span class="col statcol"><em>Spe</em><br />' + stats.spe + '</span> ';
+			buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
+			buf += '</span>';
+		buf += '</li>';
+		this.sendReply('|raw|'+buf);
 	},
 	crossevolvehelp: ["/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon."],
 
