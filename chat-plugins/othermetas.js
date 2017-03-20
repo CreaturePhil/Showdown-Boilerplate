@@ -91,6 +91,7 @@ exports.commands = {
 				return this.errorReply(`This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
 			}
 		}
+		mixedTemplate.tier = "CE";
 		let details;
 		let weighthit = 20;
 		if (mixedTemplate.weightkg >= 200) {
@@ -176,6 +177,7 @@ exports.commands = {
 		}
 		mixedTemplate.baseStats = Object.assign({}, baseStats);
 		mixedTemplate.weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
+		mixedTemplate.tier = "MnM";
 		let details;
 		let weighthit = 20;
 		if (mixedTemplate.weightkg >= 200) {
@@ -213,7 +215,7 @@ exports.commands = {
 			return this.errorReply("Error: Pokemon not found.");
 		}
 		let bst = 0;
-		let pokeobj = Tools.getTemplate(toId(target));
+		let pokeobj = Object.assign({}, Tools.getTemplate(target));
 		for (let i in pokeobj.baseStats) {
 			bst += pokeobj.baseStats[i];
 		}
@@ -221,7 +223,35 @@ exports.commands = {
 		for (let i in pokeobj.baseStats) {
 			newStats[i] = pokeobj.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
-		this.sendReplyBox(`${pokeobj.species} in 350 Cup: <br /> ${Object.values(newStats).join('/')}`);
+		pokeobj.baseStats = Object.assign({}, newStats);
+		pokeobj.tier = "350Cup";
+		let details;
+		let weighthit = 20;
+		if (mixedTemplate.weightkg >= 200) {
+			weighthit = 120;
+		} else if (mixedTemplate.weightkg >= 100) {
+			weighthit = 100;
+		} else if (mixedTemplate.weightkg >= 50) {
+			weighthit = 80;
+		} else if (mixedTemplate.weightkg >= 25) {
+			weighthit = 60;
+		} else if (mixedTemplate.weightkg >= 10) {
+			weighthit = 40;
+		}
+		details = {
+			"Dex#": mixedTemplate.num,
+			"Gen": mixedTemplate.gen,
+			"Height": mixedTemplate.heightm + " m",
+			"Weight": mixedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Dex Colour": mixedTemplate.color,
+		};
+		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
+		details['<font color="#686868">Does Not Evolve</font>'] = "";
+		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
+				if (details[detail] === '') return detail;
+				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
+			}).join("&nbsp;|&ThickSpace;") + '</font>');
 	},
 	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 Cup."],
 
@@ -246,11 +276,39 @@ exports.commands = {
 		let template = Object.assign({}, Tools.getTemplate(target));
 		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(template.baseStats).join('/')}`);
 		let boost = boosts[template.tier];
-		let newStats = Object.assign({}, template.baseStats);
+		let newStats = {};
 		for (let statName in template.baseStats) {
-			newStats[statName] = Tools.clampIntRange(newStats[statName] + boost, 1, 255);
+			newStats[statName] = Tools.clampIntRange(template.baseStats[statName] + boost, 1, 255);
 		}
-		this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(newStats).join('/')}`);
+		template.baseStats = Object.assign({}, newStats);
+		template.tier = "TS";
+		let details;
+		let weighthit = 20;
+		if (mixedTemplate.weightkg >= 200) {
+			weighthit = 120;
+		} else if (mixedTemplate.weightkg >= 100) {
+			weighthit = 100;
+		} else if (mixedTemplate.weightkg >= 50) {
+			weighthit = 80;
+		} else if (mixedTemplate.weightkg >= 25) {
+			weighthit = 60;
+		} else if (mixedTemplate.weightkg >= 10) {
+			weighthit = 40;
+		}
+		details = {
+			"Dex#": mixedTemplate.num,
+			"Gen": mixedTemplate.gen,
+			"Height": mixedTemplate.heightm + " m",
+			"Weight": mixedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Dex Colour": mixedTemplate.color,
+		};
+		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
+		details['<font color="#686868">Does Not Evolve</font>'] = "";
+		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
+				if (details[detail] === '') return detail;
+				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
+			}).join("&nbsp;|&ThickSpace;") + '</font>');
 	},
 	'tiershifthelp': ["/ts OR /tiershift <pokemon> - Shows the base stats that a Pokemon would have in Tier Shift."],
 
