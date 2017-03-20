@@ -274,7 +274,7 @@ exports.commands = {
 			'LC': 20,
 		};
 		let mixedTemplate = Object.assign({}, Tools.getTemplate(target));
-		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(mixedTemplate.baseStats).join('/')}`);
+		if (!(mixedTemplate.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(mixedTemplate.baseStats).join('/')}`);
 		let boost = boosts[template.tier];
 		let newStats = {};
 		for (let statName in template.baseStats) {
