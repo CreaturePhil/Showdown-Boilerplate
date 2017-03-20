@@ -80,7 +80,7 @@ exports.commands = {
 		if (crossTemplate.types[0] !== prevo.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
 		if (crossTemplate.types[1] !== prevo.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
 		if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
-		mixedTemplate.weightkg = crossTemplate.weightkg - prevo.weightkg + Tools.data.Pokedex[template.id].baseStats[weightkg];
+		mixedTemplate.weightkg = crossTemplate.weightkg - prevo.weightkg + Tools.data.Pokedex[template.id].weightkg;
 		if (mixedTemplate.weightkg <= 0) {
 			mixedTemplate.weightkg = 0.1;
 		}
