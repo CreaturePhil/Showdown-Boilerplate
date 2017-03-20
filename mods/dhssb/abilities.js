@@ -11,8 +11,10 @@ exports.BattleAbilities = {
 				boost[i] *= -1;
 			}
 		},
+		shortDesc: 'Contrary + Mold breaker.',
+		desc: 'Contrary + Mold breaker.',
 		id: "contraryplusplus",
-		name: "Contrary++",
+		name: "Contrary Plus Plus",
 	},
 	"ultratechnical": {
 		onBasePowerPriority: 8,
