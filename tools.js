@@ -323,7 +323,6 @@ class BattleDex {
 		}
 		let id = toId(pokemon);
 		if (pokemon && pokemon.num !== undefined) num = pokemon.num;
-		//else if (this.data.PokemonSprites && this.data.PokemonSprites[id] && this.data.PokemonSprites[id].num) num = this.data.PokemonSprites[id].num;
 		else if (this.data.Pokedex && this.data.Pokedex[id] && this.data.Pokedex[id].num) num = this.data.Pokedex[id].num;
 		if (num < 0) num = 0;
 		if (num > 802) num = 0;
@@ -643,7 +642,7 @@ class BattleDex {
 	}
 
 	getDataPokemonHTML(template) {
-		if (typeof template === 'string') template = Tools.getTemplate(template);
+		if (typeof template === 'string') template = Object.assign({}, Tools.getTemplate(template));
 		let buf = '<li class="result">';
 		buf += '<span class="col numcol">' + (template.tier) + '</span> ';
 		buf += '<span class="col iconcol"><span style="' + Tools.getPokemonIcon(template) + '"></span></span> ';
