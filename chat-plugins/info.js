@@ -333,7 +333,12 @@ exports.commands = {
 				}
 			}
 		}
-		let newTargets = Tools.dataSearch(target);
+		let sep = target.split(',');
+		let mod = Tools;
+		if (sep[1] && toId(sep[i]) in Tools.dexes) {
+			mod = Tools.mod(toId(sep[0]));
+		}
+		let newTargets = mod.dataSearch(sep[0]);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
@@ -351,8 +356,9 @@ exports.commands = {
 					}
 					return this.sendReply(buffer);
 				} else {
-					if (newTargets[i].searchType === 'pokemon') {
-						buffer += `|raw|${Tools.getDataPokemonHTML(newTargets[i].name)}\n`;
+					let sType = newTargets[i].searchType.charAt(0).toUpperCase + newTargets[i].searchType.substring(1, newTargets[i].searchType.length);
+					if (mod[`getData${sType}HTML`]) {
+						buffer += `|raw|${mod[`getData${sType}HTML`](modnewTargets[i].name)}\n`;
 					}
 					else {
 						buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
@@ -368,7 +374,7 @@ exports.commands = {
 			let isSnatch = false;
 			let isMirrorMove = false;
 			if (newTargets[0].searchType === 'pokemon') {
-				let pokemon = Tools.getTemplate(newTargets[0].name);
+				let pokemon = mod.getTemplate(newTargets[0].name);
 				let weighthit = 20;
 				if (pokemon.weightkg >= 200) {
 					weighthit = 120;
@@ -393,12 +399,12 @@ exports.commands = {
 					details['<font color="#686868">Does Not Evolve</font>'] = "";
 				} else {
 					details["Evolution"] = pokemon.evos.map(evo => {
-						evo = Tools.getTemplate(evo);
+						evo = mod.getTemplate(evo);
 						return evo.name + " (" + evo.evoLevel + ")";
 					}).join(", ");
 				}
 			} else if (newTargets[0].searchType === 'move') {
-				let move = Tools.getMove(newTargets[0].name);
+				let move = mod.getMove(newTargets[0].name);
 				details = {
 					"Priority": move.priority,
 					"Gen": move.gen,
