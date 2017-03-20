@@ -447,10 +447,10 @@ exports.commands = {
 					}
 				} else if (move.isZ) {
 					details["&#10003; Z-Move"] = "";
-					details["Z-Crystal"] = Tools.getItem(move.isZ).name;
+					details["Z-Crystal"] = mod.getItem(move.isZ).name;
 					if (move.basePower !== 1) {
-						details["User"] = Tools.getItem(move.isZ).zMoveUser.join(", ");
-						details["Required Move"] = Tools.getItem(move.isZ).zMoveFrom;
+						details["User"] = mod.getItem(move.isZ).zMoveUser.join(", ");
+						details["Required Move"] = mod.getItem(move.isZ).zMoveFrom;
 					}
 				} else {
 					details["Z-Effect"] = "None";
@@ -471,7 +471,7 @@ exports.commands = {
 					'all': "All Pok\u00e9mon",
 				}[move.target] || "Unknown";
 			} else if (newTargets[0].searchType === 'item') {
-				let item = Tools.getItem(newTargets[0].name);
+				let item = mod.getItem(newTargets[0].name);
 				details = {
 					"Gen": item.gen,
 				};
