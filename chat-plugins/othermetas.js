@@ -166,16 +166,14 @@ exports.commands = {
 		}
 		//////////////////////////////////////////
 		let mixedTemplate = Object.assign({}, template);
-		let baseStats = {};
 		if (mixedTemplate.types[0] === deltas.type) { // Add any type gains
 			mixedTemplate.types = [deltas.type];
 		} else if (deltas.type) {
 			mixedTemplate.types = [types[0], deltas.type];
 		}
 		for (let statName in baseStats) { // Add the changed stats and weight
-			baseStats[statName] = Tools.clampIntRange(mixedTemplate.baseStats[statName] + deltas.baseStats[statName], 1, 255);
+			mixedTemplate.baseStats[statName] = Tools.clampIntRange(Tools.data.Pokedex[template.id].baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		mixedTemplate.baseStats = Object.assign({}, baseStats);
 		mixedTemplate.weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
 		mixedTemplate.tier = "MnM";
 		let details;
@@ -215,16 +213,16 @@ exports.commands = {
 			return this.errorReply("Error: Pokemon not found.");
 		}
 		let bst = 0;
-		let pokeobj = Object.assign({}, Tools.getTemplate(target));
-		for (let i in pokeobj.baseStats) {
-			bst += pokeobj.baseStats[i];
+		let mixedTemplate = Object.assign({}, Tools.getTemplate(target));
+		for (let i in mixedTemplate.baseStats) {
+			bst += mixedTemplate.baseStats[i];
 		}
 		let newStats = {};
-		for (let i in pokeobj.baseStats) {
-			newStats[i] = pokeobj.baseStats[i] * (bst <= 350 ? 2 : 1);
+		for (let i in mixedTemplate.baseStats) {
+			newStats[i] = mixedTemplate.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
-		pokeobj.baseStats = Object.assign({}, newStats);
-		pokeobj.tier = "350Cup";
+		mixedTemplate.baseStats = Object.assign({}, newStats);
+		mixedTemplate.tier = "350Cup";
 		let details;
 		let weighthit = 20;
 		if (mixedTemplate.weightkg >= 200) {
@@ -273,15 +271,15 @@ exports.commands = {
 			'LC Uber': 20,
 			'LC': 20,
 		};
-		let template = Object.assign({}, Tools.getTemplate(target));
-		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(template.baseStats).join('/')}`);
+		let mixedTemplate = Object.assign({}, Tools.getTemplate(target));
+		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(mixedTemplate.baseStats).join('/')}`);
 		let boost = boosts[template.tier];
 		let newStats = {};
 		for (let statName in template.baseStats) {
-			newStats[statName] = Tools.clampIntRange(template.baseStats[statName] + boost, 1, 255);
+			newStats[statName] = Tools.clampIntRange(mixedTemplate.baseStats[statName] + boost, 1, 255);
 		}
-		template.baseStats = Object.assign({}, newStats);
-		template.tier = "TS";
+		mixedTemplate.baseStats = Object.assign({}, newStats);
+		mixedTemplate.tier = "TS";
 		let details;
 		let weighthit = 20;
 		if (mixedTemplate.weightkg >= 200) {
