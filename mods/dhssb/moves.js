@@ -1,6 +1,31 @@
 "use strict";
 
 exports.BattleMovedex = {
+	"thenetherlandsfirst": {
+		num: 245,
+		accuracy: 100,
+		basePower: 150,
+		category: "Physical",
+		desc: "No additional effect.",
+		shortDesc: "Nearly always goes first.",
+		id: "thenetherlandsfirst",
+		isViable: true,
+		name: "The Netherlands First",
+		pp: 10,
+		priority: 2,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		self: {
+			boosts: {
+				def: -1,
+				spd: -1,
+			},
+		},
+		secondary: false,
+		target: "normal",
+		type: "Normal",
+		zMovePower: 160,
+		contestType: "Cool",
+	},
 	"superduperwombocombo": {
 		accuracy: true,
 		category: "Status",

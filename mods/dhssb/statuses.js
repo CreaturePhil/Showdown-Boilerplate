@@ -1,5 +1,18 @@
 'use strict';
 exports.BattleStatuses = {
+	flurbel: {
+		exists: true,
+		effectType: 'Ability',
+		onStart: function () {
+			this.add('c|$Flurbel|F*ck gligod');
+		},
+		onFaint: function(pokemon) {
+			this.add('c|$Flurbel|my spirit will haunt you :]');
+		},
+		onSwitchOut: function (pokemon) {
+			this.add('c|$Flurbel|i ain\'t done with you');
+		},
+	},
 	classyz: {
 		exists: true,
 		effectType: 'Ability',

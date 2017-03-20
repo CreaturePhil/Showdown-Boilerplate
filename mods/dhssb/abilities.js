@@ -1,6 +1,19 @@
 'use strict';
 
 exports.BattleAbilities = {
+	"contraryplusplus": {
+		onModifyMove: function(move, pokemon) {
+			move.ignoreAbility = true;
+		},
+		onBoost: function (boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			for (let i in boost) {
+				boost[i] *= -1;
+			}
+		},
+		id: "contraryplusplus",
+		name: "Contrary++",
+	},
 	"ultratechnical": {
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
