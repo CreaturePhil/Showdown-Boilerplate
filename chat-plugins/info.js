@@ -14,6 +14,48 @@
 
 const path = require('path');
 
+function getDataHTML (template) {
+	if (typeof template === 'string') template = Tools.getTemplate(template);
+	let buf = '<li class="result">';
+	buf += '<span class="col numcol">' + (template.tier) + '</span> ';
+	buf += '<span class="col iconcol"><span style="' + Tools.getPokemonIcon(template) + '"></span></span> ';
+	buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + template.id + '" target="_blank">' + template.species + '</a></span> ';
+	buf += '<span class="col typecol">';
+	if (template.types) for (var i = 0; i < template.types.length; i++) {
+		buf += `<img src="https://play.pokemonshowdown.com/sprites/types/${template.types[i]}.png" alt="${template.types[i]}" height="14" width="32">`;
+	}
+	buf += '</span> ';
+	buf += '<span style="float:left;min-height:26px">';
+	if (template.abilities['1']) {
+		buf += '<span class="col twoabilitycol">' + template.abilities['0'] + '<br />' + template.abilities['1'] + '</span>';
+	} else {
+		buf += '<span class="col abilitycol">' + template.abilities['0'] + '</span>';
+	}
+	if (template.abilities['S']) {
+		buf += '<span class="col twoabilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '<br />' + template.abilities['S'] + '</em></span>';
+	} else if (template.abilities['H']) {
+		buf += '<span class="col abilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '</em></span>';
+	} else {
+		buf += '<span class="col abilitycol"></span>';
+	}
+	buf += '</span>';
+	buf += '<span style="float:left;min-height:26px">';
+	buf += '<span class="col statcol"><em>HP</em><br />' + template.baseStats.hp + '</span> ';
+	buf += '<span class="col statcol"><em>Atk</em><br />' + template.baseStats.atk + '</span> ';
+	buf += '<span class="col statcol"><em>Def</em><br />' + template.baseStats.def + '</span> ';
+	buf += '<span class="col statcol"><em>SpA</em><br />' + template.baseStats.spa + '</span> ';
+	buf += '<span class="col statcol"><em>SpD</em><br />' + template.baseStats.spd + '</span> ';
+	buf += '<span class="col statcol"><em>Spe</em><br />' + template.baseStats.spe + '</span> ';
+	let bst = 0;
+	for (let i in template.baseStats) {
+		bst += template.baseStats[i];
+	}
+	buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
+	buf += '</span>';
+	buf += '</li>';
+	return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
+}
+
 exports.commands = {
 
 	'!whois': true,
@@ -351,7 +393,12 @@ exports.commands = {
 					}
 					return this.sendReply(buffer);
 				} else {
-					buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+					if (newTargets[i].searchType === 'pokemon') {
+						buffer += `|raw|${getDataHTML(newTargets[i].name)}\n`;
+					}
+					else {
+						buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+					}
 				}
 			}
 		} else {
