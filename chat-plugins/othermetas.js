@@ -89,7 +89,41 @@ exports.commands = {
 				return this.errorReply(`This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
 			}
 		}
+		let details;
+		let pokemon = Tools.getTemplate(newTargets[0].name);
+		let weighthit = 20;
+		if (pokemon.weightkg >= 200) {
+			weighthit = 120;
+		} else if (pokemon.weightkg >= 100) {
+			weighthit = 100;
+		} else if (pokemon.weightkg >= 50) {
+			weighthit = 80;
+		} else if (pokemon.weightkg >= 25) {
+			weighthit = 60;
+		} else if (pokemon.weightkg >= 10) {
+			weighthit = 40;
+		}
+		details = {
+			"Dex#": pokemon.num,
+			"Gen": pokemon.gen,
+			"Height": pokemon.heightm + " m",
+			"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Dex Colour": pokemon.color,
+		};
+		if (pokemon.eggGroups) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
+		if (!pokemon.evos.length) {
+			details['<font color="#686868">Does Not Evolve</font>'] = "";
+		} else {
+			details["Evolution"] = pokemon.evos.map(evo => {
+				evo = Tools.getTemplate(evo);
+				return evo.name + " (" + evo.evoLevel + ")";
+			}).join(", ");
+		}
 		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
+				if (details[detail] === '') return detail;
+				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
+			}).join("&nbsp;|&ThickSpace;") + '</font>');
 	},
 	crossevolvehelp: ["/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon."],
 
