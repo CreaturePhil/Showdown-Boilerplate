@@ -357,10 +357,10 @@ exports.commands = {
 					return this.sendReply(buffer);
 				} else {
 					let sType = newTargets[i].searchType.charAt(0).toUpperCase() + newTargets[i].searchType.substring(1, newTargets[i].searchType.length);
-					if (mod[`getData${sType}HTML`]) {
-						buffer += `|raw|${mod[`getData${sType}HTML`](newTargets[i].name)}\n`;
-					}
-					else {
+					if (Chat[`getData${sType}HTML`]) {
+						let template = mod["get" + (sType === "Pokemon" ? "Template" : sType)](newTargets[i].name);
+						buffer += `|raw|${Chat[`getData${sType}HTML`](template)}\n`;
+					} else {
 						buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
 					}
 				}

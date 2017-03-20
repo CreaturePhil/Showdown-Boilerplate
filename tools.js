@@ -312,29 +312,6 @@ class BattleDex {
 	 * @param {string|DexTemplate} species
 	 * @return {string}
 	 */
-	getDataMoveHTML(move) {
-		if (typeof move === 'string') move = Object.assign({}, this.getMove(move));
-		let buf = `<ul class="utilichart"><li class="result">`;
-		buf += `<a data-entry="move|${move.name}"><span class="col movenamecol">${move.name}</span> `;
-		buf += `<span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/${move.type}.png" alt="${move.type}" width="32" height="14">`;
-		buf += `<img src="//play.pokemonshowdown.com/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
-		if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
-		buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
-		buf += `<span class="col pplabelcol"><em>PP</em><br>${move.pp ? move.pp : 1}</span> `;
-		buf += `<span class="col movedesccol">${move.shortDesc}</span> `;
-		buf += `</a></li><li style="clear:both"></li></ul>`;
-		return buf;
-	}
-
-	getDataAbilityHTML(ability) {
-		if (typeof ability === 'string') ability = Object.assign({}, this.getAbility(ability));
-		let buf = `<ul class="utilichart"><li class="result">`;
-		buf += `<a data-entry="ability|${ability.name}"><span class="col namecol">${ability.name}</span> `;
-		buf += `<span class="col abilitydesccol">${ability.desc}</span> `;
-		buf += `</a></li><li style="clear:both"></li></ul>`;
-		return buf;
-	}
-
 	getSpecies(species) {
 		let id = toId(species || '');
 		let template = this.getTemplate(id);
