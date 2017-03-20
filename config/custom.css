@@ -3,17 +3,14 @@
   * GENERAL CSS *
   **************/
 
-  body {
-    background: #EEE url("http://i.imgur.com/FJ6LkXo.png") no-repeat left fixed;
-    width: 100%;
-    max-width: 1500px;
+ body {
+    background: #EEE url("http://i.imgur.com/JYUBwQr.jpg") no-repeat left fixed;
   }
-
-.button{color:black;background:#238be0!important;border:solid 1px black!important}.menugroup
-
+.button{color:black;background:#ff9966!important;border:solid 1px black!important}.menugroup
+ 
 .button:hover,.menugroup
-
-.button:active{color:black;background:#238be0!important;border:solid 1px black!important
+ 
+.button:active{color:white;background:#ff9966!important;border:solid 1px black!important
 }
 
   .astext{
@@ -22,13 +19,13 @@
   }
 
   .broadcast-blue {
-    background-image: url(https://i.ytimg.com/vi/Mccg0fLFq-U/maxresdefault.jpg);
-    border: 5px solid #0B1361;
+    background-color: #054270;
+    border: 5px solid #13d858;
     font-size:24px;
-    color: #0B1361;
+    color: #01ba76;
     font-weight:bold;
     font-family: sans-serif;
-    padding: 50px;
+    padding: 20px;
     text-align: center;
     margin: 5px;
     text-shadow: 0px -1px 0px #e6e6e6;
@@ -472,8 +469,8 @@ button.button.mainmenu5{
   }
 /*Battle CSS*/
 
-  .backdrop {
-    background: url(http://img03.deviantart.net/d68c/i/2014/213/3/b/swablu_and_altaria_by_kazeskyfox-d7t6x5p.png) !important;
+   .backdrop {
+    background: url(http://cdn.wallpapersafari.com/31/60/sFZiGV.jpg) !important;
         opacity: 0.6;
 }
 
