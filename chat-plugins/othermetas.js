@@ -75,7 +75,7 @@ exports.commands = {
 		}
 		mixedTemplate.abilities = Object.assign({}, crossTemplate.abilities);
 		for (let statName in template.baseStats) {
-			mixedTemplate.baseStats[statName] = crossTemplate.baseStats[statName] - prevo.baseStats[statName] + template.baseStats[statName];
+			mixedTemplate.baseStats[statName] = crossTemplate.baseStats[statName] - prevo.baseStats[statName] + Tools.getTemplate(template.species).baseStats[statName];
 		}
 		if (crossTemplate.types[0] !== prevo.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
 		if (crossTemplate.types[1] !== prevo.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
