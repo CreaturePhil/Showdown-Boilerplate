@@ -151,7 +151,6 @@ exports.commands = {
 			baseTemplate = Tools.getTemplate("Kyogre");
 		}
 		let deltas = {
-			ability: megaTemplate.abilities['0'],
 			baseStats: {},
 			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
 		};
@@ -167,6 +166,7 @@ exports.commands = {
 		}
 		//////////////////////////////////////////
 		let mixedTemplate = Object.assign({}, template);
+		mixedTemplate.abilities = Object.assign({}, megaTemplate.abilities);
 		if (mixedTemplate.types[0] === deltas.type) { // Add any type gains
 			mixedTemplate.types = [deltas.type];
 		} else if (deltas.type) {
