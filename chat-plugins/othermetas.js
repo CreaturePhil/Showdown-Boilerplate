@@ -77,6 +77,8 @@ exports.commands = {
 		for (let statName in template.baseStats) {
 			mixedTemplate.baseStats[statName] = crossTemplate.baseStats[statName] - prevo.baseStats[statName] + Tools.data.Pokedex[template.id].baseStats[statName];
 		}
+		mixedTemplate.types = [Tools.data.Pokedex[template.id].types[0]];
+		if (Tools.data.Pokedex[template.id].types[1]) mixedTemplate.types.push(Tools.data.Pokedex[template.id].types[1]);
 		if (crossTemplate.types[0] !== prevo.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
 		if (crossTemplate.types[1] !== prevo.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
 		if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
@@ -162,42 +164,45 @@ exports.commands = {
 			deltas.type = megaTemplate.types[1];
 		}
 		//////////////////////////////////////////
-		let ability = deltas.ability;
-		let types = template.types;
-		let baseStats = Object.assign({}, template.baseStats);
-		if (types[0] === deltas.type) { // Add any type gains
-			types = [deltas.type];
+		let mixedTemplate = Object.assign({}, template);
+		let baseStats = {};
+		if (mixedTemplate.types[0] === deltas.type) { // Add any type gains
+			mixedTemplate.types = [deltas.type];
 		} else if (deltas.type) {
-			types = [types[0], deltas.type];
+			mixedTemplate.types = [types[0], deltas.type];
 		}
 		for (let statName in baseStats) { // Add the changed stats and weight
-			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
+			baseStats[statName] = Tools.clampIntRange(mixedTemplate.baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		let weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
-		let type = '<span class="col typecol">';
-		for (let i = 0; i < types.length; i++) { // HTML for some nice type images.
-			type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${types[i]}.png" alt="${types[i]}" height="14" width="32">`;
+		mixedTemplate.baseStats = Object.assign({}, baseStats);
+		mixedTemplate.weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
+		let details;
+		let weighthit = 20;
+		if (mixedTemplate.weightkg >= 200) {
+			weighthit = 120;
+		} else if (mixedTemplate.weightkg >= 100) {
+			weighthit = 100;
+		} else if (mixedTemplate.weightkg >= 50) {
+			weighthit = 80;
+		} else if (mixedTemplate.weightkg >= 25) {
+			weighthit = 60;
+		} else if (mixedTemplate.weightkg >= 10) {
+			weighthit = 40;
 		}
-		type = type + "</span>";
-		let gnbp = 20;
-		if (weightkg >= 200) { // Calculate Grass Knot/Low Kick Base Power
-			gnbp = 120;
-		} else if (weightkg >= 100) {
-			gnbp = 100;
-		} else if (weightkg >= 50) {
-			gnbp = 80;
-		} else if (weightkg >= 25) {
-			gnbp = 60;
-		} else if (weightkg >= 10) {
-			gnbp = 40;
-		} // Aah, only if `template` had a `bst` property.
-		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = `<b>Stats</b>: ${Object.values(baseStats).join('/')}<br />`;
-		text = `${text}<b>BST</b>: ${bst}<br />`;
-		text = `${text}<b>Type:</b> ${type}<br />`;
-		text = `${text}<b>Ability</b>: ${ability}<br />`;
-		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
-		return this.sendReplyBox(text);
+		details = {
+			"Dex#": mixedTemplate.num,
+			"Gen": mixedTemplate.gen,
+			"Height": mixedTemplate.heightm + " m",
+			"Weight": mixedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Dex Colour": mixedTemplate.color,
+		};
+		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
+		details['<font color="#686868">Does Not Evolve</font>'] = "";
+		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
+				if (details[detail] === '') return detail;
+				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
+			}).join("&nbsp;|&ThickSpace;") + '</font>');
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the Mix and Mega evolved Pokemon's type and stats."],
 
