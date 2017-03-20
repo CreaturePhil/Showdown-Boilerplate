@@ -273,9 +273,9 @@ exports.commands = {
 			'LC Uber': 20,
 			'LC': 20,
 		};
-		let mixedTemplate = Object.assign({}, Tools.getTemplate(target));
-		if (!(mixedTemplate.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(mixedTemplate.baseStats).join('/')}`);
 		let boost = boosts[template.tier];
+		let mixedTemplate = Object.assign({}, Tools.getTemplate(target));
+		if (!(mixedTemplate.tier in boosts)) boost = 0;
 		let newStats = {};
 		for (let statName in template.baseStats) {
 			newStats[statName] = Tools.clampIntRange(mixedTemplate.baseStats[statName] + boost, 1, 255);
