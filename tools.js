@@ -642,10 +642,10 @@ class BattleDex {
 	}
 
 	getDataPokemonHTML(template) {
-		if (typeof template === 'string') template = Object.assign({}, getTemplate(template));
+		if (typeof template === 'string') template = Object.assign({}, this.getTemplate(template));
 		let buf = '<li class="result">';
 		buf += '<span class="col numcol">' + (template.tier) + '</span> ';
-		buf += '<span class="col iconcol"><span style="' + Tools.getPokemonIcon(template) + '"></span></span> ';
+		buf += '<span class="col iconcol"><span style="' + this.getPokemonIcon(template) + '"></span></span> ';
 		buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + template.id + '" target="_blank">' + template.species + '</a></span> ';
 		buf += '<span class="col typecol">';
 		if (template.types) for (var i = 0; i < template.types.length; i++) {
@@ -684,7 +684,7 @@ class BattleDex {
 	}
 
 	getDataMoveHTML(move) {
-		if (typeof move === 'string') move = Object.assign({}, getMove(move));
+		if (typeof move === 'string') move = Object.assign({}, this.getMove(move));
 		let buf = `<ul class="utilichart"><li class="result">`;
 		buf += ` <a data-entry="move|${move.name}"><span class="col movenamecol">${move.name}</span>`;
 		buf += ` <span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/${move.type}.png" alt="${move.type}" width="32" height="14">`;
@@ -696,7 +696,7 @@ class BattleDex {
 	}
 
 	getDataAbilityHTML(ability) {
-		if (typeof ability === 'string') ability = Object.assign({}, getAbility(ability));
+		if (typeof ability === 'string') ability = Object.assign({}, this.getAbility(ability));
 		let buf = `<ul class="utilichart"><li class="result">`;
 		buf += `<a data-entry="ability|${ability.name}"><span class="col namecol">${ability.name}</span> `;
 		buf += `<span class="col abilitydesccol">${ability.desc}</span> `;
