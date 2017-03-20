@@ -74,8 +74,9 @@ exports.commands = {
 			return this.sendReply(`Error: Cross evolution must follow evolutionary stages. (${poke1.species} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
 		}
 		mixedTemplate.abilities = Object.assign({}, crossTemplate.abilities);
+		mixedTemplate.baseStats = {};
 		for (let statName in template.baseStats) {
-			mixedTemplate.baseStats[statName] = crossTemplate.baseStats[statName] - prevo.baseStats[statName] + Tools.data.Pokedex[template.id].baseStats[statName];
+			mixedTemplate.baseStats[statName] = (crossTemplate.baseStats[statName] - prevo.baseStats[statName]) + Tools.data.Pokedex[template.id].baseStats[statName];
 		}
 		mixedTemplate.types = [Tools.data.Pokedex[template.id].types[0]];
 		if (Tools.data.Pokedex[template.id].types[1]) mixedTemplate.types.push(Tools.data.Pokedex[template.id].types[1]);
@@ -171,7 +172,8 @@ exports.commands = {
 		} else if (deltas.type) {
 			mixedTemplate.types = [types[0], deltas.type];
 		}
-		for (let statName in baseStats) { // Add the changed stats and weight
+		mixedTemplate.baseStats = {};
+		for (let statName in template.baseStats) { // Add the changed stats and weight
 			mixedTemplate.baseStats[statName] = Tools.clampIntRange(Tools.data.Pokedex[template.id].baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		mixedTemplate.weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
