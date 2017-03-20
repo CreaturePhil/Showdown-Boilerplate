@@ -323,8 +323,8 @@ class BattleDex {
 		}
 		let id = toId(pokemon);
 		if (pokemon && pokemon.num !== undefined) num = pokemon.num;
-		else if (this.data.PokemonSprites && this.data.PokemonSprites[id] && this.data.PokemonSprites[id].num) num = this.data.PokemonSprites[id].num;
-		else if (this.data.Pokedex && this.data.BattlePokedex[id] && this.data.Pokedex[id].num) num = this.data.Pokedex[id].num;
+		//else if (this.data.PokemonSprites && this.data.PokemonSprites[id] && this.data.PokemonSprites[id].num) num = this.data.PokemonSprites[id].num;
+		else if (this.data.Pokedex && this.data.Pokedex[id] && this.data.Pokedex[id].num) num = this.data.Pokedex[id].num;
 		if (num < 0) num = 0;
 		if (num > 802) num = 0;
 		let altNums = {
