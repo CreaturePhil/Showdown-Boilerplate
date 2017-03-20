@@ -356,7 +356,7 @@ exports.commands = {
 					}
 					return this.sendReply(buffer);
 				} else {
-					let sType = newTargets[i].searchType.charAt(0).toUpperCase + newTargets[i].searchType.substring(1, newTargets[i].searchType.length);
+					let sType = newTargets[i].searchType.charAt(0).toUpperCase() + newTargets[i].searchType.substring(1, newTargets[i].searchType.length);
 					if (mod[`getData${sType}HTML`]) {
 						buffer += `|raw|${mod[`getData${sType}HTML`](modnewTargets[i].name)}\n`;
 					}
