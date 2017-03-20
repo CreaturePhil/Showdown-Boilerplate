@@ -628,7 +628,7 @@ class BattleDex {
 		var top = Math.floor(num / 12) * 30;
 		var left = (num % 12) * 40;
 		return 'background:transparent url(https://play.pokemonshowdown.com/sprites/smicons-sheet.png?a1) no-repeat scroll -' + left + 'px -' + top + 'px';
-	},
+	}
 
 	getSpecies(species) {
 		let id = toId(species || '');

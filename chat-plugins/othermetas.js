@@ -119,7 +119,7 @@ exports.commands = {
 		//return this.sendReplyBox(text);
 		let buf = '<li class="result">';
 			buf += '<span class="col numcol">' + (poke1.tier || poke2.tier) + '</span> ';
-			buf += '<span class="col iconcol"><span style="background:transparent url(https://play.pokemonshowdown.com/sprites/smicons-pokeball-sheet.png) no-repeat scroll -0px 4px"></span></span> ';
+			buf += '<span class="col iconcol"><span style="' + Tools.getPokemonIcon(poke1) + '"></span></span> ';
 			buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + poke1.id + '" target="_blank">' + poke1.species + '</a></span> ';
 			buf += type;
 			buf += '<span style="float:left;min-height:26px">';
