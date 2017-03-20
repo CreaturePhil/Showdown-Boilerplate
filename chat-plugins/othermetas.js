@@ -92,35 +92,27 @@ exports.commands = {
 			}
 		}
 		let details;
-		let pokemon = Tools.getTemplate(newTargets[0].name);
 		let weighthit = 20;
-		if (pokemon.weightkg >= 200) {
+		if (mixedTemplate.weightkg >= 200) {
 			weighthit = 120;
-		} else if (pokemon.weightkg >= 100) {
+		} else if (mixedTemplate.weightkg >= 100) {
 			weighthit = 100;
-		} else if (pokemon.weightkg >= 50) {
+		} else if (mixedTemplate.weightkg >= 50) {
 			weighthit = 80;
-		} else if (pokemon.weightkg >= 25) {
+		} else if (mixedTemplate.weightkg >= 25) {
 			weighthit = 60;
-		} else if (pokemon.weightkg >= 10) {
+		} else if (mixedTemplate.weightkg >= 10) {
 			weighthit = 40;
 		}
 		details = {
-			"Dex#": pokemon.num,
-			"Gen": pokemon.gen,
-			"Height": pokemon.heightm + " m",
-			"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
-			"Dex Colour": pokemon.color,
+			"Dex#": mixedTemplate.num,
+			"Gen": mixedTemplate.gen,
+			"Height": mixedTemplate.heightm + " m",
+			"Weight": mixedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Dex Colour": mixedTemplate.color,
 		};
-		if (pokemon.eggGroups) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
-		if (!pokemon.evos.length) {
-			details['<font color="#686868">Does Not Evolve</font>'] = "";
-		} else {
-			details["Evolution"] = pokemon.evos.map(evo => {
-				evo = Tools.getTemplate(evo);
-				return evo.name + " (" + evo.evoLevel + ")";
-			}).join(", ");
-		}
+		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
+		details['<font color="#686868">Does Not Evolve</font>'] = "";
 		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
 		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
 				if (details[detail] === '') return detail;
