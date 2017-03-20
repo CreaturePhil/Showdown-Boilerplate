@@ -146,7 +146,7 @@ exports.commands = {
 			buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
 			buf += '</span>';
 		buf += '</li>';
-		this.sendReply(`|raw|<div class="message"><ul class="utilichart">'${buf}'<li style="clear:both"></li></ul></div>`;
+		this.sendReply(`|raw|<div class="message"><ul class="utilichart">'${buf}'<li style="clear:both"></li></ul></div>`);
 	},
 	crossevolvehelp: ["/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon."],
 
