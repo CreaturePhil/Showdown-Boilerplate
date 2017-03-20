@@ -335,8 +335,8 @@ exports.commands = {
 		}
 		let sep = target.split(',');
 		let mod = Tools;
-		if (sep[1] && toId(sep[i]) in Tools.dexes) {
-			mod = Tools.mod(toId(sep[0]));
+		if (sep[1] && toId(sep[1]) in Tools.dexes) {
+			mod = Tools.mod(toId(sep[1]));
 		}
 		let newTargets = mod.dataSearch(sep[0]);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
