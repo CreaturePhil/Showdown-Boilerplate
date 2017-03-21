@@ -504,4 +504,16 @@ exports.commands = {
 		this.sendReplyBox(`${Tools.data.Pokedex[toId(target)].species} in Bad 'n Boosted: <br /> ${newStats.join('/')}`);
 	},
 	badnboostedhelp: ["/bnb <pokemon> - Shows the base stats that a Pokemon would have in Bad 'n Boosted."],
+
+	istorlist: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		let buf = `<div class=infobox-limited><center><h2>List Of Istor Pokemon</h2></center>`;
+		let istorDex = require('./mods/istor/pokedex.js').BattlePokedex;
+		if (!istorDex) return this.errorReply("Error Fetching Istor Data.");
+		Object.values(istorDex).forEach(mon => {
+			buf += `<button name="send" value="/dt ${mon.species}, Istor" style="background:none;border:none;">${mon.species}/button><br>`;
+		});
+		this.sendReplyBox(`${buf}</div>`);
+	},
+	istorlisthelp: ["/istorlist - Shows the list of Istor Pokemon."],
 };
