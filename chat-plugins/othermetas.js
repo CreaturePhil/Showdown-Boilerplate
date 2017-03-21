@@ -363,7 +363,7 @@ exports.commands = {
 		if(!target || target === ' ' || !target.includes(',')) return this.errorReply('Error: Invalid Argument(s).')
 		let text = "";
 		let separated = target.split(",");
-		let name = separated[0], name2 = separeted[1];
+		let name = separated[0], name2 = separated[1];
 		if (!Tools.data.Pokedex[name] || !Tools.data.Pokedex[name2]) {
 			return this.errorReply("Error: Pokemon not found");;
 		}
