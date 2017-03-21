@@ -3050,8 +3050,8 @@ exports.BattleMovedex = {
 		accuracy: 50,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target to fall asleep.",
-		shortDesc: "Puts the foe(s) to sleep.",
+		desc: "Causes the target to fall asleep. This move cannot be used successfully unless the user's current form, while considering Transform, is Darkrai.",
+		shortDesc: "Darkrai: Puts the foe(s) to sleep.",
 		id: "darkvoid",
 		isViable: true,
 		name: "Dark Void",
@@ -4383,6 +4383,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'encore',
 		effect: {
 			duration: 3,
+			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart: function (target) {
 				let noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, struggle:1, transform:1};
 				let moveIndex = target.moves.indexOf(target.lastMove);
@@ -17048,7 +17049,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 3 turns, the target cannot avoid any attacks made against it, other than OHKO moves, as long as it remains active. During the effect, the target is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Ability Arena Trap as long as it remains active. If the target uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, Thousand Arrows, and Iron Ball override this move if the target is under any of their effects. Fails if the target is already under this effect or the effects of Ingrain, Smack Down, or Thousand Arrows.",
+		desc: "For 3 turns, the target cannot avoid any attacks made against it, other than OHKO moves, as long as it remains active. During the effect, the target is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Ability Arena Trap as long as it remains active. If the target uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, Thousand Arrows, and Iron Ball override this move if the target is under any of their effects. Fails if the target is already under this effect or the effects of Ingrain, Smack Down, or Thousand Arrows. The target is immune to this move on use if its species is Diglett, Dugtrio, Alolan Diglett, Alolan Dugtrio, Sandygast, Palossand, or Gengar while Mega-Evolved. Mega Gengar cannot be under this effect by any means.",
 		shortDesc: "For 3 turns, target floats but moves can't miss it.",
 		id: "telekinesis",
 		name: "Telekinesis",
@@ -17059,6 +17060,11 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart: function (target) {
+				if (target.baseTemplate.baseSpecies in {Diglett: 1, Dugtrio: 1, Palossand: 1, Sandygast: 1} ||
+						target.baseTemplate.species === 'Gengar-Mega') {
+					this.add('-immune', target, '[msg]');
+					return null;
+				}
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
 				this.add('-start', target, 'Telekinesis');
 			},
@@ -17068,6 +17074,12 @@ exports.BattleMovedex = {
 			},
 			onImmunity: function (type) {
 				if (type === 'Ground') return false;
+			},
+			onUpdate: function (pokemon) {
+				if (pokemon.baseTemplate.species === 'Gengar-Mega') {
+					delete pokemon.volatiles['telekinesis'];
+					this.add('-end', pokemon, 'Telekinesis', '[silent]');
+				}
 			},
 			onResidualOrder: 16,
 			onEnd: function (target) {

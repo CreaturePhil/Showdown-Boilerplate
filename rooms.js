@@ -334,7 +334,7 @@ class GlobalRoom {
 						writing = false;
 						if (writePending) {
 							writePending = false;
-							process.nextTick(() => this.writeChatRoomData());
+							setImmediate(() => this.writeChatRoomData());
 						}
 					});
 				});
@@ -527,9 +527,12 @@ class GlobalRoom {
 	autojoinRooms(user, connection) {
 		// we only autojoin regular rooms if the client requests it with /autojoin
 		// note that this restriction doesn't apply to staffAutojoin
+		let includesLobby = false;
 		for (let i = 0; i < this.autojoin.length; i++) {
 			user.joinRoom(this.autojoin[i], connection);
+			if (this.autojoin[i] === 'lobby') includesLobby = true;
 		}
+		if (!includesLobby && Config.serverid !== 'showdown') user.send(`>lobby\n|deinit`);
 	}
 	checkAutojoin(user, connection) {
 		if (!user.named) return;
@@ -855,9 +858,17 @@ class BattleRoom extends Room {
 	getInactiveSide() {
 		let p1active = this.battle.p1 && this.battle.p1.active;
 		let p2active = this.battle.p2 && this.battle.p2.active;
+
+		if (p1active && this.battle.requests.p1) {
+			if (!this.battle.requests.p1[2]) p1active = false;
+		}
+		if (p2active && this.battle.requests.p2) {
+			if (!this.battle.requests.p2[2]) p2active = false;
+		}
+
 		if (p1active && !p2active) return 1;
 		if (p2active && !p1active) return 0;
-		return this.battle.inactiveSide;
+		return -1;
 	}
 	sendPlayer(num, message) {
 		let player = this.getPlayer(num);
