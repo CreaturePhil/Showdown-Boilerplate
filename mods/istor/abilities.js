@@ -165,6 +165,7 @@ exports.BattleAbilities = {
 		num: 10005,
 	},
 	"midnightlurker": {
+		desc: "This Pokemon's attacks are critical hits if the target is asleep.",
 		shortDesc: "This Pokemon's attacks are critical hits if the target is asleep.",
 		onModifyCritRatio: function (critRatio, source, target) {
 			if (target && target.status in {'slp':1}) return 5;
