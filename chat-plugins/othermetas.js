@@ -115,7 +115,7 @@ exports.commands = {
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
-		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedTemplate)}`);
 		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
 				if (details[detail] === '') return detail;
 				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
@@ -200,7 +200,7 @@ exports.commands = {
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
-		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedTemplate)}`);
 		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
 				if (details[detail] === '') return detail;
 				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
@@ -247,7 +247,7 @@ exports.commands = {
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
-		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedTemplate)}`);
 		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
 				if (details[detail] === '') return detail;
 				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
@@ -304,7 +304,7 @@ exports.commands = {
 		};
 		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
-		this.sendReply(`|raw|${Tools.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedTemplate)}`);
 		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
 				if (details[detail] === '') return detail;
 				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
