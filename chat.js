@@ -1316,7 +1316,7 @@ Chat.getDataMoveHTML = function (move) {
 	if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
 	buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
 	buf += `<span class="col pplabelcol"><em>PP</em><br>${move.pp ? move.pp : 1}</span> `;
-	buf += `<span class="col movedesccol">${move.shortDesc}</span> `;
+	buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
 	buf += `</a></li><li style="clear:both"></li></ul>`;
 	return buf;
 };
@@ -1325,7 +1325,7 @@ Chat.getDataAbilityHTML = function (ability) {
 	if (typeof ability === 'string') ability = Object.assign({}, Tools.getAbility(ability));
 	let buf = `<ul class="utilichart"><li class="result">`;
 	buf += `<a data-entry="ability|${ability.name}"><span class="col namecol">${ability.name}</span> `;
-	buf += `<span class="col abilitydesccol">${ability.desc}</span> `;
+	buf += `<span class="col abilitydesccol">${ability.desc || ability.shortDesc}</span> `;
 	buf += `</a></li><li style="clear:both"></li></ul>`;
 	return buf;
 };
@@ -1336,7 +1336,7 @@ Chat.getDataItemHTML = function (item) {
 	let left = (item.spritenum % 16) * 24;
 	let buf = `<ul class="utilichart"><li class="result">`;
 	buf  += `<a data-entry="item|${item.name}"><span class="col itemiconcol"><span style="background:transparent url(//play.pokemonshowdown.com/sprites/itemicons-sheet.png) no-repeat scroll -${left}px -${top}px"></span></span> <span class="col namecol">${item.name}</span> `;
-	buf += `<span class="col itemdesccol">${item.desc}</span> `;
+	buf += `<span class="col itemdesccol">${item.desc || item.shortDesc}</span> `;
 	buf += `</a></li><li style="clear:both"></li></ul>`;
 	return buf;
 };
