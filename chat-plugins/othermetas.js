@@ -511,7 +511,7 @@ exports.commands = {
 		let istorDex = require('../mods/istor/pokedex.js').BattlePokedex;
 		if (!istorDex) return this.errorReply("Error Fetching Istor Data.");
 		Object.values(istorDex).forEach(mon => {
-			buf += `<button name="send" value="/dt ${mon.species}, Istor" style="background:none;border:none;">${mon.species}/button><br>`;
+			buf += `<button name="send" value="/dt ${mon.species}, Istor" style="background:none;border:none;">${mon.species}</button><br>`;
 		});
 		this.sendReplyBox(`${buf}</div>`);
 	},
