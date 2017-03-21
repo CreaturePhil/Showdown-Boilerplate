@@ -285,6 +285,18 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["psychic", "nuclearray", "recover", "calmmind", "trickroom"],
 		tier: "New",
 	},
+	litwickistor: {
+		randomBattleMoves: ["thunderbolt", "darkpulse", "fireblast", "dazzlinggleam", "trick"],
+		tier: "LC",
+	},
+	lampentistor: {
+		randomBattleMoves: ["thunderbolt", "darkpulse", "fireblast", "dazzlinggleam", "trick"],
+		tier: "NFE",
+	},
+	chandelureistor: {
+		randomBattleMoves: ["thunderbolt", "darkpulse", "fireblast", "dazzlinggleam", "trick"],
+		tier: "New",
+	},
 	/* Editing Old Movesets */
 	mrmime: {
 		randomBattleMoves: ["nastyplot", "psychic", "psyshock", "dazzlinggleam", "shadowball", "batonpass", "focusblast", "healingwish", "encore", "divertissement"],
