@@ -10,7 +10,7 @@ exports.BattleMovedex = {
 		shortDesc: "20% chance to lower the target's Defense by 1.",
 		id: "impalingfeather",
 		isViable: true,
-		name: "impalingfeather",
+		name: "Impaling Feather",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
