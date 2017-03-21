@@ -10,7 +10,7 @@ exports.BattleMovedex = {
 		shortDesc: "20% chance to lower the target's Defense by 1.",
 		id: "impalingfeather",
 		isViable: true,
-		name: "impalingfeather",
+		name: "Impaling Feather",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -518,5 +518,30 @@ exports.BattleMovedex = {
 		type: "Poison",
 		zMoveBoost: {spe: 1},
 		contestType: "Smart",
+	},
+	"blackmagic": {
+		num: 10021,
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		desc: "Uses the inverse type chart.",
+		shortDesc: "Uses the inversed type chart.",
+		id: "blackmagic",
+		isViable: true,
+		name: "Black Magic",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onEffectiveness: function (typeMod, type) {
+			if (type === 'Fairy') return 1;
+			if (type === 'Dark') return 1;
+			if (type === 'Fighting') return 1;
+			if (type === 'Psychic') return 2;
+			if (type === 'Ghost') return 2;
+		},
+		target: "normal",
+		type: "Dark",
+		zMovePower: 140,
+		contestType: "Beautiful",
 	},
 };

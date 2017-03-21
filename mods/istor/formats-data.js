@@ -285,6 +285,18 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["psychic", "nuclearray", "recover", "calmmind", "trickroom"],
 		tier: "New",
 	},
+	litwickistor: {
+		randomBattleMoves: ["thunderbolt", "darkpulse", "fireblast", "dazzlinggleam", "trick"],
+		tier: "LC",
+	},
+	lampentistor: {
+		randomBattleMoves: ["thunderbolt", "darkpulse", "fireblast", "dazzlinggleam", "trick"],
+		tier: "NFE",
+	},
+	chandelureistor: {
+		randomBattleMoves: ["thunderbolt", "darkpulse", "fireblast", "dazzlinggleam", "trick"],
+		tier: "New",
+	},
 	/* Editing Old Movesets */
 	mrmime: {
 		randomBattleMoves: ["nastyplot", "psychic", "psyshock", "dazzlinggleam", "shadowball", "batonpass", "focusblast", "healingwish", "encore", "divertissement"],
@@ -292,6 +304,15 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 42, "abilities":["soundproof"], "moves":["followme", "psychic", "encore", "thunderpunch"]},
 		],
-		tier: "Bank",
+		tier: "New",
+	},
+	zoroark: {
+		randomBattleMoves: ["nastyplot", "darkpulse", "blackmagic", "taunt"],
+		randomDoubleBattleMoves: ["suckerpunch", "darkpulse", "focusblast", "flamethrower", "uturn", "nastyplot", "knockoff", "protect"],
+		eventPokemon: [
+			{"generation": 5, "level": 50, "gender": "M", "nature": "Quirky", "moves":["agility", "embargo", "punishment", "snarl"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 50, "moves":["sludgebomb", "darkpulse", "flamethrower", "suckerpunch"], "pokeball": "ultraball"},
+		],
+		tier: "New",
 	},
 };
