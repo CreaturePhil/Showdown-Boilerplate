@@ -360,61 +360,66 @@ exports.commands = {
         },
 	fuse: function(target, room, user) {
 		if (!this.runBroadcast()) return;
+		if(!target || target === ' ' || !target.includes(',')) return this.errorReply('Error: Invalid Argument(s).')
 		let text = "";
 		let separated = target.split(",");
-		let name = (("" + separated[0]).trim()).toLowerCase();
-		let name2 = (("" + separated[1]).trim()).toLowerCase();
-		name = toId(name);
-		name2 = toId(name2);
-		let pokemen = Tools.data.Pokedex;
-		if (pokemen[name] == undefined || pokemen[name2] == undefined)
-		{
-			this.errorReply("Error: Pokemon not found");
-			return;
+		let name = separated[0], name2 = separeted[1];
+		if (!Tools.data.Pokedex[name] || !Tools.data.Pokedex[name2]) {
+			return this.errorReply("Error: Pokemon not found");;
 		}
-		else {
-			let baseStats = {};
-			baseStats['avehp'] = Math.floor((pokemen[name].baseStats.hp + pokemen[name2].baseStats.hp) / 2);
-			baseStats['aveatk'] = Math.floor((pokemen[name].baseStats.atk + pokemen[name2].baseStats.atk) / 2);
-			baseStats['avedef'] = Math.floor((pokemen[name].baseStats.def + pokemen[name2].baseStats.def) / 2);
-			baseStats['avespa'] = Math.floor((pokemen[name].baseStats.spa + pokemen[name2].baseStats.spa) / 2);
-			baseStats['avespd'] = Math.floor((pokemen[name].baseStats.spd + pokemen[name2].baseStats.spd) / 2);
-			baseStats['avespe'] = Math.floor((pokemen[name].baseStats.spe + pokemen[name2].baseStats.spe) / 2);
-			let type = pokemen[name].types[0];
-			let ability = "";
-			let weight = (pokemen[name].weightkg + pokemen[name2].weightkg) / 2;
-			for (let i in pokemen[name].abilities) {
-				ability += pokemen[name].abilities[i] + "/";
-			}
-			ability = ability.substring(0, ability.length - 1);
-			ability = ability + " + " + pokemen[name2].abilities['0'];
-			if (separated[2] && toId(separated[2]) === "shiny" && pokemen[name2].types[1])
-				type = type + '/' + pokemen[name2].types[1];
-			else if (pokemen[name].types[0] != pokemen[name2].types[0])
-				type = type + '/' + pokemen[name2].types[0];
-			if (type.split("/")[0] === type.split("/")[1]) {
-				type = type.split("/")[0];
-			}
-			let bst = baseStats['avehp'] + baseStats['aveatk'] + baseStats['avedef'] + baseStats['avespa'] + baseStats['avespd'] + baseStats['avespe'];
-			text = "<b>Stats</b>: " + baseStats['avehp'] + "/" + baseStats['aveatk'] + "/" + baseStats['avedef'] + "/" + baseStats['avespa'] + "/" + baseStats['avespd'] + "/" + baseStats['avespe'] + "<br /><b>BST</b>:" + bst + "<br /><b>Type:</b> " + type + "<br /><b>Abilities</b>: " + ability + "<br /><b>Weight</b>: " + weight + " kg";
-			this.sendReplyBox(text);
+		let baseStats = {}, fusedTemplate = Object.assign({}, Tools.getTemplate(name)), template = Object.assign({}, Tools.getTemplate(name2));
+		Object.keys(fusedTemplate.baseStats).forEach(stat => {
+			baseStats[stat] = Math.floor((fusedTemplate.baseStats[stat] + template.baseStats[stat]) / 2);
+		});
+		fusedTemplate.baseStats = Object.assign({}, baseStats);
+		fusedTemplate.types = [fusedTemplate.types[0]];
+		let type = (separated[2] && toId(separated[2]) === 'shiny') ? 0 : 1;
+		if(template.types[type] && template.types[type] !== fusedTemplate.types[0]);
+		let weight = (Tools.data.Pokedex[fusedTemplate.id].weightkg + template.weightkg) / 2;
+		fusedTemplate.weightkg = weight;
+		fusedTemplate.abilities = Object.assign({'S': `<b>${template.abilities['0']}</b>`}, Tools.data.Pokedex[fusedTemplate.id].abilities);
+		this.sendReply(`|html|${Chat.getDataPokemonHTML(fusedTemplate)}`);
+		let details;
+		let weighthit = 20;
+		if (fusedTemplate.weightkg >= 200) {
+			weighthit = 120;
+		} else if (fusedTemplate.weightkg >= 100) {
+			weighthit = 100;
+		} else if (fusedTemplate.weightkg >= 50) {
+			weighthit = 80;
+		} else if (fusedTemplate.weightkg >= 25) {
+			weighthit = 60;
+		} else if (fusedTemplate.weightkg >= 10) {
+			weighthit = 40;
 		}
+		details = {
+			"Dex#": fusedTemplate.num,
+			"Gen": fusedTemplate.gen,
+			"Height": fusedTemplate.heightm + " m",
+			"Weight": fusedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Dex Colour": fusedTemplate.color,
+		};
+		details['<font color="#686868">Does Not Evolve</font>'] = "";
+		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
+				if (details[detail] === '') return detail;
+				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
+			}).join("&nbsp;|&ThickSpace;") + '</font>');
 	},
-        learnistor: function(target, room, user) {
-                if (!this.runBroadcast()) return;
+	learnistor: function(target, room, user) {
+		if (!this.runBroadcast()) return;
 		let learnstor = Tools.mod('istor').data.Learnsets, movestor = Tools.mod('istor').data.Movedex, dexstor = Tools.mod('istor').data.Pokedex;
-                if(!target || toId(target) === '') return this.sendReply("/learnistor: Shows the whether a Pokemon can learn a move, including Pokemon and Moves from istor.");
-                let targets = target.split(','), mon = targets[0], move = targets[1];
-                if(!mon || !dexstor[toId(mon)]) return this.errorReply("Error: Pokemon not found");
-                if(!learnstor[toId(mon)]) return this.errorReply("Error: Learnset not found");
-                if(!move || !movestor[toId(move)]) return this.errorReply("Error: Move not found");
-                mon = dexstor[toId(mon)];
-                move = movestor[toId(move)];
-                if(learnstor[toId(mon.species)].learnset[toId(move.name)]) {
-                        return this.sendReplyBox("In Istor, "+mon.species+' <font color="green"><u><b>can<b><u></font> learn '+move.name);
-                }
-                return this.sendReplyBox("In Istor, "+mon.species+' <font color="red"><u><b>can\'t<b><u></font> learn '+move.name);
-        },
+		if (!target || toId(target) === '') return this.sendReply("/learnistor: Shows the whether a Pokemon can learn a move, including Pokemon and Moves from istor.");
+		let targets = target.split(','), mon = targets[0], move = targets[1];
+		if (!mon || !dexstor[toId(mon)]) return this.errorReply("Error: Pokemon not found");
+		if (!learnstor[toId(mon)]) return this.errorReply("Error: Learnset not found");
+		if (!move || !movestor[toId(move)]) return this.errorReply("Error: Move not found");
+		mon = dexstor[toId(mon)];
+		move = movestor[toId(move)];
+		if (learnstor[toId(mon.species)].learnset[toId(move.name)]) {
+			return this.sendReplyBox("In Istor, " + mon.species + ' <font color="green"><u><b>can<b><u></font> learn ' + move.name);
+		}
+		return this.sendReplyBox("In Istor, " + mon.species + ' <font color="red"><u><b>can\'t<b><u></font> learn ' + move.name);
+	},
 	
 	'bnb' : 'badnboosted',
 	badnboosted : function (target, room, user) {
