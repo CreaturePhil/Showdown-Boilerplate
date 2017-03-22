@@ -5303,7 +5303,7 @@ exports.Formats = [
 			for (let i = 0; i < pokemon.baseTemplate.otherFormes.length; i++) {
 				let formeTemplate = this.getTemplate(pokemon.baseTemplate.otherFormes[i]);
 				for (let j in newStats) {
-					newStats[i] = Math.max(formeTemplate.baseStats[i], newStats[i]);
+					newStats[j] = Math.max(formeTemplate.baseStats[j], newStats[j]);
 				}
 			}
 			return Object.assign(template, newStats);
