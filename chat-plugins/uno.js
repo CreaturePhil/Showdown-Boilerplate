@@ -163,6 +163,7 @@ class UNOgame extends Rooms.RoomGame {
 		clearTimeout(this.timer);
 		let player = this.players[this.currentPlayer];
 		this.room.send(`${player.name}'s turn.`);
+		this.state = "play";
 		if (player.cardLock) delete player.cardLock;
 		player.sendDisplay();
 
@@ -292,7 +293,6 @@ class UNOgame extends Rooms.RoomGame {
 		this.topCard.color = color; // manually change the top card's color
 		this.sendToRoom(`The color has been changed to ${color}.`);
 		clearTimeout(this.timer);
-		this.state = "play";
 
 		if (this.isPlusFour) {
 			this.isPlusFour = false;
@@ -421,6 +421,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 exports.commands = {
 	uno: {
 		// roomowner commands
+		"off": "disable",
 		disable: function (target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
 			if (room.unoDisabled) {
@@ -434,6 +435,7 @@ exports.commands = {
 			return this.sendReply("UNO has been disabled for this room.");
 		},
 
+		"on": "enable",
 		enable: function (target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
 			if (!room.unoDisabled) {
@@ -448,13 +450,15 @@ exports.commands = {
 		},
 
 		// moderation commands
+		"new": "create",
+		"make": "create",
 		create: function (target, room, user) {
 			if (!this.can("minigame", null, room)) return;
 			if (room.unoDisabled) return this.errorReply("UNO is disabled for this room.");
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
 			room.game = new UNOgame(room, target);
-			room.add(`|uhtml|uno-${room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center;">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center;">Use <strong>/uno join</strong> to join the game.</p></div>`).update();
+			room.add(`|uhtml|uno-${room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button name="send" value="/uno join">Join</button><br />Or use <strong>/uno join</strong> to join the game.</p></div>`).update();
 			this.privateModCommand(`(A game of UNO was created by ${user.name}.)`);
 		},
 
@@ -464,6 +468,7 @@ exports.commands = {
 			if (room.game.onStart()) this.privateModCommand(`(The game of UNO was started by ${user.name}.)`);
 		},
 
+		"stop": "end",
 		end: function (target, room, user) {
 			if (!this.can("minigame", null, room)) return;
 			if (!room.game || room.game.gameid !== "uno") return this.errorReply("There is no UNO game going on in this room.");
@@ -501,6 +506,7 @@ exports.commands = {
 		},
 
 		// player/user commands
+		"j": "join",
 		join: function (target, room, user) {
 			if (!room.game || room.game.gameid !== "uno") return false;
 			if (!this.canTalk()) return false;
@@ -509,6 +515,7 @@ exports.commands = {
 			return this.sendReply("You have joined the game of UNO.");
 		},
 
+		"l": "leave",
 		leave: function (target, room, user) {
 			if (!room.game || room.game.gameid !== "uno") return false;
 			if (!room.game.leaveGame(user)) return this.errorReply("Unable to leave the game.");
@@ -553,6 +560,9 @@ exports.commands = {
 			room.game.onSendHand(user);
 		},
 
+		"players": "getusers",
+		"users": "getusers",
+		"getplayers": "getusers",
 		getusers: function (target, room, user) {
 			if (!room.game || room.game.gameid !== "uno") return false;
 			if (!this.runBroadcast()) return false;
