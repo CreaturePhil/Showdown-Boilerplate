@@ -1611,6 +1611,74 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
+		name: "[Gen 7] Rock Paper Shedinja",
+		desc: ["challenge your friends to a friendly game of rock paper scissors on Pokemon Showdown"],
+		team: 'randomRPS',
+		onBegin: function () {
+			this.add("raw|All moves won't miss. First move is Rock, second is Paper, third is Scissors. Moves will do nothing if the same move type is used.");
+			let allPokemon = [this.p1.pokemon[0], this.p2.pokemon[0]];
+			for (let i = 0; i < 2; i++) { //Give infinite PP just in case both players love to tie
+				let pokemon = allPokemon[i];
+				for (let j = 0; j < 3; j++) {
+					pokemon.moveset[j].pp = Infinity;
+					pokemon.moveset[j].maxpp = Infinity;
+				}
+			}
+		},
+		onModifyMove: function (move) {
+			move.accuracy = true;
+			if (move.id === 'suckerpunch') { //Paper
+				move.onTry = function (source, target) {
+					let decision = this.willMove(target);
+					if (!decision || decision.move.category === 'Status' || decision.move.id === 'suckerpunch') {
+						this.attrLastMove('[still]');
+						this.add('-fail', source);
+						return null;
+					}
+				};
+			} else if (move.id === 'phantomforce') { //Special case for Phantom Force
+				move.onTry = function (source, target, move) {
+					let decision = this.willMove(target);
+					if (!decision && !source.status || decision && decision.move.category !== 'Status') {
+						this.attrLastMove('[still]');
+						this.add('-fail', source);
+						return null;
+					}
+					if (source.removeVolatile(move.id)) {
+						return;
+					}
+					this.add('-prepare', source, move.name, target);
+					if (!this.runEvent('ChargeMove', source, target, move)) {
+						this.add('-anim', source, move.name, target);
+						return;
+					}
+					source.addVolatile('twoturnmove', target);
+					return null;
+				};
+			} else if (move.category !== 'Status') { //Rock
+				move.onTry = function (source, target) {
+					let decision = this.willMove(target);
+					if (!decision && !source.status || decision && decision.move.category !== 'Status') {
+						this.attrLastMove('[still]');
+						this.add('-fail', source);
+						return null;
+					}
+				};
+			} else { //Scissors
+				move.onTry = function (source, target) {
+					let decision = this.willMove(target);
+					if (!decision || decision.move.category === 'Status') {
+						this.attrLastMove('[still]');
+						this.add('-fail', source);
+						return null;
+					}
+				};
+			}
+		},
+		mod: 'gen7', //this can be replaced with a seperate mod folder if you wanted it to
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "[Gen 7] Random Benjamin Butterfree",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/benjamin-butterfree-aka-pokemon-deevolution.3581895/\">Benjamin Butterfee (Pokemon DeEvolution)</a>"],
 		mod: 'bb',
