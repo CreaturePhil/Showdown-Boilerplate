@@ -946,38 +946,6 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomRPSTeam: function (side) {
-		let team;
-		let natures = Object.keys(this.data.Natures);
-		let nature = natures[this.random(natures.length)];
-		let rock = this.random(5);
-		let scissors = this.random(2);
-		let moves = [['phantomforce','naturalgift','aerialace','shadowclaw','shadowball'][rock], 'suckerpunch', ['toxic','willowisp'][scissors]];
-		let item;
-		if (!rock) {
-			item = 'powerherb';
-		} else if (rock === 1) {
-			let berries = ['cheriberry','wikiberry','magoberry','iapapaberry','blukberry','grepaberry','magostberry','rabutaberry','spelonberry','watmelberry','occaberry','cobaberry','chartiberry','kasibberry','colburberry','lansatberry','micleberry','custapberry','rowapberry','marangaberry'];
-			item = berries[this.random(berries.length)];
-		} else {
-			item = ['leftovers','sitrusberry','smoothrock','widelens'][this.random(4)];
-		}
-		team = [{
-			name: 'Shedinja',
-			species: 'Shedinja',
-			item: item,
-			ability: 'wonderguard',
-			moves: moves,
-			evs: {hp: 252, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
-			ivs: {hp: 31, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
-			nature: nature,
-			level: 100,
-			happiness: 255,
-			shiny: false,
-		}];
-
-		return team;
-	},
 	randomCCTeam: function (side) {
 		let team = [];
 
