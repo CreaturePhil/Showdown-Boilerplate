@@ -252,7 +252,7 @@ loppeyemegax:{num:-141,species:"Loppeye-Mega-X",baseSpecies:"Loppeye",forme:"Meg
  },
 loppeyemegay:{num:-141,species:"Loppeye-Mega-Y",baseSpecies:"Loppeye",forme:"Mega-Y",formeLetter:"M",types:["Ghost","Fighting"],genderRatio:{M:0.5,F:0.5},baseStats:{hp:67,atk:145,def:99,spa:69,spd:91,spe:117},abilities:{0:"Scrappy"},heightm:1.6,weightkg:60.0,color:"Brown",eggGroups:["Human-Like"], 
  },
-houndlion:{num:-142,species:"Houndlion",types:["Dark","Steel"],genderRatio:{M:0.5,F:0.5},baseStats:{hp:83,atk:90,def:98,spa:120,spd:76,spe:112},abilities:{0:"Justified Fire"},heightm:2,1,weightkg:250,color:"Black",eggGroups:["Undiscovered"],otherFormes:["houndlionmega"], 
+houndlion:{num:-142,species:"Houndlion",types:["Dark","Steel"],genderRatio:{M:0.5,F:0.5},baseStats:{hp:83,atk:90,def:98,spa:120,spd:76,spe:112},abilities:{0:"Justified Fire"},heightm:2.1,weightkg:250,color:"Black",eggGroups:["Undiscovered"],otherFormes:["houndlionmega"], 
  },
 houndlionmega:{num:-142,species:"Houndlion-Mega",baseSpecies:"Houndlion",forme:"Mega",formeLetter:"M",types:["Dark","Steel"],genderRatio:{M:0.5,F:0.5},baseStats:{hp:83,atk:90,def:138,spa:150,spd:86,spe:132},abilities:{0:"Solar Power"},heightm:2.1,weightkg:250,color:"Black",eggGroups:["Undiscovered"], 
  },
