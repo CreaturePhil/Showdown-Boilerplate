@@ -1629,6 +1629,7 @@ exports.Formats = [
 			move.accuracy = true;
 			if (move.id === 'suckerpunch') { //Paper
 				move.onTry = function (source, target) {
+					source.rps = "paper";
 					let decision = this.willMove(target);
 					if (!decision || decision.move.category === 'Status' || decision.move.id === 'suckerpunch') {
 						this.attrLastMove('[still]');
@@ -1638,8 +1639,9 @@ exports.Formats = [
 				};
 			} else if (move.id === 'phantomforce') { //Special case for Phantom Force
 				move.onTry = function (source, target, move) {
+					source.rps = "rock";
 					let decision = this.willMove(target);
-					if (!decision && !source.status || decision && decision.move.category !== 'Status') {
+					if (!decision && target.rps !== "scissors" || decision && decision.move.category !== 'Status') {
 						this.attrLastMove('[still]');
 						this.add('-fail', source);
 						return null;
@@ -1657,8 +1659,9 @@ exports.Formats = [
 				};
 			} else if (move.category !== 'Status') { //Rock
 				move.onTry = function (source, target) {
+					source.rps = "rock";
 					let decision = this.willMove(target);
-					if (!decision && !source.status || decision && decision.move.category !== 'Status') {
+					if (!decision && target.rps !== "scissors" || decision && decision.move.category !== 'Status') {
 						this.attrLastMove('[still]');
 						this.add('-fail', source);
 						return null;
@@ -1666,8 +1669,9 @@ exports.Formats = [
 				};
 			} else { //Scissors
 				move.onTry = function (source, target) {
+					source.rps = "scissors";
 					let decision = this.willMove(target);
-					if (!decision || decision.move.category === 'Status') {
+					if (!decision && target.rps !== "paper" || decision && decision.move.category === 'Status') {
 						this.attrLastMove('[still]');
 						this.add('-fail', source);
 						return null;
