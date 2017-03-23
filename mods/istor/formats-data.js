@@ -233,6 +233,14 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["partingshot", "destinybond", "shadowball", "perishsong", "protect"],
 		tier: "New",
 	},
+	staggart: {
+		randomBattleMoves: ["moonlight", "topsyturvy", "taunt", "thunderwave", "voltswitch", "moonblast", "naturepower", "focusblast", "reflect", "lightscreen"],
+		tier: "LC",
+	},
+	outaggart: {
+		randomBattleMoves: ["moonlight", "topsyturvy", "taunt", "thunderwave", "voltswitch", "moonblast", "naturepower", "focusblast", "reflect", "lightscreen"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
