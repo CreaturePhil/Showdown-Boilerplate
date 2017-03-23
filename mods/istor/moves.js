@@ -580,4 +580,36 @@ exports.BattleMovedex = {
 				this.add('-end', target, 'Disturbance', '[off]');
 			},
 		},
+		target: "any",
+		type: "Electric",
+		zMovePower: 160,
+		contestType: "Clever",
+	},
+	"sandvortex": {
+		num: 542,
+		accuracy: 70,
+		basePower: 110,
+		category: "Special",
+		desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop. If the weather is Sandstorm, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+		shortDesc: "30% chance to confuse target. Can't miss in sand.",
+		id: "sandvortex",
+		isViable: true,
+		name: "Sand Vortex",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, distance: 1},
+		onModifyMove: function (move) {
+			if (this.isWeather(['sandstorm'])) {
+				move.accuracy = true;
+			}
+		},
+		secondary: {
+			chance: 30,
+			volatileStatus: 'confusion',
+		},
+		target: "any",
+		type: "Rock",
+		zMovePower: 185,
+		contestType: "Cool",
+	},
 };
