@@ -823,7 +823,7 @@ exports.BattlePokedex = {
 		heightm: 0.9,
 		weightkg: 40.8,
 		color: "Black",
-		prevo: "outaggart",
+		prevo: "staggart",
 		evoLevel: 38,
 		eggGroups: ["Human-Like", "Fairy"],
 	},
