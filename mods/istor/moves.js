@@ -551,7 +551,7 @@ exports.BattleMovedex = {
 		category: "Special",
 		desc: "For 2 turns, the target cannot use Electric moves.",
 		shortDesc: "For 2 turns, the target cannot use Electric moves.",
-		id: "distrubance",
+		id: "disturbance",
 		name: "Disturbance",
 		pp: 15,
 		priority: 0,
