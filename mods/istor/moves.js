@@ -544,4 +544,40 @@ exports.BattleMovedex = {
 		zMovePower: 140,
 		contestType: "Beautiful",
 	},
+	"disturbance": {
+		num: 10022,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "For 2 turns, the target cannot use Electric moves.",
+		shortDesc: "For 2 turns, the target cannot use Electric moves.",
+		id: "distrubance",
+		name: "Disturbance",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, authentic: 1},
+		effect: {
+			duration: 2,
+			onStart: function (target) {
+				this.add('-start', target, 'Disturbance', '[off]');
+			},
+			onDisableMove: function (pokemon) {
+				for (let i = 0; i < pokemon.moveset.length; i++) {
+					if (effect.type === 'Electric') {
+						pokemon.disableMove(pokemon.moveset[i].id);
+					}
+				}
+			},
+			onBeforeMovePriority: 6,
+			onBeforeMove: function (pokemon, target, move) {
+				if (effect.type === 'Electric') {
+					this.add('cant', pokemon, 'move: Disturbance');
+					return false;
+				}
+			},
+			onResidualOrder: 22,
+			onEnd: function (target) {
+				this.add('-end', target, 'Disturbance', '[off]');
+			},
+		},
 };
