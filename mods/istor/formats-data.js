@@ -198,11 +198,11 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	zerazay: {
-		randomBattleMoves: ["powergem", "shadowball", "thunderbolt", "calmmind"],
+		randomBattleMoves: ["sandvortex", "shadowball", "thunderbolt", "calmmind"],
 		tier: "LC",
 	},
 	zoulzura: {
-		randomBattleMoves: ["powergem", "shadowball", "thunderbolt", "calmmind"],
+		randomBattleMoves: ["sandvortex", "shadowball", "thunderbolt", "calmmind"],
 		tier: "New",
 	},
 	koltie: {
