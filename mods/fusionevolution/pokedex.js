@@ -8,7 +8,7 @@ swampamar:{
   types:["Dark","Water"],
   genderRatio:{M:0.5,F:0.5},
   baseStats:{hp:103,atk:111,def:99,spa:86,spd:92,spe:76},
-  abilities:{0:"Turnabout", H: "Torrent"},
+  abilities:{0:"Turnabout Torrent"},
   heightm:2,
   weightkg:75.5,
   color:"Blue",
