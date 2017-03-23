@@ -81,175 +81,26 @@ exports.BattleAbilities = {
 		rating: 2,
 		num: 194
 	},
-	/* Spandamn its starting to crack from here so commenting it, fix it */
-
-	/*	"flashweather": {
-			desc: "This Pokemon is immune to Fire-type moves. The first time it is hit by a Fire-type move, its attacking stat is multiplied by 1.5 while using a Fire-type attack as long as it remains active and has this Ability. If this Pokemon is frozen, it cannot be defrosted by Fire-type attacks.",
-			shortDesc: "This Pokemon's Fire attacks do 1.5x damage if hit by one Fire move; Fire immunity.",
-			onTryHit: function (target, source, move) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
-				if (target !== source && move.type === 'Fire') {
-					move.accuracy = true;
-					if (!target.addVolatile('flashfire')) {
-						this.add('-immune', target, '[msg]', '[from] ability: Flash Fire');
-					}
-					return null;
-			}
-			},
-			onEnd: function (pokemon) {
-				pokemon.removeVolatile('flashfire');
-			},
-			effect: {
-				noCopy: true, // doesn't get copied by Baton Pass
-				onStart: function (target) {
-					this.add('-start', target, 'ability: Flash Fire');
-				},
-				onModifyAtkPriority: 5,
-				onModifyAtk: function (atk, attacker, defender, move) {
-					if (move.type === 'Fire') {
-						this.debug('Flash Fire boost');
-						return this.chainModify(1.5);
-					}
-				},
-				onModifySpAPriority: 5,
-				onModifySpA: function (atk, attacker, defender, move) {
-					if (move.type === 'Fire') {
-						this.debug('Flash Fire boost');
-						return this.chainModify(1.5);
-					}
-				},
-				onEnd: function (target) {
-					this.add('-end', target, 'ability: Flash Fire', '[silent]');
-				}
-	},
-				if (this.isWeather(['raindance', 'primordialsea'])) {
-				if (target !== source && move.type === 'water') {
-					move.accuracy = true;
-					if (!target.addVolatile('flashwater')) {
-						this.add('-immune', target, '[msg]', '[from] ability: Flash water');
-					}
-					return null;
-				}
-			},
-			onEnd: function (pokemon) {
-				pokemon.removeVolatile('flashwater');
-			},
-			effect: {
-				noCopy: true, // doesn't get copied by Baton Pass
-				onStart: function (target) {
-					this.add('-start', target, 'ability: Flash water');
-				},
-				onModifyAtkPriority: 5,
-				onModifyAtk: function (atk, attacker, defender, move) {
-					if (move.type === 'water') {
-						this.debug('Flash water boost');
-						return this.chainModify(1.5);
-					}
-				},
-				onModifySpAPriority: 5,
-				onModifySpA: function (atk, attacker, defender, move) {
-					if (move.type === 'water') {
-						this.debug('Flash water boost');
-						return this.chainModify(1.5);
-					}
-				},
-				onEnd: function (target) {
-					this.add('-end', target, 'ability: Flash water', '[silent]');
-				}
-	},
-	if (this.isWeather(['hail'])) {
-	if (target !== source && move.type === 'ice') {
-					move.accuracy = true;
-					if (!target.addVolatile('flashice')) {
-						this.add('-immune', target, '[msg]', '[from] ability: Flash ice');
-					}
-					return null;
-				}
-			},
-			onEnd: function (pokemon) {
-				pokemon.removeVolatile('flashice');
-			},
-			effect: {
-				noCopy: true, // doesn't get copied by Baton Pass
-				onStart: function (target) {
-					this.add('-start', target, 'ability: Flash ice');
-				},
-				onModifyAtkPriority: 5,
-				onModifyAtk: function (atk, attacker, defender, move) {
-					if (move.type === 'ice') {
-						this.debug('Flash ice boost');
-						return this.chainModify(1.5);
-					}
-				},
-				onModifySpAPriority: 5,
-				onModifySpA: function (atk, attacker, defender, move) {
-					if (move.type === 'ice') {
-						this.debug('Flash ice boost');
-						return this.chainModify(1.5);
-					}
-				},
-				onEnd: function (target) {
-					this.add('-end', target, 'ability: Flash ice', '[silent]');
-				}
-	},
-
-	if (this.isWeather(['sandstorm'])) {
-	if (target !== source && move.type === 'rock') {
-					move.accuracy = true;
-					if (!target.addVolatile('flashrock')) {
-						this.add('-immune', target, '[msg]', '[from] ability: Flash rock');
-					}
-					return null;
-				}
-			},
-			onEnd: function (pokemon) {
-				pokemon.removeVolatile('flashrock');
-			},
-			effect: {
-				noCopy: true, // doesn't get copied by Baton Pass
-				onStart: function (target) {
-					this.add('-start', target, 'ability: Flash rock');
-				},
-				onModifyAtkPriority: 5,
-				onModifyAtk: function (atk, attacker, defender, move) {
-					if (move.type === 'rock') {
-						this.debug('Flash rock boost');
-						return this.chainModify(1.5);
-					}
-				},
-				onModifySpAPriority: 5,
-				onModifySpA: function (atk, attacker, defender, move) {
-					if (move.type === 'rock') {
-						this.debug('Flash rock boost');
-						return this.chainModify(1.5);
-					}
-				},
-				onEnd: function (target) {
-					this.add('-end', target, 'ability: Flash rock', '[silent]');
-				}
-
-	},
-
-
-			
-			id: "flashfire",
-			name: "Flash Fire",
-			rating: 3,
-			num: 195
-		},
+	
 
 	"intenserivalry": {
 		desc: "This Pokemon's attacks have their power multiplied by 1.25 against targets of the same gender or multiplied by 0.75 against targets of the opposite gender. There is no modifier if either this Pokemon or the target is genderless.",
 		shortDesc: "This Pokemon's attacks do 1.25x on same gender targets; 0.75x on opposite gender.",
-		onBasePowerPriority: 8,
+		onStart: function (pokemon) {
+			this.add('-ability', pokemon, 'Teravolt');
+		},
+		onModifyMove: function (move) {
+			move.ignoreAbility = true;
+		},
 		onBasePower: function (basePower, attacker, defender, move) {
 			if (attacker.gender && defender.gender) {
-			if (attacker.gender === defender.gender) {
-		onStart: function (pokemon) {
-			this.add('-ability', pokemon, 'Mold Breaker');
-		},
-		stopAttackEvents: true,
-				} 
+				if (attacker.gender === defender.gender) {
+					this.debug('Rivalry boost');
+					return this.chainModify(1.25);
+				} else {
+					this.debug('Rivalry weaken');
+					return this.chainModify(0.75);
+				}
 			}
 		},
 		id: "intenserivalry",
@@ -258,7 +109,7 @@ exports.BattleAbilities = {
 		num: 196
 
 		},
-*/
+
 "intimidateveil": {
 	desc: "On switch-in, this Pokemon lowers the Attack of adjacent opposing Pokemon by 1 stage. Pokemon behind a substitute are immune.",
 	shortDesc: "On switch-in, this Pokemon lowers the Attack of adjacent opponents by 1 stage.",
@@ -302,10 +153,7 @@ exports.BattleAbilities = {
 	shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it.",
 	onImmunity: function(type) {
 		if (type === 'Ground') return false;
-		{
-			source.trySetStatus('psn', target, move);
-		}
-
+		/* Levipoison (Levitate+Poison Point) - If this Pokémon is hit with a Ground-type attack, the attacker is poisoned. Grants the Pokémon with this ability an immunity to ground */
 	},
 	id: "levipoison",
 	name: "Levipoison",
@@ -866,7 +714,7 @@ exports.BattleAbilities = {
 		num: 219
 	},
 
-	"naturalguard": {
+	/*"naturalguard": {
 		shortDesc: "Every move used by or against this Pokemon will always hit.",
 		onAnyAccuracy: function(accuracy, target, source, move) {
 			if (move && (source === this.effectData.target || pokemon.status === 'psn' || pokemon.status === 'tox' || pokemon.status === 'brn' || pokemon.status === 'frz' || pokemon.status === 'par')) {
@@ -878,8 +726,8 @@ exports.BattleAbilities = {
 		id: "naturalguard",
 		name: "Natural Guard",
 		rating: 4,
-		num: 220
-	},
+		num: 220, 
+	},*/
 
 	"stickylevitation": {
 		shortDesc: "This Pokemon cannot lose its held item due to another Pokemon's attack.",
@@ -1066,7 +914,7 @@ exports.BattleAbilities = {
 	num: 228
 },
 
-"cursedtrace": {
+/*"cursedtrace": {
 	desc: "On switch-in, this Pokemon copies a random adjacent opposing Pokemon's Ability. If there is no Ability that can be copied at that time, this Ability will activate as soon as an Ability can be copied. Abilities that cannot be copied are Flower Gift, Forecast, Illusion, Imposter, Multitype, Stance Change, Trace, and Zen Mode.",
 	shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 	onUpdate: function(pokemon) {
@@ -1110,7 +958,7 @@ exports.BattleAbilities = {
 	rating: 3,
 	num: 229
 },
-
+*/
 
 "sheerflight": {
 	desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed.",
@@ -1181,7 +1029,7 @@ exports.BattleAbilities = {
 		}
 	},
 
-	"hardbody": {
+	/*"hardbody": {
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages.",
 		onBoost: function(boost, target, source, effect) {
 			{
@@ -1207,7 +1055,7 @@ exports.BattleAbilities = {
 		name: "Hard Body",
 		rating: 2,
 		num: 231
-	},
+	},*/
 
 	"gutbreaker": {
 		shortDesc: "This Pokemon's moves and their effects ignore the Abilities of other Pokemon.",
@@ -1227,7 +1075,7 @@ exports.BattleAbilities = {
 		num: 232
 	},
 
-	"synchofloat": {
+	/*"synchofloat": {
 		desc: "This Pokemon is immune to Ground. Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
 		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it.",
 		onImmunity: function(type) {
@@ -1241,7 +1089,7 @@ exports.BattleAbilities = {
 		name: "Synchofloat",
 		rating: 3.5,
 		num: 233
-	},
+	},*/
 
 	"magicianswand": {
 		desc: "This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by an Electric-type move. If this Pokemon is not the target of a single-target Electric-type move used by another Pokemon, this Pokemon redirects that move to itself if it is within the range of that move.",
