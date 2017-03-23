@@ -79,7 +79,7 @@ vespicor:{num:-76,species:"Vespicor",types:["Dark", "Poison"],genderRatio:{M:0.5
 aggrodos:{num:-77,species:"Aggrodos",types:["Water", "Steel"],genderRatio:{M:0.5,F:0.5},baseStats:{hp:92,atk:127,def:139,spa:70,spd:90,spe:75},abilities:{0:"FEAR"},heightm:2,weightkg:75.5,color:"Brown",eggGroups:["Monster"]
 },
 
-aggrodosmegax:{num:-77,species:"Aggrodos-Mega-X",baseSpecies:"Aggrodos",forme:"Mega",formeLetter:"M",types:["Water", "Dark"],,baseStats:{hp:92,atk:157,def:169,spa:80,spd:120,spe:75},abilities:{0:"Mold Breaker"},heightm:2,weightkg:75.5,color:"Brown",eggGroups:["Monster"]
+aggrodosmegax:{num:-77,species:"Aggrodos-Mega-X",baseSpecies:"Aggrodos",forme:"Mega",formeLetter:"M",types:["Water", "Dark"],baseStats:{hp:92,atk:157,def:169,spa:80,spd:120,spe:75},abilities:{0:"Mold Breaker"},heightm:2,weightkg:75.5,color:"Brown",eggGroups:["Monster"]
 },
 
 aggrodosmegay:{num:-77,species:"Aggrodos-Mega-Y",baseSpecies:"Aggrodos",forme:"Mega",formeLetter:"M",types:["Water", "Steel"],baseStats:{hp:92,atk:157,def:189,spa:70,spd:110,spe:75},abilities:{0:"Filter"},heightm:2,weightkg:75.5,color:"Brown",eggGroups:["Monster"]
