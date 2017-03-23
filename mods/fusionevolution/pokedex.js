@@ -8,11 +8,11 @@ swampamar:{
   types:["Dark","Water"],
   genderRatio:{M:0.5,F:0.5},
   baseStats:{hp:103,atk:111,def:99,spa:86,spd:92,spe:76},
-  abilities:{0:"Turnabout Torrent"},
+  abilities:{0:"Turnabout", H: "Torrent"},
   heightm:2,
   weightkg:75.5,
   color:"Blue",
-  eggGroups:["Water 2"]
+  eggGroups:["Water 2"],
 },
 swampamarmega:{num:-62,species:"Swampamar-Mega",baseSpecies:"Swampamar",forme:"Mega",formeLetter:"M",types:["Dark","Water"],baseStats:{hp:103,atk:151,def:119,spa:96,spd:112,spe:86},abilities:{0:"Swift Swim"},heightm:2,weightkg:75.5,color:"Blue",eggGroups:["Water 2"]
 },
