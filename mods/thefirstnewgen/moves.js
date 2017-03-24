@@ -167,7 +167,7 @@ exports.BattleMovedex = {
 	},
 	"powerball": {
 		accuracy: 90,
-		basePower: 75,
+		basePower: 150,
 		category: "Special",
 		desc: "This move's type depends on the user's held Plate.",
 		shortDesc: "Type varies based on the held Plate.",
