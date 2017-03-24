@@ -5,6 +5,13 @@ exports.BattleScripts = {
 		let team = [];
 		let variant = (this.random(2) === 1);
 		let sets = {
+			'Zygardeorder' : { /* Eyy will edit it soon */
+				species: 'Zygarde-10%', ability: 'Tough Claws', item: 'Rawr', gender: 'M',
+				moves: ['thousandarrows', 'spectralthief', 'uturn'],
+				signaturMove: "Rawrr",
+				evs: {hp: 252, atk:252, spd: 252, def: 252, spe: 252},
+				nature:'Jolly',
+			},
 			'Flurbel' : {
 				species: 'Lillipup', ability: 'Contrary Plus Plus', item: 'Eviolite', gender: 'M',
 				moves: ['vcreate', 'superpower', 'dragonascent'],
