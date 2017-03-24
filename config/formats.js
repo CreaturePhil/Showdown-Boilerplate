@@ -3447,7 +3447,7 @@ exports.Formats = [
 		ruleset: ['[Gen 7] Ubers'],
 		mod: 'zmoveseverywhere',
 	},
-		{
+	{
 		section: "Frantic Fusions",
 		column: 4,
 	},
@@ -3459,6 +3459,7 @@ exports.Formats = [
 		mod: 'franticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Uber', 'Unreleased', 'Shadow Tag', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite', 'Swoobat'],
+		suspect: "Nothing Yet (Test)",
 		onModifyTemplate: function (template, pokemon) {
 			let fusionTemplate = this.getTemplate(pokemon.name), mixedTemplate = Object.assign({}, template);
 			if (!fusionTemplate.exists) return template;
