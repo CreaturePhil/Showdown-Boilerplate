@@ -241,6 +241,18 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["moonlight", "topsyturvy", "taunt", "thunderwave", "voltswitch", "moonblast", "naturepower", "focusblast", "reflect", "lightscreen"],
 		tier: "New",
 	},
+	eusociant: {
+		randomBattleMoves: ["leechlife", "swordsdance", "uturn", "wildcharge", "knockoff"],
+		tier: "LC",
+	},
+	phospant: {
+		randomBattleMoves: ["leechlife", "swordsdance", "uturn", "wildcharge", "knockoff"],
+		tier: "NFE",
+	},
+	luminescant: {
+		randomBattleMoves: ["leechlife", "swordsdance", "uturn", "wildcharge", "knockoff", "healorder"/*, "Spectrum Strike*/],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
