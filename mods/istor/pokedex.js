@@ -874,7 +874,7 @@ exports.BattlePokedex = {
 		species: "Uisge",
 		gender: "N",
 		types: ["Water", "Psychic"],
-		baseStats: {hp: 65, atk: 100, def: 70, spa: 85, spd: 70, spe: 130},
+		baseStats: {hp: 90, atk: 70, def: 110, spa: 135, spd: 70, spe: 105},
 		abilities: {0: "Magical Emanation"},
 		heightm: 4.3,
 		weightkg: 77.7,
