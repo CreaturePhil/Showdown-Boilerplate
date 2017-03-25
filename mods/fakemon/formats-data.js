@@ -25,4 +25,8 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["dazzlinggleam", "earthpower", "psyshock", "focusblast", "flashcannon", "glare", "stealth rock"],
 		tier: "New",
 	},
+	mechroarmancer: {
+		randomBattleMoves: ["shiftgear", "dragonclaw", "ironhead", "geargrind", "partingshot", "clangingscales", "flashcannon", "icebeam"],
+		tier: "Uber",
+	},
 };
