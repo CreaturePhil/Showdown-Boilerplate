@@ -253,6 +253,10 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["leechlife", "swordsdance", "uturn", "wildcharge", "knockoff", "healorder"/*, "Spectrum Strike*/],
 		tier: "New",
 	},
+	nourizo: {
+		randomBattleMoves: ["synthesis", "spikyshield", "leechseed", "gigadrain", "aromatherapy"],
+		tier: "New",
+	},
 	uisge: {
 		randomBattleMoves: ["scald", "psyshock", "recover", "calmmind"],
 		tier: "New",
