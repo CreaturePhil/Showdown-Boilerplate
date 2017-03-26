@@ -3217,6 +3217,27 @@ exports.Formats = [
 		},
 
 	},
+	{
+		name: "[Gen 7] Scalemons",
+		desc: [
+		    "All Pokemon have their stats, barring HP, scaled to give them a BST of around 600.",
+		    "&bullet; <a href=\"https://docs.google.com/spreadsheets/d/1JW-YTOUgg6AtF47Pmea1mOvCgszl-CGsWgratnvuLE8/edit#gid=1841107233\">Spreadsheet of all stats</a>",
+		],
+       
+		mod: 'gen7',
+		ruleset: ['[Gen 7] Anything Goes', 'Species Clause'],
+		banlist: ['Eviolite'],
+		onModifyTemplate: function (template, pokemon) {
+			let bst = 0;
+			let hp = template.baseStats['hp'];
+			Object.values(template.baseStats).forEach(stat => {bst += stat;});
+			for (let i in template.baseStats) {
+				template.baseStats['hp'] = hp;
+				template.baseStats[i] = Math.floor((template.baseStats[i] * (600 - template.baseStats['hp'])) / (bst - template.baseStats['hp']));
+			}
+			return template;
+		},
+	},
 	// Pet Mods ///////////////////////////////////////////////////////////////////
 	{
 		section: "Pet Mods",
