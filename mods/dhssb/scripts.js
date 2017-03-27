@@ -6,7 +6,7 @@ exports.BattleScripts = {
 		let variant = (this.random(2) === 1);
 		let sets = {
 			'Zygardeorder' : { /* Eyy will edit it soon */
-				species: 'Zygarde-10%', ability: 'Tough Claws', item: 'Rawr', gender: 'M',
+				species: 'Zygarde-10%', ability: 'Rawr', item: 'Leftovers', gender: 'M',
 				moves: ['thousandarrows', 'spectralthief', 'uturn'],
 				signaturMove: "Rawrr",
 				evs: {hp: 252, atk:252, spd: 252, def: 252, spe: 252},
