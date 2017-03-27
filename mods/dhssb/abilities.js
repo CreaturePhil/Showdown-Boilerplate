@@ -2,6 +2,7 @@
 
 exports.BattleAbilities = {
 	"rawr": {
+		shortDesc: "Thick Fat + Clear Body",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Rawr');
 			this.add('-formechange', pokemon, 'Sharpedo-Mega', '[msg]');
@@ -63,6 +64,7 @@ exports.BattleAbilities = {
 		name: "Ultra Technical",
 	},
 	"dankzone": {
+		shortDesc: "Truggets Grassy Terrain, Sunny Day and Trick Room on switch in",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Dank Zone');
 			this.addPseudoWeather('trickroom', pokemon);
@@ -73,6 +75,7 @@ exports.BattleAbilities = {
 		id: 'dankzone',
 	},
 	"staticboost": {
+		shortDesc: "+1 in all stats upon switch in",
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Static Boost');
 			this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1, evasion:1});
@@ -157,6 +160,7 @@ exports.BattleAbilities = {
 		name: "Russian Winter",
 	},
         "flairhax": {
+		shortDesc: "Serene Grace and Protean with +2 Speed on switch in",
 		onModifyMovePriority: -2,
 		onModifyMove: function (move) {
 			if (move.secondaries) {
@@ -181,6 +185,7 @@ exports.BattleAbilities = {
 		name: "Flair Hax",
 	},
 	pressurebreaker: {
+		shortDesc: "Pressure + Mold Breaker",
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Pressure');
 			this.add('-ability', pokemon, 'Mold Breaker');
@@ -246,6 +251,7 @@ exports.BattleAbilities = {
 		name: "Flame Guard",
 	},
 	breakthrough: {
+		shortDesc: "This Pokemon's moves ignores type immunities",
 		onModifyMovePriority: -5,
 		onModifyMove: function (move) {
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
@@ -270,6 +276,7 @@ exports.BattleAbilities = {
 		rating: 3,
 	},
 	toughbounce: {
+		shortDesc: "Tough Claws + Magic Bounce + Own Tempo",
 	        onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
 			if (move.flags['contact']) {
@@ -317,6 +324,7 @@ exports.BattleAbilities = {
 		rating: 5,
 	},
 	breakingpoint: {
+		shortDesc: "Shadow Tag + No Guard",
 		onFoeTrapPokemon: function (pokemon) {
 			if ((!pokemon.hasAbility('shadowtag')&&!pokemon.hasAbility('breakingpoint')) && this.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap(true);
@@ -339,6 +347,7 @@ exports.BattleAbilities = {
 		rating: 2,
 	},
 	"theunderlord": {
+		shortDesc: "Flame Body + changes type to resist the opposing Pokemon's last attack.",
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				if (parseInt(this.random(10)) == 7) {
@@ -373,6 +382,7 @@ exports.BattleAbilities = {
 		name: "The Underlord",
 	},
 	epicclaws: {
+		shortDesc: "Tough Claws + Magic Bounce",
 		onModifyAtkPriority: 5,
 		onModifyAtk: function (atk) {
 			return this.chainModify(1.5);
@@ -478,6 +488,7 @@ exports.BattleAbilities = {
 		},
 	},
 	blessedhax: {
+		shortDesc: "Speed Boost + Serne Grace and +1 Def and SpD boost on switch in",
 		onStart: function (pokemon) {
 			this.boost({def:1,spd:1});
 		},
@@ -499,6 +510,7 @@ exports.BattleAbilities = {
 		name:'Blessed Hax',
 	},
 	knowledge: {
+		shortDesc: "+3 Def and SpD on switch in, high crit ratio",
 		onStart: function (pokemon) {
 			this.boost({def:3,spd:3});
 		},
@@ -513,6 +525,7 @@ exports.BattleAbilities = {
 		},
 	},
 	'partingshotspam': {
+		shortDesc: "Uses Parting Shot on switch in",
 		onStart: function (source) {
 			this.useMove('Parting Shot Spam', source);
 		},
@@ -520,6 +533,7 @@ exports.BattleAbilities = {
 		name: "Parting Shot Spam",
 	},
 	'hidden': {
+		shortDesc: "Uses substitute on switch in",
 		onStart: function (source) {
 			this.useMove('Substitute', source);
 		},
@@ -538,6 +552,7 @@ exports.BattleAbilities = {
 		num: 83,
 	},
 	'slowchat': {
+		shortDesc: "Uses Defog, Sticky Web then Stealth Rock on switch in",
 		onStart: function (source) {
 			this.useMove('Defog', source);
 			this.useMove('Sticky Web', source);
