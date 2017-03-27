@@ -1,6 +1,41 @@
 'use strict';
 
 exports.BattleAbilities = {
+	"rawr": {
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Rawr');
+			this.add('-formechange', pokemon, 'Sharpedo-Mega', '[msg]');
+			this.add('-formechange', pokemon, 'Sharpedo', '[msg]');
+			this.add('-formechange', pokemon, 'Absol-Mega', '[msg]');
+			this.add('-formechange', pokemon, 'Zygarde-Complete', '[msg]');
+		},
+		onSourceModifyAtk: function (atk, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				this.debug('Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onSourceModifySpA: function (atk, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				this.debug('Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onBoost: function (boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			for (let i in boost) {
+				if (boost[i] < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Rawr", "[of] " + target);
+		},
+		name:"Rawr",
+		id:"rawr",
+	},
 	"contraryplusplus": {
 		onModifyMove: function(move, pokemon) {
 			move.ignoreAbility = true;
