@@ -1959,7 +1959,7 @@ exports.Formats = [
 		team: 'random',
 		onModifyMovePriority: 5,
 		onModifyMove: function(move, pokemon) {
-			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return;
+			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return move;
 			if (move.isZ) {
 				move.basePower = 180;
 				return;
@@ -1969,6 +1969,7 @@ exports.Formats = [
 				return;
 			}
 			move.basePower = 100;
+			return move;
 		},
 	},
 	{
