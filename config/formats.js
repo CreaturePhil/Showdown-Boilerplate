@@ -3021,7 +3021,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Move Equality",
-		desc: ["&bullet; Every Move has 100 base power with the exception of moves that have varying base powers."],
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3599280/\">Move Equality</a>: Every Move has 100 base power with the exception of moves that have varying base powers."],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Fell Stinger', 'Mud Slap', 'Power Up Punch'],
