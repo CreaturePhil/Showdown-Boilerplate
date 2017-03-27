@@ -1962,11 +1962,11 @@ exports.Formats = [
 			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return move;
 			if (move.isZ) {
 				move.basePower = 180;
-				return;
+				return move;
 			}
 			if (move.multihit) {
 				move.basePower = parseInt(100 / move.multihit[move.multihit.length - 1]);
-				return;
+				return move;
 			}
 			move.basePower = 100;
 			return move;
@@ -3024,19 +3024,20 @@ exports.Formats = [
 		desc: ["&bullet; Every Move has 100 base power with the exception of moves that have varying base powers."],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Power Up Punch'],
+		banlist: ['Fell Stinger', 'Mud Slap', 'Power Up Punch'],
 		onModifyMovePriority: 5,
 		onModifyMove: function(move, pokemon) {
-			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return;
+			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return move;
 			if (move.isZ) {
 				move.basePower = 180;
-				return;
+				return move;
 			}
 			if (move.multihit) {
 				move.basePower = parseInt(100 / move.multihit[move.multihit.length - 1]);
-				return;
+				return move;
 			}
 			move.basePower = 100;
+			return move;
 		},
 	},
 	{
