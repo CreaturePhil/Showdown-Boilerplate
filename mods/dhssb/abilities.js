@@ -9,17 +9,18 @@ exports.BattleAbilities = {
 			this.add('-formechange', pokemon, 'Sharpedo', '[msg]');
 			this.add('-formechange', pokemon, 'Absol-Mega', '[msg]');
 			this.add('-formechange', pokemon, 'Zygarde-Complete', '[msg]');
+			pokemon.formeChange("Zygarde-Complete");
 		},
 		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
-				this.debug('Thick Fat weaken');
+				this.debug('Rawr weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onSourceModifySpA: function (atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
-				this.debug('Thick Fat weaken');
+				this.debug('Rawr weaken');
 				return this.chainModify(0.5);
 			}
 		},
