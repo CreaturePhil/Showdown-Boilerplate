@@ -134,7 +134,7 @@ exports.BattleFormats = {
 				totalEV += set.evs[k];
 			}
 			// In gen 6, it is impossible to battle other players with pokemon that break the EV limit
-			if (totalEV > 510 && this.gen >= 6) {
+			if (totalEV > 510 && this.gen === 6) {
 				problems.push((set.name || set.species) + " has more than 510 total EVs.");
 			}
 
@@ -298,8 +298,7 @@ exports.BattleFormats = {
 			}
 		},
 		onTeamPreview: function () {
-			let lengthData = this.getFormat().teamLength;
-			this.makeRequest('teampreview', lengthData && lengthData.battle || '');
+			this.makeRequest('teampreview');
 		},
 	},
 	littlecup: {
@@ -690,6 +689,17 @@ exports.BattleFormats = {
 			for (let i = 0; i < this.sides[1].pokemon.length; i++) {
 				if (this.sides[1].pokemon[i].speciesid === 'rayquaza') this.sides[1].pokemon[i].canMegaEvo = false;
 			}
+		},
+	},
+	inversemod: {
+		effectType: 'Rule',
+		name: 'Inverse Mod',
+		onNegateImmunity: false,
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		},
 	},
 };

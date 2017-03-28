@@ -197,18 +197,43 @@ exports.BattleScripts = {
 				if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
 					// mod for automagic start
 					let flag = true;
-					if (moveData.secondary.status) flag = moveData.secondary.status !== target.status;
-					if (moveData.secondary.volatileStatus) flag = !(moveData.secondary.volatileStatus in target.volatiles);
-					if (moveData.secondary.volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
+					let subBlocks = !target || (target.volatiles['substitute'] && !move.infiltrates && !moveData.flags['authentic']);
+					let canSetStatus = function (status, target, pokemon) {
+						if (target.status) return false;
+						let cantStatus = {
+							brn: ['Fire', 'comatose', 'waterveil', 'waterbubble'],
+							frz: ['Ice', 'comatose', 'magmaarmor'],
+							par: ['Electric', 'comatose', 'limber'],
+							psn: ['comatose', 'immunity'],
+							slp: ['comatose', 'insomnia', 'vitalspirit'],
+							tox: ['comatose', 'immunity'],
+						};
+						if (target.hasType(['Poison', 'Steel']) && (status === 'psn' || status === 'tox')) {
+							if (pokemon.hasAbility('corrosion')) {
+								return true;
+							} else {
+								return false;
+							}
+						}
+						if (target.hasType(cantStatus[status][0])) return false;
+						if (move.ignoreAbility) return true;
+						if (target.hasAbility('leafguard') && this.isWeather(['sunnyday', 'desolateland'])) return false;
+						if (target.hasAbility('shieldsdown') && target.template.speciesid === 'miniormeteor') return false;
+						if (target.hasAbility(cantStatus[status])) return false;
+						return true;
+					};
+					if (secondaries[i].status) flag = !subBlocks && canSetStatus(secondaries[i].status, target, pokemon);
+					if (secondaries[i].volatileStatus) flag = !subBlocks && !(secondaries[i].volatileStatus in target.volatiles);
+					if (secondaries[i].volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
 					this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
-					if (moveData.secondary.self && moveData.secondary.self.boosts) {
-						Object.keys(moveData.secondary.self.boosts).forEach(boost => {
+					if (secondaries[i].self && secondaries[i].self.boosts) {
+						Object.keys(secondaries[i].self.boosts).forEach(boost => {
 							if (pokemon.boosts[boost] === 6) flag = false;
 						});
 					} else {
-						flag = flag && !(target.hp === undefined || target.hp <= 0);
+						flag = flag && target && !(target.hp === undefined || target.hp <= 0);
 					}
-					if (moveData.target === 'Normal' && moveData.secondary.boosts) {
+					if (moveData.target !== 'self' && secondaries[i].boosts && !subBlocks) {
 						let cantLower = {
 							'atk': ['clearbody', 'fullmetalbody', 'hypercutter', 'whitesmoke'],
 							'def': ['bigpecks', 'clearbody', 'fullmetalbody', 'whitesmoke'],
@@ -217,23 +242,19 @@ exports.BattleScripts = {
 							'spe': ['clearbody', 'fullmetalbody', 'whitesmoke'],
 							'accuracy': ['clearbody', 'fullmetalbody', 'keeneye', 'whitesmoke'],
 						};
-						for (let k in moveData.secondary.boosts) {
+						for (let k in secondaries[i].boosts) {
 							if (target.boosts[k] === -6) {
 								flag = false;
 								continue;
 							}
-							if (moveData.secondary.boosts[k] < 0) {
-								for (let j = 0; j < cantLower[k].length; j++) {
-									if (target.hasAbility(cantLower[k][j])) {
-										flag = false;
-										break;
-									}
-								}
+							if (secondaries[i].boosts[k] < 0 && target.hasAbility(cantLower[k]) && !move.ignoreAbility) {
+								flag = false;
+								break;
 							}
 						}
 					}
 					if (pokemon.hasAbility('sheerforce')) flag = false;
-					if (target.hasAbility('shielddust') && !move.ignoreAbility) {
+					if (target && target.hasAbility('shielddust') && !move.ignoreAbility && isSecondary && !isSelf) {
 						flag = false;
 					}
 					if (flag) this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);

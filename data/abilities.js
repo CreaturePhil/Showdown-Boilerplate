@@ -561,7 +561,7 @@ exports.BattleAbilities = {
 			if (move.id.includes('dance') && move.id !== 'raindance') {
 				this.faintMessages();
 				this.add('-activate', this.effectData.target, 'ability: Dancer');
-				this.runMove(move, this.effectData.target, 0, this.getAbility('dancer'), undefined, true);
+				this.runMove(move.id, this.effectData.target, 0, this.getAbility('dancer'), undefined, true);
 			}
 		},
 		name: "Dancer",
@@ -2990,7 +2990,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack.",
 		onModifySecondaries: function (secondaries) {
 			this.debug('Shield Dust prevent secondary');
-			return secondaries.filter(effect => !!effect.self);
+			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
 		},
 		id: "shielddust",
 		name: "Shield Dust",
@@ -3259,7 +3259,7 @@ exports.BattleAbilities = {
 		},
 		id: "stamina",
 		name: "Stamina",
-		rating: 1.5,
+		rating: 2,
 		num: 192,
 	},
 	"stancechange": {

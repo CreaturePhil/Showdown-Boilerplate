@@ -6,6 +6,7 @@ exports.BattleScripts = {
 
 		if (typeof move === 'number') {
 			move = {
+				id: 'confused',
 				basePower: move,
 				type: '???',
 				category: 'Physical',
@@ -69,6 +70,12 @@ exports.BattleScripts = {
 				attackStat = i;
 				highestStat = stat;
 			}
+		}
+		if (move.useTargetOffensive) {
+			attackStat = category === 'Physical' ? 'atk' : 'spa';
+		}
+		if (move.id === 'confused') {
+			attackStat = 'atk';
 		}
 		let attack;
 		let defense;
