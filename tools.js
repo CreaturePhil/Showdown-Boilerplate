@@ -905,7 +905,7 @@ class BattleDex {
 		let searchResults = [];
 		for (let i = 0; i < searchIn.length; i++) {
 			let res = this[searchFunctions[searchIn[i]]](target);
-			if (res.exists) {
+			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					exactMatch: !isInexact,
 					searchType: searchTypes[searchIn[i]],
