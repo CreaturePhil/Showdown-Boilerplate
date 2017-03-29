@@ -198,11 +198,11 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	zerazay: {
-		randomBattleMoves: ["powergem", "shadowball", "thunderbolt", "calmmind"],
+		randomBattleMoves: ["sandvortex", "shadowball", "thunderbolt", "calmmind"],
 		tier: "LC",
 	},
 	zoulzura: {
-		randomBattleMoves: ["powergem", "shadowball", "thunderbolt", "calmmind"],
+		randomBattleMoves: ["sandvortex", "shadowball", "thunderbolt", "calmmind"],
 		tier: "New",
 	},
 	koltie: {
@@ -231,6 +231,30 @@ exports.BattleFormatsData = {
 	},
 	neshrill: {
 		randomBattleMoves: ["partingshot", "destinybond", "shadowball", "perishsong", "protect"],
+		tier: "New",
+	},
+	staggart: {
+		randomBattleMoves: ["moonlight", "topsyturvy", "taunt", "thunderwave", "voltswitch", "moonblast", "naturepower", "focusblast", "reflect", "lightscreen"],
+		tier: "LC",
+	},
+	outaggart: {
+		randomBattleMoves: ["moonlight", "topsyturvy", "taunt", "thunderwave", "voltswitch", "moonblast", "naturepower", "focusblast", "reflect", "lightscreen"],
+		tier: "New",
+	},
+	eusociant: {
+		randomBattleMoves: ["leechlife", "swordsdance", "uturn", "wildcharge", "knockoff"],
+		tier: "LC",
+	},
+	phospant: {
+		randomBattleMoves: ["leechlife", "swordsdance", "uturn", "wildcharge", "knockoff"],
+		tier: "NFE",
+	},
+	luminescant: {
+		randomBattleMoves: ["leechlife", "swordsdance", "uturn", "wildcharge", "knockoff", "healorder"/*, "Spectrum Strike*/],
+		tier: "New",
+	},
+	nourizo: {
+		randomBattleMoves: ["synthesis", "spikyshield", "leechseed", "gigadrain", "aromatherapy"],
 		tier: "New",
 	},
 	uisge: {

@@ -1611,6 +1611,78 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
+		name: "[Gen 7] Rock Paper Shedinja",
+		desc: ["challenge your friends to a friendly game of rock paper scissors on Pokemon Showdown"],
+		team: 'randomRPS',
+		onBegin: function () {
+			this.add("raw|All moves won't miss. First move is Rock, second is Paper, third is Scissors. Moves will do nothing if the same move type is used.");
+			let allPokemon = [this.p1.pokemon[0], this.p2.pokemon[0]];
+			for (let i = 0; i < 2; i++) { //Give infinite PP just in case both players love to tie
+				let pokemon = allPokemon[i];
+				for (let j = 0; j < 3; j++) {
+					pokemon.moveset[j].pp = Infinity;
+					pokemon.moveset[j].maxpp = Infinity;
+				}
+			}
+		},
+		onModifyMove: function (move) {
+			move.accuracy = true;
+			if (move.id === 'suckerpunch') { //Paper
+				move.onTry = function (source, target) {
+					source.rps = "paper";
+					let decision = this.willMove(target);
+					if (!decision || decision.move.category === 'Status' || decision.move.id === 'suckerpunch') {
+						this.attrLastMove('[still]');
+						this.add('-fail', source);
+						return null;
+					}
+				};
+			} else if (move.id === 'phantomforce') { //Special case for Phantom Force
+				move.onTry = function (source, target, move) {
+					source.rps = "rock";
+					let decision = this.willMove(target);
+					if (!decision && target.rps !== "scissors" || decision && decision.move.category !== 'Status') {
+						this.attrLastMove('[still]');
+						this.add('-fail', source);
+						return null;
+					}
+					if (source.removeVolatile(move.id)) {
+						return;
+					}
+					this.add('-prepare', source, move.name, target);
+					if (!this.runEvent('ChargeMove', source, target, move)) {
+						this.add('-anim', source, move.name, target);
+						return;
+					}
+					source.addVolatile('twoturnmove', target);
+					return null;
+				};
+			} else if (move.category !== 'Status') { //Rock
+				move.onTry = function (source, target) {
+					source.rps = "rock";
+					let decision = this.willMove(target);
+					if (!decision && target.rps !== "scissors" || decision && decision.move.category !== 'Status') {
+						this.attrLastMove('[still]');
+						this.add('-fail', source);
+						return null;
+					}
+				};
+			} else { //Scissors
+				move.onTry = function (source, target) {
+					source.rps = "scissors";
+					let decision = this.willMove(target);
+					if (!decision && target.rps !== "paper" || decision && decision.move.category === 'Status') {
+						this.attrLastMove('[still]');
+						this.add('-fail', source);
+						return null;
+					}
+				};
+			}
+		},
+		mod: 'gen7', //this can be replaced with a seperate mod folder if you wanted it to
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "[Gen 7] Random Benjamin Butterfree",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/benjamin-butterfree-aka-pokemon-deevolution.3581895/\">Benjamin Butterfee (Pokemon DeEvolution)</a>"],
 		mod: 'bb',
@@ -1887,16 +1959,17 @@ exports.Formats = [
 		team: 'random',
 		onModifyMovePriority: 5,
 		onModifyMove: function(move, pokemon) {
-			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return;
+			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return move;
 			if (move.isZ) {
 				move.basePower = 180;
-				return;
+				return move;
 			}
 			if (move.multihit) {
 				move.basePower = parseInt(100 / move.multihit[move.multihit.length - 1]);
-				return;
+				return move;
 			}
 			move.basePower = 100;
+			return move;
 		},
 	},
 	{
@@ -2948,22 +3021,23 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Move Equality",
-		desc: ["&bullet; Every Move has 100 base power with the exception of moves that have varying base powers."],
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3599280/\">Move Equality</a>: Every Move has 100 base power with the exception of moves that have varying base powers."],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Power Up Punch'],
+		banlist: ['Fell Stinger', 'Mud Slap', 'Power Up Punch'],
 		onModifyMovePriority: 5,
 		onModifyMove: function(move, pokemon) {
-			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return;
+			if (move.category === 'Status' || move.priority !== 0 || move.onBasePower || move.basePowerCallback) return move;
 			if (move.isZ) {
 				move.basePower = 180;
-				return;
+				return move;
 			}
 			if (move.multihit) {
 				move.basePower = parseInt(100 / move.multihit[move.multihit.length - 1]);
-				return;
+				return move;
 			}
 			move.basePower = 100;
+			return move;
 		},
 	},
 	{
@@ -3122,6 +3196,27 @@ exports.Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] Scalemons",
+		desc: [
+		    "All Pokemon have their stats, barring HP, scaled to give them a BST of around 600.",
+		    "&bullet; <a href=\"https://docs.google.com/spreadsheets/d/1JW-YTOUgg6AtF47Pmea1mOvCgszl-CGsWgratnvuLE8/edit#gid=1841107233\">Spreadsheet of all stats</a>",
+		],
+       
+		mod: 'gen7',
+		ruleset: ['[Gen 7] Anything Goes', 'Species Clause'],
+		banlist: ['Eviolite'],
+		onModifyTemplate: function (template, pokemon) {
+			let bst = 0;
+			let hp = template.baseStats['hp'];
+			Object.values(template.baseStats).forEach(stat => {bst += stat;});
+			for (let i in template.baseStats) {
+				template.baseStats['hp'] = hp;
+				template.baseStats[i] = Math.floor((template.baseStats[i] * (600 - template.baseStats['hp'])) / (bst - template.baseStats['hp']));
+			}
+			return template;
+		},
+	},
+	{
 		name: "[Gen 7] Trademarked",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/trademarked.3572949/\">Trademarked</a>"],
 		column: 1,
@@ -3196,6 +3291,14 @@ exports.Formats = [
 			if (pokemon.baseTemplate.actualSpecies) this.add('-end', pokemon, pokemon.baseTemplate.actualSpecies, '[silent]');
 		},
 	},
+	{
+  		name: "[Gen 7] Fusion Evolution",
+  		desc: ["&bullet; <a href=http://www.smogon.com/forums/threads/fusion-evolution-v2-submission-phase.3560216/>Fusion Evolution</a>",
+  		       "&bullet; <a href=http://www.smogon.com/forums/threads/fusion-moves-fusion-evolution-companion-project.3564805/>Fusion Moves</a>",
+  		      ],
+  		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+  		mod: 'fusionevolution',
+  	},
 	{
 		name: "[Gen 7] Move Mastery",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/move-mastery.3590075/\">Move Mastery</a>"],
@@ -3367,7 +3470,7 @@ exports.Formats = [
 		ruleset: ['[Gen 7] Ubers'],
 		mod: 'zmoveseverywhere',
 	},
-		{
+	{
 		section: "Frantic Fusions",
 		column: 4,
 	},
@@ -3379,6 +3482,7 @@ exports.Formats = [
 		mod: 'franticfusions',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Uber', 'Unreleased', 'Shadow Tag', "Assist", "Shedinja", "Huge Power", "Pure Power", 'Medichamite', 'Swoobat'],
+		suspect: "Nothing Yet (Test)",
 		onModifyTemplate: function (template, pokemon) {
 			let fusionTemplate = this.getTemplate(pokemon.name), mixedTemplate = Object.assign({}, template);
 			if (!fusionTemplate.exists) return template;
@@ -6369,6 +6473,6 @@ exports.Formats = [
 		mod: 'fakemon',
 		team: 'randomFotW',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Freeze Clause Mod'],
-		fotw: "Valkyrieti",
+		fotw: "Mechroarmancer",
 	},
 ];

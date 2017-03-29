@@ -72,6 +72,16 @@ exports.BattleAliases = {
 	"allterrain": "[Gen 7] All Terrain",
 	"ptnfg": "[Gen 7] Pokemon: The New First Generation",
 	"movemastery": "[Gen 7] Move Mastery",
+	"fusionevolution": "[Gen 7] Fusion Evolution",
+	"fe": "[Gen 7] Fusion Evolution",
+	"completed": "[Gen 7] Completed",
+	"consolationprize": "[Gen 7] Consolation Prize",
+	"cp": "[Gen 7] Consolation Prize",
+	"totemshowdown": "[Gen 7] Totem Showdown",
+	"totem": "[Gen 7] Totem Showdown",
+	"abilitysharing": "[Gen 7] Ability Sharing",
+	"lastwill": "[Gen 7] Last Will",
+	"dualweilding": "[Gen 7] Dual Wielding",
 
 	// mega evos
 	"maero": "Aerodactyl-Mega",
@@ -646,7 +656,6 @@ exports.BattleAliases = {
 	"demkyogres": "kyogre-primal",
 	"zmeeed": "latias",
 	"loominite": "luxray",
-	"diarmuidodyna": "suicune",
 	"flufi": "raichu",
 	"falcon": "samurott",
 	"thetruefalcon": "samurott",
@@ -655,4 +664,7 @@ exports.BattleAliases = {
 	"pikachuun": "pikachu",
 	"pikaxreme": "pikachu",
 	"xprienzo": "reshiram",
+	"zygardeorder": "zygarde",
+	"scarfwynaut": "wynaut",
+	"winona": "dunsparce",
 };

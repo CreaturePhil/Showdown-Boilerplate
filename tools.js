@@ -905,7 +905,7 @@ class BattleDex {
 		let searchResults = [];
 		for (let i = 0; i < searchIn.length; i++) {
 			let res = this[searchFunctions[searchIn[i]]](target);
-			if (res.exists) {
+			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					exactMatch: !isInexact,
 					searchType: searchTypes[searchIn[i]],
@@ -942,7 +942,7 @@ class BattleDex {
 				}
 
 				let ld = this.levenshtein(cmpTarget, word.toLowerCase(), maxLd);
-				if (ld <= maxLd) {
+				if (ld <= maxLd && this[searchFunctions[searchIn[i]]](word).gen <= this.gen) {
 					searchResults.push({word: word, ld: ld});
 				}
 			}

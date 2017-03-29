@@ -14,6 +14,10 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 2,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Extreme Speed", target);
+		},
 		self: {
 			boosts: {
 				def: -1,
@@ -27,6 +31,7 @@ exports.BattleMovedex = {
 		contestType: "Cool",
 	},
 	"superduperwombocombo": {
+		shortDesc: "Uses Nature Power, Weather Ball, Splash, and Belly Drum",
 		accuracy: true,
 		category: "Status",
 		id: "superduperwombocombo",
@@ -46,6 +51,7 @@ exports.BattleMovedex = {
 		type: "Dragon",
 	},
 	zransei: {
+		shortDesc: "Mega evolves Ransei",
 		accuracy: 100,
 		basePower: 300,
 		category: "Special",
@@ -70,6 +76,7 @@ exports.BattleMovedex = {
 		isZ: "ransiumz",
 	},
 	"heroicbeatdown": {
+		shortDesc: "Boosts Def, SpD, and Atk by 1 stage and Speed by 2 stages",
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
@@ -160,6 +167,7 @@ exports.BattleMovedex = {
 		isZ: "salamencite",
 	},
 	"powerlick": {
+		shortDesc: "Drains 25% of the damage dealt",
 		accuracy: 100,
 		basePower: 110,
 		category: "Special",
@@ -258,6 +266,7 @@ exports.BattleMovedex = {
 		contestType: "Cool",
 	},
 "theloomeffect": {
+		shortDesc: "Boosts Defense and Special Defense by 2 stages",
 		num: 407,
 		accuracy: 100,
 		basePower: 110,
@@ -284,6 +293,7 @@ exports.BattleMovedex = {
 		type: "Dragon",
 	},
 	chachadance: {
+		shortDesc: "50% chance to raise the user's speed by 1 stage, confuses and burns it",
 		accuracy: 100,
 		basePower: 190,
 		category: "Physical",
@@ -379,6 +389,7 @@ exports.BattleMovedex = {
 		type: "Flying"
 	},
 	spacecompress: {
+		shortDesc: "Lowers the foe's Atk, Speed, and Def by 1 stage. Raises the user's SpA by 1 stage and SpD by 2 stages",
 		accuracy: 100,
 		category: "Status",
 		id: "spacecompress",
@@ -408,6 +419,7 @@ exports.BattleMovedex = {
 		type: "Dragon",
 	},
 	ggm8: {
+		shortDesc: "80% Chance to increase the user's speed by one stage, 50% chance to burn the target, has 40% Recoil.",
 		accuracy:100,
 		pp:15,
 		id: "ggm8",
@@ -438,6 +450,7 @@ exports.BattleMovedex = {
 		},
 	},
 	sacredhax: {
+		shortDesc: "40% Chance to burn the target",
 		accuracy:100,
 		pp:15,
 		id: "sacredhax",
@@ -460,6 +473,7 @@ exports.BattleMovedex = {
 		},
 	},
 	hyperspeedpunch: {
+		shortDesc: "20% chance to flinch the target",
 		accuracy: 100,
 		basePower: 45,
 		category: "Physical",
@@ -482,6 +496,7 @@ exports.BattleMovedex = {
 		type: "Bug",
 	},
     garchompepicness: {
+	    	shortDesc: "Raises Def, Speed, and SpD by 3 stages and Attack by 4 stages. Sets up 3 layers of Toxic Spikes and Lucky Chant.",
 		accuracy: 100,
 		category: "Status",
 		id: "garchompepicness",
@@ -494,9 +509,10 @@ exports.BattleMovedex = {
 		secondary: {
 			self: {
 				boosts: {
-					atk: 3,
+					atk: 4,
 					def: 3,
 					spe: 3,
+					spd: 3,
 				},
 			},
 		},
@@ -517,8 +533,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 120,
 		category: "Special",
-		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
-		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
+		desc: "Has a 40% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
+		shortDesc: "40% chance to raise SpA, Def, SpD, and Speed by 3 stages and Attack by 1 stage",
 		id: "blehflame",
 		isViable: true,
 		name: "Bleh fLame",
@@ -534,10 +550,10 @@ exports.BattleMovedex = {
 			self: {
 				boosts: {
 					atk: 1,
-					def: 1,
-					spa: 2,
-					spd: 1,
-					spe: 2,
+					def: 3,
+					spa: 3,
+					spd: 3,
+					spe: 3,
 				},
 			},
 		},

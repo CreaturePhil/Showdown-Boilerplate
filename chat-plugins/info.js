@@ -371,7 +371,7 @@ exports.commands = {
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
 				if (!newTargets[i].exactMatch && !i) {
-					buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + sep[0] + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
+					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found${Tools.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 				}
 				if (newTargets[i].searchType === 'nature') {
 					let nature = Tools.getNature(newTargets[i].name);
@@ -387,7 +387,6 @@ exports.commands = {
 					let sType = newTargets[i].searchType.charAt(0).toUpperCase() + newTargets[i].searchType.substring(1, newTargets[i].searchType.length);
 					if (Chat[`getData${sType}HTML`]) {
 						let template = mod["get" + (sType === "Pokemon" ? "Template" : sType)](newTargets[i].name);
-						if (template.gen > mod.gen) return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found in Gen ${mod.gen}.`);
 						buffer += `|raw|${Chat[`getData${sType}HTML`](template)}\n`;
 					} else {
 						buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
@@ -1357,7 +1356,7 @@ exports.commands = {
 			for (let i = 0; i < sections[sectionId].formats.length; i++) {
 				let format = Tools.getFormat(sections[sectionId].formats[i]);
 				let nameHTML = Chat.escapeHTML(format.name);
-				let descHTML = format.desc ? (format.desc.join("<br />")) : "&mdash;";
+				let descHTML = format.desc ? `${format.desc.join("<br />")}${Tools.data.Formats[formatId].suspect ? `<br />Currently Suspecting: <u>${Tools.data.Formats[formatId].suspect}</u>` : ""}` : "&mdash;";
 				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
 			}
 		}
