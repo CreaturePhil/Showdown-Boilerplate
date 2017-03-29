@@ -946,13 +946,6 @@ Chat.toDurationString = function (number, options) {
 
 Chat.getPokemonIcon = function (pokemon, facingLeft) {
 	let num = 0;
-	if (pokemon === 'pokeball') {
-		return 'background:transparent url(https://play.pokemonshowdown.com/sprites/smicons-pokeball-sheet.png) no-repeat scroll -0px 4px';
-	} else if (pokemon === 'pokeball-statused') {
-		return 'background:transparent url(https://play.pokemonshowdown.com/sprites/smicons-pokeball-sheet.png) no-repeat scroll -40px 4px';
-	} else if (pokemon === 'pokeball-none') {
-		return 'background:transparent url(https://play.pokemonshowdown.com/sprites/smicons-pokeball-sheet.png) no-repeat scroll -80px 4px';
-	}
 	let id = toId(pokemon);
 	if (pokemon && pokemon.num !== undefined) {
 		num = pokemon.num;
@@ -1157,6 +1150,22 @@ Chat.getPokemonIcon = function (pokemon, facingLeft) {
 		crucibelle: 1140 + 20,
 		crucibellemega: 1140 + 21,
 		kerfluffle: 1140 + 22,
+
+		syclar: 1164 + 0,
+		embirch: 1164 + 1,
+		flarelm: 1164 + 2,
+		breezi: 1164 + 3,
+		scratchet: 1164 + 4,
+		necturine: 1164 + 5,
+		cupra: 1164 + 6,
+		argalis: 1164 + 7,
+		brattler: 1164 + 8,
+		cawdet: 1164 + 9,
+		volkritter: 1164 + 10,
+		snugglow: 1164 + 11,
+		floatoy: 1164 + 12,
+		caimanoe: 1164 + 13,
+		pluffle: 1164 + 14
 	};
 
 	if (altNums[id]) {
