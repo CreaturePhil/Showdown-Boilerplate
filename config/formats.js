@@ -2163,6 +2163,26 @@ exports.Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] CAP",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587865/\">CAP Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3597893/\">CAP Viability Ranking</a>",
+		],
+
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Allow CAP'],
+	},
+	{
+		name: "[Gen 7] CAP LC",
+
+		mod: 'gen7',
+		searchShow: false,
+		maxLevel: 5,
+		ruleset: ['[Gen 7] LC'],
+		banlist: ['Allow CAP'],
+	},
+	{
 		name: "[Gen 7] Alola Friendly",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3591710/\">Alola Friendly</a>"],
 
