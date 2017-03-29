@@ -1631,6 +1631,12 @@ exports.Formats = [
 			move.type = "Fairy";
 			return move;
 		},
+		onSwitchIn: function(pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+		onAfterMega: function(pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
 	},
 	{
 		name: "[Gen 7] Rock Paper Shedinja",
