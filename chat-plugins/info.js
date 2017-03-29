@@ -343,7 +343,7 @@ exports.commands = {
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
 				if (!newTargets[i].exactMatch && !i) {
-					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found${Tools.gen > mod.gen ? `in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
+					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found${Tools.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 				}
 				if (newTargets[i].searchType === 'nature') {
 					let nature = Tools.getNature(newTargets[i].name);
