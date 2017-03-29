@@ -1611,6 +1611,28 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
+		name: "[Gen 7] BOOM BAM WE ARE ALL FARIES WE ARE BEST",
+		desc: ["EVERYTHING IS FAIRY",
+			"EVERY MOVE IS FAIRY",
+			"EVERY ITEM IS FAIRY",
+			"EVERY ABILITY IS FAIRY",
+			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA WE ALL ARE FAIRIES",
+			"*purrs*",
+		],
+
+		mod: 'gen7',
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		onModifyTemplate: function (template) {
+			template.types = ["Fairy"];
+			return template;
+		},
+		onModifyMove: function (move) {
+			move.type = "Fairy";
+			return move;
+		},
+	},
+	{
 		name: "[Gen 7] Rock Paper Shedinja",
 		desc: ["challenge your friends to a friendly game of rock paper scissors on Pokemon Showdown"],
 		team: 'randomRPS',
