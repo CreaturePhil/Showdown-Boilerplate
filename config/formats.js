@@ -3506,6 +3506,13 @@ exports.Formats = [
 		mod: 'thefirstnewgen',
 	},
 	{
+		name: "[Gen 7] Jillian",
+		desc: ["&bullet; A custom region",
+		      ],
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		mod: 'jillian',
+	},
+	{
 		name: "Universal Ubers",
 		mod: 'primordialpokemon',
 
