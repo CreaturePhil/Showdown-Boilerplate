@@ -1121,7 +1121,7 @@ exports.BattleMovedex = {
 				this.add('-anim', source, "Extreme Speed", target);
 			},
 		  pp: 15,
-		  priority: 1,
+		  priority: 3,
 		  flags: {protect: 1, mirror: 1},
 		  target: "normal",
 		  type: "Normal",
