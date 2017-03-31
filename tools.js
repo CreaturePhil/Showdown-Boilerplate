@@ -391,7 +391,7 @@ class BattleDex {
 			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0, F:1};
 			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0, F:0};
 			if (!template.genderRatio) template.genderRatio = {M:0.5, F:0.5};
-			if (!template.tier && template.baseSpecies !== template.species) template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
+			if (this.data.FormatsData[toId(template.baseSpecies)] && !template.tier && template.baseSpecies !== template.species) template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
 			if (!template.requiredItems && template.requiredItem) template.requiredItems = [template.requiredItem];
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.gen) {
