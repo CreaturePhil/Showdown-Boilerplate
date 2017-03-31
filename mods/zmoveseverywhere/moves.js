@@ -339,4 +339,159 @@ exports.BattleMovedex = {
 		type: "Fire",
 		isZ: "torkoaliumz",
 	},
+"depthstridedecimation": { /* Add in such that this gets past Filter */
+		accuracy: 100,
+		basePower: 210,
+		category: "Special",
+		id: "depthstridedecimation",
+		isViable: true,
+		name: "Depthstride Decimation",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hydro Vortex", target);
+		},
+		suppressWeather: true,
+		target: "normal",
+		type: "Water",
+		isZ: "kyogriumz",
+	},
+"inneraurafocus": { 
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		id: "inneraurafocus",
+		isViable: true,
+		name: "Inner Aura Focus",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'laserfocus',
+		effect: {
+			duration: 2,
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'move: Laser Focus');
+			},
+			onModifyCritRatio: function (critRatio) {
+				return 5;
+			},
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+				},
+			},
+		},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Tail Glow", target);
+		},
+		target: "normal",
+		type: "Normal",
+		isZ: "lucariumz",
+	},
+"hyperwatershuriken": { 
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		id: "hyperwatershuriken",
+		isViable: true,
+		name: "Hyper Water Shuriken",
+		pp: 1,
+		priority: 1,
+		flags: {},
+		multihit: 5,
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Water Shuriken", target);
+			this.add('-anim', source, "Water Shuriken", target);
+			this.add('-anim', source, "Water Shuriken", target);
+			this.add('-anim', source, "Water Shuriken", target);
+			this.add('-anim', source, "Water Shuriken", target);
+		},
+		target: "normal",
+		type: "Water",
+		isZ: "grenjiumz",
+	},
+		
+"toadshypnospiral": { 
+		accuracy: true,
+		basePower: 0,
+		category: "Special",
+		id: "toadshypnospiral",
+		isViable: true,
+		name: "Toad's Hypno-Spiral",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		status: 'slp',
+		onHit: function (target, source, move) {
+			if (!target.addVolatile('trapped', source, move, 'trapper')) {
+				this.add('-fail', target);
+			}
+		},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hypnosis", target);
+			this.add('-anim', source, "Mean Look", target);
+		},
+		target: "normal",
+		type: "Psychic",
+		isZ: "politoediumz",
+	},
+"highdeliverydeluge": { /*Does damage and extends rain to 8 more turns. Basically allows Pelipper to have a Z-move while still being able to set up rain as if it had Damp Rock. */
+		accuracy: 100,
+		basePower: 190,
+		category: "Special",
+		id: "highdeliverydeluge",
+		isViable: true,
+		name: "High Delivery Deluge",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hydro Vortex", target);
+		},
+		target: "normal",
+		type: "Water",
+		isZ: "pelipiumz",
+	},
+"sacredspiral": { 
+		accuracy: 100,
+		basePower: 210,
+		category: "Special",
+		id: "sacredspiral",
+		isViable: true,
+		name: "Sacred Spiral",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					def: 1,
+					spd: 1,
+					spe: 1,
+				},
+			},
+		},
+		onPrepareHit: function(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hydro Vortex", target);
+		},
+		target: "normal",
+		type: "Water",
+		isZ: "omastatiumz",
+	},
+	
 };
