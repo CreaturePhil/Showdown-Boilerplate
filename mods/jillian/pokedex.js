@@ -27,5 +27,30 @@ exports.BattlePokedex = {
         evos: ["treenomian"],
         prevo: "branchion",
 	},
+  laviniou: {
+        num: 1000004,
+        species: "Laviniou",
+        types: ["Fire"],
+        baseStats: {hp: 30, atk: 50, def: 38, spa: 56, spd: 40, spe: 40},
+        abilities: {0: "Blaze", H: "Sheer Force"},
+        evos: ["marsminian"],
+	},
+  marsminian: {
+        num: 1000005,
+        species: "Marsminian",
+        types: ["Fire","Steel"],
+        baseStats: {hp: 70, atk: 76, def: 60, spa: 75, spd: 62, spe: 71},
+        abilities: {0: "Blaze", H: "Sheer Force"},
+        evos: ["volcanolion"],
+        prevo: "laviniou",
+	},
+  volcanolion: {
+        num: 1000006,
+        species: "Volcanolion",
+        types: ["Fire","Steel"],
+        baseStats: {hp: 75, atk: 110, def: 80, spa: 105, spd: 73, spe: 99},
+        abilities: {0: "Blaze", H: "Sheer Force"},
+        prevo: "marsminian",
+	},
   
 };
