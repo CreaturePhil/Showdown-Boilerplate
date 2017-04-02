@@ -21,7 +21,7 @@ exports.BattlePokedex = {
   treenomian: {
         num: 1000003,
         species: "Treenomian",
-        types: ["Grass"],
+        types: ["Grass", "Ground"],
         baseStats: {hp: 88, atk: 93, def: 110, spa: 70, spd: 98, spe: 76},
         abilities: {0: "Overgrow", H: "Sap Sipper"},
         evos: ["treenomian"],
