@@ -1611,24 +1611,19 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "[Gen 7] BOOM BAM WE ARE ALL FARIES WE ARE BEST",
-		desc: ["EVERYTHING IS FAIRY",
-			"EVERY MOVE IS FAIRY",
-			"EVERY ITEM IS FAIRY",
-			"EVERY ABILITY IS FAIRY",
-			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA WE ALL ARE FAIRIES",
-			"*purrs*",
+		name: "[Gen 7] Dragonify",
+		desc: ["Heaven of Dragons",
 		],
 
 		mod: 'gen7',
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onModifyTemplate: function (template) {
-			template.types = ["Fairy"];
+			template.types = ["Dragon"];
 			return template;
 		},
 		onModifyMove: function (move) {
-			move.type = "Fairy";
+			move.type = "Dragon";
 			return move;
 		},
 		onSwitchIn: function(pokemon) {
