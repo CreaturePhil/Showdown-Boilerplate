@@ -4,13 +4,13 @@
   **************/
 
  body {
-    background: #EEE url("http://i.imgur.com/hxm1K3z.png") no-repeat left fixed;
+    background: #EEE url("http://i.imgur.com/JYUBwQr.jpg") no-repeat left fixed;
   }
-.button{color:black;background:#ff66f2!important;border:solid 1px black!important}.menugroup
+.button{color:black;background:#ff9966!important;border:solid 1px black!important}.menugroup
  
 .button:hover,.menugroup
  
-.button:active{color:white;background:#ff66f2!important;border:solid 1px black!important
+.button:active{color:white;background:#ff9966!important;border:solid 1px black!important
 }
 
   .astext{
@@ -164,12 +164,12 @@ font-size:64px;
     color: #000;
                     }
   .ps-room.ps-room-light {
-    background: rgba(255, 153, 248, 0.79);
+    background: rgba(255, 204, 153, 0.79);
     border-color: black;
   }
 
   .ps-room.ps-room-light.scrollable {
-    background:rgba(255, 153, 248, 0.79);
+    background:rgba(255, 204, 153, 0.79);
     border-color: black;
   }
   .dark .ps-room.ps-room-light.scrollable {
@@ -185,7 +185,7 @@ font-size:64px;
 
   .roomlist a.ilink:hover, .roomcounters button:hover {
     border-color: black;
-    color: pink;
+    color: orange;
     background: white;
   }
 .dark a.roomtab.button.closable {
@@ -199,21 +199,21 @@ font-size:64px;
 
 
   button:hover {
-    border: 1px solid #ff00d4;
+    border: 1px solid #ffa500;
 
   }
 
   button {
-    background:#ff00d4;
+    background:#ffa500;
     border-radius: 5px;
     color: #000000;
-    border: 1px solid #ff00d4;
+    border: 1px solid #ffa500;
   }
   button {
-    background:#ff00d4;
+    background:#ffa500;
     border-radius: 5px;
     color: #000000;
-    border: 1px solid #ff00d4;
+    border: 1px solid #ffa500;
   }
 
 button.button.mainmenu1{
@@ -238,7 +238,7 @@ button.button.mainmenu5{
   .infobox {
     border: 1px solid #0B1361;
     padding: 6px 6px;
-    background: rgba(255, 153, 248, 0.4);
+    background: rgba(255, 204, 153, 0.4);
   }
 
   .chat-log a, .pm-log a {
@@ -250,7 +250,7 @@ button.button.mainmenu5{
   }
 
   .userlist {
-    background: rgba(234, 167, 239, 0.45);
+    background: rgba(167, 239, 239, 0.45);
     border-right: 1px solid #252F3F;
   }
 
@@ -278,10 +278,10 @@ button.button.mainmenu5{
 
 
   #header {
-    background: rgba(255, 153, 253, 0.45) url("http://imgur.com/lR7rgQq") no-repeat 0 0;
+    background: rgba(255, 187, 153, 0.45) url("http://i.imgur.com/QbFNFD9.png") no-repeat 0 0;
 }
 .dark #header {
-  background: rgba(240, 140, 100, 0.4) url("http://imgur.com/lR7rgQq") no-repeat 0 0;
+  background: rgba(240, 140, 100, 0.4) url("http://i.imgur.com/QbFNFD9.png") no-repeat 0 0;
 }
 
   .header .logo {
@@ -296,7 +296,7 @@ button.button.mainmenu5{
 }
 .menugroup {
         border: 1px solid #d9d9d9;
-        background: rgba(255, 153, 253, 0.45);
+        background: rgba(255, 187, 153, 0.45);
 
 }
 .label {
@@ -470,7 +470,7 @@ button.button.mainmenu5{
 /*Battle CSS*/
 
    .backdrop {
-    background: url(http://img00.deviantart.net/c9d7/i/2016/032/9/6/clefairy_pokemon_art_academy_by_tatanrg-d9q7lfc.jpg) !important;
+    background: url(http://cdn.wallpapersafari.com/31/60/sFZiGV.jpg) !important;
         opacity: 0.6;
 }
 
@@ -482,12 +482,12 @@ button.button.mainmenu5{
     text-align: right;
     font-style: italic;
     border-color: #000000;
-    background: #ff66f2;
+    background: #ff9966;
     color: #000000;
   }
 
   .battle-log-add {
-    background: #ff66f2;
+    background: #ff9966;
     border: 1px solid #000000;
     color: #000000;
   }
