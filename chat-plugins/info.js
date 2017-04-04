@@ -366,6 +366,9 @@ exports.commands = {
 		if (sep[1] && toId(sep[1]) in Tools.dexes) {
 			mod = Tools.mod(toId(sep[1]));
 		}
+		else if (sep[1] && Tools.getFormat(sep[1]).mod) {
+			mod = Tools.mod(Tools.getFormat(sep[1]).mod);
+		}
 		let newTargets = mod.dataSearch(sep[0]);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
