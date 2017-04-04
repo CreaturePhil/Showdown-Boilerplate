@@ -71,7 +71,7 @@ exports.commands = {
 			}
 		}
 		if (setStage + 1 !== crossStage) {
-			return this.sendReply(`Error: Cross evolution must follow evolutionary stages. (${poke1.species} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
+			return this.sendReply(`Error: Cross evolution must follow evolutionary stages. (${template.species} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
 		}
 		mixedTemplate.abilities = Object.assign({}, crossTemplate.abilities);
 		mixedTemplate.baseStats = {};
