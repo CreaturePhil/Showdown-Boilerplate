@@ -1,5 +1,15 @@
 'use strict';
 exports.BattleStatuses = {
+	zapmaster2010: {
+		exists: true,
+		effectType: 'Ability',
+		onStart: function () {
+			this.add('c|+Zapmaster2010|Boi, tell me where the muffins at. llamashades');
+		},
+		onFaint: function(pokemon) {
+			this.add('c|+Zapmaster2010|Nuuu. llamacry');
+		},
+	},
 	flurbel: {
 		exists: true,
 		effectType: 'Ability',
