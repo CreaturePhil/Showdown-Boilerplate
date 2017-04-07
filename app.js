@@ -91,10 +91,12 @@ if (Config.watchconfig) {
 /*********************************************************
  * Set up most of our globals
  *********************************************************/
+global.Util = {};
 
 global.Monitor = require('./monitor');
 
 global.Tools = require('./tools');
+
 global.toId = Tools.getId;
 
 global.LoginServer = require('./loginserver');

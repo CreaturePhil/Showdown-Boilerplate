@@ -1,7 +1,6 @@
 'use strict';
 /*eslint no-restricted-modules: [0]*/
 
-let color = require('../config/color');
 let moment = require('moment');
 
 let BR = '<br>';
@@ -109,23 +108,12 @@ Profile.prototype.buttonAvatar = function () {
 	return '<button style="' + css + '" name="parseCommand" value="/user ' + this.username + '">' + this.avatar() + "</button>";
 };
 
-Profile.prototype.group = function () {
-	if (this.isOnline && this.user.group === ' ') return label('Group') + 'Regular User';
-	if (this.isOnline) return label('Group') + Config.groups[this.user.group].name;
-	for (let name in Users.usergroups) {
-		if (toId(this.username) === name) {
-			return label('Group') + Config.groups[Users.usergroups[name].charAt(0)].name;
-		}
-	}
-	return label('Group') + 'Regular User';
-};
-
 Profile.prototype.money = function (amount) {
 	return label('Money') + amount + currencyName(amount);
 };
 
 Profile.prototype.name = function () {
-	return label('Name') + bold(font(color(toId(this.username)), this.username));
+	return label('Name') + Util.nameColor(this.username, true, true);
 };
 
 Profile.prototype.seen = function (timeAgo) {
@@ -139,7 +127,6 @@ Profile.prototype.show = function (callback) {
 
 	return this.buttonAvatar() +
 		SPACE + this.name() + BR +
-		SPACE + this.group() + BR +
 		SPACE + this.money(Db.money.get(userid, 0)) + BR +
 		SPACE + this.seen(Db.seen.get(userid)) +
 		'<br clear="all">';

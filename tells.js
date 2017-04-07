@@ -16,7 +16,6 @@
 'use strict';
 
 let fs = require('fs');
-let color = require('./config/color');
 
 let tells = {inbox: {}, outbox: {}};
 try {
@@ -99,7 +98,7 @@ exports.sendTell = function (userid, user) {
 			if (Tells.outbox[ips[ip]] <= 0) delete Tells.outbox[ips[ip]];
 		}
 		let timeStr = Tells.getTellTime(tellsToSend[i].time);
-		buffer += '<div class="chat"><font color="gray">[' + timeStr + ' ago]</font> <b><font color="' + color(toId(tellsToSend[i].sender)) + '">' + tellsToSend[i].sender + ':</font></b> ' + Chat.escapeHTML(tellsToSend[i].msg.replace(/\|/g, '&#124;')) + '</div>';
+		buffer += '<div class="chat"><font color="gray">[' + timeStr + ' ago]</font> ' + Util.nameColor(tellsToSend[i].sender, true, true) + ': ' + Chat.escapeHTML(tellsToSend[i].msg.replace(/\|/g, '&#124;')) + '</div>';
 	}
 	user.send(buffer);
 	delete Tells.inbox[userid];

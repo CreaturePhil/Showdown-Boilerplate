@@ -1,7 +1,5 @@
 'use strict';
 
-let color = require('../config/color');
-
 let bubbleLetterMap = new Map([
 	['a', '\u24D0'], ['b', '\u24D1'], ['c', '\u24D2'], ['d', '\u24D3'], ['e', '\u24D4'], ['f', '\u24D5'], ['g', '\u24D6'], ['h', '\u24D7'], ['i', '\u24D8'], ['j', '\u24D9'], ['k', '\u24DA'], ['l', '\u24DB'], ['m', '\u24DC'],
 	['n', '\u24DD'], ['o', '\u24DE'], ['p', '\u24DF'], ['q', '\u24E0'], ['r', '\u24E1'], ['s', '\u24E2'], ['t', '\u24E3'], ['u', '\u24E4'], ['v', '\u24E5'], ['w', '\u24E6'], ['x', '\u24E7'], ['y', '\u24E8'], ['z', '\u24E9'],
@@ -58,7 +56,7 @@ exports.commands = {
 			targetUser.send("|nametaken||Your name conflicts with " + user.name + (user.name.substr(-1) === "s" ? "'" : "'s") + " new away status.");
 		}
 
-		if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + color(user.userid) + "'><strong>" + Chat.escapeHTML(user.name) + "</strong></font> is now " + target.toLowerCase() + ".");
+		if (user.can('lock', null, room)) this.add("|raw|-- " + Util.nameColor(user.name, true, true) + " is now " + target.toLowerCase() + ".");
 		user.forceRename(newName, user.registered);
 		user.updateIdentity();
 		user.isAway = true;
@@ -72,7 +70,7 @@ exports.commands = {
 		let statusIdx = newName.search(/\s\-\s[\u24B6-\u24E9\u2460-\u2468\u24EA]+$/);
 		if (statusIdx < 0) {
 			user.isAway = false;
-			if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + color(user.userid) + "'><strong>" + Chat.escapeHTML(user.name) + "</strong></font> is no longer away.");
+			if (user.can('lock', null, room)) this.add("|raw|-- " + Util.nameColor(user.name, true, true) + " is no longer away.");
 			return false;
 		}
 
@@ -81,7 +79,7 @@ exports.commands = {
 		user.forceRename(newName, user.registered);
 		user.updateIdentity();
 		user.isAway = false;
-		if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + color(user.userid) + "'><strong>" + Chat.escapeHTML(newName) + "</strong></font> is no longer " + status.toLowerCase() + ".");
+		if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + Util.hashColor(user.userid) + "'><strong>" + Chat.escapeHTML(newName) + "</strong></font> is no longer " + status.toLowerCase() + ".");
 	},
 
 	afk: function (target, room, user) {
