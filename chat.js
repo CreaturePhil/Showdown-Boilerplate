@@ -393,7 +393,7 @@ class CommandContext {
 		}
 	}
 	errorReply(message) {
-		if (this.pmTarget) {
+		if (this.pmTarget && this.pmTarget.getIdentity) {
 			let prefix = '|pm|' + this.user.getIdentity() + '|' + this.pmTarget.getIdentity() + '|/error ';
 			this.connection.send(prefix + message.replace(/\n/g, prefix));
 		} else {
@@ -480,12 +480,6 @@ class CommandContext {
 
 			// broadcast cooldown
 			let broadcastMessage = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-
-			if (this.room && this.room.lastBroadcast === this.broadcastMessage &&
-					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-				this.errorReply("You can't broadcast this because it was just broadcasted.");
-				return false;
-			}
 
 			this.message = message;
 			this.broadcastMessage = broadcastMessage;
@@ -624,11 +618,6 @@ class CommandContext {
 
 			if (room) {
 				let normalized = message.trim();
-				if (room.id === 'lobby' && (normalized === user.lastMessage) &&
-						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-					this.errorReply("You can't send the same message again so soon.");
-					return false;
-				}
 				user.lastMessage = message;
 				user.lastMessageTime = Date.now();
 			}
@@ -952,4 +941,411 @@ Chat.toDurationString = function (number, options) {
 		}
 	}
 	return parts.slice(positiveIndex).reverse().map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "").reverse().slice(0, precision).join(" ").trim();
+};
+
+
+Chat.getPokemonIcon = function (pokemon, facingLeft) {
+	let num = 0;
+	let id = toId(pokemon);
+	if (pokemon && pokemon.num !== undefined) {
+		num = pokemon.num;
+	} else if (this.data.Pokedex && this.data.Pokedex[id] && this.data.Pokedex[id].num) {
+		num = this.data.Pokedex[id].num;
+	}
+	if (num < 0 || num > 802) num = 0;
+	let altNums = {
+		egg: 804 + 1,
+		pikachubelle: 804 + 2,
+		pikachulibre: 804 + 3,
+		pikachuphd: 804 + 4,
+		pikachupopstar: 804 + 5,
+		pikachurockstar: 804 + 6,
+		pikachucosplay: 804 + 7,
+		castformrainy: 804 + 35,
+		castformsnowy: 804 + 36,
+		castformsunny: 804 + 37,
+		deoxysattack: 804 + 38,
+		deoxysdefense: 804 + 39,
+		deoxysspeed: 804 + 40,
+		burmysandy: 804 + 41,
+		burmytrash: 804 + 42,
+		wormadamsandy: 804 + 43,
+		wormadamtrash: 804 + 44,
+		cherrimsunshine: 804 + 45,
+		shelloseast: 804 + 46,
+		gastrodoneast: 804 + 47,
+		rotomfan: 804 + 48,
+		rotomfrost: 804 + 49,
+		rotomheat: 804 + 50,
+		rotommow: 804 + 51,
+		rotomwash: 804 + 52,
+		giratinaorigin: 804 + 53,
+		shayminsky: 804 + 54,
+		unfezantf: 804 + 55,
+		basculinbluestriped: 804 + 56,
+		darmanitanzen: 804 + 57,
+		deerlingautumn: 804 + 58,
+		deerlingsummer: 804 + 59,
+		deerlingwinter: 804 + 60,
+		sawsbuckautumn: 804 + 61,
+		sawsbucksummer: 804 + 62,
+		sawsbuckwinter: 804 + 63,
+		frillishf: 804 + 64,
+		jellicentf: 804 + 65,
+		tornadustherian: 804 + 66,
+		thundurustherian: 804 + 67,
+		landorustherian: 804 + 68,
+		kyuremblack: 804 + 69,
+		kyuremwhite: 804 + 70,
+		keldeoresolute: 804 + 71,
+		meloettapirouette: 804 + 72,
+		vivillonarchipelago: 804 + 73,
+		vivilloncontinental: 804 + 74,
+		vivillonelegant: 804 + 75,
+		vivillonfancy: 804 + 76,
+		vivillongarden: 804 + 77,
+		vivillonhighplains: 804 + 78,
+		vivillonicysnow: 804 + 79,
+		vivillonjungle: 804 + 80,
+		vivillonmarine: 804 + 81,
+		vivillonmodern: 804 + 82,
+		vivillonmonsoon: 804 + 83,
+		vivillonocean: 804 + 84,
+		vivillonpokeball: 804 + 85,
+		vivillonpolar: 804 + 86,
+		vivillonriver: 804 + 87,
+		vivillonsandstorm: 804 + 88,
+		vivillonsavanna: 804 + 89,
+		vivillonsun: 804 + 90,
+		vivillontundra: 804 + 91,
+		pyroarf: 804 + 92,
+		flabebeblue: 804 + 93,
+		flabebeorange: 804 + 94,
+		flabebewhite: 804 + 95,
+		flabebeyellow: 804 + 96,
+		floetteblue: 804 + 97,
+		floetteeternal: 804 + 98,
+		floetteorange: 804 + 99,
+		floettewhite: 804 + 100,
+		floetteyellow: 804 + 101,
+		florgesblue: 804 + 102,
+		florgesorange: 804 + 103,
+		florgeswhite: 804 + 104,
+		florgesyellow: 804 + 105,
+		meowsticf: 804 + 115,
+		aegislashblade: 804 + 116,
+		hoopaunbound: 804 + 118,
+		rattataalola: 804 + 119,
+		raticatealola: 804 + 120,
+		raichualola: 804 + 121,
+		sandshrewalola: 804 + 122,
+		sandslashalola: 804 + 123,
+		vulpixalola: 804 + 124,
+		ninetalesalola: 804 + 125,
+		diglettalola: 804 + 126,
+		dugtrioalola: 804 + 127,
+		meowthalola: 804 + 128,
+		persianalola: 804 + 129,
+		geodudealola: 804 + 130,
+		graveleralola: 804 + 131,
+		golemalola: 804 + 132,
+		grimeralola: 804 + 133,
+		mukalola: 804 + 134,
+		exeggutoralola: 804 + 135,
+		marowakalola: 804 + 136,
+		greninjaash: 804 + 137,
+		zygarde10: 804 + 138,
+		zygardecomplete: 804 + 139,
+		oricoriopompom: 804 + 140,
+		oricoriopau: 804 + 141,
+		oricoriosensu: 804 + 142,
+		lycanrocmidnight: 804 + 143,
+		wishiwashischool: 804 + 144,
+		miniormeteor: 804 + 145,
+		miniororange: 804 + 146,
+		minioryellow: 804 + 147,
+		miniorgreen: 804 + 148,
+		miniorblue: 804 + 149,
+		miniorviolet: 804 + 150,
+		miniorindigo: 804 + 151,
+		magearnaoriginal: 804 + 152,
+		pikachuoriginal: 804 + 153,
+		pikachuhoenn: 804 + 154,
+		pikachusinnoh: 804 + 155,
+		pikachuunova: 804 + 156,
+		pikachukalos: 804 + 157,
+		pikachualola: 804 + 158,
+
+		venusaurmega: 972 + 0,
+		charizardmegax: 972 + 1,
+		charizardmegay: 972 + 2,
+		blastoisemega: 972 + 3,
+		beedrillmega: 972 + 4,
+		pidgeotmega: 972 + 5,
+		alakazammega: 972 + 6,
+		slowbromega: 972 + 7,
+		gengarmega: 972 + 8,
+		kangaskhanmega: 972 + 9,
+		pinsirmega: 972 + 10,
+		gyaradosmega: 972 + 11,
+		aerodactylmega: 972 + 12,
+		mewtwomegax: 972 + 13,
+		mewtwomegay: 972 + 14,
+		ampharosmega: 972 + 15,
+		steelixmega: 972 + 16,
+		scizormega: 972 + 17,
+		heracrossmega: 972 + 18,
+		houndoommega: 972 + 19,
+		tyranitarmega: 972 + 20,
+		sceptilemega: 972 + 21,
+		blazikenmega: 972 + 22,
+		swampertmega: 972 + 23,
+		gardevoirmega: 972 + 24,
+		sableyemega: 972 + 25,
+		mawilemega: 972 + 26,
+		aggronmega: 972 + 27,
+		medichammega: 972 + 28,
+		manectricmega: 972 + 29,
+		sharpedomega: 972 + 30,
+		cameruptmega: 972 + 31,
+		altariamega: 972 + 32,
+		banettemega: 972 + 33,
+		absolmega: 972 + 34,
+		glaliemega: 972 + 35,
+		salamencemega: 972 + 36,
+		metagrossmega: 972 + 37,
+		latiasmega: 972 + 38,
+		latiosmega: 972 + 39,
+		kyogreprimal: 972 + 40,
+		groudonprimal: 972 + 41,
+		rayquazamega: 972 + 42,
+		lopunnymega: 972 + 43,
+		garchompmega: 972 + 44,
+		lucariomega: 972 + 45,
+		abomasnowmega: 972 + 46,
+		gallademega: 972 + 47,
+		audinomega: 972 + 48,
+		dianciemega: 972 + 49,
+
+		syclant: 1140 + 0,
+		revenankh: 1140 + 1,
+		pyroak: 1140 + 2,
+		fidgit: 1140 + 3,
+		stratagem: 1140 + 4,
+		arghonaut: 1140 + 5,
+		kitsunoh: 1140 + 6,
+		cyclohm: 1140 + 7,
+		colossoil: 1140 + 8,
+		krilowatt: 1140 + 9,
+		voodoom: 1140 + 10,
+		tomohawk: 1140 + 11,
+		necturna: 1140 + 12,
+		mollux: 1140 + 13,
+		aurumoth: 1140 + 14,
+		malaconda: 1140 + 15,
+		cawmodore: 1140 + 16,
+		volkraken: 1140 + 17,
+		plasmanta: 1140 + 18,
+		naviathan: 1140 + 19,
+		crucibelle: 1140 + 20,
+		crucibellemega: 1140 + 21,
+		kerfluffle: 1140 + 22,
+
+		syclar: 1164 + 0,
+		embirch: 1164 + 1,
+		flarelm: 1164 + 2,
+		breezi: 1164 + 3,
+		scratchet: 1164 + 4,
+		necturine: 1164 + 5,
+		cupra: 1164 + 6,
+		argalis: 1164 + 7,
+		brattler: 1164 + 8,
+		cawdet: 1164 + 9,
+		volkritter: 1164 + 10,
+		snugglow: 1164 + 11,
+		floatoy: 1164 + 12,
+		caimanoe: 1164 + 13,
+		pluffle: 1164 + 14
+	};
+
+	if (altNums[id]) {
+		num = altNums[id];
+	}
+
+	if (pokemon && pokemon.gender === 'F') {
+		if (id === 'unfezant' || id === 'frillish' || id === 'jellicent' || id === 'meowstic' || id === 'pyroar') {
+			num = altNums[id + 'f'];
+		}
+	}
+
+	if (facingLeft) {
+		altNums = {
+			pikachubelle: 1032 + 0,
+			pikachupopstar: 1032 + 1,
+			clefairy: 1032 + 2,
+			clefable: 1032 + 3,
+			jigglypuff: 1032 + 4,
+			wigglytuff: 1032 + 5,
+			dugtrioalola: 1032 + 6,
+			poliwhirl: 1032 + 7,
+			poliwrath: 1032 + 8,
+			mukalola: 1032 + 9,
+			kingler: 1032 + 10,
+			croconaw: 1032 + 11,
+			cleffa: 1032 + 12,
+			igglybuff: 1032 + 13,
+			politoed: 1032 + 14,
+			// unown gap
+			sneasel: 1032 + 35,
+			teddiursa: 1032 + 36,
+			roselia: 1032 + 37,
+			zangoose: 1032 + 38,
+			seviper: 1032 + 39,
+			castformrainy: 1032 + 40,
+			absolmega: 1032 + 41,
+			absol: 1032 + 42,
+			regirock: 1032 + 43,
+			torterra: 1032 + 44,
+			budew: 1032 + 45,
+			roserade: 1032 + 46,
+			magmortar: 1032 + 47,
+			togekiss: 1032 + 48,
+			rotomwash: 1032 + 49,
+			shayminsky: 1032 + 50,
+			emboar: 1032 + 51,
+			pansear: 1032 + 52,
+			simisear: 1032 + 53,
+			drilbur: 1032 + 54,
+			excadrill: 1032 + 55,
+			sawk: 1032 + 56,
+			lilligant: 1032 + 57,
+			garbodor: 1032 + 58,
+			solosis: 1032 + 59,
+			vanilluxe: 1032 + 60,
+			amoonguss: 1032 + 61,
+			klink: 1032 + 62,
+			klang: 1032 + 63,
+			klinklang: 1032 + 64,
+			litwick: 1032 + 65,
+			golett: 1032 + 66,
+			golurk: 1032 + 67,
+			kyuremblack: 1032 + 68,
+			kyuremwhite: 1032 + 69,
+			kyurem: 1032 + 70,
+			keldeoresolute: 1032 + 71,
+			meloetta: 1032 + 72,
+			greninja: 1032 + 73,
+			greninjaash: 1032 + 74,
+			// furfroudebutante: 1032 + 75,
+			barbaracle: 1032 + 76,
+			clauncher: 1032 + 77,
+			clawitzer: 1032 + 78,
+			sylveon: 1032 + 79,
+			klefki: 1032 + 80,
+			zygarde: 1032 + 81,
+			zygarde10: 1032 + 82,
+			zygardecomplete: 1032 + 83,
+			dartrix: 1032 + 84,
+			steenee: 1032 + 85,
+			tsareena: 1032 + 86,
+			comfey: 1032 + 87,
+			miniormeteor: 1032 + 88,
+			minior: 1032 + 89,
+			miniororange: 1032 + 90,
+			minioryellow: 1032 + 91,
+			miniorgreen: 1032 + 92,
+			miniorblue: 1032 + 93,
+			miniorviolet: 1032 + 94,
+			miniorindigo: 1032 + 95,
+			dhelmise: 1032 + 96,
+			necrozma: 1032 + 97,
+			marshadow: 1032 + 98,
+			pikachuoriginal: 1032 + 99,
+		};
+		if (altNums[id]) {
+			num = altNums[id];
+		}
+	}
+
+	let top = Math.floor(num / 12) * 30;
+	let left = (num % 12) * 40;
+	return 'background:transparent url(https://play.pokemonshowdown.com/sprites/smicons-sheet.png?a1) no-repeat scroll -' + left + 'px -' + top + 'px';
+};
+
+Chat.getDataPokemonHTML = function (template) {
+	if (typeof template === 'string') template = Object.assign({}, Tools.getTemplate(template));
+	let buf = '<li class="result">';
+	buf += '<span class="col numcol">' + (template.tier) + '</span> ';
+	buf += '<span class="col iconcol"><span style="' + Chat.getPokemonIcon(template) + '"></span></span> ';
+	buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + template.id + '" target="_blank">' + template.species + '</a></span> ';
+	buf += '<span class="col typecol">';
+	if (template.types) {
+		for (let i = 0; i < template.types.length; i++) {
+			buf += `<img src="https://play.pokemonshowdown.com/sprites/types/${template.types[i]}.png" alt="${template.types[i]}" height="14" width="32">`;
+		}
+	}
+	buf += '</span> ';
+	buf += '<span style="float:left;min-height:26px">';
+	if (template.abilities['1']) {
+		buf += '<span class="col twoabilitycol">' + template.abilities['0'] + '<br />' + template.abilities['1'] + '</span>';
+	} else {
+		buf += '<span class="col abilitycol">' + template.abilities['0'] + '</span>';
+	}
+	if (template.abilities['S']) {
+		buf += '<span class="col twoabilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '<br />' + template.abilities['S'] + '</em></span>';
+	} else if (template.abilities['H']) {
+		buf += '<span class="col abilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '</em></span>';
+	} else {
+		buf += '<span class="col abilitycol"></span>';
+	}
+	buf += '</span>';
+	buf += '<span style="float:left;min-height:26px">';
+	buf += '<span class="col statcol"><em>HP</em><br />' + template.baseStats.hp + '</span> ';
+	buf += '<span class="col statcol"><em>Atk</em><br />' + template.baseStats.atk + '</span> ';
+	buf += '<span class="col statcol"><em>Def</em><br />' + template.baseStats.def + '</span> ';
+	buf += '<span class="col statcol"><em>SpA</em><br />' + template.baseStats.spa + '</span> ';
+	buf += '<span class="col statcol"><em>SpD</em><br />' + template.baseStats.spd + '</span> ';
+	buf += '<span class="col statcol"><em>Spe</em><br />' + template.baseStats.spe + '</span> ';
+	let bst = 0;
+	for (let i in template.baseStats) {
+		bst += template.baseStats[i];
+	}
+	buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
+	buf += '</span>';
+	buf += '</li>';
+	return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
+};
+
+Chat.getDataMoveHTML = function (move) {
+	if (typeof move === 'string') move = Object.assign({}, Tools.getMove(move));
+	let buf = `<ul class="utilichart"><li class="result">`;
+	buf += `<a data-entry="move|${move.name}"><span class="col movenamecol">${move.name}</span> `;
+	buf += `<span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/${move.type}.png" alt="${move.type}" width="32" height="14">`;
+	buf += `<img src="//play.pokemonshowdown.com/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
+	if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
+	buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
+	buf += `<span class="col pplabelcol"><em>PP</em><br>${move.pp ? move.pp : 1}</span> `;
+	buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
+	buf += `</a></li><li style="clear:both"></li></ul>`;
+	return buf;
+};
+
+Chat.getDataAbilityHTML = function (ability) {
+	if (typeof ability === 'string') ability = Object.assign({}, Tools.getAbility(ability));
+	let buf = `<ul class="utilichart"><li class="result">`;
+	buf += `<a data-entry="ability|${ability.name}"><span class="col namecol">${ability.name}</span> `;
+	buf += `<span class="col abilitydesccol">${ability.desc || ability.shortDesc}</span> `;
+	buf += `</a></li><li style="clear:both"></li></ul>`;
+	return buf;
+};
+
+Chat.getDataItemHTML = function (item) {
+	if (typeof item === 'string') item = Object.assign({}, Tools.getItem(item));
+	let top = Math.floor(item.spritenum / 16) * 24;
+	let left = (item.spritenum % 16) * 24;
+	let buf = `<ul class="utilichart"><li class="result">`;
+	buf  += `<a data-entry="item|${item.name}"><span class="col itemiconcol"><span style="background:transparent url(//play.pokemonshowdown.com/sprites/itemicons-sheet.png) no-repeat scroll -${left}px -${top}px"></span></span> <span class="col namecol">${item.name}</span> `;
+	buf += `<span class="col itemdesccol">${item.desc || item.shortDesc}</span> `;
+	buf += `</a></li><li style="clear:both"></li></ul>`;
+	return buf;
 };

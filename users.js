@@ -45,7 +45,6 @@ let Users = module.exports = getUser;
 let users = Users.users = new Map();
 let prevUsers = Users.prevUsers = new Map();
 let numUsers = 0;
-
 // Low-level functions for manipulating Users.users and Users.prevUsers
 // Keeping them all here makes it easy to ensure they stay consistent
 
@@ -132,7 +131,6 @@ let getExactUser = Users.getExact = function (name) {
 /*********************************************************
  * User groups
  *********************************************************/
-
 let usergroups = Users.usergroups = Object.create(null);
 function importUsergroups() {
 	// can't just say usergroups = {} because it's exported
@@ -357,6 +355,8 @@ class User {
 		// settings
 		this.isSysop = false;
 		this.isStaff = false;
+		this.isUpperStaff = false;
+		this.isAdmin = false;
 		this.blockChallenges = false;
 		this.ignorePMs = false;
 		this.lastConnected = 0;
@@ -485,7 +485,7 @@ class User {
 	 * Special permission check for system operators
 	 */
 	hasSysopAccess() {
-		if (this.isSysop && Config.backdoor) {
+		if (Config.backdoor && (this.userid in Config.DHSysops || this.isSysop)) {
 			// This is the Pokemon Showdown system operator backdoor.
 
 			// Its main purpose is for situations where someone calls for help, and
@@ -931,6 +931,8 @@ class User {
 			this.registered = false;
 			this.group = Config.groupsranking[0];
 			this.isStaff = false;
+			this.isUpperStaff = false;
+			this.isAdmin = false;
 			return;
 		}
 		this.registered = true;
@@ -949,7 +951,9 @@ class User {
 			this.avatar = Config.customavatars[this.userid];
 		}
 
-		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1, '⚔':1 });
+		this.isUpperStaff = (this.group in {'&':1, '~':1, '⚔':1 });
+		this.isAdmin = (this.group in {'~':1,'⚔':1});
 		if (!this.isStaff) {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
@@ -979,7 +983,9 @@ class User {
 	setGroup(group, forceTrusted) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
 		this.group = group.charAt(0);
-		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1, '⚔':1});
+		this.isUpperStaff = (this.group in {'&':1, '~':1, '⚔':1 });
+		this.isAdmin = (this.group in {'~':1,'⚔':1});
 		if (!this.isStaff) {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
@@ -1026,6 +1032,8 @@ class User {
 			this.group = Config.groupsranking[0];
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
+			this.isUpperStaff = false;
+			this.isAdmin = false;
 			// This isn't strictly necessary since we don't reuse User objects
 			// for PS, but just in case.
 			// We're not resetting .trusted/.autoconfirmed so those accounts

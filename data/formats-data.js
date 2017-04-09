@@ -174,7 +174,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["roost", "heatwave", "uturn", "hurricane", "defog"],
 		randomDoubleBattleMoves: ["tailwind", "heatwave", "uturn", "hurricane", "protect"],
 		requiredItem: "Pidgeotite",
-		tier: "Unreleased",
+		tier: "OU",
 	},
 	rattata: {
 		randomBattleMoves: ["facade", "flamewheel", "suckerpunch", "uturn", "wildcharge", "thunderwave", "crunch", "revenge"],
@@ -346,6 +346,54 @@ exports.BattleFormatsData = {
 		eventOnly: true,
 		gen: 6,
 		tier: "Illegal",
+	},
+	pikachuoriginal: {
+		eventPokemon: [
+			{"generation": 7, "level": 1, "moves":["thunderbolt", "quickattack", "thunder", "agility"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachuhoenn: {
+		eventPokemon: [
+			{"generation": 7, "level": 6, "moves":["thunderbolt", "quickattack", "thunder", "irontail"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachusinnoh: {
+		eventPokemon: [
+			{"generation": 7, "level": 10, "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachuunova: {
+		eventPokemon: [
+			{"generation": 7, "level": 14, "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachukalos: {
+		eventPokemon: [
+			{"generation": 7, "level": 17, "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachualola: {
+		eventPokemon: [
+			{"generation": 7, "level": 20, "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	raichu: {
 		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "grassknot", "hiddenpowerice", "focusblast", "voltswitch"],
@@ -952,7 +1000,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["stealthrock", "earthquake", "heavyslam", "roar", "toxic", "dragontail"],
 		randomDoubleBattleMoves: ["stealthrock", "earthquake", "heavyslam", "rockslide", "protect", "explosion"],
 		requiredItem: "Steelixite",
-		tier: "Unreleased",
+		tier: "OU",
 	},
 	drowzee: {
 		randomBattleMoves: ["psychic", "seismictoss", "thunderwave", "wish", "protect", "toxic", "shadowball", "trickroom", "calmmind", "dazzlinggleam"],
@@ -5351,7 +5399,7 @@ exports.BattleFormatsData = {
 	talonflame: {
 		randomBattleMoves: ["bravebird", "flareblitz", "roost", "swordsdance", "uturn", "willowisp", "tailwind"],
 		randomDoubleBattleMoves: ["bravebird", "flareblitz", "roost", "swordsdance", "uturn", "willowisp", "tailwind", "taunt", "protect"],
-		tier: "New",
+		tier: "BL2",
 	},
 	scatterbug: {
 		randomBattleMoves: ["tackle", "stringshot", "stunspore", "bugbite", "poisonpowder"],
@@ -6281,6 +6329,10 @@ exports.BattleFormatsData = {
 		eventOnly: true,
 		tier: "OU",
 	},
+	magearnaoriginal: {
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
 	marshadow: {
 		randomBattleMoves: ["spectralthief", "closecombat", "stoneedge", "shadowsneak", "icepunch"],
 		isUnreleased: true,
@@ -6415,6 +6467,10 @@ exports.BattleFormatsData = {
 		tier: "CAP",
 	},
 	embirch: {
+		isNonstandard: true,
+		tier: "CAP",
+	},
+	flarelm: {
 		isNonstandard: true,
 		tier: "CAP",
 	},

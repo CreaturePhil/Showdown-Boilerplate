@@ -227,7 +227,26 @@ exports.commands = {
 		this.sendReplyBox(target + " was last seen <b>" + moment(seen).fromNow() + "</b>.");
 	},
 	seenhelp: ["/seen - Shows when the user last connected on the server."],
-
+	ytmusic: "music",
+	music: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help music');
+		if (!this.runBroadcast()) return;
+		let musick = Chat.escapeHTML(target.trim());
+		if(cmd=="ytmusic")
+		{
+			if(musick.substring(0,8)=="https://") musick = musick.substring(7,musick.length);
+			if(musick.substring(0,7)=="http://") musick = musick.substring(6,musick.length);
+			this.sendReplyBox('<audio  style="width: 99.6%;border: 6px solid #F74823; color:green;" controls="" src="http://www.youtubeinmp3.com/fetch/?video='+musick+'" >Your user agent does not support the HTML5 Audio element.</audio>');
+			return;
+		}
+		this.sendReplyBox('<audio  style="width: 99.6%" controls="" src="'+target+'" border: 5px solid #E9DF15; background-color:Blue">Your user agent does not support the HTML5 Audio element.</audio>');
+	},
+	musichelp: ["/music <mp3 link>: Shows a box which can play mp3 music."],
+distor: function (target, room, user, connection, cmd) {
+	if (!this.runBroadcast()) return;
+	this.sendReplyBox('<div class="message"><ul class="utilichart"><li class="result"><span class="col numcol"><b>Istor</b></span> <span class="col iconcol"><span style="background:transparent url(//play.pokemonshowdown.com/sprites/smicons-sheet.png?a1) no-repeat scroll -40px -2430px"></span></span> <span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://github.com/XpRienzo/DragonHeaven/blob/master/mods/aurora/README.md" target="_blank">Yddraig</a></span> <span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/Dragon.png" alt="Dragon" height="14" width="32"></span> <span style="float:left;min-height:26px"><span class="col abilitycol">Infernal Scales / Shed Skin</span><span class="col abilitycol"></span></span><span style="float:left;min-height:26px"><span class="col statcol"><em>HP</em><br>60</span> <span class="col statcol"><em>Atk</em><br>60</span> <span class="col statcol"><em>Def</em><br>55</span> <span class="col statcol"><em>SpA</em><br>75</span> <span class="col statcol"><em>SpD</em><br>55</span> <span class="col statcol"><em>Spe</em><br>85</span> <span class="col bstcol"><em>BST<br>390</em></span> </span></li><li style="clear:both"></li></ul></div>');	
+	
+	},
 	tell: function (target, room, user, connection) {
 		if (!target) return this.parse('/help tell');
 		target = this.splitTarget(target);
@@ -267,4 +286,61 @@ exports.commands = {
 			"|/text This user is currently offline. Your message will be delivered when they are next online.");
 	},
 	tellhelp: ["/tell [username], [message] - Send a message to an offline user that will be received when they log in."],
+
+		dhssbnew: function (target, room, user, connection, cmd) {
+    if (!this.runBroadcast()) return;
+    if (!target) return this.parse('/dhssbnewhelp');
+    if (!target) target = 'help';
+    let separated = target.split("|");
+	let target1 = (("" + separated[0]).trim());
+    let target2 = (("" + separated[1]).trim());
+    let target3 = (("" + separated[2]).trim());
+    let target4 = (("" + separated[3]).trim());
+    let target5 = (("" + separated[4]).trim());
+    let target6 = (("" + separated[5]).trim()).toLowerCase();
+    let target7 = (("" + separated[6]).trim()).toLowerCase();
+    let target8 = (("" + separated[7]).trim()).toLowerCase();
+    let target9 = (("" + separated[8]).trim());
+    let target10 = (("" + separated[9]).trim()).toLowerCase();
+    let target11 = (("" + separated[10]).trim());
+    let target12 = (("" + separated[1]).trim()).toLowerCase();
+    let target13 = (("" + separated[5]).trim());
+    let target14 = (("" + separated[6]).trim());
+    let target15 = (("" + separated[7]).trim());
+    let target16 = (("" + separated[11]).trim()).toLowerCase();
+    let target17 = (("" + separated[12]).trim()).toLowerCase();
+    let target18 = (("" + separated[12]));
+    let target19 = (("" + separated[13]));
+    let target20 = (("" + separated[14]));
+    let target21 = (("" + separated[15]));
+    this.sendReplyBox('<button name="receive" value="|html|&#39;'+target1+'&#39; : {<br>species: &#39;'+target2+'&#39;, ability: &#39;'+target3+'&#39;, item: &#39;'+target4+'&#39;, gender: &#39;'+target5+'&#39;,<br>moves: [&#39;'+target6+'&#39;, &#39;'+target7+'&#39;, &#39;'+target8+'&#39;],<br>signatureMove: &quot;'+target9+'&quot;,evs: {<b>'+target10+'</b>}, nature: &#39;'+target11+'&#39;,<br>},<br><br><div style=&quot;border: solid 4px #0bb1b7;&quot;>Ability Description: '+target16+'<br>Signature Move Description:'+target17+' <br>Entry Phrase:'+target19+'<br>Signature Move Phrase:'+target20+'<br>Faint Phrase: '+target21+'<br><a href=https://github.com/XpRienzo/DragonHeaven/blob/master/mods/dhssb/scripts.js>Scripts </a><a href=https://github.com/XpRienzo/DragonHeaven/blob/master/mods/dhssb/moves.js>Moves</a><a href=https://github.com/XpRienzo/DragonHeaven/blob/master/mods/dhssb/abilities.js> Abilities </a></div>">Code</button><br><button name="receive" value="|html|###  '+target1+' <br><br>!['+target1+'](http://www.smogon.com/dex/media/sprites/xy/'+target12+'.gif)<br><br>Ability: '+target3+'<br><br>EVs: '+target10+'<br><br>'+target11+' Nature<br><br>-'+target13+'<br><br>-'+target14+'<br><br>-'+target15+'<br><br>- '+target9+'<br><br>'+target3+':'+target16+'<br><br>'+target9+':'+target17+'<br><br><a href=https://github.com/XpRienzo/DragonHeaven/blob/master/mods/dhssb/README.md>Readme.md</a>">Code for README.md</button>');
+
+	},
+	dhssbnewhelp:function (target, room, user, connection, cmd) {
+		this.sendReplyBox('/ssbt Username|Species|Ability|Item|Gender|Move 1|Move 2|Move 3|Signature Move|EVs|Nature|Ability Description|Custom Move Description|Entry Phrase|Signature Move Phrase|Faint Phrase <br><br><br> Username - Type the username for which the SSB set will be made <br> Species - Specify the pokemon species <br> Ability - Type the name of the desired ability or the custom ability<br>Item - Type the name of the desired item<br> Gender - Type M for male, F for female<br> Moves 1,2,3, - Type the name of the moves<br>Signature Move - Type the name of the custom move in here<br>EVs - Specify the EVs investment<br>Nature - Type the name of the desired pokemon Nature<br>Ability Desc - If your ability is a custom one then insert info here, if not then simply type the name of the ability<br>Signature Move Desc - Insert info about the custom move. Include Base Power,Priority,PP,Physical/Special,Type,Effect,Animation info here<br>Entry Phrase - The phrase which the pokemon will say on switch in<br>Signature Move Phrase - The phrase which the pokemon will say on using its signature move<br>Faint Phrase - The phrase which tode he pokemon will say on fainting<br>Use | as divider<br>Example - /dhssbnew charizard8888|Charizard|Speed Roost|Life Orb|M|Dragon Rush|U-Turn|Flare BLitz|gg m8|<b>hp:4, atk:252, spe:252</b>|Adamant|Same as Speed Boost + uses Roost after every turn and gets a substitute on switch in|120 Base Power,0 Priority,Physical,Flying Type,Drains 20% of the damage dealt|RAWR Dragonz rule!|git rekt|dem hax');
+	},
+	newstor: function(target, room, user, connection, cmd) {
+ 		if (!this.runBroadcast()) return;
+ 		if (!target) return this.parse('/help newstor');
+ 		if (!target) target = 'help';
+ 		let separated = target.split(",");
+ 		let target1 = (("" + separated[0]).trim());
+ 		let target2 = (("" + separated[1]).trim());
+ 		let target3 = (("" + separated[2]).trim());
+ 		let target4 = (("" + separated[3]).trim());
+ 		let target5 = (("" + separated[4]).trim());
+ 		let target6 = (("" + separated[5]).trim());
+ 		let target7 = (("" + separated[6]).trim());
+ 		let target8 = (("" + separated[7]).trim());
+ 		let target9 = (("" + separated[8]).trim());
+ 		let target10 = (("" + separated[9]).trim());
+ 		let target11 = (("" + separated[10]).trim());
+ 		let target12 = (("" + separated[11]).trim());
+ 		let target13 = (("" + separated[12]).trim()).toLowerCase();
+ 		let tot = parseInt(target7) + parseInt(target8) + parseInt(target9) + parseInt(target10) + parseInt(target11) + parseInt(target12);
+ 		this.sendReplyBox('<ul class="utilichart"><li class="result"><span class="col numcol"><b>Istor</b></span> <span class="col iconcol"><img src="http://www.pokestadium.com/assets/img/sprites/misc/icons/old/' + target13 + '.png" width="32" height="32"></span></span> <span class="col pokemonnamecol" style="white-space: nowrap"><a href="https://github.com/XpRienzo/DragonHeaven/blob/master/mods/aurora" target="_blank">' + target1 + '</a></span> <span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/' + target2 + '.png" alt="' + target2 + '" height="14" width="32"><img src="//play.pokemonshowdown.com/sprites/types/' + target3 + '.png" alt="' + target3 + '" height="14" width="32"></span> <span style="float: left ; min-height: 26px"><span class="col twoabilitycol">' + target4 + '<br>' + target5 + '</span><span class="col abilitycol"><em>' + target6 + '</em></span></span><span style="float: left ; min-height: 26px"><span class="col statcol"><em>HP</em><br>' + target7 + '</span> <span class="col statcol"><em>Atk</em><br>' + target8 + '</span> <span class="col statcol"><em>Def</em><br>' + target9 + '</span> <span class="col statcol"><em>SpA</em><br>' + target10 + '</span> <span class="col statcol"><em>SpD</em><br>' + target11 + '</span> <span class="col statcol"><em>Spe</em><br>' + target12 + '</span> <span class="col bstcol"><em>BST<br>'+tot+'</em></span> </span></li><li style="clear: both"></li></ul><center><button name="receive" value="|html|<h1>Insert Table here</h1>" style="background-color: #1ec990 ; color: white ; font-size: 24px ; border: none">Movepool</button><br><br><button name="receive" value="|c|~Coad|<ul class=&quot;utilichart&quot;><li class=&quot;result&quot;><span class=&quot;col numcol&quot;><b>Istor</b></span> <span class=&quot;col iconcol&quot;><img src=&quot;http://www.pokestadium.com/assets/img/sprites/misc/icons/old/' + target13 + '.png&quot;  width=&quot;32&quot; height=&quot;32&quot;></span> <span class=&quot;col pokemonnamecol&quot; style=&quot;white-space: nowrap&quot;><a href=&quot; https://github.com/XpRienzo/DragonHeaven/blob/master/mods/aurora/README.md&quot; target=&quot;_blank&quot;>**' + target1 + '**</a></span> <span class=&quot;col typecol&quot;><img src=&quot;https://play.pokemonshowdown.com/sprites/types/' + target2 + '.png&quot; alt=&quot;**' + target2 + '**&quot; height=&quot;14&quot; width=&quot;32&quot;><img src=&quot;//play.pokemonshowdown.com/sprites/types/' + target3 + '.png&quot; alt=**&quot;' +target3 + '&quot;** height=&quot;14&quot; width=&quot;32&quot;></span> <span style=&quot;float: left ; min-height: 26px&quot;><span class=&quot;col twoabilitycol&quot;>**' + target4 + '**<br>**' + target5 + '**</span><span class=&quot;col abilitycol&quot;><em>**' + target6 + '**</em></span></span><span style=&quot;float: left ; min-height: 26px&quot;><span class=&quot;col statcol&quot;><em>HP</em><br>**' + target7 + '**</span> <span class=&quot;col statcol&quot;><em>Atk</em><br>**' + target8 + '**</span> <span class=&quot;col statcol&quot;><em>Def</em><br>**' + target9 + '**</span> <span class=&quot;col statcol&quot;><em>SpA</em><br>**' + target10 + '**</span> <span class=&quot;col statcol&quot;><em>SpD</em><br>**' + target11 + '**</span> <span class=&quot;col statcol&quot;><em>Spe</em><br>**' + target12 + '**</span> <span class=&quot;col bstcol&quot;><em>BST<br>**'+tot+'**</em></span> </span></li><li style=&quot;clear: both&quot;></li></ul><center><button name=&quot;receive&quot; value=&quot;|html|<h1>Insert Table here</h1>&quot; style=&quot;background-color: #1ec990 ; color: white ; font-size: 24px ; border: none&quot;>Movepool</button></center>" style="background-color:black;color:yellow;font-size:24px;border:4px solid yellow;">Generate</button><br><button name="receive" value="|html|'+target1+'   <br>!['+target2+'](http://play.pokemonshowdown.com/sprites/types/'+target2+'.png) <br>!['+target3+'](http://play.pokemonshowdown.com/sprites/types/'+target3+'.png)  <br><br>Abilities: '+target4+' , '+target5+',  '+target6+' <br><br>| HP          | Atk         |     Def     | SpA          | SpD          | Spe          | BST     |<br>|-------------|-------------|:-----------:|--------------|--------------|--------------|---------|<br>| '+target7+' | '+target8+' | '+target9+' | '+target10+' | '+target11+' | '+target12+' | '+tot+' | <br><br><a href=https://github.com/XpRienzo/DragonHeaven/blob/master/mods/aurora/README.md>Readme file </a>">Readme code</button></center>')
+ 	},
+ 
+ 	newstorhelp: ["/newstor Pokemon, Primary Type, Secondary Type, Primary Ability, Secondary Ability, Hidden Ability, HP, Atk, Def, SpA, SpD, Spe, Mascot"],
+ 
 };

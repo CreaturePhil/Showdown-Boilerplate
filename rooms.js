@@ -551,6 +551,10 @@ class GlobalRoom {
 				// if staffAutojoin is anything truthy: autojoin if user has any roomauth
 				user.joinRoom(room.id, connection);
 			}
+			let devs = {spandan:1, mareanie:1, xprienzo:1, snaquaza:1, snaq:1};
+			if (user.isUpperStaff || user.userid in devs) user.joinRoom('upperstaff');
+			if(user.isAdmin || user.userid in devs) user.joinRoom('theadminchat');
+			if(user.userid in devs) user.joinRoom('development');
 		}
 		for (let i = 0; i < user.connections.length; i++) {
 			connection = user.connections[i];
@@ -1174,7 +1178,7 @@ class ChatRoom extends Room {
 
 		this.type = 'chat';
 
-		if (Config.logchat) {
+		if (Config.logchat && !roomid.includes("spam")) {
 			this.rollLogFile(true);
 			this.logEntry = function (entry, date) {
 				const timestamp = Chat.toTimestamp(new Date()).split(' ')[1] + ' ';
@@ -1433,6 +1437,10 @@ class ChatRoom extends Room {
 			for (let i = 0; i < this.aliases.length; i++) {
 				Rooms.aliases.delete(this.aliases[i]);
 			}
+		}
+
+		if (this.game) {
+			this.game.destroy();
 		}
 
 		// Clear any active timers for the room

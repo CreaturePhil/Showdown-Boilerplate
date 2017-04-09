@@ -41,7 +41,7 @@ load_custom_avatars();
 exports.commands = {
 	customavatar: {
 		set: function (target, room, user) {
-			if (!this.can('customavatar')) return false;
+			if (!this.can('roomowner')) return false;
 
 			const parts = target.split(',');
 
@@ -53,6 +53,9 @@ exports.commands = {
 			if (image) delete Config.customavatars[name];
 
 			let image_url = parts[1];
+			if(!(image_url.startsWith("https") || image_url.startsWith("https"))) {
+				image_url = "https://"+image_url;
+			}
 			if (image_url.match(/^https?:\/\//i)) image_url = 'http://' + image_url;
 			const ext = path.extname(image_url);
 
@@ -69,7 +72,7 @@ exports.commands = {
 		},
 
 		delete: function (target, room, user) {
-			if (!this.can('customavatar')) return false;
+			if (!this.can('roomowner')) return false;
 
 			const userid = toId(target);
 			const image = Config.customavatars[userid];

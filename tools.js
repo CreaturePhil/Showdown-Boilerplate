@@ -70,9 +70,10 @@ if (!Object.values) {
 
 let dexes = {};
 
-const DATA_TYPES = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
+const DATA_TYPES = ['PokemonSprites', 'Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
 
 const DATA_FILES = {
+	'PokemonSprites': 'pokedex-mini',
 	'Pokedex': 'pokedex',
 	'Movedex': 'moves',
 	'Statuses': 'statuses',
@@ -241,6 +242,29 @@ class BattleDex {
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	}
 
+	uploadToHastebin (toUpload, callback) {
+		var reqOpts = {
+			hostname: "hastebin.com",
+			method: "POST",
+			path: '/documents'
+		};
+		var req = require('https').request(reqOpts, function (res) {
+			res.on('data', function (chunk) {
+				try {
+					var linkStr = "hastebin.com/" + JSON.parse(chunk.toString())['key'];
+					if (typeof callback === "function") callback(true, linkStr);
+				} catch (e) {
+					if (typeof callback === "function") callback(false, e);
+				}
+			});
+		});
+		req.on('error', function (e) {
+			if (typeof callback === "function") callback(false, e);
+		});
+		req.write(toUpload);
+		req.end();
+	}
+
 	/**
 	 * returns false if the target is immune; true otherwise
 	 *
@@ -367,7 +391,7 @@ class BattleDex {
 			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0, F:1};
 			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0, F:0};
 			if (!template.genderRatio) template.genderRatio = {M:0.5, F:0.5};
-			if (!template.tier && template.baseSpecies !== template.species) template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
+			if (this.data.FormatsData[toId(template.baseSpecies)] && !template.tier && template.baseSpecies !== template.species) template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
 			if (!template.requiredItems && template.requiredItem) template.requiredItems = [template.requiredItem];
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.gen) {
@@ -881,7 +905,7 @@ class BattleDex {
 		let searchResults = [];
 		for (let i = 0; i < searchIn.length; i++) {
 			let res = this[searchFunctions[searchIn[i]]](target);
-			if (res.exists) {
+			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					exactMatch: !isInexact,
 					searchType: searchTypes[searchIn[i]],
@@ -918,7 +942,7 @@ class BattleDex {
 				}
 
 				let ld = this.levenshtein(cmpTarget, word.toLowerCase(), maxLd);
-				if (ld <= maxLd) {
+				if (ld <= maxLd && this[searchFunctions[searchIn[i]]](word).gen <= this.gen) {
 					searchResults.push({word: word, ld: ld});
 				}
 			}

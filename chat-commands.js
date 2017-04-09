@@ -583,8 +583,8 @@ exports.commands = {
 			targetRoom.isPrivate = true;
 			targetRoom.chatRoomData.isPrivate = true;
 			Rooms.global.writeChatRoomData();
-			if (Rooms.get('upperstaff')) {
-				Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Private chat room created: <b>' + Chat.escapeHTML(target) + '</b></div>').update();
+			if (Rooms.get('theadminchat')) {
+				Rooms.get('theadminchat').add('|raw|<div class="broadcast-green">Private chat room created: <b>' + Chat.escapeHTML(target) + '</b></div>').update();
 			}
 			this.sendReply("The private chat room '" + target + "' was created.");
 		} else {
@@ -719,8 +719,8 @@ exports.commands = {
 
 		if (targetRoom.chatRoomData) {
 			if (targetRoom.isPrivate) {
-				if (Rooms.get('upperstaff')) {
-					Rooms.get('upperstaff').add(`|raw|<div class="broadcast-red">Private chat room deleted by ${user.userid}: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+				if (Rooms.get('theadminchat')) {
+					Rooms.get('theadminchat').add(`|raw|<div class="broadcast-red">Private chat room deleted by ${user.userid}: <b>${Chat.escapeHTML(target)}</b></div>`).update();
 				}
 			} else {
 				if (Rooms.get('staff')) {
@@ -1646,6 +1646,7 @@ exports.commands = {
 
 	forceglobalban: 'globalban',
 	gban: 'globalban',
+	ban: 'globalban',
 	globalban: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help globalban');
 
@@ -2362,6 +2363,79 @@ exports.commands = {
 		return this.addModCommand(`The IP '${target}' was unmarked as shared by ${user.name}.`);
 	},
 	unmarksharedhelp: ["/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &, ~"],
+	
+	pingall: function (target, room, user, connection) {
+		if(!this.can("broadcast")) return;
+		if(Object.keys(this.room.users).length < 3) return this.errorReply("This room doesn't have enough users.");
+		let users = Object.values(this.room.users).map(function(user) {
+			return user.name;
+		}.bind(this)).join(', ');
+		this.add(`|c|${this.user.group}${this.user.name}|${users} ${target}`);
+	},
+	pingallhelp: ["/pingall [message] - Pings all the users of the current room with a message.",
+		     "Requires: +"],
+	
+	/*
+	roomlog: function (target, room, user, connection) {
+		if(!Config.logchat) return this.errorReply("Roomlogs are disabled for this server. (Did you mean: modlog?)");
+		if(!this.can("roomdriver")) return;
+		if(!target || target === "") return this.errorReply("Error: Please provide a parameter.");
+		let date = target.trim(), month = date.substring(0,7);
+		let data = "", path = "logs/chat/"+toId(room)+"/";
+		if(target === "today") path = path + "today.txt";
+		else {
+			path = path+month+"/"+date+".txt";
+		}
+		try {
+			data = fs.readFileSync(path).toString().split('\n');
+		}
+		catch (e) {
+			return this.errorReply("Error: Invalid Date, or logs for that date do not exist.");
+		}
+		data = data.map(function(line) {
+			if(line.includes('|c|')) {
+				let timestamp = line.split('|c|')[0].trim(), mes = line.split('|c|')[1];
+				if(line.split('|c|').length > 2) {
+					for(let i=2; i<line.split('|c|').length; i++) {
+						mes = mes + line.split('|c|')[i];
+					}
+				}
+				return `[${timestamp}] ${mes.replace('|',': ').trim()}`;
+			}
+			else if(line.includes('|j|')) {
+				let timestamp = line.split('|j|')[0].trim(), user = line.split('|j|')[1];
+				if(line.split('|j|').length > 2) {
+					for(let i=2; i<line.split('|j|').length; i++) {
+						user = user + line.split('|j|')[i];
+					}
+				}
+				return `(${timestamp}) ${user.trim()} joined`;
+			}
+			else if(line.includes('|l|')) {
+				let timestamp = line.split('|l|')[0].trim(), user = line.split('|l|')[1];
+				if(line.split('|l|').length > 2) {
+					for(let i=2; i<line.split('|l|').length; i++) {
+						user = user + line.split('|l|')[i];
+					}
+				}
+				return `(${timestamp}) ${user.trim()} left`;
+			}
+			return line;
+		}).join('\n');
+		try {
+			uploadToHastebin(data, function (r, link) {
+				link = "https://hastebin.com/raw/"+link.split('/')[link.split('/').length-1];
+				if (r) return this.sendReplyBox('<a href="'+link+'">Roomlog for '+target+ '</a>');
+				else this.sendReplyBox("An Error Occured.");
+			}.bind(this));
+		} 
+		catch (e) {
+			this.errorReply("Error Uploading file to hastebin.");
+		}
+	},
+	roomloghelp: ["/roomlog [date|today] - Generates a hastebin link to show the room logs for that date.",
+		      "Requires: & ~"],*/
+
 
 	modlog: function (target, room, user, connection) {
 		let lines = 0;
@@ -2515,7 +2589,7 @@ exports.commands = {
 		if (!this.can('hotpatch')) return false;
 		if (Monitor.hotpatchLock) return this.errorReply("Hotpatch is currently been disabled. (" + Monitor.hotpatchLock + ")");
 
-		for (let roomid of ['development', 'staff', 'upperstaff']) {
+		for (let roomid of ['development']) {
 			let curRoom = Rooms(roomid);
 			if (curRoom) curRoom.add(`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`).update();
 		}
@@ -3469,8 +3543,9 @@ exports.commands = {
 		user.rename(targetName, targetToken, targetRegistered, connection);
 	},
 
-	a: function (target, room, user) {
+	a: function (target, room, user, connection, cmd, message) {
 		if (!this.can('rawpacket')) return false;
+		room.modlog(user + " used \""+message+"\" in "+room);
 		// secret sysop command
 		room.add(target);
 	},

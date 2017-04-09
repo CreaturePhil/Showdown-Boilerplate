@@ -361,12 +361,20 @@ exports.commands = {
 				}
 			}
 		}
-		let newTargets = Tools.dataSearch(target);
+		let sep = target.split(',');
+		let mod = Tools;
+		if (sep[1] && toId(sep[1]) in Tools.dexes) {
+			mod = Tools.mod(toId(sep[1]));
+		}
+		else if (sep[1] && Tools.getFormat(sep[1]).mod) {
+			mod = Tools.mod(Tools.getFormat(sep[1]).mod);
+		}
+		let newTargets = mod.dataSearch(sep[0]);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
 				if (!newTargets[i].exactMatch && !i) {
-					buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
+					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found${Tools.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 				}
 				if (newTargets[i].searchType === 'nature') {
 					let nature = Tools.getNature(newTargets[i].name);
@@ -379,7 +387,13 @@ exports.commands = {
 					}
 					return this.sendReply(buffer);
 				} else {
-					buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+					let sType = newTargets[i].searchType.charAt(0).toUpperCase() + newTargets[i].searchType.substring(1, newTargets[i].searchType.length);
+					if (Chat[`getData${sType}HTML`]) {
+						let template = mod["get" + (sType === "Pokemon" ? "Template" : sType)](newTargets[i].name);
+						buffer += `|raw|${Chat[`getData${sType}HTML`](template)}\n`;
+					} else {
+						buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+					}
 				}
 			}
 		} else {
@@ -391,7 +405,7 @@ exports.commands = {
 			let isSnatch = false;
 			let isMirrorMove = false;
 			if (newTargets[0].searchType === 'pokemon') {
-				let pokemon = Tools.getTemplate(newTargets[0].name);
+				let pokemon = mod.getTemplate(newTargets[0].name);
 				let weighthit = 20;
 				if (pokemon.weightkg >= 200) {
 					weighthit = 120;
@@ -416,12 +430,12 @@ exports.commands = {
 					details['<font color="#686868">Does Not Evolve</font>'] = "";
 				} else {
 					details["Evolution"] = pokemon.evos.map(evo => {
-						evo = Tools.getTemplate(evo);
+						evo = mod.getTemplate(evo);
 						return evo.name + " (" + evo.evoLevel + ")";
 					}).join(", ");
 				}
 			} else if (newTargets[0].searchType === 'move') {
-				let move = Tools.getMove(newTargets[0].name);
+				let move = mod.getMove(newTargets[0].name);
 				details = {
 					"Priority": move.priority,
 					"Gen": move.gen,
@@ -464,10 +478,10 @@ exports.commands = {
 					}
 				} else if (move.isZ) {
 					details["&#10003; Z-Move"] = "";
-					details["Z-Crystal"] = Tools.getItem(move.isZ).name;
+					details["Z-Crystal"] = mod.getItem(move.isZ).name;
 					if (move.basePower !== 1) {
-						details["User"] = Tools.getItem(move.isZ).zMoveUser.join(", ");
-						details["Required Move"] = Tools.getItem(move.isZ).zMoveFrom;
+						details["User"] = mod.getItem(move.isZ).zMoveUser.join(", ");
+						details["Required Move"] = mod.getItem(move.isZ).zMoveFrom;
 					}
 				} else {
 					details["Z-Effect"] = "None";
@@ -488,7 +502,7 @@ exports.commands = {
 					'all': "All Pok\u00e9mon",
 				}[move.target] || "Unknown";
 			} else if (newTargets[0].searchType === 'item') {
-				let item = Tools.getItem(newTargets[0].name);
+				let item = mod.getItem(newTargets[0].name);
 				details = {
 					"Gen": item.gen,
 				};
@@ -1141,8 +1155,8 @@ exports.commands = {
 		this.sendReplyBox(
 			"Pok&eacute;mon Showdown is open source:<br />" +
 			"- Language: JavaScript (Node.js)<br />" +
-			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />" +
-			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source code</a><br />" +
+			"- <a href=\"https://github.com/XpRienzo/DragonHeaven/commits/master\">What's new here?</a><br />" +
+			"- <a href=\"https://github.com/XpRienzo/DragonHeaven\">Dragon Heaven source code</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Dex\">Dex source code</a>"
 		);
@@ -1271,42 +1285,6 @@ exports.commands = {
 		);
 	},
 
-	'!othermetas': true,
-	om: 'othermetas',
-	othermetas: function (target, room, user) {
-		if (!this.runBroadcast()) return;
-		target = toId(target);
-		let buffer = "";
-
-		if (target === 'all' && this.broadcasting) {
-			return this.sendReplyBox("You cannot broadcast information about all Other Metagames at once.");
-		}
-
-		if (!target || target === 'all') {
-			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames.394/\">Other Metagames Forum</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/forums/om-analyses.416/\">Other Metagames Analyses</a><br />";
-			if (!target) return this.sendReplyBox(buffer);
-		}
-		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
-
-		if (target === 'all') {
-			// Display OMotM formats, with forum thread links as caption
-			this.parse('/formathelp omofthemonth');
-
-			// Display the rest of OM formats, with OM hub/index forum links as caption
-			this.parse('/formathelp othermetagames');
-			return this.sendReply('|raw|<center>' + buffer + '</center>');
-		}
-		if (showMonthly) {
-			this.target = 'omofthemonth';
-			this.run('formathelp');
-		} else {
-			this.run('formathelp');
-		}
-	},
-	othermetashelp: ["/om - Provides links to information on the Other Metagames.",
-		"!om - Show everyone that information. Requires: + % @ * # & ~"],
-
 	'!formathelp': true,
 	banlists: 'formathelp',
 	tier: 'formathelp',
@@ -1381,7 +1359,7 @@ exports.commands = {
 			for (let i = 0; i < sections[sectionId].formats.length; i++) {
 				let format = Tools.getFormat(sections[sectionId].formats[i]);
 				let nameHTML = Chat.escapeHTML(format.name);
-				let descHTML = format.desc ? format.desc.join("<br />") : "&mdash;";
+				let descHTML = format.desc ? `${format.desc.join("<br />")}${Tools.data.Formats[format.id].suspect ? `<br />Currently Suspecting: <u>${Tools.data.Formats[formatId].suspect}</u>` : ""}` : "&mdash;";
 				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
 			}
 		}
@@ -1762,10 +1740,10 @@ exports.commands = {
 		Config.potd = target;
 		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
 		if (target) {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
+			if (Rooms.development) Rooms.development.addRaw("<b>The Pok&eacute;mon of the was set to " + target + ". This Pokemon will be guaranteed to show up in random battles.</b>");
 			this.logModCommand("The Pok\u00e9mon of the Day was changed to " + target + " by " + user.name + ".");
 		} else {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
+			if (Rooms.development) Rooms.development.addRaw("<b>The Pok&eacute;mon of the Day was removed. No pokemon will be guaranteed in random battles.</b>");
 			this.logModCommand("The Pok\u00e9mon of the Day was removed by " + user.name + ".");
 		}
 	},
