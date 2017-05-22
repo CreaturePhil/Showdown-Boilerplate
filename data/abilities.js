@@ -47,7 +47,7 @@ exports.BattleAbilities = {
 		},
 		id: "adaptability",
 		name: "Adaptability",
-		rating: 3.5,
+		rating: 4,
 		num: 91,
 	},
 	"aftermath": {
@@ -101,15 +101,25 @@ exports.BattleAbilities = {
 		desc: "The power of this Pokemon's move is multiplied by 1.3 if it is the last to move in a turn. Does not affect Doom Desire and Future Sight.",
 		shortDesc: "This Pokemon's attacks have 1.3x power if it is the last to move in a turn.",
 		onBasePowerPriority: 8,
-		onBasePower: function (basePower, attacker, defender, move) {
-			if (!this.willMove(defender)) {
+		onBasePower: function (basePower, pokemon) {
+			let boosted = true;
+			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
+			for (let i = 0; i < allActives.length; i++) {
+				let target = allActives[i];
+				if (target === pokemon) continue;
+				if (this.willMove(target)) {
+					boosted = false;
+					break;
+				}
+			}
+			if (boosted) {
 				this.debug('Analytic boost');
 				return this.chainModify([0x14CD, 0x1000]);
 			}
 		},
 		id: "analytic",
 		name: "Analytic",
-		rating: 2,
+		rating: 2.5,
 		num: 148,
 	},
 	"angerpoint": {
@@ -409,6 +419,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's type changes to match the type of the last move that hit it, unless that type is already one of its types. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect.",
 		shortDesc: "This Pokemon's type changes to the type of a move it's hit by, unless it has the type.",
 		onAfterMoveSecondary: function (target, source, move) {
+			if (!target.hp) return;
 			let type = move.type;
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
@@ -495,7 +506,7 @@ exports.BattleAbilities = {
 	},
 	"corrosion": {
 		shortDesc: "This Pokemon can poison or badly poison other Pokemon regardless of their typing.",
-		// Implemented in battle-engine.js:BattlePokemon#setStatus
+		// Implemented in sim/pokemon.js:Pokemon#setStatus
 		id: "corrosion",
 		name: "Corrosion",
 		rating: 2.5,
@@ -558,7 +569,7 @@ exports.BattleAbilities = {
 		id: "dancer",
 		onAnyAfterMove: function (source, target, move) {
 			if (!this.effectData.target.hp || source === this.effectData.target || move.isExternal) return;
-			if (move.id.includes('dance') && move.id !== 'raindance') {
+			if (move.flags['dance']) {
 				this.faintMessages();
 				this.add('-activate', this.effectData.target, 'ability: Dancer');
 				this.runMove(move.id, this.effectData.target, 0, this.getAbility('dancer'), undefined, true);
@@ -1215,7 +1226,7 @@ exports.BattleAbilities = {
 		shortDesc: "When this Pokemon has 1/2 or less of its maximum HP, it uses certain Berries early.",
 		id: "gluttony",
 		name: "Gluttony",
-		rating: 1,
+		rating: 1.5,
 		num: 82,
 	},
 	"gooey": {
@@ -1630,7 +1641,7 @@ exports.BattleAbilities = {
 	"klutz": {
 		desc: "This Pokemon's held item has no effect. This Pokemon cannot use Fling successfully. Macho Brace, Power Anklet, Power Band, Power Belt, Power Bracer, Power Lens, and Power Weight still have their effects.",
 		shortDesc: "This Pokemon's held item has no effect, except Macho Brace. Fling cannot be used.",
-		// Item suppression implemented in BattlePokemon.ignoringItem() within battle-engine.js
+		// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
 		id: "klutz",
 		name: "Klutz",
 		rating: -1,
@@ -1659,7 +1670,7 @@ exports.BattleAbilities = {
 	"levitate": {
 		desc: "This Pokemon is immune to Ground. Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
 		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it.",
-		// airborneness implemented in battle-engine.js:BattlePokemon#isGrounded
+		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
 		id: "levitate",
 		name: "Levitate",
 		rating: 3.5,
@@ -2063,7 +2074,7 @@ exports.BattleAbilities = {
 					// this.add('-message', "" + curPoke + " skipped: Natural Cure already known");
 					continue;
 				}
-				let template = Tools.getTemplate(curPoke.species);
+				let template = Dex.getTemplate(curPoke.species);
 				// pokemon can't get Natural Cure
 				if (Object.values(template.abilities).indexOf('Natural Cure') < 0) {
 					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
@@ -3197,7 +3208,7 @@ exports.BattleAbilities = {
 	"soundproof": {
 		shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
 		onTryHit: function (target, source, move) {
-			if (target !== source && move.flags['sound']) {
+			if (move.flags['sound']) {
 				this.add('-immune', target, '[msg]', '[from] ability: Soundproof');
 				return null;
 			}
@@ -3259,7 +3270,7 @@ exports.BattleAbilities = {
 		},
 		id: "stamina",
 		name: "Stamina",
-		rating: 2,
+		rating: 3,
 		num: 192,
 	},
 	"stancechange": {
@@ -3532,7 +3543,7 @@ exports.BattleAbilities = {
 		},
 		id: "synchronize",
 		name: "Synchronize",
-		rating: 2.5,
+		rating: 2,
 		num: 28,
 	},
 	"tangledfeet": {
