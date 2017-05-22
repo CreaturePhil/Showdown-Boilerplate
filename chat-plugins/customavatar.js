@@ -96,6 +96,6 @@ exports.commands = {
 		},
 	},
 	customavatarhelp: ["Commands for /customavatar are:",
-	"/customavatar set [username], [image link] - Set a user's avatar.",
-	"/customavatar delete [username] - Delete a user's avatar."],
+		"/customavatar set [username], [image link] - Set a user's avatar.",
+		"/customavatar delete [username] - Delete a user's avatar."],
 };
