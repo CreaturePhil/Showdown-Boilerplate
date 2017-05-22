@@ -48,6 +48,10 @@ exports.commands = {
 			if (parts.length < 2) return this.parse('/help customavatar');
 
 			const name = toId(parts[0]);
+			const image = Config.customavatars[name];
+
+			if (image) delete Config.customavatars[name];
+
 			let image_url = parts[1];
 			if (image_url.match(/^https?:\/\//i)) image_url = 'http://' + image_url;
 			const ext = path.extname(image_url);
